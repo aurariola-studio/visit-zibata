@@ -1,0 +1,50 @@
+{
+  "$comment": "Configuración del pipeline GIS (scripts/map). Coordenadas en WGS84 (EPSG:4326), orden [lng, lat]. Ver docs/PIPELINE-GIS.md.",
+  "area": {
+    "name": "Zibatá, El Marqués, Querétaro, México",
+    "bbox": [-100.37, 20.65, -100.29, 20.705]
+  },
+  "zibataSeedPolygon": [
+    [-100.3548, 20.6874],
+    [-100.3412, 20.68777],
+    [-100.33, 20.69144],
+    [-100.3092, 20.6808],
+    [-100.31, 20.67714],
+    [-100.3164, 20.672],
+    [-100.3228, 20.66907],
+    [-100.3396, 20.66944],
+    [-100.3444, 20.67567],
+    [-100.3548, 20.6786],
+    [-100.3548, 20.6874]
+  ],
+  "sources": {
+    "overpassEndpoints": [
+      "https://overpass-api.de/api/interpreter",
+      "https://overpass.private.coffee/api/interpreter",
+      "https://overpass.kumi.systems/api/interpreter"
+    ],
+    "overtureRelease": "2026-08-19.0"
+  },
+  "tiles": {
+    "minZoom": 12,
+    "maxZoom": 16,
+    "buildingsMinZoom": 13,
+    "$buildingsLowZoomComment": "En z13 (vista inicial en móvil) se omiten huellas menores que este área: casetas y fragmentos que no se distinguen a esa escala y pesan en la tesela.",
+    "buildingsLowZoomMinAreaM2": 60
+  },
+  "buildings": {
+    "defaultLevelHeight": 3.2,
+    "minAreaM2": 12,
+    "plazaSynthetic": {
+      "$comment": "Volumen generado a partir de la geometría de la plaza cuando no hay huellas de edificio dentro (o cuando las existentes están incompletas: replaceExisting). scale = factor sobre el polígono de la plaza.",
+      "default": { "height": 8, "scale": 0.8, "replaceExisting": false },
+      "plazas": {
+        "paseo-zibata": { "height": 9, "scale": 0.62, "replaceExisting": true },
+        "xentric-zibata": { "height": 8, "scale": 0.8, "replaceExisting": true },
+        "campo-de-golf": { "height": 6, "scale": 0.85, "replaceExisting": true },
+        "foodtrucks-pickleball": { "height": 4, "scale": 0.75 },
+        "distrito-nandu": { "height": 10, "scale": 0.85 }
+      }
+    }
+  }
+}

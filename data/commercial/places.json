@@ -1,0 +1,2842 @@
+{
+  "$schema": "./schemas/places.schema.json",
+  "version": 1,
+  "updatedAt": "2026-09-14",
+  "places": [
+    {
+      "id": "carls-jr",
+      "slug": "carls-jr",
+      "name": "Carl's Jr.",
+      "plazaId": "xentric-anahuac",
+      "category": "hamburguesas",
+      "subcategory": null,
+      "description": "Sucursal de la cadena de hamburguesas Carl's Jr.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.ubereats.com/mx/store/carls-jr-zibata/w6_gvhpSUZWSjBZlliWNOg",
+          "https://zibata.digital/categoria-unica/restaurantes/"
+        ]
+      }
+    },
+    {
+      "id": "mirrus-kitchen",
+      "slug": "mirrus-kitchen",
+      "name": "Mirrus Kitchen",
+      "plazaId": "xentric-anahuac",
+      "category": "desayunos-y-cafe",
+      "subcategory": "brunch",
+      "description": "Desayunos, comida consciente y repostería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/mirruskitchen/",
+        "facebook": "https://www.facebook.com/mirruskitchen/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/mirruskitchen/",
+          "https://www.facebook.com/mirruskitchen/",
+          "https://www.rappi.com.mx/restaurantes/1930061802-mirrus-kitchen",
+          "https://restaurantguru.com/Mirrus-Kitchen-Santiago-de-Queretaro"
+        ]
+      }
+    },
+    {
+      "id": "akilos-de-cecina",
+      "slug": "akilos-de-cecina",
+      "name": "A'Kilos de Cecina",
+      "plazaId": "xentric-anahuac",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Tacos y platillos de cecina y chorizo; también vende cecina por kilo.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/akilos.de.cecina/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "cecina"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/akilos.de.cecina/",
+          "https://www.rappi.com.mx/restaurantes/delivery/564141-a-kilos-de-cecina",
+          "https://www.ubereats.com/mx-en/store/a-kilos-de-cecina-queretaro/cjHzwj1MVTuiRcGymYMcOw",
+          "https://www.instagram.com/p/DWpHXovkd1y/"
+        ]
+      }
+    },
+    {
+      "id": "huskys-ice-cream",
+      "slug": "huskys-ice-cream",
+      "name": "Husky's Ice Cream",
+      "plazaId": "xentric-anahuac",
+      "category": "postres",
+      "subcategory": "helados",
+      "description": "Heladería artesanal de Querétaro con helados de crema, soft y yogur.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.huskysicecream.com/",
+        "instagram": "https://www.instagram.com/huskys.icecream/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.huskysicecream.com/",
+          "https://www.instagram.com/huskys.icecream/"
+        ]
+      }
+    },
+    {
+      "id": "boba-station",
+      "slug": "boba-station",
+      "name": "Boba Station Tapioca Bar",
+      "plazaId": "xentric-anahuac",
+      "category": "bebidas",
+      "subcategory": "te-de-burbujas",
+      "description": "Bebidas con perlas de tapioca (boba).",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/Bobastationqro/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.rappi.com.mx/restaurantes/1930110288-boba-station-tapioca-bar",
+          "https://www.facebook.com/Bobastationqro/",
+          "https://linktr.ee/bobastationmx"
+        ]
+      }
+    },
+    {
+      "id": "origenatural",
+      "slug": "origenatural",
+      "name": "Origen Natural",
+      "plazaId": "xentric-anahuac",
+      "category": "saludable-y-bowls",
+      "subcategory": null,
+      "description": "Bowls, jugos, smoothies y sándwiches saludables.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/origenatural_zibata/",
+        "facebook": "https://www.facebook.com/origenaturalzibata/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "jugos",
+        "smoothies"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/origenatural_zibata/",
+          "https://www.facebook.com/origenaturalzibata/",
+          "https://www.tripadvisor.com/Restaurant_Review-g479232-d25335613-Reviews-Origen_Natural_Zibata-Queretaro_City_Central_Mexico_and_Gulf_Coast.html",
+          "https://www.rappi.com.mx/restaurantes/1930062980-origenatural"
+        ]
+      }
+    },
+    {
+      "id": "ciao-bella",
+      "slug": "ciao-bella",
+      "name": "Ciao Bella Trattoria",
+      "plazaId": "xentric-anahuac",
+      "category": "italiana",
+      "subcategory": null,
+      "description": "Trattoria italiana con pastas, risotto y pizza.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.ciaobellaqro.com/",
+        "instagram": "https://www.instagram.com/ciao_bellaqro/",
+        "facebook": "https://www.facebook.com/CiaoBellaqro/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.ciaobellaqro.com/",
+          "https://www.instagram.com/ciao_bellaqro/",
+          "https://www.ubereats.com/mx/store/ciao-bella-trattoria/yab4F0duTMmL05MWFZZ4iQ",
+          "https://restaurantguru.com/Ciao-Bella-Trattoria-Italiana-Santiago-de-Queretaro"
+        ]
+      }
+    },
+    {
+      "id": "sushi-itto",
+      "slug": "sushi-itto",
+      "name": "Sushi Itto",
+      "plazaId": "xentric-anahuac",
+      "category": "asiatica",
+      "subcategory": "sushi",
+      "description": "Sucursal de la cadena Sushi Itto: sushi, rollos y cocina japonesa.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/SushiittoQueretaroOficial/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/SushiittoQueretaroOficial/videos/conoce-nuestra-nueva-sucursal-en-zibat%C3%A1sushiitto-m%C3%A1s-cerca-de-ti-sushi-itto-xent/851004575574566/",
+          "https://www.rappi.com.mx/restaurantes/1930014741-sushiitto",
+          "https://www.ubereats.com/mx/store/sushi-itto-xentric/pVIoZ_eTUm-DGHewEOkK_Q",
+          "https://web.didiglobal.com/mx/food/queretaro-que/sushi-itto-xentric/5764607582027907617/"
+        ]
+      }
+    },
+    {
+      "id": "subway",
+      "slug": "subway",
+      "name": "Subway",
+      "plazaId": "xentric-anahuac",
+      "category": "sandwiches-y-deli",
+      "subcategory": null,
+      "description": "Sucursal de la cadena de sándwiches Subway.",
+      "localNumber": "126",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://mexicopymes.com/info/subway-4DEB725A4337BCB8",
+          "https://www.rappi.com.mx/restaurantes/1930064964-subway",
+          "https://zibata.digital/categoria-unica/restaurantes/"
+        ]
+      }
+    },
+    {
+      "id": "good-morning-coffee",
+      "slug": "good-morning-coffee",
+      "name": "Good Morning Coffee",
+      "plazaId": "xentric-anahuac",
+      "category": "desayunos-y-cafe",
+      "subcategory": "brunch",
+      "description": "Cafetería de desayunos y brunch.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/goodmorningcoffee.qro/",
+        "facebook": "https://www.facebook.com/gmcoffeequeretaro/",
+        "tiktok": "https://www.tiktok.com/@goodmorningcoffee.qro",
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/goodmorningcoffee.qro/",
+          "https://www.tiktok.com/@goodmorningcoffee.qro/video/7245017369104387333",
+          "https://www.facebook.com/gmcoffeequeretaro/"
+        ]
+      }
+    },
+    {
+      "id": "tortas-fifthy-fifthy",
+      "slug": "tortas-fifthy-fifthy",
+      "name": "Tortas Fifthy Fifthy",
+      "plazaId": "xentric-anahuac",
+      "category": "sandwiches-y-deli",
+      "subcategory": "tortas",
+      "description": "Tortería con tortas, wraps y bowls.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://fifthyfifthy.com.mx/",
+        "instagram": "https://www.instagram.com/fifthy_fifthymx/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "wraps",
+        "bowls"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://fifthyfifthy.com.mx/",
+          "https://tortas-fifthy-fifthy.ola.click/",
+          "https://www.instagram.com/fifthy_fifthymx/p/DO1bXfJjjX_/",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
+          "https://www.ubereats.com/mx-en/store/tortas-fifthy-fifthy-zibata-queretaro/dEQQZM56TfSVY4IYAG7f1w"
+        ]
+      }
+    },
+    {
+      "id": "rometta",
+      "slug": "rometta",
+      "name": "Rometta Gastrobar",
+      "plazaId": "xentric-anahuac",
+      "category": "bistro",
+      "subcategory": null,
+      "description": "Gastrobar con coctelería y vista panorámica.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/romettaqro/",
+        "facebook": "https://www.facebook.com/p/Rometta-100088246603495/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "bar",
+        "coctelería",
+        "vista"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/romettaqro/",
+          "https://www.rappi.com.mx/restaurantes/1930074457-rometta-gastrobar",
+          "https://www.facebook.com/p/Rometta-100088246603495/",
+          "https://www.tiktok.com/@tragonauta/video/7249106716808236294"
+        ]
+      }
+    },
+    {
+      "id": "dominos",
+      "slug": "dominos",
+      "name": "Domino's",
+      "plazaId": "xentric-anahuac",
+      "category": "pizza",
+      "subcategory": null,
+      "description": "Sucursal de la cadena de pizzas Domino's.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://web.didiglobal.com/mx/food/queretaro-que/dominos-zibata/5764607774571626711/",
+          "https://www.ubereats.com/mx-en/store/dominos-zibata/O_XWufZZVaakvzybfQp7PQ",
+          "https://www.allbiz.mx/dominos-zibata-442-644-9797",
+          "https://zibata.digital/categoria-unica/restaurantes/"
+        ]
+      }
+    },
+    {
+      "id": "la-880",
+      "slug": "la-880",
+      "name": "La 880 Alitas y Pisto",
+      "plazaId": "xentric-anahuac",
+      "category": "pollo",
+      "subcategory": "alitas",
+      "description": "Alitas, antojitos y bar casual.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/La880Alitas/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "bar"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.rappi.com.mx/restaurantes/1930095201-la-880-alitas-y-pisto",
+          "https://www.facebook.com/La880Alitas/",
+          "https://www.wansoft.net/Tienda.Wansoft/Home/Index?id=K06Mc6XmUgc%3D&mid=undefined&table=undefined"
+        ]
+      }
+    },
+    {
+      "id": "lion-reef",
+      "slug": "lion-reef",
+      "name": "Lion Reef Sea & Bar",
+      "plazaId": "xentric-anahuac",
+      "category": "mariscos",
+      "subcategory": null,
+      "description": "Restaurante-bar de mariscos y coctelería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.lionreef.mx/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/lionreef/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "coctelería"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.lionreef.mx/",
+          "https://www.facebook.com/lionreef/",
+          "https://www.instagram.com/reel/DSDrwTAEW_K/"
+        ]
+      }
+    },
+    {
+      "id": "wicklow-irish-pub",
+      "slug": "wicklow-irish-pub",
+      "name": "Wicklow Irish Pub",
+      "plazaId": "xentric-anahuac",
+      "category": "bar-y-pub",
+      "subcategory": "cerveceria",
+      "description": "Pub irlandés con cerveza, whisky y música en vivo.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/wicklowirishpub/",
+        "facebook": "https://www.facebook.com/wicklowzibata/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "música en vivo"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/wicklowzibata/",
+          "https://www.instagram.com/wicklowirishpub/p/CztVbpQOU79/",
+          "https://untappd.com/v/wicklow-irish-pub-zibata/11541936"
+        ]
+      }
+    },
+    {
+      "id": "birria-los-esposos",
+      "slug": "birria-los-esposos",
+      "name": "Birria Los Esposos",
+      "plazaId": "xentric-anahuac",
+      "category": "tacos-y-antojitos",
+      "subcategory": "birria",
+      "description": "Birria estilo Jalisco, quesabirrias y carne en su jugo.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://birrialosesposos.com/",
+        "instagram": "https://www.instagram.com/birrialosesposos/",
+        "facebook": "https://www.facebook.com/p/Birria-Los-Esposos-100089812507971/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/100089812507971/posts/es-hoy-es-hoy-apertura-birria-los-esposos-sucursal-zibat%C3%A1-para-celebrar-a-partir/674639872206424/",
+          "https://birrialosesposos.com/",
+          "https://www.instagram.com/birrialosesposos/"
+        ]
+      }
+    },
+    {
+      "id": "los-morros-de-sonora",
+      "slug": "los-morros-de-sonora",
+      "name": "Los Morros de Sonora",
+      "plazaId": "xentric-anahuac",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Carne asada y hot dogs estilo Sonora.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.losmorrosdesonora.com/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/LosMorrosdeSonora/",
+        "tiktok": "https://www.tiktok.com/@losmorrosdesonora",
+        "whatsapp": null
+      },
+      "tags": [
+        "hot dogs"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.losmorrosdesonora.com/",
+          "https://www.facebook.com/LosMorrosdeSonora/",
+          "https://www.rappi.com.mx/restaurantes/1930072181-los-morros-de-sonoraa"
+        ]
+      }
+    },
+    {
+      "id": "tacos-los-tarascos",
+      "slug": "tacos-los-tarascos",
+      "name": "Los Tarascos Taquería",
+      "plazaId": "xentric-anahuac",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Taquería de tacos al pastor, bistec y chorizo.",
+      "localNumber": "Int. 4",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422984553",
+      "photos": [],
+      "links": {
+        "website": "https://lostarascos.com.mx/tacos-en-zibata/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://lostarascos.com.mx/tacos-en-zibata/",
+          "https://www.ubereats.com/mx-en/store/los-tarascos-zibata/25vMgtSSV-K_ywvlq4BvCw"
+        ]
+      }
+    },
+    {
+      "id": "pizca-de-azucar-zibata",
+      "slug": "pizca-de-azucar-zibata",
+      "name": "Pizca de Azúcar",
+      "plazaId": "xentric-anahuac",
+      "category": "postres",
+      "subcategory": "pasteleria",
+      "description": "Pastelería y panadería artesanal con café.",
+      "localNumber": "14",
+      "hours": {
+        "mon": [
+          "07:30-20:30"
+        ],
+        "tue": [
+          "07:30-20:30"
+        ],
+        "wed": [
+          "07:30-20:30"
+        ],
+        "thu": [
+          "07:30-20:30"
+        ],
+        "fri": [
+          "07:30-20:30"
+        ],
+        "sat": [
+          "08:00-20:00"
+        ],
+        "sun": [
+          "08:00-20:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://pizcadeazucar.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "café"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://pizcadeazucar.com/",
+          "https://www.ubereats.com/mx/store/pizca-de-azucar-zibata/L9YxBJDPUFaWA3Els5aczA",
+          "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
+          "https://zibatahoy.com/listing/pizca-de-azucar-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "tim-hortons",
+      "slug": "tim-hortons",
+      "name": "Tim Hortons",
+      "plazaId": "anahuac-queretaro",
+      "category": "desayunos-y-cafe",
+      "subcategory": null,
+      "description": "Cafetería de la cadena Tim Hortons dentro del campus de la Universidad Anáhuac.",
+      "localNumber": null,
+      "hours": {
+        "mon": [
+          "06:00-20:00"
+        ],
+        "tue": [
+          "06:00-20:00"
+        ],
+        "wed": [
+          "06:00-20:00"
+        ],
+        "thu": [
+          "06:00-20:00"
+        ],
+        "fri": [
+          "06:00-20:00"
+        ],
+        "sat": [
+          "06:00-20:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://timhortonsmx.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "dentro del campus"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://timhortonsmx.com/es/sucursalesqro.php"
+        ]
+      }
+    },
+    {
+      "id": "sinforosa",
+      "slug": "sinforosa",
+      "name": "Sinforosa Café",
+      "plazaId": "paseo-zibata",
+      "category": "desayunos-y-cafe",
+      "subcategory": "cafe-de-especialidad",
+      "description": "Cafetería con café de especialidad, panadería, ensaladas y sándwiches.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/sinforosa.cafe/",
+        "tiktok": "https://www.tiktok.com/@sinforosa.cafe",
+        "whatsapp": null
+      },
+      "tags": [
+        "panadería"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.facebook.com/sinforosa.cafe/",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://zibatahoy.com/listing/sinforosa-cafe/",
+          "https://www.ubereats.com/mx-en/store/sinforosa-cafe-zibata/X2wWogHuV3a1aovgDsnJng",
+          "https://www.tiktok.com/@sinforosa.cafe/video/7272535144882261254"
+        ]
+      }
+    },
+    {
+      "id": "cebicheria-del-dia",
+      "slug": "cebicheria-del-dia",
+      "name": "Cebichería del Día",
+      "plazaId": "paseo-zibata",
+      "category": "mariscos",
+      "subcategory": "ceviche",
+      "description": "Ceviches, tostadas y mariscos.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/cebicheriadeldia.qro/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/zibata.mx/reel/DH4yp5mgdO5/",
+          "https://www.instagram.com/cebicheriadeldia.qro/",
+          "https://www.facebook.com/groups/528562053916284/posts/9074591835979887/",
+          "https://www.ubereats.com/mx/store/cebicheria-del-dia-zibata/ZrfVhPLlUneWaP__2nvjGA",
+          "https://www.rappi.com.mx/restaurantes/1930220836-cebicheria-del-dia"
+        ]
+      }
+    },
+    {
+      "id": "dlu-coffee-bakery",
+      "slug": "dlu-coffee-bakery",
+      "name": "D’Lu Coffee & Bakery",
+      "plazaId": "paseo-zibata",
+      "category": "desayunos-y-cafe",
+      "subcategory": "panaderia",
+      "description": "Cafetería y panadería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/dlu_cafe/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/dlu_cafe/",
+          "https://restaurantguru.com/Plaza-Paseo-Zibata-Mexico-ml"
+        ]
+      }
+    },
+    {
+      "id": "mr-miches",
+      "slug": "mr-miches",
+      "name": "Mr. Miches",
+      "plazaId": "paseo-zibata",
+      "category": "bar-y-pub",
+      "subcategory": null,
+      "description": "Micheladas, cantaritos, cerveza y botanas.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/mr.michesbar/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "micheladas"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/mr.michesbar/",
+          "https://www.entuzona.com.mx/directoriofrayjunipero/mr-miches/zibata",
+          "https://www.facebook.com/groups/zakiaoficial/posts/1007239788521561/",
+          "https://www.rappi.com.mx/restaurantes/1930278399-miches-burgers-zibata"
+        ]
+      }
+    },
+    {
+      "id": "sylvius",
+      "slug": "sylvius",
+      "name": "Sylvius Cocktail & Cocina",
+      "plazaId": "paseo-zibata",
+      "category": "bar-y-pub",
+      "subcategory": "cocteleria",
+      "description": "Bar de coctelería con cocina.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422705187",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/sylvius.bar/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "coctelería"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/p/C4LvYCyotQc/",
+          "https://www.facebook.com/PaseoZibata/posts/-bienvenidos-a-sylviusbar-donde-cada-sorbo-es-una-experiencia-%C3%BAnica-en-sylvius-n/974488221364447/",
+          "https://www.facebook.com/sylvius.bar/posts/en-sylvius-tenemos-promociones-todos-los-d%C3%ADas-las-conoces-rsv-442-270-5187paseo-/709814967817248/"
+        ]
+      }
+    },
+    {
+      "id": "currucucu",
+      "slug": "currucucu",
+      "name": "Currucucú Cocina Artesanal Mexicana",
+      "plazaId": "paseo-zibata",
+      "category": "mexicana",
+      "subcategory": null,
+      "description": "Cocina mexicana artesanal con desayunos y chilaquiles.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://currucucu.mx/",
+        "instagram": "https://www.instagram.com/currucucumx/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "desayunos"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://currucucu.mx/",
+          "https://www.instagram.com/currucucumx/",
+          "https://www.ubereats.com/mx/store/currucucu-cocina-artesanal-mexicana-sucursal-zibata/_zSnAMcLRMOPxinpqUPdVQ",
+          "https://www.tiktok.com/@parqueszibata/video/7348183331198029062"
+        ]
+      }
+    },
+    {
+      "id": "luka-pokes",
+      "slug": "luka-pokes",
+      "name": "Luka",
+      "plazaId": "paseo-zibata",
+      "category": "saludable-y-bowls",
+      "subcategory": "poke",
+      "description": "Poke bowls personalizables.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/LukaPokehouse/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.facebook.com/LukaPokehouse/videos/luka-zibata/298162768118161/",
+          "https://restaurantguru.com/Luka-Mexico/menu",
+          "https://www.ubereats.com/mx-en/store/luka-pokes-zibata/j42vV5UpQ-y4Unq3Vn88jA"
+        ]
+      }
+    },
+    {
+      "id": "las-memelas-de-la-rana",
+      "slug": "las-memelas-de-la-rana",
+      "name": "Las Memelas de la Rana",
+      "plazaId": "paseo-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": null,
+      "description": "Memelas, antojitos mexicanos y desayunos.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://lasmemelasdelarana.mx/",
+        "instagram": "https://www.instagram.com/las_memelas/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "desayunos"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.facebook.com/PaseoZibata/posts/en-las-memelas-de-la-rana-zibat%C3%A1-las-memelas-son-m%C3%A1s-que-un-platillo-son-una-exp/1009489811197621/",
+          "https://lasmemelasdelarana.mx/",
+          "https://www.instagram.com/las_memelas/",
+          "https://www.rappi.com.mx/restaurantes/1930040091-las-memelas-de-la-rana"
+        ]
+      }
+    },
+    {
+      "id": "holy-kebabs",
+      "slug": "holy-kebabs",
+      "name": "Holy Kebabs",
+      "plazaId": "paseo-zibata",
+      "category": "sandwiches-y-deli",
+      "subcategory": null,
+      "description": "Kebabs.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/holykebabszibata/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "kebab"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/holykebabszibata/",
+          "https://www.tiktok.com/@elishagleason/photo/7609722967907486996",
+          "https://www.ubereats.com/mx-en/store/holy-kebabs/WRbhHcJzVOmi5nU5jqoxRw"
+        ]
+      }
+    },
+    {
+      "id": "carnitas-don-tono",
+      "slug": "carnitas-don-tono",
+      "name": "Carnitas Don Toño",
+      "plazaId": "paseo-zibata",
+      "category": "carne-y-parrilla",
+      "subcategory": "carnitas",
+      "description": "Carnitas, tacos y desayunos.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/carnitasdontonoqro/",
+        "facebook": "https://www.facebook.com/p/Carnitas-Don-To%C3%B1o-Zibata-100076021691931/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.facebook.com/p/Carnitas-Don-To%C3%B1o-Zibata-100076021691931/",
+          "https://www.instagram.com/carnitasdontonoqro/",
+          "https://restaurantguru.com/Carnitas-Don-Tono-Zibata-Santiago-de-Queretaro"
+        ]
+      }
+    },
+    {
+      "id": "masaru",
+      "slug": "masaru",
+      "name": "Masaru Sushi & Beer",
+      "plazaId": "paseo-zibata",
+      "category": "asiatica",
+      "subcategory": "sushi",
+      "description": "Sushi, pokes y yakimeshi.",
+      "localNumber": "6",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524428880580",
+      "photos": [],
+      "links": {
+        "website": "https://www.masaru.com.mx/web/",
+        "instagram": "https://www.instagram.com/masarusushibeer/",
+        "facebook": "https://www.facebook.com/masaruzibata/",
+        "tiktok": null,
+        "whatsapp": "+524426028627"
+      },
+      "tags": [
+        "poke"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.masaru.com.mx/web/",
+          "https://www.facebook.com/masaruzibata/",
+          "https://www.rappi.com.mx/restaurantes/1923211877-masaru-sushi"
+        ]
+      }
+    },
+    {
+      "id": "tomassa",
+      "slug": "tomassa",
+      "name": "Tomassa Almacén de Pastas",
+      "plazaId": "paseo-zibata",
+      "category": "italiana",
+      "subcategory": "pasta-fresca",
+      "description": "Pastas y pizzas artesanales.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/tomassapasta/",
+        "facebook": "https://www.facebook.com/p/Tomassa-Almac%C3%A9n-de-Pastas-61581875640351/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "pizza"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/tomassapasta/",
+          "https://www.facebook.com/p/Tomassa-Almac%C3%A9n-de-Pastas-61581875640351/",
+          "https://restaurantguru.com/Plaza-Paseo-Zibata-Mexico-ml"
+        ]
+      }
+    },
+    {
+      "id": "la-michoacana",
+      "slug": "la-michoacana",
+      "name": "La Michoacana",
+      "plazaId": "paseo-zibata",
+      "category": "postres",
+      "subcategory": "helados",
+      "description": "Paletería y nevería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/"
+        ]
+      }
+    },
+    {
+      "id": "al-grano",
+      "slug": "al-grano",
+      "name": "Al Grano Maíz & Snacks",
+      "plazaId": "paseo-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": "esquites-y-snacks",
+      "description": "Elotes, esquites y snacks de maíz.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/algranomaizysnacks/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "esquites"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/algranomaizysnacks/",
+          "https://www.facebook.com/people/Al-Grano-Ma%C3%ADz-Snacks/100092242820677/",
+          "https://restaurantguru.com/Plaza-Paseo-Zibata-Mexico-ml"
+        ]
+      }
+    },
+    {
+      "id": "tacos-la-chusma",
+      "slug": "tacos-la-chusma",
+      "name": "Tacos la Chusma",
+      "plazaId": "paseo-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Taquería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/tacoslachusmazibata/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/tacoslachusmazibata/",
+          "https://www.paseozibata.mx/",
+          "https://zibata.digital/categoria-unica/restaurantes/"
+        ]
+      }
+    },
+    {
+      "id": "el-hornero",
+      "slug": "el-hornero",
+      "name": "El Hornero",
+      "plazaId": "paseo-zibata",
+      "category": "carne-y-parrilla",
+      "subcategory": "cortes",
+      "description": "Parrilla y pizzería argentina con empanadas y cortes.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.elhornero.mx/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/elhornero.mx/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "empanadas",
+        "pizza"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.elhornero.mx/Hornero.html",
+          "https://www.facebook.com/elhornero.mx/videos/el-hornero-zibat%C3%A1/1535053337563291/",
+          "https://restaurantguru.com/EL-HORNERO-ZIBATA-Mexico/menu"
+        ]
+      }
+    },
+    {
+      "id": "birria-jauregui",
+      "slug": "birria-jauregui",
+      "name": "Birria Jáuregui",
+      "plazaId": "paseo-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": "birria",
+      "description": "Birriería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/birriajauregui/",
+        "facebook": "https://www.facebook.com/BirriaJaureguiQro/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.facebook.com/BirriaJaureguiQro/posts/386032436351898/",
+          "https://www.instagram.com/birriajauregui/p/C8j95mMuXAb/",
+          "https://www.ubereats.com/mx/store/birria-jauregui-zibata/JRmky0I_X96I4HtZ0QbdsA",
+          "https://www.rappi.com.mx/restaurantes/1923741548-birria-jauregui"
+        ]
+      }
+    },
+    {
+      "id": "bistrot-marino",
+      "slug": "bistrot-marino",
+      "name": "Bistrot Marino",
+      "plazaId": "paseo-zibata",
+      "category": "mariscos",
+      "subcategory": null,
+      "description": "Mariscos y coctelería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/bistrot.marino/",
+        "facebook": "https://www.facebook.com/people/Bistrot-Marino/61559868993335/",
+        "tiktok": "https://www.tiktok.com/@bistrot.marino",
+        "whatsapp": null
+      },
+      "tags": [
+        "coctelería"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.tiktok.com/@lalibredenegocios/video/7393151765702659334",
+          "https://www.facebook.com/people/Bistrot-Marino/61559868993335/",
+          "https://www.instagram.com/bistrot.marino/",
+          "https://zibatahoy.com/listing/bistrot-marino/",
+          "https://www.rappi.com.mx/restaurantes/1930257646-bistrot-marino"
+        ]
+      }
+    },
+    {
+      "id": "ramen-express",
+      "slug": "ramen-express",
+      "name": "Ramen Express",
+      "plazaId": "paseo-zibata",
+      "category": "asiatica",
+      "subcategory": "ramen",
+      "description": "Ramen y productos de comida coreana.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/ramenexpress.qro.zibata/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "comida coreana"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/p/DBp1F6gMnb5/",
+          "https://www.facebook.com/PaseoZibata/videos/quieres-vivir-una-experiencia-llena-de-sabor-sin-viajar-miles-de-kil%C3%B3metros-en-p/2944306425916797/",
+          "https://www.instagram.com/ramenexpress.qro.zibata/"
+        ]
+      }
+    },
+    {
+      "id": "la-gaspacheria-tradicional",
+      "slug": "la-gaspacheria-tradicional",
+      "name": "La Gaspachería Tradicional",
+      "plazaId": "paseo-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": "esquites-y-snacks",
+      "description": "Gaspachos tradicionales de fruta estilo Morelia.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://lagaspacheriatradicional.com/",
+        "instagram": "https://www.instagram.com/lagaspacheriatradicional/",
+        "facebook": "https://www.facebook.com/gaspacheriatradicional/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "gaspachos",
+        "fruta"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.facebook.com/gaspacheriatradicional/",
+          "https://lagaspacheriatradicional.com/",
+          "https://restaurantguru.com/La-Gaspacheria-Tradicional-Mexico"
+        ]
+      }
+    },
+    {
+      "id": "panaderia-santa-fe",
+      "slug": "panaderia-santa-fe",
+      "name": "Panadería Santa Fe",
+      "plazaId": "paseo-zibata",
+      "category": "desayunos-y-cafe",
+      "subcategory": "panaderia",
+      "description": "Panadería tradicional.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/PanaderiaSantaFeQro/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.paseozibata.mx/",
+          "https://www.facebook.com/PanaderiaSantaFeQro/"
+        ]
+      }
+    },
+    {
+      "id": "tacos-la-capilla",
+      "slug": "tacos-la-capilla",
+      "name": "Tacos La Capilla",
+      "plazaId": "paseo-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Taquería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/PaseoZibata/posts/los-tradicionales-tacos-la-capilla-cu%C3%A1les-son-tus-favoritos-queso-papa-todos-te-/808611753163868/",
+          "https://es.foursquare.com/v/la-capilla-zibat%C3%A1/5da1e11bde8f3c0008e6e10a",
+          "https://es.restaurantguru.com/La-Capilla-Zibata-Santiago-de-Queretaro/menu"
+        ]
+      }
+    },
+    {
+      "id": "nam-nam",
+      "slug": "nam-nam",
+      "name": "Ñam Ñam Sushi",
+      "plazaId": "condesa",
+      "category": "asiatica",
+      "subcategory": "sushi",
+      "description": "Sucursal de la cadena Ñam Ñam Sushi.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://xn--amamsushi-k6ac.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": "https://www.tiktok.com/@namnamsushi",
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://web.didiglobal.com/mx/food/queretaro-que/nam-nam-sushi-zibata/5764607734100787559/",
+          "https://namnamsushi.com/",
+          "https://www.tiktok.com/@namnamsushi"
+        ]
+      }
+    },
+    {
+      "id": "carly-tacos-de-pescado",
+      "slug": "carly-tacos-de-pescado",
+      "name": "Tacos Carly",
+      "plazaId": "condesa",
+      "category": "mariscos",
+      "subcategory": null,
+      "description": "Tacos de pescado estilo Baja y mariscos.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/tacoscarly/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "tacos de pescado"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/p/DDfORh9xQH2/",
+          "https://www.entuzona.com.mx/directoriofrayjunipero/tacos-carly/zibata",
+          "https://web.didiglobal.com/mx/food/queretaro-que/tacos-carly-zibata/5764608290936587474/",
+          "https://www.rappi.com.mx/restaurantes/1930231990-tacos-carly"
+        ]
+      }
+    },
+    {
+      "id": "arepanas",
+      "slug": "arepanas",
+      "name": "Arepanas Mx",
+      "plazaId": "condesa",
+      "category": "tacos-y-antojitos",
+      "subcategory": "arepas",
+      "description": "Arepas venezolanas.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524424865798",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.tripadvisor.com/Restaurant_Review-g479232-d27975346-Reviews-Arepanas_Mx-Queretaro_City_Central_Mexico_and_Gulf_Coast.html",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://www.rappi.com.mx/restaurantes/1930162726-arepanas-mx"
+        ]
+      }
+    },
+    {
+      "id": "romani-pizzas",
+      "slug": "romani-pizzas",
+      "name": "Romani Pizzas y Ensaladas",
+      "plazaId": "condesa",
+      "category": "pizza",
+      "subcategory": null,
+      "description": "Pizzas y ensaladas.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/p/Romani-Pizzas-y-Ensaladas-61577783051318/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "ensaladas"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/p/Romani-Pizzas-y-Ensaladas-61577783051318/",
+          "https://www.rappi.com.mx/restaurantes/delivery/617705-romani-pizzas-y-ensaladas"
+        ]
+      }
+    },
+    {
+      "id": "casa-vieja",
+      "slug": "casa-vieja",
+      "name": "Taquería Casa Vieja",
+      "plazaId": "condesa",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Taquería y parrillada.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/p/Taquer%C3%ADa-Casa-Vieja-Zibata-100090240614595/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/p/Taquer%C3%ADa-Casa-Vieja-Zibata-100090240614595/",
+          "https://www.rappi.com.mx/restaurantes/1930044301-taqueria-casa-vieja",
+          "https://www.instagram.com/casavieja_mx/"
+        ]
+      }
+    },
+    {
+      "id": "bendito-bocado",
+      "slug": "bendito-bocado",
+      "name": "Bendito Bocado",
+      "plazaId": "condesa",
+      "category": "bistro",
+      "subcategory": null,
+      "description": null,
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/p/Bendito-Bocado-Zibat%C3%A1-61552620264859/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/p/Bendito-Bocado-Zibat%C3%A1-61552620264859/"
+        ]
+      }
+    },
+    {
+      "id": "burger-fries",
+      "slug": "burger-fries",
+      "name": "Burger & Fries Forever",
+      "plazaId": "condesa",
+      "category": "hamburguesas",
+      "subcategory": null,
+      "description": "Hamburguesas, papas, hot dogs y malteadas.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/burgers_bff/",
+        "facebook": "https://www.facebook.com/burgernfriesmx",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "hot dogs"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.ubereats.com/mx-en/store/burger-fries-forever-zibata/sX34wNrjUQO_12_PAo0gTw",
+          "https://www.instagram.com/burgers_bff/",
+          "https://www.facebook.com/burgernfriesmx"
+        ]
+      }
+    },
+    {
+      "id": "bocuze",
+      "slug": "bocuze",
+      "name": "Bocuze Bistró Café",
+      "plazaId": "xentric-zibata",
+      "category": "bistro",
+      "subcategory": null,
+      "description": "Bistró café con brunch, comida y cena.",
+      "localNumber": "101-103",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524425498641",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/bocuzebistro/",
+        "facebook": "https://www.facebook.com/Bocuze.bistro/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "brunch"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/",
+          "https://www.instagram.com/bocuzebistro/",
+          "https://www.facebook.com/Bocuze.bistro/",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://www.tripadvisor.com/Restaurant_Review-g479232-d19865629-Reviews-Bocuze-Queretaro_City_Central_Mexico_and_Gulf_Coast.html"
+        ]
+      }
+    },
+    {
+      "id": "bee-waffle",
+      "slug": "bee-waffle",
+      "name": "BeeWaffle",
+      "plazaId": "xentric-zibata",
+      "category": "desayunos-y-cafe",
+      "subcategory": null,
+      "description": "Waffles dulces y salados, café y malteadas.",
+      "localNumber": "104",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/beewafflemx/",
+        "facebook": "https://www.facebook.com/BeeWaffleMX/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "waffles"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/",
+          "https://www.facebook.com/BeeWaffleMX/",
+          "https://www.instagram.com/beewafflemx/"
+        ]
+      }
+    },
+    {
+      "id": "cosi-fan-tutte",
+      "slug": "cosi-fan-tutte",
+      "name": "Cosi Fan Tutte",
+      "plazaId": "xentric-zibata",
+      "category": "italiana",
+      "subcategory": null,
+      "description": "Restaurante italiano con pizzas y pastas.",
+      "localNumber": "105",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422148299",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/cosifantutteoficial/",
+        "facebook": "https://www.facebook.com/cosifantutteoficial/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "pizza"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/",
+          "https://www.facebook.com/cosifantutteoficial/videos/conoce-cosi-fan-tutte-zibat%C3%A1-ubicado-en-plaza-xentric-como-en-todas-nuestras-suc/801633100847949/",
+          "https://www.instagram.com/cosifantutteoficial/"
+        ]
+      }
+    },
+    {
+      "id": "honu-sushi",
+      "slug": "honu-sushi",
+      "name": "Honu Sushi & Oriental",
+      "plazaId": "xentric-zibata",
+      "category": "asiatica",
+      "subcategory": "sushi",
+      "description": "Sushi y cocina oriental.",
+      "localNumber": "207",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422457023",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/honuqro/",
+        "facebook": "https://www.facebook.com/honuqro/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "poke"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/",
+          "https://www.facebook.com/honuqro/",
+          "https://instagram.com/honuqro",
+          "https://www.tripadvisor.com/Restaurant_Review-g14967777-d27261113-Reviews-Honu_Sushi_Oriental-El_Marques_Municipality_Central_Mexico_and_Gulf_Coast.html",
+          "https://www.rappi.com.mx/restaurantes/1923220538-honu-sushi-y-oriental"
+        ]
+      }
+    },
+    {
+      "id": "ichos",
+      "slug": "ichos",
+      "name": "Ichos",
+      "plazaId": "xentric-zibata",
+      "category": "carne-y-parrilla",
+      "subcategory": null,
+      "description": "Carnes asadas.",
+      "localNumber": "208",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524426057244",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/"
+        ]
+      }
+    },
+    {
+      "id": "trecielos",
+      "slug": "trecielos",
+      "name": "Trecielos",
+      "plazaId": "xentric-zibata",
+      "category": "mexicana",
+      "subcategory": "cocina-regional",
+      "description": "Restaurante bar con cochinita pibil y lechón.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/trecielosqro/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "cochinita pibil"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://zibatahoy.com/listing/trecielos-qro/"
+        ]
+      }
+    },
+    {
+      "id": "la-marmota",
+      "slug": "la-marmota",
+      "name": "La Marmota Wings and Beer",
+      "plazaId": "xentric-zibata",
+      "category": "pollo",
+      "subcategory": "alitas",
+      "description": "Alitas, snacks y cerveza.",
+      "localNumber": "210",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524421951689",
+      "photos": [],
+      "links": {
+        "website": "https://lamarmota.com.mx/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/LaMarmotaZibata/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "cerveza"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/",
+          "https://www.facebook.com/LaMarmotaZibata/",
+          "https://lamarmota.com.mx/",
+          "https://www.ubereats.com/mx-en/store/la-marmota-wings-and-beer-zibata/wJQHq6V1QRKNojbleSIjyg",
+          "https://restaurantguru.com/La-Marmota-Zibata-Santiago-de-Queretaro"
+        ]
+      }
+    },
+    {
+      "id": "romelia-cafe",
+      "slug": "romelia-cafe",
+      "name": "Romelia Café",
+      "plazaId": "xentric-zibata",
+      "category": "desayunos-y-cafe",
+      "subcategory": null,
+      "description": "Cafetería con repostería casera.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://zibatahoy.com/listing/romelia-cafe/",
+          "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/"
+        ]
+      }
+    },
+    {
+      "id": "la-borra-del-cafe-xentric",
+      "slug": "la-borra-del-cafe-xentric",
+      "name": "La Borra del Café",
+      "plazaId": "xentric-zibata",
+      "category": "desayunos-y-cafe",
+      "subcategory": null,
+      "description": "Cafetería de la franquicia La Borra del Café.",
+      "localNumber": "110-111",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524423531580",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/LaBorraXentric/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/",
+          "https://www.facebook.com/LaBorraXentric/",
+          "https://www.allbiz.mx/la-borra-del-caf%C3%A9-xentric-442-353-1580"
+        ]
+      }
+    },
+    {
+      "id": "quetacos",
+      "slug": "quetacos",
+      "name": "Quetacos",
+      "plazaId": "xentric-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Taquería.",
+      "localNumber": "112-113",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/"
+        ]
+      }
+    },
+    {
+      "id": "la-michoacana-xentric-zibata",
+      "slug": "la-michoacana-xentric-zibata",
+      "name": "La Michoacana",
+      "plazaId": "xentric-zibata",
+      "category": "postres",
+      "subcategory": "helados",
+      "description": "Paletería y nevería.",
+      "localNumber": "109",
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xentriczibata.com/plaza-comercial/"
+        ]
+      }
+    },
+    {
+      "id": "kazus-kitchen",
+      "slug": "kazus-kitchen",
+      "name": "Kazu's Kitchen",
+      "plazaId": "plaza-zielo",
+      "category": "asiatica",
+      "subcategory": "sushi",
+      "description": "Cocina japonesa de la chef Kazu Kumoto.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://kazuskitchen.com/",
+        "instagram": "https://www.instagram.com/kazuskitchen/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://kazuskitchen.com/sucursales/",
+          "https://japan-food.jetro.go.jp/library/aboutsupporter/restaurant/Central_and_South_America/Mexico202408.pdf",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml"
+        ]
+      }
+    },
+    {
+      "id": "margaritas",
+      "slug": "margaritas",
+      "name": "Bistró Margaritas by Kaos",
+      "plazaId": "plaza-zielo",
+      "category": "bistro",
+      "subcategory": null,
+      "description": "Bistró con coctelería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/bistromargaritasbykaos/",
+        "facebook": "https://www.facebook.com/bistromargaritasbykaos/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "coctelería"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/bistromargaritasbykaos/",
+          "https://www.instagram.com/bistromargaritasbykaos/",
+          "https://www.facebook.com/p/Margaritas-Restaurante-Zibat%C3%A1-100094489011665/",
+          "https://triptap.com/places/mx/quertaro/santiago-de-queretaro/margaritas-restaurante-bar-t031f9a1",
+          "https://lideresmexicanos.com/tendencias/margaritas-bistro-restaurant-una-experiencia-culinaria-unica-en-queretaro"
+        ]
+      }
+    },
+    {
+      "id": "santa-clara",
+      "slug": "santa-clara",
+      "name": "Helados Santa Clara",
+      "plazaId": "plaza-zielo",
+      "category": "postres",
+      "subcategory": "helados",
+      "description": "Heladería de la marca Santa Clara.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/santaclarahelados/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml",
+          "https://www.instagram.com/santaclarahelados/",
+          "https://zibaliving.mx/interior.php?origen=Plaza+Zielo"
+        ]
+      }
+    },
+    {
+      "id": "entrecot-asador",
+      "slug": "entrecot-asador",
+      "name": "Entrecot Asador",
+      "plazaId": "plaza-zielo",
+      "category": "carne-y-parrilla",
+      "subcategory": "cortes",
+      "description": "Asador de cortes; también sirve desayunos.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://entrecot.com.mx/",
+        "instagram": "https://www.instagram.com/entrecotasador/",
+        "facebook": "https://www.facebook.com/entrecotasador/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "desayunos"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/entrecotasador/",
+          "https://entrecot.com.mx/",
+          "https://www.facebook.com/entrecotasador/",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
+          "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml"
+        ]
+      }
+    },
+    {
+      "id": "hot-buns",
+      "slug": "hot-buns",
+      "name": "Hot Buns",
+      "plazaId": "plaza-zielo",
+      "category": "hamburguesas",
+      "subcategory": null,
+      "description": "Hamburguesas smash, papas y aros de cebolla.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/hotbuns.zibata/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/hotbuns.zibata/",
+          "https://www.youtube.com/watch?v=P72LXBzGfRI",
+          "https://restaurantguru.com/Hot-Buns-Zibata-Hamburguesas-Mexico"
+        ]
+      }
+    },
+    {
+      "id": "escarola",
+      "slug": "escarola",
+      "name": "Escarola Food & Health",
+      "plazaId": "plaza-zielo",
+      "category": "saludable-y-bowls",
+      "subcategory": "ensaladas",
+      "description": "Ensaladas y paninis.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "paninis"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.escarolaqro.com/",
+          "https://zibata.digital/directory/local-verde/",
+          "https://mx.worldorgs.com/catalogar/santiago-de-quer%C3%A9taro/tienda-de-ensaladas/escarola-food-and-health"
+        ]
+      }
+    },
+    {
+      "id": "donatto-pizza",
+      "slug": "donatto-pizza",
+      "name": "Donatto Pizza",
+      "plazaId": "plaza-zielo",
+      "category": "pizza",
+      "subcategory": null,
+      "description": "Pizzería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/p/Donatto-100075786476537/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.rappi.com.mx/restaurantes/1923764489-donatto-pizza",
+          "https://www.facebook.com/p/Donatto-100075786476537/",
+          "https://ciudadypoder.mx/mundo/10-pizzerias-recomendables-para-pedir-a-domicilio-en-queretaro/",
+          "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml"
+        ]
+      }
+    },
+    {
+      "id": "la-borra-del-cafe-zielo",
+      "slug": "la-borra-del-cafe-zielo",
+      "name": "La Borra del Café",
+      "plazaId": "plaza-zielo",
+      "category": "desayunos-y-cafe",
+      "subcategory": null,
+      "description": "Cafetería de la franquicia La Borra del Café.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/laborradelcafe.zielo/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/laborradelcafe.zielo/",
+          "https://www.facebook.com/BorradelCafe/posts/hola-zielo-en-la-borra-del-caf%C3%A9-estamos-muy-contentos-de-poder-invitarte-a-nuest/3414663718647964/",
+          "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml"
+        ]
+      }
+    },
+    {
+      "id": "cafele",
+      "slug": "cafele",
+      "name": "Cafele",
+      "plazaId": "mol-jamadi",
+      "category": "desayunos-y-cafe",
+      "subcategory": "cafe-de-especialidad",
+      "description": "Café de especialidad, comida y bebidas todo el día.",
+      "localNumber": null,
+      "hours": {
+        "mon": [
+          "07:00-21:30"
+        ],
+        "tue": [
+          "07:00-21:30"
+        ],
+        "wed": [
+          "07:00-21:30"
+        ],
+        "thu": [
+          "07:00-21:30"
+        ],
+        "fri": [
+          "07:00-21:30"
+        ],
+        "sat": [
+          "07:00-21:30"
+        ],
+        "sun": [
+          "07:00-21:30"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://cafele.com.mx/pages/zibata",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "desayunos"
+      ],
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://cafele.com.mx/pages/zibata",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
+          "https://www.rappi.com.mx/restaurantes/1930198261-cafele"
+        ]
+      }
+    },
+    {
+      "id": "hoyo-19",
+      "slug": "hoyo-19",
+      "name": "DiezyNueve Golf Bar",
+      "plazaId": "campo-de-golf",
+      "category": "bar-y-pub",
+      "subcategory": null,
+      "description": "Restaurante y bar del campo de golf de Zibatá.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/diezynueve_zibata/",
+        "facebook": "https://www.facebook.com/DiezyNueveZibata/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "campo de golf"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://zibatagolf.com/",
+          "https://www.instagram.com/diezynueve_zibata/",
+          "https://www.facebook.com/DiezyNueveZibata/",
+          "https://www.ubereats.com/mx-en/store/diezynueve-zibata/zQSohueRTuu_BKYtqSb5Yg",
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://www.ubereats.com/mx/store/diezynueve-zibata/zQSohueRTuu_BKYtqSb5Yg"
+        ]
+      }
+    },
+    {
+      "id": "agave-grill",
+      "slug": "agave-grill",
+      "name": "Agave Grill",
+      "plazaId": "centro-zibata",
+      "category": "tacos-y-antojitos",
+      "subcategory": "tacos",
+      "description": "Taquería.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/p/Agave-Grill-61557015256230/",
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.facebook.com/p/Agave-Grill-61557015256230/",
+          "https://www.instagram.com/p/DNqtMc9N4i-/",
+          "https://www.instagram.com/sm_arq.uitectura/p/DDKreWSSdTS/"
+        ]
+      }
+    },
+    {
+      "id": "pio-poke-house",
+      "slug": "pio-poke-house",
+      "name": "Pio Poke House & Rolls",
+      "plazaId": "centro-zibata",
+      "category": "saludable-y-bowls",
+      "subcategory": "poke",
+      "description": "Poke bowls y rollos de sushi.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/piopokehouseandrolls/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "sushi"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://zibata.digital/categoria-unica/restaurantes/",
+          "https://www.rappi.com.mx/restaurantes/1930162529-pio-poke-house-and-rolls",
+          "https://www.instagram.com/piopokehouseandrolls/"
+        ]
+      }
+    },
+    {
+      "id": "lilo-bowl-bar",
+      "slug": "lilo-bowl-bar",
+      "name": "Lilo Bowl Bar",
+      "plazaId": "centro-zibata",
+      "category": "saludable-y-bowls",
+      "subcategory": null,
+      "description": "Smoothie bowls de açaí, pitaya y matcha.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/lilobowlbar/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "açaí"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/lilobowlbar/",
+          "https://www.happycow.net/reviews/lilo-bowl-bar-queretaro-418884",
+          "https://www.rappi.com.mx/restaurantes/1930214537-lilo-bowl-bar"
+        ]
+      }
+    },
+    {
+      "id": "sixties-burger",
+      "slug": "sixties-burger",
+      "name": "Sixties Burger",
+      "plazaId": "centro-zibata",
+      "category": "hamburguesas",
+      "subcategory": null,
+      "description": "Hamburguesas en ambiente de fuente de sodas de los años sesenta.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/sixtiesburgerzibata/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [
+        "malteadas"
+      ],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.instagram.com/sixtiesburgerzibata/",
+          "https://www.ubereats.com/mx/store/sixties-burger-zibata/_sE-hH8HRqyNoZelQHisxw"
+        ]
+      }
+    },
+    {
+      "id": "starbucks-centro-zibata",
+      "slug": "starbucks-centro-zibata",
+      "name": "Starbucks",
+      "plazaId": "centro-zibata",
+      "category": "desayunos-y-cafe",
+      "subcategory": null,
+      "description": "Sucursal de la cadena de cafeterías Starbucks.",
+      "localNumber": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.starbucks.com.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null
+      },
+      "tags": [],
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://web.didiglobal.com/mx/food/queretaro-que/starbucks-centro-zibata-queretaro/5764608034693973168/",
+          "https://www.ubereats.com/mx/store/starbucks-centro-zibata-queretaro/XiRZgNzxUTSAlHKj-Wzkbg",
+          "https://zibata.digital/"
+        ]
+      }
+    }
+  ]
+}

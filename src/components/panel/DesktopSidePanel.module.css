@@ -1,0 +1,35 @@
+.panel {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: var(--z-panel);
+  display: flex;
+  width: var(--panel-width);
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  backdrop-filter: var(--blur-surface);
+  box-shadow:
+    0 0 0 1px var(--color-border),
+    var(--shadow-lg);
+  transform: translateX(calc(100% + var(--space-6)));
+  opacity: 0;
+  transition:
+    transform var(--duration-slow) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.panel[data-open="true"] {
+  transform: none;
+  opacity: 1;
+}
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5) var(--space-5) var(--space-8);
+  scrollbar-width: thin;
+  scrollbar-color: var(--sand-300) transparent;
+}

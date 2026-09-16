@@ -1,0 +1,84 @@
+/** Resultados de búsqueda / filtros agrupados por plaza, con estado vacío claro. */
+import { SearchX, X } from 'lucide-react'
+import { EmptyState } from '../../components/ui/EmptyState.tsx'
+import { useCatalog } from '../../data/CatalogContext.tsx'
+import { t } from '../../i18n/index.ts'
+import type { Place } from '../../types/domain.ts'
+import { groupByPlaza } from '../filters/filters.ts'
+import { PlaceList } from '../places/PlaceList.tsx'
+import styles from './Panel.module.css'
+
+interface ResultsPanelProps {
+  places: readonly Place[]
+  onOpenPlace: (place: Place) => void
+  onSelectPlaza: (plazaId: string) => void
+  onClearFilters: () => void
+}
+
+export function ResultsPanel({
+  places,
+  onOpenPlace,
+  onSelectPlaza,
+  onClearFilters,
+}: ResultsPanelProps) {
+  const catalog = useCatalog()
+  const groups = groupByPlaza(places)
+
+  return (
+    <section className={styles.panel} aria-labelledby="results-title">
+      <header className={styles.header}>
+        <div className={styles.topline}>
+          <p className={styles.eyebrow}>
+            <span className={styles.eyebrowDot} aria-hidden="true" />
+            <span>{t('filters.results', { count: places.length })}</span>
+          </p>
+          <button
+            type="button"
+            className={styles.close}
+            onClick={onClearFilters}
+            aria-label={t('filters.clear')}
+          >
+            <X aria-hidden="true" />
+          </button>
+        </div>
+        <h2 id="results-title" className={styles.title}>
+          {t('results.title')}
+        </h2>
+      </header>
+
+      {places.length === 0 ? (
+        <EmptyState
+          icon={<SearchX />}
+          title={t('results.empty.title')}
+          action={
+            <button type="button" className={styles.textButton} onClick={onClearFilters}>
+              {t('filters.clear')}
+            </button>
+          }
+        >
+          {t('results.empty.body')}
+        </EmptyState>
+      ) : (
+        groups.map(([plazaId, groupPlaces]) => {
+          const plaza = catalog.plazaById.get(plazaId)
+          if (!plaza) return null
+          return (
+            <div key={plazaId} className={styles.group}>
+              <button
+                type="button"
+                className={styles.groupHeader}
+                onClick={() => onSelectPlaza(plazaId)}
+              >
+                <span className={styles.groupName}>{plaza.name}</span>
+                <span className={styles.count}>
+                  {t('places.matching', { count: groupPlaces.length })}
+                </span>
+              </button>
+              <PlaceList places={groupPlaces} onOpen={onOpenPlace} label={plaza.name} />
+            </div>
+          )
+        })
+      )}
+    </section>
+  )
+}

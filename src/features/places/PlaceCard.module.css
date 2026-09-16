@@ -1,0 +1,77 @@
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding-right: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.card:hover {
+  background: var(--lime-50);
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  text-align: left;
+}
+
+.main:focus-visible {
+  outline-offset: -2px;
+}
+
+.thumb {
+  flex-shrink: 0;
+  width: 3.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  border-radius: 0.875rem;
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink-900);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.category svg {
+  flex-shrink: 0;
+  color: var(--olive-600);
+}
+
+.meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

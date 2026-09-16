@@ -1,0 +1,15 @@
+# Finales de línea LF en el repositorio y en cualquier clon (Windows incluido): el formateador
+# (Biome) y los scripts esperan LF, y un clon con CRLF fallaba `npm run check`.
+* text=auto eol=lf
+
+# Binarios: nunca convertir.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pmtiles binary
+*.xlsx binary

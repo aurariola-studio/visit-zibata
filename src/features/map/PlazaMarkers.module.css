@@ -1,0 +1,211 @@
+.anchor {
+  /* MapLibre posiciona este contenedor por su base; dentro, el botón (la etiqueta), el tallo y la insignia. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* El botón es exactamente la etiqueta: su área pulsable no tapa otros marcadores ni el mapa. */
+.marker {
+  pointer-events: auto;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out);
+}
+
+.marker:focus-visible {
+  outline: none;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.35rem 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: rgb(252 250 246 / 0.95);
+  box-shadow:
+    0 0 0 1px rgb(83 108 42 / 0.16),
+    0 6px 16px -6px rgb(31 36 25 / 0.35);
+  color: var(--ink-800);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  /* Sin transición de padding: la colocación mide el ancho real de la etiqueta tras cambiar de modo. */
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.4rem;
+  border-radius: var(--radius-pill);
+  background: var(--lime-100);
+  color: var(--olive-700);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stem {
+  width: 2px;
+  height: 0.875rem;
+  border-radius: 1px;
+  background: linear-gradient(to bottom, rgb(83 108 42 / 0.55), rgb(83 108 42 / 0));
+  transition:
+    height var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+/* Etiqueta elevada para no chocar con otra: el tallo se alarga 48 px por nivel (LIFT_STEP) y sigue
+   señalando la plaza. */
+.stem[data-lift="1"] {
+  height: calc(0.875rem + 48px);
+}
+
+.stem[data-lift="2"] {
+  height: calc(0.875rem + 96px);
+}
+
+.stem:not([data-lift="0"]) {
+  background: linear-gradient(to bottom, rgb(83 108 42 / 0.65), rgb(83 108 42 / 0.3));
+}
+
+.marker[data-state="hover"] .label,
+.marker:focus-visible .label {
+  background: var(--lime-50);
+  box-shadow:
+    0 0 0 2px var(--lime-500),
+    0 10px 20px -8px rgb(31 36 25 / 0.4);
+}
+
+.marker[data-state="hover"],
+.marker:focus-visible {
+  transform: translateY(-2px);
+}
+
+/* En pantallas táctiles no hay hover: respuesta inmediata al tocar. */
+.marker:active .label {
+  background: var(--lime-100);
+  scale: 0.96;
+}
+
+.marker:focus-visible .label {
+  box-shadow:
+    0 0 0 2px var(--sand-25),
+    0 0 0 4.5px var(--color-focus);
+}
+
+.marker[data-state="selected"] {
+  transform: translateY(-4px);
+  z-index: 2;
+}
+
+.marker[data-state="selected"] .label {
+  background: var(--olive-600);
+  color: white;
+  box-shadow:
+    0 0 0 2px rgb(252 250 246 / 0.9),
+    0 12px 24px -10px rgb(31 36 25 / 0.55);
+}
+
+.marker[data-state="selected"] .count {
+  background: var(--lime-500);
+  color: var(--ink-900);
+}
+
+.marker[data-state="dimmed"],
+.stem[data-state="dimmed"] {
+  opacity: 0.45;
+}
+
+/* Zoom bajo: solo la cifra, para no saturar el mapa. El nombre sigue disponible en aria-label. */
+.marker[data-mode="compact"] .name {
+  display: none;
+}
+
+.marker[data-mode="compact"] .label {
+  padding: 0.25rem;
+}
+
+.marker[data-mode="hidden"],
+.marker[data-mode="hidden"] + .stem {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Etiqueta desplazada a un lado para no chocar con otra; el tallo sigue marcando la plaza. */
+.marker[data-mode="left"] {
+  translate: calc(-50% + 1.1rem) 0;
+}
+
+.marker[data-mode="right"] {
+  translate: calc(50% - 1.1rem) 0;
+}
+
+/* "+N": plazas cercanas sin espacio para su marcador; al pulsarlo el mapa se acerca. Va junto a la
+   etiqueta, sin taparla (BADGE_SIZE/GAP/TOP en PlazaMarkers.tsx), también si está desplazada. El
+   contenedor mide lo que la etiqueta sin desplazar: 50 % = media etiqueta y 1.1rem = SHIFT_OVERHANG. */
+.nearby {
+  position: absolute;
+  top: 5px;
+  left: calc(100% + 2px);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 0.3rem;
+  border: 2px solid var(--sand-25);
+  border-radius: var(--radius-pill);
+  background: var(--olive-600);
+  box-shadow: 0 4px 10px -4px rgb(31 36 25 / 0.5);
+  color: white;
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  pointer-events: auto;
+}
+
+.nearby[data-host-mode="left"] {
+  left: calc(50% + 1.1rem + 2px);
+}
+
+.nearby[data-host-mode="right"] {
+  left: calc(150% - 1.1rem + 2px);
+}
+
+.nearby[data-side="start"] {
+  left: auto;
+  right: calc(100% + 2px);
+}
+
+.nearby[data-side="start"][data-host-mode="left"] {
+  right: calc(150% - 1.1rem + 2px);
+}
+
+.nearby[data-side="start"][data-host-mode="right"] {
+  right: calc(50% + 1.1rem + 2px);
+}
+
+.nearby:hover {
+  background: var(--olive-700);
+}
+
+.nearby:focus-visible {
+  outline: 2.5px solid var(--color-focus);
+  outline-offset: 2px;
+}

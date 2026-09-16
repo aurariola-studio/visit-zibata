@@ -1,0 +1,77 @@
+id,name,plaza,category,subcategory,localNumber,description,hours,lat,lng,googleMapsUri,website,instagram,facebook,tiktok,whatsapp,phone,tags,active
+carls-jr,Carl's Jr.,Xentric Anáhuac,hamburguesas,,,Sucursal de la cadena de hamburguesas Carl's Jr.,,,,,,,,,,,,sí
+mirrus-kitchen,Mirrus Kitchen,Xentric Anáhuac,desayunos-y-cafe,brunch,,"Desayunos, comida consciente y repostería.",,,,,,https://www.instagram.com/mirruskitchen/,https://www.facebook.com/mirruskitchen/,,,,,sí
+akilos-de-cecina,A'Kilos de Cecina,Xentric Anáhuac,tacos-y-antojitos,tacos,,Tacos y platillos de cecina y chorizo; también vende cecina por kilo.,,,,,,https://www.instagram.com/akilos.de.cecina/,,,,,cecina,sí
+huskys-ice-cream,Husky's Ice Cream,Xentric Anáhuac,postres,helados,,"Heladería artesanal de Querétaro con helados de crema, soft y yogur.",,,,,https://www.huskysicecream.com/,https://www.instagram.com/huskys.icecream/,,,,,,sí
+boba-station,Boba Station Tapioca Bar,Xentric Anáhuac,bebidas,te-de-burbujas,,Bebidas con perlas de tapioca (boba).,,,,,,,https://www.facebook.com/Bobastationqro/,,,,,sí
+origenatural,Origen Natural,Xentric Anáhuac,saludable-y-bowls,,,"Bowls, jugos, smoothies y sándwiches saludables.",,,,,,https://www.instagram.com/origenatural_zibata/,https://www.facebook.com/origenaturalzibata/,,,,jugos|smoothies,sí
+ciao-bella,Ciao Bella Trattoria,Xentric Anáhuac,italiana,,,"Trattoria italiana con pastas, risotto y pizza.",,,,,https://www.ciaobellaqro.com/,https://www.instagram.com/ciao_bellaqro/,https://www.facebook.com/CiaoBellaqro/,,,,,sí
+sushi-itto,Sushi Itto,Xentric Anáhuac,asiatica,sushi,,"Sucursal de la cadena Sushi Itto: sushi, rollos y cocina japonesa.",,,,,,,https://www.facebook.com/SushiittoQueretaroOficial/,,,,,sí
+subway,Subway,Xentric Anáhuac,sandwiches-y-deli,,126,Sucursal de la cadena de sándwiches Subway.,,,,,,,,,,,,sí
+good-morning-coffee,Good Morning Coffee,Xentric Anáhuac,desayunos-y-cafe,brunch,,Cafetería de desayunos y brunch.,,,,,,https://www.instagram.com/goodmorningcoffee.qro/,https://www.facebook.com/gmcoffeequeretaro/,https://www.tiktok.com/@goodmorningcoffee.qro,,,,sí
+tortas-fifthy-fifthy,Tortas Fifthy Fifthy,Xentric Anáhuac,sandwiches-y-deli,tortas,,"Tortería con tortas, wraps y bowls.",,,,,https://fifthyfifthy.com.mx/,https://www.instagram.com/fifthy_fifthymx/,,,,,wraps|bowls,sí
+rometta,Rometta Gastrobar,Xentric Anáhuac,bistro,,,Gastrobar con coctelería y vista panorámica.,,,,,,https://www.instagram.com/romettaqro/,https://www.facebook.com/p/Rometta-100088246603495/,,,,bar|coctelería|vista,sí
+dominos,Domino's,Xentric Anáhuac,pizza,,,Sucursal de la cadena de pizzas Domino's.,,,,,,,,,,,,sí
+la-880,La 880 Alitas y Pisto,Xentric Anáhuac,pollo,alitas,,"Alitas, antojitos y bar casual.",,,,,,,https://www.facebook.com/La880Alitas/,,,,bar,sí
+lion-reef,Lion Reef Sea & Bar,Xentric Anáhuac,mariscos,,,Restaurante-bar de mariscos y coctelería.,,,,,https://www.lionreef.mx/,,https://www.facebook.com/lionreef/,,,,coctelería,sí
+wicklow-irish-pub,Wicklow Irish Pub,Xentric Anáhuac,bar-y-pub,cerveceria,,"Pub irlandés con cerveza, whisky y música en vivo.",,,,,,https://www.instagram.com/wicklowirishpub/,https://www.facebook.com/wicklowzibata/,,,,música en vivo,sí
+birria-los-esposos,Birria Los Esposos,Xentric Anáhuac,tacos-y-antojitos,birria,,"Birria estilo Jalisco, quesabirrias y carne en su jugo.",,,,,https://birrialosesposos.com/,https://www.instagram.com/birrialosesposos/,https://www.facebook.com/p/Birria-Los-Esposos-100089812507971/,,,,,sí
+los-morros-de-sonora,Los Morros de Sonora,Xentric Anáhuac,tacos-y-antojitos,tacos,,Carne asada y hot dogs estilo Sonora.,,,,,https://www.losmorrosdesonora.com/,,https://www.facebook.com/LosMorrosdeSonora/,https://www.tiktok.com/@losmorrosdesonora,,,hot dogs,sí
+tacos-los-tarascos,Los Tarascos Taquería,Xentric Anáhuac,tacos-y-antojitos,tacos,Int. 4,"Taquería de tacos al pastor, bistec y chorizo.",,,,,https://lostarascos.com.mx/tacos-en-zibata/,,,,,+524422984553,,sí
+pizca-de-azucar-zibata,Pizca de Azúcar,Xentric Anáhuac,postres,pasteleria,14,Pastelería y panadería artesanal con café.,lun 07:30-20:30; mar 07:30-20:30; mie 07:30-20:30; jue 07:30-20:30; vie 07:30-20:30; sab 08:00-20:00; dom 08:00-20:00,,,,https://pizcadeazucar.com/,,,,,,café,sí
+tim-hortons,Tim Hortons,Anáhuac Querétaro,desayunos-y-cafe,,,Cafetería de la cadena Tim Hortons dentro del campus de la Universidad Anáhuac.,lun 06:00-20:00; mar 06:00-20:00; mie 06:00-20:00; jue 06:00-20:00; vie 06:00-20:00; sab 06:00-20:00; dom cerrado,,,,https://timhortonsmx.com/,,,,,,dentro del campus,sí
+sinforosa,Sinforosa Café,Paseo Zibatá,desayunos-y-cafe,cafe-de-especialidad,,"Cafetería con café de especialidad, panadería, ensaladas y sándwiches.",,,,,,,https://www.facebook.com/sinforosa.cafe/,https://www.tiktok.com/@sinforosa.cafe,,,panadería,sí
+cebicheria-del-dia,Cebichería del Día,Paseo Zibatá,mariscos,ceviche,,"Ceviches, tostadas y mariscos.",,,,,,https://www.instagram.com/cebicheriadeldia.qro/,,,,,,sí
+dlu-coffee-bakery,D’Lu Coffee & Bakery,Paseo Zibatá,desayunos-y-cafe,panaderia,,Cafetería y panadería.,,,,,,https://www.instagram.com/dlu_cafe/,,,,,,sí
+mr-miches,Mr. Miches,Paseo Zibatá,bar-y-pub,,,"Micheladas, cantaritos, cerveza y botanas.",,,,,,https://www.instagram.com/mr.michesbar/,,,,,micheladas,sí
+sylvius,Sylvius Cocktail & Cocina,Paseo Zibatá,bar-y-pub,cocteleria,,Bar de coctelería con cocina.,,,,,,,https://www.facebook.com/sylvius.bar/,,,+524422705187,coctelería,sí
+currucucu,Currucucú Cocina Artesanal Mexicana,Paseo Zibatá,mexicana,,,Cocina mexicana artesanal con desayunos y chilaquiles.,,,,,https://currucucu.mx/,https://www.instagram.com/currucucumx/,,,,,desayunos,sí
+luka-pokes,Luka,Paseo Zibatá,saludable-y-bowls,poke,,Poke bowls personalizables.,,,,,,,https://www.facebook.com/LukaPokehouse/,,,,,sí
+las-memelas-de-la-rana,Las Memelas de la Rana,Paseo Zibatá,tacos-y-antojitos,,,"Memelas, antojitos mexicanos y desayunos.",,,,,https://lasmemelasdelarana.mx/,https://www.instagram.com/las_memelas/,,,,,desayunos,sí
+holy-kebabs,Holy Kebabs,Paseo Zibatá,sandwiches-y-deli,,,Kebabs.,,,,,,https://www.instagram.com/holykebabszibata/,,,,,kebab,sí
+carnitas-don-tono,Carnitas Don Toño,Paseo Zibatá,carne-y-parrilla,carnitas,,"Carnitas, tacos y desayunos.",,,,,,https://www.instagram.com/carnitasdontonoqro/,https://www.facebook.com/p/Carnitas-Don-To%C3%B1o-Zibata-100076021691931/,,,,,sí
+masaru,Masaru Sushi & Beer,Paseo Zibatá,asiatica,sushi,6,"Sushi, pokes y yakimeshi.",,,,,https://www.masaru.com.mx/web/,https://www.instagram.com/masarusushibeer/,https://www.facebook.com/masaruzibata/,,+524426028627,+524428880580,poke,sí
+tomassa,Tomassa Almacén de Pastas,Paseo Zibatá,italiana,pasta-fresca,,Pastas y pizzas artesanales.,,,,,,https://www.instagram.com/tomassapasta/,https://www.facebook.com/p/Tomassa-Almac%C3%A9n-de-Pastas-61581875640351/,,,,pizza,sí
+la-michoacana,La Michoacana,Paseo Zibatá,postres,helados,,Paletería y nevería.,,,,,,,,,,,,sí
+al-grano,Al Grano Maíz & Snacks,Paseo Zibatá,tacos-y-antojitos,esquites-y-snacks,,"Elotes, esquites y snacks de maíz.",,,,,,https://www.instagram.com/algranomaizysnacks/,,,,,esquites,sí
+tacos-la-chusma,Tacos la Chusma,Paseo Zibatá,tacos-y-antojitos,tacos,,Taquería.,,,,,,,https://www.facebook.com/tacoslachusmazibata/,,,,,sí
+el-hornero,El Hornero,Paseo Zibatá,carne-y-parrilla,cortes,,Parrilla y pizzería argentina con empanadas y cortes.,,,,,https://www.elhornero.mx/,,https://www.facebook.com/elhornero.mx/,,,,empanadas|pizza,sí
+birria-jauregui,Birria Jáuregui,Paseo Zibatá,tacos-y-antojitos,birria,,Birriería.,,,,,,https://www.instagram.com/birriajauregui/,https://www.facebook.com/BirriaJaureguiQro/,,,,,sí
+bistrot-marino,Bistrot Marino,Paseo Zibatá,mariscos,,,Mariscos y coctelería.,,,,,,https://www.instagram.com/bistrot.marino/,https://www.facebook.com/people/Bistrot-Marino/61559868993335/,https://www.tiktok.com/@bistrot.marino,,,coctelería,sí
+ramen-express,Ramen Express,Paseo Zibatá,asiatica,ramen,,Ramen y productos de comida coreana.,,,,,,https://www.instagram.com/ramenexpress.qro.zibata/,,,,,comida coreana,sí
+la-gaspacheria-tradicional,La Gaspachería Tradicional,Paseo Zibatá,tacos-y-antojitos,esquites-y-snacks,,Gaspachos tradicionales de fruta estilo Morelia.,,,,,https://lagaspacheriatradicional.com/,https://www.instagram.com/lagaspacheriatradicional/,https://www.facebook.com/gaspacheriatradicional/,,,,gaspachos|fruta,sí
+panaderia-santa-fe,Panadería Santa Fe,Paseo Zibatá,desayunos-y-cafe,panaderia,,Panadería tradicional.,,,,,,,https://www.facebook.com/PanaderiaSantaFeQro/,,,,,sí
+tacos-la-capilla,Tacos La Capilla,Paseo Zibatá,tacos-y-antojitos,tacos,,Taquería.,,,,,,,,,,,,sí
+nam-nam,Ñam Ñam Sushi,Plaza Condesa,asiatica,sushi,,Sucursal de la cadena Ñam Ñam Sushi.,,,,,https://xn--amamsushi-k6ac.com/,,,https://www.tiktok.com/@namnamsushi,,,,sí
+carly-tacos-de-pescado,Tacos Carly,Plaza Condesa,mariscos,,,Tacos de pescado estilo Baja y mariscos.,,,,,,https://www.instagram.com/tacoscarly/,,,,,tacos de pescado,sí
+arepanas,Arepanas Mx,Plaza Condesa,tacos-y-antojitos,arepas,,Arepas venezolanas.,,,,,,,,,,+524424865798,,sí
+romani-pizzas,Romani Pizzas y Ensaladas,Plaza Condesa,pizza,,,Pizzas y ensaladas.,,,,,,,https://www.facebook.com/p/Romani-Pizzas-y-Ensaladas-61577783051318/,,,,ensaladas,sí
+casa-vieja,Taquería Casa Vieja,Plaza Condesa,tacos-y-antojitos,tacos,,Taquería y parrillada.,,,,,,,https://www.facebook.com/p/Taquer%C3%ADa-Casa-Vieja-Zibata-100090240614595/,,,,,sí
+bendito-bocado,Bendito Bocado,Plaza Condesa,bistro,,,,,,,,,,https://www.facebook.com/p/Bendito-Bocado-Zibat%C3%A1-61552620264859/,,,,,sí
+burger-fries,Burger & Fries Forever,Plaza Condesa,hamburguesas,,,"Hamburguesas, papas, hot dogs y malteadas.",,,,,,https://www.instagram.com/burgers_bff/,https://www.facebook.com/burgernfriesmx,,,,hot dogs,sí
+bocuze,Bocuze Bistró Café,Xentric Zibatá,bistro,,101-103,"Bistró café con brunch, comida y cena.",,,,,,https://www.instagram.com/bocuzebistro/,https://www.facebook.com/Bocuze.bistro/,,,+524425498641,brunch,sí
+bee-waffle,BeeWaffle,Xentric Zibatá,desayunos-y-cafe,,104,"Waffles dulces y salados, café y malteadas.",,,,,,https://www.instagram.com/beewafflemx/,https://www.facebook.com/BeeWaffleMX/,,,,waffles,sí
+cosi-fan-tutte,Cosi Fan Tutte,Xentric Zibatá,italiana,,105,Restaurante italiano con pizzas y pastas.,,,,,,https://www.instagram.com/cosifantutteoficial/,https://www.facebook.com/cosifantutteoficial/,,,+524422148299,pizza,sí
+honu-sushi,Honu Sushi & Oriental,Xentric Zibatá,asiatica,sushi,207,Sushi y cocina oriental.,,,,,,https://www.instagram.com/honuqro/,https://www.facebook.com/honuqro/,,,+524422457023,poke,sí
+ichos,Ichos,Xentric Zibatá,carne-y-parrilla,,208,Carnes asadas.,,,,,,,,,,+524426057244,,sí
+trecielos,Trecielos,Xentric Zibatá,mexicana,cocina-regional,,Restaurante bar con cochinita pibil y lechón.,,,,,,https://www.instagram.com/trecielosqro/,,,,,cochinita pibil,sí
+la-marmota,La Marmota Wings and Beer,Xentric Zibatá,pollo,alitas,210,"Alitas, snacks y cerveza.",,,,,https://lamarmota.com.mx/,,https://www.facebook.com/LaMarmotaZibata/,,,+524421951689,cerveza,sí
+romelia-cafe,Romelia Café,Xentric Zibatá,desayunos-y-cafe,,,Cafetería con repostería casera.,,,,,,,,,,,,sí
+la-borra-del-cafe-xentric,La Borra del Café,Xentric Zibatá,desayunos-y-cafe,,110-111,Cafetería de la franquicia La Borra del Café.,,,,,,,https://www.facebook.com/LaBorraXentric/,,,+524423531580,,sí
+quetacos,Quetacos,Xentric Zibatá,tacos-y-antojitos,tacos,112-113,Taquería.,,,,,,,,,,,,sí
+la-michoacana-xentric-zibata,La Michoacana,Xentric Zibatá,postres,helados,109,Paletería y nevería.,,,,,,,,,,,,sí
+kazus-kitchen,Kazu's Kitchen,Plaza Zielo,asiatica,sushi,,Cocina japonesa de la chef Kazu Kumoto.,,,,,https://kazuskitchen.com/,https://www.instagram.com/kazuskitchen/,,,,,,sí
+margaritas,Bistró Margaritas by Kaos,Plaza Zielo,bistro,,,Bistró con coctelería.,,,,,,https://www.instagram.com/bistromargaritasbykaos/,https://www.facebook.com/bistromargaritasbykaos/,,,,coctelería,sí
+santa-clara,Helados Santa Clara,Plaza Zielo,postres,helados,,Heladería de la marca Santa Clara.,,,,,,https://www.instagram.com/santaclarahelados/,,,,,,sí
+entrecot-asador,Entrecot Asador,Plaza Zielo,carne-y-parrilla,cortes,,Asador de cortes; también sirve desayunos.,,,,,https://entrecot.com.mx/,https://www.instagram.com/entrecotasador/,https://www.facebook.com/entrecotasador/,,,,desayunos,sí
+hot-buns,Hot Buns,Plaza Zielo,hamburguesas,,,"Hamburguesas smash, papas y aros de cebolla.",,,,,,,https://www.facebook.com/hotbuns.zibata/,,,,,sí
+escarola,Escarola Food & Health,Plaza Zielo,saludable-y-bowls,ensaladas,,Ensaladas y paninis.,,,,,,,,,,,paninis,sí
+donatto-pizza,Donatto Pizza,Plaza Zielo,pizza,,,Pizzería.,,,,,,,https://www.facebook.com/p/Donatto-100075786476537/,,,,,sí
+la-borra-del-cafe-zielo,La Borra del Café,Plaza Zielo,desayunos-y-cafe,,,Cafetería de la franquicia La Borra del Café.,,,,,,https://www.instagram.com/laborradelcafe.zielo/,,,,,,sí
+cafele,Cafele,MOL Pitahaya,desayunos-y-cafe,cafe-de-especialidad,,"Café de especialidad, comida y bebidas todo el día.",lun 07:00-21:30; mar 07:00-21:30; mie 07:00-21:30; jue 07:00-21:30; vie 07:00-21:30; sab 07:00-21:30; dom 07:00-21:30,,,,https://cafele.com.mx/pages/zibata,,,,,,desayunos,sí
+hoyo-19,DiezyNueve Golf Bar,Zibatá Golf,bar-y-pub,,,Restaurante y bar del campo de golf de Zibatá.,,,,,,https://www.instagram.com/diezynueve_zibata/,https://www.facebook.com/DiezyNueveZibata/,,,,campo de golf,sí
+agave-grill,Agave Grill,Centro Zibatá,tacos-y-antojitos,tacos,,Taquería.,,,,,,,https://www.facebook.com/p/Agave-Grill-61557015256230/,,,,,sí
+pio-poke-house,Pio Poke House & Rolls,Centro Zibatá,saludable-y-bowls,poke,,Poke bowls y rollos de sushi.,,,,,,https://www.instagram.com/piopokehouseandrolls/,,,,,sushi,sí
+lilo-bowl-bar,Lilo Bowl Bar,Centro Zibatá,saludable-y-bowls,,,"Smoothie bowls de açaí, pitaya y matcha.",,,,,,https://www.instagram.com/lilobowlbar/,,,,,açaí,sí
+sixties-burger,Sixties Burger,Centro Zibatá,hamburguesas,,,Hamburguesas en ambiente de fuente de sodas de los años sesenta.,,,,,,https://www.instagram.com/sixtiesburgerzibata/,,,,,malteadas,sí
+starbucks-centro-zibata,Starbucks,Centro Zibatá,desayunos-y-cafe,,,Sucursal de la cadena de cafeterías Starbucks.,,,,,https://www.starbucks.com.mx/,,,,,,,sí

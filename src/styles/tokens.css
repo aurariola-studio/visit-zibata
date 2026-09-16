@@ -1,0 +1,109 @@
+/*
+ * Tokens de diseño. Paleta base del proyecto: #D1C3B0 (arena), #536C2A (olivo), #8CBA37 (lima),
+ * complementada con neutros cálidos y verdes derivados. Los colores del mapa viven en
+ * src/features/map/style/theme.ts y deben mantenerse coherentes con estos tokens.
+ */
+:root {
+  /* Arena / neutros cálidos */
+  --sand-25: #fcfaf6;
+  --sand-50: #f8f4ed;
+  --sand-100: #f1ebe0;
+  --sand-200: #e6ddcd;
+  --sand-300: #d1c3b0;
+  --sand-400: #b9a88f;
+  --sand-500: #978670;
+
+  /* Tinta (texto) */
+  --ink-900: #1f2419;
+  --ink-800: #2e3326;
+  --ink-700: #454a3b;
+  --ink-600: #5c6050;
+  /* Texto secundario: ≥ 4,5:1 también sobre las superficies arena (--sand-100). */
+  --ink-500: #62655a;
+
+  /* Verdes de marca */
+  --olive-800: #34451a;
+  --olive-700: #435a22;
+  --olive-600: #536c2a;
+  --olive-500: #6a8736;
+  --lime-500: #8cba37;
+  --lime-300: #b8d77c;
+  --lime-100: #e7f1d4;
+  --lime-50: #f3f8ea;
+
+  --danger-600: #a3402b;
+  --danger-50: #fbede9;
+
+  /* Semánticos */
+  --color-bg: var(--sand-50);
+  --color-surface: rgb(252 250 246 / 0.94);
+  --color-surface-solid: var(--sand-25);
+  --color-surface-muted: var(--sand-100);
+  --color-border: rgb(69 74 59 / 0.12);
+  --color-border-strong: rgb(69 74 59 / 0.22);
+  --color-text: var(--ink-900);
+  --color-text-muted: var(--ink-500);
+  --color-accent: var(--olive-600);
+  --color-accent-strong: var(--olive-700);
+  --color-accent-soft: var(--lime-100);
+  --color-highlight: var(--lime-500);
+  --color-focus: #3d6b00;
+
+  /* Tipografía */
+  --font-sans:
+    "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.875rem;
+  --text-2xl: 2.5rem;
+
+  /* Espaciado y forma */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgb(31 36 25 / 0.06), 0 1px 1px rgb(31 36 25 / 0.04);
+  --shadow-md: 0 6px 18px -6px rgb(31 36 25 / 0.18), 0 2px 6px -2px rgb(31 36 25 / 0.08);
+  --shadow-lg: 0 24px 48px -16px rgb(31 36 25 / 0.28), 0 6px 16px -8px rgb(31 36 25 / 0.12);
+  --blur-surface: saturate(1.4) blur(14px);
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 140ms;
+  --duration-base: 240ms;
+  --duration-slow: 420ms;
+
+  /* Layout */
+  --panel-width: clamp(22.5rem, 28vw, 27.5rem);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --z-map-ui: 10;
+  --z-panel: 20;
+  --z-sheet: 30;
+  --z-toast: 40;
+  --z-modal: 50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}

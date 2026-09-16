@@ -1,0 +1,76 @@
+{
+  "researchDate": "2026-09-14",
+  "datasetVersion": "2026.09.14",
+  "plazas": {
+    "beta": 12,
+    "betaActive": 10,
+    "verifiedPublishable": 9,
+    "activeInApp": 9,
+    "byStatus": {
+      "active": 7,
+      "likely_active": 2,
+      "uncertain": 1,
+      "removed": 1,
+      "coming_soon": 1
+    },
+    "renamed": 3,
+    "addressCorrected": 3,
+    "candidatesDiscoveredNotOperating": 3
+  },
+  "businesses": {
+    "candidatesReviewed": 135,
+    "beta": 104,
+    "betaActive": 76,
+    "newDiscovered": 31,
+    "newPublished": 10,
+    "published": 76,
+    "byStatus": {
+      "likely_active": 61,
+      "active": 15,
+      "uncertain": 48,
+      "closed": 3,
+      "removed": 1,
+      "rejected": 5,
+      "coming_soon": 1,
+      "duplicate": 1
+    },
+    "betaPublished": 66,
+    "betaActiveNowExcluded": 15,
+    "betaInactiveNowPublished": 5,
+    "plazaCorrections": 2,
+    "nameChanges": 31,
+    "categoryChanges": 10,
+    "confidenceInApp": {
+      "medium": 49,
+      "low": 2,
+      "high": 25
+    },
+    "statusInApp": {
+      "likely_active": 61,
+      "active": 15
+    },
+    "withStructuredHours": 3,
+    "withPhone": 10,
+    "withLocalNumber": 13,
+    "withDescription": 75,
+    "withOfficialLink": 65,
+    "withSubcategory": 45,
+    "evidenceUrls": 287,
+    "datedEvidenceWithin12Months": 25
+  },
+  "categories": {
+    "beta": 17,
+    "final": 17,
+    "usedInApp": 16,
+    "usedBetaActive": 16,
+    "subcategoriesBeta": 24,
+    "subcategoriesFinal": 27,
+    "changes": [
+      "desayunos-y-cafe: nueva subcategoría undefined",
+      "pollo: etiqueta «Pollo y alitas»",
+      "pollo: nueva subcategoría alitas",
+      "tacos-y-antojitos: nueva subcategoría esquites-y-snacks",
+      "postres: nueva subcategoría pasteleria"
+    ]
+  }
+}

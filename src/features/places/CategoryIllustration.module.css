@@ -1,0 +1,52 @@
+.illustration {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    var(--illo-bg),
+    color-mix(in srgb, var(--illo-bg) 70%, var(--illo-accent))
+  );
+  color: var(--illo-ink);
+}
+
+.contours {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--illo-accent);
+  stroke-width: 1.2;
+  opacity: 0.55;
+}
+
+.badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44%;
+  max-width: 5.5rem;
+  aspect-ratio: 1;
+  border-radius: 30%;
+  background: rgb(255 255 255 / 0.6);
+  box-shadow: 0 8px 20px -12px rgb(31 36 25 / 0.45);
+}
+
+.badge svg {
+  width: 56%;
+  height: 56%;
+}
+
+.illustration[data-size="sm"] .contours {
+  display: none;
+}
+
+.illustration[data-size="sm"] .badge {
+  width: 64%;
+  background: rgb(255 255 255 / 0.5);
+  box-shadow: none;
+}
