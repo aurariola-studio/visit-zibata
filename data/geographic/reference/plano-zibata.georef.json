@@ -1,0 +1,14 @@
+{
+  "$comment": "Generado por scripts/map/georef-plano.ts. Esquinas en orden: arriba-izq, arriba-der, abajo-der, abajo-izq.",
+  "source": "plano-zibata.png",
+  "image": "plano-zibata.webp",
+  "projection": "EPSG:3857 (Web Mercator), norte arriba",
+  "metersPerPixel": 3.35,
+  "matchScore": 0.981,
+  "coordinates": [
+    [-100.378364, 20.716368],
+    [-100.301596, 20.716368],
+    [-100.301596, 20.623593],
+    [-100.378364, 20.623593]
+  ]
+}

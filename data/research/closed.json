@@ -1,0 +1,225 @@
+{
+  "researchDate": "2026-09-14",
+  "records": [
+    {
+      "id": "mr-bagel",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": null,
+      "name": "Mr. Bagel",
+      "previousName": null,
+      "plazaId": "paseo-zibata",
+      "category": null,
+      "subcategory": null,
+      "beta": {
+        "name": "Mr. Bagel",
+        "plazaId": "xentric-anahuac",
+        "category": "sandwiches-y-deli",
+        "active": false
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Directorio: 'Permanently closed'; anuncio de cierre indefinido. Estaba en Paseo Zibatá local 29, no en Xentric Anáhuac.",
+      "verificationNotes": [
+        "Cierre indicado por Restaurant Guru y anuncio de cierre indefinido. Además, la dirección era Paseo Zibatá local 29, no Xentric Anáhuac (beta con plaza incorrecta)."
+      ],
+      "sources": [
+        {
+          "url": "https://restaurantguru.com/Mr-Bagel-Santiago-de-Queretaro",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": "página actualizada 2024-02-06",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "status:'Permanently closed'",
+            "address:Plaza Paseo Zibatá local 29"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/Mr.BagelMx/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "cierre por tiempo indefinido (resumen)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grand-antonella",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": null,
+      "name": "Grand Antonella",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "subcategory": null,
+      "beta": {
+        "name": "Grand Antonella",
+        "plazaId": "paseo-zibata",
+        "category": "bistro",
+        "active": false
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Su página oficial indica 'CERRADO PERMANENTEMENTE'.",
+      "verificationNotes": [
+        "Cierre permanente indicado en su página oficial."
+      ],
+      "sources": [
+        {
+          "url": "https://www.facebook.com/Antonellacafeboutique/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "status:'CERRADO PERMANENTEMENTE' (según resumen de búsqueda)",
+            "plaza:Plaza Paseo Zibatá"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "piotl-rosticeria",
+      "status": "removed",
+      "publishedInApp": false,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": null,
+      "name": "Piotl Rosticeria",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "subcategory": null,
+      "beta": {
+        "name": "Piotl Rosticeria",
+        "plazaId": "xentric-zibata",
+        "category": "pollo",
+        "active": true
+      },
+      "newRecord": false,
+      "replacedBy": "ichos",
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "El directorio oficial asigna su local (208) y teléfono a Ichos.",
+      "verificationNotes": [
+        "Mismo local y teléfono que 'Ichos' en el directorio oficial actual → Piotl fue sustituido o renombrado como Ichos. Registro retirado del dataset activo; ver candidato Ichos."
+      ],
+      "sources": [
+        {
+          "url": "https://www.facebook.com/PiotlRosticeria/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "municipio:El Marqués"
+          ]
+        },
+        {
+          "url": "https://restaurantguru.com/La-Marmota-Zibata-Santiago-de-Queretaro",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "address:Plaza Xentric Zibatá, Tuna 18, local 208, 2.º piso",
+            "phone:+52 442 605 7244"
+          ]
+        },
+        {
+          "url": "https://xentriczibata.com/plaza-comercial/",
+          "level": 1,
+          "type": "official-plaza-directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "local 208 = 'Ichos' (carnes asadas), tel. 442 605 7244"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tacos-el-pata-zibata",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": null,
+      "name": "Tacos El Pata Zibatá",
+      "previousName": null,
+      "plazaId": "xentric-zibata",
+      "category": null,
+      "subcategory": null,
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "La lista oficial de sucursales omite Zibatá y la tienda de delivery figura cerrada desde julio de 2025.",
+      "verificationNotes": [
+        "Candidato nuevo. Dirección citada: 'Pitahaya #14, Plaza Xentric Zibata' y referencia a Xentric Anáhuac Suites: plaza por resolver.",
+        "Contradicción: la lista oficial de sucursales omite Zibatá mientras persisten tienda de delivery y página. Direcciones citadas contradictorias (Pitahaya 14 Plaza Xentric / Av. Paseo de las Pitahayas 19).",
+        "Dos señales independientes de cierre: la lista oficial omite Zibatá y la tienda de delivery figura cerrada desde julio de 2025."
+      ],
+      "sources": [
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1923726808-tacos-el-pata",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "branch:Zibatá"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/p/Tacos-El-Pata-Zibata-100076322976562/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        },
+        {
+          "url": "https://www.tacoselpata.com/en/about-1",
+          "level": 1,
+          "type": "official-branch-list",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "NO incluye sucursal Zibatá (11 sucursales en Querétaro)",
+            "sin sucursal Zibatá"
+          ]
+        },
+        {
+          "url": "https://www.ubereats.com/mx/store/tacos-el-pata-zibata/6BE1dgddThyXAEo7PGv2NQ",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "branch:Zibatá",
+            "status:cerrado en Uber Eats desde el 22 de julio de 2025 (resumen de búsqueda)"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,329 @@
+{
+  "researchDate": "2026-09-14",
+  "datasetVersion": "2026.09.14",
+  "plazas": [
+    {
+      "id": "xentric-anahuac",
+      "status": "active",
+      "active": true,
+      "confidence": "high",
+      "withinZibata": true,
+      "name": "Xentric Anáhuac",
+      "previousName": null,
+      "address": "Av. Paseo de las Pitahayas 55, Zibatá",
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.678393,
+        "lng": -100.313518
+      },
+      "locationConfidence": "high",
+      "publishedPlaces": 20,
+      "betaActivePlaces": 24,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "Los locales usan dos numeraciones: Av. Paseo de las Pitahayas 55 y 1A (y 'Circuito Universidades s/n'). 85 locales según la ficha del desarrollador.",
+      "sources": [
+        "https://xentricanahuac.com/",
+        "https://www.instagram.com/xentric.anahuac/",
+        "https://pizcadeazucar.com/",
+        "https://lostarascos.com.mx/tacos-en-zibata/"
+      ]
+    },
+    {
+      "id": "anahuac-queretaro",
+      "status": "likely_active",
+      "active": true,
+      "confidence": "medium",
+      "withinZibata": true,
+      "name": "Anáhuac Querétaro",
+      "previousName": null,
+      "address": "Circuito Universidades I km 7, Zibatá",
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.68056,
+        "lng": -100.31302
+      },
+      "locationConfidence": "medium",
+      "publishedPlaces": 1,
+      "betaActivePlaces": 2,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "Solo se verificó Tim Hortons (sucursal oficial 056 Universidad Anáhuac). Acceso público al campus no verificado. Sinforosa parece tener una cafetería vinculada al campus (sin confirmar).",
+      "sources": [
+        "https://timhortonsmx.com/es/sucursalesqro.php",
+        "https://queretaro.anahuac.mx/licenciaturas/campus"
+      ]
+    },
+    {
+      "id": "paseo-zibata",
+      "status": "active",
+      "active": true,
+      "confidence": "high",
+      "withinZibata": true,
+      "name": "Paseo Zibatá",
+      "previousName": null,
+      "address": "Av. Paseo de las Pitahayas 501, Zibatá",
+      "previousAddress": "Av. Paseo de las Pitahayas 13, Zibatá",
+      "coordinates": {
+        "lat": 20.679336,
+        "lng": -100.314984
+      },
+      "locationConfidence": "high",
+      "publishedPlaces": 22,
+      "betaActivePlaces": 20,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "La web oficial publica el n.º 501; fuentes secundarias usan 13 y 24. Directorio oficial incompleto (omite Masaru, Tomassa y otros verificados).",
+      "sources": [
+        "https://www.paseozibata.mx/",
+        "https://www.facebook.com/PaseoZibata/"
+      ]
+    },
+    {
+      "id": "foodtrucks-pickleball",
+      "status": "uncertain",
+      "active": false,
+      "confidence": "low",
+      "withinZibata": true,
+      "name": "FoodTrucks Pickleball",
+      "previousName": null,
+      "address": null,
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.6799,
+        "lng": -100.3158
+      },
+      "locationConfidence": "low",
+      "publishedPlaces": 0,
+      "betaActivePlaces": 1,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "La web oficial de Pick Spot no menciona food trucks ni oferta de comida. Ningún food truck del beta tiene evidencia de operar ahí → plaza fuera del dataset activo hasta verificación presencial.",
+      "sources": [
+        "https://pickspot.mx/"
+      ]
+    },
+    {
+      "id": "condesa",
+      "status": "active",
+      "active": true,
+      "confidence": "high",
+      "withinZibata": true,
+      "name": "Plaza Condesa",
+      "previousName": "Condesa",
+      "address": "Av. Paseo de las Pitahayas 9-B, Zibatá",
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.68097,
+        "lng": -100.316595
+      },
+      "locationConfidence": "high",
+      "publishedPlaces": 7,
+      "betaActivePlaces": 7,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "También citada como 'Plaza Riscos Condesa' y 'Plaza Condesa Zibatá' (Av. Paseo de las Pitahayas 9-B).",
+      "sources": [
+        "https://www.instagram.com/plazacondesa.qro/",
+        "https://www.facebook.com/p/Plaza-Condesa-Zibata-100080913602150/",
+        "https://condesazibata.com/",
+        "https://xn--amamsushi-k6ac.com/"
+      ]
+    },
+    {
+      "id": "plaza-walmart",
+      "status": "removed",
+      "active": false,
+      "confidence": "high",
+      "withinZibata": true,
+      "name": "Plaza Walmart",
+      "previousName": null,
+      "address": "Av. Paseo de las Pitahayas 6A, Zibatá",
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.6824846,
+        "lng": -100.3177617
+      },
+      "locationConfidence": "high",
+      "publishedPlaces": 0,
+      "betaActivePlaces": 0,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "Supermercado: fuera del alcance comida y bebida. Su único local del beta (Burger & Fries Forever) está en realidad en Plaza Condesa, local 111.",
+      "sources": [
+        "https://www.walmartmexico.com/sala-de-prensa/2022/10/11/inaugura-walmart-express-su-tienda-numero-100-en-mexico"
+      ]
+    },
+    {
+      "id": "xentric-zibata",
+      "status": "active",
+      "active": true,
+      "confidence": "high",
+      "withinZibata": true,
+      "name": "Xentric Zibatá",
+      "previousName": null,
+      "address": "Paseo Tunas 18, Zibatá",
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.683739,
+        "lng": -100.326266
+      },
+      "locationConfidence": "high",
+      "publishedPlaces": 11,
+      "betaActivePlaces": 8,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "Directorio oficial con número de local y teléfono por locatario (sin fecha de actualización).",
+      "sources": [
+        "https://xentriczibata.com/plaza-comercial/",
+        "https://www.instagram.com/xentric.zibata/"
+      ]
+    },
+    {
+      "id": "plaza-zielo",
+      "status": "active",
+      "active": true,
+      "confidence": "high",
+      "withinZibata": true,
+      "name": "Plaza Zielo",
+      "previousName": null,
+      "address": "Av. Paseo de las Pitahayas 26, Zibatá",
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.674848,
+        "lng": -100.322713
+      },
+      "locationConfidence": "high",
+      "publishedPlaces": 8,
+      "betaActivePlaces": 9,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "plazazielo.com no resuelve DNS; la plaza se confirma por locatarios con dirección Av. Paseo de las Pitahayas 26.",
+      "sources": [
+        "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml",
+        "https://www.instagram.com/laborradelcafe.zielo/",
+        "https://zibata.digital/directory/local-verde/"
+      ]
+    },
+    {
+      "id": "mol-jamadi",
+      "status": "active",
+      "active": true,
+      "confidence": "medium",
+      "withinZibata": true,
+      "name": "MOL Pitahaya",
+      "previousName": "Mol Jamadi",
+      "address": "Cerro del Huizache 49, Zibatá",
+      "previousAddress": "Av. Huizache 49, Zibatá",
+      "coordinates": {
+        "lat": 20.67735,
+        "lng": -100.335
+      },
+      "locationConfidence": "medium",
+      "publishedPlaces": 1,
+      "betaActivePlaces": 1,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "El desarrollador la llama 'MOL Pitahaya'. Solo un locatario de comida verificado (Cafele).",
+      "sources": [
+        "https://atlasdesarrollos.com/plazas-comerciales/",
+        "https://cafele.com.mx/pages/zibata"
+      ]
+    },
+    {
+      "id": "campo-de-golf",
+      "status": "likely_active",
+      "active": true,
+      "confidence": "medium",
+      "withinZibata": true,
+      "name": "Zibatá Golf",
+      "previousName": "Campo de Golf",
+      "address": null,
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.68274,
+        "lng": -100.33784
+      },
+      "locationConfidence": "medium",
+      "publishedPlaces": 1,
+      "betaActivePlaces": 1,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "Acceso del público general al restaurante no verificado.",
+      "sources": [
+        "https://zibatagolf.com/",
+        "https://www.instagram.com/diezynueve_zibata/"
+      ]
+    },
+    {
+      "id": "centro-zibata",
+      "status": "active",
+      "active": true,
+      "confidence": "medium",
+      "withinZibata": true,
+      "name": "Centro Zibatá",
+      "previousName": null,
+      "address": "Av. Paseo de las Pitahayas 199, Zibatá",
+      "previousAddress": "Av. Paseo de las Pitahayas, Zibatá",
+      "coordinates": {
+        "lat": 20.68102,
+        "lng": -100.340119
+      },
+      "locationConfidence": "high",
+      "publishedPlaces": 5,
+      "betaActivePlaces": 3,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "La web del desarrollador describe el proyecto sin nombrar marcas; locatarios confirmados por fuentes de terceros.",
+      "sources": [
+        "https://zibata.com/town-center/",
+        "https://www.facebook.com/centrozibata/",
+        "https://zibata.digital/categoria-unica/restaurantes/"
+      ]
+    },
+    {
+      "id": "distrito-nandu",
+      "status": "coming_soon",
+      "active": false,
+      "confidence": "high",
+      "withinZibata": true,
+      "name": "Distrito Nandú",
+      "previousName": null,
+      "address": null,
+      "previousAddress": null,
+      "coordinates": {
+        "lat": 20.68573,
+        "lng": -100.35009
+      },
+      "locationConfidence": "low",
+      "publishedPlaces": 0,
+      "betaActivePlaces": 0,
+      "lastVerifiedAt": "2026-09-14",
+      "notes": "Rendimientos previstos a partir de enero de 2027. Andador 58 anunció apertura (sin confirmar).",
+      "sources": [
+        "https://webuild.mx/invierte-distrito-nandu-en-zibata/",
+        "https://www.instagram.com/distritonandu/"
+      ]
+    }
+  ],
+  "candidatePlazas": [
+    {
+      "name": "Xenica",
+      "status": "coming_soon",
+      "withinZibata": true,
+      "sources": [
+        "https://xenica.mx/",
+        "https://www.pincali.com/inmueble/venta-locales-plaza-comercial-xenica-zibata-queretaro"
+      ],
+      "notes": "Locales en venta con entregas previstas en diciembre de 2026."
+    },
+    {
+      "name": "Plaza Nova",
+      "status": "coming_soon",
+      "withinZibata": "uncertain",
+      "sources": [
+        "https://www.pincali.com/inmuebles/locales-comerciales-en-renta-en-zibata-el-marques-queretaro"
+      ],
+      "notes": "Preventa en Circuito Universidades junto al IMSS HGR 2; se describe 'rodeada por Zibatá, Zákia y El Refugio'."
+    },
+    {
+      "name": "Pabellón Zibatá",
+      "status": "coming_soon",
+      "withinZibata": true,
+      "sources": [
+        "https://pabellonzibata.com/",
+        "https://criptica.com.mx/presentan-proyecto-de-pabellon-zibata-contara-con-auditorio-hotel-restaurantes-oficinas-y-tiendas-de-marcas-de-lujo/"
+      ],
+      "notes": "Proyecto con restaurantes; inauguración prevista a finales de 2026."
+    }
+  ]
+}

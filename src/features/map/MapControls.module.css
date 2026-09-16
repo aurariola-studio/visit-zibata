@@ -1,0 +1,145 @@
+.controls {
+  position: absolute;
+  right: var(--controls-right, var(--space-4));
+  bottom: var(--controls-bottom, calc(var(--space-6) + var(--safe-bottom)));
+  z-index: var(--z-map-ui);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  transition:
+    right var(--duration-slow) var(--ease-out),
+    bottom var(--duration-slow) var(--ease-out);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  backdrop-filter: var(--blur-surface);
+  box-shadow:
+    0 0 0 1px var(--color-border),
+    var(--shadow-md);
+}
+
+.button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.625rem;
+  height: 2.625rem;
+  border: 0;
+  background: transparent;
+  color: var(--ink-700);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.button + .button {
+  border-top: 1px solid var(--color-border);
+}
+
+.button svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 1.9;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.button:hover {
+  background: var(--lime-50);
+  color: var(--olive-700);
+}
+
+.button:focus-visible {
+  outline-offset: -3px;
+}
+
+.badge {
+  position: absolute;
+  right: 0.2rem;
+  bottom: 0.15rem;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--olive-600);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.message {
+  position: absolute;
+  right: calc(100% + var(--space-2));
+  bottom: 0;
+  width: max-content;
+  max-width: 15rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--ink-900);
+  box-shadow: var(--shadow-md);
+  color: var(--sand-50);
+  font-size: var(--text-sm);
+}
+
+/* Punto de "mi ubicación": solo en memoria, nunca se guarda ni se envía. */
+.userDot {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 3px solid white;
+  border-radius: 50%;
+  background: #2f6fde;
+  box-shadow:
+    0 0 0 6px rgb(47 111 222 / 0.25),
+    0 2px 6px rgb(0 0 0 / 0.3);
+}
+
+@media (max-width: 899px) {
+  .button {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+/* En pantallas táctiles pequeñas se hace zoom con pellizco: se liberan esos botones del mapa. */
+@media (max-width: 899px) and (pointer: coarse) {
+  .zoomStack {
+    display: none;
+  }
+}
+
+/* Sin altura para una columna entre la barra superior y la hoja (teléfono en horizontal, 320 px con
+   filtros; lo decide Experience midiendo la barra): controles en fila sobre la hoja, a la derecha. */
+:global([data-controls="row"]) {
+  .controls {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .stack {
+    flex-direction: row;
+  }
+
+  .button + .button {
+    border-top: 0;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .message {
+    right: 0;
+    bottom: calc(100% + var(--space-2));
+  }
+}

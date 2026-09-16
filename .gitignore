@@ -1,0 +1,30 @@
+# Dependencias y builds
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Tests
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Datos geográficos crudos (se regeneran con `npm run map:fetch`)
+data/geographic/raw/
+
+# Originales de fotografías (se publican solo las versiones optimizadas)
+data/commercial/photos-src/
+
+# Entorno y editores
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
+
+# Configuración local de agentes (no forma parte del producto)
+.claude/

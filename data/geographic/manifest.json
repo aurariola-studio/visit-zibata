@@ -1,0 +1,146 @@
+{
+  "$comment": "Generado por scripts/map/build-map.ts. No editar a mano.",
+  "crs": "Datos en EPSG:4326 (WGS84); teselas vectoriales en EPSG:3857 (Web Mercator)",
+  "area": {
+    "name": "Zibatá, El Marqués, Querétaro, México",
+    "bbox": [
+      -100.37,
+      20.65,
+      -100.29,
+      20.705
+    ]
+  },
+  "sources": [
+    {
+      "id": "osm",
+      "name": "OpenStreetMap",
+      "layers": [
+        "boundary",
+        "roads",
+        "landuse",
+        "water",
+        "waterway",
+        "labels"
+      ],
+      "license": "ODbL-1.0",
+      "attribution": "© OpenStreetMap contributors",
+      "url": "https://www.openstreetmap.org/copyright",
+      "method": "Overpass API (scripts/map/fetch-osm.ts)",
+      "extractedAt": "2026-09-14T02:41:40.547Z",
+      "dataTimestamp": "2026-09-14T02:40:01Z"
+    },
+    {
+      "id": "overture-buildings",
+      "name": "Overture Maps Foundation — buildings",
+      "layers": [
+        "buildings",
+        "plaza-buildings"
+      ],
+      "license": "ODbL-1.0",
+      "attribution": "© OpenStreetMap contributors, Overture Maps Foundation",
+      "url": "https://docs.overturemaps.org/attribution/",
+      "method": "GeoParquet 2026-08-19.0 vía DuckDB (scripts/map/fetch-overture.ts)",
+      "upstream": [
+        "OpenStreetMap",
+        "Microsoft ML Buildings",
+        "Google Open Buildings"
+      ],
+      "extractedAt": "2026-09-14T02:54:46.511Z"
+    },
+    {
+      "id": "plazas",
+      "name": "Geometría de plazas (data/commercial/plazas.json)",
+      "layers": [
+        "plaza-buildings"
+      ],
+      "method": "Ubicación a partir de POIs abiertos y referencias públicas; geometría con npm run map:suggest-plaza. Ver locationSource de cada plaza."
+    }
+  ],
+  "processing": [
+    "Conversión Overpass → GeoJSON con ensamblado de multipolígonos",
+    "Clasificación de vialidades, usos de suelo, agua y etiquetas (scripts/map/lib/classify.ts)",
+    "Recorte al área configurada (config.json → area.bbox)",
+    "Contorno de Zibatá: envolvente cóncava (maxEdge 350 m) de la red vial dentro del polígono semilla + margen de 70 m, simplificada",
+    "Edificios: descarte de huellas < minAreaM2; alturas medidas, por niveles o estimadas por tipo y superficie (en esta extracción de Overture ninguna huella trae altura medida: todas son estimadas, con variación determinista por id)",
+    "Edificios en z13: solo huellas ≥ 60 m² (peso de la vista inicial en móvil)",
+    "Etiquetas: se omiten las que quedan a menos de 130 m de una plaza activa (irían bajo su marcador)",
+    "Asociación edificio → plaza por centroide dentro de la geometría de la plaza; volumen generado si faltan huellas",
+    "Teselado MVT z12–z16 (geojson-vt, extent 4096, tolerancia 3) + gzip, empaquetado PMTiles v3"
+  ],
+  "outputs": {
+    "public/map/zibata.pmtiles": {
+      "bytes": 1620382,
+      "sha256": "fda0d7bfa3bee17b0ed26bc0188bc5b1a9a313b4df5fc840b27c65211189dcc8",
+      "tiles": 250,
+      "bytesByZoom": {
+        "12": 45831,
+        "13": 230838,
+        "14": 369065,
+        "15": 431927,
+        "16": 541501
+      },
+      "largestTile": {
+        "z": 13,
+        "x": 1812,
+        "y": 3615,
+        "bytes": 95232
+      },
+      "features": {
+        "roads": 4023,
+        "landuse": 125,
+        "water": 6,
+        "waterway": 8,
+        "buildings": 14029,
+        "labels": 21
+      }
+    },
+    "public/map/plaza-buildings.geojson": {
+      "bytes": 8018,
+      "sha256": "c59ebff7596c98d0cf3a144fa23df812005a5516c8c252c038ab2760cf95e725",
+      "features": 21,
+      "synthesizedFor": [
+        "paseo-zibata",
+        "foodtrucks-pickleball",
+        "xentric-zibata",
+        "campo-de-golf",
+        "distrito-nandu"
+      ],
+      "synthesisDetail": [
+        {
+          "plazaId": "paseo-zibata",
+          "replacedFootprints": 1,
+          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en config.json)"
+        },
+        {
+          "plazaId": "foodtrucks-pickleball",
+          "replacedFootprints": 0,
+          "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
+        },
+        {
+          "plazaId": "xentric-zibata",
+          "replacedFootprints": 1,
+          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en config.json)"
+        },
+        {
+          "plazaId": "campo-de-golf",
+          "replacedFootprints": 1,
+          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en config.json)"
+        },
+        {
+          "plazaId": "distrito-nandu",
+          "replacedFootprints": 0,
+          "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
+        }
+      ]
+    },
+    "data/geographic/extent.json": {
+      "bbox": [
+        -100.35547,
+        20.66951,
+        -100.30988,
+        20.69194
+      ],
+      "areaKm2": 6.66
+    }
+  }
+}

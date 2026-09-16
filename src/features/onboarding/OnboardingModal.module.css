@@ -1,0 +1,147 @@
+.dialog {
+  width: min(24.5rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: transparent;
+  color: var(--color-text);
+  overflow: visible;
+}
+
+.dialog::backdrop {
+  background: rgb(31 36 25 / 0.28);
+  backdrop-filter: blur(2px);
+}
+
+.dialog[open] {
+  animation: pop var(--duration-slow) var(--ease-out);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* En pantallas bajas (móvil en horizontal) el contenido se desplaza: las acciones siguen al alcance. */
+  max-height: calc(100dvh - 2.5rem);
+  overflow-y: auto;
+  padding: var(--space-5) var(--space-6) var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--sand-25);
+  box-shadow: var(--shadow-lg);
+}
+
+.close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-surface-muted);
+  color: var(--ink-700);
+}
+
+.close svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.art {
+  width: 100%;
+  height: auto;
+  margin: var(--space-2) 0 var(--space-1);
+}
+
+/* La ilustración es decorativa: sin altura suficiente se omite y el paso cabe completo. */
+@media (max-height: 480px) {
+  .art {
+    display: none;
+  }
+}
+
+.progress {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--olive-600);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.body {
+  min-height: 4.4em;
+  color: var(--ink-700);
+}
+
+.dots {
+  display: flex;
+  gap: 0.35rem;
+  margin: var(--space-1) 0;
+}
+
+.dots span {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: var(--radius-pill);
+  background: var(--sand-300);
+  transition:
+    width var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out);
+}
+
+.dots span[data-active="true"] {
+  width: 1.4rem;
+  background: var(--olive-600);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.primary,
+.secondary {
+  height: 2.75rem;
+  padding: 0 1.2rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+
+.primary {
+  flex: 1;
+  background: var(--olive-600);
+  color: white;
+}
+
+.primary:hover {
+  background: var(--olive-700);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--ink-700);
+}
+
+.secondary:hover {
+  background: var(--color-surface-muted);
+}

@@ -1,0 +1,48 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  animation: fade var(--duration-slow) var(--ease-out);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: var(--space-2);
+  border-radius: 1.1rem;
+  background: var(--lime-100);
+  color: var(--olive-600);
+}
+
+.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.empty[data-tone="error"] .icon {
+  background: var(--danger-50);
+  color: var(--danger-600);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.15;
+}
+
+.body {
+  max-width: 22rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}

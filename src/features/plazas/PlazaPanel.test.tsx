@@ -1,0 +1,87 @@
+// @vitest-environment jsdom
+import { screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
+import { placesFixture, plazasFixture } from '../../test/fixtures.ts'
+import { renderWithCatalog } from '../../test/render.tsx'
+import { countByCategory } from '../filters/filters.ts'
+import { PlazaPanel } from './PlazaPanel.tsx'
+
+const plaza = plazasFixture[0] as (typeof plazasFixture)[number]
+const plazaPlaces = placesFixture.filter((place) => place.plazaId === plaza.id && place.active)
+
+async function setup(overrides: Partial<Parameters<typeof PlazaPanel>[0]> = {}) {
+  const props = {
+    plaza,
+    places: plazaPlaces,
+    categoryCounts: countByCategory(plazaPlaces),
+    filtersActive: false,
+    activeCategoryId: null,
+    onCategoryChange: vi.fn(),
+    onClearFilters: vi.fn(),
+    onOpenPlace: vi.fn(),
+    onClose: vi.fn(),
+    ...overrides,
+  }
+  await renderWithCatalog(<PlazaPanel {...props} />)
+  return props
+}
+
+describe('PlazaPanel', () => {
+  it('muestra nombre, descripción, número de lugares, categorías y lista', async () => {
+    await setup()
+    expect(screen.getByRole('heading', { level: 2, name: 'Plaza Norte' })).toBeInTheDocument()
+    expect(screen.getByText('Plaza de prueba')).toBeInTheDocument()
+    expect(screen.getByText(/Plaza · 3 lugares/)).toBeInTheDocument()
+    const categories = screen.getByRole('list', { name: 'Categorías' })
+    expect(within(categories).getAllByRole('button')).toHaveLength(4)
+    const list = screen.getByRole('list', { name: 'Lugares en esta plaza' })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
+  })
+
+  it('mueve el foco al título para lectores de pantalla', async () => {
+    await setup()
+    expect(screen.getByRole('heading', { level: 2 })).toHaveFocus()
+  })
+
+  it('las pastillas anuncian los conteos con los filtros vigentes, no el total de la plaza', async () => {
+    // Búsqueda activa que solo deja un lugar de tacos en la plaza.
+    const tacos = plazaPlaces.filter((place) => place.category === 'tacos-y-antojitos')
+    await setup({ places: tacos, categoryCounts: countByCategory(tacos), filtersActive: true })
+    const chips = within(screen.getByRole('list', { name: 'Categorías' }))
+    expect(chips.getByRole('button', { name: /^Todo/ })).toHaveTextContent('Todo1')
+    expect(chips.getByRole('button', { name: /Tacos y antojitos/ })).toHaveTextContent(/1$/)
+    expect(chips.getByRole('button', { name: /Pizza/ })).not.toHaveTextContent(/\d$/)
+  })
+
+  it('filtra por categoría dentro de la plaza', async () => {
+    const props = await setup()
+    await userEvent.click(screen.getByRole('button', { name: /Tacos y antojitos/ }))
+    expect(props.onCategoryChange).toHaveBeenCalledWith('tacos-y-antojitos')
+  })
+
+  it('abre la ficha de un lugar', async () => {
+    const props = await setup()
+    await userEvent.click(screen.getByRole('button', { name: 'Ver detalles de Café Aurora' }))
+    expect(props.onOpenPlace).toHaveBeenCalledWith(expect.objectContaining({ id: 'cafe-aurora' }))
+  })
+
+  it('muestra un estado vacío cuando los filtros no dejan resultados', async () => {
+    const props = await setup({ places: [], filtersActive: true })
+    expect(screen.getByText('Sin resultados')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Ver todos los lugares de la plaza' }))
+    expect(props.onClearFilters).toHaveBeenCalled()
+  })
+
+  it('ofrece cómo llegar a la plaza y cerrar el panel', async () => {
+    const props = await setup()
+    const link = screen.getByRole('link', { name: /Cómo llegar a la plaza/ })
+    expect(link).toHaveAttribute(
+      'href',
+      expect.stringContaining('https://www.google.com/maps/dir/?api=1'),
+    )
+    expect(link).toHaveAttribute('target', '_blank')
+    await userEvent.click(screen.getByRole('button', { name: 'Cerrar panel' }))
+    expect(props.onClose).toHaveBeenCalled()
+  })
+})

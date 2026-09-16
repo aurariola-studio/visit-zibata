@@ -1,0 +1,31 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--sand-400);
+}
+
+.label {
+  font-weight: 600;
+}
+
+.status[data-state="open"] .dot {
+  background: var(--lime-500);
+  box-shadow: 0 0 0 3px rgb(140 186 55 / 0.22);
+}
+
+.status[data-state="open"] .label {
+  color: var(--olive-700);
+}
+
+.status[data-state="closed"] .label {
+  color: var(--danger-600);
+}

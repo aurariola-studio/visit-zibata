@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Zibatá · Comer y beber</title>
+  <rect width="32" height="32" rx="9" fill="#536c2a"/>
+  <path d="M16 6.5 26 12v8.4L16 26 6 20.4V12z" fill="#8cba37"/>
+  <path d="M16 6.5 26 12l-10 5.6L6 12z" fill="#b8d77c"/>
+  <path d="M16 17.6V26l10-5.6V12z" fill="#6a8736"/>
+  <path d="M11.2 14.3 16 17l4.8-2.7" fill="none" stroke="#f3f8ea" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

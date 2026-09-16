@@ -1,0 +1,193 @@
+.app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+}
+
+.mapFallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #e2d9c9;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.topbar {
+  position: absolute;
+  top: calc(var(--space-4) + var(--safe-top));
+  left: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-map-ui);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  pointer-events: none;
+  transition: right var(--duration-slow) var(--ease-out);
+}
+
+.topbar > * {
+  pointer-events: auto;
+}
+
+.topbar > :last-child {
+  pointer-events: none;
+}
+
+.searchCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(100%, 40rem);
+  padding: 0.45rem 0.5rem 0.45rem 0.6rem;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  backdrop-filter: var(--blur-surface);
+  box-shadow:
+    0 0 0 1px var(--color-border),
+    var(--shadow-md);
+}
+
+.listButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 2.75rem;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--olive-600);
+  color: white;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.listButton svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.listButton:hover {
+  background: var(--olive-700);
+}
+
+.app[data-layout="mobile"] .topbar {
+  top: calc(var(--space-3) + var(--safe-top));
+  left: var(--space-3);
+  right: var(--space-3);
+  gap: var(--space-2);
+}
+
+.app[data-layout="mobile"] .searchCard {
+  width: 100%;
+  padding: 0.35rem;
+  gap: var(--space-2);
+}
+
+/* En móvil las pastillas llegan hasta el borde para desplazarse con naturalidad. */
+.app[data-layout="mobile"] .topbar > :last-child {
+  margin-inline: calc(-1 * var(--space-3));
+}
+
+.fullscreenState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: 100%;
+  padding: var(--space-6);
+  background: radial-gradient(90% 60% at 50% 40%, var(--sand-25), transparent), var(--sand-100);
+}
+
+.loadingText {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.retry {
+  margin-top: var(--space-3);
+  height: 2.75rem;
+  padding: 0 1.4rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--olive-600);
+  color: white;
+  font-weight: 600;
+}
+
+/* Visible solo con foco de teclado: primer elemento tabulable, lleva directo al buscador. */
+.skipLink {
+  position: fixed;
+  top: calc(var(--space-2) + var(--safe-top));
+  left: var(--space-2);
+  z-index: calc(var(--z-map-ui) + 10);
+  padding: 0.6rem 1rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--ink-900);
+  color: var(--sand-50);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transform: translateY(calc(-100% - 2 * var(--space-2) - var(--safe-top)));
+}
+
+.skipLink:focus-visible {
+  transform: none;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: min(100%, 40rem);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--ink-900);
+  box-shadow: var(--shadow-md);
+  color: var(--sand-50);
+  font-size: var(--text-sm);
+}
+
+.notice p {
+  flex: 1;
+  margin: 0;
+}
+
+.noticeClose {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: inherit;
+}
+
+.noticeClose svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.noticeClose:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.noticeIcon {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.notice[data-tone="offline"] {
+  padding-block: var(--space-3);
+}

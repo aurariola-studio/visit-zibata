@@ -1,0 +1,66 @@
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sheet);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--color-surface);
+  backdrop-filter: var(--blur-surface);
+  box-shadow:
+    0 -1px 0 var(--color-border),
+    0 -18px 40px -24px rgb(31 36 25 / 0.45);
+  transition: height var(--duration-slow) var(--ease-out);
+  touch-action: none;
+}
+
+.sheet[data-dragging="true"] {
+  transition: none;
+}
+
+.grabArea {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0.35rem 0 0.1rem;
+  cursor: grab;
+  touch-action: none;
+}
+
+.grabArea:active {
+  cursor: grabbing;
+}
+
+.handle {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 1.5rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+
+.handle span {
+  width: 2.5rem;
+  height: 0.3rem;
+  border-radius: var(--radius-pill);
+  background: var(--sand-400);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.handle:hover span,
+.handle:focus-visible span {
+  background: var(--olive-600);
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--space-4) calc(var(--space-6) + var(--safe-bottom));
+  touch-action: pan-y;
+}

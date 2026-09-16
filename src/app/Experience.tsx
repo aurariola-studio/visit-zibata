@@ -1,0 +1,489 @@
+/**
+ * Composición de la experiencia: el mapa ocupa toda la pantalla y la interfaz flota encima.
+ * Escritorio: panel lateral derecho. Móvil: hoja inferior. Misma lógica y componentes en ambos.
+ */
+import { AlertTriangle, List, WifiOff, X } from 'lucide-react'
+import type { Map as MapLibreMap, PaddingOptions } from 'maplibre-gl'
+import {
+  type CSSProperties,
+  lazy,
+  type ReactNode,
+  type RefObject,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { Brand } from '../components/brand/Brand.tsx'
+import {
+  BottomSheet,
+  collapsedHeightFor,
+  useViewportHeight,
+} from '../components/panel/BottomSheet.tsx'
+import { DesktopSidePanel } from '../components/panel/DesktopSidePanel.tsx'
+import { EmptyState } from '../components/ui/EmptyState.tsx'
+import { useCatalogState } from '../data/CatalogContext.tsx'
+import { FilterBar } from '../features/filters/FilterBar.tsx'
+import { MapErrorBoundary } from '../features/map/MapErrorBoundary.tsx'
+import type { MapStatus } from '../features/map/types.ts'
+import { hasSeenOnboarding, OnboardingModal } from '../features/onboarding/OnboardingModal.tsx'
+import { PlaceDetail } from '../features/places/PlaceDetail.tsx'
+import { ExplorePanel } from '../features/plazas/ExplorePanel.tsx'
+import { PlazaPanel } from '../features/plazas/PlazaPanel.tsx'
+import { ResultsPanel } from '../features/plazas/ResultsPanel.tsx'
+import { SearchBar } from '../features/search/SearchBar.tsx'
+import { useElementBottom } from '../hooks/useElementBottom.ts'
+import { useIsDesktop, useMediaQuery } from '../hooks/useMediaQuery.ts'
+import { useOnlineStatus } from '../hooks/useOnlineStatus.ts'
+import { t } from '../i18n/index.ts'
+import type { Catalog, Place } from '../types/domain.ts'
+import { useAppDispatch } from './AppStateContext.tsx'
+import styles from './Experience.module.css'
+import { useExperience } from './useExperience.ts'
+import { useUrlSync } from './useUrlSync.ts'
+
+// MapLibre vive en un chunk aparte; su descarga empieza ya, en paralelo a la de los datos. Si falla, lo
+// gestiona MapErrorBoundary al renderizar (aquí solo se evita el aviso de promesa sin capturar).
+const mapViewModule =
+  typeof window !== 'undefined' ? import('../features/map/MapView.tsx') : undefined
+mapViewModule?.catch(() => {})
+const MapView = lazy(() => mapViewModule ?? import('../features/map/MapView.tsx'))
+// La depuración del mapa solo existe en desarrollo (o si se habilita explícitamente al compilar).
+const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_DEBUG === 'true'
+const MapDebugPanel = DEBUG_ENABLED
+  ? lazy(() => import('../features/map/debug/MapDebugPanel.tsx'))
+  : null
+
+const appTitle = `${t('app.name')} · ${t('app.tagline')}`
+
+export function Experience() {
+  const { state } = useCatalogState()
+  if (state.status === 'error') {
+    return (
+      <main className={styles.fullscreenState}>
+        <h1 className="visually-hidden">{appTitle}</h1>
+        <Brand />
+        <EmptyState
+          tone="error"
+          icon={<AlertTriangle />}
+          title={t('data.error.title')}
+          action={
+            // Recargar es lo más fiable en un sitio estático: los navegadores recuerdan un import() fallido.
+            <button type="button" className={styles.retry} onClick={() => window.location.reload()}>
+              {t('data.retry')}
+            </button>
+          }
+        >
+          {t('data.error.body')}
+        </EmptyState>
+      </main>
+    )
+  }
+  if (state.status === 'loading') {
+    return (
+      <main className={styles.fullscreenState} aria-busy="true">
+        <h1 className="visually-hidden">{appTitle}</h1>
+        <Brand />
+        <p className={styles.loadingText} role="status">
+          {t('data.loading')}
+        </p>
+      </main>
+    )
+  }
+  return <ReadyExperience catalog={state.catalog} />
+}
+
+const panelWidthFor = (viewport: number) =>
+  Math.round(Math.min(440, Math.max(360, viewport * 0.28)))
+
+function usePanelWidth(): number {
+  const [width, setWidth] = useState(() => panelWidthFor(window.innerWidth))
+  useEffect(() => {
+    const onResize = () => setWidth(panelWidthFor(window.innerWidth))
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+  return width
+}
+
+/**
+ * Al cerrar el panel con teclado el botón pulsado desaparece: el foco vuelve al último control usado
+ * fuera del panel (marcador, lista, búsqueda) o, si ya no existe, al buscador. Con ratón o dedo no se
+ * mueve el foco (no hay foco que perder y no se abre el teclado virtual).
+ */
+function useReturnFocus(fallback: RefObject<HTMLElement | null>) {
+  const lastOutside = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    const onFocusIn = (event: FocusEvent) => {
+      if (event.target instanceof HTMLElement && !event.target.closest('[data-panel]')) {
+        lastOutside.current = event.target
+      }
+    }
+    document.addEventListener('focusin', onFocusIn)
+    return () => document.removeEventListener('focusin', onFocusIn)
+  }, [])
+  return useCallback(
+    (event?: { detail?: number }) => {
+      // Un clic sintético de teclado (Enter/Espacio) tiene detail 0.
+      if (event?.detail !== 0) return
+      requestAnimationFrame(() => {
+        const target = lastOutside.current
+        const usable =
+          target?.isConnected &&
+          target.tabIndex >= 0 &&
+          target.checkVisibility?.() !== false &&
+          !target.closest('[aria-hidden="true"], [inert]')
+        ;(usable ? target : fallback.current)?.focus()
+      })
+    },
+    [fallback],
+  )
+}
+
+function ReadyExperience({ catalog }: { catalog: Catalog }) {
+  const dispatch = useAppDispatch()
+  const isDesktop = useIsDesktop()
+  const online = useOnlineStatus()
+  // Tan estrecho que la atribución y la fila de controles no caben lado a lado.
+  const veryNarrow = useMediaQuery('(max-width: 439px)')
+  const experience = useExperience(catalog)
+  const { state, panel, favorites, filtersActive, matching } = experience
+  const panelWidth = usePanelWidth()
+  const viewportHeight = useViewportHeight()
+  const sheetPeek = panel.kind === 'idle' ? 'small' : 'medium'
+  const topbarRef = useRef<HTMLElement>(null)
+  // Estimación inicial (~168 px en escritorio, ~157 px en móvil) hasta medir la barra real.
+  const topbarBottom = useElementBottom(topbarRef, isDesktop ? 168 : 157)
+  // La hoja colapsada deja libre la barra medida más ~150 px de mapa (marcador, atribución y controles).
+  // Si con esa hoja los controles no caben en columna, irán en fila sobre la hoja (y en pantallas muy
+  // estrechas también la atribución): se reserva ese alto y se vuelve a decidir con la hoja resultante.
+  const controlsFitColumn = (peekHeight: number) =>
+    isDesktop || viewportHeight - peekHeight - 12 - topbarBottom - 12 >= 172
+  // Solo en pantallas muy estrechas la fila de controles y la atribución ocupan todo el ancho sobre la
+  // hoja; en horizontal quedan a los lados y los marcadores pueden usar el centro.
+  const overSheetFor = (inRow: boolean) => (inRow && veryNarrow ? 104 : 0)
+  const firstPeek = collapsedHeightFor(sheetPeek, viewportHeight, topbarBottom + 150)
+  const sheetTopReserved = topbarBottom + 150 + overSheetFor(!controlsFitColumn(firstPeek))
+  const sheetPeekHeight = collapsedHeightFor(sheetPeek, viewportHeight, sheetTopReserved)
+  const [map, setMap] = useState<MapLibreMap | null>(null)
+  const [debugRequested] = useState(() => new URLSearchParams(window.location.search).has('debug'))
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  const returnFocus = useReturnFocus(searchInputRef)
+  useUrlSync(catalog)
+
+  useEffect(() => {
+    if (!hasSeenOnboarding()) dispatch({ type: 'showTutorial' })
+  }, [dispatch])
+
+  useEffect(() => {
+    if (!state.missingLinkNotice) return
+    const timer = window.setTimeout(() => dispatch({ type: 'dismissNotice' }), 8000)
+    return () => window.clearTimeout(timer)
+  }, [dispatch, state.missingLinkNotice])
+
+  const openPlace = useCallback(
+    (place: Place) =>
+      dispatch({
+        type: 'selectPlace',
+        placeId: place.id,
+        plazaId: place.plazaId,
+        origin: panel.kind === 'results' ? 'results' : 'plaza',
+      }),
+    [dispatch, panel.kind],
+  )
+  const selectPlaza = useCallback(
+    (plazaId: string | null) => dispatch({ type: 'selectPlaza', plazaId }),
+    [dispatch],
+  )
+  const setCategory = useCallback(
+    (categoryId: string | null) => dispatch({ type: 'setCategory', categoryId }),
+    [dispatch],
+  )
+  const clearFilters = useCallback(() => dispatch({ type: 'clearFilters' }), [dispatch])
+  const closePanel = useCallback(
+    (event?: { detail?: number }) => {
+      dispatch({ type: 'closePanel' })
+      returnFocus(event)
+    },
+    [dispatch, returnFocus],
+  )
+  const closeResults = useCallback(
+    (event?: { detail?: number }) => {
+      dispatch({ type: 'clearFilters' })
+      returnFocus(event)
+    },
+    [dispatch, returnFocus],
+  )
+  // Escape cierra la ficha (vuelve a la plaza o a los resultados) y, si no hay ficha, el panel.
+  // El buscador y el tutorial gestionan su propio Escape antes (preventDefault / <dialog>).
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || event.defaultPrevented || state.tutorialVisible) return
+      if (panel.kind === 'place') {
+        dispatch({ type: 'closePlace' })
+        if (panel.fromResults) returnFocus({ detail: 0 })
+      } else if (panel.kind === 'plaza' || panel.kind === 'explore') {
+        closePanel({ detail: 0 })
+      } else if (panel.kind === 'results') {
+        closeResults({ detail: 0 })
+      } else {
+        return
+      }
+      event.preventDefault()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [dispatch, panel, state.tutorialVisible, closePanel, closeResults, returnFocus])
+
+  const onMapStatus = useCallback(
+    (status: MapStatus) => dispatch({ type: 'mapStatusChanged', status }),
+    [dispatch],
+  )
+  const onMapCrash = useCallback(
+    () => onMapStatus({ state: 'error', reason: 'generic' }),
+    [onMapStatus],
+  )
+
+  const mapFailed = state.mapStatus.state === 'error'
+  // Si el mapa 3D no está disponible, la lista de plazas mantiene la guía utilizable.
+  const desktopPanelOpen = panel.kind !== 'idle' || mapFailed
+  // Controles del mapa en columna (4 × 40 px + márgenes) solo si caben entre la barra y el borde inferior
+  // libre; si no (móvil en horizontal, 320 px con filtros), en fila sobre la hoja.
+  const controlsInRow = !controlsFitColumn(sheetPeekHeight)
+  // En móvil, lo que queda sobre la hoja: la fila de controles y, si no caben lado a lado, la atribución.
+  const overSheet = overSheetFor(controlsInRow)
+  // top: borde inferior medido de la barra de búsqueda y filtros + margen.
+  const padding: PaddingOptions = isDesktop
+    ? {
+        top: topbarBottom + 8,
+        bottom: 40,
+        left: 40,
+        right: desktopPanelOpen ? panelWidth + 40 : 88,
+      }
+    : { top: topbarBottom + 8, bottom: sheetPeekHeight + 16 + overSheet, left: 16, right: 16 }
+
+  const resultCount =
+    panel.kind === 'plaza'
+      ? panel.places.length
+      : state.selectedPlazaId
+        ? matching.filter((place) => place.plazaId === state.selectedPlazaId).length
+        : matching.length
+
+  // Una sola región viva para toda la interfaz: avisos y número de resultados (no se duplican anuncios).
+  const announcement = !online
+    ? t('network.offline')
+    : state.missingLinkNotice
+      ? t('link.missing')
+      : filtersActive
+        ? t('filters.results', { count: resultCount })
+        : ''
+  const favoritesCount = [...favorites.ids].filter((id) => catalog.placeById.has(id)).length
+
+  let content: ReactNode
+  let contentKey: string = panel.kind
+  switch (panel.kind) {
+    case 'place':
+      contentKey = `place-${panel.place.id}`
+      content = (
+        <PlaceDetail
+          place={panel.place}
+          plaza={panel.plaza}
+          backLabel={
+            panel.fromResults
+              ? t('place.backToResults')
+              : t('place.backToPlaza', { plaza: panel.plaza.name })
+          }
+          onBack={() => dispatch({ type: 'closePlace' })}
+          onClose={closePanel}
+        />
+      )
+      break
+    case 'plaza':
+      contentKey = `plaza-${panel.plaza.id}`
+      content = (
+        <PlazaPanel
+          plaza={panel.plaza}
+          places={panel.places}
+          categoryCounts={experience.categoryCounts}
+          filtersActive={filtersActive}
+          activeCategoryId={state.activeCategoryId}
+          onCategoryChange={setCategory}
+          onClearFilters={clearFilters}
+          onOpenPlace={openPlace}
+          onClose={closePanel}
+        />
+      )
+      break
+    case 'results':
+      content = (
+        <ResultsPanel
+          places={panel.places}
+          onOpenPlace={openPlace}
+          onSelectPlaza={selectPlaza}
+          onClearFilters={closeResults}
+        />
+      )
+      break
+    case 'explore':
+      content = (
+        <ExplorePanel onSelectPlaza={selectPlaza} onClose={isDesktop ? closePanel : undefined} />
+      )
+      break
+    case 'idle':
+      content = (
+        <ExplorePanel
+          onSelectPlaza={selectPlaza}
+          headerOnly={!isDesktop && !state.sheetExpanded}
+          onExpand={() => dispatch({ type: 'setSheetExpanded', expanded: true })}
+        />
+      )
+      break
+  }
+
+  const stageStyle = {
+    '--controls-right': isDesktop && desktopPanelOpen ? `${panelWidth + 32}px` : undefined,
+    '--controls-bottom': isDesktop ? undefined : `${sheetPeekHeight + 12}px`,
+    // La atribución de OpenStreetMap debe verse: en móvil queda justo encima de la hoja.
+    '--attribution-bottom': isDesktop
+      ? undefined
+      : `${sheetPeekHeight + 4 + (controlsInRow && veryNarrow ? 52 : 0)}px`,
+  } as CSSProperties
+
+  return (
+    <div className={styles.app} data-layout={isDesktop ? 'desktop' : 'mobile'}>
+      <button
+        type="button"
+        className={styles.skipLink}
+        onClick={() => searchInputRef.current?.focus()}
+      >
+        {t('a11y.skipToSearch')}
+      </button>
+      <p className="visually-hidden" aria-live="polite" aria-atomic="true">
+        {announcement}
+      </p>
+      <main
+        className={styles.stage}
+        style={stageStyle}
+        data-controls={controlsInRow ? 'row' : 'column'}
+      >
+        <h1 className="visually-hidden">{appTitle}</h1>
+        <MapErrorBoundary onError={onMapCrash}>
+          <Suspense
+            fallback={
+              <div className={styles.mapFallback} role="status">
+                {t('map.loading')}
+              </div>
+            }
+          >
+            <MapView
+              plazas={catalog.plazas}
+              placeCounts={experience.placeCounts}
+              matchCounts={experience.matchCounts}
+              selectedPlazaId={state.selectedPlazaId}
+              onSelectPlaza={selectPlaza}
+              padding={padding}
+              compact={!isDesktop}
+              onStatusChange={onMapStatus}
+              onMapInstance={setMap}
+            />
+          </Suspense>
+        </MapErrorBoundary>
+
+        <header
+          ref={topbarRef}
+          className={styles.topbar}
+          style={isDesktop && desktopPanelOpen ? { right: `${panelWidth + 32}px` } : undefined}
+        >
+          <div className={styles.searchCard}>
+            <Brand compact={!isDesktop} />
+            <SearchBar
+              value={state.searchQuery}
+              onChange={(query) => dispatch({ type: 'setQuery', query })}
+              inputRef={searchInputRef}
+            />
+            {isDesktop && !desktopPanelOpen && (
+              <button
+                type="button"
+                className={styles.listButton}
+                onClick={() => dispatch({ type: 'openList' })}
+              >
+                <List aria-hidden="true" />
+                {t('explore.openList')}
+              </button>
+            )}
+          </div>
+          {!online && (
+            <div className={styles.notice} data-tone="offline">
+              <WifiOff aria-hidden="true" className={styles.noticeIcon} />
+              <p>{t('network.offline')}</p>
+            </div>
+          )}
+          {state.missingLinkNotice && (
+            <div className={styles.notice}>
+              <p>{t('link.missing')}</p>
+              <button
+                type="button"
+                className={styles.noticeClose}
+                onClick={() => dispatch({ type: 'dismissNotice' })}
+                aria-label={t('link.dismiss')}
+              >
+                <X aria-hidden="true" />
+              </button>
+            </div>
+          )}
+          <FilterBar
+            categories={experience.visibleCategories}
+            categoryCounts={experience.categoryCounts}
+            totalCount={[...experience.categoryCounts.values()].reduce(
+              (sum, count) => sum + count,
+              0,
+            )}
+            activeCategoryId={state.activeCategoryId}
+            onCategoryChange={setCategory}
+            plazas={experience.activePlazas}
+            selectedPlazaId={state.selectedPlazaId}
+            onPlazaChange={selectPlaza}
+            favoritesCount={favoritesCount}
+            favoritesOnly={state.favoritesOnly}
+            onToggleFavorites={() => dispatch({ type: 'toggleFavoritesOnly' })}
+            filtersActive={filtersActive}
+            resultCount={resultCount}
+            onClear={(event?: { detail?: number }) => {
+              clearFilters()
+              selectPlaza(null)
+              returnFocus(event)
+            }}
+          />
+        </header>
+      </main>
+
+      {isDesktop ? (
+        <DesktopSidePanel open={desktopPanelOpen} contentKey={contentKey}>
+          {content}
+        </DesktopSidePanel>
+      ) : (
+        <BottomSheet
+          expanded={state.sheetExpanded}
+          onExpandedChange={(expanded) => dispatch({ type: 'setSheetExpanded', expanded })}
+          peek={sheetPeek}
+          topReserved={sheetTopReserved}
+          contentKey={contentKey}
+        >
+          {content}
+        </BottomSheet>
+      )}
+
+      <OnboardingModal
+        open={state.tutorialVisible}
+        onClose={() => dispatch({ type: 'dismissTutorial' })}
+      />
+
+      {MapDebugPanel && debugRequested && map && (
+        <Suspense fallback={null}>
+          <MapDebugPanel map={map} />
+        </Suspense>
+      )}
+    </div>
+  )
+}

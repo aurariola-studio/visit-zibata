@@ -1,0 +1,128 @@
+.hero,
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.hero > div,
+.heroButton {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.heroButton {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.note {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.thumbs {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding-bottom: var(--space-1);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.thumbs li {
+  flex: 0 0 4rem;
+  scroll-snap-align: start;
+}
+
+.thumb {
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  opacity: 0.75;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.thumb[aria-current="true"] {
+  border-color: var(--olive-600);
+  opacity: 1;
+}
+
+.lightbox {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(20 24 16 / 0.92);
+}
+
+.lightbox::backdrop {
+  background: rgb(20 24 16 / 0.6);
+}
+
+.lightboxInner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: var(--space-8) var(--space-4);
+}
+
+.lightboxInner > div {
+  max-width: min(100%, 72rem);
+  max-height: 80dvh;
+  background: transparent;
+}
+
+.lightboxInner img {
+  max-height: 80dvh;
+  object-fit: contain;
+}
+
+.caption {
+  color: var(--sand-100);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.close,
+.prev,
+.next {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(252 250 246 / 0.14);
+  color: white;
+}
+
+.close {
+  top: calc(var(--space-4) + var(--safe-top));
+  right: var(--space-4);
+}
+
+.prev {
+  left: var(--space-4);
+  top: 50%;
+}
+
+.next {
+  right: var(--space-4);
+  top: 50%;
+}

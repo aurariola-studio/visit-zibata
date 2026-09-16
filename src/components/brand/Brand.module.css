@@ -1,0 +1,33 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.brand svg {
+  border-radius: 9px;
+  box-shadow: var(--shadow-sm);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  letter-spacing: -0.01em;
+  color: var(--ink-900);
+}
+
+.tagline {
+  margin-top: 0.15rem;
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--olive-600);
+}

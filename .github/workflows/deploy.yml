@@ -1,0 +1,76 @@
+# Publicación en GitHub Pages: install → validate → test → build → e2e → deploy.
+# El sitio es 100 % estático; para otro hosting basta con publicar la carpeta dist/.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Validar, testear y compilar
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      # Proyecto publicado en https://<usuario>.github.io/<repositorio>/. Con dominio propio o
+      # repositorio <usuario>.github.io usa BASE_PATH "/" (variable de repositorio PAGES_BASE_PATH).
+      BASE_PATH: ${{ vars.PAGES_BASE_PATH || format('/{0}/', github.event.repository.name) }}
+      SITE_URL: ${{ vars.PAGES_SITE_URL || format('https://{0}.github.io/{1}/', github.repository_owner, github.event.repository.name) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Validar datos comerciales
+        run: npm run data:validate
+      - name: Lint, tipos y tests
+        run: |
+          npm run lint
+          npm run typecheck
+          npm test
+      - name: Build de producción
+        run: npm run build
+      - name: Presupuesto de rendimiento
+        run: npm run perf:budget
+      - name: E2E contra el build (con la misma base que GitHub Pages)
+        run: |
+          npx playwright install --with-deps chromium webkit
+          npm run test:e2e
+      - name: Informe de Playwright
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
+      - name: Preparar artefacto
+        run: touch dist/.nojekyll
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: dist
+
+  deploy:
+    name: Publicar en GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
