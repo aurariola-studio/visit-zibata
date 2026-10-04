@@ -2,6 +2,27 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.2.0]: 2026-10-04
+
+### Cambiado
+
+- **La publicación pasa de GitHub Pages a Cloudflare Pages, y se hace desde GitHub Actions, no con la
+  integración de Git de Cloudflare.** Esa integración compila por su cuenta y no corre las pruebas:
+  publicaría igual con el presupuesto de peso roto, con axe en rojo o con los tests de CSP fallando.
+  Las puertas de este repositorio solo sirven si nada se publica sin pasarlas, así que el workflow
+  valida, compila, mide y prueba, y solo entonces llama a `wrangler pages deploy`.
+- **La página 404 decía "Zibatá · Comer y beber"**, un resto del rebranding de la 4.0.0.
+
+### Añadido
+
+- **`dist/_headers`, generado por el build** desde la misma constante que el `<meta>` de la CSP, para
+  que no puedan divergir: cuando las dos existen el navegador aplica la intersección, y tocar una sin
+  la otra daría un bloqueo difícil de diagnosticar. Añade lo que un `<meta>` no puede declarar
+  (`frame-ancestors`), más `Referrer-Policy`, `X-Content-Type-Options`, `Cross-Origin-Opener-Policy`,
+  `Permissions-Policy` y el `Cache-Control` por tipo de archivo.
+- **`wrangler` como dependencia de desarrollo fijada en el lockfile**, en vez de descargarla sin fijar
+  al publicar: es la misma disciplina con la que las acciones van fijadas por SHA.
+
 ## [4.1.0]: 2026-10-04
 
 ### Añadido
