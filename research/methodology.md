@@ -2,7 +2,7 @@
 
 Fecha de ejecución: **2026-09-14** · versión del dataset **2026.09.14**.
 
-Objetivo: sustituir la lista beta del propietario («Restaurantes en Zibatá.xlsx», 12 plazas y 104 locales) por
+Objetivo: sustituir la lista beta del propietario ("Restaurantes en Zibatá.xlsx", 12 plazas y 104 locales) por
 la mejor representación verificable, a esa fecha, de los lugares de comida y bebida que operan dentro de Zibatá.
 
 ## 1. Alcance geográfico
@@ -33,7 +33,7 @@ Reglas de uso:
   (`scripts/research/post-date.ts`): en TikTok, 32 bits altos = segundos Unix; en Instagram, el shortcode
   codifica milisegundos desde el epoch de la plataforma.
 - Los resúmenes automáticos del buscador pueden mezclar datos. Horarios y teléfonos que solo aparecen ahí
-  quedan como nota («sin confirmar») y no se publican.
+  quedan como nota ("sin confirmar") y no se publican.
 - Las fechas de publicación de fichas en directorios locales (p. ej., Zibata Digital) son señales de
   vigencia débiles: indican que alguien publicó la ficha, no que se visitó el lugar.
 
@@ -45,8 +45,8 @@ Reglas de uso:
    registros, activos o no.
 3. **Plazas** (fases 4–5): búsqueda de plazas y desarrollos; lectura de directorios oficiales; verificación
    de dirección, nombre y pertenencia a Zibatá.
-4. **Categorías, aperturas y cierres** (fases 6–8): búsquedas por categoría y término («cafetería nueva
-   Zibatá 2026», «inauguración», «cerró»…) y en guías y directorios locales.
+4. **Categorías, aperturas y cierres** (fases 6–8): búsquedas por categoría y término ("cafetería nueva
+   Zibatá 2026", "inauguración", "cerró"…) y en guías y directorios locales.
 5. **Deduplicación** (fase 9): nombres traducidos o con sufijo de sucursal (Estación Boba = Boba Station),
    renombres (Margaritas Restaurante Bar → Bistró Margaritas by Kaos) y sustituciones en el mismo local y
    teléfono (Piotl Rosticería → Ichos).
@@ -71,7 +71,7 @@ Reglas de uso:
 | `rejected` | Fuera de Zibatá, no es comida/bebida, supermercado, marca virtual o sin nombre comercial | No |
 | `coming_soon` | Apertura anunciada, no confirmada | No |
 
-«Solo delivery» significa que la única evidencia de la sucursal son tiendas en Rappi, Uber Eats o DiDi. Esas
+"Solo delivery" significa que la única evidencia de la sucursal son tiendas en Rappi, Uber Eats o DiDi. Esas
 tiendas suelen seguir listadas tras un cierre, por eso esos casos quedan `uncertain`.
 
 ## 5. Confianza
@@ -88,7 +88,7 @@ tiendas suelen seguir listadas tras un cierre, por eso esos casos quedan `uncert
 - `data/commercial/places.json` contiene **solo** `active` y `likely_active`. Cada local incluye
   `verification` (estado, confianza, `lastVerifiedAt` y URLs de fuentes). El validador avisa si un local
   activo no la tiene y da error si su estado no es publicable.
-- Nombre comercial actual, sin sufijos de sucursal («Sushi Itto», no «Sushi Itto Xentric Anáhuac»). Los ids
+- Nombre comercial actual, sin sufijos de sucursal ("Sushi Itto", no "Sushi Itto Xentric Anáhuac"). Los ids
   del beta se conservan aunque cambie el nombre, para no romper enlaces.
 - Descripciones cortas y factuales, sintetizadas de las fuentes, sin lenguaje publicitario. Sin descripción
   verificable → `null`.
@@ -112,10 +112,10 @@ tiendas suelen seguir listadas tras un cierre, por eso esos casos quedan `uncert
 
 1. Copiar el dataset vigente a `data/research/beta/` (será la nueva línea base) y fijar `researchDate` y
    `datasetVersion` en `research/decisions.json`.
-2. Por cada registro y cada plaza, repetir búsquedas (nombre + «Zibatá», plaza, categoría) y revisar los
+2. Por cada registro y cada plaza, repetir búsquedas (nombre + "Zibatá", plaza, categoría) y revisar los
    directorios oficiales; añadir cada hallazgo a `research/log/businesses.jsonl` con URL, nivel, tipo,
    `sourceDate` (usar `node scripts/research/post-date.ts <url>` para publicaciones) y qué respalda.
-3. Buscar aperturas y cierres del periodo («apertura», «inauguración», «cerrado permanentemente») y
+3. Buscar aperturas y cierres del periodo ("apertura", "inauguración", "cerrado permanentemente") y
    revisar los inciertos de `data/research/uncertain.json`: son los primeros candidatos a cambiar.
 4. Actualizar `research/decisions.json` aplicando las reglas de las secciones 4–6.
 5. `node scripts/research/build-dataset.ts`, `npm run check` y `npm run test:e2e`.

@@ -1,31 +1,54 @@
 /**
  * npm run images:icons
  *
- * Genera los iconos «maskable» del manifiesto (fondo a sangre y el símbolo dentro de la zona segura del
- * 80 %), separados de los iconos «any» con esquinas redondeadas. Con un único icono «any maskable» los
- * lanzadores recortaban las esquinas y el símbolo quedaba demasiado cerca del borde.
+ * Genera los PNG de icono a partir de public/logo.svg, que es la única fuente del símbolo.
+ *
+ * Son tres formatos porque cada sitio recorta distinto:
+ *  - "any" (manifiesto): esquina redondeada propia, porque el lanzador lo pone tal cual.
+ *  - "maskable" (manifiesto): fondo a sangre y el símbolo dentro de la zona segura del 80 %, porque
+ *    el lanzador recorta la forma que quiera. Con un único icono "any maskable" se comían las
+ *    esquinas y el símbolo quedaba pegado al borde.
+ *  - apple-touch: a sangre y sin esquina, porque iOS aplica su propia máscara y redondear dos veces
+ *    deja un borde sucio.
+ *
+ * Sobre el olivo el símbolo va en papel y en lima clara: el lima de la marca (#8cba37) queda
+ * demasiado cerca del olivo del fondo y la aguja pierde sus dos mitades.
  */
+import { readFileSync } from 'node:fs'
 import sharp from 'sharp'
 import { ROOT } from '../data/lib/dataset.ts'
 
-// Mismo símbolo que public/favicon.svg, en una caja de 32 × 32 escalada al 72 % y centrada (zona segura).
-const symbol = `
-  <path d="M16 6.5 26 12v8.4L16 26 6 20.4V12z" fill="#8cba37"/>
-  <path d="M16 6.5 26 12l-10 5.6L6 12z" fill="#b8d77c"/>
-  <path d="M16 17.6V26l10-5.6V12z" fill="#6a8736"/>
-  <path d="M11.2 14.3 16 17l4.8-2.7" fill="none" stroke="#f3f8ea" stroke-width="1.2" stroke-linecap="round"/>`
-const scale = 0.72
-const offset = 16 - 16 * scale
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#536c2a"/>
-  <g transform="translate(${offset} ${offset}) scale(${scale})">${symbol}</g>
-</svg>`
+const OLIVO = '#536c2a'
+const LIENZO = 256
 
-for (const size of [192, 512]) {
-  const file = `${ROOT}public/icons/icon-maskable-${size}.png`
-  await sharp(Buffer.from(svg), { density: (72 * size) / 32 })
+const fuente = readFileSync(`${ROOT}public/logo.svg`, 'utf8')
+const dentro = fuente.match(/<\/title>([\s\S]*)<\/svg>/)?.[1]
+if (!dentro) throw new Error('public/logo.svg no tiene el formato esperado')
+// Sobre fondo oscuro se invierte la marca: el olivo pasa a papel y el lima a su tono claro.
+const simbolo = dentro.replaceAll('#536C2A', '#f7f4ed').replaceAll('#8CBA37', '#b8d77c')
+if (simbolo === dentro) throw new Error('public/logo.svg no usa los colores esperados')
+
+/** `escala` < 1 mete el símbolo en la zona segura; `radio` 0 deja el fondo a sangre. */
+const lienzo = (escala: number, radio: number) => {
+  const margen = (LIENZO * (1 - escala)) / 2
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${LIENZO} ${LIENZO}">
+  <rect width="${LIENZO}" height="${LIENZO}" rx="${radio}" fill="${OLIVO}"/>
+  <g transform="translate(${margen} ${margen}) scale(${escala})">${simbolo}</g>
+</svg>`
+}
+
+const SALIDAS = [
+  { file: 'public/icons/icon-192.png', size: 192, svg: lienzo(0.84, 48) },
+  { file: 'public/icons/icon-512.png', size: 512, svg: lienzo(0.84, 48) },
+  { file: 'public/icons/icon-maskable-192.png', size: 192, svg: lienzo(0.72, 0) },
+  { file: 'public/icons/icon-maskable-512.png', size: 512, svg: lienzo(0.72, 0) },
+  { file: 'public/apple-touch-icon.png', size: 180, svg: lienzo(0.8, 0) },
+]
+
+for (const { file, size, svg } of SALIDAS) {
+  await sharp(Buffer.from(svg), { density: (72 * size) / LIENZO })
     .resize(size, size)
     .png({ compressionLevel: 9 })
-    .toFile(file)
+    .toFile(`${ROOT}${file}`)
   console.log(`✓ ${file}`)
 }

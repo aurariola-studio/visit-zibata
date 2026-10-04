@@ -79,7 +79,7 @@ Banco de auditoría (sondas independientes sobre el mismo build):
 | Plazas (12 × 2 perfiles) | Marcador, panel, conteos, orden, URL, cierre y hover correctos; 0 fallos |
 | axe (todas las severidades, WCAG 2.0/2.1/2.2 A-AA + buenas prácticas) | 16/16 estados **sin violaciones**, incluidos tutorial, sin WebGL y error de datos |
 | Estados de error (PMTiles, datos, red, esquema, relaciones) | Degradación correcta con aviso y reintento |
-| Fichas de lugar (76 × comprobaciones) | 0 problemas: categoría, plaza, «Cómo llegar», volver, cerrar y foco |
+| Fichas de lugar (76 × comprobaciones) | 0 problemas: categoría, plaza, "Cómo llegar", volver, cerrar y foco |
 | Objetivos táctiles (WCAG 2.2) | 0 incumplimientos |
 | Fotogramas por segundo (escritorio) | 60,6–61,2 fps en reposo, vuelo y reencuadre; 0 fotogramas > 34 ms; heap 54 MB |
 | Recorridos A–R (nueva ejecución) | 36/36 PASS |
@@ -99,7 +99,7 @@ Requisitos del encargo original, con su estado tras esta ronda (antes → ahora 
 | 3D | Alturas no idénticas sin justificación | PARTIAL → PASS (limitación) | 59 valores; método documentado; **son estimaciones** |
 | Vialidades | Jerarquía y nombres según zoom | PASS | 6 clases; rótulos desde z15,5 |
 | Plazas | Seleccionables por clic, hover y teclado | PASS | E2E + NVDA |
-| Plazas | Reconocibles en la vista inicial | PASS | 9/9 representadas (marcador o «+N») |
+| Plazas | Reconocibles en la vista inicial | PASS | 9/9 representadas (marcador o "+N") |
 | Plazas | Ubicación verificada | UNVERIFIED → PASS (limitación) | 12/12 con fuentes; 3 activas con confianza media, sin campo |
 | Selección | Resalte, mapa visible, panel con nombre, descripción, cantidad, categorías y lista | PASS | E2E en 4 proyectos y 9 tamaños |
 | Panel | Lateral en escritorio (25–30 %) y hoja inferior en móvil | PASS | 404 px de 1440; hoja con tope de altura |
@@ -107,7 +107,7 @@ Requisitos del encargo original, con su estado tras esta ronda (antes → ahora 
 | Detalle | Solo campos disponibles, nunca botones vacíos | PASS | Pruebas de componente |
 | Imágenes | Formatos modernos, lazy, respaldo | PASS (sin fotos) | Validador de rutas y variantes; ilustración por categoría |
 | Horarios | Se muestran cuando existen | PASS | 3/76 con horario real |
-| Google Maps | «Cómo llegar» sin Google Places | PASS | 76/76 URLs verificadas por prueba |
+| Google Maps | "Cómo llegar" sin Google Places | PASS | 76/76 URLs verificadas por prueba |
 | Búsqueda | Nombre, plaza, categoría, subcategoría, etiquetas, descripción; acentos, erratas y sinónimos | PARTIAL → PASS | Prioridad por inicio de palabra; tests |
 | Filtros | Categoría + plaza combinables, con recuento y limpieza | PASS | E2E |
 | Descubrimiento | Mapa → plaza → local → detalle sin buscar | PASS | Recorridos A–R |
@@ -146,11 +146,11 @@ cerrados salvo los declarados como limitación):
 | --- | --- | --- | --- | --- |
 | R-50 | Un marcador con el foco del teclado podía ocultarse al moverse la cámara | Regresión E2E intermitente | P3 (accesibilidad) | Corregido |
 | R-51 | Una plaza elegida nada más cargar quedaba pisada por la sincronización inicial de la URL | WebKit con carga alta (5/15) | P2 (funcional) | Corregido |
-| R-52 | «+N» no revelaba la plaza agrupada con un solo toque en pantallas estrechas | iPhone 13 emulado (390×664) | P3 (UX) | Corregido |
+| R-52 | "+N" no revelaba la plaza agrupada con un solo toque en pantallas estrechas | iPhone 13 emulado (390×664) | P3 (UX) | Corregido |
 | R-53 | El índice de búsqueda se consultaba dos veces por cambio de filtros | Prueba de estrés | P4 (rendimiento) | Corregido |
 | R-54 | Arrastrar la hoja y soltar sobre el asa deshacía el gesto | E2E táctil intermitente en tableta | P3 (UX) | Corregido |
-| A11Y-1 | Las pastillas se leían «Todo19» | Sesión con NVDA | P3 (accesibilidad) | Corregido |
-| A11Y-2 | La marca se leía «ZibatáCOMER Y BEBER» | Sesión con NVDA | P4 (accesibilidad) | Corregido |
+| A11Y-1 | Las pastillas se leían "Todo19" | Sesión con NVDA | P3 (accesibilidad) | Corregido |
+| A11Y-2 | La marca se leía "ZibatáCOMER Y BEBER" | Sesión con NVDA | P4 (accesibilidad) | Corregido |
 | A11Y-3 | Controles de MapLibre anunciados en inglés | Sesión con NVDA | P4 (accesibilidad) | Corregido |
 
 Ningún defecto abierto con severidad P1–P3 al cierre de la auditoría.
@@ -209,10 +209,10 @@ Ningún defecto abierto con severidad P1–P3 al cierre de la auditoría.
 | Chunk del mapa (gzip) | 283,5 KB | 320 KB | PASS |
 | Datos comerciales (gzip) | 15,2 KB | 20 KB | PASS |
 | PMTiles | 1 582 KB | 1 900 KB | PASS (antes 1 651 KB) |
-| Teselas z13 (primera vista en móvil) | 230,6 KB | — | −23 % respecto a la versión anterior |
-| Mapa listo (escritorio / móvil, local) | 0,7 s / 0,6 s | — | Medido con 76 y con 500 locales |
-| Estrés 500 locales · latencia de tecleo | ≤ 0,3 s | — | Sin tareas largas > 120 ms |
-| Estrés 500 locales · memoria | 25–51 MB | — | — |
+| Teselas z13 (primera vista en móvil) | 230,6 KB | n/d | −23 % respecto a la versión anterior |
+| Mapa listo (escritorio / móvil, local) | 0,7 s / 0,6 s | n/d | Medido con 76 y con 500 locales |
+| Estrés 500 locales · latencia de tecleo | ≤ 0,3 s | n/d | Sin tareas largas > 120 ms |
+| Estrés 500 locales · memoria | 25–51 MB | n/d | n/d |
 
 ## K. Matriz de contenido
 
@@ -226,8 +226,8 @@ Ningún defecto abierto con severidad P1–P3 al cierre de la auditoría.
 | Teléfono | 10/76 | Publicado por el negocio | Formato E.164 |
 | WhatsApp | 1/76 | Web oficial | Formato E.164 |
 | Horario | 3/76 | Publicado por el negocio | Se muestra solo si existe |
-| Fotografías | 0/76 | — | Respaldo por categoría, sin imágenes rotas |
-| Registros no publicados | 59 (48 inciertos, 3 cerrados, 5 rechazados, 1 retirado, 1 próximo, 1 duplicado) | — | Conservados con su evidencia |
+| Fotografías | 0/76 | n/d | Respaldo por categoría, sin imágenes rotas |
+| Registros no publicados | 59 (48 inciertos, 3 cerrados, 5 rechazados, 1 retirado, 1 próximo, 1 duplicado) | n/d | Conservados con su evidencia |
 
 ## L. Certificación final
 

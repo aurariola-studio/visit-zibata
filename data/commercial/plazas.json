@@ -7,7 +7,10 @@
       "id": "xentric-anahuac",
       "slug": "xentric-anahuac",
       "name": "Xentric Anáhuac",
-      "description": "Plaza comercial con suites universitarias sobre Av. Paseo de las Pitahayas, junto a la Universidad Anáhuac Querétaro.",
+      "description": {
+        "es": "Plaza comercial con suites universitarias delante de la Universidad Anáhuac Querétaro.",
+        "en": "Shopping plaza with student suites, across from Universidad Anáhuac Querétaro."
+      },
       "address": "Av. Paseo de las Pitahayas 55, Zibatá",
       "coordinates": {
         "lat": 20.678393,
@@ -72,8 +75,6 @@
         "huskys-ice-cream",
         "boba-station",
         "origenatural",
-        "ciao-bella",
-        "sushi-itto",
         "subway",
         "good-morning-coffee",
         "tortas-fifthy-fifthy",
@@ -83,25 +84,32 @@
         "lion-reef",
         "wicklow-irish-pub",
         "birria-los-esposos",
-        "los-morros-de-sonora",
         "tacos-los-tarascos",
-        "pizca-de-azucar-zibata"
+        "pizca-de-azucar-zibata",
+        "oakberry-xentric-anahuac",
+        "burgerthoven-zibata",
+        "mr-bagel-zibata",
+        "castore-mx-zibata",
+        "la-lorenza-xentric-anahuac",
+        "nutrisa-xentric-anahuac",
+        "wake-cup-xentric-anahuac",
+        "henko-juice-bar"
       ],
       "categories": [
         "desayunos-y-cafe",
         "tacos-y-antojitos",
+        "mexicana",
         "mariscos",
         "hamburguesas",
-        "pizza",
         "italiana",
         "asiatica",
-        "saludable-y-bowls",
-        "sandwiches-y-deli",
-        "pollo",
-        "bistro",
-        "postres",
+        "entre-panes",
+        "saludable",
+        "panaderia-y-reposteria",
+        "postres-y-dulces",
         "bebidas",
-        "bar-y-pub"
+        "internacional",
+        "bar"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -121,7 +129,10 @@
       "id": "anahuac-queretaro",
       "slug": "anahuac-queretaro",
       "name": "Anáhuac Querétaro",
-      "description": "Opciones para comer dentro del campus de la Universidad Anáhuac Querétaro.",
+      "description": {
+        "es": "Opciones para comer dentro del campus de la Universidad Anáhuac Querétaro.",
+        "en": "Places to eat inside the Universidad Anáhuac Querétaro campus."
+      },
       "address": "Circuito Universidades I km 7, Zibatá",
       "coordinates": {
         "lat": 20.68056,
@@ -176,10 +187,29 @@
       },
       "active": true,
       "placeIds": [
-        "tim-hortons"
+        "tim-hortons",
+        "vete-a-la-burger",
+        "karrusel-anahuac",
+        "tortas-la-guera-anahuac",
+        "la-barra-verde-anahuac",
+        "oma-bakery-anahuac",
+        "diegos-house-anahuac",
+        "chilakiles-anahuac",
+        "grunen-lush-anahuac",
+        "luka-anahuac",
+        "sinforosa-anahuac",
+        "starbucks-anahuac"
       ],
       "categories": [
-        "desayunos-y-cafe"
+        "desayunos-y-cafe",
+        "hamburguesas",
+        "italiana",
+        "asiatica",
+        "entre-panes",
+        "saludable",
+        "panaderia-y-reposteria",
+        "bebidas",
+        "casera"
       ],
       "locationConfidence": "medium",
       "locationSource": "Campus según OSM (way 653492316) y POIs de Overture Maps (release 2026-08-19.0). El edificio exacto de los locales está por verificar.",
@@ -197,7 +227,10 @@
       "id": "paseo-zibata",
       "slug": "paseo-zibata",
       "name": "Paseo Zibatá",
-      "description": "Plaza comercial frente a la Universidad Anáhuac con restaurantes, cafeterías, panadería y servicios.",
+      "description": {
+        "es": "Plaza comercial frente a la Universidad Anáhuac con restaurantes, cafeterías, panadería y servicios.",
+        "en": "Shopping plaza across from Universidad Anáhuac, with restaurants, coffee shops, a bakery and services."
+      },
       "address": "Av. Paseo de las Pitahayas 501, Zibatá",
       "coordinates": {
         "lat": 20.679336,
@@ -248,25 +281,30 @@
         "al-grano",
         "tacos-la-chusma",
         "el-hornero",
+        "all-berries",
         "birria-jauregui",
-        "bistrot-marino",
-        "ramen-express",
         "la-gaspacheria-tradicional",
         "panaderia-santa-fe",
-        "tacos-la-capilla"
+        "reposteria-eddi-mena",
+        "sweet-crepe-zibata",
+        "sana-corazon",
+        "enzza-pizza-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
-        "mexicana",
         "tacos-y-antojitos",
+        "mexicana",
+        "carnes-y-parrilla",
         "mariscos",
-        "carne-y-parrilla",
+        "hamburguesas",
         "italiana",
         "asiatica",
-        "saludable-y-bowls",
-        "sandwiches-y-deli",
-        "postres",
-        "bar-y-pub"
+        "entre-panes",
+        "saludable",
+        "panaderia-y-reposteria",
+        "botanas",
+        "postres-y-dulces",
+        "bar"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Paseo Zibatá\" y locales con esa dirección (El Hornero, Currucucú, Masaru…). Huella aproximada: el edificio aún no aparece en los datos abiertos.",
@@ -284,7 +322,10 @@
       "id": "foodtrucks-pickleball",
       "slug": "foodtrucks-pickleball",
       "name": "FoodTrucks Pickleball",
-      "description": "Food trucks junto a las canchas de pickleball, a un lado de Paseo Zibatá.",
+      "description": {
+        "es": "Food trucks junto a las canchas de pickleball, a un lado de Paseo Zibatá.",
+        "en": "Food trucks next to the pickleball courts, beside Paseo Zibatá."
+      },
       "address": null,
       "coordinates": {
         "lat": 20.6799,
@@ -335,7 +376,10 @@
       "id": "condesa",
       "slug": "condesa",
       "name": "Plaza Condesa",
-      "description": "Zona de restaurantes del desarrollo Riscos Condesa, frente a la Universidad Anáhuac.",
+      "description": {
+        "es": "Zona comercial del desarrollo Riscos Condesa I, frente a la Universidad Anáhuac.",
+        "en": "Shopping area of the Riscos Condesa I development, across from Universidad Anáhuac."
+      },
       "address": "Av. Paseo de las Pitahayas 9-B, Zibatá",
       "coordinates": {
         "lat": 20.68097,
@@ -400,15 +444,20 @@
         "romani-pizzas",
         "casa-vieja",
         "bendito-bocado",
-        "burger-fries"
+        "eme-cafe",
+        "mykona-frozen-yogurt",
+        "enchilokos"
       ],
       "categories": [
+        "desayunos-y-cafe",
         "tacos-y-antojitos",
         "mariscos",
-        "hamburguesas",
-        "pizza",
+        "italiana",
         "asiatica",
-        "bistro"
+        "saludable",
+        "botanas",
+        "postres-y-dulces",
+        "casera"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Condesa Zibata\" y locales con esa dirección (Bendito Bocado, Romani Pizzas, Freestyle Pizza); huella de Overture.",
@@ -428,7 +477,10 @@
       "id": "plaza-walmart",
       "slug": "plaza-walmart",
       "name": "Plaza Walmart",
-      "description": "Walmart Express Zibatá (supermercado), sobre Av. Paseo de las Pitahayas.",
+      "description": {
+        "es": "Walmart Express Zibatá (supermercado), sobre Av. Paseo de las Pitahayas.",
+        "en": "Walmart Express Zibatá (supermarket), on Av. Paseo de las Pitahayas."
+      },
       "address": "Av. Paseo de las Pitahayas 6A, Zibatá",
       "coordinates": {
         "lat": 20.6824846,
@@ -511,7 +563,10 @@
       "id": "xentric-zibata",
       "slug": "xentric-zibata",
       "name": "Xentric Zibatá",
-      "description": "Primera plaza comercial de Zibatá, sobre Paseo Tunas.",
+      "description": {
+        "es": "Plaza comercial con suites universitarias sobre Paseo Tunas.",
+        "en": "Shopping plaza with student suites, on Paseo Tunas."
+      },
       "address": "Paseo Tunas 18, Zibatá",
       "coordinates": {
         "lat": 20.683739,
@@ -545,29 +600,26 @@
         ]
       },
       "active": true,
+      "googleMapsUri": "https://maps.app.goo.gl/huGq3YL19b25NMLk6",
       "placeIds": [
         "bocuze",
-        "bee-waffle",
         "cosi-fan-tutte",
         "honu-sushi",
-        "trecielos",
         "la-marmota",
         "romelia-cafe",
-        "ichos",
-        "la-borra-del-cafe-xentric",
-        "quetacos",
-        "la-michoacana-xentric-zibata"
+        "la-michoacana-xentric-zibata",
+        "kekas-fritas-el-xavi",
+        "sazon-de-nassar"
       ],
       "categories": [
         "desayunos-y-cafe",
-        "mexicana",
         "tacos-y-antojitos",
-        "carne-y-parrilla",
+        "hamburguesas",
         "italiana",
         "asiatica",
-        "pollo",
-        "bistro",
-        "postres"
+        "postres-y-dulces",
+        "internacional",
+        "casera"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección Paseo Tunas 18 (Cosi Fan Tutte, Trecielos, La Marmota, Honu Sushi…). Huella aproximada.",
@@ -585,7 +637,10 @@
       "id": "plaza-zielo",
       "slug": "plaza-zielo",
       "name": "Plaza Zielo",
-      "description": "Plaza comercial junto al Discovery Center de Zibatá.",
+      "description": {
+        "es": "Plaza comercial entre el Discovery Center de Zibatá y la entrada principal a Zibatá.",
+        "en": "Shopping plaza between the Zibatá Discovery Center and the main entrance to Zibatá."
+      },
       "address": "Av. Paseo de las Pitahayas 26, Zibatá",
       "coordinates": {
         "lat": 20.674848,
@@ -647,21 +702,27 @@
         "kazus-kitchen",
         "margaritas",
         "santa-clara",
+        "taqueria-el-tapatio",
         "entrecot-asador",
         "hot-buns",
+        "los-del-mandil",
         "escarola",
         "donatto-pizza",
-        "la-borra-del-cafe-zielo"
+        "punta-cacao"
       ],
       "categories": [
         "desayunos-y-cafe",
-        "carne-y-parrilla",
+        "tacos-y-antojitos",
+        "mexicana",
+        "carnes-y-parrilla",
         "hamburguesas",
-        "pizza",
+        "italiana",
         "asiatica",
-        "saludable-y-bowls",
-        "bistro",
-        "postres"
+        "saludable",
+        "panaderia-y-reposteria",
+        "postres-y-dulces",
+        "internacional",
+        "bar"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Zielo\" y locales con esa dirección (Escarola, Donatto Pizza, Margaritas); huella de Overture.",
@@ -680,7 +741,10 @@
       "id": "mol-jamadi",
       "slug": "mol-jamadi",
       "name": "MOL Pitahaya",
-      "description": "Plaza del desarrollo Paseo Pitahaya, frente al Parque Jamadi.",
+      "description": {
+        "es": "Plaza del desarrollo Paseo Pitahayas, a un costado del Parque Jamadi.",
+        "en": "Plaza in the Paseo Pitahayas development, beside Parque Jamadi."
+      },
       "address": "Cerro del Huizache 49, Zibatá",
       "coordinates": {
         "lat": 20.67735,
@@ -746,11 +810,13 @@
         ]
       },
       "active": true,
+      "googleMapsUri": "https://maps.app.goo.gl/ijk5ygwvkhuFFSuf6",
       "placeIds": [
         "cafele"
       ],
       "categories": [
-        "desayunos-y-cafe"
+        "desayunos-y-cafe",
+        "panaderia-y-reposteria"
       ],
       "locationConfidence": "medium",
       "locationSource": "Dirección de MOL Pitahaya (Cerro del Huizache 49) publicada por Atlas Desarrollos y de Cafele Zibatá; POIs de Overture Maps (release 2026-08-19.0) en Av. Huizache 49 (local 23); huella de Overture.",
@@ -768,7 +834,10 @@
       "id": "campo-de-golf",
       "slug": "campo-de-golf",
       "name": "Zibatá Golf",
-      "description": "Restaurante y terraza bar del campo de golf de Zibatá.",
+      "description": {
+        "es": "Restaurante y terraza bar del campo de golf de Zibatá.",
+        "en": "Restaurant and terrace bar at the Zibatá golf course."
+      },
       "address": null,
       "coordinates": {
         "lat": 20.68274,
@@ -806,7 +875,8 @@
         "hoyo-19"
       ],
       "categories": [
-        "bar-y-pub"
+        "desayunos-y-cafe",
+        "bar"
       ],
       "locationConfidence": "medium",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) del restaurante del club (DiezyNueve / Birdie) junto a Golf Zibatá (OSM). Huella aproximada.",
@@ -824,7 +894,10 @@
       "id": "centro-zibata",
       "slug": "centro-zibata",
       "name": "Centro Zibatá",
-      "description": "Distrito comercial del Town Center de Zibatá.",
+      "description": {
+        "es": "Plaza comercial en zona céntrica sobre Av. Paseo de las Pitahayas.",
+        "en": "Shopping plaza in the central area, on Av. Paseo de las Pitahayas."
+      },
       "address": "Av. Paseo de las Pitahayas 199, Zibatá",
       "coordinates": {
         "lat": 20.68102,
@@ -882,14 +955,16 @@
         "agave-grill",
         "pio-poke-house",
         "lilo-bowl-bar",
-        "sixties-burger",
-        "starbucks-centro-zibata"
+        "starbucks-centro-zibata",
+        "marie-panaderia-artesanal"
       ],
       "categories": [
         "desayunos-y-cafe",
-        "tacos-y-antojitos",
-        "hamburguesas",
-        "saludable-y-bowls"
+        "carnes-y-parrilla",
+        "asiatica",
+        "saludable",
+        "panaderia-y-reposteria",
+        "bebidas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Centro Zibatá\" (shopping center) y Agave Grill; huella de Overture.",
@@ -908,7 +983,10 @@
       "id": "distrito-nandu",
       "slug": "distrito-nandu",
       "name": "Distrito Nandú",
-      "description": "Desarrollo de uso mixto en construcción junto al Parque Nandú.",
+      "description": {
+        "es": "Desarrollo de uso mixto en construcción junto al Parque Nandú.",
+        "en": "Mixed use development under construction next to Parque Nandú."
+      },
       "address": null,
       "coordinates": {
         "lat": 20.68573,
@@ -942,6 +1020,7 @@
         ]
       },
       "active": false,
+      "comingSoon": true,
       "placeIds": [],
       "categories": [],
       "locationConfidence": "low",
@@ -951,8 +1030,198 @@
         "confidence": "high",
         "lastVerifiedAt": "2026-09-14",
         "sources": [
-          "https://webuild.mx/invierte-distrito-nandu-en-zibata/",
-          "https://www.instagram.com/distritonandu/"
+          "https://www.instagram.com/distritonandu/",
+          "https://webuild.mx/invierte-distrito-nandu-en-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "plaza-loop",
+      "slug": "plaza-loop",
+      "name": "Plaza Loop Urban",
+      "description": {
+        "es": "Plaza comercial a un costado de Walmart Express Zibatá.",
+        "en": "Shopping plaza beside Walmart Express Zibatá."
+      },
+      "address": "Av. Paseo de las Pitahayas, Zibatá",
+      "coordinates": {
+        "lat": 20.682679,
+        "lng": -100.318637
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -100.318758,
+              20.682505
+            ],
+            [
+              -100.318805,
+              20.682544
+            ],
+            [
+              -100.318559,
+              20.682948
+            ],
+            [
+              -100.318377,
+              20.68295
+            ],
+            [
+              -100.318685,
+              20.68245
+            ],
+            [
+              -100.318758,
+              20.682505
+            ]
+          ]
+        ]
+      },
+      "active": true,
+      "placeIds": [
+        "burger-fries",
+        "tacos-el-pata-zibata",
+        "enoff-zibata",
+        "nomad-zibata"
+      ],
+      "categories": [
+        "desayunos-y-cafe",
+        "tacos-y-antojitos",
+        "hamburguesas",
+        "saludable",
+        "panaderia-y-reposteria",
+        "bebidas"
+      ],
+      "locationConfidence": "high",
+      "locationSource": "Huella del centro comercial \"PLAZA LOOP\" en OpenStreetMap (way/1545151019, shop=mall), incluida en la extracción Overpass de data/geographic/raw/osm.json.",
+      "verification": {
+        "status": "active",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://www.openstreetmap.org/way/1545151019"
+        ]
+      }
+    },
+    {
+      "id": "plaza-luna",
+      "slug": "plaza-luna",
+      "name": "Plaza Luna",
+      "description": {
+        "es": "Zona comercial del desarrollo Riscos Condesa II, sobre Av. Ceiba.",
+        "en": "Shopping area of the Riscos Condesa II development, on Av. Ceiba."
+      },
+      "address": null,
+      "coordinates": {
+        "lat": 20.685199,
+        "lng": -100.325317
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -100.32572,
+              20.68527
+            ],
+            [
+              -100.324963,
+              20.685394
+            ],
+            [
+              -100.324913,
+              20.685128
+            ],
+            [
+              -100.325671,
+              20.685004
+            ],
+            [
+              -100.32572,
+              20.68527
+            ]
+          ]
+        ]
+      },
+      "active": true,
+      "googleMapsUri": "https://maps.app.goo.gl/4bPouo99KE38c8zF8",
+      "placeIds": [
+        "baguettia-plaza-luna",
+        "smoothie-lab-plaza-luna"
+      ],
+      "categories": [
+        "entre-panes",
+        "saludable",
+        "bebidas"
+      ],
+      "locationConfidence": "medium",
+      "locationSource": "Punto del enlace del local Smoothie Lab de Google Maps aportado por el propietario de la guía (2026-09-20), leído de la redirección del enlace sin consultar contenido de Google. Huella aproximada: rectángulo orientado a la vialidad más cercana (npm run map:suggest-plaza), porque aún no hay huella construida en los datos abiertos.",
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://maps.app.goo.gl/4bPouo99KE38c8zF8",
+          "campo:2026-09-20"
+        ]
+      }
+    },
+    {
+      "id": "xenica",
+      "slug": "xenica",
+      "name": "Xënica",
+      "description": {
+        "es": "Plaza comercial en construcción.",
+        "en": "Shopping plaza under construction."
+      },
+      "address": null,
+      "coordinates": {
+        "lat": 20.680546,
+        "lng": -100.339137
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -100.338855,
+              20.680267
+            ],
+            [
+              -100.339546,
+              20.680583
+            ],
+            [
+              -100.339419,
+              20.680825
+            ],
+            [
+              -100.338729,
+              20.680509
+            ],
+            [
+              -100.338855,
+              20.680267
+            ]
+          ]
+        ]
+      },
+      "active": false,
+      "comingSoon": true,
+      "googleMapsUri": "https://maps.app.goo.gl/2K2suM5iCjE9U13o6",
+      "placeIds": [],
+      "categories": [],
+      "locationConfidence": "medium",
+      "locationSource": "Punto del enlace de Google Maps aportado por el propietario de la guía (2026-09-20), leído de la redirección del enlace sin consultar contenido de Google. Huella aproximada: rectángulo orientado a la vialidad más cercana y colocado a su lado libre (el punto del enlace cae sobre la calle) (npm run map:suggest-plaza), porque aún no hay huella construida en los datos abiertos.",
+      "verification": {
+        "status": "coming_soon",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-09-14",
+        "sources": [
+          "https://xenica.mx/",
+          "https://maps.app.goo.gl/2K2suM5iCjE9U13o6"
         ]
       }
     }

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { z } from 'zod'
-import type { Bounds, CommercialDataset } from '../../../src/data/relations.ts'
+import type { Bounds } from '../../../src/data/relations.ts'
 import {
   CategoriesFileSchema,
   PlacesFileSchema,
@@ -49,14 +49,6 @@ export function loadPlazasFile(): PlazasFile {
 
 export function loadPlacesFile(): PlacesFile | null {
   return existsSync(dataPaths.places) ? parseFile(dataPaths.places, PlacesFileSchema) : null
-}
-
-export function loadDataset(): CommercialDataset {
-  return {
-    categories: loadCategoriesFile().categories,
-    plazas: loadPlazasFile().plazas,
-    places: loadPlacesFile()?.places ?? [],
-  }
 }
 
 /** Área válida para coordenadas: la extensión del mapa generada por el pipeline GIS. */

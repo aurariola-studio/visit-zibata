@@ -4,18 +4,19 @@
  * a la ilustración de categoría si la imagen falla.
  */
 import { useState } from 'react'
-import { t } from '../../i18n/index.ts'
+import { localized, t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
 import { variantPath } from '../../lib/image-variants.ts'
-import type { Photo } from '../../types/domain.ts'
+import type { Category, Photo } from '../../types/domain.ts'
 import { CategoryIllustration } from './CategoryIllustration.tsx'
 import styles from './PlacePicture.module.css'
 
 interface PlacePictureProps {
   photo: Photo | undefined
-  categoryId: string
-  categoryIcon: string
-  categoryLabel: string
+  /** Para el respaldo ilustrado: icono y tono salen de la categoría, no de constantes en el código. */
+  category: Category | undefined
+  /** Dibujos de los giros principales para el respaldo ilustrado (ver girosOf). */
+  icons?: readonly string[]
   /** Tamaño aproximado en pantalla para elegir la variante (atributo sizes). */
   sizes: string
   ratio?: string
@@ -25,9 +26,8 @@ interface PlacePictureProps {
 
 export function PlacePicture({
   photo,
-  categoryId,
-  categoryIcon,
-  categoryLabel,
+  category,
+  icons,
   sizes,
   ratio = '4 / 3',
   eager = false,
@@ -41,11 +41,13 @@ export function PlacePicture({
     return (
       <div className={styles.frame} style={{ aspectRatio: ratio }}>
         <CategoryIllustration
-          categoryId={categoryId}
-          icon={categoryIcon}
+          category={category}
+          icons={icons}
           size={illustrationSize}
           label={
-            illustrationSize === 'sm' ? undefined : t('place.noPhoto', { category: categoryLabel })
+            illustrationSize === 'sm' || !category
+              ? undefined
+              : t('place.noPhoto', { category: localized(category.label) })
           }
         />
       </div>

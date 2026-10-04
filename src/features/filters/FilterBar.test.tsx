@@ -55,8 +55,18 @@ describe('FilterBar', () => {
 
   it('filtra por plaza con un selector nativo', async () => {
     const props = setup()
-    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Plaza' }), 'Plaza Sur')
+    await userEvent.selectOptions(
+      screen.getByRole('combobox', { name: 'Filtrar por zona' }),
+      'Plaza Sur',
+    )
     expect(props.onPlazaChange).toHaveBeenCalledWith('plaza-sur')
+  })
+
+  it('con una plaza elegida también dice cuántos resultados hay', async () => {
+    // Elegir plaza acota la lista igual que un filtro: el conteo no puede aparecer y desaparecer.
+    setup({ selectedPlazaId: 'plaza-sur', resultCount: 2 })
+    expect(screen.getByText('2 resultados')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Limpiar filtros' })).toBeInTheDocument()
   })
 
   it('con filtros activos muestra resultados y permite limpiarlos', async () => {

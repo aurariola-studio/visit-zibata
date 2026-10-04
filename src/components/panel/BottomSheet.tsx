@@ -80,7 +80,7 @@ export function BottomSheet({
     velocity: number
   } | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  /** Un arrastre acaba también en «click» sobre el asa: se ignora para no deshacer el gesto. */
+  /** Un arrastre acaba también en "click" sobre el asa: se ignora para no deshacer el gesto. */
   const justDragged = useRef(false)
 
   const collapsed = collapsedHeightFor(peek, viewport, topReserved)

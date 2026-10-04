@@ -43,7 +43,6 @@ export function HoursTable({ hours }: { hours: Hours | null }) {
         })}
       </dl>
       {hours.note && <p className={styles.note}>{hours.note}</p>}
-      <p className={styles.note}>{t('hours.timezoneNote')}</p>
     </section>
   )
 }

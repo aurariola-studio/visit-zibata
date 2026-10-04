@@ -20,7 +20,14 @@ import {
   PUBLISHABLE_STATUS,
   type RESEARCH_STATUS,
 } from '../../src/data/schemas.ts'
-import type { Category, Hours, Place, Plaza } from '../../src/types/domain.ts'
+import type {
+  Category,
+  Hours,
+  LocalizedText,
+  Place,
+  Plaza,
+  PlazaGeometry,
+} from '../../src/types/domain.ts'
 import { dataPaths, loadBounds, ROOT, writeDataFile } from '../data/lib/dataset.ts'
 
 type Status = (typeof RESEARCH_STATUS)[number]
@@ -56,14 +63,37 @@ interface PlaceDecision {
   plazaId?: string
   candidatePlaza?: string
   currentPlaza?: string
-  category?: string
-  subcategory?: string | null
-  description?: string | null
-  localNumber?: string
+  /** Los giros principales del local, en orden: lo que lo define. */
+  giros?: string[]
+  /** Lo demás que se vende ahí. Entre los dos, el tope son tres. */
+  secundarios?: string[]
+  description?: LocalizedText | null
   phone?: string
   hours?: Hours
-  links?: Partial<Record<'website' | 'instagram' | 'facebook' | 'tiktok' | 'whatsapp', string>>
-  tags?: string[]
+  links?: Partial<
+    Record<
+      | 'website'
+      | 'instagram'
+      | 'facebook'
+      | 'tiktok'
+      | 'whatsapp'
+      | 'rappi'
+      | 'uberEats'
+      | 'didiFood',
+      string
+    >
+  >
+  /**
+   * Verificación en sitio por quien mantiene la guía (AAAA-MM-DD). Vale como fuente cuando el negocio
+   * no tiene presencia pública: se publica como "campo:<fecha>" en verification.sources.
+   */
+  fieldVerifiedAt?: string
+  /**
+   * Ubicación propia del local, solo si está verificada y es la actual (p. ej. el enlace de Maps que
+   * aporta el propietario). Sin ella, la ficha lleva a la plaza.
+   */
+  location?: { lat: number; lng: number }
+  googleMapsUri?: string
   reason: string
   replacedBy?: string
   duplicateOf?: string
@@ -76,9 +106,23 @@ interface PlazaDecision {
   name?: string
   previousName?: string
   address?: string
-  description?: string
+  description?: LocalizedText
   /** Corrección del punto del marcador (p. ej. para que caiga dentro del polígono de la plaza). */
   coordinates?: { lat: number; lng: number; reason: string }
+  /** Enlace de Google Maps de la plaza aportado y comprobado por el propietario. */
+  googleMapsUri?: string
+  /**
+   * Plaza que no estaba en la lista beta (Zibatá sigue creciendo): trae su definición completa, con
+   * geometría verificable. Ver "Agregar una plaza nueva" en docs/DATOS.md.
+   */
+  new?: {
+    description: LocalizedText | null
+    address: string | null
+    coordinates: { lat: number; lng: number }
+    geometry: PlazaGeometry
+    locationConfidence: Confidence
+    locationSource: string
+  }
   sources: string[]
   notes: string
 }
@@ -114,70 +158,35 @@ const isHttpUrl = (value: string) => {
 
 const decisions = read<Decisions>('research/decisions.json')
 const logs = readJsonl<LogEntry>('research/log/businesses.jsonl')
+/**
+ * La beta es el dataset de partida y se queda como estaba, con categoría y subcategoría: es un
+ * histórico para comparar, no algo que se publique. Por eso se lee con su propia forma y no con el
+ * esquema de hoy, que ya pide giros.
+ */
+interface BetaCategory {
+  id: string
+  label: { es: string }
+  subcategories: { id: string }[]
+}
+interface BetaPlace {
+  id: string
+  name: string
+  plazaId: string
+  category: string
+  active: boolean
+}
 const beta = {
-  categories: CategoriesFileSchema.parse(read('data/research/beta/categories.beta.json'))
+  categories: read<{ categories: BetaCategory[] }>('data/research/beta/categories.beta.json')
     .categories,
   plazas: PlazasFileSchema.parse(read('data/research/beta/plazas.beta.json')).plazas,
-  places: PlacesFileSchema.parse(read('data/research/beta/places.beta.json')).places,
+  places: read<{ places: BetaPlace[] }>('data/research/beta/places.beta.json').places,
 }
 const { researchDate, datasetVersion } = decisions
 
 // ── Taxonomía ──────────────────────────────────────────────────────────────────────────────────────
-// Solo cambios que el nuevo inventario necesita: alitas como subcategoría real, snacks de maíz y fruta,
-// y pastelería. Las categorías sin locales siguen ocultas en la UI.
-const categories: Category[] = structuredClone(beta.categories)
-const TAXONOMY_CHANGES: {
-  category: string
-  label?: string
-  subcategory?: Category['subcategories'][number]
-  /** Sinónimos que atraen búsquedas ajenas ("barista" hacía que "bar" trajera cafeterías). */
-  removeSynonyms?: { subcategory: string; synonyms: string[] }
-}[] = [
-  {
-    category: 'desayunos-y-cafe',
-    removeSynonyms: { subcategory: 'cafe-de-especialidad', synonyms: ['barista'] },
-  },
-  { category: 'pollo', label: 'Pollo y alitas' },
-  {
-    category: 'pollo',
-    subcategory: {
-      id: 'alitas',
-      label: { es: 'Alitas' },
-      synonyms: ['alitas', 'wings', 'boneless'],
-    },
-  },
-  {
-    category: 'tacos-y-antojitos',
-    subcategory: {
-      id: 'esquites-y-snacks',
-      label: { es: 'Esquites y snacks' },
-      synonyms: ['esquites', 'elotes', 'gaspachos', 'snacks'],
-    },
-  },
-  {
-    category: 'postres',
-    subcategory: {
-      id: 'pasteleria',
-      label: { es: 'Pastelería' },
-      synonyms: ['pastel', 'pasteles', 'pastelería', 'repostería'],
-    },
-  },
-]
-for (const change of TAXONOMY_CHANGES) {
-  const category = categories.find((c) => c.id === change.category)
-  if (!category) throw new Error(`Categoría inexistente en la taxonomía: ${change.category}`)
-  if (change.label) category.label = { ...category.label, es: change.label }
-  const subcategory = change.subcategory
-  if (subcategory && !category.subcategories.some((s) => s.id === subcategory.id)) {
-    category.subcategories.push(subcategory)
-  }
-  const removal = change.removeSynonyms
-  if (removal) {
-    const target = category.subcategories.find((s) => s.id === removal.subcategory)
-    if (!target) throw new Error(`Subcategoría inexistente: ${removal.subcategory}`)
-    target.synonyms = target.synonyms.filter((synonym) => !removal.synonyms.includes(synonym))
-  }
-}
+// La taxonomía curada vive en research/taxonomy.json (la beta solo sirve para comparar). Se valida
+// más abajo con CategoriesFileSchema y con validateRelations (cada local debe caer en una categoría).
+const categories: Category[] = read<{ categories: Category[] }>('research/taxonomy.json').categories
 
 // ── Evidencia por registro ─────────────────────────────────────────────────────────────────────────
 function evidenceFor(decision: PlaceDecision): { entries: LogEntry[]; sources: Evidence[] } {
@@ -214,32 +223,32 @@ if (undecided.length > 0)
 const audit = decisions.places.map((decision) => {
   const betaPlace = betaPlaceById.get(decision.id)
   const { entries, sources } = evidenceFor(decision)
-  if (isPublishable(decision.status) && sources.length === 0) {
+  const field = decision.fieldVerifiedAt ? [`campo:${decision.fieldVerifiedAt}`] : []
+  if (isPublishable(decision.status) && sources.length === 0 && field.length === 0) {
     throw new Error(`${decision.id}: un registro publicable necesita evidencia`)
   }
-  return { decision, betaPlace, entries, sources }
+  return { decision, betaPlace, entries, sources, field }
 })
 
 const places: Place[] = audit
   .filter(({ decision }) => isPublishable(decision.status))
-  .map(({ decision, betaPlace, sources }) => {
+  .map(({ decision, betaPlace, sources, field }) => {
     const plazaId = decision.plazaId ?? betaPlace?.plazaId
     const name = decision.name ?? betaPlace?.name
-    if (!plazaId || !name || !decision.category)
-      throw new Error(`${decision.id}: faltan plaza, nombre o categoría`)
+    if (!plazaId || !name || !decision.giros || decision.giros.length === 0)
+      throw new Error(`${decision.id}: faltan plaza, nombre o giros`)
     return {
       id: decision.id,
       slug: decision.id,
       name,
       plazaId,
-      category: decision.category,
-      subcategory: decision.subcategory ?? null,
+      giros: decision.giros,
+      secundarios: decision.secundarios ?? [],
       description: decision.description ?? null,
-      localNumber: decision.localNumber ?? null,
       hours: decision.hours ?? null,
-      // Sin coordenadas propias verificadas: la app usa las de la plaza.
-      location: null,
-      googleMapsUri: null,
+      // Sin coordenadas propias verificadas, la app usa las de la plaza.
+      location: decision.location ?? null,
+      googleMapsUri: decision.googleMapsUri ?? null,
       googlePlaceId: null,
       phone: decision.phone ?? null,
       photos: [],
@@ -249,14 +258,16 @@ const places: Place[] = audit
         facebook: decision.links?.facebook ?? null,
         tiktok: decision.links?.tiktok ?? null,
         whatsapp: decision.links?.whatsapp ?? null,
+        rappi: decision.links?.rappi ?? null,
+        uberEats: decision.links?.uberEats ?? null,
+        didiFood: decision.links?.didiFood ?? null,
       },
-      tags: decision.tags ?? [],
       active: true,
       verification: {
         status: decision.status,
         confidence: decision.confidence,
         lastVerifiedAt: researchDate,
-        sources: sources.map((source) => source.url),
+        sources: [...sources.map((source) => source.url), ...field],
       },
     }
   })
@@ -266,26 +277,61 @@ const plazaDecisionById = new Map(decisions.plazas.map((decision) => [decision.i
 const missingPlazaDecisions = beta.plazas.filter((plaza) => !plazaDecisionById.has(plaza.id))
 if (missingPlazaDecisions.length > 0)
   throw new Error(`Plazas sin decisión: ${missingPlazaDecisions.map((p) => p.id).join(', ')}`)
+const unknownPlazas = decisions.plazas.filter(
+  (decision) => !betaPlazaById.has(decision.id) && !decision.new,
+)
+if (unknownPlazas.length > 0)
+  throw new Error(
+    `Plazas fuera de la lista beta sin definición "new": ${unknownPlazas.map((p) => p.id).join(', ')}`,
+  )
 
-let plazas: Plaza[] = beta.plazas.map((plaza) => {
-  const decision = plazaDecisionById.get(plaza.id) as PlazaDecision
+/** Base de la plaza: la de la lista beta o, si es nueva, la que aporta su propia decisión. */
+function plazaBase(decision: PlazaDecision): Plaza {
+  const beta = betaPlazaById.get(decision.id)
+  if (beta) return beta
+  const added = decision.new as NonNullable<PlazaDecision['new']>
   return {
-    ...plaza,
-    name: decision.name ?? plaza.name,
-    address: decision.address ?? plaza.address,
-    description: decision.description ?? plaza.description,
-    coordinates: decision.coordinates
-      ? { lat: decision.coordinates.lat, lng: decision.coordinates.lng }
-      : plaza.coordinates,
-    active: decision.active ?? isPublishable(decision.status),
-    verification: {
-      status: decision.status,
-      confidence: decision.confidence,
-      lastVerifiedAt: researchDate,
-      sources: decision.sources,
-    },
+    id: decision.id,
+    slug: decision.id,
+    name: decision.name ?? decision.id,
+    description: added.description,
+    address: added.address,
+    coordinates: added.coordinates,
+    geometry: added.geometry,
+    active: true,
+    placeIds: [],
+    categories: [],
+    locationConfidence: added.locationConfidence,
+    locationSource: added.locationSource,
   }
-})
+}
+
+// Orden: primero las plazas de la lista beta (sin mover nada) y después las que se han ido sumando.
+let plazas: Plaza[] = decisions.plazas
+  .slice()
+  .sort((a, b) => Number(Boolean(a.new)) - Number(Boolean(b.new)))
+  .map((decision) => {
+    const plaza = plazaBase(decision)
+    return {
+      ...plaza,
+      name: decision.name ?? plaza.name,
+      address: decision.address ?? plaza.address,
+      description: decision.description ?? plaza.description,
+      coordinates: decision.coordinates
+        ? { lat: decision.coordinates.lat, lng: decision.coordinates.lng }
+        : plaza.coordinates,
+      active: decision.active ?? isPublishable(decision.status),
+      // Confirmada y en obra: se muestra con la leyenda "Próximamente" hasta que abra.
+      ...(decision.status === 'coming_soon' ? { comingSoon: true } : {}),
+      ...(decision.googleMapsUri ? { googleMapsUri: decision.googleMapsUri } : {}),
+      verification: {
+        status: decision.status,
+        confidence: decision.confidence,
+        lastVerifiedAt: researchDate,
+        sources: decision.sources,
+      },
+    }
+  })
 plazas = syncPlazaDerivedFields({ categories, plazas, places })
 
 const dataset = { categories, plazas, places }
@@ -345,10 +391,10 @@ writeFileSync(
       id: place.id,
       name: place.name,
       plaza: plazaName.get(place.plazaId),
-      category: place.category,
-      subcategory: place.subcategory ?? '',
-      localNumber: place.localNumber ?? '',
-      description: place.description ?? '',
+      giros: place.giros.join(';'),
+      secundarios: place.secundarios.join(';'),
+      description: place.description?.es ?? '',
+      descriptionEn: place.description?.en ?? '',
       hours: hoursToText(place.hours),
       lat: '',
       lng: '',
@@ -358,14 +404,22 @@ writeFileSync(
       facebook: place.links.facebook ?? '',
       tiktok: place.links.tiktok ?? '',
       whatsapp: place.links.whatsapp ?? '',
+      rappi: place.links.rappi ?? '',
+      uberEats: place.links.uberEats ?? '',
+      didiFood: place.links.didiFood ?? '',
       phone: place.phone ?? '',
-      tags: place.tags.join('|'),
       active: 'sí',
     })),
   )}\n`,
 )
 
 // ── Entregables de investigación ──────────────────────────────────────────────────────────────────
+const categoryOfGiro = new Map(
+  categories.flatMap((category) => category.giros.map((giro) => [giro.id, category.id] as const)),
+)
+/** La categoría de un local ya no se escribe: sale de su primer giro. */
+const mainCategoryOf = (place: Place | undefined) =>
+  place ? categoryOfGiro.get(place.giros[0] ?? '') : undefined
 const categoryLabel = (id: string | undefined) =>
   id
     ? (categories.find((c) => c.id === id)?.label.es ??
@@ -373,9 +427,9 @@ const categoryLabel = (id: string | undefined) =>
       id)
     : null
 const plazaLabel = (id: string | undefined | null) =>
-  id ? (betaPlazaById.get(id)?.name ?? id) : null
+  id ? (plazaName.get(id) ?? betaPlazaById.get(id)?.name ?? id) : null
 
-const businessAudit = audit.map(({ decision, betaPlace, entries, sources }) => {
+const businessAudit = audit.map(({ decision, betaPlace, entries, sources, field }) => {
   const production = places.find((place) => place.id === decision.id)
   const currentPlaza =
     production?.plazaId ?? decision.currentPlaza ?? decision.candidatePlaza ?? null
@@ -391,8 +445,8 @@ const businessAudit = audit.map(({ decision, betaPlace, entries, sources }) => {
       decision.previousName ??
       (betaPlace && production && betaPlace.name !== production.name ? betaPlace.name : null),
     plazaId: currentPlaza,
-    category: production?.category ?? decision.category ?? null,
-    subcategory: production?.subcategory ?? null,
+    category: mainCategoryOf(production) ?? null,
+    giros: production?.giros ?? decision.giros ?? [],
     beta: betaPlace
       ? {
           name: betaPlace.name,
@@ -407,14 +461,25 @@ const businessAudit = audit.map(({ decision, betaPlace, entries, sources }) => {
     lastVerifiedAt: researchDate,
     reason: decision.reason,
     verificationNotes: entries.map((entry) => entry.notes),
-    sources: sources.map((source) => ({
-      url: source.url,
-      level: source.level,
-      type: source.type,
-      sourceDate: source.sourceDate ?? null,
-      checkedAt: researchDate,
-      supports: source.supports,
-    })),
+    fieldVerifiedAt: decision.fieldVerifiedAt ?? null,
+    sources: [
+      ...field.map((url) => ({
+        url,
+        level: 1,
+        type: 'field-check',
+        sourceDate: decision.fieldVerifiedAt ?? null,
+        checkedAt: researchDate,
+        supports: ['existence', 'plaza'],
+      })),
+      ...sources.map((source) => ({
+        url: source.url,
+        level: source.level,
+        type: source.type,
+        sourceDate: source.sourceDate ?? null,
+        checkedAt: researchDate,
+        supports: source.supports,
+      })),
+    ],
   }
 })
 write('research/business-audit.json', { researchDate, datasetVersion, records: businessAudit })
@@ -424,18 +489,20 @@ const plazaAudit = {
   datasetVersion,
   plazas: plazas.map((plaza) => {
     const decision = plazaDecisionById.get(plaza.id) as PlazaDecision
-    const betaPlaza = betaPlazaById.get(plaza.id) as Plaza
+    const betaPlaza = betaPlazaById.get(plaza.id)
     return {
       id: plaza.id,
       status: decision.status,
       active: plaza.active,
       confidence: decision.confidence,
       withinZibata: true,
+      newRecord: Boolean(decision.new),
       name: plaza.name,
       previousName:
-        decision.previousName ?? (betaPlaza.name !== plaza.name ? betaPlaza.name : null),
+        decision.previousName ??
+        (betaPlaza && betaPlaza.name !== plaza.name ? betaPlaza.name : null),
       address: plaza.address,
-      previousAddress: betaPlaza.address !== plaza.address ? betaPlaza.address : null,
+      previousAddress: betaPlaza && betaPlaza.address !== plaza.address ? betaPlaza.address : null,
       coordinates: plaza.coordinates,
       locationConfidence: plaza.locationConfidence,
       publishedPlaces: plaza.placeIds.length,
@@ -484,6 +551,11 @@ const comparison = businessAudit
 write('research/beta-vs-verified.json', { researchDate, rows: comparison })
 writeFileSync(`${ROOT}research/beta-vs-verified.csv`, `${Papa.unparse(comparison)}\n`)
 
+const generalGiros = new Set(
+  categories.flatMap((category) =>
+    category.giros.filter((giro) => giro.general).map((giro) => giro.id),
+  ),
+)
 const count = <T>(items: T[], key: (item: T) => string) =>
   items.reduce<Record<string, number>>((acc, item) => {
     acc[key(item)] = (acc[key(item)] ?? 0) + 1
@@ -522,10 +594,12 @@ const metrics = {
     statusInApp: count(places, (place) => place.verification?.status ?? 'none'),
     withStructuredHours: places.filter((place) => place.hours).length,
     withPhone: places.filter((place) => place.phone).length,
-    withLocalNumber: places.filter((place) => place.localNumber).length,
+    withOwnLocation: places.filter((place) => place.location).length,
+    withSeveralGiros: places.filter((place) => place.giros.length > 1).length,
     withDescription: places.filter((place) => place.description).length,
     withOfficialLink: places.filter((place) => Object.values(place.links).some(Boolean)).length,
-    withSubcategory: places.filter((place) => place.subcategory).length,
+    withSpecificGiro: places.filter((place) => place.giros.some((giro) => !generalGiros.has(giro)))
+      .length,
     evidenceUrls: new Set(
       businessAudit.flatMap((record) => record.sources.map((source) => source.url)),
     ).size,
@@ -541,7 +615,8 @@ const metrics = {
   categories: {
     beta: beta.categories.length,
     final: categories.length,
-    usedInApp: new Set(places.map((place) => place.category)).size,
+    usedInApp: new Set(places.flatMap((place) => place.giros.map((g) => categoryOfGiro.get(g))))
+      .size,
     usedBetaActive: new Set(
       beta.places.filter((place) => place.active).map((place) => place.category),
     ).size,
@@ -549,15 +624,12 @@ const metrics = {
       (sum, category) => sum + category.subcategories.length,
       0,
     ),
-    subcategoriesFinal: categories.reduce(
-      (sum, category) => sum + category.subcategories.length,
-      0,
-    ),
-    changes: TAXONOMY_CHANGES.map((change) =>
-      change.label
-        ? `${change.category}: etiqueta «${change.label}»`
-        : `${change.category}: nueva subcategoría ${change.subcategory?.id}`,
-    ),
+    girosFinal: categories.reduce((sum, category) => sum + category.giros.length, 0),
+    // Categorías beta que ya no son de primer nivel: siguen existiendo como subcategoría o fundidas
+    // en otra (research/taxonomy.json). Ninguna desaparece sin destino.
+    merged: beta.categories
+      .filter((category) => !categories.some((final) => final.id === category.id))
+      .map((category) => category.id),
   },
 }
 write('research/metrics.json', metrics)
@@ -600,7 +672,7 @@ const sourcesMd = [
       (a, b) => b[1] - a[1],
     )
     return [
-      `### ${LEVELS[level]} — ${items.length} citas`,
+      `### ${LEVELS[level]}: ${items.length} citas`,
       '',
       '| Dominio | Citas |',
       '| --- | --- |',
@@ -614,7 +686,7 @@ const sourcesMd = [
   '| --- | --- | --- | --- | --- | --- |',
   ...plazaSources.map(
     (source) =>
-      `| ${source.sid} | ${source.level} | ${source.type} | ${source.sourceDate ?? '—'} | ${source.url} | ${source.findings.replaceAll('|', '/')} |`,
+      `| ${source.sid} | ${source.level} | ${source.type} | ${source.sourceDate ?? 'sin fecha'} | ${source.url} | ${source.findings.replaceAll('|', '/')} |`,
   ),
   '',
 ]

@@ -11,7 +11,21 @@ export const categoriesFixture: Category[] = [
     icon: 'coffee',
     order: 10,
     synonyms: ['café', 'cafetería', 'coffee', 'desayuno'],
-    subcategories: [{ id: 'panaderia', label: { es: 'Panadería' }, synonyms: ['pan', 'bakery'] }],
+    giros: [
+      {
+        id: 'cafeteria',
+        label: { es: 'Cafetería' },
+        icon: 'coffee',
+        synonyms: ['café'],
+        general: true,
+      },
+      {
+        id: 'panaderia',
+        label: { es: 'Panadería' },
+        icon: 'croissant',
+        synonyms: ['pan', 'bakery'],
+      },
+    ],
   },
   {
     id: 'tacos-y-antojitos',
@@ -19,7 +33,15 @@ export const categoriesFixture: Category[] = [
     icon: 'taco',
     order: 30,
     synonyms: ['tacos', 'taquería', 'pastor'],
-    subcategories: [],
+    giros: [
+      {
+        id: 'taqueria',
+        label: { es: 'Taquería' },
+        icon: 'taco',
+        synonyms: ['tacos'],
+        general: true,
+      },
+    ],
   },
   {
     id: 'pizza',
@@ -27,7 +49,9 @@ export const categoriesFixture: Category[] = [
     icon: 'pizza',
     order: 70,
     synonyms: ['pizzería'],
-    subcategories: [],
+    giros: [
+      { id: 'pizza', label: { es: 'Pizza' }, icon: 'pizza', synonyms: ['pizzería'], general: true },
+    ],
   },
 ]
 
@@ -50,7 +74,7 @@ export function makePlaza(overrides: Partial<Plaza> & Pick<Plaza, 'id'>): Plaza 
   return {
     slug: overrides.id,
     name: `Plaza ${overrides.id}`,
-    description: 'Plaza de prueba',
+    description: { es: 'Plaza de prueba', en: 'Test plaza' },
     address: null,
     coordinates,
     geometry: square(coordinates.lng, coordinates.lat),
@@ -67,10 +91,9 @@ export function makePlace(overrides: Partial<Place> & Pick<Place, 'id' | 'plazaI
   return {
     slug: overrides.id,
     name: overrides.id,
-    category: 'pizza',
-    subcategory: null,
+    giros: ['pizza'],
+    secundarios: [],
     description: null,
-    localNumber: null,
     hours: null,
     location: null,
     googleMapsUri: null,
@@ -78,7 +101,6 @@ export function makePlace(overrides: Partial<Place> & Pick<Place, 'id' | 'plazaI
     phone: null,
     photos: [],
     links: { website: null, instagram: null, facebook: null, tiktok: null, whatsapp: null },
-    tags: [],
     active: true,
     ...overrides,
   }
@@ -105,34 +127,32 @@ export const placesFixture: Place[] = [
     id: 'cafe-aurora',
     plazaId: 'plaza-norte',
     name: 'Café Aurora',
-    category: 'desayunos-y-cafe',
-    tags: ['terraza'],
+    giros: ['cafeteria'],
   }),
   makePlace({
     id: 'tacos-el-farol',
     plazaId: 'plaza-norte',
     name: 'Tacos El Farol',
-    category: 'tacos-y-antojitos',
+    giros: ['taqueria'],
   }),
   makePlace({
     id: 'pizza-norte',
     plazaId: 'plaza-norte',
     name: 'Pizzería Norte',
-    category: 'pizza',
+    giros: ['pizza'],
   }),
   makePlace({
     id: 'panaderia-trigo',
     plazaId: 'plaza-sur',
     name: 'Trigo',
-    category: 'desayunos-y-cafe',
-    subcategory: 'panaderia',
-    description: 'Pan de masa madre y café de especialidad.',
+    giros: ['panaderia'],
+    description: { es: 'Pan de masa madre y café de especialidad.' },
   }),
   makePlace({
     id: 'cerrado-hace-tiempo',
     plazaId: 'plaza-sur',
     name: 'Cerrado',
-    category: 'pizza',
+    giros: ['pizza'],
     active: false,
   }),
 ]

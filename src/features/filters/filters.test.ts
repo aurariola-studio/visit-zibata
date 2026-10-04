@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { catalogFixture } from '../../test/fixtures.ts'
+import { catalogFixture, makePlace } from '../../test/fixtures.ts'
 import { createSearchIndex } from '../search/searchIndex.ts'
 import {
   applyFilters,
+  categoriesOf,
   countByCategory,
   countByPlaza,
   EMPTY_FILTERS,
@@ -75,6 +76,18 @@ describe('utilidades de filtros', () => {
     expect(hasActiveFilters({ ...EMPTY_FILTERS, categoryId: 'pizza' })).toBe(true)
   })
 
+  it('un giro secundario también lleva al local a su estante', () => {
+    // El nivel es peso visual, no visibilidad: si la panadería también hace tacos, sale al
+    // filtrar tacos aunque lo suyo sea el pan.
+    const pan = makePlace({
+      id: 'pan-con-tacos',
+      plazaId: 'plaza-sur',
+      giros: ['panaderia'],
+      secundarios: ['taqueria'],
+    })
+    expect(categoriesOf(pan, catalog)).toEqual(['desayunos-y-cafe', 'tacos-y-antojitos'])
+  })
+
   it('cuenta y agrupa por plaza y categoría', () => {
     const all = applyFilters(catalog, index, EMPTY_FILTERS)
     expect(countByPlaza(all)).toEqual(
@@ -87,6 +100,6 @@ describe('utilidades de filtros', () => {
       ['plaza-norte', 3],
       ['plaza-sur', 1],
     ])
-    expect(countByCategory(all).get('desayunos-y-cafe')).toBe(2)
+    expect(countByCategory(all, catalog).get('desayunos-y-cafe')).toBe(2)
   })
 })

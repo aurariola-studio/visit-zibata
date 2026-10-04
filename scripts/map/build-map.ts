@@ -17,6 +17,7 @@ import type {
   Feature,
   FeatureCollection,
   LineString,
+  MultiLineString,
   MultiPolygon,
   Point,
   Polygon,
@@ -29,6 +30,7 @@ import {
   classifyLabel,
   classifyLanduse,
   classifyRoad,
+  displayName,
   estimateHeight,
   isWaterArea,
   isWaterway,
@@ -38,6 +40,7 @@ import { type OverpassResponse, overpassToFeatures } from './lib/osm.ts'
 import { loadConfig, paths, readJson, writeJson } from './lib/paths.ts'
 import { Compression, TileType, writePmtiles } from './lib/pmtiles-writer.ts'
 import { buildVectorTiles, type LayerInput } from './lib/tiles.ts'
+import { placeTrees } from './lib/trees.ts'
 
 const started = Date.now()
 const log = (message: string) =>
@@ -118,7 +121,7 @@ for (const feature of osmFeatures) {
   if (isWaterArea(tags)) {
     const clipped = clipPolygonFeature(polygon, {
       class: 'water',
-      ...(tags.name ? { name: tags.name } : {}),
+      ...(tags.name ? { name: displayName(tags.name) } : {}),
     })
     if (clipped) water.push(clipped)
     continue
@@ -153,7 +156,20 @@ for (const road of roads) {
 const hull =
   turf.concave(turf.featureCollection(vertices), { maxEdge: 0.35, units: 'kilometers' }) ?? seed
 const buffered = turf.buffer(hull, 70, { units: 'meters' }) as Feature<Polygon | MultiPolygon>
-const largest = polygonsOf(buffered).sort((a, b) => turf.area(b) - turf.area(a))[0]
+// Suelo planeado sin calles todavía (Master Plan): se suma al contorno para que el mapa lo cubra. El
+// polígono se guarda exacto (solo el suelo nuevo), así que se ensancha unos metros al unirlo: si solo
+// se tocaran por el borde, la unión devolvería dos piezas sueltas y la ampliación se perdería.
+const extended = config.boundaryExtensions.reduce<Feature<Polygon | MultiPolygon>>(
+  (shape, extension) =>
+    (turf.union(
+      turf.featureCollection([
+        shape,
+        turf.buffer(turf.polygon([extension.polygon]), 10, { units: 'meters' }) as Feature<Polygon>,
+      ]),
+    ) ?? shape) as Feature<Polygon | MultiPolygon>,
+  buffered,
+)
+const largest = polygonsOf(extended).sort((a, b) => turf.area(b) - turf.area(a))[0]
 if (!largest) throw new Error('No se pudo calcular el contorno de Zibatá')
 const boundary = turf.simplify(turf.feature(largest), {
   tolerance: 0.00012,
@@ -168,6 +184,22 @@ log(
 // ── 4. Plazas ───────────────────────────────────────────────────────────────────────────────────
 const plazas = PlazasFileSchema.parse(readJson(paths.plazas)).plazas
 const plazaShapes = plazas.map((plaza) => ({ plaza, shape: turf.feature(plaza.geometry) }))
+// Una plaza no puede atravesar una calle: pasa cuando su huella aproximada se centra en el punto de un
+// enlace de Maps que cae sobre la vía (Xënica, 2026-09). Se avisa para rehacerla con map:suggest-plaza.
+const THROUGH_ROADS = new Set(['highway', 'primary', 'tertiary', 'street'])
+for (const { plaza, shape } of plazaShapes) {
+  const crossed = roads.filter(
+    (road) =>
+      THROUGH_ROADS.has((road.properties as { class: string }).class) &&
+      turf
+        .flatten(road as Feature<LineString | MultiLineString>)
+        .features.some((line) => turf.booleanCrosses(line, shape)),
+  )
+  if (crossed.length > 0)
+    console.warn(
+      `⚠ La plaza ${plaza.id} cruza ${crossed.length} vía(s): revisa su geometría (npm run map:suggest-plaza).`,
+    )
+}
 const educationAreas = landuse.filter((f) => f.properties.class === 'education')
 const commercialAreas = landuse.filter((f) => f.properties.class === 'commercial')
 
@@ -316,7 +348,7 @@ const labelRegion = turf.buffer(boundary, 400, { units: 'meters' }) as Feature<P
 const labelsByName = new Map<string, { feature: Feature<Point>; area: number }>()
 for (const feature of osmFeatures) {
   const labelClass = classifyLabel(feature.properties)
-  const name = feature.properties.name
+  const name = feature.properties.name ? displayName(feature.properties.name) : undefined
   if (!labelClass || !name) continue
   const area = feature.geometry.type === 'Point' ? 0 : turf.area(feature)
   if (labelClass === 'park' && area > 0 && area < 1500) continue
@@ -349,6 +381,39 @@ log(
   `${labels.length} etiquetas de lugares (omitidas junto a plazas: ${[...labelsNearPlazas].join(', ') || 'ninguna'})`,
 )
 
+// ── 6b. Árboles: solo donde la cobertura arbórea real (ESA WorldCover vía Overture) dice que hay ──────
+const TREE_MARGIN_M = 150
+const treeCover = existsSync(paths.rawTreeCover)
+  ? readJson<FeatureCollection<Polygon | MultiPolygon>>(paths.rawTreeCover)
+  : null
+if (!treeCover)
+  console.warn(
+    '⚠ Sin cobertura arbórea: ejecuta `npm run map:fetch:trees`. El mapa sale sin árboles.',
+  )
+const treeArea = turf.buffer(boundary, TREE_MARGIN_M, { units: 'meters' }) as Feature<Polygon>
+const canopy = (treeCover?.features ?? []).flatMap((feature) => {
+  const clipped = turf.intersect(turf.featureCollection([feature, treeArea]))
+  return clipped ? [clipped as Feature<Polygon | MultiPolygon>] : []
+})
+const obstacles = {
+  roads,
+  buildings: [...baseBuildings, ...[...plazaBuildings.values()].flat()],
+}
+// Las áreas verdes de OSM (parques, jardines, pasto y golf) también están arboladas en Zibatá, con
+// menos densidad que una cañada: la clasificación satelital de 10 m no distingue un árbol suelto.
+const GREEN_CLASSES = new Set(['park', 'garden', 'grass', 'golf', 'wood'])
+const greenAreas = landuse
+  .filter((feature) => GREEN_CLASSES.has(feature.properties.class))
+  .flatMap((feature) => polygonsOf(feature as Feature<Polygon | MultiPolygon>))
+  .map((polygon) => turf.feature(polygon) as Feature<Polygon>)
+const trees = [
+  ...placeTrees(canopy, obstacles, config.trees),
+  ...placeTrees(greenAreas, obstacles, { ...config.trees, spacingM: config.trees.greenSpacingM }),
+]
+log(
+  `${trees.length / 3} árboles: ${(canopy.reduce((sum, area) => sum + turf.area(area), 0) / 1e6).toFixed(2)} km² de copa arbórea + ${greenAreas.length} áreas verdes`,
+)
+
 // ── 7. Teselas vectoriales → PMTiles ───────────────────────────────────────────────────────────
 const { minZoom, maxZoom, buildingsMinZoom, buildingsLowZoomMinAreaM2 } = config.tiles
 const lowZoomBuildings = baseBuildings.filter(
@@ -371,6 +436,20 @@ const layers: LayerInput[] = [
   },
   { name: 'buildings', features: baseBuildings, minZoom: buildingsMinZoom + 1, maxZoom },
   { name: 'labels', features: labels, minZoom, maxZoom },
+  // De lejos basta la copa baja; el segundo piso entra en z15 y el tronco en z16, cuando se distinguen.
+  {
+    name: 'trees',
+    features: trees.filter((tree) => tree.properties.part === 'crown'),
+    minZoom: buildingsMinZoom,
+    maxZoom: 14,
+  },
+  {
+    name: 'trees',
+    features: trees.filter((tree) => tree.properties.part !== 'trunk'),
+    minZoom: 15,
+    maxZoom: 15,
+  },
+  { name: 'trees', features: trees, minZoom: 16, maxZoom },
 ]
 const { tiles, bytesByZoom, largestTile } = buildVectorTiles(layers, {
   minZoom,
@@ -399,7 +478,7 @@ const archive = writePmtiles(tiles, {
   bounds: bbox,
   center: [boundaryCenter[0], boundaryCenter[1], 15],
   metadata: {
-    name: 'Zibatá — capas base',
+    name: 'Zibatá: capas base',
     description: 'Vialidades, usos de suelo, agua, edificios y etiquetas de Zibatá (Querétaro).',
     attribution,
     version: '1',
@@ -468,7 +547,7 @@ writeJson(paths.manifest, {
     },
     {
       id: 'overture-buildings',
-      name: 'Overture Maps Foundation — buildings',
+      name: 'Overture Maps Foundation: buildings',
       layers: ['buildings', 'plaza-buildings'],
       license: 'ODbL-1.0',
       attribution: '© OpenStreetMap contributors, Overture Maps Foundation',
@@ -477,6 +556,20 @@ writeJson(paths.manifest, {
       upstream: buildingsMeta.upstream,
       extractedAt: buildingsMeta.fetchedAt,
     },
+    ...(treeCover
+      ? [
+          {
+            id: 'overture-tree-cover',
+            name: 'Overture Maps Foundation: land_cover (forest), derivado de ESA WorldCover 10 m',
+            layers: ['trees'],
+            license: 'CC-BY-4.0',
+            attribution: '© ESA WorldCover, Overture Maps Foundation',
+            url: 'https://docs.overturemaps.org/attribution/',
+            method: 'GeoParquet vía DuckDB (scripts/map/fetch-landcover.ts)',
+            extractedAt: readJson<{ fetchedAt: string }>(paths.rawTreeCoverMeta).fetchedAt,
+          },
+        ]
+      : []),
     {
       id: 'plazas',
       name: 'Geometría de plazas (data/commercial/plazas.json)',
@@ -490,10 +583,14 @@ writeJson(paths.manifest, {
     'Clasificación de vialidades, usos de suelo, agua y etiquetas (scripts/map/lib/classify.ts)',
     'Recorte al área configurada (config.json → area.bbox)',
     'Contorno de Zibatá: envolvente cóncava (maxEdge 350 m) de la red vial dentro del polígono semilla + margen de 70 m, simplificada',
+    config.boundaryExtensions.length > 0
+      ? `Contorno ampliado con suelo planeado sin calles: ${config.boundaryExtensions.map((extension) => `${extension.name} (${extension.source})`).join('; ')}`
+      : 'Sin ampliaciones de contorno configuradas (config.json → boundaryExtensions)',
     'Edificios: descarte de huellas < minAreaM2; alturas medidas, por niveles o estimadas por tipo y superficie (en esta extracción de Overture ninguna huella trae altura medida: todas son estimadas, con variación determinista por id)',
     `Edificios en z${buildingsMinZoom}: solo huellas ≥ ${buildingsLowZoomMinAreaM2} m² (peso de la vista inicial en móvil)`,
     `Etiquetas: se omiten las que quedan a menos de ${LABEL_CLEARANCE_M} m de una plaza activa (irían bajo su marcador)`,
     'Asociación edificio → plaza por centroide dentro de la geometría de la plaza; volumen generado si faltan huellas',
+    `Árboles: retícula de ~${config.trees.spacingM} m (cobertura arbórea ESA WorldCover 10 m, a ≤ ${TREE_MARGIN_M} m del contorno) y ~${config.trees.greenSpacingM} m (áreas verdes de OSM), con desplazamiento determinista, sin invadir vías (despeje por clase) ni edificios. Cada árbol es tronco + copa. La posición de cada árbol es aproximada; la del arbolado, real`,
     `Teselado MVT z${minZoom}–z${maxZoom} (geojson-vt, extent 4096, tolerancia 3) + gzip, empaquetado PMTiles v3`,
   ],
   outputs: {
@@ -510,6 +607,7 @@ writeJson(paths.manifest, {
         waterway: count('waterway'),
         buildings: count('buildings'),
         labels: count('labels'),
+        trees: count('trees'),
       },
     },
     'public/map/plaza-buildings.geojson': {

@@ -9,6 +9,7 @@ import instrumentSerif400 from '@fontsource/instrument-serif/files/instrument-se
 import type { Feature, FeatureCollection, Polygon } from 'geojson'
 import type { StyleSpecification } from 'maplibre-gl'
 import type { Bbox } from '../../../config/map.ts'
+import { plazaTones } from '../../../config/palette.ts'
 import type { Plaza } from '../../../types/domain.ts'
 import { SOURCE } from './ids.ts'
 import { buildingLayers } from './layers/buildings.ts'
@@ -16,6 +17,7 @@ import { groundLayers, outsideVeilLayers } from './layers/ground.ts'
 import { FONT, labelLayers } from './layers/labels.ts'
 import { plazaBuildingLayers, plazaGroundLayers } from './layers/plazas.ts'
 import { roadLayers } from './layers/roads.ts'
+import { treeLayers } from './layers/trees.ts'
 import { mapTheme } from './theme.ts'
 
 export interface MapStyleOptions {
@@ -30,6 +32,7 @@ export interface MapStyleOptions {
 export const MAP_ATTRIBUTION =
   '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap</a> · ' +
   '<a href="https://overturemaps.org/" target="_blank" rel="noopener">Overture Maps</a> · ' +
+  '<a href="https://esa-worldcover.org/" target="_blank" rel="noopener">ESA WorldCover</a> · ' +
   '<a href="https://maplibre.org/" target="_blank" rel="noopener">MapLibre</a>'
 
 const absolute = (url: string) => new URL(url, window.location.href).href
@@ -39,7 +42,12 @@ export function plazaSitesGeoJSON(plazas: readonly Plaza[]): FeatureCollection {
     type: 'FeatureCollection',
     features: plazas.map((plaza) => ({
       type: 'Feature',
-      properties: { plazaId: plaza.id, name: plaza.name, active: plaza.active },
+      properties: {
+        plazaId: plaza.id,
+        name: plaza.name,
+        active: plaza.active,
+        comingSoon: plaza.comingSoon === true,
+      },
       geometry: plaza.geometry,
     })),
   }
@@ -64,10 +72,10 @@ export function outsideMask(boundary: Polygon, [west, south, east, north]: Bbox)
 }
 
 export function buildMapStyle(options: MapStyleOptions): StyleSpecification {
-  const activePlazaIds = options.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id)
+  const tones = plazaTones(options.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
   return {
     version: 8,
-    name: 'Zibatá — maqueta',
+    name: 'Zibatá: maqueta',
     'font-faces': {
       [FONT.sans]: absolute(instrumentSans500),
       [FONT.sansStrong]: absolute(instrumentSans600),
@@ -112,11 +120,12 @@ export function buildMapStyle(options: MapStyleOptions): StyleSpecification {
     light: { anchor: 'map', color: mapTheme.light, intensity: 0.42, position: [1.25, 210, 42] },
     layers: [
       ...groundLayers(),
-      ...plazaGroundLayers(),
+      ...plazaGroundLayers(tones),
       ...roadLayers(),
       ...outsideVeilLayers(),
+      ...treeLayers(),
       ...buildingLayers(),
-      ...plazaBuildingLayers(activePlazaIds),
+      ...plazaBuildingLayers(tones),
       ...labelLayers(),
     ],
   }

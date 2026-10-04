@@ -13,6 +13,13 @@ Guía para agentes y colaboradores. Contexto del producto y comandos en [README.
 - Procesamiento GIS solo en `scripts/map` (Node), nunca en el navegador.
 - Imports relativos con extensión `.ts`/`.tsx` (los scripts corren con Node sin transpilar).
 
+## Cómo se escribe aquí
+
+- Nada de guion largo (—) ni de comillas angulares (" "): delatan texto generado. Con coma, punto,
+  paréntesis o comillas dobles rectas alcanza.
+- Vale para todo: textos de interfaz, comentarios del código, documentación, datos y mensajes de
+  commit.
+
 ## Antes de terminar un cambio
 
 ```bash

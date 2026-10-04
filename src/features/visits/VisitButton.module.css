@@ -1,0 +1,71 @@
+/* Botón y aviso en una fila; la cuenta vive dentro del botón, no al lado. */
+.visit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+/* Pastilla, como el resto de acciones de la ficha: verde apagado hasta que la persona registra. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.25rem;
+  padding: 0 0.7rem 0 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+  color: var(--ink-800);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  color: var(--olive-600);
+}
+
+.button:hover {
+  background: var(--lime-50);
+}
+
+.button[data-marked="true"] {
+  border-color: var(--olive-600);
+  background: var(--olive-600);
+  color: white;
+}
+
+.button[data-marked="true"] svg {
+  color: white;
+}
+
+.button[data-marked="true"]:hover {
+  background: var(--olive-700);
+}
+
+/* La cuenta, con la misma forma que la cifra de las pastillas de categoría. */
+.count {
+  min-width: 1.35rem;
+  padding: 0 0.35rem;
+  border-radius: var(--radius-pill);
+  background: rgb(83 108 42 / 0.1);
+  color: var(--olive-700);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  line-height: 1.35rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.button[data-marked="true"] .count {
+  background: rgb(255 255 255 / 0.22);
+  color: white;
+}
+
+.hint {
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+}

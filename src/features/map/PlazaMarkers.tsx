@@ -1,16 +1,16 @@
 /**
  * Marcadores HTML de plazas: botones accesibles (teclado y lector de pantalla) anclados al mapa.
  * Muestran nombre y número de lugares. Nunca se superponen: los de menor prioridad prueban a desplazar
- * la etiqueta a un lado o a elevarla con un tallo más largo, o se reducen a la cifra. Solo si aun así no
- * caben se ocultan, y la plaza visible más cercana anuncia "+N" (al pulsarlo el mapa se acerca).
+ * la etiqueta a un lado o a elevarla con un tallo más largo, o se reducen a la cifra. Solo si aun así
+ * no caben se ocultan hasta que el usuario se acerca.
  * Prioridad: plaza seleccionada y luego más lugares.
  */
-import { LngLatBounds, type Map as MapLibreMap, Marker } from 'maplibre-gl'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { type Map as MapLibreMap, Marker } from 'maplibre-gl'
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { DEFAULT_PLAZA_TONE, plazaTones } from '../../config/palette.ts'
 import { t } from '../../i18n/index.ts'
 import type { Plaza } from '../../types/domain.ts'
-import { prefersReducedMotion } from './mapRuntime.ts'
 import styles from './PlazaMarkers.module.css'
 
 interface PlazaMarkersProps {
@@ -24,7 +24,7 @@ interface PlazaMarkersProps {
   onSelect: (plazaId: string) => void
 }
 
-type Mode = 'full' | 'left' | 'right' | 'compact' | 'hidden'
+type Mode = 'full' | 'left' | 'right' | 'compact' | 'dot' | 'hidden'
 /** Niveles de elevación de la etiqueta (0 = junto al punto; cada nivel alarga el tallo). */
 type Lift = 0 | 1 | 2
 interface Placement {
@@ -42,76 +42,20 @@ interface Rect {
 const COMPACT_BELOW_ZOOM = 14.3
 const MARKER_HEIGHT = 44
 const COMPACT_WIDTH = 34
+/** Último recurso: un punto pulsable (24 px, el mínimo táctil) que mantiene la plaza en el mapa. */
+const DOT_SIZE = 24
 const GAP = 4
 /** Lo que sube la etiqueta por nivel de elevación (debe coincidir con PlazaMarkers.module.css). */
 const LIFT_STEP = MARKER_HEIGHT + GAP
 /** Cuánto sobresale una etiqueta desplazada hacia el lado del tallo (≈1.1rem). */
 const SHIFT_OVERHANG = 17.6
 const EDGE_RESERVED_RIGHT = 64
-/** Insignia "+N" junto a la etiqueta (medidas en PlazaMarkers.module.css). */
-const BADGE_SIZE = 24
-const BADGE_GAP = 2
-const BADGE_TOP = 5
-type BadgeSide = 'end' | 'start'
-interface Cluster {
-  ids: string[]
-  side: BadgeSide
-}
 
 const overlaps = (a: Rect, b: Rect) =>
   a.left < b.right + GAP &&
   a.right > b.left - GAP &&
   a.top < b.bottom + GAP &&
   a.bottom > b.top - GAP
-
-const GROUP_MAX_ZOOM = 18.5
-
-/**
- * Acerca el mapa a un grupo de plazas cercanas hasta que cada una tenga su marcador. Encuadrar el grupo
- * no siempre basta (en pantallas estrechas las etiquetas no caben con ese zoom): mientras alguna siga
- * oculta tras terminar el movimiento y recolocar marcadores, se acerca un poco más.
- */
-function zoomToPlazas(
-  map: MapLibreMap,
-  ids: readonly string[],
-  plazas: readonly Plaza[],
-  isHidden: (id: string) => boolean,
-) {
-  const bounds = new LngLatBounds()
-  for (const plaza of plazas) {
-    if (ids.includes(plaza.id)) bounds.extend([plaza.coordinates.lng, plaza.coordinates.lat])
-  }
-  const duration = prefersReducedMotion() ? 0 : 800
-  const STEP = 0.75
-  // ¿Seguirían todas las plazas del grupo dentro del área libre (sin barra, hoja ni márgenes) tras acercar?
-  const fitsAfterStep = () => {
-    const { width, height } = map.getContainer().getBoundingClientRect()
-    const { top = 0, bottom = 0, left = 0, right = 0 } = map.getPadding()
-    const points = ids.flatMap((id) => {
-      const plaza = plazas.find((candidate) => candidate.id === id)
-      return plaza ? [map.project([plaza.coordinates.lng, plaza.coordinates.lat])] : []
-    })
-    const spread = (values: number[]) => (Math.max(...values) - Math.min(...values)) * 2 ** STEP
-    return (
-      spread(points.map((point) => point.x)) <= width - left - right - 2 * MARKER_HEIGHT &&
-      spread(points.map((point) => point.y)) <= height - top - bottom - 2 * MARKER_HEIGHT
-    )
-  }
-  const refine = () => {
-    // Deja pasar la recolocación de marcadores (un fotograma) y el render que la aplica.
-    window.setTimeout(() => {
-      if (!ids.some(isHidden) || map.getZoom() >= GROUP_MAX_ZOOM || !fitsAfterStep()) return
-      map.once('moveend', refine)
-      map.easeTo({
-        center: bounds.getCenter(),
-        zoom: Math.min(GROUP_MAX_ZOOM, map.getZoom() + STEP),
-        duration: duration / 2,
-      })
-    }, 150)
-  }
-  map.once('moveend', refine)
-  map.fitBounds(bounds, { padding: 96, maxZoom: 17, duration })
-}
 
 export function PlazaMarkers({
   map,
@@ -124,16 +68,22 @@ export function PlazaMarkers({
   onSelect,
 }: PlazaMarkersProps) {
   const activePlazas = useMemo(() => plazas.filter((plaza) => plaza.active), [plazas])
-  const nameById = useMemo(
-    () => new Map(activePlazas.map((plaza) => [plaza.id, plaza.name])),
-    [activePlazas],
-  )
+  // Mismo reparto de tonos que el estilo del mapa (buildMapStyle): la etiqueta y su plaza combinan.
+  const tones = useMemo(() => plazaTones(activePlazas.map((plaza) => plaza.id)), [activePlazas])
   const [elements, setElements] = useState<Map<string, HTMLElement>>(new Map())
   const [modes, setModes] = useState<ReadonlyMap<string, Placement>>(new Map())
   const [focusedPlazaId, setFocusedPlazaId] = useState<string | null>(null)
-  /** Plazas ocultas por falta de espacio, agrupadas en la plaza visible más cercana. */
-  const [clusters, setClusters] = useState<ReadonlyMap<string, Cluster>>(new Map())
+  /** La plaza bajo el cursor, para el orden de capas, sin rehacer la colocación al pasar por encima. */
+  const hoveredIdRef = useRef(hoveredPlazaId)
+  hoveredIdRef.current = hoveredPlazaId
   const fullWidths = useRef(new Map<string, number>())
+  /**
+   * Cuántos anchos reales de etiqueta se han aprendido. La pasada extra tras cambiar de modo solo tiene
+   * sentido mientras aparezcan anchos nuevos; sin este contador, dos plazas podían turnarse la etiqueta
+   * (una cabe con el ancho estimado pero no con el real, la otra al revés) y el mapa se quedaba
+   * recolocando marcadores en bucle, que es lo que se veía como animación trabada.
+   */
+  const widthsVersion = useRef(0)
   const relayout = useRef(() => {})
 
   useEffect(() => {
@@ -180,15 +130,20 @@ export function PlazaMarkers({
         rect.top >= topBar &&
         rect.bottom <= bottomBar
       const placed = new Map<string, Rect>()
+      /** Plazas reducidas a un punto: un punto puede rozar una etiqueta, pero no a otro punto. */
+      const dots = new Set<string>()
       const next = new Map<string, Placement>()
-      const collides = (rect: Rect, except?: string) =>
-        [...placed].some(([id, other]) => id !== except && overlaps(rect, other))
-      const free = ([, rect]: [Placement, Rect]) => insideView(rect) && !collides(rect)
+      const collides = (rect: Rect, onlyDots = false) =>
+        [...placed].some(([id, other]) => (!onlyDots || dots.has(id)) && overlaps(rect, other))
+      const free =
+        (kind: 'named' | 'compact' | 'dot') =>
+        ([, rect]: [Placement, Rect]) =>
+          insideView(rect) && !collides(rect, kind === 'dot')
 
       // Posibles colocaciones de cada marcador, según su punto en pantalla y el ancho de su etiqueta.
       const options = new Map<
         string,
-        (kind: 'named' | 'compact', lift: Lift) => [Placement, Rect][]
+        (kind: 'named' | 'compact' | 'dot', lift: Lift) => [Placement, Rect][]
       >()
       const anchors = new Map<string, { x: number; y: number }>()
       for (const id of priority) {
@@ -199,8 +154,17 @@ export function PlazaMarkers({
         const box = element.getBoundingClientRect()
         const label = button.firstElementChild as HTMLElement | null
         const currentMode = button.dataset.mode
-        if (label && currentMode !== 'compact' && currentMode !== 'hidden') {
-          fullWidths.current.set(id, label.offsetWidth)
+        if (
+          label &&
+          currentMode !== 'compact' &&
+          currentMode !== 'dot' &&
+          currentMode !== 'hidden'
+        ) {
+          const width = label.offsetWidth
+          if (fullWidths.current.get(id) !== width) {
+            fullWidths.current.set(id, width)
+            widthsVersion.current += 1
+          }
         }
         const anchorX = box.left + box.width / 2
         const anchorY = box.bottom
@@ -214,34 +178,50 @@ export function PlazaMarkers({
           bottom: anchorY - lift * LIFT_STEP,
         })
         options.set(id, (kind, lift) =>
-          kind === 'compact'
+          kind === 'dot'
             ? [
                 [
-                  { mode: 'compact', lift },
-                  rect(anchorX - COMPACT_WIDTH / 2, anchorX + COMPACT_WIDTH / 2, lift),
+                  // Centrado en el punto de la plaza (no encima, como la etiqueta): así cabe aunque el
+                  // punto quede a un paso del borde superior de la franja libre.
+                  { mode: 'dot', lift },
+                  {
+                    left: anchorX - DOT_SIZE / 2,
+                    right: anchorX + DOT_SIZE / 2,
+                    top: anchorY - lift * LIFT_STEP - DOT_SIZE / 2,
+                    bottom: anchorY - lift * LIFT_STEP + DOT_SIZE / 2,
+                  },
                 ],
               ]
-            : [
-                [{ mode: 'full', lift }, rect(anchorX - width / 2, anchorX + width / 2, lift)],
-                [
-                  { mode: 'left', lift },
-                  rect(anchorX - width + SHIFT_OVERHANG, anchorX + SHIFT_OVERHANG, lift),
+            : kind === 'compact'
+              ? [
+                  [
+                    { mode: 'compact', lift },
+                    rect(anchorX - COMPACT_WIDTH / 2, anchorX + COMPACT_WIDTH / 2, lift),
+                  ],
+                ]
+              : [
+                  [{ mode: 'full', lift }, rect(anchorX - width / 2, anchorX + width / 2, lift)],
+                  [
+                    { mode: 'left', lift },
+                    rect(anchorX - width + SHIFT_OVERHANG, anchorX + SHIFT_OVERHANG, lift),
+                  ],
+                  [
+                    { mode: 'right', lift },
+                    rect(anchorX - SHIFT_OVERHANG, anchorX + width - SHIFT_OVERHANG, lift),
+                  ],
                 ],
-                [
-                  { mode: 'right', lift },
-                  rect(anchorX - SHIFT_OVERHANG, anchorX + width - SHIFT_OVERHANG, lift),
-                ],
-              ],
         )
       }
 
       // Pasadas de mayor a menor calidad: que todas las plazas se vean pesa más que mostrar el nombre,
-      // y ambas cosas más que mantener la etiqueta junto al punto.
-      const passes: ['named' | 'compact', Lift[]][] = [
+      // y ambas cosas más que mantener la etiqueta junto al punto. La última deja un punto pulsable:
+      // ninguna plaza desaparece del mapa por falta de sitio.
+      const passes: ['named' | 'compact' | 'dot', Lift[]][] = [
         ['named', [0]],
         ['compact', [0]],
         ['named', [1]],
         ['compact', [1, 2]],
+        ['dot', [0, 1, 2]],
       ]
       for (const [kind, lifts] of passes) {
         for (const id of priority) {
@@ -254,10 +234,11 @@ export function PlazaMarkers({
           const covered = (anchors.get(id)?.y ?? 0) > bottomBar
           const fitting = covered
             ? undefined
-            : lifts.flatMap((lift) => optionsFor(kind, lift)).find(free)
+            : lifts.flatMap((lift) => optionsFor(kind, lift)).find(free(kind))
           if (fitting) {
             next.set(id, fitting[0])
             placed.set(id, fitting[1])
+            if (kind === 'dot') dots.add(id)
           } else if (selected) {
             // Va primera: solo no cabe fuera de la vista; se coloca igualmente.
             const [placement, rect] = optionsFor('named', 0)[0] as [Placement, Rect]
@@ -272,60 +253,13 @@ export function PlazaMarkers({
         if (options.has(id) && !next.has(id)) next.set(id, { mode: 'hidden', lift: 0 })
       }
 
-      // Agrupación solo si hace falta: cada plaza sin sitio se anuncia ("+N") junto a la etiqueta de la
-      // plaza visible más cercana, a su derecha o a su izquierda, sin tapar ninguna otra.
-      const nearby = new Map<string, Cluster>()
-      const badgeFor = (host: Rect, side: BadgeSide): Rect => {
-        const left = side === 'end' ? host.right + BADGE_GAP : host.left - BADGE_GAP - BADGE_SIZE
-        const top = host.top + BADGE_TOP
-        return { left, right: left + BADGE_SIZE, top, bottom: top + BADGE_SIZE }
-      }
-      const sides: BadgeSide[] = ['end', 'start']
-      for (const [id, placement] of next) {
-        const anchor = anchors.get(id)
-        if (placement.mode !== 'hidden' || !anchor) continue
-        const hosts = [...next]
-          .flatMap(([hostId, hostPlacement]) => {
-            const rect = placed.get(hostId)
-            const hostAnchor = anchors.get(hostId)
-            if (hostPlacement.mode === 'hidden' || !rect || !hostAnchor) return []
-            return [
-              {
-                hostId,
-                rect,
-                distance: Math.hypot(anchor.x - hostAnchor.x, anchor.y - hostAnchor.y),
-              },
-            ]
-          })
-          .sort((a, b) => a.distance - b.distance)
-        // La más cercana que ya tenga insignia o deje hueco para ella; si ninguna, la más cercana.
-        let chosen: { hostId: string; side: BadgeSide } | undefined
-        for (const { hostId, rect } of hosts) {
-          const existing = nearby.get(hostId)
-          if (existing) {
-            chosen = { hostId, side: existing.side }
-            break
-          }
-          const side = sides.find((candidate) => {
-            const badge = badgeFor(rect, candidate)
-            return insideView(badge) && !collides(badge, hostId)
-          })
-          if (side) {
-            chosen = { hostId, side }
-            break
-          }
-        }
-        const fallback = hosts[0]
-        chosen ??= fallback ? { hostId: fallback.hostId, side: 'end' } : undefined
-        if (!chosen) continue
-        const cluster = nearby.get(chosen.hostId)
-        if (cluster) {
-          cluster.ids.push(id)
-        } else {
-          const hostRect = placed.get(chosen.hostId)
-          if (hostRect) placed.set(`${chosen.hostId}:+`, badgeFor(hostRect, chosen.side))
-          nearby.set(chosen.hostId, { ids: [id], side: chosen.side })
-        }
+      // Quien está más abajo en pantalla está más cerca del observador: va por encima. Sin esto el tallo
+      // de una plaza lejana podía cruzar por encima de la etiqueta de una plaza que tiene delante.
+      for (const [id, anchor] of anchors) {
+        const element = elements.get(id)
+        if (!element) continue
+        const front = id === selectedPlazaId || id === hoveredIdRef.current
+        element.style.zIndex = String(Math.round(anchor.y) + (front ? 10_000 : 0))
       }
 
       setModes((previous) =>
@@ -336,15 +270,6 @@ export function PlazaMarkers({
         })
           ? previous
           : next,
-      )
-      setClusters((previous) =>
-        previous.size === nearby.size &&
-        [...nearby].every(([id, cluster]) => {
-          const before = previous.get(id)
-          return before?.side === cluster.side && before.ids.join() === cluster.ids.join()
-        })
-          ? previous
-          : nearby,
       )
     }
     const schedule = () => {
@@ -363,10 +288,13 @@ export function PlazaMarkers({
   }, [map, elements, selectedPlazaId, activePlazas, matchCounts, placeCounts])
 
   // Tras un render que cambia modos, las etiquetas con nombre ya se pueden medir: otra pasada sustituye los
-  // anchos estimados por los reales. Sin ella, si la cámara no se mueve (movimiento reducido), la estimación
-  // se queda. Converge: solo cambian los modos mientras aparecen anchos nuevos.
+  // anchos estimados por los reales. Solo se repite mientras se aprendan anchos nuevos; en cuanto la pasada
+  // no descubre ninguno, se para (si no, dos plazas pueden turnarse la etiqueta indefinidamente).
+  const relayoutedAt = useRef(-1)
   // biome-ignore lint/correctness/useExhaustiveDependencies: se reacciona a cada cambio de modos.
   useEffect(() => {
+    if (relayoutedAt.current === widthsVersion.current) return
+    relayoutedAt.current = widthsVersion.current
     relayout.current()
   }, [modes])
 
@@ -394,16 +322,20 @@ export function PlazaMarkers({
           selected && (layoutMode === 'compact' || layoutMode === 'hidden' || !layoutMode)
             ? 'full'
             : layoutMode === 'hidden' && plaza.id === focusedPlazaId
-              ? 'compact'
+              ? 'dot'
               : (layoutMode ?? 'compact')
         const lift = mode === 'hidden' ? 0 : (placement?.lift ?? 0)
-        const cluster = mode === 'hidden' ? undefined : clusters.get(plaza.id)
-        const grouped = cluster?.ids
+        const tone = tones.get(plaza.id) ?? DEFAULT_PLAZA_TONE
+        const toneStyle = {
+          '--plaza-accent': tone.accent,
+          '--plaza-soft': tone.soft,
+        } as CSSProperties
         return createPortal(
           <>
             <button
               type="button"
               className={styles.marker}
+              style={toneStyle}
               data-state={state}
               data-mode={mode}
               data-lift={lift}
@@ -432,30 +364,13 @@ export function PlazaMarkers({
               </span>
             </button>
             {/* El tallo va fuera del botón: el área pulsable es solo la etiqueta. */}
-            <span className={styles.stem} data-state={state} data-lift={lift} aria-hidden="true" />
-            {grouped && (
-              <button
-                type="button"
-                className={styles.nearby}
-                data-host-mode={mode}
-                data-side={cluster?.side}
-                aria-label={t('plaza.nearby', {
-                  count: grouped.length,
-                  names: grouped.map((id) => nameById.get(id) ?? id).join(', '),
-                })}
-                onClick={() =>
-                  zoomToPlazas(
-                    map,
-                    [plaza.id, ...grouped],
-                    activePlazas,
-                    (id) =>
-                      elements.get(id)?.firstElementChild?.getAttribute('data-mode') === 'hidden',
-                  )
-                }
-              >
-                +{grouped.length}
-              </button>
-            )}
+            <span
+              className={styles.stem}
+              style={toneStyle}
+              data-state={state}
+              data-lift={lift}
+              aria-hidden="true"
+            />
           </>,
           element,
           plaza.id,

@@ -46,17 +46,37 @@ export const INITIAL_CAMERA_COMPACT: CameraState = {
   bearing: -80,
 }
 
+/**
+ * Margen alrededor del contorno de Zibatá (grados ≈ 440 m) hasta donde puede llegar el centro de la
+ * pantalla. Se limita el centro y no el encuadre completo (`maxBounds`): con la cámara inclinada el
+ * encuadre abarca mucho más terreno que el área de datos, y un `maxBounds` ajustado obligaba a MapLibre
+ * a recentrar el mapa, lo que dejaba plazas fuera de la pantalla en los teléfonos.
+ */
+const CENTER_MARGIN = 0.004
+
 export const MAP_LIMITS = {
   minZoom: 12.6,
   maxZoom: 19,
   maxPitch: 72,
-  /** El área de datos con un pequeño margen: no se puede "salir" de Zibatá. */
-  maxBounds: [
-    ZIBATA_EXTENT.areaBbox[0] - 0.01,
-    ZIBATA_EXTENT.areaBbox[1] - 0.01,
-    ZIBATA_EXTENT.areaBbox[2] + 0.01,
-    ZIBATA_EXTENT.areaBbox[3] + 0.01,
+  /** Hasta dónde puede llegar el centro de la pantalla: el contorno real de Zibatá con margen corto. */
+  centerBounds: [
+    ZIBATA_EXTENT.bbox[0] - CENTER_MARGIN,
+    ZIBATA_EXTENT.bbox[1] - CENTER_MARGIN,
+    ZIBATA_EXTENT.bbox[2] + CENTER_MARGIN,
+    ZIBATA_EXTENT.bbox[3] + CENTER_MARGIN,
   ] as Bbox,
+}
+
+/** ¿Queda este punto dentro del área por la que se puede mover el mapa? */
+export function insideCenterBounds(lng: number, lat: number): boolean {
+  const [west, south, east, north] = MAP_LIMITS.centerBounds
+  return lng >= west && lng <= east && lat >= south && lat <= north
+}
+
+/** El punto más cercano dentro del área: a donde vuelve la cámara si se sale. */
+export function clampToCenterBounds(lng: number, lat: number): [number, number] {
+  const [west, south, east, north] = MAP_LIMITS.centerBounds
+  return [Math.min(Math.max(lng, west), east), Math.min(Math.max(lat, south), north)]
 }
 
 /** Zoom al que la cámara se acerca al seleccionar una plaza. */

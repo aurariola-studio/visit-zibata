@@ -1,9 +1,11 @@
 /** PlazaPanel: nombre, descripción, nº de lugares, categorías y lista de establecimientos. */
 import { ArrowUpRight, MapPin, SearchX, X } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { type CSSProperties, useEffect, useRef } from 'react'
 import { EmptyState } from '../../components/ui/EmptyState.tsx'
+import { DEFAULT_PLAZA_TONE, plazaTones } from '../../config/palette.ts'
 import { useCatalog } from '../../data/CatalogContext.tsx'
-import { t } from '../../i18n/index.ts'
+import { localized, t } from '../../i18n/index.ts'
+import { focusPanelHeading } from '../../lib/focus.ts'
 import { plazaDirectionsUrl } from '../../lib/maps-url.ts'
 import type { Place, Plaza } from '../../types/domain.ts'
 import { PlaceList } from '../places/PlaceList.tsx'
@@ -38,17 +40,25 @@ export function PlazaPanel({
   const catalog = useCatalog()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const allPlaces = catalog.placesByPlaza.get(plaza.id) ?? []
+  // El mismo color que la plaza tiene en el mapa: al abrir el panel se reconoce de dónde viene.
+  const tone =
+    plazaTones(catalog.plazas.filter((item) => item.active).map((item) => item.id)).get(plaza.id) ??
+    DEFAULT_PLAZA_TONE
   const categories = plaza.categories
     .map((id) => catalog.categoryById.get(id))
     .filter((category) => category !== undefined)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia la plaza mostrada.
   useEffect(() => {
-    headingRef.current?.focus({ preventScroll: true })
+    focusPanelHeading(headingRef.current)
   }, [plaza.id])
 
   return (
-    <section className={styles.panel} aria-labelledby="plaza-panel-title">
+    <section
+      className={styles.panel}
+      style={{ '--plaza-accent': tone.accent } as CSSProperties}
+      aria-labelledby="plaza-panel-title"
+    >
       <header className={styles.header}>
         <div className={styles.topline}>
           <p className={styles.eyebrow}>
@@ -67,7 +77,7 @@ export function PlazaPanel({
         <h2 id="plaza-panel-title" ref={headingRef} tabIndex={-1} className={styles.title}>
           {plaza.name}
         </h2>
-        {plaza.description && <p className={styles.lead}>{plaza.description}</p>}
+        {plaza.description && <p className={styles.lead}>{localized(plaza.description)}</p>}
         <p className={styles.address}>
           {plaza.address && (
             <span className={styles.addressText}>
@@ -91,7 +101,7 @@ export function PlazaPanel({
         <CategoryChips
           categories={categories}
           counts={categoryCounts}
-          totalCount={[...categoryCounts.values()].reduce((sum, count) => sum + count, 0)}
+          totalCount={places.length}
           activeId={activeCategoryId}
           onChange={onCategoryChange}
           label={t('filters.categories')}

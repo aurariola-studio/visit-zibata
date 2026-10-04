@@ -13,6 +13,14 @@ describe('encuadre general', () => {
   it('reduce el margen en pantallas bajas para que el encuadre quepa', () => {
     const margin = overviewMargin(844, 390, { top: 165, bottom: 120, left: 16, right: 16 })
     expect(margin.top).toBeLessThanOrEqual(16)
-    expect(overviewMargin(1440, 900, { top: 176, bottom: 40, left: 40, right: 88 }).top).toBe(56)
+    expect(overviewMargin(1440, 900, { top: 176, bottom: 40, left: 40, right: 88 }).top).toBe(16)
+  })
+
+  it('deja más aire abajo, donde la inclinación de la cámara baja los puntos cercanos', () => {
+    const phone = overviewMargin(375, 812, { top: 165, bottom: 120, left: 16, right: 16 })
+    expect(phone.bottom).toBeGreaterThan(phone.top as number)
+    // Nunca tanto como para comerse el encuadre en pantallas bajas.
+    const landscape = overviewMargin(844, 390, { top: 165, bottom: 120, left: 16, right: 16 })
+    expect(landscape.bottom).toBeLessThanOrEqual(24)
   })
 })

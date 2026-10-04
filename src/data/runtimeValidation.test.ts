@@ -58,7 +58,6 @@ const placeVariants: [string, unknown][] = [
   ['foto por http', { ...place, photos: [{ src: 'http://cdn.com/x.webp', alt: 'x' }] }],
   ['foto javascript:', { ...place, photos: [{ src: 'javascript:alert(1)', alt: 'x' }] }],
   ['foto sin alt', { ...place, photos: [{ src: 'images/x.webp', alt: '' }] }],
-  ['tags no texto', { ...place, tags: [1] }],
   ['active texto', { ...place, active: 'yes' }],
   ['sin links', { ...place, links: undefined }],
   ['no objeto', 'cafe'],
@@ -99,7 +98,7 @@ describe('validación de runtime', () => {
     ['válida', categoriesFixture[0]],
     ['sin etiqueta', { ...categoriesFixture[0], label: { es: '' } }],
     ['orden decimal', { ...categoriesFixture[0], order: 1.5 }],
-    ['subcategoría rota', { ...categoriesFixture[0], subcategories: [{ id: 'X' }] }],
+    ['giro roto', { ...categoriesFixture[0], giros: [{ id: 'X' }] }],
   ])('coincide con Zod para una categoría: %s', (_label, record) => {
     expect(validateCategories([record]).valid.length === 1).toBe(
       CategorySchema.safeParse(record).success,
@@ -145,9 +144,9 @@ describe('sanitizeDataset y loadCatalog', () => {
       places: [
         ...placesFixture,
         makePlace({ id: 'huerfano', plazaId: 'plaza-fantasma' }),
-        makePlace({ id: 'sin-categoria', plazaId: 'plaza-norte', category: 'sushi' }),
+        makePlace({ id: 'sin-giro', plazaId: 'plaza-norte', giros: ['sushi'] }),
         makePlace({ id: 'lejos', plazaId: 'plaza-norte', location: { lat: 19.4, lng: -99.1 } }),
-        makePlace({ id: 'sub-ajena', plazaId: 'plaza-norte', subcategory: 'panaderia' }),
+        makePlace({ id: 'giro-ajeno', plazaId: 'plaza-norte', giros: ['pizza', 'sushi'] }),
         makePlace({ id: 'cerrado', plazaId: 'plaza-norte', verification }),
       ],
     }
@@ -155,10 +154,11 @@ describe('sanitizeDataset y loadCatalog', () => {
     expect(clean.places.map((p) => p.id)).toEqual([
       ...placesFixture.map((p) => p.id),
       'lejos',
-      'sub-ajena',
+      'giro-ajeno',
     ])
     expect(clean.places.find((p) => p.id === 'lejos')?.location).toBeNull()
-    expect(clean.places.find((p) => p.id === 'sub-ajena')?.subcategory).toBeNull()
+    // El giro que no existe se cae y el local se queda con los que sí.
+    expect(clean.places.find((p) => p.id === 'giro-ajeno')?.giros).toEqual(['pizza'])
     expect(notes).toHaveLength(5)
   })
 

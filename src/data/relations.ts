@@ -77,7 +77,15 @@ export function deriveCategoryIds(
   placesOfPlaza: readonly Place[],
   categories: readonly Category[],
 ): string[] {
-  const used = new Set(placesOfPlaza.filter((place) => place.active).map((place) => place.category))
+  const categoryOfGiro = new Map(
+    categories.flatMap((category) => category.giros.map((giro) => [giro.id, category.id] as const)),
+  )
+  const used = new Set(
+    placesOfPlaza
+      .filter((place) => place.active)
+      .flatMap((place) => place.giros.map((giro) => categoryOfGiro.get(giro)))
+      .filter((id): id is string => id !== undefined),
+  )
   return [...categories]
     .sort((a, b) => a.order - b.order)
     .filter((category) => used.has(category.id))
@@ -119,8 +127,8 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
     error('categories', `ID de categoría duplicado: "${dup}"`, dup)
   }
   for (const category of categories) {
-    for (const dup of findDuplicates(category.subcategories.map((s) => s.id))) {
-      error('categories', `Subcategoría duplicada "${dup}" en "${category.id}"`, category.id)
+    for (const dup of findDuplicates(category.giros.map((giro) => giro.id))) {
+      error('categories', `Giro duplicado "${dup}" en "${category.id}"`, category.id)
     }
   }
   for (const dup of findDuplicates(plazas.map((p) => p.id))) {
@@ -136,7 +144,10 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
     error('places', `Slug de local duplicado: "${dup}"`, dup)
   }
 
-  const categoryById = new Map(categories.map((c) => [c.id, c]))
+  const giroIds = new Set(categories.flatMap((c) => c.giros.map((giro) => giro.id)))
+  for (const dup of findDuplicates(categories.flatMap((c) => c.giros.map((giro) => giro.id)))) {
+    error('categories', `El giro "${dup}" está en más de una categoría`)
+  }
   const plazaById = new Map(plazas.map((p) => [p.id, p]))
   const placeById = new Map(places.map((p) => [p.id, p]))
 
@@ -148,18 +159,11 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
       warn('places', `Local activo en la plaza inactiva "${plaza.id}": no se mostrará`, place.id)
     }
 
-    const category = categoryById.get(place.category)
-    if (!category) {
-      error('places', `La categoría "${place.category}" no existe`, place.id)
-    } else if (
-      place.subcategory !== null &&
-      !category.subcategories.some((s) => s.id === place.subcategory)
-    ) {
-      error(
-        'places',
-        `La subcategoría "${place.subcategory}" no pertenece a "${category.id}"`,
-        place.id,
-      )
+    for (const giro of place.giros) {
+      if (!giroIds.has(giro)) error('places', `El giro "${giro}" no existe`, place.id)
+    }
+    for (const dup of findDuplicates(place.giros)) {
+      error('places', `Giro repetido "${dup}"`, place.id)
     }
 
     if (place.active && !place.verification) {

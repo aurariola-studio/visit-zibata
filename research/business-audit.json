@@ -13,7 +13,9 @@
       "previousName": "Carl's Jr",
       "plazaId": "xentric-anahuac",
       "category": "hamburguesas",
-      "subcategory": null,
+      "giros": [
+        "hamburguesas"
+      ],
       "beta": {
         "name": "Carl's Jr",
         "plazaId": "xentric-anahuac",
@@ -28,7 +30,19 @@
       "verificationNotes": [
         "Sucursal 'Carl's Jr. Zibatá' en Uber Eats y ficha de Zibata Digital (2026-05-11). Plaza sin confirmar en fuente; comprobar localizador oficial carlsjr.com.mx."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.ubereats.com/mx/store/carls-jr-zibata/w6_gvhpSUZWSjBZlliWNOg",
           "level": 3,
@@ -64,7 +78,9 @@
       "previousName": null,
       "plazaId": "xentric-anahuac",
       "category": "desayunos-y-cafe",
-      "subcategory": "brunch",
+      "giros": [
+        "brunch"
+      ],
       "beta": {
         "name": "Mirrus Kitchen",
         "plazaId": "xentric-anahuac",
@@ -79,7 +95,19 @@
       "verificationNotes": [
         "Dirección citada: Av. Paseo de las Pitahayas 55, local 105 (Xentric Anáhuac). Horario citado (resumen de búsqueda, sin confirmar): L-V 8:30-21:00, S-D 9:00-15:00. Desayunos/comida consciente y repostería."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/mirruskitchen/",
           "level": 2,
@@ -133,8 +161,10 @@
       "name": "A'Kilos de Cecina",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "category": "mexicana",
+      "giros": [
+        "cecina"
+      ],
       "beta": {
         "name": "A'Kilos de Cecina",
         "plazaId": "xentric-anahuac",
@@ -150,7 +180,19 @@
         "Dirección citada: Av. Paseo de las Pitahayas 1A, local 108, Plaza Xentric Anáhuac. Cecina, tacos y chorizo; también venta por kilo.",
         "Fecha decodificada del identificador público de la publicación."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/akilos.de.cecina/",
           "level": 2,
@@ -203,8 +245,10 @@
       "name": "Husky's Ice Cream",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "postres",
-      "subcategory": "helados",
+      "category": "postres-y-dulces",
+      "giros": [
+        "helados"
+      ],
       "beta": {
         "name": "Husky's Ice Cream",
         "plazaId": "xentric-anahuac",
@@ -219,7 +263,19 @@
       "verificationNotes": [
         "Sitio oficial citado con sucursales Juriquilla, Zibatá y Paseo Querétaro; no se pudo leer (403) para confirmar plaza y dirección."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.huskysicecream.com/",
           "level": 1,
@@ -253,7 +309,9 @@
       "previousName": "Boba Station",
       "plazaId": "xentric-anahuac",
       "category": "bebidas",
-      "subcategory": "te-de-burbujas",
+      "giros": [
+        "boba"
+      ],
       "beta": {
         "name": "Boba Station",
         "plazaId": "xentric-anahuac",
@@ -268,7 +326,19 @@
       "verificationNotes": [
         "Dirección citada: Paseo de las Pitahayas 55, local 118, Zibatá."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930110288-boba-station-tapioca-bar",
           "level": 3,
@@ -312,8 +382,11 @@
       "name": "Origen Natural",
       "previousName": "Origenatural",
       "plazaId": "xentric-anahuac",
-      "category": "saludable-y-bowls",
-      "subcategory": null,
+      "category": "saludable",
+      "giros": [
+        "saludable",
+        "desayunos"
+      ],
       "beta": {
         "name": "Origenatural",
         "plazaId": "xentric-anahuac",
@@ -328,7 +401,19 @@
       "verificationNotes": [
         "Dirección: Av. Paseo de las Pitahayas 1A, local 115, Plaza Xentric Anáhuac. Bowls, jugos, smoothies y sándwiches saludables."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/origenatural_zibata/",
           "level": 2,
@@ -374,16 +459,18 @@
     },
     {
       "id": "ciao-bella",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "medium",
       "name": "Ciao Bella Trattoria",
-      "previousName": "Ciao Bella",
-      "plazaId": "xentric-anahuac",
-      "category": "italiana",
-      "subcategory": null,
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "pizza"
+      ],
       "beta": {
         "name": "Ciao Bella",
         "plazaId": "xentric-anahuac",
@@ -394,11 +481,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Beta inactivo; la web oficial, redes, delivery y directorio (Pitahayas 55, local 121) indican operación.",
+      "reason": "Beta inactivo; la web oficial, redes, delivery y directorio (Pitahayas 55, local 121) indican operación. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Ciao Bella Trattoria ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Beta: inactivo. Dirección citada: Av. Paseo de las Pitahayas 55, local 121, Zibatá; tel. +52 442 152 5829; horario citado L-D 8:00-20:00 (sin confirmar en fuente oficial). Verificar sitio oficial."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.ciaobellaqro.com/",
           "level": 1,
@@ -445,16 +544,18 @@
     },
     {
       "id": "sushi-itto",
-      "status": "active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "high",
       "plazaConfidence": "high",
       "name": "Sushi Itto",
       "previousName": null,
-      "plazaId": "xentric-anahuac",
-      "category": "asiatica",
-      "subcategory": "sushi",
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "sushi"
+      ],
       "beta": {
         "name": "Sushi Itto",
         "plazaId": "xentric-anahuac",
@@ -465,11 +566,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Anuncio oficial de la sucursal Xentric Anáhuac y reseñas de los últimos 90 días en plataforma.",
+      "reason": "Anuncio oficial de la sucursal Xentric Anáhuac y reseñas de los últimos 90 días en plataforma. 2026-09-25: cerrado. El mantenedor de la guía confirma en sitio que la sucursal ya no opera.",
       "verificationNotes": [
         "Anuncio oficial de la sucursal 'Sushi Itto Xentric Anáhuac Zibatá'. Dirección: Av. Paseo de las Pitahayas 55. Horario citado (resumen): L-V 12:00-22:00, fines de semana hasta 23:00 (sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-25",
       "sources": [
+        {
+          "url": "campo:2026-09-25",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-25",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/SushiittoQueretaroOficial/videos/conoce-nuestra-nueva-sucursal-en-zibat%C3%A1sushiitto-m%C3%A1s-cerca-de-ti-sushi-itto-xent/851004575574566/",
           "level": 1,
@@ -524,8 +637,10 @@
       "name": "Subway",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "sandwiches-y-deli",
-      "subcategory": null,
+      "category": "entre-panes",
+      "giros": [
+        "sandwiches"
+      ],
       "beta": {
         "name": "Subway",
         "plazaId": "xentric-anahuac",
@@ -540,7 +655,19 @@
       "verificationNotes": [
         "Dos fuentes independientes coinciden en local 126 de Xentric Anáhuac."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://mexicopymes.com/info/subway-4DEB725A4337BCB8",
           "level": 3,
@@ -585,7 +712,9 @@
       "previousName": null,
       "plazaId": "xentric-anahuac",
       "category": "desayunos-y-cafe",
-      "subcategory": "brunch",
+      "giros": [
+        "desayunos"
+      ],
       "beta": {
         "name": "Good Morning Coffee",
         "plazaId": "xentric-anahuac",
@@ -600,7 +729,19 @@
       "verificationNotes": [
         "Dirección citada: Av. Paseo de las Pitahayas 55, local 128, Plaza Xentric Anáhuac (Restaurant Guru la asigna erróneamente a Paseo Zibatá). Desayunos y brunch."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/goodmorningcoffee.qro/",
           "level": 2,
@@ -643,8 +784,10 @@
       "name": "Tortas Fifthy Fifthy",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "sandwiches-y-deli",
-      "subcategory": "tortas",
+      "category": "entre-panes",
+      "giros": [
+        "tortas"
+      ],
       "beta": {
         "name": "Tortas Fifthy Fifthy",
         "plazaId": "xentric-anahuac",
@@ -659,7 +802,19 @@
       "verificationNotes": [
         "Teléfono y horario citados en resumen (442-323-2343; 12:00-21:00 diario), sin fuente oficial legible."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://fifthyfifthy.com.mx/",
           "level": 1,
@@ -732,8 +887,11 @@
       "name": "Rometta Gastrobar",
       "previousName": "Rometta",
       "plazaId": "xentric-anahuac",
-      "category": "bistro",
-      "subcategory": null,
+      "category": "bar",
+      "giros": [
+        "gastrobar",
+        "cocina-internacional"
+      ],
       "beta": {
         "name": "Rometta",
         "plazaId": "xentric-anahuac",
@@ -749,7 +907,19 @@
         "Instagram oficial: restaurante con vista panorámica, coctelería y cocina gourmet en Zibatá. Plaza no confirmada.",
         "Nombre comercial 'Rometta Gastrobar'. Teléfono citado +52 442 457 3768 (sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/romettaqro/",
           "level": 2,
@@ -805,8 +975,10 @@
       "name": "Domino's",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "pizza",
-      "subcategory": null,
+      "category": "italiana",
+      "giros": [
+        "pizza"
+      ],
       "beta": {
         "name": "Domino's",
         "plazaId": "xentric-anahuac",
@@ -821,7 +993,19 @@
       "verificationNotes": [
         "Dirección citada: Prolongación Av. Paseo de las Pitahayas, 76246 (sin plaza). Plaza del beta (Xentric Anáhuac) sin confirmar. Horario citado 11:00-22:00 (sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://web.didiglobal.com/mx/food/queretaro-que/dominos-zibata/5764607774571626711/",
           "level": 3,
@@ -874,8 +1058,11 @@
       "name": "La 880 Alitas y Pisto",
       "previousName": "La 880",
       "plazaId": "xentric-anahuac",
-      "category": "pollo",
-      "subcategory": "alitas",
+      "category": "hamburguesas",
+      "giros": [
+        "alitas",
+        "bar"
+      ],
       "beta": {
         "name": "La 880",
         "plazaId": "xentric-anahuac",
@@ -890,7 +1077,19 @@
       "verificationNotes": [
         "Nombre comercial 'La 880 Alitas y Pisto'. Alitas y bar. Dirección citada: Av. Paseo de las Pitahayas 55, local 123."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930095201-la-880-alitas-y-pisto",
           "level": 3,
@@ -935,8 +1134,11 @@
       "name": "Lion Reef Sea & Bar",
       "previousName": "Lion Reef",
       "plazaId": "xentric-anahuac",
-      "category": "mariscos",
-      "subcategory": null,
+      "category": "bar",
+      "giros": [
+        "bar",
+        "marisqueria"
+      ],
       "beta": {
         "name": "Lion Reef",
         "plazaId": "xentric-anahuac",
@@ -951,7 +1153,19 @@
       "verificationNotes": [
         "Restaurante-bar de mariscos; resumen de búsqueda lo ubica en Plaza Xentric Anáhuac. La web oficial no muestra dirección en texto."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.lionreef.mx/",
           "level": 1,
@@ -995,8 +1209,10 @@
       "name": "Wicklow Irish Pub",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "bar-y-pub",
-      "subcategory": "cerveceria",
+      "category": "bar",
+      "giros": [
+        "pub"
+      ],
       "beta": {
         "name": "Wicklow Irish Pub",
         "plazaId": "xentric-anahuac",
@@ -1011,7 +1227,19 @@
       "verificationNotes": [
         "Pub irlandés con música en vivo. Dirección citada: Paseo de las Pitahayas 55 A, int. 205 (Xentric Anáhuac); teléfono citado 442 343 1089 (sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/wicklowzibata/",
           "level": 2,
@@ -1055,8 +1283,11 @@
       "name": "Birria Los Esposos",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "tacos-y-antojitos",
-      "subcategory": "birria",
+      "category": "mexicana",
+      "giros": [
+        "birria",
+        "taqueria"
+      ],
       "beta": {
         "name": "Birria Los Esposos",
         "plazaId": "xentric-anahuac",
@@ -1071,7 +1302,19 @@
       "verificationNotes": [
         "Anuncio oficial de apertura de la sucursal Zibatá; ubicación citada Paseo de las Pitahayas 55, Plaza Xentric Anáhuac. Fecha de apertura no legible."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/100089812507971/posts/es-hoy-es-hoy-apertura-birria-los-esposos-sucursal-zibat%C3%A1-para-celebrar-a-partir/674639872206424/",
           "level": 1,
@@ -1106,16 +1349,18 @@
     },
     {
       "id": "los-morros-de-sonora",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "medium",
       "name": "Los Morros de Sonora",
       "previousName": null,
-      "plazaId": "xentric-anahuac",
-      "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "taqueria"
+      ],
       "beta": {
         "name": "Los Morros de Sonora",
         "plazaId": "xentric-anahuac",
@@ -1126,11 +1371,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Beta inactivo; web y redes oficiales y tienda de la sucursal Zibatá (Pitahayas 55, local 229).",
+      "reason": "Beta inactivo; web y redes oficiales y tienda de la sucursal Zibatá (Pitahayas 55, local 229). 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Los Morros de Sonora ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Beta: inactivo. Dirección citada: Paseo de las Pitahayas 55, local 229, Plaza Xentric Anáhuac. Carne asada y hot dogs estilo Sonora."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.losmorrosdesonora.com/",
           "level": 1,
@@ -1174,7 +1431,9 @@
       "previousName": "Tacos Los Tarascos",
       "plazaId": "xentric-anahuac",
       "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "giros": [
+        "taqueria"
+      ],
       "beta": {
         "name": "Tacos Los Tarascos",
         "plazaId": "xentric-anahuac",
@@ -1190,7 +1449,19 @@
         "Sitio oficial con página 'Tacos en Zibatá' (frente a la Universidad Anáhuac). Pendiente leer dirección exacta.",
         "Página oficial de la sucursal. El horario publicado es ambiguo ('DOM-LUN'): no se estructura."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://lostarascos.com.mx/tacos-en-zibata/",
           "level": 1,
@@ -1228,8 +1499,11 @@
       "name": "Pizca de Azúcar",
       "previousName": null,
       "plazaId": "xentric-anahuac",
-      "category": "postres",
-      "subcategory": "pasteleria",
+      "category": "panaderia-y-reposteria",
+      "giros": [
+        "pasteleria",
+        "reposteria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -1239,7 +1513,19 @@
       "verificationNotes": [
         "Nuevo (no está en el beta). Horario de la web oficial (difiere de un resumen secundario: prevalece la oficial). Pastelería y panadería artesanal con café."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://pizcadeazucar.com/",
           "level": 1,
@@ -1294,7 +1580,9 @@
       "previousName": null,
       "plazaId": "anahuac-queretaro",
       "category": "desayunos-y-cafe",
-      "subcategory": null,
+      "giros": [
+        "cafeteria"
+      ],
       "beta": {
         "name": "Tim Hortons",
         "plazaId": "anahuac-queretaro",
@@ -1309,7 +1597,19 @@
       "verificationNotes": [
         "Sucursal oficial dentro del campus; acceso público al campus no verificado."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://timhortonsmx.com/es/sucursalesqro.php",
           "level": 1,
@@ -1335,7 +1635,10 @@
       "previousName": "Sinforosa",
       "plazaId": "paseo-zibata",
       "category": "desayunos-y-cafe",
-      "subcategory": "cafe-de-especialidad",
+      "giros": [
+        "brunch",
+        "cafeteria"
+      ],
       "beta": {
         "name": "Sinforosa",
         "plazaId": "paseo-zibata",
@@ -1350,7 +1653,19 @@
       "verificationNotes": [
         "Dos sucursales en Zibatá según varias fuentes (una en Paseo Zibatá; otra aparentemente en el campus Anáhuac: posible origen del beta 'La Café Anáhuac', sin confirmar). Correo citado hola@sinforosacafe.com. Horario de fuente generada (localoria): no se usa."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -1424,7 +1739,9 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": "mariscos",
-      "subcategory": "ceviche",
+      "giros": [
+        "ceviches"
+      ],
       "beta": {
         "name": "Cebichería del Día",
         "plazaId": "paseo-zibata",
@@ -1439,7 +1756,19 @@
       "verificationNotes": [
         "Reel del Instagram oficial del desarrollador (@zibata.mx) dedicado al negocio. Dirección citada: Av. Paseo de las Pitahayas 501 (Paseo Zibatá). Otra sucursal en Atelier Juriquilla."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/zibata.mx/reel/DH4yp5mgdO5/",
           "level": 1,
@@ -1503,7 +1832,11 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": "desayunos-y-cafe",
-      "subcategory": "panaderia",
+      "giros": [
+        "cafeteria",
+        "panaderia",
+        "brunch"
+      ],
       "beta": {
         "name": "D’Lu Coffee & Bakery",
         "plazaId": "paseo-zibata",
@@ -1518,7 +1851,19 @@
       "verificationNotes": [
         "No figura en el directorio oficial de Paseo Zibatá (incompleto). Cafetería y panadería."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/dlu_cafe/",
           "level": 2,
@@ -1551,8 +1896,12 @@
       "name": "Mr. Miches",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": "bar-y-pub",
-      "subcategory": null,
+      "category": "bar",
+      "giros": [
+        "bar",
+        "hamburguesas",
+        "alitas"
+      ],
       "beta": {
         "name": "Mr. Miches",
         "plazaId": "paseo-zibata",
@@ -1567,7 +1916,19 @@
       "verificationNotes": [
         "Micheladas, cantaritos y botanas. Horario de directorio secundario: no se estructura sin confirmación oficial."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/mr.michesbar/",
           "level": 2,
@@ -1621,8 +1982,10 @@
       "name": "Sylvius Cocktail & Cocina",
       "previousName": "Sylvius",
       "plazaId": "paseo-zibata",
-      "category": "bar-y-pub",
-      "subcategory": "cocteleria",
+      "category": "bar",
+      "giros": [
+        "gastrobar"
+      ],
       "beta": {
         "name": "Sylvius",
         "plazaId": "paseo-zibata",
@@ -1637,7 +2000,19 @@
       "verificationNotes": [
         "Coctelería y cocina fusión, solo mayores de 21 años (resumen). Paseo Zibatá, Av. Paseo de las Pitahayas 501."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/p/C4LvYCyotQc/",
           "level": 1,
@@ -1681,7 +2056,9 @@
       "previousName": "Currucucú",
       "plazaId": "paseo-zibata",
       "category": "mexicana",
-      "subcategory": null,
+      "giros": [
+        "cocina-mexicana"
+      ],
       "beta": {
         "name": "Currucucú",
         "plazaId": "paseo-zibata",
@@ -1696,7 +2073,19 @@
       "verificationNotes": [
         "Dirección citada: Av. Paseo de las Pitahayas 501; tel. 442 142 4545. Cocina mexicana artesanal (chilaquiles, platillos de fin de semana)."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -1759,8 +2148,10 @@
       "name": "Luka",
       "previousName": "Luka Pokes",
       "plazaId": "paseo-zibata",
-      "category": "saludable-y-bowls",
-      "subcategory": "poke",
+      "category": "asiatica",
+      "giros": [
+        "poke"
+      ],
       "beta": {
         "name": "Luka Pokes",
         "plazaId": "paseo-zibata",
@@ -1775,7 +2166,19 @@
       "verificationNotes": [
         "Nombres usados: 'Luka Poke House', 'Luka Pokes' y 'Luka' (directorio oficial). Local 30. Posts oficiales citados son de época COVID (antiguos)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -1832,7 +2235,10 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": "tacos-y-antojitos",
-      "subcategory": null,
+      "giros": [
+        "memelas",
+        "cocina-mexicana"
+      ],
       "beta": {
         "name": "Las Memelas de la Rana",
         "plazaId": "paseo-zibata",
@@ -1847,7 +2253,19 @@
       "verificationNotes": [
         "Varias publicaciones de la plaza oficial. Dirección citada: Av. Paseo de las Pitahayas 13, local 13. Memelas, antojitos y desayunos."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -1910,8 +2328,10 @@
       "name": "Holy Kebabs",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": "sandwiches-y-deli",
-      "subcategory": null,
+      "category": "entre-panes",
+      "giros": [
+        "kebabs"
+      ],
       "beta": {
         "name": "Holy Kebabs",
         "plazaId": "paseo-zibata",
@@ -1926,7 +2346,19 @@
       "verificationNotes": [
         "Plaza no confirmada por fuente (beta: Paseo Zibatá)."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/holykebabszibata/",
           "level": 2,
@@ -1970,8 +2402,10 @@
       "name": "Carnitas Don Toño",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": "carne-y-parrilla",
-      "subcategory": "carnitas",
+      "category": "mexicana",
+      "giros": [
+        "carnitas"
+      ],
       "beta": {
         "name": "Carnitas Don Toño",
         "plazaId": "paseo-zibata",
@@ -1986,7 +2420,19 @@
       "verificationNotes": [
         "Carnitas, tacos y desayunos; sucursales también en Lomas del Marqués y Juriquilla."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -2041,7 +2487,10 @@
       "previousName": "Masaru",
       "plazaId": "paseo-zibata",
       "category": "asiatica",
-      "subcategory": "sushi",
+      "giros": [
+        "sushi",
+        "poke"
+      ],
       "beta": {
         "name": "Masaru",
         "plazaId": "paseo-zibata",
@@ -2056,7 +2505,19 @@
       "verificationNotes": [
         "Sitio oficial con dirección de la sucursal. Sushi, pokes y yakimeshi."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.masaru.com.mx/web/",
           "level": 1,
@@ -2101,7 +2562,10 @@
       "previousName": "Tomassa",
       "plazaId": "paseo-zibata",
       "category": "italiana",
-      "subcategory": "pasta-fresca",
+      "giros": [
+        "pasta",
+        "cocina-italiana"
+      ],
       "beta": {
         "name": "Tomassa",
         "plazaId": "paseo-zibata",
@@ -2116,7 +2580,19 @@
       "verificationNotes": [
         "Pastas y pizzas artesanales. No figura en el directorio oficial de la plaza (incompleto)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/tomassapasta/",
           "level": 2,
@@ -2161,8 +2637,10 @@
       "name": "La Michoacana",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": "postres",
-      "subcategory": "helados",
+      "category": "postres-y-dulces",
+      "giros": [
+        "helados"
+      ],
       "beta": {
         "name": "La Michoacana",
         "plazaId": "paseo-zibata",
@@ -2177,7 +2655,19 @@
       "verificationNotes": [
         "Nombre genérico de paleterías independientes; también figura otra 'La Michoacana' (local 109) en el directorio oficial de Xentric Zibatá → registros distintos."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -2201,8 +2691,10 @@
       "name": "Al Grano Maíz & Snacks",
       "previousName": "Al Grano",
       "plazaId": "paseo-zibata",
-      "category": "tacos-y-antojitos",
-      "subcategory": "esquites-y-snacks",
+      "category": "botanas",
+      "giros": [
+        "elotes-y-esquites"
+      ],
       "beta": {
         "name": "Al Grano",
         "plazaId": "paseo-zibata",
@@ -2217,7 +2709,19 @@
       "verificationNotes": [
         "Elotes y esquites; otra sucursal en Lomas del Marqués."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/algranomaizysnacks/",
           "level": 2,
@@ -2261,7 +2765,9 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "giros": [
+        "taqueria"
+      ],
       "beta": {
         "name": "Tacos la Chusma",
         "plazaId": "paseo-zibata",
@@ -2276,7 +2782,19 @@
       "verificationNotes": [
         "Plaza confirmada por directorio oficial y ficha de Zibata Digital (2026-08-21)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/tacoslachusmazibata/",
           "level": 2,
@@ -2320,8 +2838,10 @@
       "name": "El Hornero",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": "carne-y-parrilla",
-      "subcategory": "cortes",
+      "category": "carnes-y-parrilla",
+      "giros": [
+        "parrilla-argentina"
+      ],
       "beta": {
         "name": "El Hornero",
         "plazaId": "paseo-zibata",
@@ -2336,7 +2856,19 @@
       "verificationNotes": [
         "Parrilla y pizzería argentina. Teléfono citado +52 442 471 6402 (sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -2389,8 +2921,10 @@
       "name": "Birria Jáuregui",
       "previousName": "Birria Jauregui",
       "plazaId": "paseo-zibata",
-      "category": "tacos-y-antojitos",
-      "subcategory": "birria",
+      "category": "mexicana",
+      "giros": [
+        "birria"
+      ],
       "beta": {
         "name": "Birria Jauregui",
         "plazaId": "paseo-zibata",
@@ -2405,7 +2939,19 @@
       "verificationNotes": [
         "Directorio oficial + publicación oficial de la marca en la plaza. Dirección citada: Av. Paseo de las Pitahayas 13."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -2461,16 +3007,18 @@
     },
     {
       "id": "bistrot-marino",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "high",
       "name": "Bistrot Marino",
       "previousName": null,
-      "plazaId": "paseo-zibata",
-      "category": "mariscos",
-      "subcategory": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "marisqueria"
+      ],
       "beta": {
         "name": "Bistrot Marino",
         "plazaId": "paseo-zibata",
@@ -2481,11 +3029,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Redes oficiales, directorio local y difusión institucional (2024-07-19) en Plaza Paseo Zibatá, segundo piso.",
+      "reason": "Redes oficiales, directorio local y difusión institucional (2024-07-19) en Plaza Paseo Zibatá, segundo piso. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Bistrot Marino ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Mariscos y coctelería. Discrepancia de local: 40 (TikTok 2024) vs 41 (zibatahoy). No se asigna número de local."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.tiktok.com/@lalibredenegocios/video/7393151765702659334",
           "level": 3,
@@ -2541,16 +3101,18 @@
     },
     {
       "id": "ramen-express",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
-      "confidence": "high",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
       "plazaConfidence": "high",
       "name": "Ramen Express",
       "previousName": null,
-      "plazaId": "paseo-zibata",
-      "category": "asiatica",
-      "subcategory": "ramen",
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cocina-asiatica"
+      ],
       "beta": {
         "name": "Ramen Express",
         "plazaId": "paseo-zibata",
@@ -2561,11 +3123,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Apertura oficial en Paseo Zibatá (2024-10-28) difundida por la plaza.",
+      "reason": "Apertura oficial en Paseo Zibatá (2024-10-28) difundida por la plaza. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Ramen Express ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Apertura en Paseo Zibatá (octubre 2024) difundida por la plaza oficial. Ramen y productos coreanos. Restaurant Guru lista un 'Soba Express' (posible confusión)."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/p/DBp1F6gMnb5/",
           "level": 2,
@@ -2608,8 +3182,10 @@
       "name": "La Gaspachería Tradicional",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": "tacos-y-antojitos",
-      "subcategory": "esquites-y-snacks",
+      "category": "botanas",
+      "giros": [
+        "gaspachos"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -2619,7 +3195,19 @@
       "verificationNotes": [
         "Nuevo (no está en el beta). Gaspachos de fruta estilo Morelia."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -2674,8 +3262,10 @@
       "name": "Panadería Santa Fe",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": "desayunos-y-cafe",
-      "subcategory": "panaderia",
+      "category": "panaderia-y-reposteria",
+      "giros": [
+        "panaderia"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -2685,7 +3275,19 @@
       "verificationNotes": [
         "Nuevo (no está en el beta). Panadería tradicional (origen Huichapan, 1950). Teléfono y horario citados en resumen (442 251 7342; L-S 7:00-21:30, D 7:00-21:00) sin fuente oficial legible."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.paseozibata.mx/",
           "level": 1,
@@ -2711,26 +3313,40 @@
     },
     {
       "id": "tacos-la-capilla",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "high",
       "name": "Tacos La Capilla",
       "previousName": null,
-      "plazaId": "paseo-zibata",
-      "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "taqueria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Publicación de la plaza oficial y dos directorios; no figura en el directorio web de la plaza.",
+      "reason": "Publicación de la plaza oficial y dos directorios; no figura en el directorio web de la plaza. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Tacos La Capilla ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Nuevo (no está en el beta). Publicación de la plaza oficial sin fecha; no figura en su directorio web."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/PaseoZibata/posts/los-tradicionales-tacos-la-capilla-cu%C3%A1les-son-tus-favoritos-queso-papa-todos-te-/808611753163868/",
           "level": 1,
@@ -2774,7 +3390,10 @@
       "previousName": "Ñam Ñam",
       "plazaId": "condesa",
       "category": "asiatica",
-      "subcategory": "sushi",
+      "giros": [
+        "sushi",
+        "poke"
+      ],
       "beta": {
         "name": "Ñam Ñam",
         "plazaId": "condesa",
@@ -2789,7 +3408,19 @@
       "verificationNotes": [
         "Dirección citada: Paseo Pitahayas 9A, 'Plaza Riscos Condesa', local 100. Horario citado L-D 12:00-22:00 (sin confirmar). Restaurant Guru la lista también en Plaza Zielo (asignación algorítmica)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://web.didiglobal.com/mx/food/queretaro-que/nam-nam-sushi-zibata/5764607734100787559/",
           "level": 3,
@@ -2833,7 +3464,9 @@
       "previousName": "Carly Tacos de Pescado",
       "plazaId": "condesa",
       "category": "mariscos",
-      "subcategory": null,
+      "giros": [
+        "marisqueria"
+      ],
       "beta": {
         "name": "Carly Tacos de Pescado",
         "plazaId": "condesa",
@@ -2848,7 +3481,19 @@
       "verificationNotes": [
         "Nombre comercial 'Tacos Carly' (pescado estilo Baja y mariscos)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/p/DDfORh9xQH2/",
           "level": 2,
@@ -2903,7 +3548,9 @@
       "previousName": "Arepanas",
       "plazaId": "condesa",
       "category": "tacos-y-antojitos",
-      "subcategory": "arepas",
+      "giros": [
+        "arepas"
+      ],
       "beta": {
         "name": "Arepanas",
         "plazaId": "condesa",
@@ -2918,7 +3565,19 @@
       "verificationNotes": [
         "Arepas venezolanas. Dos fuentes independientes coinciden en teléfono."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.tripadvisor.com/Restaurant_Review-g479232-d27975346-Reviews-Arepanas_Mx-Queretaro_City_Central_Mexico_and_Gulf_Coast.html",
           "level": 3,
@@ -2962,8 +3621,12 @@
       "name": "Romani Pizzas y Ensaladas",
       "previousName": "Romani Pizzas",
       "plazaId": "condesa",
-      "category": "pizza",
-      "subcategory": null,
+      "category": "italiana",
+      "giros": [
+        "cocina-italiana",
+        "ensaladas",
+        "crepas"
+      ],
       "beta": {
         "name": "Romani Pizzas",
         "plazaId": "condesa",
@@ -2978,7 +3641,19 @@
       "verificationNotes": [
         "Nombre comercial 'Romani Pizzas y Ensaladas' (no confundir con Romani Pizzas de Puebla)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/p/Romani-Pizzas-y-Ensaladas-61577783051318/",
           "level": 2,
@@ -3013,7 +3688,9 @@
       "previousName": "Casa Vieja",
       "plazaId": "condesa",
       "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "giros": [
+        "taqueria"
+      ],
       "beta": {
         "name": "Casa Vieja",
         "plazaId": "condesa",
@@ -3028,7 +3705,19 @@
       "verificationNotes": [
         "La sucursal original está en Zákia (fuera de Zibatá); existe página específica de la sucursal Zibatá. Plaza (Condesa) sin confirmar."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/p/Taquer%C3%ADa-Casa-Vieja-Zibata-100090240614595/",
           "level": 2,
@@ -3072,8 +3761,11 @@
       "name": "Bendito Bocado",
       "previousName": null,
       "plazaId": "condesa",
-      "category": "bistro",
-      "subcategory": null,
+      "category": "casera",
+      "giros": [
+        "comida-casera",
+        "desayunos"
+      ],
       "beta": {
         "name": "Bendito Bocado",
         "plazaId": "condesa",
@@ -3088,7 +3780,19 @@
       "verificationNotes": [
         "Página oficial con reapertura tras vacaciones un 3 de enero (año no legible). Cocina casera/bistró."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/p/Bendito-Bocado-Zibat%C3%A1-61552620264859/",
           "level": 2,
@@ -3112,9 +3816,11 @@
       "plazaConfidence": "medium",
       "name": "Burger & Fries Forever",
       "previousName": "Burger & Fries",
-      "plazaId": "condesa",
+      "plazaId": "plaza-loop",
       "category": "hamburguesas",
-      "subcategory": null,
+      "giros": [
+        "hamburguesas"
+      ],
       "beta": {
         "name": "Burger & Fries",
         "plazaId": "plaza-walmart",
@@ -3125,11 +3831,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Beta inactivo y en 'Plaza Walmart'. Tienda con dirección en Plaza Condesa, local 111, y redes oficiales en El Marqués.",
+      "reason": "Beta inactivo y en 'Plaza Walmart'. Tienda con dirección en Plaza Condesa, local 111, y redes oficiales en El Marqués. 2026-09-16: el propietario de la guía reporta el traslado a Plaza Loop; se publica ahí con confianza media hasta poder verificarlo en una fuente propia del negocio. 2026-09-20: el propietario reporta que la cuenta de Instagram @burgers_bff ya no es la actual; se retira el enlace hasta tener la nueva (las fuentes abiertas solo muestran la antigua). 2026-09-21: el propietario aporta la cuenta actual de Instagram (@burgernfriesmx).",
       "verificationNotes": [
         "Beta: inactivo y en 'Plaza Walmart'. Evidencia lo sitúa en Plaza Condesa, local 111 → corrección de plaza. Teléfono citado 442 291 3952 (sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.ubereats.com/mx-en/store/burger-fries-forever-zibata/sX34wNrjUQO_12_PAo0gTw",
           "level": 3,
@@ -3173,8 +3891,10 @@
       "name": "Bocuze Bistró Café",
       "previousName": "Bocuze",
       "plazaId": "xentric-zibata",
-      "category": "bistro",
-      "subcategory": null,
+      "category": "internacional",
+      "giros": [
+        "cocina-internacional"
+      ],
       "beta": {
         "name": "Bocuze",
         "plazaId": "xentric-zibata",
@@ -3189,7 +3909,19 @@
       "verificationNotes": [
         "Directorio oficial + ficha fechada 2026 con el mismo teléfono. Horario citado (resumen): D 9:00-18:15; L-S desde 9:00 hasta 22:00-22:30 (sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3247,16 +3979,19 @@
     },
     {
       "id": "bee-waffle",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "high",
       "name": "BeeWaffle",
-      "previousName": "Bee Waffle",
-      "plazaId": "xentric-zibata",
-      "category": "desayunos-y-cafe",
-      "subcategory": null,
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "waffles",
+        "desayunos"
+      ],
       "beta": {
         "name": "Bee Waffle",
         "plazaId": "xentric-zibata",
@@ -3267,11 +4002,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Directorio oficial de Xentric Zibatá (local 104) y redes de la marca.",
+      "reason": "Directorio oficial de Xentric Zibatá (local 104) y redes de la marca. 2026-09-26: cerrado. El mantenedor de la guía confirma en sitio que el local ya no opera.",
       "verificationNotes": [
         "Waffles dulces y salados, café y malteadas."
       ],
+      "fieldVerifiedAt": "2026-09-26",
       "sources": [
+        {
+          "url": "campo:2026-09-26",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-26",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3317,7 +4064,9 @@
       "previousName": null,
       "plazaId": "xentric-zibata",
       "category": "italiana",
-      "subcategory": null,
+      "giros": [
+        "cocina-italiana"
+      ],
       "beta": {
         "name": "Cosi Fan Tutte",
         "plazaId": "xentric-zibata",
@@ -3332,7 +4081,19 @@
       "verificationNotes": [
         "Cocina italiana y pizzas (desde 1998). Horario citado D-J 13-22, V-S 13-23 (sin fuente oficial legible)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3378,7 +4139,10 @@
       "previousName": "Honu Sushi",
       "plazaId": "xentric-zibata",
       "category": "asiatica",
-      "subcategory": "sushi",
+      "giros": [
+        "sushi",
+        "cocina-asiatica"
+      ],
       "beta": {
         "name": "Honu Sushi",
         "plazaId": "xentric-zibata",
@@ -3393,7 +4157,19 @@
       "verificationNotes": [
         "Beta: inactivo. Directorio oficial y directorio secundario coinciden en teléfono → operación probable. honu.soy no resuelve DNS."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3452,26 +4228,40 @@
     },
     {
       "id": "ichos",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "high",
       "name": "Ichos",
       "previousName": "Piotl Rosticería",
-      "plazaId": "xentric-zibata",
-      "category": "carne-y-parrilla",
-      "subcategory": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "asador"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Directorio oficial (local 208); ocupa el local y teléfono antes asociados a Piotl Rosticería.",
+      "reason": "Directorio oficial (local 208); ocupa el local y teléfono antes asociados a Piotl Rosticería. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Ichos ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Nuevo registro. Sucede a Piotl Rosticería en el mismo local y teléfono. Pendiente de corroboración independiente."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3489,16 +4279,18 @@
     },
     {
       "id": "trecielos",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "medium",
       "name": "Trecielos",
       "previousName": null,
-      "plazaId": "xentric-zibata",
-      "category": "mexicana",
-      "subcategory": "cocina-regional",
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cocina-mexicana"
+      ],
       "beta": {
         "name": "Trecielos",
         "plazaId": "xentric-zibata",
@@ -3509,11 +4301,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Cuenta oficial y ficha local con dirección Paseo Tunas 18; no figura en el directorio oficial.",
+      "reason": "Cuenta oficial y ficha local con dirección Paseo Tunas 18; no figura en el directorio oficial. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Trecielos ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "No figura en el directorio oficial de Xentric Zibatá. Una sola fuente secundaria sin fecha."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://zibatahoy.com/listing/trecielos-qro/",
           "level": 3,
@@ -3537,8 +4341,11 @@
       "name": "La Marmota Wings and Beer",
       "previousName": "La Marmota",
       "plazaId": "xentric-zibata",
-      "category": "pollo",
-      "subcategory": "alitas",
+      "category": "hamburguesas",
+      "giros": [
+        "alitas",
+        "hamburguesas"
+      ],
       "beta": {
         "name": "La Marmota",
         "plazaId": "xentric-zibata",
@@ -3553,7 +4360,19 @@
       "verificationNotes": [
         "Alitas, snacks y cerveza; buffet de alitas."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3619,7 +4438,10 @@
       "previousName": null,
       "plazaId": "xentric-zibata",
       "category": "desayunos-y-cafe",
-      "subcategory": null,
+      "giros": [
+        "brunch",
+        "cafeteria"
+      ],
       "beta": {
         "name": "Romelia Café",
         "plazaId": "xentric-zibata",
@@ -3634,7 +4456,19 @@
       "verificationNotes": [
         "Cafetería con repostería casera en Xentric Zibatá (int. 220; no figura en el directorio oficial, que llega a 219)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://zibatahoy.com/listing/romelia-cafe/",
           "level": 3,
@@ -3659,26 +4493,40 @@
     },
     {
       "id": "la-borra-del-cafe-xentric",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
-      "confidence": "high",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
       "plazaConfidence": "high",
       "name": "La Borra del Café",
       "previousName": null,
-      "plazaId": "xentric-zibata",
-      "category": "desayunos-y-cafe",
-      "subcategory": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cafeteria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Directorio oficial (locales 110-111), página oficial de la sucursal y teléfono coincidente en directorio independiente.",
+      "reason": "Directorio oficial (locales 110-111), página oficial de la sucursal y teléfono coincidente en directorio independiente. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que La Borra del Café (Xentric Zibatá) ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Nuevo (no está en el beta). Cafetería de franquicia; directorio oficial y directorio secundario coinciden en teléfono."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3716,26 +4564,40 @@
     },
     {
       "id": "quetacos",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "high",
       "name": "Quetacos",
       "previousName": null,
-      "plazaId": "xentric-zibata",
-      "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "taqueria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Solo en el directorio oficial de la plaza (locales 112-113).",
+      "reason": "Solo en el directorio oficial de la plaza (locales 112-113). 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Quetacos ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Nuevo. Solo aparece en el directorio oficial (sin fecha); ninguna otra fuente en la web."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3760,8 +4622,10 @@
       "name": "La Michoacana",
       "previousName": null,
       "plazaId": "xentric-zibata",
-      "category": "postres",
-      "subcategory": "helados",
+      "category": "postres-y-dulces",
+      "giros": [
+        "helados"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -3771,7 +4635,19 @@
       "verificationNotes": [
         "Nuevo. Distinta de la La Michoacana de Paseo Zibatá."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
           "level": 1,
@@ -3797,7 +4673,9 @@
       "previousName": null,
       "plazaId": "plaza-zielo",
       "category": "asiatica",
-      "subcategory": "sushi",
+      "giros": [
+        "cocina-asiatica"
+      ],
       "beta": {
         "name": "Kazu's Kitchen",
         "plazaId": "plaza-zielo",
@@ -3812,7 +4690,19 @@
       "verificationNotes": [
         "Cocina japonesa de la chef Kazu Kumoto (otra sede en Polanco). Horario citado: martes a domingo 13:00-22:00 (sin confirmar en página oficial legible)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://kazuskitchen.com/sucursales/",
           "level": 1,
@@ -3866,8 +4756,11 @@
       "name": "Bistró Margaritas by Kaos",
       "previousName": "Margaritas Restaurante Bar",
       "plazaId": "plaza-zielo",
-      "category": "bistro",
-      "subcategory": null,
+      "category": "internacional",
+      "giros": [
+        "cocina-internacional",
+        "gastrobar"
+      ],
       "beta": {
         "name": "Margaritas",
         "plazaId": "plaza-zielo",
@@ -3882,7 +4775,19 @@
       "verificationNotes": [
         "Nombre actual en redes: 'Bistró Margaritas by Kaos' (antes 'Margaritas Restaurante Bar'). Discrepancia de local (20 vs 43): no se asigna."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/bistromargaritasbykaos/",
           "level": 2,
@@ -3947,8 +4852,10 @@
       "name": "Helados Santa Clara",
       "previousName": "Santa Clara",
       "plazaId": "plaza-zielo",
-      "category": "postres",
-      "subcategory": "helados",
+      "category": "postres-y-dulces",
+      "giros": [
+        "helados"
+      ],
       "beta": {
         "name": "Santa Clara",
         "plazaId": "plaza-zielo",
@@ -3963,7 +4870,19 @@
       "verificationNotes": [
         "Horario citado diario 13:00-22:00 (fuente no identificada: no se usa)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml",
           "level": 3,
@@ -4007,8 +4926,10 @@
       "name": "Entrecot Asador",
       "previousName": null,
       "plazaId": "plaza-zielo",
-      "category": "carne-y-parrilla",
-      "subcategory": "cortes",
+      "category": "carnes-y-parrilla",
+      "giros": [
+        "asador"
+      ],
       "beta": {
         "name": "Entrecot Asador",
         "plazaId": "plaza-zielo",
@@ -4023,7 +4944,19 @@
       "verificationNotes": [
         "Asador de cortes y desayunos. Horario citado 7:00-23:00 diario (sin confirmar). Dos fuentes locales fechadas en 2026."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/entrecotasador/",
           "level": 2,
@@ -4098,7 +5031,9 @@
       "previousName": null,
       "plazaId": "plaza-zielo",
       "category": "hamburguesas",
-      "subcategory": null,
+      "giros": [
+        "hamburguesas"
+      ],
       "beta": {
         "name": "Hot Buns",
         "plazaId": "plaza-zielo",
@@ -4113,7 +5048,19 @@
       "verificationNotes": [
         "Hamburguesas smash, papas y aros de cebolla."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/hotbuns.zibata/",
           "level": 2,
@@ -4157,8 +5104,10 @@
       "name": "Escarola Food & Health",
       "previousName": "Escarola",
       "plazaId": "plaza-zielo",
-      "category": "saludable-y-bowls",
-      "subcategory": "ensaladas",
+      "category": "saludable",
+      "giros": [
+        "ensaladas"
+      ],
       "beta": {
         "name": "Escarola",
         "plazaId": "plaza-zielo",
@@ -4173,7 +5122,19 @@
       "verificationNotes": [
         "Ensaladas y paninis con ingredientes locales. Horario de directorio secundario: no se estructura."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.escarolaqro.com/",
           "level": 1,
@@ -4218,8 +5179,10 @@
       "name": "Donatto Pizza",
       "previousName": null,
       "plazaId": "plaza-zielo",
-      "category": "pizza",
-      "subcategory": null,
+      "category": "italiana",
+      "giros": [
+        "pizza"
+      ],
       "beta": {
         "name": "Donatto Pizza",
         "plazaId": "plaza-zielo",
@@ -4234,7 +5197,19 @@
       "verificationNotes": [
         "Pizzería. Plaza solo por directorio algorítmico + beta."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.rappi.com.mx/restaurantes/1923764489-donatto-pizza",
           "level": 3,
@@ -4281,26 +5256,40 @@
     },
     {
       "id": "la-borra-del-cafe-zielo",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
-      "confidence": "high",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
       "plazaConfidence": "high",
       "name": "La Borra del Café",
       "previousName": null,
-      "plazaId": "plaza-zielo",
-      "category": "desayunos-y-cafe",
-      "subcategory": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cafeteria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Cuenta oficial de la sucursal Zielo y publicación de apertura de la marca.",
+      "reason": "Cuenta oficial de la sucursal Zielo y publicación de apertura de la marca. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que La Borra del Café (Plaza Zielo) ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Nuevo (no está en el beta). Cuenta oficial específica de la sucursal Zielo."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/laborradelcafe.zielo/",
           "level": 2,
@@ -4344,7 +5333,10 @@
       "previousName": null,
       "plazaId": "mol-jamadi",
       "category": "desayunos-y-cafe",
-      "subcategory": "cafe-de-especialidad",
+      "giros": [
+        "cafeteria",
+        "panaderia"
+      ],
       "beta": {
         "name": "Cafele",
         "plazaId": "mol-jamadi",
@@ -4359,7 +5351,19 @@
       "verificationNotes": [
         "Horario oficial estructurable (7:00-21:30 todos los días). Dirección = MOL Pitahaya (Cerro del Huizache 49)."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://cafele.com.mx/pages/zibata",
           "level": 1,
@@ -4413,8 +5417,11 @@
       "name": "DiezyNueve Golf Bar",
       "previousName": "Hoyo 19",
       "plazaId": "campo-de-golf",
-      "category": "bar-y-pub",
-      "subcategory": null,
+      "category": "bar",
+      "giros": [
+        "gastrobar",
+        "desayunos"
+      ],
       "beta": {
         "name": "Hoyo 19",
         "plazaId": "campo-de-golf",
@@ -4430,7 +5437,19 @@
         "El 'Hoyo 19' del beta opera con la marca 'DiezyNueve Golf Bar'. Ubicación citada 'Campo de Golf Hoyo 4, Circuito Universidades'; teléfono citado +52 442 227 1351; horario citado confuso (no se usa). Acceso al público no confirmado.",
         "El cierre del canal de delivery no implica el cierre del restaurante del club."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://zibatagolf.com/",
           "level": 1,
@@ -4504,8 +5523,10 @@
       "name": "Agave Grill",
       "previousName": null,
       "plazaId": "centro-zibata",
-      "category": "tacos-y-antojitos",
-      "subcategory": "tacos",
+      "category": "carnes-y-parrilla",
+      "giros": [
+        "asador"
+      ],
       "beta": {
         "name": "Agave Grill",
         "plazaId": "centro-zibata",
@@ -4520,7 +5541,19 @@
       "verificationNotes": [
         "Proyecto arquitectónico publicado en dic 2024 y actividad en redes en ago 2025. Plaza (Centro Zibatá) no confirmada por fuente. La guía zibatahoy menciona 'Parrilla de agave' (posible mismo negocio, sin confirmar)."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.facebook.com/p/Agave-Grill-61557015256230/",
           "level": 2,
@@ -4565,8 +5598,11 @@
       "name": "Pio Poke House & Rolls",
       "previousName": "Pio Poke House",
       "plazaId": "centro-zibata",
-      "category": "saludable-y-bowls",
-      "subcategory": "poke",
+      "category": "asiatica",
+      "giros": [
+        "poke",
+        "sushi"
+      ],
       "beta": {
         "name": "Pio Poke House",
         "plazaId": "centro-zibata",
@@ -4581,7 +5617,19 @@
       "verificationNotes": [
         "Dos fuentes coinciden en Plaza Centro (Pitahayas 199); teléfonos distintos → no se registra teléfono."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://zibata.digital/categoria-unica/restaurantes/",
           "level": 3,
@@ -4626,8 +5674,11 @@
       "name": "Lilo Bowl Bar",
       "previousName": null,
       "plazaId": "centro-zibata",
-      "category": "saludable-y-bowls",
-      "subcategory": null,
+      "category": "saludable",
+      "giros": [
+        "acai",
+        "jugos-y-smoothies"
+      ],
       "beta": {
         "name": "Lilo Bowl Bar",
         "plazaId": "centro-zibata",
@@ -4642,7 +5693,19 @@
       "verificationNotes": [
         "Smoothie bowls (açaí, pitaya, matcha)."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/lilobowlbar/",
           "level": 2,
@@ -4678,16 +5741,18 @@
     },
     {
       "id": "sixties-burger",
-      "status": "likely_active",
-      "publishedInApp": true,
-      "withinZibata": true,
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
       "confidence": "medium",
       "plazaConfidence": "low",
       "name": "Sixties Burger",
       "previousName": null,
-      "plazaId": "centro-zibata",
-      "category": "hamburguesas",
-      "subcategory": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "hamburguesas"
+      ],
       "beta": {
         "name": "Sixties Burger",
         "plazaId": "centro-zibata",
@@ -4698,11 +5763,23 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Beta inactivo; cuenta oficial de la sucursal Zibatá y tienda de delivery. Plaza del beta sin confirmar.",
+      "reason": "Beta inactivo; cuenta oficial de la sucursal Zibatá y tienda de delivery. Plaza del beta sin confirmar. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Sixties Burger ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
       "verificationNotes": [
         "Beta: inactivo. Cuenta de sucursal y tienda de delivery; horario citado (sin confirmar). Plaza no confirmada."
       ],
+      "fieldVerifiedAt": "2026-09-20",
       "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/sixtiesburgerzibata/",
           "level": 2,
@@ -4737,7 +5814,9 @@
       "previousName": null,
       "plazaId": "centro-zibata",
       "category": "desayunos-y-cafe",
-      "subcategory": null,
+      "giros": [
+        "cafeteria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -4747,7 +5826,19 @@
       "verificationNotes": [
         "Nuevo (no está en el beta). Dirección citada: Av. Paseo de las Pitahayas 199, Plaza Centro; alternativa 'Pitahayas 39 A int. 101-102'. Verificar localizador oficial."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://web.didiglobal.com/mx/food/queretaro-que/starbucks-centro-zibata-queretaro/5764608034693973168/",
           "level": 3,
@@ -4791,7 +5882,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Koi Ramen",
         "plazaId": "xentric-anahuac",
@@ -4806,6 +5899,7 @@
       "verificationNotes": [
         "Beta: inactivo (¿Activo? vacío). Nombre comercial 'Koi Ramen House'. Dirección citada: Av. Paseo de las Pitahayas 1 int. 103. Tiendas de delivery sin fecha: no prueban operación actual."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930015215-koi-ramen-house",
@@ -4852,7 +5946,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "La Lorenza",
         "plazaId": "xentric-anahuac",
@@ -4867,6 +5963,7 @@
       "verificationNotes": [
         "Solo aparece La Lorenza Juriquilla (fuera de Zibatá). Sin evidencia de sucursal en Zibatá en esta búsqueda; buscar 'La Lorenza Xentric'."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.tripadvisor.com/Restaurant_Review-g3181058-d33115052-Reviews-La_Lorenza_Tacos-Juriquilla_Queretaro_City_Central_Mexico_and_Gulf_Coast.html",
@@ -4901,7 +5998,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Loreto Taco Fish",
         "plazaId": "xentric-anahuac",
@@ -4916,6 +6015,7 @@
       "verificationNotes": [
         "Dos búsquedas ('\"Loreto Taco Fish\" Zibatá'; 'Loreto tacos pescado Xentric Zibatá Pitahayas') sin ningún resultado del negocio en Zibatá ni en Querétaro. Sin evidencia de existencia."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -4929,7 +6029,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Nutrisa",
         "plazaId": "xentric-anahuac",
@@ -4944,6 +6046,7 @@
       "verificationNotes": [
         "Citada tienda en 'Cto. Universidades, Zibatá, 76246' (no Pitahayas 55): la plaza del beta (Xentric Anáhuac) no está confirmada. Revisar localizador oficial."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.skyscrapercity.com/threads/proyectos-zibat%C3%A1-el-refugio-cc-paseo-quer%C3%A9taro-la-espiga.927120/page-60",
@@ -4978,7 +6081,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "MEZCLA",
         "plazaId": "xentric-anahuac",
@@ -4993,6 +6098,7 @@
       "verificationNotes": [
         "No se encontró un negocio llamado MEZCLA; la única coincidencia es un platillo de Maiztros Xentric Anáhuac. Posible error del beta (nombre de producto o de un local no identificado)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930097683-maiztros-xentric-anahuac-zibata",
@@ -5017,7 +6123,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Chick In",
         "plazaId": "xentric-anahuac",
@@ -5032,6 +6140,7 @@
       "verificationNotes": [
         "Nombre comercial en Rappi: 'Chickin - Zibatá' (sándwiches y tiras de pollo). Única fuente: delivery sin plaza."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930279063-chickin",
@@ -5057,7 +6166,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Neneo",
         "plazaId": "xentric-anahuac",
@@ -5072,6 +6183,7 @@
       "verificationNotes": [
         "Solo un resumen de búsqueda sin URL propia lo sitúa en 'Plaza Xentric Zibatá'; no aparece en el directorio oficial de Xentric Zibatá (local 208 = Ichos, carnes asadas). Sin evidencia verificable de operación."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -5085,7 +6197,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "El Lonche del Capitán",
         "plazaId": "xentric-anahuac",
@@ -5100,6 +6214,7 @@
       "verificationNotes": [
         "Beta: inactivo. Resumen de búsqueda: sucursal en Paseo de las Pitahayas 1, Zibatá (otra en Lomas del Marqués). Mariscos estilo Sinaloa. Sin fecha: actividad actual no confirmada."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ellonchedelcapitan.com/",
@@ -5154,7 +6269,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Tlaxcalli",
         "plazaId": "xentric-anahuac",
@@ -5169,6 +6286,7 @@
       "verificationNotes": [
         "Sin ningún resultado de un negocio 'Tlaxcalli' en Zibatá o Querétaro."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -5182,7 +6300,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Doña Tota",
         "plazaId": "xentric-anahuac",
@@ -5197,6 +6317,7 @@
       "verificationNotes": [
         "Beta: inactivo. Rappi 'Gorditas Doña Tota - Zibatá' (Xentric Anáhuac, Circuito Universidades). Solo delivery: actividad no confirmada."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930170908-gorditas-dona-tota",
@@ -5233,7 +6354,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "El Edén",
         "plazaId": "xentric-anahuac",
@@ -5248,6 +6371,7 @@
       "verificationNotes": [
         "Nombre comercial 'El Edén Chocolate y Churros'. Solo plataforma de delivery."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930048926-el-eden-chocolate-y-churros",
@@ -5274,7 +6398,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Mesón Cristi",
         "plazaId": "xentric-anahuac",
@@ -5289,6 +6415,7 @@
       "verificationNotes": [
         "Sin resultados del negocio en Zibatá ni en Querétaro."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -5302,7 +6429,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "La Cafe Anáhuac",
         "plazaId": "anahuac-queretaro",
@@ -5317,6 +6446,7 @@
       "verificationNotes": [
         "Sin resultados de una cafetería con ese nombre en el campus de Querétaro (los resultados mezclan otros campus Anáhuac)."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -5330,7 +6460,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Grünen Lush",
         "plazaId": "anahuac-queretaro",
@@ -5345,6 +6477,7 @@
       "verificationNotes": [
         "Sucursales visibles en Álamos 2.ª sección y Juriquilla (fuera de Zibatá). Sin evidencia de sucursal en la Anáhuac Querétaro/Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.happycow.net/reviews/gruenen-lush-queretaro-269351",
@@ -5389,7 +6522,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "El Ahijao'",
         "plazaId": "paseo-zibata",
@@ -5404,6 +6539,7 @@
       "verificationNotes": [
         "Sin evidencia que vincule el negocio a Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.facebook.com/pages/category/Restaurant/pollos-el-ahijao-106691315147881/",
@@ -5428,7 +6564,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Mamba Pizza",
         "plazaId": "paseo-zibata",
@@ -5443,6 +6581,7 @@
       "verificationNotes": [
         "Beta: inactivo. Sucursal Paseo Zibatá solo en directorios sin fecha; no figura en el directorio oficial de la plaza. Otras sucursales: Pie de la Cuesta y Lomas del Marqués."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://restaurantguru.com/MAMBA-Pizza-Co-plaza-PASEO-ZIBATA-Santiago-de-Queretaro",
@@ -5487,7 +6626,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Zafrina",
         "plazaId": "paseo-zibata",
@@ -5502,6 +6643,7 @@
       "verificationNotes": [
         "Beta: inactivo. Última evidencia fechada: agosto 2022. Sin rastro reciente: posible cierre no confirmado."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.instagram.com/zafrina.zibata/",
@@ -5547,16 +6689,19 @@
     },
     {
       "id": "all-berries",
-      "status": "uncertain",
-      "publishedInApp": false,
-      "withinZibata": "uncertain",
-      "confidence": "low",
-      "plazaConfidence": null,
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
       "name": "All Berries",
       "previousName": null,
-      "plazaId": null,
-      "category": null,
-      "subcategory": null,
+      "plazaId": "paseo-zibata",
+      "category": "saludable",
+      "giros": [
+        "acai",
+        "bowls-de-fruta"
+      ],
       "beta": {
         "name": "All Berries",
         "plazaId": "paseo-zibata",
@@ -5567,11 +6712,24 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Sin resultados.",
+      "reason": "Sin resultados. 2026-09-20: el propietario de la guía lo verifica en sitio. Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
       "verificationNotes": [
         "Sin resultados del negocio en Zibatá (la búsqueda solo devuelve contenido no relacionado)."
       ],
-      "sources": []
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
     },
     {
       "id": "trompochtitlan",
@@ -5584,7 +6742,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Trompochtitlan",
         "plazaId": "foodtrucks-pickleball",
@@ -5599,6 +6759,7 @@
       "verificationNotes": [
         "Existe tienda 'Trompochtitlan (Zibata)' en Uber Eats; la web oficial de sucursales no resuelve DNS. Ubicación exacta dentro de Zibatá (y relación con Pick Spot) sin confirmar."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/trompochtitlan-zibata/Yl5lO44BXEu4A5fNaa15tg",
@@ -5643,7 +6804,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Santo Antojo",
         "plazaId": "foodtrucks-pickleball",
@@ -5658,6 +6821,7 @@
       "verificationNotes": [
         "Resultados solo de negocios homónimos en Mérida, Quito, Barcelona y Tucson. Sin evidencia en Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -5671,7 +6835,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Samdo",
         "plazaId": "foodtrucks-pickleball",
@@ -5686,6 +6852,7 @@
       "verificationNotes": [
         "Existe en Querétaro (sándwiches brioche estilo coreano); sin evidencia de ubicación en Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx-en/store/samdo-brioche-sandwich/10ccv4juR5WDUN7wV9489w",
@@ -5710,7 +6877,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Bad Doggie",
         "plazaId": "foodtrucks-pickleball",
@@ -5725,6 +6894,7 @@
       "verificationNotes": [
         "Sin resultados."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -5738,7 +6908,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "La Carreta Culichi",
         "plazaId": "foodtrucks-pickleball",
@@ -5753,6 +6925,7 @@
       "verificationNotes": [
         "Sin evidencia de ubicación en Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.instagram.com/p/DNbr14-yVRk/",
@@ -5777,7 +6950,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Melonio",
         "plazaId": "foodtrucks-pickleball",
@@ -5792,6 +6967,7 @@
       "verificationNotes": [
         "Sin resultados."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -5805,7 +6981,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Heladería ONCE",
         "plazaId": "condesa",
@@ -5820,6 +6998,7 @@
       "verificationNotes": [
         "Beta: inactivo. Única ubicación visible en Juriquilla (fuera de Zibatá) y tienda no disponible. Sin evidencia en Condesa."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/heladeria-once-once/lj_FZC6LRiOfRm0mhCu6hw",
@@ -5855,7 +7034,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Freestyle Pizza",
         "plazaId": "condesa",
@@ -5870,6 +7051,7 @@
       "verificationNotes": [
         "Beta: inactivo. Abrió en agosto de 2022; el subdominio oficial zibata.freestylepizza.com.mx ya no resuelve DNS (señal débil de cierre). Sin evidencia reciente."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.youtube.com/watch?v=51rXIY_23sI",
@@ -5914,7 +7096,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "La Chilakleta",
         "plazaId": "condesa",
@@ -5929,6 +7113,7 @@
       "verificationNotes": [
         "Cadena de chilaquiles para llevar. Tienda 'La Chilakleta (Zibata)' en Uber Eats; plaza sin confirmar."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/la-chilakleta-zibata/xcc9niO0V7SZ1d0Nv0rdJA",
@@ -5973,7 +7158,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "La Casa",
         "plazaId": "condesa",
@@ -5988,6 +7175,7 @@
       "verificationNotes": [
         "Beta: inactivo. Un resumen de búsqueda menciona 'La Casa Cocina Saludable' en Zibatá sin URL propia; sin evidencia verificable de ubicación en Condesa."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -6001,7 +7189,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Kekas El Xavi",
         "plazaId": "xentric-zibata",
@@ -6016,6 +7206,7 @@
       "verificationNotes": [
         "Nombre comercial 'Kekas Fritas el Xavi'. No figura en el directorio oficial de Xentric Zibatá (sin fecha). Única fuente: delivery."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930255452-kekas-fritas-el-xavi",
@@ -6033,16 +7224,18 @@
     },
     {
       "id": "taqueria-el-tapatio",
-      "status": "uncertain",
-      "publishedInApp": false,
+      "status": "likely_active",
+      "publishedInApp": true,
       "withinZibata": true,
-      "confidence": "low",
-      "plazaConfidence": null,
-      "name": "Taquería el Tapatio",
-      "previousName": null,
-      "plazaId": null,
-      "category": null,
-      "subcategory": null,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Taquería El Tapatío",
+      "previousName": "Taquería el Tapatio",
+      "plazaId": "plaza-zielo",
+      "category": "tacos-y-antojitos",
+      "giros": [
+        "taqueria"
+      ],
       "beta": {
         "name": "Taquería el Tapatio",
         "plazaId": "plaza-zielo",
@@ -6053,11 +7246,24 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Solo una tienda de delivery (Plaza Zielo) y una cuenta de marca no vinculada a la sucursal.",
+      "reason": "Solo una tienda de delivery (Plaza Zielo) y una cuenta de marca no vinculada a la sucursal. 2026-09-20: el propietario de la guía lo verifica en sitio. Sucursal de Zibatá publicada en Plaza Zielo.",
       "verificationNotes": [
-        "Taquería originaria de Arandas, Jalisco; otras sucursales (Calimaya, Zen House, Refugio Mall)."
+        "Taquería originaria de Arandas, Jalisco; otras sucursales (Calimaya, Zen House, Refugio Mall).",
+        "Sucursal de Zibatá en Plaza Zielo."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930113199-taqueria-el-tapatio",
           "level": 3,
@@ -6067,7 +7273,10 @@
           "supports": [
             "branch:Zibatá",
             "plaza:Plaza Zielo",
-            "activity:+79 reseñas"
+            "activity:+79 reseñas",
+            "name",
+            "existence",
+            "plaza:Zielo"
           ]
         },
         {
@@ -6077,23 +7286,26 @@
           "sourceDate": null,
           "checkedAt": "2026-09-14",
           "supports": [
-            "brand"
+            "brand",
+            "name"
           ]
         }
       ]
     },
     {
       "id": "los-del-mandil",
-      "status": "uncertain",
-      "publishedInApp": false,
+      "status": "likely_active",
+      "publishedInApp": true,
       "withinZibata": true,
-      "confidence": "low",
-      "plazaConfidence": null,
+      "confidence": "high",
+      "plazaConfidence": "high",
       "name": "Los del Mandil",
       "previousName": null,
-      "plazaId": null,
-      "category": null,
-      "subcategory": null,
+      "plazaId": "plaza-zielo",
+      "category": "mexicana",
+      "giros": [
+        "cocina-mexicana"
+      ],
       "beta": {
         "name": "Los del Mandil",
         "plazaId": "plaza-zielo",
@@ -6104,11 +7316,24 @@
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Una sola fuente secundaria sin fecha.",
+      "reason": "Una sola fuente secundaria sin fecha. 2026-09-20: el propietario de la guía lo verifica en sitio. Dirección publicada: Av. Paseo de las Pitahayas 26 (Plaza Zielo).",
       "verificationNotes": [
-        "Única fuente secundaria sin fecha; sin redes oficiales localizadas."
+        "Única fuente secundaria sin fecha; sin redes oficiales localizadas.",
+        "Fonda fina en Av. Paseo de las Pitahayas 26 (Plaza Zielo)."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml",
           "level": 3,
@@ -6119,6 +7344,18 @@
             "name",
             "plaza:Plaza Zielo (algorítmica)",
             "activity:20 votos"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930381845-los-del-mandil",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "address:Av. Paseo de las Pitahayas 26"
           ]
         }
       ]
@@ -6134,7 +7371,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "KFC",
         "plazaId": "distrito-nandu",
@@ -6149,6 +7388,7 @@
       "verificationNotes": [
         "Distrito Nandú no opera hasta 2027; sin anuncio de KFC en Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://kfc.com.mx/stores",
@@ -6173,7 +7413,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Nama Sushi",
         "plazaId": "distrito-nandu",
@@ -6188,6 +7430,7 @@
       "verificationNotes": [
         "Sin evidencia de ubicación en Zibatá ni en Distrito Nandú (en desarrollo)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://namasushi.ola.click/",
@@ -6212,7 +7455,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Il Diavolo",
         "plazaId": "distrito-nandu",
@@ -6227,6 +7472,7 @@
       "verificationNotes": [
         "Sin resultados en Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -6240,7 +7486,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "San Cosme",
         "plazaId": "distrito-nandu",
@@ -6255,6 +7503,7 @@
       "verificationNotes": [
         "Sin resultados en Zibatá."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -6268,7 +7517,9 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Mr. Bagel",
         "plazaId": "xentric-anahuac",
@@ -6283,6 +7534,7 @@
       "verificationNotes": [
         "Cierre indicado por Restaurant Guru y anuncio de cierre indefinido. Además, la dirección era Paseo Zibatá local 29, no Xentric Anáhuac (beta con plaza incorrecta)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://restaurantguru.com/Mr-Bagel-Santiago-de-Queretaro",
@@ -6318,7 +7570,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Grand Antonella",
         "plazaId": "paseo-zibata",
@@ -6333,6 +7587,7 @@
       "verificationNotes": [
         "Cierre permanente indicado en su página oficial."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.facebook.com/Antonellacafeboutique/",
@@ -6358,7 +7613,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Piotl Rosticeria",
         "plazaId": "xentric-zibata",
@@ -6373,6 +7630,7 @@
       "verificationNotes": [
         "Mismo local y teléfono que 'Ichos' en el directorio oficial actual → Piotl fue sustituido o renombrado como Ichos. Registro retirado del dataset activo; ver candidato Ichos."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.facebook.com/PiotlRosticeria/",
@@ -6419,7 +7677,9 @@
       "previousName": null,
       "plazaId": "xentric-anahuac",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6430,6 +7690,7 @@
         "Candidato nuevo (esquites/elotes). Solo plataforma de delivery: requiere corroboración.",
         "Marca con enfoque en eventos; el local en Xentric Anáhuac solo consta en delivery."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930097683-maiztros-xentric-anahuac-zibata",
@@ -6458,28 +7719,51 @@
     },
     {
       "id": "tacos-el-pata-zibata",
-      "status": "closed",
-      "publishedInApp": false,
+      "status": "likely_active",
+      "publishedInApp": true,
       "withinZibata": true,
       "confidence": "medium",
-      "plazaConfidence": null,
-      "name": "Tacos El Pata Zibatá",
+      "plazaConfidence": "high",
+      "name": "Tacos el Pata",
       "previousName": null,
-      "plazaId": "xentric-zibata",
-      "category": null,
-      "subcategory": null,
+      "plazaId": "plaza-loop",
+      "category": "tacos-y-antojitos",
+      "giros": [
+        "taqueria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "La lista oficial de sucursales omite Zibatá y la tienda de delivery figura cerrada desde julio de 2025.",
+      "reason": "La investigación de 2026-09-14 lo dio por cerrado en Xentric Anáhuac. 2026-09-20: el propietario de la guía confirma que la sucursal se mudó a Plaza Loop y sigue abierta; la marca mantiene sitio propio y sucursal de Zibatá en Rappi y Uber Eats.",
       "verificationNotes": [
-        "Candidato nuevo. Dirección citada: 'Pitahaya #14, Plaza Xentric Zibata' y referencia a Xentric Anáhuac Suites: plaza por resolver.",
-        "Contradicción: la lista oficial de sucursales omite Zibatá mientras persisten tienda de delivery y página. Direcciones citadas contradictorias (Pitahaya 14 Plaza Xentric / Av. Paseo de las Pitahayas 19).",
-        "Dos señales independientes de cierre: la lista oficial omite Zibatá y la tienda de delivery figura cerrada desde julio de 2025."
+        "Marca con sitio propio y sucursal de Zibatá en Rappi y Uber Eats. Los directorios la siguen citando en Xentric Anáhuac; el propietario de la guía confirma que hoy opera en Plaza Loop."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.tacoselpata.com/en",
+          "level": 1,
+          "type": "official-site",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence"
+          ]
+        },
         {
           "url": "https://www.rappi.com.mx/restaurantes/1923726808-tacos-el-pata",
           "level": 3,
@@ -6487,29 +7771,8 @@
           "sourceDate": null,
           "checkedAt": "2026-09-14",
           "supports": [
-            "name",
-            "branch:Zibatá"
-          ]
-        },
-        {
-          "url": "https://www.facebook.com/p/Tacos-El-Pata-Zibata-100076322976562/",
-          "level": 2,
-          "type": "official-social",
-          "sourceDate": null,
-          "checkedAt": "2026-09-14",
-          "supports": [
-            "name"
-          ]
-        },
-        {
-          "url": "https://www.tacoselpata.com/en/about-1",
-          "level": 1,
-          "type": "official-branch-list",
-          "sourceDate": null,
-          "checkedAt": "2026-09-14",
-          "supports": [
-            "NO incluye sucursal Zibatá (11 sucursales en Querétaro)",
-            "sin sucursal Zibatá"
+            "existence",
+            "zone:Zibatá"
           ]
         },
         {
@@ -6519,8 +7782,8 @@
           "sourceDate": null,
           "checkedAt": "2026-09-14",
           "supports": [
-            "branch:Zibatá",
-            "status:cerrado en Uber Eats desde el 22 de julio de 2025 (resumen de búsqueda)"
+            "existence",
+            "zone:Zibatá"
           ]
         }
       ]
@@ -6536,7 +7799,9 @@
       "previousName": null,
       "plazaId": "xentric-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6546,6 +7811,7 @@
       "verificationNotes": [
         "Nuevo. 'Emprendedor' parece un rótulo genérico del directorio, no un nombre comercial verificable → no apto para producción sin nombre real."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
@@ -6563,26 +7829,42 @@
     },
     {
       "id": "punta-cacao",
-      "status": "uncertain",
-      "publishedInApp": false,
+      "status": "likely_active",
+      "publishedInApp": true,
       "withinZibata": true,
-      "confidence": "low",
-      "plazaConfidence": null,
+      "confidence": "high",
+      "plazaConfidence": "high",
       "name": "Punta Cacao",
       "previousName": null,
       "plazaId": "plaza-zielo",
-      "category": null,
-      "subcategory": null,
+      "category": "panaderia-y-reposteria",
+      "giros": [
+        "reposteria",
+        "cafeteria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Marca de chocolate; punto de venta en Plaza Zielo no confirmado.",
+      "reason": "Marca de chocolate; punto de venta en Plaza Zielo no confirmado. 2026-09-20: el propietario de la guía lo verifica en sitio. Sitio propio: tienda física en Plaza Zielo local 10.",
       "verificationNotes": [
-        "Marca de chocolate; no se confirmó un punto de venta en Plaza Zielo."
+        "Marca de chocolate; no se confirmó un punto de venta en Plaza Zielo.",
+        "Sitio propio: tienda física en Plaza Zielo local 10, Zibatá."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml",
           "level": 3,
@@ -6604,6 +7886,19 @@
           "supports": [
             "brand:chocolate sin azúcar (Querétaro)"
           ]
+        },
+        {
+          "url": "https://www.puntacacao.mx/contacto/",
+          "level": 1,
+          "type": "official-site",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "plaza:Zielo",
+            "local:10"
+          ]
         }
       ]
     },
@@ -6618,7 +7913,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6628,6 +7925,7 @@
       "verificationNotes": [
         "Candidato descartado: la ficha del propio medio lo ubica en El Refugio, fuera de Zibatá (la guía lo incluye por cercanía)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://zibatahoy.com/listing/corazon-de-maiz/",
@@ -6662,7 +7960,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6672,6 +7972,7 @@
       "verificationNotes": [
         "Candidato sin dirección ni redes localizables; no verificable."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
@@ -6696,7 +7997,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6706,6 +8009,7 @@
       "verificationNotes": [
         "Solo una ficha de directorio local; sin redes ni plaza (Circuito Tuna es vía residencial). No verificable."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://zibata.digital/categoria-unica/restaurantes/",
@@ -6731,7 +8035,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6741,6 +8047,7 @@
       "verificationNotes": [
         "Solo un resumen de búsqueda (sin URL propia) lo describe como restaurante saludable nuevo en Zibatá. No verificable."
       ],
+      "fieldVerifiedAt": null,
       "sources": []
     },
     {
@@ -6754,7 +8061,9 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6764,6 +8073,7 @@
       "verificationNotes": [
         "Descartado: tienda de servicios para fiestas y dulcería (la comida es accesoria) → fuera del alcance comida y bebida."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.facebook.com/p/Spiruleka-Paseo-Zibat%C3%A1-100063521470459/",
@@ -6798,7 +8108,9 @@
       "previousName": null,
       "plazaId": "distrito-nandu",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6808,6 +8120,7 @@
       "verificationNotes": [
         "Cafetería con apertura anunciada en Zibatá (resumen: Plaza Nandú, agosto 2026). La web oficial no lista sucursal Zibatá y no hay confirmación de apertura → COMING_SOON."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.instagram.com/reel/DXu5y9ctmBX/",
@@ -6852,7 +8165,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6862,6 +8177,7 @@
       "verificationNotes": [
         "Panadería franco-italiana; la página de contacto oficial devuelve 404 y la tienda de delivery no está disponible. Ubicación exacta (¿campus Anáhuac?) sin confirmar."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/panio-zibata/4wACRP4VT2qPp3MbYlWQGQ",
@@ -6898,7 +8214,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6908,6 +8226,7 @@
       "verificationNotes": [
         "Probable marca virtual de delivery que opera desde la cocina de La Chilakleta: no es un local independiente → descartado como lugar físico."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/las-chopeaditas-zibata/dkTeBECjUi2rxizer6JLFw",
@@ -6943,7 +8262,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6953,6 +8274,7 @@
       "verificationNotes": [
         "Tienda de delivery no disponible y sin otra evidencia. No verificable."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx-en/store/camelato-zibata/VMWqz8emSJeC2Rdd5zEOgA",
@@ -6978,7 +8300,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -6988,6 +8312,7 @@
       "verificationNotes": [
         "Barra de comida preparada dentro del supermercado HEB Zibatá. Excluido por la regla de supermercados (no es un lugar de comida independiente)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/meet-&-eat-by-heb-zibata/znX9K4FxXR2jX1jJPrcqOg",
@@ -7023,7 +8348,9 @@
       "previousName": null,
       "plazaId": "xentric-anahuac",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -7033,6 +8360,7 @@
       "verificationNotes": [
         "Solo un agregador de baja calidad. No verificable."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://nicelocal.com.mx/queretaro/restaurants/la_michoacana_-_zibata/",
@@ -7057,7 +8385,9 @@
       "previousName": null,
       "plazaId": "xentric-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -7067,6 +8397,7 @@
       "verificationNotes": [
         "No figura en el directorio oficial de la plaza. Evidencia débil."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/la-rue-qro-xentric-zibata/fSLcz1FwRP6VWVRVg3HXJA",
@@ -7102,7 +8433,9 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -7112,6 +8445,7 @@
       "verificationNotes": [
         "Marcado como cerrado temporalmente; no se incluye."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://restaurantguru.com/Plaza-Paseo-Zibata-Mexico-ml",
@@ -7128,26 +8462,40 @@
     },
     {
       "id": "reposteria-eddi-mena",
-      "status": "uncertain",
-      "publishedInApp": false,
-      "withinZibata": "uncertain",
-      "confidence": "low",
-      "plazaConfidence": null,
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
       "name": "Repostería Eddi Mena",
       "previousName": null,
       "plazaId": "paseo-zibata",
-      "category": null,
-      "subcategory": null,
+      "category": "panaderia-y-reposteria",
+      "giros": [
+        "reposteria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Dirección contradictoria (Paseo Zibatá vs. Anillo Vial Fray Junípero Serra).",
+      "reason": "Dirección contradictoria (Paseo Zibatá vs. Anillo Vial Fray Junípero Serra). 2026-09-20: el propietario de la guía lo verifica en sitio. Dirección publicada: Plaza Paseo Zibatá, planta baja, local J.",
       "verificationNotes": [
         "Dirección citada contradictoria: 'Plaza Paseo Zibatá, planta baja' junto con 'Anillo Vial Fray Junípero Serra km 7+200 local J' (fuera de Zibatá). No resuelto."
       ],
+      "fieldVerifiedAt": "2026-09-22",
       "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.instagram.com/eddimena/",
           "level": 2,
@@ -7182,26 +8530,41 @@
     },
     {
       "id": "marie-panaderia-artesanal",
-      "status": "uncertain",
-      "publishedInApp": false,
-      "withinZibata": "uncertain",
-      "confidence": "low",
-      "plazaConfidence": null,
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "medium",
       "name": "Marie Panadería Artesanal",
       "previousName": null,
-      "plazaId": null,
-      "category": null,
-      "subcategory": null,
+      "plazaId": "centro-zibata",
+      "category": "panaderia-y-reposteria",
+      "giros": [
+        "panaderia",
+        "reposteria"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "Solo una tienda de delivery.",
+      "reason": "Solo una tienda de delivery. 2026-09-20: el propietario de la guía lo verifica en sitio. Sucursal de Zibatá en Rappi; la plaza la confirma el propietario de la guía.",
       "verificationNotes": [
         "Solo plataforma de delivery, sin dirección ni redes."
       ],
+      "fieldVerifiedAt": "2026-09-21",
       "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
         {
           "url": "https://www.rappi.com.mx/restaurantes/1930202725-marie-panaderia-artesanal",
           "level": 3,
@@ -7225,7 +8588,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -7235,6 +8600,7 @@
       "verificationNotes": [
         "Probable traducción de 'Boba Station' (única tienda de té boba localizada en Zibatá): se consolida con boba-station."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
@@ -7259,7 +8625,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -7269,6 +8637,7 @@
       "verificationNotes": [
         "Sin ficha, dirección ni redes; posible referencia a Agave Grill (no confirmado)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
@@ -7278,6 +8647,1402 @@
           "checkedAt": "2026-09-14",
           "supports": [
             "'Parrilla de agave' (cortes y cocina mexicana de autor)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vete-a-la-burger",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Vete a la Burger",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "hamburguesas",
+      "giros": [
+        "hamburguesas",
+        "pizza",
+        "alitas"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Perfil oficial que se ubica en la Universidad Anáhuac Querétaro y sucursal de Zibatá en Rappi.",
+      "verificationNotes": [
+        "Perfil oficial con ubicación en la Universidad Anáhuac Querétaro; también aparece en Rappi como sucursal de Zibatá."
+      ],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/vetealaburgerqro/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "plaza:Anáhuac"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930056032-vete-a-la-burger",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "zone:Zibatá"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "karrusel-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Karrusel",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "casera",
+      "giros": [
+        "comida-casera",
+        "desayunos"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Cuenta oficial \"Karrusel Cafetería Anáhuac Qro\".",
+      "verificationNotes": [
+        "Cuenta oficial \"Karrusel Cafetería Anáhuac Qro\"."
+      ],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/karruselanahuacqro/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "plaza:Anáhuac"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tortas-la-guera-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Tortas La Güera Queretana",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "entre-panes",
+      "giros": [
+        "tortas"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Sitio oficial de la cadena y dirección publicada de la sucursal Anáhuac (Edificio E, Circuito Universidades I, local 10).",
+      "verificationNotes": [
+        "Cadena queretana con sucursal Anáhuac: \"Edificio E, Circuito Universidades I fracción 2, local 10\"."
+      ],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.tortaslagueraqueretana.com/",
+          "level": 1,
+          "type": "official-site",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence"
+          ]
+        },
+        {
+          "url": "https://quimiplastic.com.mx/tortas-la-g-era-queretana-suc-anahuac-8663558411141568214/",
+          "level": 4,
+          "type": "aggregator",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "plaza:Anáhuac",
+            "address:Edificio E, Circuito Universidades I, local 10"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "la-barra-verde-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "La Barra Verde",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "saludable",
+      "giros": [
+        "saludable",
+        "jugos-y-smoothies"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "La cadena publica un sitio por sucursal; el del campus es anahuac.labarraverde.com.",
+      "verificationNotes": [
+        "La cadena publica un sitio propio por sucursal; anahuac.labarraverde.com corresponde al campus."
+      ],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://anahuac.labarraverde.com/",
+          "level": 1,
+          "type": "official-site",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "plaza:Anáhuac"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/labarraverde.qro/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oma-bakery-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "OMA Bakery",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "panaderia-y-reposteria",
+      "giros": [
+        "panaderia",
+        "pasteleria",
+        "desayunos"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diegos-house-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Diego's House",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "italiana",
+      "giros": [
+        "pizza",
+        "pasta"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chilakiles-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Los Chikaliles",
+      "previousName": "Chilakiles",
+      "plazaId": "anahuac-queretaro",
+      "category": "desayunos-y-cafe",
+      "giros": [
+        "desayunos"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grunen-lush-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Grünen Lush",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "saludable",
+      "giros": [
+        "ensaladas",
+        "sandwiches",
+        "wraps"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente. La marca tiene otras sucursales en Querétaro, ninguna citada en el campus.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oakberry-xentric-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "OAKBERRY Açaí Bowls",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "saludable",
+      "giros": [
+        "acai"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Dirección publicada en plataformas de reparto: Plaza Xentric Anáhuac, Paseo de las Pitahayas 1-A230.",
+      "verificationNotes": [
+        "Dirección publicada: \"Plaza Xentric Anáhuac, Paseo de las Pitahayas 1-A230, Circuito Universidades, Zibatá\"."
+      ],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.ubereats.com/mx/store/oakberry-acai-bowls-zibata/Br30mP4YTneHGwhvgYLDvQ",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "plaza:Xentric Anáhuac"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930196539-oakberry-acai-bowls",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "burgerthoven-zibata",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "medium",
+      "name": "Burgerthoven",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "hamburguesas",
+      "giros": [
+        "hamburguesas"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Sucursal de Zibatá en Rappi (Paseo de las Pitahayas); la plaza la confirma el propietario de la guía.",
+      "verificationNotes": [
+        "Sucursal de Zibatá en Rappi (Paseo de las Pitahayas); la plaza exacta la aporta el propietario de la guía."
+      ],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930420692-burgerthoven",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "zone:Zibatá"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mr-bagel-zibata",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "medium",
+      "name": "Mr. Bagel",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "entre-panes",
+      "giros": [
+        "bagels"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Rappi cita \"Plaza Paseo Zibatá local 29\"; el propietario de la guía lo ubica hoy en Xentric Anáhuac.",
+      "verificationNotes": [
+        "Cierre indicado por Restaurant Guru y anuncio de cierre indefinido. Además, la dirección era Paseo Zibatá local 29, no Xentric Anáhuac (beta con plaza incorrecta)."
+      ],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://restaurantguru.com/Mr-Bagel-Santiago-de-Queretaro",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": "página actualizada 2024-02-06",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "status:'Permanently closed'",
+            "address:Plaza Paseo Zibatá local 29"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/Mr.BagelMx/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "cierre por tiempo indefinido (resumen)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "castore-mx-zibata",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "medium",
+      "name": "Castore MX Game & Snack",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "hamburguesas",
+      "giros": [
+        "hamburguesas",
+        "alitas",
+        "ramen"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Sitio propio con menú y pedidos; la plaza la aporta el propietario de la guía.",
+      "verificationNotes": [
+        "Sitio propio con menú y pedidos; la plaza la aporta el propietario de la guía."
+      ],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://castore-mx-game-snack.netlify.app/",
+          "level": 1,
+          "type": "official-site",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "la-lorenza-xentric-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "La Lorenza",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "tacos-y-antojitos",
+      "giros": [
+        "taqueria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nutrisa-xentric-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Nutrisa",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "postres-y-dulces",
+      "giros": [
+        "helados"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wake-cup-xentric-anahuac",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Wake Cup Panadería y Cafetería",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "panaderia-y-reposteria",
+      "giros": [
+        "panaderia",
+        "cafeteria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "henko-juice-bar",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Henko Juice Bar",
+      "previousName": null,
+      "plazaId": "xentric-anahuac",
+      "category": "bebidas",
+      "giros": [
+        "jugos-y-smoothies"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kekas-fritas-el-xavi",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Kekas Fritas el Xavi",
+      "previousName": null,
+      "plazaId": "xentric-zibata",
+      "category": "tacos-y-antojitos",
+      "giros": [
+        "quesadillas"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Dirección publicada: Xentric Zibatá Suites 18, Paseo Tunas.",
+      "verificationNotes": [
+        "Nombre comercial 'Kekas Fritas el Xavi'. No figura en el directorio oficial de Xentric Zibatá (sin fecha). Única fuente: delivery."
+      ],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930255452-kekas-fritas-el-xavi",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "branch:Zibatá",
+            "address:Xentric Zibatá Suites 18, Paseo Tunas, Plaza Xentric"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sazon-de-nassar",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "El Sazón de Nassar",
+      "previousName": null,
+      "plazaId": "xentric-zibata",
+      "category": "casera",
+      "giros": [
+        "comida-casera"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sweet-crepe-zibata",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Sweet Crepe",
+      "previousName": null,
+      "plazaId": "paseo-zibata",
+      "category": "postres-y-dulces",
+      "giros": [
+        "crepas"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sana-corazon",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Sana Corazón",
+      "previousName": null,
+      "plazaId": "paseo-zibata",
+      "category": "bar",
+      "giros": [
+        "bar"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "enzza-pizza-zibata",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Enzza Pizza",
+      "previousName": null,
+      "plazaId": "paseo-zibata",
+      "category": "italiana",
+      "giros": [
+        "pizza"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente. La marca tiene sucursal documentada en Tequisquiapan, no en Zibatá.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eme-cafe",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Eme Café",
+      "previousName": null,
+      "plazaId": "condesa",
+      "category": "desayunos-y-cafe",
+      "giros": [
+        "brunch",
+        "cafeteria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Dirección publicada: Av. Paseo de las Pitahayas 9-B, local 104-A, Plaza Condesa.",
+      "verificationNotes": [
+        "Dirección publicada: \"Av. Paseo de las Pitahayas 9-B, local 104-A, Plaza Condesa\"."
+      ],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/queretaro/restaurantes/delivery/656252-eme-cafe-qro",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "existence",
+            "plaza:Condesa",
+            "local:104-A"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "la-michoacana-de-mi-corazon",
+      "status": "removed",
+      "publishedInApp": false,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "La Michoacana de Mi Corazón",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "helados"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": "mykona-frozen-yogurt",
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. 2026-09-23: el local lo ocupa ahora Myköna Frozen Yogurt; el registro se conserva como historial del local.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-23",
+      "sources": [
+        {
+          "url": "campo:2026-09-23",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-23",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mykona-frozen-yogurt",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Myköna Frozen Yogurt",
+      "previousName": "La Michoacana de Mi Corazón",
+      "plazaId": "condesa",
+      "category": "postres-y-dulces",
+      "giros": [
+        "helados"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Abre en el local que ocupaba La Michoacana de Mi Corazón (Plaza Condesa). Datos aportados por el propietario de la guía el 2026-09-23: sitio propio, redes, teléfono, horario y ubicación exacta.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-23",
+      "sources": [
+        {
+          "url": "campo:2026-09-23",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-23",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "enchilokos",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Enchilokos",
+      "previousName": null,
+      "plazaId": "condesa",
+      "category": "botanas",
+      "giros": [
+        "papas-preparadas"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "enoff-zibata",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Enoff",
+      "previousName": null,
+      "plazaId": "plaza-loop",
+      "category": "desayunos-y-cafe",
+      "giros": [
+        "brunch",
+        "cafeteria",
+        "reposteria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente. 2026-09-20: el propietario corrige su giro (cafetería y brunch, no bowls ni sándwiches).",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nomad-zibata",
+      "status": "likely_active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "NOMAD",
+      "previousName": null,
+      "plazaId": "plaza-loop",
+      "category": "saludable",
+      "giros": [
+        "alto-en-proteina",
+        "jugos-y-smoothies"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. Sin presencia pública localizable todavía: se publica con la verificación de campo como fuente. 2026-09-20: el propietario aporta su giro y descripción.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocuna",
+      "status": "coming_soon",
+      "publishedInApp": false,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": null,
+      "name": "Ocuna",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "otros"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Reportado por el propietario de la guía el 2026-09-20 como local de Paseo Zibatá que todavía no abre. Se registra como próximo para no perderlo; no se publica hasta que abra y haya con qué describirlo.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "luka-anahuac",
+      "status": "active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Luka",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "asiatica",
+      "giros": [
+        "poke"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Sucursal confirmada por el propietario de la guía el 2026-09-20: la marca opera en el campus Anáhuac además de su otra plaza. Es un registro aparte porque cada sucursal tiene su propia ubicación; los enlaces son los de la marca.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sinforosa-anahuac",
+      "status": "active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Sinforosa Café",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "desayunos-y-cafe",
+      "giros": [
+        "brunch",
+        "cafeteria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Sucursal confirmada por el propietario de la guía el 2026-09-20: la marca opera en el campus Anáhuac además de su otra plaza. Es un registro aparte porque cada sucursal tiene su propia ubicación; los enlaces son los de la marca.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "starbucks-anahuac",
+      "status": "active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Starbucks",
+      "previousName": null,
+      "plazaId": "anahuac-queretaro",
+      "category": "desayunos-y-cafe",
+      "giros": [
+        "cafeteria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Sucursal confirmada por el propietario de la guía el 2026-09-20: la marca opera en el campus Anáhuac además de su otra plaza. Es un registro aparte porque cada sucursal tiene su propia ubicación; los enlaces son los de la marca.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-21",
+      "sources": [
+        {
+          "url": "campo:2026-09-21",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-21",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "baguettia-plaza-luna",
+      "status": "active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Baguettia",
+      "previousName": null,
+      "plazaId": "plaza-luna",
+      "category": "entre-panes",
+      "giros": [
+        "baguettes"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Local de Plaza Luna reportado y verificado por el propietario de la guía (2026-09-16 y 2026-09-20). Sin fuente pública localizada: se publica con la verificación de campo, sin descripción hasta confirmarla.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "smoothie-lab-plaza-luna",
+      "status": "active",
+      "publishedInApp": true,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Smoothie Lab",
+      "previousName": null,
+      "plazaId": "plaza-luna",
+      "category": "bebidas",
+      "giros": [
+        "jugos-y-smoothies",
+        "alto-en-proteina"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Local de Plaza Luna reportado por el propietario de la guía con el enlace de Google Maps del propio local (2026-09-20). Las coordenadas salen de la redirección de ese enlace, sin consultar contenido de Google.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-22",
+      "sources": [
+        {
+          "url": "campo:2026-09-22",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-22",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
           ]
         }
       ]

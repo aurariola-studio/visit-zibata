@@ -9,6 +9,19 @@
   inset: 0;
 }
 
+/*
+ * Franja de la guía: abajo a la izquierda, justo encima de la atribución de OpenStreetMap (2,25 rem
+ * de alto con su margen) para que las dos se lean como un pie sin llegar a tocarse, y lejos de los
+ * controles del mapa.
+ */
+.guideBar {
+  position: absolute;
+  left: var(--space-4);
+  bottom: 2.75rem;
+  z-index: var(--z-map-ui);
+  max-width: min(44rem, calc(100% - var(--controls-right, 5rem) - 3rem));
+}
+
 .mapFallback {
   position: absolute;
   inset: 0;
@@ -27,6 +40,7 @@
   z-index: var(--z-map-ui);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-3);
   pointer-events: none;
   transition: right var(--duration-slow) var(--ease-out);
@@ -40,12 +54,29 @@
   pointer-events: none;
 }
 
+/*
+ * Primera fila de la barra: la tarjeta de búsqueda y, suelto en la otra punta, tu sello. El alto de
+ * la fila sale de una sola cuenta (el alto de los controles + el aire de la tarjeta), y de ahí lo
+ * toma también el círculo del perfil: los dos miden lo mismo en cualquier pantalla.
+ */
+.topRow {
+  --card-pad: 0.45rem;
+  --topbar-height: calc(2.75rem + 2 * var(--card-pad));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+}
+
 .searchCard {
+  flex: 1 1 auto;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  width: min(100%, 40rem);
-  padding: 0.45rem 0.5rem 0.45rem 0.6rem;
+  max-width: 46rem;
+  padding: var(--card-pad) 0.5rem var(--card-pad) 0.6rem;
   border-radius: var(--radius-xl);
   background: var(--color-surface);
   backdrop-filter: var(--blur-surface);
@@ -85,9 +116,12 @@
   gap: var(--space-2);
 }
 
+.app[data-layout="mobile"] .topRow {
+  --card-pad: 0.35rem;
+}
+
 .app[data-layout="mobile"] .searchCard {
-  width: 100%;
-  padding: 0.35rem;
+  padding: var(--card-pad);
   gap: var(--space-2);
 }
 

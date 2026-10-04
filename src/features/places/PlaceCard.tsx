@@ -3,9 +3,9 @@ import { useCatalog } from '../../data/CatalogContext.tsx'
 import { localized, t } from '../../i18n/index.ts'
 import type { Place } from '../../types/domain.ts'
 import { FavoriteButton } from '../favorites/FavoriteButton.tsx'
-import { OpenStatus } from './OpenStatus.tsx'
 import styles from './PlaceCard.module.css'
 import { PlacePicture } from './PlacePicture.tsx'
+import { girosOf, girosSecundariosOf } from './placeIcon.ts'
 
 interface PlaceCardProps {
   place: Place
@@ -16,19 +16,37 @@ interface PlaceCardProps {
 
 export function PlaceCard({ place, onOpen, showPlaza = false }: PlaceCardProps) {
   const catalog = useCatalog()
-  const category = catalog.categoryById.get(place.category)
-  const subcategory = category?.subcategories.find((s) => s.id === place.subcategory)
   const plaza = catalog.plazaById.get(place.plazaId)
-  const categoryLabel = subcategory
-    ? localized(subcategory.label)
-    : category
-      ? localized(category.label)
-      : ''
+  // En la lista, el icono es de los principales; los secundarios solo se leen.
+  const giros = girosOf(place, catalog)
+  const secundarios = girosSecundariosOf(place, catalog)
+  const iconos = giros.map((giro) => giro.icon)
+  const todos = [...giros, ...secundarios]
+  /*
+   * Aquí solo hay una línea: se nombran los giros que caben en ella, siempre al menos uno, y el
+   * resto se cuenta ("Alitas · Hamburguesas +1"). El presupuesto va en letras y no en píxeles a
+   * propósito, porque medir el ancho real obligaría a observar el tamaño de cada tarjeta al
+   * pintar; veinticinco es lo que entra en la línea de un teléfono de 375 px aun con letras anchas.
+   * Un tope fijo de dos nombres no bastaba: "Jugos y Smoothies · Alto en Proteína" son dos y no
+   * caben. La ficha los enseña todos, y el title lleva la lista entera.
+   */
+  const ANCHO_LINEA = 25
+  const nombres: string[] = []
+  let largo = 0
+  for (const giro of todos) {
+    const nombre = localized(giro.label)
+    const suma = nombres.length > 0 ? largo + 3 + nombre.length : nombre.length
+    if (nombres.length > 0 && suma > ANCHO_LINEA) break
+    nombres.push(nombre)
+    largo = suma
+  }
+  const categoryLabel = nombres.join(' · ')
+  const resto = todos.length - nombres.length
+  const tituloCompleto = todos.map((giro) => localized(giro.label)).join(' · ')
 
-  const meta = [
-    showPlaza ? plaza?.name : null,
-    place.localNumber ? t('place.localNumber', { number: place.localNumber }) : null,
-  ].filter(Boolean)
+  // El número de local y el horario solo los publica una minoría: en la lista crearían filas desiguales
+  // (unas con dato, la mayoría sin él). Se muestran en la ficha, donde el dato se entiende con su fuente.
+  const meta = showPlaza && plaza ? plaza.name : null
 
   return (
     <article className={styles.card}>
@@ -41,9 +59,8 @@ export function PlaceCard({ place, onOpen, showPlaza = false }: PlaceCardProps) 
         <span className={styles.thumb}>
           <PlacePicture
             photo={place.photos[0]}
-            categoryId={place.category}
-            categoryIcon={category?.icon ?? 'utensils-crossed'}
-            categoryLabel={categoryLabel}
+            category={catalog.categoryOfGiro.get(place.giros[0] ?? '')}
+            icons={iconos}
             sizes="64px"
             ratio="1 / 1"
             illustrationSize="sm"
@@ -51,12 +68,14 @@ export function PlaceCard({ place, onOpen, showPlaza = false }: PlaceCardProps) 
         </span>
         <span className={styles.body}>
           <span className={styles.name}>{place.name}</span>
-          <span className={styles.category}>
-            <CategoryIcon name={category?.icon ?? 'utensils-crossed'} size={14} strokeWidth={2} />
-            {categoryLabel}
-            {meta.length > 0 && <span className={styles.meta}> · {meta.join(' · ')}</span>}
+          <span className={styles.category} title={tituloCompleto}>
+            {giros.map((giro) => (
+              <CategoryIcon key={giro.id} name={giro.icon} size={14} strokeWidth={2} />
+            ))}
+            <span className={styles.categoryText}>{categoryLabel}</span>
+            {resto > 0 && <span className={styles.mas}>+{resto}</span>}
+            {meta && <span className={styles.meta}> · {meta}</span>}
           </span>
-          <OpenStatus hours={place.hours} />
         </span>
       </button>
       <FavoriteButton placeId={place.id} placeName={place.name} size="sm" />

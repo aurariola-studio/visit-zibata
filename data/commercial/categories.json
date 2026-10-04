@@ -6,10 +6,11 @@
     {
       "id": "desayunos-y-cafe",
       "label": {
-        "es": "Desayunos y café",
-        "en": "Breakfast & coffee"
+        "es": "Desayunos y Café",
+        "en": "Breakfast & Coffee"
       },
       "icon": "coffee",
+      "hue": 32,
       "order": 10,
       "synonyms": [
         "café",
@@ -22,40 +23,161 @@
         "espresso",
         "latte"
       ],
-      "subcategories": [
+      "giros": [
         {
-          "id": "cafe-de-especialidad",
+          "id": "cafeteria",
           "label": {
-            "es": "Café de especialidad"
+            "es": "Café",
+            "en": "Coffee"
           },
+          "icon": "coffee",
           "synonyms": [
-            "espresso",
             "americano",
-            "capuchino"
+            "cafetería",
+            "café",
+            "capuchino",
+            "coffee shop",
+            "espresso",
+            "filtrado",
+            "frappé",
+            "latte",
+            "métodos"
           ]
         },
         {
-          "id": "panaderia",
+          "id": "desayunos",
           "label": {
-            "es": "Panadería"
+            "es": "Desayunos",
+            "en": "Breakfast"
           },
+          "icon": "egg-fried",
           "synonyms": [
-            "pan",
-            "bakery",
-            "pastelería",
-            "croissant"
+            "desayunar",
+            "almuerzo",
+            "chilaquiles",
+            "huevos",
+            "molletes",
+            "enmoladas"
           ]
         },
         {
           "id": "brunch",
           "label": {
-            "es": "Brunch"
+            "es": "Brunch",
+            "en": "Brunch"
           },
+          "icon": "hotcakes",
           "synonyms": [
-            "chilaquiles",
+            "brunch",
+            "avocado toast",
             "hot cakes",
-            "waffles",
-            "huevos"
+            "mimosa",
+            "pan y café"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tacos-y-antojitos",
+      "label": {
+        "es": "Tacos y Antojitos",
+        "en": "Tacos & Street Food"
+      },
+      "icon": "taco",
+      "hue": 18,
+      "order": 20,
+      "synonyms": [
+        "tacos",
+        "taquería",
+        "antojitos",
+        "quesadillas",
+        "gorditas",
+        "memelas",
+        "sopes",
+        "birria",
+        "pastor",
+        "cecina"
+      ],
+      "giros": [
+        {
+          "id": "taqueria",
+          "label": {
+            "es": "Tacos",
+            "en": "Tacos"
+          },
+          "icon": "taco",
+          "synonyms": [
+            "taquería",
+            "pastor",
+            "suadero",
+            "trompo",
+            "bistec",
+            "cecina"
+          ],
+          "general": true
+        },
+        {
+          "id": "antojitos-de-masa",
+          "label": {
+            "es": "Antojitos",
+            "en": "Street Snacks"
+          },
+          "icon": "antojito",
+          "synonyms": [
+            "antojitos",
+            "gorditas",
+            "sopes",
+            "tlacoyos",
+            "huaraches"
+          ]
+        },
+        {
+          "id": "arepas",
+          "label": {
+            "es": "Arepas",
+            "en": "Arepas"
+          },
+          "icon": "arepa",
+          "synonyms": [
+            "venezolana",
+            "arepera"
+          ]
+        },
+        {
+          "id": "memelas",
+          "label": {
+            "es": "Memelas",
+            "en": "Memelas"
+          },
+          "icon": "memela",
+          "synonyms": [
+            "memelas",
+            "memela",
+            "tlacoyos"
+          ]
+        },
+        {
+          "id": "quesadillas",
+          "label": {
+            "es": "Quesadillas",
+            "en": "Quesadillas"
+          },
+          "icon": "quesadilla",
+          "synonyms": [
+            "quesadillas",
+            "kekas",
+            "quesadilla frita"
+          ]
+        },
+        {
+          "id": "empanadas",
+          "label": {
+            "es": "Empanadas",
+            "en": "Empanadas"
+          },
+          "icon": "empanada",
+          "synonyms": [
+            "empanada"
           ]
         }
       ]
@@ -66,94 +188,122 @@
         "es": "Mexicana",
         "en": "Mexican"
       },
-      "icon": "chef-hat",
-      "order": 20,
+      "icon": "molcajete",
+      "hue": 4,
+      "order": 30,
       "synonyms": [
         "comida mexicana",
         "cocina mexicana",
         "tradicional",
-        "mole",
-        "enchiladas",
-        "pozole"
+        "fonda",
+        "antojitos",
+        "guisados"
       ],
-      "subcategories": [
+      "giros": [
         {
-          "id": "cocina-regional",
+          "id": "cocina-mexicana",
           "label": {
-            "es": "Cocina regional"
+            "es": "Mexicana",
+            "en": "Mexican"
           },
+          "icon": "molcajete",
           "synonyms": [
-            "oaxaqueña",
-            "yucateca",
-            "poblana"
+            "fonda",
+            "mole",
+            "enchiladas",
+            "tradicional"
+          ],
+          "general": true
+        },
+        {
+          "id": "birria",
+          "label": {
+            "es": "Birria",
+            "en": "Birria"
+          },
+          "icon": "birria",
+          "synonyms": [
+            "consomé",
+            "quesabirria",
+            "birriería"
+          ]
+        },
+        {
+          "id": "carnitas",
+          "label": {
+            "es": "Carnitas",
+            "en": "Carnitas"
+          },
+          "icon": "cerdo",
+          "synonyms": [
+            "michoacanas",
+            "cerdo",
+            "chicharrón"
+          ]
+        },
+        {
+          "id": "cecina",
+          "label": {
+            "es": "Cecina",
+            "en": "Cecina"
+          },
+          "icon": "cecina",
+          "synonyms": [
+            "cecina",
+            "carne seca"
           ]
         }
       ]
     },
     {
-      "id": "tacos-y-antojitos",
+      "id": "carnes-y-parrilla",
       "label": {
-        "es": "Tacos y antojitos",
-        "en": "Tacos & street food"
+        "es": "Carnes y Parrilla",
+        "en": "Grill & Steak"
       },
-      "icon": "taco",
-      "order": 30,
+      "icon": "beef",
+      "hue": 350,
+      "order": 35,
       "synonyms": [
-        "tacos",
-        "taquería",
-        "antojitos",
-        "quesadillas",
-        "gorditas",
-        "memelas",
-        "sopes",
-        "tortas",
-        "birria",
-        "pastor",
-        "cecina"
+        "carne",
+        "carnes",
+        "cortes",
+        "parrilla",
+        "asador",
+        "arrachera",
+        "steak",
+        "argentina",
+        "grill"
       ],
-      "subcategories": [
+      "giros": [
         {
-          "id": "tacos",
+          "id": "asador",
           "label": {
-            "es": "Tacos"
+            "es": "Asador y Cortes",
+            "en": "Grill & Steak"
           },
+          "icon": "beef",
           "synonyms": [
-            "taquería",
-            "pastor",
-            "suadero",
-            "trompo"
-          ]
+            "cortes",
+            "rib eye",
+            "arrachera",
+            "asador",
+            "steak"
+          ],
+          "general": true
         },
         {
-          "id": "birria",
+          "id": "parrilla-argentina",
           "label": {
-            "es": "Birria"
+            "es": "Parrilla Argentina",
+            "en": "Argentine Grill"
           },
+          "icon": "flame",
           "synonyms": [
-            "consomé",
-            "quesabirria"
-          ]
-        },
-        {
-          "id": "arepas",
-          "label": {
-            "es": "Arepas"
-          },
-          "synonyms": [
-            "venezolana",
-            "arepera"
-          ]
-        },
-        {
-          "id": "esquites-y-snacks",
-          "label": {
-            "es": "Esquites y snacks"
-          },
-          "synonyms": [
-            "esquites",
-            "elotes",
-            "gaspachos",
-            "snacks"
+            "argentina",
+            "empanadas",
+            "chimichurri",
+            "parrillada"
           ]
         }
       ]
@@ -164,7 +314,8 @@
         "es": "Mariscos",
         "en": "Seafood"
       },
-      "icon": "fish",
+      "icon": "shrimp",
+      "hue": 192,
       "order": 40,
       "synonyms": [
         "pescado",
@@ -176,12 +327,29 @@
         "seafood",
         "marisquería"
       ],
-      "subcategories": [
+      "giros": [
         {
-          "id": "ceviche",
+          "id": "marisqueria",
           "label": {
-            "es": "Ceviches"
+            "es": "Mariscos",
+            "en": "Seafood"
           },
+          "icon": "shrimp",
+          "synonyms": [
+            "mariscos",
+            "camarones",
+            "aguachile",
+            "cóctel de camarón"
+          ],
+          "general": true
+        },
+        {
+          "id": "ceviches",
+          "label": {
+            "es": "Ceviches",
+            "en": "Ceviche"
+          },
+          "icon": "fish",
           "synonyms": [
             "cebiche",
             "aguachile",
@@ -191,80 +359,82 @@
       ]
     },
     {
-      "id": "carne-y-parrilla",
-      "label": {
-        "es": "Carne y parrilla",
-        "en": "Grill & steakhouse"
-      },
-      "icon": "beef",
-      "order": 50,
-      "synonyms": [
-        "carne",
-        "cortes",
-        "parrilla",
-        "asador",
-        "arrachera",
-        "steak",
-        "argentina",
-        "carnitas",
-        "grill"
-      ],
-      "subcategories": [
-        {
-          "id": "cortes",
-          "label": {
-            "es": "Cortes"
-          },
-          "synonyms": [
-            "rib eye",
-            "arrachera",
-            "asador"
-          ]
-        },
-        {
-          "id": "carnitas",
-          "label": {
-            "es": "Carnitas"
-          },
-          "synonyms": [
-            "michoacanas",
-            "cerdo"
-          ]
-        }
-      ]
-    },
-    {
       "id": "hamburguesas",
       "label": {
-        "es": "Hamburguesas",
-        "en": "Burgers"
+        "es": "Comida Rápida",
+        "en": "Fast Food"
       },
       "icon": "hamburger",
-      "order": 60,
+      "hue": 44,
+      "order": 50,
       "synonyms": [
         "hamburguesa",
         "burger",
         "burgers",
         "papas",
         "hot dogs",
-        "comida rápida"
+        "comida rápida",
+        "smash",
+        "alitas",
+        "wings",
+        "boneless"
       ],
-      "subcategories": []
-    },
-    {
-      "id": "pizza",
-      "label": {
-        "es": "Pizza",
-        "en": "Pizza"
-      },
-      "icon": "pizza",
-      "order": 70,
-      "synonyms": [
-        "pizzas",
-        "pizzería",
-        "calzone"
-      ],
-      "subcategories": []
+      "giros": [
+        {
+          "id": "hamburguesas",
+          "label": {
+            "es": "Hamburguesas",
+            "en": "Burgers"
+          },
+          "icon": "hamburger",
+          "synonyms": [
+            "hamburguesa",
+            "burger",
+            "smash",
+            "papas"
+          ],
+          "general": true
+        },
+        {
+          "id": "alitas",
+          "label": {
+            "es": "Alitas",
+            "en": "Wings"
+          },
+          "icon": "drumstick",
+          "synonyms": [
+            "alitas",
+            "wings",
+            "boneless"
+          ]
+        },
+        {
+          "id": "papas-fritas",
+          "label": {
+            "es": "Papas Fritas",
+            "en": "Fries"
+          },
+          "icon": "papas-fritas",
+          "synonyms": [
+            "papas",
+            "papas a la francesa",
+            "fries"
+          ]
+        },
+        {
+          "id": "hot-dogs",
+          "label": {
+            "es": "Hot Dogs",
+            "en": "Hot Dogs"
+          },
+          "icon": "hot-dog",
+          "synonyms": [
+            "hot dog",
+            "jocho",
+            "perro caliente"
+          ]
+        }
+      ]
     },
     {
       "id": "italiana",
@@ -272,25 +442,64 @@
         "es": "Italiana",
         "en": "Italian"
       },
-      "icon": "pasta",
-      "order": 80,
+      "icon": "italiana",
+      "hue": 12,
+      "order": 60,
       "synonyms": [
-        "pasta",
-        "comida italiana",
-        "risotto",
+        "antipasto",
+        "calzone",
+        "italiana",
+        "italiano",
         "lasaña",
+        "pasta",
+        "pastas",
+        "pizza",
+        "pizzas",
+        "pizzería",
+        "risotto",
         "trattoria"
       ],
-      "subcategories": [
+      "giros": [
         {
-          "id": "pasta-fresca",
+          "id": "cocina-italiana",
           "label": {
-            "es": "Pasta fresca"
+            "es": "Italiana",
+            "en": "Italian"
           },
+          "icon": "italiana",
+          "synonyms": [
+            "italiana",
+            "trattoria",
+            "risotto"
+          ],
+          "general": true
+        },
+        {
+          "id": "pizza",
+          "label": {
+            "es": "Pizza",
+            "en": "Pizza"
+          },
+          "icon": "pizza",
+          "synonyms": [
+            "pizzas",
+            "pizzería",
+            "calzone"
+          ]
+        },
+        {
+          "id": "pasta",
+          "label": {
+            "es": "Pasta",
+            "en": "Pasta"
+          },
+          "icon": "pasta",
           "synonyms": [
             "pasta",
+            "pastas",
             "ravioles",
-            "fettuccine"
+            "fettuccine",
+            "lasaña"
           ]
         }
       ]
@@ -302,7 +511,8 @@
         "en": "Asian"
       },
       "icon": "chopsticks",
-      "order": 90,
+      "hue": 228,
+      "order": 70,
       "synonyms": [
         "sushi",
         "ramen",
@@ -312,229 +522,491 @@
         "thai",
         "oriental",
         "rollos",
-        "poke"
+        "noodles"
       ],
-      "subcategories": [
+      "giros": [
+        {
+          "id": "cocina-asiatica",
+          "label": {
+            "es": "Asiática",
+            "en": "Asian"
+          },
+          "icon": "chopsticks",
+          "synonyms": [
+            "japonesa",
+            "ramen",
+            "yakimeshi",
+            "teppanyaki"
+          ],
+          "general": true
+        },
         {
           "id": "sushi",
           "label": {
-            "es": "Sushi"
+            "es": "Sushi",
+            "en": "Sushi"
           },
+          "icon": "nigiri",
           "synonyms": [
             "rollos",
             "nigiri",
-            "japonesa"
+            "makis",
+            "sashimi"
           ]
         },
         {
-          "id": "ramen",
-          "label": {
-            "es": "Ramen"
-          },
-          "synonyms": [
-            "sopa japonesa",
-            "noodles",
-            "fideos"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "saludable-y-bowls",
-      "label": {
-        "es": "Saludable y bowls",
-        "en": "Healthy & bowls"
-      },
-      "icon": "salad",
-      "order": 100,
-      "synonyms": [
-        "saludable",
-        "healthy",
-        "ensaladas",
-        "bowls",
-        "poke",
-        "vegano",
-        "vegetariano",
-        "fit",
-        "light"
-      ],
-      "subcategories": [
-        {
           "id": "poke",
           "label": {
-            "es": "Poke"
+            "es": "Poke",
+            "en": "Poke"
           },
+          "icon": "bowl",
           "synonyms": [
             "poke bowl",
             "hawaiana"
           ]
         },
         {
-          "id": "ensaladas",
+          "id": "ramen",
           "label": {
-            "es": "Ensaladas"
+            "es": "Ramen",
+            "en": "Ramen"
           },
+          "icon": "ramen",
           "synonyms": [
-            "salad",
-            "verde"
+            "ramen",
+            "fideos",
+            "noodles",
+            "sopa japonesa"
           ]
         }
       ]
     },
     {
-      "id": "sandwiches-y-deli",
+      "id": "entre-panes",
       "label": {
-        "es": "Sándwiches y deli",
-        "en": "Sandwiches & deli"
+        "es": "Entre Panes",
+        "en": "Sandwiches & Wraps"
       },
-      "icon": "sandwich",
-      "order": 110,
+      "icon": "pan",
+      "hue": 268,
+      "order": 75,
       "synonyms": [
+        "torta",
+        "tortas",
         "sándwich",
         "sandwich",
-        "tortas",
-        "bagels",
         "baguettes",
+        "bagels",
         "kebab",
+        "paninis",
         "wraps",
         "deli",
-        "subs"
+        "subs",
+        "lonches",
+        "pan"
       ],
-      "subcategories": [
+      "giros": [
+        {
+          "id": "entre-panes",
+          "label": {
+            "es": "Entre Panes",
+            "en": "Sandwiches & Wraps"
+          },
+          "icon": "pan",
+          "synonyms": [
+            "pan",
+            "bocadillo"
+          ],
+          "general": true
+        },
         {
           "id": "tortas",
           "label": {
-            "es": "Tortas"
+            "es": "Tortas",
+            "en": "Tortas"
           },
+          "icon": "torta",
           "synonyms": [
             "torta",
-            "lonches"
+            "lonches",
+            "bolillo",
+            "telera"
+          ]
+        },
+        {
+          "id": "sandwiches",
+          "label": {
+            "es": "Sándwiches",
+            "en": "Sandwiches"
+          },
+          "icon": "sandwich",
+          "synonyms": [
+            "sándwich",
+            "sub",
+            "subs",
+            "deli"
+          ]
+        },
+        {
+          "id": "baguettes",
+          "label": {
+            "es": "Baguettes",
+            "en": "Baguettes"
+          },
+          "icon": "baguette",
+          "synonyms": [
+            "baguette",
+            "baguettes",
+            "francés",
+            "fast french"
           ]
         },
         {
           "id": "bagels",
           "label": {
-            "es": "Bagels"
+            "es": "Bagels",
+            "en": "Bagels"
           },
+          "icon": "bagel",
           "synonyms": [
-            "bagel"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "pollo",
-      "label": {
-        "es": "Pollo y alitas",
-        "en": "Chicken"
-      },
-      "icon": "drumstick",
-      "order": 120,
-      "synonyms": [
-        "pollo frito",
-        "pollo rostizado",
-        "rosticería",
-        "alitas",
-        "chicken",
-        "boneless"
-      ],
-      "subcategories": [
-        {
-          "id": "rosticeria",
-          "label": {
-            "es": "Rosticería"
-          },
-          "synonyms": [
-            "pollo rostizado",
-            "asado"
+            "bagel",
+            "bagels"
           ]
         },
         {
-          "id": "alitas",
+          "id": "kebabs",
           "label": {
-            "es": "Alitas"
+            "es": "Kebabs",
+            "en": "Kebabs"
           },
+          "icon": "kebab",
           "synonyms": [
-            "alitas",
-            "wings",
-            "boneless"
+            "kebab",
+            "shawarma",
+            "döner"
+          ]
+        },
+        {
+          "id": "wraps",
+          "label": {
+            "es": "Wraps",
+            "en": "Wraps"
+          },
+          "icon": "wrap",
+          "synonyms": [
+            "wrap",
+            "burrito"
           ]
         }
       ]
     },
     {
-      "id": "bistro",
+      "id": "saludable",
       "label": {
-        "es": "Bistró",
-        "en": "Bistro"
+        "es": "Saludable",
+        "en": "Healthy"
       },
-      "icon": "utensils",
-      "order": 130,
+      "icon": "leafy-green",
+      "hue": 104,
+      "order": 80,
       "synonyms": [
-        "bistro",
-        "restaurante",
-        "comida internacional",
-        "cocina de autor",
-        "cena",
-        "comida"
+        "saludable",
+        "healthy",
+        "bowls",
+        "vegano",
+        "vegetariano",
+        "fit",
+        "light",
+        "ensaladas",
+        "açaí",
+        "proteína"
       ],
-      "subcategories": []
+      "giros": [
+        {
+          "id": "saludable",
+          "label": {
+            "es": "Saludable",
+            "en": "Healthy"
+          },
+          "icon": "leafy-green",
+          "synonyms": [
+            "saludable",
+            "healthy",
+            "fit",
+            "light",
+            "vegano",
+            "vegetariano"
+          ],
+          "general": true
+        },
+        {
+          "id": "ensaladas",
+          "label": {
+            "es": "Ensaladas",
+            "en": "Salads"
+          },
+          "icon": "salad",
+          "synonyms": [
+            "ensalada",
+            "salad",
+            "verde"
+          ]
+        },
+        {
+          "id": "acai",
+          "label": {
+            "es": "Açaí",
+            "en": "Açaí"
+          },
+          "icon": "acai",
+          "synonyms": [
+            "açaí",
+            "acai",
+            "pitaya",
+            "smoothie bowl"
+          ]
+        },
+        {
+          "id": "bowls-de-fruta",
+          "label": {
+            "es": "Bowls de Fruta",
+            "en": "Fruit Bowls"
+          },
+          "icon": "fruta",
+          "synonyms": [
+            "bowl de fruta",
+            "fruta",
+            "granola",
+            "yogurt"
+          ]
+        },
+        {
+          "id": "alto-en-proteina",
+          "label": {
+            "es": "Alto en Proteína",
+            "en": "High Protein"
+          },
+          "icon": "dumbbell",
+          "synonyms": [
+            "proteína",
+            "protein",
+            "fit",
+            "gym"
+          ]
+        }
+      ]
     },
     {
-      "id": "postres",
+      "id": "panaderia-y-reposteria",
       "label": {
-        "es": "Postres",
-        "en": "Desserts"
+        "es": "Panadería y Repostería",
+        "en": "Bakery & Pastry"
       },
-      "icon": "ice-cream",
-      "order": 140,
+      "icon": "croissant",
+      "hue": 38,
+      "order": 85,
       "synonyms": [
-        "postre",
-        "helado",
-        "helados",
-        "nieve",
-        "paletas",
-        "churros",
-        "chocolate",
+        "pan",
+        "panadería",
+        "bakery",
         "pastel",
-        "yogurt",
-        "dulce",
-        "ice cream"
+        "pastelería",
+        "repostería",
+        "postres",
+        "tartas",
+        "galletas"
       ],
-      "subcategories": [
+      "giros": [
         {
-          "id": "helados",
+          "id": "panaderia",
           "label": {
-            "es": "Helados y nieves"
+            "es": "Panadería",
+            "en": "Bakery"
           },
+          "icon": "croissant",
           "synonyms": [
-            "helado",
-            "nieve",
-            "paletas",
-            "ice cream",
-            "gelato"
-          ]
-        },
-        {
-          "id": "churros",
-          "label": {
-            "es": "Churros y chocolate"
-          },
-          "synonyms": [
-            "churrería",
-            "chocolate caliente"
-          ]
+            "pan",
+            "bakery",
+            "croissant",
+            "pan dulce",
+            "conchas"
+          ],
+          "general": true
         },
         {
           "id": "pasteleria",
           "label": {
-            "es": "Pastelería"
+            "es": "Pastelería",
+            "en": "Cakes"
           },
+          "icon": "cake-slice",
           "synonyms": [
             "pastel",
             "pasteles",
-            "pastelería",
-            "repostería"
+            "repostería",
+            "galletas"
+          ]
+        },
+        {
+          "id": "reposteria",
+          "label": {
+            "es": "Repostería",
+            "en": "Pastry"
+          },
+          "icon": "cupcake",
+          "synonyms": [
+            "repostería",
+            "postres",
+            "pasteles por encargo",
+            "galletas",
+            "brownies"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "botanas",
+      "label": {
+        "es": "Para Picar",
+        "en": "Snacks & Bites"
+      },
+      "icon": "popcorn",
+      "hue": 56,
+      "order": 86,
+      "synonyms": [
+        "botana",
+        "botanas",
+        "snack",
+        "snacks",
+        "para picar",
+        "papas",
+        "elotes",
+        "esquites",
+        "gaspachos"
+      ],
+      "giros": [
+        {
+          "id": "botanas",
+          "label": {
+            "es": "Botanas",
+            "en": "Snacks"
+          },
+          "icon": "popcorn",
+          "synonyms": [
+            "botana",
+            "botanas",
+            "snack",
+            "para picar",
+            "antojo"
+          ],
+          "general": true
+        },
+        {
+          "id": "papas-preparadas",
+          "label": {
+            "es": "Papas Preparadas",
+            "en": "Loaded Chips"
+          },
+          "icon": "papas",
+          "synonyms": [
+            "papas",
+            "enchiladas",
+            "chicharrones",
+            "botana"
+          ]
+        },
+        {
+          "id": "elotes-y-esquites",
+          "label": {
+            "es": "Elotes y Esquites",
+            "en": "Elotes & Esquites"
+          },
+          "icon": "elote",
+          "synonyms": [
+            "elote",
+            "elotes",
+            "esquites",
+            "maíz"
+          ]
+        },
+        {
+          "id": "gaspachos",
+          "label": {
+            "es": "Gaspachos y Fruta",
+            "en": "Gaspachos & Fruit"
+          },
+          "icon": "cherry",
+          "synonyms": [
+            "gaspacho",
+            "gaspachos",
+            "fruta",
+            "fruta picada"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "postres-y-dulces",
+      "label": {
+        "es": "Postres y Dulces",
+        "en": "Desserts & Sweets"
+      },
+      "icon": "candy",
+      "hue": 322,
+      "order": 90,
+      "synonyms": [
+        "postre",
+        "postres",
+        "dulce",
+        "helado",
+        "nieve",
+        "paleta",
+        "crepa",
+        "waffle"
+      ],
+      "giros": [
+        {
+          "id": "helados",
+          "label": {
+            "es": "Helados y Paletas",
+            "en": "Ice Cream & Paletas"
+          },
+          "icon": "ice-cream",
+          "synonyms": [
+            "helado",
+            "nieve",
+            "paleta",
+            "yogurt helado",
+            "frozen yogurt",
+            "gelato"
+          ]
+        },
+        {
+          "id": "crepas",
+          "label": {
+            "es": "Crepas",
+            "en": "Crepes"
+          },
+          "icon": "crepa",
+          "synonyms": [
+            "crepa",
+            "crepe",
+            "creperia"
+          ]
+        },
+        {
+          "id": "waffles",
+          "label": {
+            "es": "Waffles",
+            "en": "Waffles"
+          },
+          "icon": "waffle",
+          "synonyms": [
+            "crepa",
+            "crepas",
+            "waffle",
+            "waffles"
           ]
         }
       ]
@@ -546,86 +1018,191 @@
         "en": "Drinks"
       },
       "icon": "cup-soda",
-      "order": 150,
+      "hue": 176,
+      "order": 92,
       "synonyms": [
         "bebida",
+        "bebidas",
+        "jugo",
         "jugos",
-        "smoothies",
-        "té",
+        "smoothie",
         "boba",
+        "bubble tea",
         "tapioca",
-        "frappé",
-        "licuados",
-        "aguas frescas"
+        "malteada",
+        "agua fresca"
       ],
-      "subcategories": [
-        {
-          "id": "te-de-burbujas",
-          "label": {
-            "es": "Té de burbujas"
-          },
-          "synonyms": [
-            "boba",
-            "bubble tea",
-            "tapioca"
-          ]
-        },
+      "giros": [
         {
           "id": "jugos-y-smoothies",
           "label": {
-            "es": "Jugos y smoothies"
+            "es": "Jugos y Smoothies",
+            "en": "Juices & Smoothies"
           },
+          "icon": "jugo",
           "synonyms": [
             "jugo",
+            "jugos",
             "smoothie",
+            "smoothies",
             "licuado",
-            "açaí"
+            "juice bar"
+          ]
+        },
+        {
+          "id": "boba",
+          "label": {
+            "es": "Boba",
+            "en": "Boba"
+          },
+          "icon": "boba",
+          "synonyms": [
+            "boba",
+            "bubble tea",
+            "tapioca",
+            "té",
+            "frappé",
+            "malteadas"
           ]
         }
       ]
     },
     {
-      "id": "bar-y-pub",
+      "id": "internacional",
       "label": {
-        "es": "Bar y pub",
-        "en": "Bars & pubs"
+        "es": "Internacional",
+        "en": "International"
       },
-      "icon": "beer",
-      "order": 160,
+      "icon": "hand-platter",
+      "hue": 210,
+      "order": 95,
+      "synonyms": [
+        "internacional",
+        "gourmet",
+        "bistró",
+        "bistro",
+        "fusión",
+        "restaurante"
+      ],
+      "giros": [
+        {
+          "id": "cocina-internacional",
+          "label": {
+            "es": "Internacional",
+            "en": "International"
+          },
+          "icon": "hand-platter",
+          "synonyms": [
+            "internacional",
+            "gourmet",
+            "bistró",
+            "fusión"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "casera",
+      "label": {
+        "es": "Casera y Fondas",
+        "en": "Home Cooking"
+      },
+      "icon": "cooking-pot",
+      "hue": 140,
+      "order": 96,
+      "synonyms": [
+        "casera",
+        "comida corrida",
+        "guisados",
+        "menú del día",
+        "fonda"
+      ],
+      "giros": [
+        {
+          "id": "comida-casera",
+          "label": {
+            "es": "Comida Casera",
+            "en": "Home Cooking"
+          },
+          "icon": "cooking-pot",
+          "synonyms": [
+            "casera",
+            "comida corrida",
+            "guisados",
+            "menú del día",
+            "fonda"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "bar",
+      "label": {
+        "es": "Bar",
+        "en": "Bar"
+      },
+      "icon": "martini",
+      "hue": 154,
+      "order": 100,
       "synonyms": [
         "bar",
         "pub",
-        "cerveza",
-        "cócteles",
-        "cocteles",
+        "cantina",
+        "gastrobar",
+        "drinks",
         "tragos",
         "mezcal",
-        "vino",
-        "cantina",
-        "drinks",
-        "beer"
+        "cerveza",
+        "cócteles",
+        "micheladas"
       ],
-      "subcategories": [
+      "giros": [
         {
-          "id": "cocteleria",
+          "id": "bar",
           "label": {
-            "es": "Coctelería"
+            "es": "Bar",
+            "en": "Bar"
           },
+          "icon": "martini",
           "synonyms": [
-            "cócteles",
-            "mixología",
-            "tragos"
+            "bar",
+            "tragos",
+            "copas",
+            "cantina",
+            "micheladas",
+            "coctelería"
+          ],
+          "general": true
+        },
+        {
+          "id": "pub",
+          "label": {
+            "es": "Pub y Cervecería",
+            "en": "Pub & Brewery"
+          },
+          "icon": "beer",
+          "synonyms": [
+            "pub",
+            "cerveza",
+            "cerveza artesanal",
+            "beer",
+            "whisky"
           ]
         },
         {
-          "id": "cerveceria",
+          "id": "gastrobar",
           "label": {
-            "es": "Cervecería"
+            "es": "Restaurante Bar",
+            "en": "Restaurant Bar"
           },
+          "icon": "wine",
           "synonyms": [
-            "cerveza artesanal",
-            "beer",
-            "micheladas"
+            "restaurante bar",
+            "gastrobar",
+            "bistró",
+            "coctelería"
           ]
         }
       ]
@@ -643,7 +1220,21 @@
         "foodtruck",
         "variado"
       ],
-      "subcategories": []
+      "giros": [
+        {
+          "id": "otros",
+          "label": {
+            "es": "Otros",
+            "en": "Other"
+          },
+          "icon": "utensils-crossed",
+          "synonyms": [
+            "variado",
+            "food truck"
+          ],
+          "general": true
+        }
+      ]
     }
   ]
 }

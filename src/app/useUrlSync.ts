@@ -31,6 +31,7 @@ export function useUrlSync(catalog: Catalog): void {
           plazaSlug: null,
           placeSlug: null,
           categoryId: category?.id ?? null,
+          infoTopic: null,
         })
         window.history.replaceState(
           null,
@@ -44,6 +45,7 @@ export function useUrlSync(catalog: Catalog): void {
         placeId: place?.id ?? null,
         categoryId: category?.id ?? null,
         missingLink,
+        infoTopic: parsed.infoTopic,
       })
     }
     syncFromLocation()
@@ -60,6 +62,7 @@ export function useUrlSync(catalog: Catalog): void {
       plazaSlug: plaza?.slug ?? null,
       placeSlug: place?.slug ?? null,
       categoryId: state.activeCategoryId,
+      infoTopic: state.infoTopic,
     })
     const previous = lastHash.current
     lastHash.current = hash
@@ -71,5 +74,11 @@ export function useUrlSync(catalog: Catalog): void {
     const selectionChanged = hash.split('?')[0] !== previous.split('?')[0]
     if (selectionChanged) window.history.pushState(null, '', url)
     else window.history.replaceState(null, '', url)
-  }, [catalog, state.selectedPlazaId, state.selectedPlaceId, state.activeCategoryId])
+  }, [
+    catalog,
+    state.selectedPlazaId,
+    state.selectedPlaceId,
+    state.activeCategoryId,
+    state.infoTopic,
+  ])
 }

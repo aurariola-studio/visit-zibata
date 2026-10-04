@@ -1,6 +1,6 @@
 import { AxeBuilder } from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
-import { isMobile, openApp, panel, plazaMarker, waitForMap } from './helpers.ts'
+import { isMobile, openApp, panel, placesInPlaza, plazaMarker, waitForMap } from './helpers.ts'
 
 test.describe('Estados de error', () => {
   test('sin WebGL2 se explica el problema y la guía sigue funcionando con la lista', async ({
@@ -22,8 +22,12 @@ test.describe('Estados de error', () => {
     await expect(
       page.getByRole('alert').filter({ hasText: 'El mapa 3D no está disponible' }),
     ).toBeVisible()
-    if (isMobile(page)) await page.getByRole('button', { name: 'Ver plazas' }).click()
-    await page.getByRole('button', { name: /^Paseo Zibatá, 22 lugares/ }).click()
+    if (isMobile(page)) await page.getByRole('button', { name: 'Explora Zibatá' }).click()
+    await page
+      .getByRole('button', {
+        name: new RegExp(`^Paseo Zibatá, ${placesInPlaza('Paseo Zibatá')} lugares`),
+      })
+      .click()
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
   })
 
@@ -57,7 +61,7 @@ test.describe('Estados de error', () => {
     })
     await openApp(page)
     await expect(page.getByRole('searchbox', { name: 'Buscar lugares' })).toBeVisible()
-    await page.getByRole('button', { name: 'Ver plazas' }).click()
+    await page.getByRole('button', { name: 'Explora Zibatá' }).click()
     // La plaza sigue abriéndose: solo faltan los registros defectuosos.
     await page.getByRole('button', { name: /^Plaza Condesa, \d+ lugares/ }).click()
     await expect(
@@ -76,8 +80,12 @@ test.describe('Estados de error', () => {
     await expect(alert).toBeVisible()
     await expect(alert.getByRole('button', { name: 'Reintentar' })).toBeVisible()
     await expect(page.getByRole('searchbox', { name: 'Buscar lugares' })).toBeVisible()
-    if (isMobile(page)) await page.getByRole('button', { name: 'Ver plazas' }).click()
-    await page.getByRole('button', { name: /^Paseo Zibatá, 22 lugares/ }).click()
+    if (isMobile(page)) await page.getByRole('button', { name: 'Explora Zibatá' }).click()
+    await page
+      .getByRole('button', {
+        name: new RegExp(`^Paseo Zibatá, ${placesInPlaza('Paseo Zibatá')} lugares`),
+      })
+      .click()
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
   })
 
@@ -119,7 +127,9 @@ test.describe('Accesibilidad', () => {
     }
     expect(await scan()).toEqual([])
 
-    await page.getByRole('combobox', { name: 'Plaza' }).selectOption({ label: 'Xentric Zibatá' })
+    await page
+      .getByRole('combobox', { name: 'Filtrar por zona' })
+      .selectOption({ label: 'Xentric Zibatá' })
     await expect(
       panel(page).getByRole('heading', { level: 2, name: 'Xentric Zibatá' }),
     ).toBeVisible()

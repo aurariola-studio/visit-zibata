@@ -2,6 +2,918 @@
   "researchDate": "2026-09-14",
   "records": [
     {
+      "id": "ciao-bella",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "medium",
+      "name": "Ciao Bella Trattoria",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "pizza"
+      ],
+      "beta": {
+        "name": "Ciao Bella",
+        "plazaId": "xentric-anahuac",
+        "category": "italiana",
+        "active": false
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Beta inactivo; la web oficial, redes, delivery y directorio (Pitahayas 55, local 121) indican operación. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Ciao Bella Trattoria ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Beta: inactivo. Dirección citada: Av. Paseo de las Pitahayas 55, local 121, Zibatá; tel. +52 442 152 5829; horario citado L-D 8:00-20:00 (sin confirmar en fuente oficial). Verificar sitio oficial."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.ciaobellaqro.com/",
+          "level": 1,
+          "type": "official-website",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/ciao_bellaqro/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        },
+        {
+          "url": "https://www.ubereats.com/mx/store/ciao-bella-trattoria/yab4F0duTMmL05MWFZZ4iQ",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence"
+          ]
+        },
+        {
+          "url": "https://restaurantguru.com/Ciao-Bella-Trattoria-Italiana-Santiago-de-Queretaro",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "address",
+            "phone",
+            "hours"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sushi-itto",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "high",
+      "plazaConfidence": "high",
+      "name": "Sushi Itto",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "sushi"
+      ],
+      "beta": {
+        "name": "Sushi Itto",
+        "plazaId": "xentric-anahuac",
+        "category": "asiatica",
+        "active": true
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Anuncio oficial de la sucursal Xentric Anáhuac y reseñas de los últimos 90 días en plataforma. 2026-09-25: cerrado. El mantenedor de la guía confirma en sitio que la sucursal ya no opera.",
+      "verificationNotes": [
+        "Anuncio oficial de la sucursal 'Sushi Itto Xentric Anáhuac Zibatá'. Dirección: Av. Paseo de las Pitahayas 55. Horario citado (resumen): L-V 12:00-22:00, fines de semana hasta 23:00 (sin confirmar)."
+      ],
+      "fieldVerifiedAt": "2026-09-25",
+      "sources": [
+        {
+          "url": "campo:2026-09-25",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-25",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/SushiittoQueretaroOficial/videos/conoce-nuestra-nueva-sucursal-en-zibat%C3%A1sushiitto-m%C3%A1s-cerca-de-ti-sushi-itto-xent/851004575574566/",
+          "level": 1,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "branch:Xentric Anáhuac Zibatá"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930014741-sushiitto",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "activity:46 reseñas en los últimos 90 días (resumen)"
+          ]
+        },
+        {
+          "url": "https://www.ubereats.com/mx/store/sushi-itto-xentric/pVIoZ_eTUm-DGHewEOkK_Q",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence"
+          ]
+        },
+        {
+          "url": "https://web.didiglobal.com/mx/food/queretaro-que/sushi-itto-xentric/5764607582027907617/",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "los-morros-de-sonora",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "medium",
+      "name": "Los Morros de Sonora",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "taqueria"
+      ],
+      "beta": {
+        "name": "Los Morros de Sonora",
+        "plazaId": "xentric-anahuac",
+        "category": "tacos-y-antojitos",
+        "active": false
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Beta inactivo; web y redes oficiales y tienda de la sucursal Zibatá (Pitahayas 55, local 229). 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Los Morros de Sonora ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Beta: inactivo. Dirección citada: Paseo de las Pitahayas 55, local 229, Plaza Xentric Anáhuac. Carne asada y hot dogs estilo Sonora."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.losmorrosdesonora.com/",
+          "level": 1,
+          "type": "official-website",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/LosMorrosdeSonora/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "municipio:El Marqués"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930072181-los-morros-de-sonoraa",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "branch:Zibatá"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bistrot-marino",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Bistrot Marino",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "marisqueria"
+      ],
+      "beta": {
+        "name": "Bistrot Marino",
+        "plazaId": "paseo-zibata",
+        "category": "mariscos",
+        "active": true
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Redes oficiales, directorio local y difusión institucional (2024-07-19) en Plaza Paseo Zibatá, segundo piso. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Bistrot Marino ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Mariscos y coctelería. Discrepancia de local: 40 (TikTok 2024) vs 41 (zibatahoy). No se asigna número de local."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.tiktok.com/@lalibredenegocios/video/7393151765702659334",
+          "level": 3,
+          "type": "institutional-social",
+          "sourceDate": "2024-07-19",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "plaza:Plaza Paseo Zibatá, segundo piso, local 40"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/people/Bistrot-Marino/61559868993335/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/bistrot.marino/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        },
+        {
+          "url": "https://zibatahoy.com/listing/bistrot-marino/",
+          "level": 3,
+          "type": "local-directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "address:local 41, Av. Paseo de las Pitahayas 501",
+            "phone:442 122 2536"
+          ]
+        },
+        {
+          "url": "https://www.rappi.com.mx/restaurantes/1930257646-bistrot-marino",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "branch:Zibatá"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ramen-express",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Ramen Express",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cocina-asiatica"
+      ],
+      "beta": {
+        "name": "Ramen Express",
+        "plazaId": "paseo-zibata",
+        "category": "asiatica",
+        "active": true
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Apertura oficial en Paseo Zibatá (2024-10-28) difundida por la plaza. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Ramen Express ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Apertura en Paseo Zibatá (octubre 2024) difundida por la plaza oficial. Ramen y productos coreanos. Restaurant Guru lista un 'Soba Express' (posible confusión)."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/p/DBp1F6gMnb5/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": "2024-10-28",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "opening:'Nueva apertura Ramen Express Plaza Paseo Zibatá'"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/PaseoZibata/videos/quieres-vivir-una-experiencia-llena-de-sabor-sin-viajar-miles-de-kil%C3%B3metros-en-p/2944306425916797/",
+          "level": 1,
+          "type": "official-plaza-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/ramenexpress.qro.zibata/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tacos-la-capilla",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Tacos La Capilla",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "taqueria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Publicación de la plaza oficial y dos directorios; no figura en el directorio web de la plaza. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Tacos La Capilla ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Nuevo (no está en el beta). Publicación de la plaza oficial sin fecha; no figura en su directorio web."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/PaseoZibata/posts/los-tradicionales-tacos-la-capilla-cu%C3%A1les-son-tus-favoritos-queso-papa-todos-te-/808611753163868/",
+          "level": 1,
+          "type": "official-plaza-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "plaza:Paseo Zibatá"
+          ]
+        },
+        {
+          "url": "https://es.foursquare.com/v/la-capilla-zibat%C3%A1/5da1e11bde8f3c0008e6e10a",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence"
+          ]
+        },
+        {
+          "url": "https://es.restaurantguru.com/La-Capilla-Zibata-Santiago-de-Queretaro/menu",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name:Tacos La Capilla Zibatá"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bee-waffle",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "BeeWaffle",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "waffles",
+        "desayunos"
+      ],
+      "beta": {
+        "name": "Bee Waffle",
+        "plazaId": "xentric-zibata",
+        "category": "desayunos-y-cafe",
+        "active": true
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Directorio oficial de Xentric Zibatá (local 104) y redes de la marca. 2026-09-26: cerrado. El mantenedor de la guía confirma en sitio que el local ya no opera.",
+      "verificationNotes": [
+        "Waffles dulces y salados, café y malteadas."
+      ],
+      "fieldVerifiedAt": "2026-09-26",
+      "sources": [
+        {
+          "url": "campo:2026-09-26",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-26",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://xentriczibata.com/plaza-comercial/",
+          "level": 1,
+          "type": "official-plaza-directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "unit:104",
+            "category:waflería"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/BeeWaffleMX/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "brand:Querétaro"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/beewafflemx/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "brand"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ichos",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Ichos",
+      "previousName": "Piotl Rosticería",
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "asador"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Directorio oficial (local 208); ocupa el local y teléfono antes asociados a Piotl Rosticería. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Ichos ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Nuevo registro. Sucede a Piotl Rosticería en el mismo local y teléfono. Pendiente de corroboración independiente."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://xentriczibata.com/plaza-comercial/",
+          "level": 1,
+          "type": "official-plaza-directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "category:carnes asadas",
+            "unit:208",
+            "phone:442 605 7244"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trecielos",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "medium",
+      "name": "Trecielos",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cocina-mexicana"
+      ],
+      "beta": {
+        "name": "Trecielos",
+        "plazaId": "xentric-zibata",
+        "category": "mexicana",
+        "active": true
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Cuenta oficial y ficha local con dirección Paseo Tunas 18; no figura en el directorio oficial. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Trecielos ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "No figura en el directorio oficial de Xentric Zibatá. Una sola fuente secundaria sin fecha."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://zibatahoy.com/listing/trecielos-qro/",
+          "level": 3,
+          "type": "local-directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "address:Paseo Tunas 18, Zibatá",
+            "category:restaurante bar de cochinita pibil y lechón"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "la-borra-del-cafe-xentric",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "La Borra del Café",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cafeteria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Directorio oficial (locales 110-111), página oficial de la sucursal y teléfono coincidente en directorio independiente. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que La Borra del Café (Xentric Zibatá) ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Nuevo (no está en el beta). Cafetería de franquicia; directorio oficial y directorio secundario coinciden en teléfono."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://xentriczibata.com/plaza-comercial/",
+          "level": 1,
+          "type": "official-plaza-directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "units:110-111",
+            "phone:442 353 1580"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/LaBorraXentric/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "branch:Xentric"
+          ]
+        },
+        {
+          "url": "https://www.allbiz.mx/la-borra-del-caf%C3%A9-xentric-442-353-1580",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "phone:442 353 1580",
+            "hours:L-V 7:00-21:00, S-D 9:00-21:00 (sin confirmar)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quetacos",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "Quetacos",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "taqueria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Solo en el directorio oficial de la plaza (locales 112-113). 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Quetacos ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Nuevo. Solo aparece en el directorio oficial (sin fecha); ninguna otra fuente en la web."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://xentriczibata.com/plaza-comercial/",
+          "level": 1,
+          "type": "official-plaza-directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "units:112-113",
+            "category:taquería"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "la-borra-del-cafe-zielo",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "high",
+      "name": "La Borra del Café",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "cafeteria"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Cuenta oficial de la sucursal Zielo y publicación de apertura de la marca. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que La Borra del Café (Plaza Zielo) ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Nuevo (no está en el beta). Cuenta oficial específica de la sucursal Zielo."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/laborradelcafe.zielo/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "branch:Zielo"
+          ]
+        },
+        {
+          "url": "https://www.facebook.com/BorradelCafe/posts/hola-zielo-en-la-borra-del-caf%C3%A9-estamos-muy-contentos-de-poder-invitarte-a-nuest/3414663718647964/",
+          "level": 1,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "opening:'¡Hola, Zielo!'"
+          ]
+        },
+        {
+          "url": "https://es.restaurantguru.com/Plaza-Zielo-Mexico-ml",
+          "level": 3,
+          "type": "directory",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "plaza:Plaza Zielo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sixties-burger",
+      "status": "closed",
+      "publishedInApp": false,
+      "withinZibata": "uncertain",
+      "confidence": "medium",
+      "plazaConfidence": "low",
+      "name": "Sixties Burger",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "hamburguesas"
+      ],
+      "beta": {
+        "name": "Sixties Burger",
+        "plazaId": "centro-zibata",
+        "category": "hamburguesas",
+        "active": false
+      },
+      "newRecord": false,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Beta inactivo; cuenta oficial de la sucursal Zibatá y tienda de delivery. Plaza del beta sin confirmar. 2026-09-20: cerrado. El propietario de la guía confirma en sitio que Sixties Burger ya no opera; las fichas de directorios y mapas siguen publicadas pero no se dieron de baja.",
+      "verificationNotes": [
+        "Beta: inactivo. Cuenta de sucursal y tienda de delivery; horario citado (sin confirmar). Plaza no confirmada."
+      ],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
+          ]
+        },
+        {
+          "url": "https://www.instagram.com/sixtiesburgerzibata/",
+          "level": 2,
+          "type": "official-social",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "name",
+            "branch:Zibatá"
+          ]
+        },
+        {
+          "url": "https://www.ubereats.com/mx/store/sixties-burger-zibata/_sE-hH8HRqyNoZelQHisxw",
+          "level": 3,
+          "type": "delivery-platform",
+          "sourceDate": null,
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "branch:Zibata"
+          ]
+        }
+      ]
+    },
+    {
       "id": "mr-bagel",
       "status": "closed",
       "publishedInApp": false,
@@ -12,7 +924,9 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Mr. Bagel",
         "plazaId": "xentric-anahuac",
@@ -27,6 +941,7 @@
       "verificationNotes": [
         "Cierre indicado por Restaurant Guru y anuncio de cierre indefinido. Además, la dirección era Paseo Zibatá local 29, no Xentric Anáhuac (beta con plaza incorrecta)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://restaurantguru.com/Mr-Bagel-Santiago-de-Queretaro",
@@ -62,7 +977,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Grand Antonella",
         "plazaId": "paseo-zibata",
@@ -77,6 +994,7 @@
       "verificationNotes": [
         "Cierre permanente indicado en su página oficial."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.facebook.com/Antonellacafeboutique/",
@@ -102,7 +1020,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": {
         "name": "Piotl Rosticeria",
         "plazaId": "xentric-zibata",
@@ -117,6 +1037,7 @@
       "verificationNotes": [
         "Mismo local y teléfono que 'Ichos' en el directorio oficial actual → Piotl fue sustituido o renombrado como Ichos. Registro retirado del dataset activo; ver candidato Ichos."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.facebook.com/PiotlRosticeria/",
@@ -153,70 +1074,37 @@
       ]
     },
     {
-      "id": "tacos-el-pata-zibata",
-      "status": "closed",
+      "id": "la-michoacana-de-mi-corazon",
+      "status": "removed",
       "publishedInApp": false,
       "withinZibata": true,
       "confidence": "medium",
-      "plazaConfidence": null,
-      "name": "Tacos El Pata Zibatá",
+      "plazaConfidence": "high",
+      "name": "La Michoacana de Mi Corazón",
       "previousName": null,
-      "plazaId": "xentric-zibata",
+      "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "helados"
+      ],
       "beta": null,
       "newRecord": true,
-      "replacedBy": null,
+      "replacedBy": "mykona-frozen-yogurt",
       "duplicateOf": null,
       "lastVerifiedAt": "2026-09-14",
-      "reason": "La lista oficial de sucursales omite Zibatá y la tienda de delivery figura cerrada desde julio de 2025.",
-      "verificationNotes": [
-        "Candidato nuevo. Dirección citada: 'Pitahaya #14, Plaza Xentric Zibata' y referencia a Xentric Anáhuac Suites: plaza por resolver.",
-        "Contradicción: la lista oficial de sucursales omite Zibatá mientras persisten tienda de delivery y página. Direcciones citadas contradictorias (Pitahaya 14 Plaza Xentric / Av. Paseo de las Pitahayas 19).",
-        "Dos señales independientes de cierre: la lista oficial omite Zibatá y la tienda de delivery figura cerrada desde julio de 2025."
-      ],
+      "reason": "Alta reportada y verificada en sitio por el propietario de la guía el 2026-09-20. 2026-09-23: el local lo ocupa ahora Myköna Frozen Yogurt; el registro se conserva como historial del local.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-23",
       "sources": [
         {
-          "url": "https://www.rappi.com.mx/restaurantes/1923726808-tacos-el-pata",
-          "level": 3,
-          "type": "delivery-platform",
-          "sourceDate": null,
-          "checkedAt": "2026-09-14",
-          "supports": [
-            "name",
-            "branch:Zibatá"
-          ]
-        },
-        {
-          "url": "https://www.facebook.com/p/Tacos-El-Pata-Zibata-100076322976562/",
-          "level": 2,
-          "type": "official-social",
-          "sourceDate": null,
-          "checkedAt": "2026-09-14",
-          "supports": [
-            "name"
-          ]
-        },
-        {
-          "url": "https://www.tacoselpata.com/en/about-1",
+          "url": "campo:2026-09-23",
           "level": 1,
-          "type": "official-branch-list",
-          "sourceDate": null,
+          "type": "field-check",
+          "sourceDate": "2026-09-23",
           "checkedAt": "2026-09-14",
           "supports": [
-            "NO incluye sucursal Zibatá (11 sucursales en Querétaro)",
-            "sin sucursal Zibatá"
-          ]
-        },
-        {
-          "url": "https://www.ubereats.com/mx/store/tacos-el-pata-zibata/6BE1dgddThyXAEo7PGv2NQ",
-          "level": 3,
-          "type": "delivery-platform",
-          "sourceDate": null,
-          "checkedAt": "2026-09-14",
-          "supports": [
-            "branch:Zibatá",
-            "status:cerrado en Uber Eats desde el 22 de julio de 2025 (resumen de búsqueda)"
+            "existence",
+            "plaza"
           ]
         }
       ]

@@ -34,8 +34,21 @@
           "description": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 1
+                "type": "object",
+                "properties": {
+                  "es": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "es"
+                ],
+                "additionalProperties": false
               },
               {
                 "type": "null"
@@ -156,6 +169,13 @@
           "active": {
             "type": "boolean"
           },
+          "comingSoon": {
+            "type": "boolean"
+          },
+          "googleMapsUri": {
+            "type": "string",
+            "format": "uri"
+          },
           "placeIds": {
             "type": "array",
             "items": {
@@ -215,8 +235,7 @@
                 "minItems": 1,
                 "type": "array",
                 "items": {
-                  "type": "string",
-                  "format": "uri"
+                  "type": "string"
                 }
               }
             },

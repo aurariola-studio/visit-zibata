@@ -1,7 +1,8 @@
 /**
  * Conversión de una fila del CSV de importación en un `Place` validado.
- * Columnas: id (opcional), name, plaza, category, subcategory, localNumber, description, hours, lat,
- * lng, googleMapsUri, website, instagram, facebook, tiktok, whatsapp, phone, tags, active
+ * Columnas: id (opcional), name, plaza, giros y secundarios (separados por ";"), description, hours, lat,
+ * lng, googleMapsUri, website, instagram, facebook, tiktok, whatsapp, phone, active.
+ * `description` es el original en español y `descriptionEn` su traducción, que puede faltar.
  */
 import { z } from 'zod'
 import { PlaceSchema } from '../../../src/data/schemas.ts'
@@ -13,10 +14,10 @@ export const CSV_COLUMNS = [
   'id',
   'name',
   'plaza',
-  'category',
-  'subcategory',
-  'localNumber',
+  'giros',
+  'secundarios',
   'description',
+  'descriptionEn',
   'hours',
   'lat',
   'lng',
@@ -27,7 +28,6 @@ export const CSV_COLUMNS = [
   'tiktok',
   'whatsapp',
   'phone',
-  'tags',
   'active',
 ] as const
 
@@ -84,11 +84,24 @@ export function findPlaza(value: string, plazas: readonly Plaza[]): Plaza | unde
   return plazas.find((plaza) => normalizeText(plaza.name) === key || plaza.slug === slugify(value))
 }
 
-export function findCategory(value: string, categories: readonly Category[]): Category | undefined {
+/** Un giro por su id o por su etiqueta en español, mire en la categoría que mire. */
+export function findGiro(value: string, categories: readonly Category[]): string | undefined {
   const key = normalizeText(value)
-  return categories.find(
-    (category) => category.id === slugify(value) || normalizeText(category.label.es) === key,
-  )
+  for (const category of categories) {
+    const match = category.giros.find(
+      (giro) => giro.id === slugify(value) || normalizeText(giro.label.es) === key,
+    )
+    if (match) return match.id
+  }
+  return undefined
+}
+
+/** La descripción del CSV: el original en español y, si viene, su traducción al inglés. */
+function localizedDescription(row: CsvRow): { es: string; en?: string } | null {
+  const es = clean(row.description)
+  if (!es) return null
+  const en = clean(row.descriptionEn)
+  return en ? { es, en } : { es }
 }
 
 export function rowToPlace(row: CsvRow, id: string, context: RowContext): RowResult {
@@ -101,23 +114,31 @@ export function rowToPlace(row: CsvRow, id: string, context: RowContext): RowRes
   const plaza = row.plaza ? findPlaza(row.plaza, context.plazas) : undefined
   if (!plaza) errors.push(`Plaza no encontrada: "${row.plaza ?? ''}" (créala antes en plazas.json)`)
 
-  let category = row.category?.trim() ? findCategory(row.category, context.categories) : undefined
-  if (!row.category?.trim()) {
-    category = context.categories.find((c) => c.id === 'otros')
-    warnings.push('Sin categoría: se asigna "otros"')
-  } else if (!category) {
-    errors.push(`Categoría no encontrada: "${row.category}"`)
+  // Los giros vienen en dos columnas, separados por ";", y valen su id o su etiqueta.
+  const leerGiros = (texto: string, campo: string) => {
+    const salida: string[] = []
+    for (const value of texto
+      .split(';')
+      .map((part) => clean(part) ?? '')
+      .filter(Boolean)) {
+      const giro = findGiro(value, context.categories)
+      if (!giro) errors.push(`${campo} no encontrado: "${value}"`)
+      else if (!salida.includes(giro)) salida.push(giro)
+    }
+    return salida
   }
-
-  let subcategory: string | null = null
-  const subcategoryValue = clean(row.subcategory)
-  if (subcategoryValue && category) {
-    const key = normalizeText(subcategoryValue)
-    const match = category.subcategories.find(
-      (s) => s.id === slugify(subcategoryValue) || normalizeText(s.label.es) === key,
+  const giros = leerGiros(row.giros ?? '', 'Giro')
+  const secundarios = leerGiros(row.secundarios ?? '', 'Giro secundario').filter(
+    (giro) => !giros.includes(giro),
+  )
+  if (giros.length === 0) {
+    giros.push('otros')
+    warnings.push('Sin giros: se asigna "otros"')
+  }
+  if (giros.length + secundarios.length > 3) {
+    errors.push(
+      `Demasiados giros (${giros.length + secundarios.length}); entre principales y secundarios el máximo son tres`,
     )
-    if (match) subcategory = match.id
-    else errors.push(`Subcategoría "${subcategoryValue}" no existe en "${category.id}"`)
   }
 
   let hours = null
@@ -147,10 +168,9 @@ export function rowToPlace(row: CsvRow, id: string, context: RowContext): RowRes
     slug: id,
     name,
     plazaId: plaza?.id ?? '',
-    category: category?.id ?? '',
-    subcategory,
-    description: clean(row.description),
-    localNumber: clean(row.localNumber),
+    giros,
+    secundarios,
+    description: localizedDescription(row),
     hours,
     location,
     googleMapsUri: clean(row.googleMapsUri),
@@ -164,10 +184,6 @@ export function rowToPlace(row: CsvRow, id: string, context: RowContext): RowRes
       tiktok: normalizeSocial('tiktok', clean(row.tiktok)),
       whatsapp: normalizePhone(clean(row.whatsapp)),
     },
-    tags: (row.tags ?? '')
-      .split('|')
-      .map((tag) => tag.trim())
-      .filter(Boolean),
     active,
   }
 

@@ -1,0 +1,94 @@
+/**
+ * Visitas a un lugar, marcadas a mano y guardadas solo en este dispositivo (localStorage), igual que
+ * los favoritos y las calificaciones.
+ *
+ * La regla es la de una libreta: marcas el día que vas y la cuenta sube. Si te equivocas, el mismo día
+ * puedes desmarcar y la visita se borra; al día siguiente ya no, porque esa visita ya ocurrió. Por eso
+ * se guardan las fechas y no un número suelto: con ellas se sabe cuántas veces fuiste, cuándo fue la
+ * última y si la de hoy se puede deshacer.
+ */
+import { useCallback, useSyncExternalStore } from 'react'
+import { locale } from '../../i18n/index.ts'
+import { createLocalStore } from '../../lib/localStore.ts'
+
+/** Fechas (AAAA-MM-DD, hora local) en las que se marcó una visita, de la más antigua a la última. */
+export type VisitDates = readonly string[]
+
+/** Tope por lugar: una visita al día durante dos años es más de lo que nadie necesita recordar. */
+const MAX_DATES = 730
+/** Tope de lugares recordados, como en las fichas abiertas: lo más antiguo se olvida primero. */
+const MAX_PLACES = 300
+
+const EMPTY: ReadonlyMap<string, VisitDates> = new Map()
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
+
+/** Hoy en el calendario de la persona (no en UTC): marcar a las 23:00 cuenta como hoy, no como mañana. */
+export function today(now = new Date()): string {
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60_000)
+  return local.toISOString().slice(0, 10)
+}
+
+/**
+ * "24/Sept/2026" a partir de la fecha guardada (AAAA-MM-DD, hora local). El mes va abreviado y en el
+ * idioma activo, con inicial mayúscula y sin el punto que añaden algunos idiomas, para que la fecha
+ * se lea de un vistazo y ocupe lo mismo en enero que en septiembre.
+ */
+export function formatVisitDate(date: string): string {
+  const [year, month, day] = date.split('-').map(Number)
+  if (!year || !month || !day) return date
+  const short = new Intl.DateTimeFormat(locale, { month: 'short' })
+    .format(new Date(year, month - 1, day))
+    .replace('.', '')
+  return `${day}/${short.charAt(0).toUpperCase()}${short.slice(1)}/${year}`
+}
+
+const isDateList = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((date) => typeof date === 'string' && DATE_PATTERN.test(date))
+
+export const visitsStore = createLocalStore<ReadonlyMap<string, VisitDates>>(
+  'zibata:visitas',
+  (raw) =>
+    new Map(
+      Object.entries((raw ?? {}) as Record<string, unknown>)
+        .filter((entry): entry is [string, string[]] => isDateList(entry[1]) && entry[1].length > 0)
+        .map(([id, dates]) => [id, dates.slice(-MAX_DATES)]),
+    ),
+  (value) => Object.fromEntries(value),
+  EMPTY,
+)
+
+/** Marca la visita de hoy o, si ya estaba marcada hoy, la deshace. Devuelve las fechas resultantes. */
+export function toggleVisitToday(placeId: string, day = today()): VisitDates {
+  const next = new Map(visitsStore.read())
+  const dates = [...(next.get(placeId) ?? [])]
+  if (dates.at(-1) === day) dates.pop()
+  else dates.push(day)
+  next.delete(placeId)
+  if (dates.length > 0) next.set(placeId, dates.slice(-MAX_DATES))
+  // Map conserva el orden de inserción: el primero es el lugar que hace más que no se visita.
+  while (next.size > MAX_PLACES) next.delete(next.keys().next().value as string)
+  visitsStore.write(next)
+  return next.get(placeId) ?? []
+}
+
+export function useVisits() {
+  const visits = useSyncExternalStore(
+    visitsStore.subscribe,
+    visitsStore.read,
+    () => visitsStore.empty,
+  )
+  const toggleToday = useCallback((placeId: string) => toggleVisitToday(placeId), [])
+  const datesOf = (placeId: string): VisitDates => visits.get(placeId) ?? []
+  return {
+    visits,
+    toggleToday,
+    datesOf,
+    countOf: (placeId: string) => datesOf(placeId).length,
+    visitedToday: (placeId: string) => datesOf(placeId).at(-1) === today(),
+    /** Lugares distintos visitados y visitas en total. */
+    totals: () => ({
+      places: visits.size,
+      visits: [...visits.values()].reduce((sum, dates) => sum + dates.length, 0),
+    }),
+  }
+}

@@ -9,7 +9,7 @@ GitHub Pages.
 
 ## Sesión 1 — enlace de salto, buscador y región viva
 
-Teclas: `Esc` (cerrar tutorial) → `Tab` → `Entrar` → escribir «tacos» → `Tab` ×3 → `Esc`.
+Teclas: `Esc` (cerrar tutorial) → `Tab` → `Entrar` → escribir "tacos" → `Tab` ×3 → `Esc`.
 
 ```
 'cliqueable', 'Cerrar', 'botón'

@@ -12,7 +12,9 @@
       "previousName": null,
       "plazaId": "distrito-nandu",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -22,6 +24,7 @@
       "verificationNotes": [
         "Cafetería con apertura anunciada en Zibatá (resumen: Plaza Nandú, agosto 2026). La web oficial no lista sucursal Zibatá y no hay confirmación de apertura → COMING_SOON."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.instagram.com/reel/DXu5y9ctmBX/",
@@ -51,6 +54,42 @@
           "checkedAt": "2026-09-14",
           "supports": [
             "título 'Andador 58 en Zibatá: ¡La Anáhuac te espera!'"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocuna",
+      "status": "coming_soon",
+      "publishedInApp": false,
+      "withinZibata": true,
+      "confidence": "medium",
+      "plazaConfidence": null,
+      "name": "Ocuna",
+      "previousName": null,
+      "plazaId": null,
+      "category": null,
+      "giros": [
+        "otros"
+      ],
+      "beta": null,
+      "newRecord": true,
+      "replacedBy": null,
+      "duplicateOf": null,
+      "lastVerifiedAt": "2026-09-14",
+      "reason": "Reportado por el propietario de la guía el 2026-09-20 como local de Paseo Zibatá que todavía no abre. Se registra como próximo para no perderlo; no se publica hasta que abra y haya con qué describirlo.",
+      "verificationNotes": [],
+      "fieldVerifiedAt": "2026-09-20",
+      "sources": [
+        {
+          "url": "campo:2026-09-20",
+          "level": 1,
+          "type": "field-check",
+          "sourceDate": "2026-09-20",
+          "checkedAt": "2026-09-14",
+          "supports": [
+            "existence",
+            "plaza"
           ]
         }
       ]

@@ -48,13 +48,20 @@ recorridos A–R en escritorio y móvil, fidelidad cartográfica contra el plano
 ## Datos de prueba
 
 `src/test/fixtures.ts` contiene datos **ficticios** con la estructura real (nunca negocios reales
-inventados). Las pruebas que dependen del dataset publicado (76 locales, 9 plazas activas) usan los
-archivos reales y se actualizan cuando cambia el contenido.
+inventados). Las pruebas que dependen del dataset publicado leen los archivos reales: los conteos salen
+de `data/commercial/*.json` con los ayudantes `placesInPlaza`, `placesInCategory` y `placeById`, no
+escritos a mano. Así una alta, una baja o una ubicación verificada no rompen la suite; solo la rompe un
+fallo de verdad.
+
+El idioma se fija en las pruebas (español): jsdom y los navegadores de Playwright se anuncian en inglés y
+la guía ahora los obedece.
 
 ## Estabilidad
 
 - La colocación de marcadores depende del tamaño de pantalla: los E2E usan el ayudante `plazaMarker`, que
-  abre el grupo "+N" si la plaza está agrupada, en vez de suponer que siempre tiene marcador propio.
+  acerca la cámara con el selector de plazas si hace falta, en vez de suponer que siempre tiene marcador
+  propio. La garantía que se comprueba es `plazasMissingInBand`: si el punto de una plaza cae en la franja
+  libre entre la barra y el panel, esa plaza tiene marcador (con nombre, con la cifra o como punto).
 - Tras mover la cámara se espera al reposo antes de medir posiciones.
 - Suites completas ejecutadas varias veces sin fallos intermitentes tras corregir dos carreras reales
   (sincronización inicial de la URL y arrastre + click en la hoja).

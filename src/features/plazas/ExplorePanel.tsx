@@ -1,6 +1,8 @@
 /** Vista de exploración: resumen de Zibatá y plazas ordenadas por número de lugares. */
-import { ChevronRight, X } from 'lucide-react'
+import { ChevronRight, Construction, X } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
+import { DEFAULT_PLAZA_TONE, plazaTones } from '../../config/palette.ts'
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { localized, t } from '../../i18n/index.ts'
 import styles from './Panel.module.css'
@@ -20,6 +22,8 @@ export function ExplorePanel({
   onExpand,
 }: ExplorePanelProps) {
   const catalog = useCatalog()
+  const tones = plazaTones(catalog.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
+  const comingSoon = catalog.plazas.filter((plaza) => plaza.comingSoon === true)
   const plazas = catalog.plazas
     .filter((plaza) => plaza.active)
     .map((plaza) => ({ plaza, count: catalog.placesByPlaza.get(plaza.id)?.length ?? 0 }))
@@ -94,19 +98,30 @@ export function ExplorePanel({
                   })
                   .join(', ')}`}
               >
-                <span className={styles.plazaBadge} aria-hidden="true">
-                  {count}
-                </span>
+                {/* El color identifica la plaza (el mismo del mapa); la cifra va como texto: una
+                    insignia numerada se leía como un puesto en un ranking. */}
+                <span
+                  className={styles.plazaDot}
+                  style={
+                    {
+                      '--plaza-accent': (tones.get(plaza.id) ?? DEFAULT_PLAZA_TONE).accent,
+                    } as CSSProperties
+                  }
+                  aria-hidden="true"
+                />
                 <span className={styles.plazaInfo}>
                   <span className={styles.plazaName}>{plaza.name}</span>
-                  <span className={styles.plazaIcons} aria-hidden="true">
-                    {plaza.categories.slice(0, 7).map((id) => (
-                      <CategoryIcon
-                        key={id}
-                        name={catalog.categoryById.get(id)?.icon ?? ''}
-                        size={15}
-                      />
-                    ))}
+                  <span className={styles.plazaMeta} aria-hidden="true">
+                    <span className={styles.plazaCount}>{t('places.count', { count })}</span>
+                    <span className={styles.plazaIcons}>
+                      {plaza.categories.slice(0, 6).map((id) => (
+                        <CategoryIcon
+                          key={id}
+                          name={catalog.categoryById.get(id)?.icon ?? ''}
+                          size={15}
+                        />
+                      ))}
+                    </span>
                   </span>
                 </span>
                 <ChevronRight className={styles.chevron} aria-hidden="true" />
@@ -114,6 +129,25 @@ export function ExplorePanel({
             </li>
           ))}
         </ul>
+      )}
+
+      {!headerOnly && comingSoon.length > 0 && (
+        <div className={styles.soon}>
+          <div className={styles.sectionHeader}>
+            <h3 className={styles.sectionTitle}>{t('plaza.comingSoonList')}</h3>
+          </div>
+          <ul className={styles.plazaList}>
+            {comingSoon.map((plaza) => (
+              <li key={plaza.id} className={styles.soonCard}>
+                <span className={styles.soonName}>{plaza.name}</span>
+                <span className={styles.soonBadge}>
+                  <Construction aria-hidden="true" />
+                  {t('plaza.comingSoon')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </section>
   )

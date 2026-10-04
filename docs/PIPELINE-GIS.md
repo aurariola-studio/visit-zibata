@@ -34,7 +34,7 @@ map:fetch:buildings ┘            ▲                   ├─► data/geograph
    desplazamientos (Web Mercator, norte arriba) y elige el ajuste con más coincidencia. Resultado actual:
    3,35 m/px y **98,1 %** de coincidencia. Genera `reference/plano-zibata.webp` y `.georef.json`.
 3. **Comparar con el plano.** Abre la app en desarrollo con `?debug` (`http://localhost:5173/?debug`) y usa el
-   control «Plano del cliente» para superponerlo con opacidad variable.
+   control "Plano del cliente" para superponerlo con opacidad variable.
 4. **Corregir geometrías.** Las correcciones de calles o áreas se hacen en OpenStreetMap (beneficia a todos) y
    se vuelven a descargar. Las plazas se corrigen en `data/commercial/plazas.json` (ver abajo).
 5. **Crear GeoJSON.** `map:build` convierte Overpass → GeoJSON (incluye ensamblado de multipolígonos) y
@@ -60,6 +60,42 @@ Zibatá no tiene un límite oficial en OSM. `map:build` calcula una envolvente c
 los vértices viales dentro de `zibataSeedPolygon`, con 70 m de margen. Si Zibatá crece, amplía el polígono
 semilla (y `area.bbox` si hace falta) y vuelve a ejecutar `map:fetch` + `map:build`. La app toma la extensión
 de `extent.json`, por lo que no hay que tocar código.
+
+### Suelo planeado que aún no tiene calles
+
+El contorno se deriva de la red vial: una zona del Master Plan todavía sin urbanizar (la expansión norte
+donde irá Town Center) no aparece, aunque el plan la incluya. Para cubrirla, añade su polígono a
+`boundaryExtensions` en `data/geographic/config.json` y vuelve a ejecutar `map:build`:
+
+```json
+"boundaryExtensions": [
+  {
+    "name": "Expansión norte (Town Center)",
+    "source": "De dónde sale el polígono: plano maestro georreferenciado, plan parcial publicado…",
+    "polygon": [[-100.34, 20.692], [-100.33, 20.697], [-100.32, 20.692], [-100.34, 20.692]]
+  }
+]
+```
+
+Cada polígono declara su procedencia y se une al contorno calculado (`turf.union`), así que el mapa cubre
+esa superficie aunque esté vacía de edificios. **Sin una fuente georreferenciada no se añade**: trazar el
+polígono "a ojo" sobre una imagen sería inventar el límite. El `manifest.json` registra qué ampliaciones
+se aplicaron.
+
+El contorno del Master Plan lo genera `npm run map:masterplan`, que no necesita que nadie dibuje:
+
+```bash
+npm run map:masterplan -- --source captura.png   # georreferencia, traza y escribe en config.json
+npm run map:build                                # regenera el mapa con el contorno unido
+```
+
+La captura (el polígono del desarrollo en un color plano sobre un mapa) se ajusta contra las vías
+principales de OpenStreetMap ya descargadas: se parte de dos anclas (`--anchor-a`, `--anchor-b`: el cruce de
+la 540 con la 57D y el campus Anáhuac, en píxeles) y se busca la escala y el desplazamiento que mejor casan
+las vías de OSM con las grises de la imagen. Por debajo de un 80 % de coincidencia el comando se detiene.
+Después toma la mancha de color más grande, tapa rótulos e iconos con un cierre morfológico, recorre su
+borde y lo simplifica a ~10 m. Sustituye cualquier entrada anterior cuyo nombre empiece por "Master Plan".
+La captura no se versiona; el polígono sí, con su procedencia.
 
 ## Sistema de coordenadas
 

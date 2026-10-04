@@ -1,26 +1,38 @@
 /**
  * Enlaces externos a Google Maps (solo navegación: el mapa del producto es MapLibre).
- * Funciona sin googlePlaceId y sin coordenadas propias del local (usa las de su plaza).
+ * El destino es la plaza salvo que el local tenga una ubicación propia verificada: una ruta que termina
+ * en el sitio equivocado es peor que una que deja en la plaza correcta.
  * https://developers.google.com/maps/documentation/urls/get-started
  */
-import { isGoogleMapsUrl } from '../data/rules.ts'
 import type { LatLng, Place, Plaza } from '../types/domain.ts'
 
 const DIRECTIONS = 'https://www.google.com/maps/dir/?api=1'
 
-export function directionsUrl(destination: LatLng, placeId?: string | null): string {
+export function directionsUrl(destination: LatLng): string {
   const params = new URLSearchParams({ destination: `${destination.lat},${destination.lng}` })
-  if (placeId) params.set('destination_place_id', placeId)
   return `${DIRECTIONS}&${params.toString()}`
 }
 
-export function placeDirectionsUrl(place: Place, plaza: Plaza): string {
-  if (place.googleMapsUri && isGoogleMapsUrl(place.googleMapsUri)) return place.googleMapsUri
-  return directionsUrl(place.location ?? plaza.coordinates, place.googlePlaceId)
+/**
+ * Con un destino en coordenadas, Google lo rotula con el negocio más cercano y la ruta parece llevar a
+ * un local suelto dentro de la plaza. Con el nombre y la dirección, el destino es la plaza. Si la plaza
+ * no tiene dirección publicada se vuelve a las coordenadas, que siempre existen.
+ */
+export function plazaDirectionsUrl(plaza: Plaza): string {
+  // Enlace aportado y comprobado a mano: es el sitio exacto, mejor que cualquier búsqueda.
+  if (plaza.googleMapsUri) return plaza.googleMapsUri
+  if (!plaza.address) return directionsUrl(plaza.coordinates)
+  const params = new URLSearchParams({ destination: `${plaza.name}, ${plaza.address}` })
+  return `${DIRECTIONS}&${params.toString()}`
 }
 
-export function plazaDirectionsUrl(plaza: Plaza): string {
-  return directionsUrl(plaza.coordinates)
+/**
+ * "Cómo llegar" desde la ficha de un local: a su puerta solo si su ubicación está verificada y es la
+ * actual (el dataset solo trae `googleMapsUri` en ese caso); si no, a la plaza.
+ */
+export function placeDirections(place: Place, plaza: Plaza): { url: string; toPlace: boolean } {
+  if (place.googleMapsUri) return { url: place.googleMapsUri, toPlace: true }
+  return { url: plazaDirectionsUrl(plaza), toPlace: false }
 }
 
 export function whatsappUrl(phone: string): string {

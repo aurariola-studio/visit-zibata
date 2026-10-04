@@ -89,9 +89,8 @@ export function FilterBar({
 
         {hasSelection && (
           <p className={styles.summary}>
-            {filtersActive && (
-              <span className={styles.results}>{t('filters.results', { count: resultCount })}</span>
-            )}
+            {/* Elegir plaza también acota la lista: el conteo aparece igual que con los demás filtros. */}
+            <span className={styles.results}>{t('filters.results', { count: resultCount })}</span>
             <button type="button" className={styles.clear} onClick={onClear}>
               {t('filters.clear')}
             </button>

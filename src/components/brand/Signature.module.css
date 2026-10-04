@@ -1,0 +1,18 @@
+.signature {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: -0.03em;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.signature:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* El punto en oro es lo único que la marca de aurariola aporta aquí: sin el anillo de píxeles. */
+.dot {
+  color: var(--gold-700);
+}

@@ -36,22 +36,13 @@ export function useZonedNow() {
   return useSyncExternalStore(subscribe, () => moment)
 }
 
-/** "Abierto · Cierra a las 22:00". No renderiza nada si no hay horario (nunca muestra huecos). */
+/**
+ * "Abierto" / "Cerrado". La hora de apertura o cierre no se repite aquí: la tabla de horarios que
+ * acompaña al estado ya la muestra. No renderiza nada si no hay horario (nunca muestra huecos).
+ */
 export function OpenStatus({ hours }: { hours: Hours | null }) {
-  const now = useZonedNow()
-  const status = getOpenStatus(hours, now)
+  const status = getOpenStatus(hours, useZonedNow())
   if (status.state === 'unknown') return null
-
-  let detail: string | null = null
-  if (status.state === 'open') detail = t('hours.closesAt', { time: status.closesAt })
-  else if (status.opensAt?.day === now.day)
-    detail = t('hours.opensAt', { time: status.opensAt.time })
-  else if (status.opensAt) {
-    detail = t('hours.opensOn', {
-      day: t(`day.${status.opensAt.day}`).toLowerCase(),
-      time: status.opensAt.time,
-    })
-  }
 
   return (
     <span className={styles.status} data-state={status.state}>
@@ -59,7 +50,6 @@ export function OpenStatus({ hours }: { hours: Hours | null }) {
       <span className={styles.label}>
         {status.state === 'open' ? t('hours.open') : t('hours.closed')}
       </span>
-      {detail && <span className={styles.detail}>· {detail}</span>}
     </span>
   )
 }

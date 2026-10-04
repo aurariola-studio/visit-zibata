@@ -4,73 +4,77 @@
   "plazas": {
     "beta": 12,
     "betaActive": 10,
-    "verifiedPublishable": 9,
-    "activeInApp": 9,
+    "verifiedPublishable": 11,
+    "activeInApp": 11,
     "byStatus": {
-      "active": 7,
+      "active": 9,
       "likely_active": 2,
       "uncertain": 1,
       "removed": 1,
-      "coming_soon": 1
+      "coming_soon": 2
     },
     "renamed": 3,
     "addressCorrected": 3,
     "candidatesDiscoveredNotOperating": 3
   },
   "businesses": {
-    "candidatesReviewed": 135,
+    "candidatesReviewed": 168,
     "beta": 104,
     "betaActive": 76,
-    "newDiscovered": 31,
-    "newPublished": 10,
-    "published": 76,
+    "newDiscovered": 64,
+    "newPublished": 40,
+    "published": 101,
     "byStatus": {
-      "likely_active": 61,
-      "active": 15,
-      "uncertain": 48,
-      "closed": 3,
-      "removed": 1,
+      "likely_active": 82,
+      "active": 19,
+      "closed": 15,
+      "uncertain": 42,
+      "removed": 2,
       "rejected": 5,
-      "coming_soon": 1,
+      "coming_soon": 2,
       "duplicate": 1
     },
-    "betaPublished": 66,
-    "betaActiveNowExcluded": 15,
-    "betaInactiveNowPublished": 5,
+    "betaPublished": 61,
+    "betaActiveNowExcluded": 17,
+    "betaInactiveNowPublished": 2,
     "plazaCorrections": 2,
-    "nameChanges": 31,
-    "categoryChanges": 10,
+    "nameChanges": 30,
+    "categoryChanges": 37,
     "confidenceInApp": {
-      "medium": 49,
+      "medium": 66,
       "low": 2,
-      "high": 25
+      "high": 33
     },
     "statusInApp": {
-      "likely_active": 61,
-      "active": 15
+      "likely_active": 82,
+      "active": 19
     },
-    "withStructuredHours": 3,
-    "withPhone": 10,
-    "withLocalNumber": 13,
-    "withDescription": 75,
-    "withOfficialLink": 65,
-    "withSubcategory": 45,
-    "evidenceUrls": 287,
-    "datedEvidenceWithin12Months": 25
+    "withStructuredHours": 90,
+    "withPhone": 77,
+    "withOwnLocation": 88,
+    "withSeveralGiros": 39,
+    "withDescription": 101,
+    "withOfficialLink": 100,
+    "withSpecificGiro": 79,
+    "evidenceUrls": 306,
+    "datedEvidenceWithin12Months": 122
   },
   "categories": {
     "beta": 17,
-    "final": 17,
-    "usedInApp": 16,
+    "final": 18,
+    "usedInApp": 17,
     "usedBetaActive": 16,
     "subcategoriesBeta": 24,
-    "subcategoriesFinal": 27,
-    "changes": [
-      "desayunos-y-cafe: nueva subcategoría undefined",
-      "pollo: etiqueta «Pollo y alitas»",
-      "pollo: nueva subcategoría alitas",
-      "tacos-y-antojitos: nueva subcategoría esquites-y-snacks",
-      "postres: nueva subcategoría pasteleria"
+    "girosFinal": 58,
+    "merged": [
+      "carne-y-parrilla",
+      "pizza",
+      "saludable-y-bowls",
+      "sandwiches-y-deli",
+      "pollo",
+      "bistro",
+      "postres",
+      "bar-y-pub"
     ]
   }
 }

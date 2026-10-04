@@ -1,5 +1,6 @@
 import { searchTerms } from '../../lib/text.ts'
 import type { Catalog, Place } from '../../types/domain.ts'
+import { allGiroIds } from '../places/placeIcon.ts'
 import type { SearchIndex } from '../search/searchIndex.ts'
 
 export interface Filters {
@@ -15,6 +16,21 @@ export const EMPTY_FILTERS: Filters = {
   categoryId: null,
   plazaId: null,
   favoritesOnly: false,
+}
+
+/**
+ * Las categorías en las que aparece un local: las de todos sus giros, principales y secundarios,
+ * sin repetir. Un secundario pesa menos a la vista, pero es igual de cierto: si Castore hace ramen,
+ * tiene que salir al filtrar Asiática.
+ */
+export function categoriesOf(place: Place, catalog: Catalog): string[] {
+  return [
+    ...new Set(
+      allGiroIds(place)
+        .map((giro) => catalog.categoryOfGiro.get(giro)?.id)
+        .filter((id): id is string => id !== undefined),
+    ),
+  ]
 }
 
 /** Filtros que reducen la lista (la plaza no cuenta: seleccionarla es navegar, no filtrar). */
@@ -46,7 +62,7 @@ export function applyFilters(
 
   return candidates.filter(
     (place) =>
-      (filters.categoryId === null || place.category === filters.categoryId) &&
+      (filters.categoryId === null || categoriesOf(place, catalog).includes(filters.categoryId)) &&
       (filters.plazaId === null || place.plazaId === filters.plazaId) &&
       (!filters.favoritesOnly || favoriteIds.has(place.id)),
   )
@@ -70,8 +86,10 @@ export function groupByPlaza(places: readonly Place[]): [string, Place[]][] {
 }
 
 /** Nº de lugares por categoría dentro de un conjunto (para las pastillas de filtro). */
-export function countByCategory(places: readonly Place[]): Map<string, number> {
+export function countByCategory(places: readonly Place[], catalog: Catalog): Map<string, number> {
   const counts = new Map<string, number>()
-  for (const place of places) counts.set(place.category, (counts.get(place.category) ?? 0) + 1)
+  for (const place of places)
+    for (const category of categoriesOf(place, catalog))
+      counts.set(category, (counts.get(category) ?? 0) + 1)
   return counts
 }

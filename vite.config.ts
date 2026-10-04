@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
+import pkg from './package.json' with { type: 'json' }
 
 // BASE_PATH permite publicar en un subdirectorio (GitHub Pages: "/<repo>/") sin acoplar el código a
 // un hosting concreto. En local y en hostings en raíz es "/".
@@ -35,8 +36,9 @@ function socialMeta(): Plugin {
 
 /**
  * Content Security Policy en `<meta>` (GitHub Pages no permite cabeceras propias). Solo en build: el
- * servidor de desarrollo inyecta estilos en línea para HMR. Todo es del propio origen: sin CDN, sin
- * analítica y sin APIs externas; Google Maps solo se abre como enlace (navegación, no petición).
+ * servidor de desarrollo inyecta estilos en línea para HMR. Todo es del propio origen salvo el envío
+ * del formulario de sugerencias (api.web3forms.com, solo al pulsar enviar): sin CDN, sin analítica y
+ * sin APIs externas al navegar; Google Maps solo se abre como enlace (navegación, no petición).
  * `blob:`/`data:` en imágenes y workers los usa MapLibre internamente. `frame-ancestors` no se puede
  * declarar en `<meta>`: requiere cabecera del hosting (ver docs/SECURITY.md).
  */
@@ -46,7 +48,8 @@ export const CONTENT_SECURITY_POLICY = [
   "style-src 'self'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  // Único destino externo: el envío de "Sugiere un cambio", y solo cuando la persona pulsa enviar.
+  "connect-src 'self' https://api.web3forms.com",
   "worker-src 'self' blob:",
   "child-src 'self' blob:",
   "manifest-src 'self'",
@@ -119,6 +122,15 @@ function notFoundPage(): Plugin {
 
 export default defineConfig({
   base,
+  define: {
+    // La versión publicada se muestra en "Acerca de": sale de package.json, no de una constante a mano.
+    __APP_VERSION__: JSON.stringify(pkg.version),
+    // El botón de compartir necesita la misma URL pública que Open Graph: si la guía se sirve a la
+    // vez desde github.io y desde el dominio propio, sin esto cada quien compartiría el enlace del
+    // sitio por el que entró y los enlaces entrantes de un mismo lugar se repartirían en dos URLs.
+    // Vacía en desarrollo y en los tests, donde se usa la ubicación real del navegador.
+    __SITE_URL__: JSON.stringify(siteUrl ?? ''),
+  },
   // Sin fallback a index.html, igual que GitHub Pages: un asset inexistente responde 404 también en
   // `vite preview` y en los tests E2E (las rutas de la app viven en el hash).
   appType: 'mpa',

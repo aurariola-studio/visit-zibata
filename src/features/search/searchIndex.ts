@@ -10,6 +10,7 @@ import Fuse, { type IFuseOptions } from 'fuse.js'
 import { localized } from '../../i18n/index.ts'
 import { searchTerms, wordText } from '../../lib/text.ts'
 import type { Catalog, Place } from '../../types/domain.ts'
+import { allGiroIds } from '../places/placeIcon.ts'
 
 interface SearchDocument {
   id: string
@@ -17,9 +18,8 @@ interface SearchDocument {
   plaza: string
   category: string
   categorySynonyms: string[]
-  subcategory: string
-  subcategorySynonyms: string[]
-  tags: string[]
+  giros: string
+  giroSynonyms: string[]
   description: string
 }
 
@@ -27,11 +27,10 @@ const OPTIONS: IFuseOptions<SearchDocument> = {
   keys: [
     { name: 'name', weight: 3 },
     { name: 'category', weight: 1.6 },
-    { name: 'subcategory', weight: 1.4 },
+    { name: 'giros', weight: 1.4 },
     { name: 'plaza', weight: 1.2 },
     { name: 'categorySynonyms', weight: 1.1 },
-    { name: 'subcategorySynonyms', weight: 1 },
-    { name: 'tags', weight: 1 },
+    { name: 'giroSynonyms', weight: 1 },
     { name: 'description', weight: 0.4 },
   ],
   ignoreDiacritics: true,
@@ -47,18 +46,23 @@ export interface SearchIndex {
 }
 
 function toDocument(place: Place, catalog: Catalog): SearchDocument {
-  const category = catalog.categoryById.get(place.category)
-  const subcategory = category?.subcategories.find((s) => s.id === place.subcategory)
+  // Todos los giros del local se buscan, principales y secundarios, no solo el primero: "pizza"
+  // encuentra a la parrilla que hace pizzas. Y con ellos, sus categorías: "italiana" encuentra las
+  // pizzerías.
+  const ids = allGiroIds(place)
+  const giros = ids.map((id) => catalog.giroById.get(id)).filter((giro) => giro !== undefined)
+  const categorias = [
+    ...new Set(ids.map((id) => catalog.categoryOfGiro.get(id)).filter((c) => c !== undefined)),
+  ]
   return {
     id: place.id,
     name: place.name,
     plaza: catalog.plazaById.get(place.plazaId)?.name ?? '',
-    category: category ? localized(category.label) : '',
-    categorySynonyms: category?.synonyms ?? [],
-    subcategory: subcategory ? localized(subcategory.label) : '',
-    subcategorySynonyms: subcategory?.synonyms ?? [],
-    tags: place.tags,
-    description: place.description ?? '',
+    category: categorias.map((c) => localized(c.label)).join(' '),
+    categorySynonyms: categorias.flatMap((c) => c.synonyms),
+    giros: giros.map((giro) => localized(giro.label)).join(' '),
+    giroSynonyms: giros.flatMap((giro) => giro.synonyms),
+    description: [place.description?.es, place.description?.en].filter(Boolean).join(' '),
   }
 }
 
@@ -74,10 +78,9 @@ export function createSearchIndex(catalog: Catalog): SearchIndex {
           doc.name,
           doc.plaza,
           doc.category,
-          doc.subcategory,
+          doc.giros,
           ...doc.categorySynonyms,
-          ...doc.subcategorySynonyms,
-          ...doc.tags,
+          ...doc.giroSynonyms,
           doc.description,
         ].join(' | '),
       ),

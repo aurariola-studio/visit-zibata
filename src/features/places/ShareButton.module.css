@@ -1,0 +1,42 @@
+/* Mismo cuerpo que el botón de favoritos: en la tarjeta van uno al lado del otro y cualquier
+   diferencia de tamaño o de redondeo se lee como un descuido. */
+.button {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-500);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.button svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.button:hover {
+  background: var(--lime-50);
+  color: var(--olive-600);
+}
+
+.button:active {
+  transform: scale(0.9);
+}
+
+/* Copiado: el verde de acción durante el acuse, sin cambiar de tamaño para que nada salte. */
+.button[data-done="true"] {
+  color: var(--olive-600);
+}
+
+.button[data-size="md"] {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-surface-muted);
+}

@@ -1,0 +1,115 @@
+.rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem var(--space-3);
+}
+
+.scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  border: 0;
+  padding: 0;
+}
+
+.legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*
+ * Cada estrella son dos dibujos superpuestos: la vacía y, recortada por la izquierda, la llena. Así
+ * media estrella es exactamente la mitad del mismo dibujo y no un glifo distinto.
+ */
+/*
+ * El alto se ajusta al dibujo (1,2 rem) para que la fila no arrastre aire arriba y abajo y rompa el
+ * ritmo de la ficha. El ancho no se toca: es la zona sensible de las dos mitades.
+ */
+.star {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 1.7rem;
+  border-radius: var(--radius-pill);
+  color: var(--sand-400);
+}
+
+.empty,
+.filled {
+  grid-area: 1 / 1;
+  width: 1.2rem;
+  height: 1.2rem;
+  fill: none;
+}
+
+.filled {
+  color: var(--olive-600);
+  fill: currentColor;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--duration-fast) var(--ease-out);
+}
+
+.star[data-fill="0.5"] .filled {
+  clip-path: inset(0 50% 0 0);
+}
+
+.star[data-fill="1"] .filled {
+  clip-path: inset(0);
+}
+
+/* Mitades sensibles al puntero: izquierda medio punto, derecha entero. */
+.hit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  cursor: pointer;
+}
+
+.hit[data-side="left"] {
+  left: 0;
+}
+
+.hit[data-side="right"] {
+  right: 0;
+}
+
+.half {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+.half input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.star:hover {
+  background: var(--color-surface-muted);
+}
+
+.star:has(input:focus-visible) {
+  outline: 2.5px solid var(--color-focus);
+  outline-offset: 1px;
+}
+
+.note {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filled {
+    transition: none;
+  }
+}

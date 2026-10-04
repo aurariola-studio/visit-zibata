@@ -1,8 +1,8 @@
-/** MapControls: zoom, orientación, vista 3D/cenital, mi ubicación y regreso a la vista de Zibatá. */
-import { Box, Compass, House, LocateFixed, Minus, Plus } from 'lucide-react'
+/** MapControls: zoom, orientación, mi ubicación y regreso a la vista de Zibatá. */
+import { Compass, House, LocateFixed, Minus, Plus } from 'lucide-react'
 import { type Map as MapLibreMap, Marker } from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
-import { INITIAL_CAMERA, MAP_LIMITS } from '../../config/map.ts'
+import { insideCenterBounds } from '../../config/map.ts'
 import { t } from '../../i18n/index.ts'
 import type { Plaza } from '../../types/domain.ts'
 import { resetCamera } from './camera.ts'
@@ -17,21 +17,15 @@ interface MapControlsProps {
 
 export function MapControls({ map, plazas, compact }: MapControlsProps) {
   const [bearing, setBearing] = useState(map.getBearing())
-  const [pitched, setPitched] = useState(map.getPitch() > 5)
   const [locating, setLocating] = useState(false)
   const [locateMessage, setLocateMessage] = useState<string | null>(null)
   const userMarker = useRef<Marker | null>(null)
 
   useEffect(() => {
-    const sync = () => {
-      setBearing(map.getBearing())
-      setPitched(map.getPitch() > 5)
-    }
+    const sync = () => setBearing(map.getBearing())
     map.on('rotate', sync)
-    map.on('pitch', sync)
     return () => {
       map.off('rotate', sync)
-      map.off('pitch', sync)
     }
   }, [map])
 
@@ -63,9 +57,8 @@ export function MapControls({ map, plazas, compact }: MapControlsProps) {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         setLocating(false)
-        const [west, south, east, north] = MAP_LIMITS.maxBounds
         const { longitude, latitude } = coords
-        if (longitude < west || longitude > east || latitude < south || latitude > north) {
+        if (!insideCenterBounds(longitude, latitude)) {
           setLocateMessage(t('map.locateOutside'))
           return
         }
@@ -74,7 +67,7 @@ export function MapControls({ map, plazas, compact }: MapControlsProps) {
         dot.className = styles.userDot ?? ''
         dot.setAttribute('role', 'img')
         dot.setAttribute('aria-label', t('map.userLocation'))
-        userMarker.current = new Marker({ element: dot })
+        userMarker.current = new Marker({ element: dot, pitchAlignment: 'map' })
           .setLngLat([longitude, latitude])
           .addTo(map)
         map.easeTo({
@@ -128,22 +121,6 @@ export function MapControls({ map, plazas, compact }: MapControlsProps) {
           title={t('map.resetNorth')}
         >
           <Compass aria-hidden="true" style={{ transform: `rotate(${-bearing - 45}deg)` }} />
-        </button>
-        <button
-          type="button"
-          className={styles.button}
-          data-active={pitched}
-          aria-pressed={pitched}
-          onClick={() =>
-            map.easeTo({ pitch: pitched ? 0 : INITIAL_CAMERA.pitch, duration: duration * 1.6 })
-          }
-          aria-label={t('map.toggle3d')}
-          title={t('map.toggle3d')}
-        >
-          <Box aria-hidden="true" />
-          <span className={styles.badge} aria-hidden="true">
-            {pitched ? '3D' : '2D'}
-          </span>
         </button>
         <button
           type="button"

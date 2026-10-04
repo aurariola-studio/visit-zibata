@@ -12,15 +12,23 @@ import {
   type PaddingOptions,
 } from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
-import { MAP_ASSETS, MAP_LIMITS, MAP_LOCALE, ZIBATA_EXTENT } from '../../config/map.ts'
+import {
+  clampToCenterBounds,
+  insideCenterBounds,
+  MAP_ASSETS,
+  MAP_LIMITS,
+  MAP_LOCALE,
+  ZIBATA_EXTENT,
+} from '../../config/map.ts'
 import { t } from '../../i18n/index.ts'
 import { absoluteAssetUrl } from '../../lib/assets.ts'
 import type { Plaza } from '../../types/domain.ts'
+import { ComingSoonMarkers } from './ComingSoonMarkers.tsx'
 import { focusPlaza, initialCamera, resetCamera, updatePadding } from './camera.ts'
 import { MapControls } from './MapControls.tsx'
 import { MapErrorMessage } from './MapErrorMessage.tsx'
 import styles from './MapView.module.css'
-import { ensureMapRuntime } from './mapRuntime.ts'
+import { ensureMapRuntime, prefersReducedMotion } from './mapRuntime.ts'
 import { PlazaMarkers } from './PlazaMarkers.tsx'
 import { buildMapStyle } from './style/buildMapStyle.ts'
 import { INTERACTIVE_PLAZA_LAYERS, SOURCE } from './style/ids.ts'
@@ -101,7 +109,6 @@ export default function MapView({
         minZoom: MAP_LIMITS.minZoom,
         maxZoom: MAP_LIMITS.maxZoom,
         maxPitch: MAP_LIMITS.maxPitch,
-        maxBounds: MAP_LIMITS.maxBounds,
         attributionControl: false,
         // Etiquetas del propio MapLibre (atribución, teclado) en español, como el resto de la interfaz.
         locale: MAP_LOCALE,
@@ -117,8 +124,38 @@ export default function MapView({
       return
     }
 
+    // El mapa no se aleja de Zibatá: si el centro de la pantalla sale del área permitida, vuelve al
+    // punto más cercano dentro de ella al terminar el gesto. Se limita el centro y no el encuadre
+    // completo para no estropear la vista general (ver MAP_LIMITS en config/map.ts).
+    const keepOverZibata = () => {
+      const { lng, lat } = instance.getCenter()
+      if (insideCenterBounds(lng, lat)) return
+      const [clampedLng, clampedLat] = clampToCenterBounds(lng, lat)
+      instance.easeTo({
+        center: [clampedLng, clampedLat],
+        duration: prefersReducedMotion() ? 0 : 300,
+      })
+    }
+    instance.on('moveend', keepOverZibata)
+
     instance.getCanvas().setAttribute('aria-label', t('app.mapLabel'))
     instance.addControl(new AttributionControl({ compact: true }), 'bottom-left')
+    /**
+     * MapLibre despliega la atribución compacta en cuanto el estilo trae sus créditos (no al añadir
+     * el control), y la guía la quiere plegada: a la vista queda la ⓘ y el texto aparece al pulsarla.
+     * Basta con plegarla la primera vez que se despliega; después, el control ya no la reabre y quien
+     * quiera leerla la abre cuando quiera.
+     */
+    const collapseAttribution = () => {
+      const attribution = instance.getContainer().querySelector('.maplibregl-ctrl-attrib')
+      if (!attribution?.classList.contains('maplibregl-compact-show')) return
+      attribution.classList.remove('maplibregl-compact-show')
+      instance.off('styledata', collapseAttribution)
+      instance.off('sourcedata', collapseAttribution)
+    }
+    instance.on('styledata', collapseAttribution)
+    instance.on('sourcedata', collapseAttribution)
+    collapseAttribution()
     // Vista inicial: las zonas comerciales encuadradas en el espacio que dejan libre los paneles. El
     // padding vive en el mapa y el encuadre solo añade su margen (igual que "Volver a la vista").
     instance.setPadding(latest.current.padding)
@@ -259,6 +296,7 @@ export default function MapView({
             onHover={setHoveredPlazaId}
             onSelect={onSelectPlaza}
           />
+          <ComingSoonMarkers map={map} plazas={plazas} />
           <MapControls map={map} plazas={plazas} compact={compact} />
         </>
       )}

@@ -2,20 +2,360 @@
   "$comment": "Configuración del pipeline GIS (scripts/map). Coordenadas en WGS84 (EPSG:4326), orden [lng, lat]. Ver docs/PIPELINE-GIS.md.",
   "area": {
     "name": "Zibatá, El Marqués, Querétaro, México",
-    "bbox": [-100.37, 20.65, -100.29, 20.705]
+    "bbox": [
+      -100.37,
+      20.65,
+      -100.29,
+      20.712
+    ],
+    "$bboxComment": "Área de recorte del mapa. El borde norte llega hasta el cruce de la MEX 57D con la QRO 540 para que quepa la expansión del Master Plan (ver boundaryExtensions)."
   },
   "zibataSeedPolygon": [
-    [-100.3548, 20.6874],
-    [-100.3412, 20.68777],
-    [-100.33, 20.69144],
-    [-100.3092, 20.6808],
-    [-100.31, 20.67714],
-    [-100.3164, 20.672],
-    [-100.3228, 20.66907],
-    [-100.3396, 20.66944],
-    [-100.3444, 20.67567],
-    [-100.3548, 20.6786],
-    [-100.3548, 20.6874]
+    [
+      -100.3548,
+      20.6874
+    ],
+    [
+      -100.3412,
+      20.68777
+    ],
+    [
+      -100.33,
+      20.69144
+    ],
+    [
+      -100.3092,
+      20.6808
+    ],
+    [
+      -100.31,
+      20.67714
+    ],
+    [
+      -100.3164,
+      20.672
+    ],
+    [
+      -100.3228,
+      20.66907
+    ],
+    [
+      -100.3396,
+      20.66944
+    ],
+    [
+      -100.3444,
+      20.67567
+    ],
+    [
+      -100.3548,
+      20.6786
+    ],
+    [
+      -100.3548,
+      20.6874
+    ]
+  ],
+  "$boundaryExtensionsComment": "Polígonos que se suman al contorno calculado a partir de la red vial existente, para cubrir suelo ya planeado pero todavía sin calles (p. ej. la expansión norte del Master Plan donde irá Town Center). Cada uno declara su procedencia; sin una fuente verificable no se añade. Ver docs/PIPELINE-GIS.md.",
+  "boundaryExtensions": [
+    {
+      "name": "Master Plan de Zibatá",
+      "source": "Contorno del Master Plan aportado por el propietario de la guía (captura de mapa con el polígono del desarrollo), georreferenciado contra las vías de OpenStreetMap con 88 % de coincidencia y trazado automáticamente. Generado por npm run map:masterplan.",
+      "polygon": [
+        [
+          -100.345438,
+          20.705041
+        ],
+        [
+          -100.345098,
+          20.705041
+        ],
+        [
+          -100.344349,
+          20.704341
+        ],
+        [
+          -100.343805,
+          20.704087
+        ],
+        [
+          -100.343192,
+          20.704087
+        ],
+        [
+          -100.342784,
+          20.704341
+        ],
+        [
+          -100.339926,
+          20.701668
+        ],
+        [
+          -100.339722,
+          20.700459
+        ],
+        [
+          -100.339314,
+          20.699631
+        ],
+        [
+          -100.338497,
+          20.698995
+        ],
+        [
+          -100.337613,
+          20.698995
+        ],
+        [
+          -100.328494,
+          20.690592
+        ],
+        [
+          -100.323935,
+          20.687536
+        ],
+        [
+          -100.317879,
+          20.684226
+        ],
+        [
+          -100.3189,
+          20.682507
+        ],
+        [
+          -100.314001,
+          20.679133
+        ],
+        [
+          -100.312844,
+          20.679197
+        ],
+        [
+          -100.312844,
+          20.678942
+        ],
+        [
+          -100.313456,
+          20.678369
+        ],
+        [
+          -100.313456,
+          20.677542
+        ],
+        [
+          -100.313661,
+          20.677096
+        ],
+        [
+          -100.315906,
+          20.675059
+        ],
+        [
+          -100.318152,
+          20.674868
+        ],
+        [
+          -100.31856,
+          20.675123
+        ],
+        [
+          -100.319444,
+          20.674932
+        ],
+        [
+          -100.329311,
+          20.671494
+        ],
+        [
+          -100.330128,
+          20.671748
+        ],
+        [
+          -100.33353,
+          20.67073
+        ],
+        [
+          -100.338021,
+          20.670157
+        ],
+        [
+          -100.34047,
+          20.669393
+        ],
+        [
+          -100.340334,
+          20.673595
+        ],
+        [
+          -100.340675,
+          20.673913
+        ],
+        [
+          -100.341763,
+          20.674104
+        ],
+        [
+          -100.34292,
+          20.674677
+        ],
+        [
+          -100.344009,
+          20.674868
+        ],
+        [
+          -100.345234,
+          20.674868
+        ],
+        [
+          -100.345574,
+          20.67455
+        ],
+        [
+          -100.345438,
+          20.672894
+        ],
+        [
+          -100.344689,
+          20.672258
+        ],
+        [
+          -100.343056,
+          20.671557
+        ],
+        [
+          -100.343328,
+          20.67003
+        ],
+        [
+          -100.343601,
+          20.669584
+        ],
+        [
+          -100.344689,
+          20.669457
+        ],
+        [
+          -100.345098,
+          20.669775
+        ],
+        [
+          -100.345846,
+          20.669711
+        ],
+        [
+          -100.346527,
+          20.668947
+        ],
+        [
+          -100.346935,
+          20.668947
+        ],
+        [
+          -100.351766,
+          20.669775
+        ],
+        [
+          -100.351766,
+          20.672703
+        ],
+        [
+          -100.351494,
+          20.673085
+        ],
+        [
+          -100.352174,
+          20.673658
+        ],
+        [
+          -100.350813,
+          20.678178
+        ],
+        [
+          -100.353739,
+          20.681298
+        ],
+        [
+          -100.358843,
+          20.682316
+        ],
+        [
+          -100.357006,
+          20.686072
+        ],
+        [
+          -100.355985,
+          20.686391
+        ],
+        [
+          -100.355304,
+          20.686327
+        ],
+        [
+          -100.354896,
+          20.686709
+        ],
+        [
+          -100.354148,
+          20.691292
+        ],
+        [
+          -100.350813,
+          20.691802
+        ],
+        [
+          -100.350541,
+          20.691992
+        ],
+        [
+          -100.350065,
+          20.691929
+        ],
+        [
+          -100.345846,
+          20.692629
+        ],
+        [
+          -100.34537,
+          20.693011
+        ],
+        [
+          -100.342852,
+          20.701859
+        ],
+        [
+          -100.343192,
+          20.702177
+        ],
+        [
+          -100.34537,
+          20.702177
+        ],
+        [
+          -100.34537,
+          20.702814
+        ],
+        [
+          -100.34571,
+          20.703132
+        ],
+        [
+          -100.346663,
+          20.703132
+        ],
+        [
+          -100.346254,
+          20.703959
+        ],
+        [
+          -100.346322,
+          20.704278
+        ],
+        [
+          -100.345438,
+          20.705041
+        ]
+      ]
+    }
   ],
   "sources": {
     "overpassEndpoints": [
@@ -37,14 +377,49 @@
     "minAreaM2": 12,
     "plazaSynthetic": {
       "$comment": "Volumen generado a partir de la geometría de la plaza cuando no hay huellas de edificio dentro (o cuando las existentes están incompletas: replaceExisting). scale = factor sobre el polígono de la plaza.",
-      "default": { "height": 8, "scale": 0.8, "replaceExisting": false },
+      "default": {
+        "height": 8,
+        "scale": 0.8,
+        "replaceExisting": false
+      },
       "plazas": {
-        "paseo-zibata": { "height": 9, "scale": 0.62, "replaceExisting": true },
-        "xentric-zibata": { "height": 8, "scale": 0.8, "replaceExisting": true },
-        "campo-de-golf": { "height": 6, "scale": 0.85, "replaceExisting": true },
-        "foodtrucks-pickleball": { "height": 4, "scale": 0.75 },
-        "distrito-nandu": { "height": 10, "scale": 0.85 }
+        "paseo-zibata": {
+          "height": 9,
+          "scale": 0.62,
+          "replaceExisting": true
+        },
+        "xentric-zibata": {
+          "height": 8,
+          "scale": 0.8,
+          "replaceExisting": true
+        },
+        "campo-de-golf": {
+          "height": 6,
+          "scale": 0.85,
+          "replaceExisting": true
+        },
+        "foodtrucks-pickleball": {
+          "height": 4,
+          "scale": 0.75
+        },
+        "distrito-nandu": {
+          "height": 10,
+          "scale": 0.85
+        }
       }
+    }
+  },
+  "trees": {
+    "$comment": "Árboles del mapa: dentro de la cobertura arbórea real (ESA WorldCover, npm run map:fetch:trees) y de las áreas verdes de OSM. spacing* = separación media entre árboles; roadClearanceM = distancia mínima entre la copa y el eje de cada clase de vía.",
+    "spacingM": 19,
+    "greenSpacingM": 32,
+    "roadClearanceM": {
+      "highway": 14,
+      "primary": 10,
+      "tertiary": 8,
+      "street": 7,
+      "service": 5,
+      "path": 3
     }
   }
 }

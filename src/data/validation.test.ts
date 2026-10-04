@@ -79,31 +79,26 @@ describe('validateRelations', () => {
       ...dataset,
       places: [
         ...placesFixture,
-        makePlace({
-          id: 'cafe-aurora',
-          plazaId: 'plaza-fantasma',
-          category: 'sushi',
-          subcategory: 'nigiri',
-        }),
+        makePlace({ id: 'cafe-aurora', plazaId: 'plaza-fantasma', giros: ['sushi'] }),
       ],
     }
     const errors = errorsOf(validateRelations(broken, bounds))
     expect(errors).toContain('ID de local duplicado: "cafe-aurora"')
     expect(errors).toContain('La plaza "plaza-fantasma" no existe')
-    expect(errors).toContain('La categoría "sushi" no existe')
+    expect(errors).toContain('El giro "sushi" no existe')
   })
 
-  it('detecta subcategorías de otra categoría y coordenadas fuera de Zibatá', () => {
+  it('detecta giros repetidos y coordenadas fuera de Zibatá', () => {
     const broken = {
       ...dataset,
       places: placesFixture.map((place) =>
         place.id === 'pizza-norte'
-          ? { ...place, subcategory: 'panaderia', location: { lat: 19.43, lng: -99.13 } }
+          ? { ...place, giros: ['pizza', 'pizza'], location: { lat: 19.43, lng: -99.13 } }
           : place,
       ),
     }
     const errors = errorsOf(validateRelations(broken, bounds))
-    expect(errors).toContain('La subcategoría "panaderia" no pertenece a "pizza"')
+    expect(errors).toContain('Giro repetido "pizza"')
     expect(errors).toContain('Las coordenadas del local están fuera del área de Zibatá')
   })
 

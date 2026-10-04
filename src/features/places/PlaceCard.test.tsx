@@ -19,34 +19,64 @@ const allDay = {
 describe('PlaceCard', () => {
   beforeEach(() => window.localStorage.clear())
 
-  it('muestra nombre, categoría y número de local', async () => {
+  it('muestra nombre y categoría, y deja el número de local para la ficha', async () => {
     const place = makePlace({
       id: 'trigo',
       plazaId: 'plaza-sur',
       name: 'Trigo',
-      category: 'desayunos-y-cafe',
-      localNumber: '12',
+      giros: ['cafeteria'],
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
     expect(screen.getByText('Trigo')).toBeInTheDocument()
-    expect(screen.getByText('Desayunos y café')).toBeInTheDocument()
-    expect(screen.getByText(/Local 12/)).toBeInTheDocument()
+    expect(screen.getByText('Cafetería')).toBeInTheDocument()
+    // Solo una minoría de locales publica su número: en la lista dejaría filas desiguales.
+    expect(screen.queryByText(/Local 12/)).not.toBeInTheDocument()
   })
 
-  it('usa la subcategoría y la plaza cuando corresponde', async () => {
+  it('nombra todos sus giros, en orden, y la plaza cuando corresponde', async () => {
     const place = makePlace({
       id: 'trigo',
       plazaId: 'plaza-sur',
       name: 'Trigo',
-      category: 'desayunos-y-cafe',
-      subcategory: 'panaderia',
+      giros: ['panaderia', 'cafeteria'],
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} showPlaza />)
-    expect(screen.getByText('Panadería')).toBeInTheDocument()
+    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
     expect(screen.getByText(/Plaza Sur/)).toBeInTheDocument()
   })
 
-  it('solo muestra el estado de horario si hay horario', async () => {
+  it('en la lista, el icono es de los principales y los secundarios solo se leen', async () => {
+    const place = makePlace({
+      id: 'trigo',
+      plazaId: 'plaza-sur',
+      name: 'Trigo',
+      giros: ['panaderia'],
+      secundarios: ['cafeteria'],
+    })
+    const { container } = await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
+    // Los dos se nombran...
+    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
+    // ...pero solo el principal lleva dibujo junto al texto.
+    expect(container.querySelectorAll('[class*="category"] svg')).toHaveLength(1)
+  })
+
+  it('nombra los giros que caben en la línea y cuenta el resto', async () => {
+    // "Panadería · Cafetería · Taquería" son treinta y dos letras y no entran en una línea de
+    // teléfono: se nombran las dos que caben y la tercera se cuenta. El title las lleva todas.
+    const place = makePlace({
+      id: 'trigo',
+      plazaId: 'plaza-sur',
+      name: 'Trigo',
+      giros: ['panaderia', 'cafeteria'],
+      secundarios: ['taqueria'],
+    })
+    await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
+    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
+    expect(screen.getByText('+1')).toBeInTheDocument()
+    expect(screen.getByTitle('Panadería · Cafetería · Taquería')).toBeInTheDocument()
+  })
+
+  it('no muestra el estado de horario en la lista, ni con horario ni sin él', async () => {
     const withoutHours = makePlace({ id: 'a', plazaId: 'plaza-norte', name: 'Sin horario' })
     const { unmount } = await renderWithCatalog(<PlaceCard place={withoutHours} onOpen={vi.fn()} />)
     expect(screen.queryByText('Abierto')).not.toBeInTheDocument()
@@ -60,7 +90,7 @@ describe('PlaceCard', () => {
       hours: allDay,
     })
     await renderWithCatalog(<PlaceCard place={withHours} onOpen={vi.fn()} />)
-    expect(screen.getByText('Abierto')).toBeInTheDocument()
+    expect(screen.queryByText('Abierto')).not.toBeInTheDocument()
   })
 
   it('abre el detalle al pulsar la tarjeta', async () => {
