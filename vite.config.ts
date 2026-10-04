@@ -94,7 +94,7 @@ function notFoundPage(): Plugin {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
-    <title>Página no encontrada · Zibatá · Comer y beber</title>
+    <title>Página no encontrada · Visit Zibatá</title>
     <link rel="icon" type="image/svg+xml" href="${base}favicon.svg" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; img-src 'self'" />
     <style>
@@ -110,10 +110,58 @@ function notFoundPage(): Plugin {
     <main>
       <h1>Esta página no existe</h1>
       <p>La dirección no corresponde a ninguna página de la guía.</p>
-      <a href="${base}">Ir al mapa de Zibatá</a>
+      <a href="${base}">Ir al mapa de Visit Zibatá</a>
     </main>
   </body>
 </html>
+`,
+      })
+    },
+  }
+}
+
+/**
+ * `_headers` para Cloudflare Pages (y Netlify, que usa el mismo formato).
+ *
+ * La política de seguridad sale de la MISMA constante que el `<meta>`, a propósito: cuando las dos
+ * existen, el navegador aplica la intersección, así que si se tocara una y no la otra el resultado
+ * sería un bloqueo difícil de diagnosticar. Se mantienen las dos porque el `<meta>` sigue haciendo
+ * falta en un hosting que no sirva cabeceras, y la cabecera añade lo que un `<meta>` no puede
+ * declarar: `frame-ancestors` (ver docs/SEGURIDAD.md).
+ *
+ * El `Cache-Control` va por tipo: los assets llevan hash en el nombre y son inmutables, mientras que
+ * el HTML y el manifiesto deben revalidarse o un despliegue nuevo tardaría un día en verse. Las
+ * teselas cambian solo cuando se regenera el mapa.
+ */
+function cloudflareHeaders(): Plugin {
+  return {
+    name: 'zibata-headers',
+    apply: 'build',
+    generateBundle() {
+      const csp = `${CONTENT_SECURITY_POLICY}; frame-ancestors 'none'`
+      this.emitFile({
+        type: 'asset',
+        fileName: '_headers',
+        source: `# Generado por vite.config.ts (plugin zibata-headers). No editar a mano.
+/*
+  Content-Security-Policy: ${csp}
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+  Cross-Origin-Opener-Policy: same-origin
+  # La ubicación solo se usa al pulsar el botón de centrar el mapa; lo demás se niega de raíz.
+  Permissions-Policy: geolocation=(self), camera=(), microphone=(), payment=(), usb=()
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/map/*
+  Cache-Control: public, max-age=86400
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/site.webmanifest
+  Cache-Control: public, max-age=3600
 `,
       })
     },
@@ -134,7 +182,7 @@ export default defineConfig({
   // Sin fallback a index.html, igual que GitHub Pages: un asset inexistente responde 404 también en
   // `vite preview` y en los tests E2E (las rutas de la app viven en el hash).
   appType: 'mpa',
-  plugins: [react(), socialMeta(), contentSecurityPolicy(), notFoundPage()],
+  plugins: [react(), socialMeta(), contentSecurityPolicy(), notFoundPage(), cloudflareHeaders()],
   build: {
     target: 'es2022',
     // MapLibre (~800 KB min) vive en su propio chunk diferido; el aviso por defecto no aporta.

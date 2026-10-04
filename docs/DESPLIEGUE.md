@@ -3,34 +3,41 @@
 El sitio es 100 % estático: `npm run build` produce `dist/` y cualquier servidor de archivos lo sirve. No
 hay backend, base de datos, variables secretas ni servicios de pago.
 
-## Estado actual (2026-09-15)
+## Estado actual (2026-10-04)
 
-**La guía todavía no se ha publicado en internet.** Por decisión del propietario, la versión 1.0.0 se
-etiqueta solo en local (sin repositorio remoto). Todo lo que se puede verificar sin publicar está
-verificado; lo que no, se declara como no verificado en
-[release/FINAL_REMEDIATION_CHECKLIST.md](release/FINAL_REMEDIATION_CHECKLIST.md):
+Código en <https://github.com/JesusOrihuela/visit-zibata>. Alojamiento: **Cloudflare Pages**, proyecto
+`visit-zibata`.
 
-| Comprobación | Estado |
-| --- | --- |
-| Build de producción en raíz y en subruta | Verificado |
-| Servidor estático estricto tipo GitHub Pages (404 reales, `Range`, sin *fallback* SPA) | Verificado en local |
-| Suite E2E contra el build, en raíz y en subruta | Verificado |
-| Workflows de CI y de publicación | Revisados y con YAML válido; **no ejecutados en GitHub** |
-| URL pública, HTTPS del hosting, caché real de GitHub Pages | **No verificado** |
+## Publicar en Cloudflare Pages
 
-## Publicar en GitHub Pages
+Se compila y se publica desde GitHub Actions, **no con la integración de Git de Cloudflare**. Es una
+decisión deliberada: esa integración compila por su cuenta y no corre las pruebas, así que publicaría
+igual con el presupuesto de peso roto, con axe en rojo o con los tests de CSP fallando. Las puertas de
+este repositorio solo sirven si nada se publica sin pasarlas.
 
-1. Sube el repositorio a GitHub (rama `main`).
-2. **Settings → Pages → Source: GitHub Actions**.
-3. Cada push a `main` ejecuta `.github/workflows/deploy.yml`: `npm ci` → validación de datos → lint, tipos
-   y tests → build → presupuesto de rendimiento → E2E (Chromium y WebKit) → publicación.
+Preparación, una sola vez:
 
-El sitio queda en `https://<usuario>.github.io/<repositorio>/`. Con dominio propio o repositorio
-`<usuario>.github.io`, define las variables de repositorio `PAGES_BASE_PATH=/` y
-`PAGES_SITE_URL=https://tu-dominio/`.
+1. En Cloudflare, crea el proyecto de Pages `visit-zibata` **sin conectar Git** (Direct Upload). Si ya
+   estaba conectado, desconéctalo o publicará dos veces y una de ellas sin pasar las puertas.
+2. Crea un token de API con el permiso **Cloudflare Pages: Edit** y anota el **Account ID**.
+3. En GitHub → Settings → Secrets and variables → Actions:
+   - secreto `CLOUDFLARE_API_TOKEN`
+   - secreto `CLOUDFLARE_ACCOUNT_ID`
+   - variable `PAGES_SITE_URL`, con barra final (por ejemplo `https://visitzibata.com/`)
 
-Las acciones están fijadas por SHA (Dependabot las actualiza). En cuentas de organización, Gitleaks
-necesita `GITLEAKS_LICENSE`.
+A partir de ahí, cada push a `main` ejecuta `.github/workflows/deploy.yml`: `npm ci` → validación de
+datos → lint, tipos y tests → build → presupuesto de rendimiento → E2E (Chromium y WebKit) →
+`wrangler pages deploy`. Si cualquier paso falla, no se publica nada.
+
+Las acciones están fijadas por SHA y `wrangler` está fijado en el lockfile (Dependabot las actualiza).
+En cuentas de organización, Gitleaks necesita `GITLEAKS_LICENSE`.
+
+### Cabeceras
+
+`dist/_headers` lo genera el build (plugin `zibata-headers` en `vite.config.ts`) a partir de la misma
+constante que el `<meta>` de la CSP, para que no puedan divergir. Añade lo que un `<meta>` no puede
+declarar: `frame-ancestors`, `Referrer-Policy`, `X-Content-Type-Options`, `Permissions-Policy` y el
+`Cache-Control` por tipo de archivo. El formato es el de Cloudflare Pages y Netlify.
 
 ## Requisitos del hosting
 
@@ -50,19 +57,13 @@ SITE_URL=https://mi-dominio/ npm run build   # URLs absolutas de Open Graph
 
 En Git Bash (Windows), exporta `MSYS_NO_PATHCONV=1` antes de pasar rutas como `BASE_PATH`.
 
-## Cabeceras recomendadas
+## Cabeceras en otros hostings
 
-La política de seguridad de contenido viaja en un `<meta>` del HTML (GitHub Pages no permite cabeceras
-propias). Si el hosting sí las admite, conviene añadir:
-
-```
-Content-Security-Policy: <misma política que el <meta>; ver docs/SEGURIDAD.md>
-Referrer-Policy: strict-origin-when-cross-origin
-X-Content-Type-Options: nosniff
-Frame-Ancestors / X-Frame-Options: DENY      (no se puede declarar en <meta>)
-Cache-Control: public, max-age=31536000, immutable   para /assets/* (nombres con hash)
-Cache-Control: no-cache                              para index.html y *.pmtiles
-```
+En Cloudflare Pages y Netlify no hay que hacer nada: el build genera `dist/_headers` (ver arriba). En
+un hosting que no lea ese archivo (nginx, Apache, S3 con CloudFront), hay que trasladar su contenido a
+la configuración del servidor. El `<meta>` de la CSP sigue viajando en el HTML, así que un hosting sin
+cabeceras conserva la política; lo que se pierde sin ellas es `frame-ancestors`, que un `<meta>` no
+puede declarar.
 
 ## Verificación local de una publicación
 
