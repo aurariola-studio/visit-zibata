@@ -2,17 +2,24 @@
  * Ficha del lugar. Solo muestra los campos que existen: nunca botones vacíos ni textos de relleno.
  */
 import { ArrowUpRight, ChevronLeft, Globe, MapPin, Navigation, Phone, X } from 'lucide-react'
-import { type ReactNode, useEffect, useRef } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { BrandIcon, type BrandName } from '../../components/icons/BrandIcons.tsx'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { localized, t } from '../../i18n/index.ts'
-import { placeDirectionsUrl, telUrl, whatsappUrl } from '../../lib/maps-url.ts'
-import type { Place, Plaza } from '../../types/domain.ts'
+import { assetUrl } from '../../lib/assets.ts'
+import { focusPanelHeading } from '../../lib/focus.ts'
+import { placeDirections, telUrl, whatsappUrl } from '../../lib/maps-url.ts'
+import type { LocalizedText, Place, Plaza } from '../../types/domain.ts'
 import { FavoriteButton } from '../favorites/FavoriteButton.tsx'
+import { SocialStats } from '../favorites/SocialStats.tsx'
+import { RatingStars } from '../ratings/RatingStars.tsx'
+import { VisitButton } from '../visits/VisitButton.tsx'
 import { HoursTable } from './HoursTable.tsx'
-import { PhotoGallery } from './PhotoGallery.tsx'
 import styles from './PlaceDetail.module.css'
+import { PlacePicture } from './PlacePicture.tsx'
+import { girosOf, girosSecundariosOf } from './placeIcon.ts'
+import { ShareButton } from './ShareButton.tsx'
 
 interface PlaceDetailProps {
   place: Place
@@ -28,24 +35,77 @@ interface ContactLink {
   label: string
   icon: ReactNode
   external: boolean
+  /** Enlace de reparto: el botón es el icono de la aplicación, sin marco. */
+  tile?: boolean
+}
+
+/**
+ * La descripción la escribe el propio negocio, en español. Cuando la guía está en otro idioma se
+ * lee la traducción, marcada como generada y con el original a un clic: el texto es suyo, no
+ * nuestro, y quien quiera leerlo tal cual escribió debe poder hacerlo. Sin traducción se muestra el
+ * original sin leyenda, que es lo que pasa con las descripciones que ya venían en inglés.
+ */
+function Description({ text }: { text: LocalizedText }) {
+  const traducida = localized(text)
+  const esTraduccion = traducida !== text.es
+  const [verOriginal, setVerOriginal] = useState(false)
+
+  return (
+    <div className={styles.descriptionBlock}>
+      <p className={styles.description}>{verOriginal ? text.es : traducida}</p>
+      {esTraduccion && (
+        <p className={styles.translationNote}>
+          {t('place.machineTranslation')}
+          <button
+            type="button"
+            className={styles.translationToggle}
+            aria-pressed={verOriginal}
+            onClick={() => setVerOriginal((antes) => !antes)}
+          >
+            {t(verOriginal ? 'place.showTranslation' : 'place.showOriginal')}
+          </button>
+        </p>
+      )}
+    </div>
+  )
 }
 
 export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceDetailProps) {
   const catalog = useCatalog()
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const category = catalog.categoryById.get(place.category)
-  const subcategory = category?.subcategories.find((s) => s.id === place.subcategory)
-  const categoryLabel = category ? localized(category.label) : ''
+  const directions = placeDirections(place, plaza)
+  /**
+   * Los giros del local en una sola línea, en su orden y con el icono de cada uno: aquí hay sitio
+   * para todos, principales y secundarios, así que esta es la única vista que los enseña completos.
+   * El logo redondo, en cambio, lleva solo los principales.
+   */
+  const giros = girosOf(place, catalog)
+  const secundarios = girosSecundariosOf(place, catalog)
+  const todos = [...giros, ...secundarios]
+  const giroLabels = todos.map((giro) => localized(giro.label))
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia el lugar mostrado.
   useEffect(() => {
-    headingRef.current?.focus({ preventScroll: true })
+    focusPanelHeading(headingRef.current)
   }, [place.id])
 
   const brand = (name: BrandName) => <BrandIcon name={name} />
+  /**
+   * Reparto: su icono de aplicación, tal cual se ve en el teléfono, a todo color y ocupando el botón.
+   * Es como se reconocen de un vistazo; las redes siguen con su silueta en el verde de la guía.
+   */
+  const appTile = (file: string) => (
+    <img
+      className={styles.tile}
+      src={assetUrl(`brands/${file}.svg`)}
+      alt=""
+      width={40}
+      height={40}
+    />
+  )
   const links: ContactLink[] = []
   const { phone } = place
-  const { whatsapp, website, instagram, facebook, tiktok } = place.links
+  const { whatsapp, website, instagram, facebook, tiktok, rappi, uberEats, didiFood } = place.links
   if (phone) {
     links.push({
       key: 'phone',
@@ -100,6 +160,36 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
       external: true,
     })
   }
+  if (rappi) {
+    links.push({
+      key: 'rappi',
+      href: rappi,
+      label: t('place.rappi'),
+      icon: appTile('rappi'),
+      external: true,
+      tile: true,
+    })
+  }
+  if (uberEats) {
+    links.push({
+      key: 'uber-eats',
+      href: uberEats,
+      label: t('place.uberEats'),
+      icon: appTile('uber-eats'),
+      external: true,
+      tile: true,
+    })
+  }
+  if (didiFood) {
+    links.push({
+      key: 'didi-food',
+      href: didiFood,
+      label: t('place.didiFood'),
+      icon: appTile('didi-food'),
+      external: true,
+      tile: true,
+    })
+  }
 
   const hasExtraInfo = Boolean(
     place.description || place.hours || links.length > 0 || place.photos.length > 0,
@@ -113,6 +203,12 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
           <span>{backLabel}</span>
         </button>
         <div className={styles.toolbarActions}>
+          <ShareButton
+            name={place.name}
+            slug={place.slug}
+            giros={giroLabels.join(' · ')}
+            plazaName={plaza.name}
+          />
           <FavoriteButton placeId={place.id} placeName={place.name} />
           <button
             type="button"
@@ -125,27 +221,48 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
         </div>
       </div>
 
-      <PhotoGallery
-        photos={place.photos}
-        categoryId={place.category}
-        categoryIcon={category?.icon ?? 'utensils-crossed'}
-        categoryLabel={categoryLabel}
-      />
-
       <header className={styles.header}>
-        <p className={styles.eyebrow}>
-          <CategoryIcon name={category?.icon ?? 'utensils-crossed'} size={15} />
-          {categoryLabel}
-          {subcategory && <span> · {localized(subcategory.label)}</span>}
-        </p>
-        <h2 id="place-detail-title" ref={headingRef} tabIndex={-1} className={styles.title}>
-          {place.name}
-        </h2>
+        <div className={styles.identity}>
+          {/* Logo del lugar (o su ilustración de categoría): redondo, como en las redes. */}
+          <span className={styles.logo}>
+            <PlacePicture
+              photo={place.photos[0]}
+              category={catalog.categoryOfGiro.get(place.giros[0] ?? '')}
+              icons={giros.map((giro) => giro.icon)}
+              sizes="88px"
+              ratio="1 / 1"
+              illustrationSize="sm"
+              eager
+            />
+          </span>
+          <div className={styles.identityText}>
+            <h2 id="place-detail-title" ref={headingRef} tabIndex={-1} className={styles.title}>
+              {place.name}
+            </h2>
+            {/*
+             * Los giros van debajo del nombre, uno por renglón: son el detalle del lugar, no su
+             * antetítulo. Un renglón por giro y no uno por nivel, porque repartirlos dos y uno
+             * partía la lista por donde no hay junta. Los dos niveles se pintan igual: en la ficha
+             * todos son lo que se vende ahí, y el orden ya dice cuál manda. Es un párrafo y no una
+             * lista: la única lista de la ficha es la de contacto.
+             */}
+            <p className={styles.giros} title={giroLabels.join(' · ')}>
+              {todos.map((giro) => (
+                <span key={giro.id}>
+                  <CategoryIcon name={giro.icon} size={14} />
+                  {localized(giro.label)}
+                </span>
+              ))}
+            </p>
+          </div>
+        </div>
+        <SocialStats placeId={place.id} />
+        <RatingStars placeId={place.id} placeName={place.name} />
+        <VisitButton placeId={place.id} placeName={place.name} />
         <p className={styles.location}>
           <MapPin aria-hidden="true" />
           <span>
             {plaza.name}
-            {place.localNumber && ` · ${t('place.localNumber', { number: place.localNumber })}`}
             {plaza.address && <span className={styles.address}>{plaza.address}</span>}
           </span>
         </p>
@@ -153,23 +270,26 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
 
       <a
         className={styles.directions}
-        href={placeDirectionsUrl(place, plaza)}
+        href={directions.url}
         target="_blank"
         rel="noopener noreferrer"
         aria-describedby="directions-hint"
+        aria-label={
+          directions.toPlace
+            ? t('place.directionsToPlace', { name: place.name })
+            : t('place.directionsToPlaza', { plaza: plaza.name })
+        }
       >
         <Navigation aria-hidden="true" />
-        {/* Sin ubicación ni ficha propias, la ruta lleva a la plaza: se dice para no prometer la puerta. */}
-        {place.location || place.googleMapsUri
-          ? t('place.directions')
-          : t('place.directionsToPlaza', { plaza: plaza.name })}
+        {/* Corto a la vista, completo para quien lo escucha: el nombre largo partía el botón en dos. */}
+        {directions.toPlace ? t('place.directions') : t('plaza.directions')}
         <ArrowUpRight aria-hidden="true" className={styles.external} />
       </a>
       <span id="directions-hint" className="visually-hidden">
         {t('place.directionsHint')}
       </span>
 
-      {place.description && <p className={styles.description}>{place.description}</p>}
+      {place.description && <Description text={place.description} />}
 
       <HoursTable hours={place.hours} />
 
@@ -181,13 +301,16 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
           <ul className={styles.links}>
             {links.map((link) => (
               <li key={link.key}>
+                {/* Solo el icono: así los enlaces caben en una fila y hay sitio para los que falten. */}
                 <a
                   className={styles.link}
+                  data-tile={link.tile === true}
                   href={link.href}
+                  aria-label={link.label}
+                  title={link.label}
                   {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   {link.icon}
-                  <span>{link.label}</span>
                 </a>
               </li>
             ))}

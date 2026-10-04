@@ -1,3 +1,8 @@
+.rail {
+  position: relative;
+  min-width: 0;
+}
+
 .scroller {
   overflow-x: auto;
   scrollbar-width: none;
@@ -19,7 +24,7 @@
   display: flex;
   gap: var(--space-2);
   width: max-content;
-  padding: 2px 12px 4px;
+  padding: 4px 12px;
 }
 
 .chip {
@@ -80,8 +85,56 @@
   color: var(--ink-900);
 }
 
+/* Flechas de desplazamiento (solo ratón): pegadas a cada extremo del carril. */
+.arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-surface-solid);
+  box-shadow:
+    0 0 0 1px var(--color-border),
+    var(--shadow-sm);
+  color: var(--ink-700);
+  translate: 0 -50%;
+}
+
+.arrow[hidden] {
+  /* `display: grid` gana al `[hidden]` del navegador: sin esto la flecha se ve con el carril al tope. */
+  display: none;
+}
+
+.arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.arrow[data-side="start"] {
+  left: 2px;
+}
+
+.arrow[data-side="end"] {
+  right: 2px;
+}
+
+.arrow:hover {
+  background: var(--lime-50);
+  color: var(--olive-700);
+}
+
+/* Con dedo o trackpad el gesto nativo basta y las flechas solo taparían pastillas. */
+@media (hover: none) {
+  .arrow {
+    display: none;
+  }
+}
+
 /* Sobre el mapa: pastillas con fondo translúcido y sombra. */
-.scroller[data-variant="floating"] .chip {
+.rail[data-variant="floating"] .chip {
   background: var(--color-surface);
   backdrop-filter: var(--blur-surface);
   box-shadow:
@@ -89,6 +142,13 @@
     var(--shadow-sm);
 }
 
-.scroller[data-variant="floating"] .chip[aria-pressed="true"] {
+.rail[data-variant="floating"] .chip[aria-pressed="true"] {
   background: var(--olive-600);
+}
+
+/* Dentro de un panel: el carril sangra hacia los márgenes lo mismo que el relleno interno de las
+   pastillas (que deja sitio al desvanecido), así que la primera queda alineada con el resto del
+   contenido en vez de 12 px más adentro. */
+.rail[data-variant="inline"] {
+  margin-inline: -12px;
 }

@@ -36,6 +36,9 @@
 .handle {
   display: grid;
   place-items: center;
+  /* `touch-action` no se hereda del área de agarre: sin esto el navegador podría interpretar el arrastre
+     que empieza sobre el asa como un desplazamiento suyo y cancelar el puntero a media gesto. */
+  touch-action: none;
   width: 4.5rem;
   height: 1.5rem;
   border: 0;
@@ -61,6 +64,7 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 0 var(--space-4) calc(var(--space-6) + var(--safe-bottom));
+  /* Con 0 arriba, el botón redondo de cerrar queda a ras del borde que recorta y se ve cortado. */
+  padding: var(--space-1) var(--space-4) calc(var(--space-6) + var(--safe-bottom));
   touch-action: pan-y;
 }

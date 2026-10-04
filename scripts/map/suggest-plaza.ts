@@ -39,6 +39,33 @@ if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
 }
 
 const center = turf.point([lng, lat])
+/** Distancia del punto del enlace al frente del rectángulo cuando hay que sacarlo de la calle. */
+const SETBACK_M = 8
+
+/** Metros de vía que cruza el polígono + m² de edificios ajenos que pisa: 0 = sitio limpio. */
+function conflictsOf(
+  polygon: Polygon,
+  roads: Feature<LineString>[],
+  footprints: Feature<Polygon | MultiPolygon>[],
+): number {
+  const shape = turf.feature(polygon)
+  let score = 0
+  for (const road of roads) {
+    if (!turf.booleanIntersects(shape, road)) continue
+    const split = turf.lineSplit(road, shape)
+    for (const piece of split.features.length > 0 ? split.features : [road]) {
+      const mid = turf.along(piece, turf.length(piece) / 2)
+      if (turf.booleanPointInPolygon(mid, shape)) score += turf.length(piece, { units: 'meters' })
+    }
+  }
+  for (const footprint of footprints) {
+    for (const part of polygonsOf(footprint)) {
+      const overlap = turf.intersect(turf.featureCollection([shape, turf.feature(part)]))
+      if (overlap) score += turf.area(overlap)
+    }
+  }
+  return score
+}
 const radiusM = Number(values.radius)
 const minArea = Number(values['min-area'])
 
@@ -70,19 +97,43 @@ if (selected.length > 0) {
   const footprint = Math.round(selected.reduce((sum, polygon) => sum + turf.area(polygon), 0))
   summary = `${selected.length} huella(s) de edificio, ${footprint} m² construidos en planta`
 } else {
+  const osm = readJson<OverpassResponse>(paths.rawOsm)
+  const roads = overpassToFeatures(osm).filter(
+    (f) => f.geometry.type === 'LineString' && classifyRoad(f.properties) !== null,
+  ) as Feature<LineString>[]
   let bearing = Number(values.bearing)
   if (values.bearing === 'auto') {
-    const osm = readJson<OverpassResponse>(paths.rawOsm)
-    const roads = overpassToFeatures(osm).filter(
-      (f) => f.geometry.type === 'LineString' && classifyRoad(f.properties) !== null,
-    ) as Feature<LineString>[]
     const nearest = nearestRoadBearing([lng, lat], roads)
     bearing = nearest?.bearing ?? 0
     summary = `rectángulo orientado a la vialidad más cercana (${nearest?.distanceM.toFixed(0)} m, rumbo ${bearing.toFixed(0)}°)`
   } else {
     summary = `rectángulo con rumbo ${bearing}°`
   }
-  geometry = orientedRectangle([lng, lat], Number(values.length), Number(values.depth), bearing)
+  // El punto de un enlace de Maps suele caer en la banqueta o en la calle de acceso: un rectángulo
+  // centrado en él cruzaría la vía. Se coloca a un lado de la calle (el que menos choca con vías y
+  // edificios), con su frente a SETBACK_M del punto.
+  const length = Number(values.length)
+  const depth = Number(values.depth)
+  const candidates = [0, 1, -1].map((side) => {
+    const shifted =
+      side === 0
+        ? center
+        : turf.destination(center, (depth / 2 + SETBACK_M) / 1000, bearing + 90 * side, {
+            units: 'kilometers',
+          })
+    const polygon = orientedRectangle(
+      shifted.geometry.coordinates as [number, number],
+      length,
+      depth,
+      bearing,
+    )
+    return { side, polygon, conflicts: conflictsOf(polygon, roads, buildings.features) }
+  })
+  const best = candidates.reduce((a, b) => (b.conflicts < a.conflicts ? b : a))
+  geometry = best.polygon
+  if (best.side !== 0) summary += `, desplazado ${depth / 2 + SETBACK_M} m al lado libre de la vía`
+  if (best.conflicts > 0)
+    summary += `: AVISO: aún cruza vías o edificios (${best.conflicts.toFixed(0)})`
 }
 
 const areaM2 = Math.round(turf.area(geometry))

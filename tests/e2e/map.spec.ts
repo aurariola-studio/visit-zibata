@@ -1,9 +1,9 @@
 import { expect, type Page, test } from '@playwright/test'
-import { openApp, panel, plazaMarker, waitForMap } from './helpers.ts'
+import { openApp, panel, placesInPlaza, plazaMarker, waitForMap } from './helpers.ts'
 
 /**
- * Plazas representadas en pantalla: marcadores visibles dentro de la vista más las plazas anunciadas en
- * un grupo "+N" (las que no caben junto a otras en pantallas pequeñas).
+ * Plazas representadas en pantalla: marcadores visibles dentro de la vista, ya lleven nombre, solo la
+ * cifra o el punto al que se reducen cuando no cabe nada más.
  */
 const representedPlazas = (page: Page) =>
   page.evaluate(() => {
@@ -11,25 +11,43 @@ const representedPlazas = (page: Page) =>
       const box = element.getBoundingClientRect()
       return box.left >= 0 && box.right <= innerWidth && box.top >= 0 && box.bottom <= innerHeight
     }
-    const markers = [...document.querySelectorAll<HTMLElement>('button[data-mode]')].filter(
+    return [...document.querySelectorAll<HTMLElement>('button[data-mode]')].filter(
       (marker) => marker.dataset.mode !== 'hidden' && inView(marker),
-    )
-    const grouped = [...document.querySelectorAll('button[aria-label^="Acercar el mapa"]')]
-      .filter(inView)
-      .reduce((sum, badge) => sum + Number(badge.textContent?.replace('+', '') ?? 0), 0)
-    return markers.length + grouped
+    ).length
   })
 
-/** Marcadores y grupos "+N" mostrados que quedan (en parte) bajo la hoja inferior, que solo existe en móvil. */
+/**
+ * Promesa del mapa: si el punto de una plaza cae en la franja libre (entre la barra superior y el
+ * panel), esa plaza tiene marcador (con nombre, con la cifra o reducida a un punto). Las que quedan
+ * fuera de la franja (detrás del panel en pantallas muy bajas) se alcanzan por la lista o el selector.
+ */
+const plazasMissingInBand = (page: Page) =>
+  page.evaluate(() => {
+    const sheet = document.querySelector('section[data-panel]')?.getBoundingClientRect()
+    const topbar = document.querySelector('header')?.getBoundingClientRect()
+    // El mapa reserva unos píxeles más que el borde visible del panel (el margen de la cámara), así que
+    // la franja que se comprueba es algo menor que el hueco en pantalla.
+    const MARGIN = 24
+    const band = {
+      top: (topbar ? topbar.bottom : 0) + MARGIN,
+      bottom: (sheet ? sheet.top : innerHeight) - MARGIN,
+    }
+    return [...document.querySelectorAll<HTMLElement>('button[data-mode]')]
+      .filter((marker) => {
+        const anchor = marker.parentElement?.getBoundingClientRect()
+        if (!anchor) return false
+        const inBand = anchor.bottom >= band.top && anchor.bottom <= band.bottom
+        return inBand && marker.dataset.mode === 'hidden'
+      })
+      .map((marker) => marker.getAttribute('aria-label'))
+  })
+
+/** Marcadores mostrados que quedan (en parte) bajo la hoja inferior, que solo existe en móvil. */
 const coveredBySheet = (page: Page) =>
   page.evaluate(() => {
     const sheet = document.querySelector('section[data-panel]')?.getBoundingClientRect()
     if (!sheet) return []
-    return [
-      ...document.querySelectorAll<HTMLElement>(
-        'button[data-mode], button[aria-label^="Acercar el mapa"]',
-      ),
-    ]
+    return [...document.querySelectorAll<HTMLElement>('button[data-mode]')]
       .filter(
         (element) =>
           element.dataset.mode !== 'hidden' && element.getBoundingClientRect().bottom > sheet.top,
@@ -39,25 +57,25 @@ const coveredBySheet = (page: Page) =>
 
 /** Nº de plazas activas según el selector de plazas (sin la opción "Todas"). */
 const activePlazaCount = async (page: Page) =>
-  (await page.getByRole('combobox', { name: 'Plaza' }).locator('option').count()) - 1
+  (await page.getByRole('combobox', { name: 'Filtrar por zona' }).locator('option').count()) - 1
 
 test.describe('Mapa', () => {
   test('abre directamente en el mapa 3D con plazas y atribución', async ({ page }) => {
     await openApp(page)
     await expect(page).toHaveTitle(/Zibatá/)
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Zibatá · Comer y beber' }),
+      page.getByRole('heading', { level: 1, name: 'Visit Zibatá · Comer y beber' }),
     ).toBeAttached()
     const canvas = page.locator('canvas.maplibregl-canvas')
     await expect(canvas).toBeVisible()
     await expect(canvas).toHaveAttribute('aria-label', 'Mapa 3D interactivo de Zibatá')
     await waitForMap(page)
-    // Qué plazas llevan marcador propio depende del tamaño de pantalla; alguna siempre lo tiene.
+    // Qué zonas llevan marcador propio depende del tamaño de pantalla; alguna siempre lo tiene.
     await expect(
-      page.getByRole('button', { name: /^Ver .+: \d+ lugar(es)?$/ }).first(),
+      page.getByRole('button', { name: /^Ver .+, \d+ lugar(es)?$/ }).first(),
     ).toBeVisible()
     await expect((await plazaMarker(page, 'Xentric Anáhuac')).first()).toHaveAccessibleName(
-      'Ver Xentric Anáhuac: 20 lugares',
+      `Ver Xentric Anáhuac, ${placesInPlaza('Xentric Anáhuac')} lugares`,
     )
     await expect(
       page.locator('.maplibregl-ctrl-attrib a', { hasText: 'OpenStreetMap' }),
@@ -71,11 +89,11 @@ test.describe('Mapa', () => {
     const dialog = page.getByRole('dialog')
     await expect(dialog.getByRole('heading', { name: 'Explora Zibatá' })).toBeVisible()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
-    await expect(dialog.getByRole('heading', { name: 'Selecciona una plaza' })).toBeVisible()
+    await expect(dialog.getByRole('heading', { name: 'Selecciona una zona' })).toBeVisible()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
-    await expect(
-      dialog.getByRole('heading', { name: 'Descubre dónde comer y beber' }),
-    ).toBeVisible()
+    await expect(dialog.getByRole('heading', { name: 'Abre la ficha de un lugar' })).toBeVisible()
+    await dialog.getByRole('button', { name: 'Siguiente' }).click()
+    await expect(dialog.getByRole('heading', { name: 'Deja tu marca' })).toBeVisible()
     await dialog.getByRole('button', { name: 'Empezar a explorar' }).click()
     await expect(dialog).toBeHidden()
 
@@ -90,15 +108,13 @@ test.describe('Mapa', () => {
     await expect(page.getByRole('dialog')).toBeHidden()
   })
 
-  test('los controles del mapa inclinan, orientan y restauran la vista', async ({ page }) => {
+  test('los controles del mapa orientan y restauran la vista', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)
-    const toggle3d = page.getByRole('button', { name: 'Cambiar entre vista 3D y vista cenital' })
-    await expect(toggle3d).toHaveAttribute('aria-pressed', 'true')
-    await toggle3d.click()
-    await expect(toggle3d).toHaveAttribute('aria-pressed', 'false')
-    await toggle3d.click()
-    await expect(toggle3d).toHaveAttribute('aria-pressed', 'true')
+    // La vista 3D es la única: ya no hay botón para pasar a cenital.
+    await expect(
+      page.getByRole('button', { name: 'Cambiar entre vista 3D y vista cenital' }),
+    ).toHaveCount(0)
     await page.getByRole('button', { name: 'Orientar al norte' }).click()
     await page.getByRole('button', { name: 'Volver a la vista de Zibatá' }).click()
     await expect(page.getByRole('button', { name: /^Ver Xentric Anáhuac/ })).toBeVisible()
@@ -109,13 +125,10 @@ test.describe('Mapa', () => {
   }) => {
     await openApp(page)
     await waitForMap(page)
+    await expect.poll(() => plazasMissingInBand(page)).toEqual([])
     await expect.poll(() => representedPlazas(page)).toBe(await activePlazaCount(page))
-    // Paseo Zibatá, la plaza con más locales, nunca debe desaparecer sin aviso.
-    await expect(
-      page
-        .getByRole('button', { name: /^Ver Paseo Zibatá/ })
-        .or(page.getByRole('button', { name: /^Acercar el mapa para ver .*Paseo Zibatá/ })),
-    ).toBeVisible()
+    // Paseo Zibatá, la plaza con más locales, nunca debe desaparecer del mapa.
+    await expect(page.getByRole('button', { name: /^Ver Paseo Zibatá/ })).toBeVisible()
     const attribution = page.locator('.maplibregl-ctrl-attrib')
     await expect(attribution).toBeInViewport()
     // La atribución de OpenStreetMap no puede quedar debajo de la hoja inferior (solo existe en móvil).
@@ -130,35 +143,34 @@ test.describe('Mapa', () => {
   test('con movimiento reducido cada plaza conserva su marcador en escritorio', async ({
     page,
   }, testInfo) => {
-    test.skip(
-      testInfo.project.name !== 'desktop',
-      'En móvil las plazas cercanas se agrupan por espacio',
-    )
+    test.skip(testInfo.project.name !== 'desktop', 'Colocación con el espacio de escritorio')
     // Sin animaciones de cámara no hay pasadas extra: la colocación debe usar el ancho real de las etiquetas.
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await openApp(page)
     await waitForMap(page)
+    const total = await activePlazaCount(page)
+    // Ninguna plaza se queda sin marcador…
     await expect
       .poll(() => page.locator('button[data-mode]:not([data-mode="hidden"])').count())
-      .toBe(await activePlazaCount(page))
-    await expect(page.getByRole('button', { name: /^Acercar el mapa para ver/ })).toHaveCount(0)
+      .toBe(total)
+    // …y solo la que comparte esquina con otra (Plaza Loop y Plaza Condesa están a 200 m) se reduce a
+    // un punto: el resto conserva su etiqueta con el nombre o la cifra.
+    await expect.poll(() => page.locator('button[data-mode="dot"]').count()).toBeLessThanOrEqual(1)
   })
 
-  test('las plazas agrupadas en "+N" aparecen al acercar el mapa', async ({ page }) => {
+  test('una plaza sin sitio para su etiqueta sigue en el mapa como punto pulsable', async ({
+    page,
+  }) => {
     await openApp(page)
     await waitForMap(page)
-    const badge = page.getByRole('button', { name: /^Acercar el mapa para ver/ }).first()
-    await page.waitForTimeout(800)
-    test.skip(
-      (await badge.count()) === 0,
-      'En esta pantalla todas las plazas tienen marcador propio',
-    )
-    const names = ((await badge.getAttribute('aria-label')) ?? '').replace(/^.*: /, '').split(', ')
-    await badge.click()
-    // Cada plaza del grupo termina con marcador propio (en pantallas estrechas, tras algún toque más).
-    for (const name of names) {
-      await expect(await plazaMarker(page, name)).not.toHaveAttribute('data-mode', 'hidden')
-    }
+    await page.waitForTimeout(1200)
+    const dots = page.locator('button[data-mode="dot"]')
+    test.skip((await dots.count()) === 0, 'En esta pantalla todas las plazas muestran su etiqueta')
+    const dot = dots.first()
+    const name = ((await dot.getAttribute('aria-label')) ?? '').replace(/^Ver (.*), .*$/, '$1')
+    await expect(dot).toBeVisible()
+    await dot.click()
+    await expect(panel(page).getByRole('heading', { level: 2, name })).toBeVisible()
   })
 
   test('"Volver a la vista de Zibatá" funciona también con una plaza abierta', async ({ page }) => {
@@ -173,7 +185,7 @@ test.describe('Mapa', () => {
     const spread = () =>
       page.evaluate(() => {
         const anchor = (name: string) => {
-          const marker = document.querySelector(`button[data-mode][aria-label^="Ver ${name}:"]`)
+          const marker = document.querySelector(`button[data-mode][aria-label^="Ver ${name}, "]`)
           const box = marker?.getBoundingClientRect()
           return box ? { x: box.left + box.width / 2, y: box.bottom } : { x: 0, y: 0 }
         }
@@ -185,7 +197,10 @@ test.describe('Mapa', () => {
     const focused = await spread()
     await page.getByRole('button', { name: 'Volver a la vista de Zibatá' }).click()
     await expect.poll(spread).toBeLessThan(focused * 0.6)
-    await expect.poll(() => representedPlazas(page)).toBe(await activePlazaCount(page))
+    // Con el panel abierto la franja de mapa es demasiado corta para etiquetar todas las plazas; lo que
+    // se comprueba aquí es que la cámara vuelve a la vista general sin cerrar la plaza. La garantía de
+    // que ninguna plaza desaparece se verifica en la vista inicial (arriba).
+    await expect(page.getByRole('button', { name: /^Ver Plaza Condesa/ })).toBeVisible()
     await expect(
       panel(page).getByRole('heading', { level: 2, name: 'Plaza Condesa' }),
     ).toBeVisible()
@@ -198,10 +213,12 @@ test.describe('Mapa', () => {
     await marker.click()
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Xentric Anáhuac' })).toBeVisible()
-    await expect(region.getByText('Plaza · 20 lugares')).toBeVisible()
     await expect(
-      region.getByRole('list', { name: 'Lugares en esta plaza' }).getByRole('listitem'),
-    ).toHaveCount(20)
+      region.getByText(`Zona · ${placesInPlaza('Xentric Anáhuac')} lugares`),
+    ).toBeVisible()
+    await expect(
+      region.getByRole('list', { name: 'Lugares en esta zona' }).getByRole('listitem'),
+    ).toHaveCount(placesInPlaza('Xentric Anáhuac'))
     await expect(page).toHaveURL(/#\/plaza\/xentric-anahuac$/)
     await expect(marker).toHaveAttribute('aria-pressed', 'true')
   })
@@ -223,14 +240,19 @@ test.describe('Móvil en horizontal', () => {
     const dialog = page.getByRole('dialog')
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
+    await dialog.getByRole('button', { name: 'Siguiente' }).click()
     await dialog.getByRole('button', { name: 'Empezar a explorar' }).click()
     await expect(dialog).toBeHidden()
 
     await waitForMap(page)
-    // Con el zoom mínimo no caben todas las plazas sobre la hoja: las tapadas se agrupan en "+N".
+    // En horizontal la franja de mapa mide poco más de 100 px: no caben diez marcadores, ni siquiera
+    // reducidos a un punto. Lo que sí se exige aquí es que ninguno quede debajo de la hoja, que la plaza
+    // con más lugares siga marcada y que el resto se alcance por el selector (se usa justo después).
     await expect.poll(() => coveredBySheet(page)).toEqual([])
-    await expect.poll(() => representedPlazas(page)).toBe(await activePlazaCount(page))
-    await page.getByRole('combobox', { name: 'Plaza' }).selectOption({ label: 'Paseo Zibatá' })
+    await expect(page.getByRole('button', { name: /^Ver Xentric Anáhuac/ })).toBeVisible()
+    await page
+      .getByRole('combobox', { name: 'Filtrar por zona' })
+      .selectOption({ label: 'Paseo Zibatá' })
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
     const header = await page
       .locator('header', { has: page.getByRole('searchbox', { name: 'Buscar lugares' }) })

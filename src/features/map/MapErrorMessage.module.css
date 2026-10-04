@@ -14,7 +14,7 @@
 
 .error h2 {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 600;
   font-size: var(--text-xl);
   line-height: 1.1;
   margin-bottom: var(--space-3);

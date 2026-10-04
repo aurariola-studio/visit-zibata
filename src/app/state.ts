@@ -3,7 +3,9 @@
  * Correspondencia con el brief: selectedPlaza = plaza seleccionada (y filtro de plaza activo),
  * selectedPlace, activeCategory, searchQuery, tutorialVisible, mapLoaded (mapStatus).
  */
+
 import type { MapStatus } from '../features/map/types.ts'
+import type { InfoTopic } from '../lib/url-state.ts'
 
 export interface AppState {
   selectedPlazaId: string | null
@@ -20,6 +22,8 @@ export interface AppState {
   placeOrigin: 'plaza' | 'results'
   /** Aviso temporal: el enlace abierto apunta a un lugar o plaza que ya no está en la guía. */
   missingLinkNotice: boolean
+  /** Página de información abierta (acerca, privacidad, corregir): cada una tiene su propia ruta. */
+  infoTopic: InfoTopic | null
 }
 
 export const initialAppState: AppState = {
@@ -34,6 +38,7 @@ export const initialAppState: AppState = {
   sheetExpanded: false,
   placeOrigin: 'plaza',
   missingLinkNotice: false,
+  infoTopic: null,
 }
 
 export type AppAction =
@@ -51,12 +56,15 @@ export type AppAction =
   | { type: 'dismissTutorial' }
   | { type: 'mapStatusChanged'; status: MapStatus }
   | { type: 'dismissNotice' }
+  | { type: 'openInfo'; topic: InfoTopic }
+  | { type: 'closeInfo' }
   | {
       type: 'syncFromUrl'
       plazaId: string | null
       placeId: string | null
       categoryId: string | null
       missingLink: boolean
+      infoTopic: InfoTopic | null
     }
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -116,7 +124,13 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, mapStatus: action.status }
     case 'dismissNotice':
       return { ...state, missingLinkNotice: false }
+    case 'openInfo':
+      return { ...state, infoTopic: action.topic }
+    case 'closeInfo':
+      return { ...state, infoTopic: null }
     case 'syncFromUrl':
+      // Una ruta de información no cambia lo que hay debajo: al cerrarla se vuelve a esa vista.
+      if (action.infoTopic) return { ...state, infoTopic: action.infoTopic }
       return {
         ...state,
         selectedPlazaId: action.plazaId,
@@ -124,6 +138,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         activeCategoryId: action.categoryId,
         sheetExpanded: action.placeId !== null,
         missingLinkNotice: action.missingLink,
+        infoTopic: null,
       }
   }
 }

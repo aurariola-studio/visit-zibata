@@ -1,22 +1,23 @@
 import { t } from '../../i18n/index.ts'
 import styles from './Brand.module.css'
 
-/** Marca: volumen isométrico (plaza) sobre base arena, en verdes de la identidad. */
+/**
+ * El símbolo vive en public como SVG y entra por <img>, no en línea.
+ *
+ * Son dos recortes del mismo dibujo, como una tipografía tiene su versión de texto: por debajo de
+ * 40 px el trazo, el aro y las puntas van más gordos y el hueco entre las dos mitades más chico,
+ * porque el corte grande se cierra y la Z deja de leerse. Van por archivo porque en línea suman
+ * cerca de 3 KB gzip al paquete inicial, que está a 119 de 120 KB de presupuesto.
+ */
 export function LogoMark({ size = 32 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <rect width="32" height="32" rx="9" fill="#536c2a" />
-      <path d="M16 6.5 26 12v8.4L16 26 6 20.4V12z" fill="#8cba37" />
-      <path d="M16 6.5 26 12l-10 5.6L6 12z" fill="#b8d77c" />
-      <path d="M16 17.6V26l10-5.6V12z" fill="#6a8736" />
-      <path
-        d="M11.2 14.3 16 17l4.8-2.7"
-        fill="none"
-        stroke="#f3f8ea"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
-    </svg>
+    <img
+      src={size < 40 ? '/favicon.svg' : '/logo.svg'}
+      width={size}
+      height={size}
+      alt=""
+      decoding="async"
+    />
   )
 }
 
@@ -24,7 +25,7 @@ export function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <div className={styles.brand} data-compact={compact}>
       <LogoMark size={compact ? 30 : 36} />
-      {/* Sin separador, NVDA lee "ZibatáCOMER Y BEBER": la coma existe solo para el lector. */}
+      {/* Sin separador, NVDA lee "Visit ZibatáCOMER Y BEBER": la coma existe solo para el lector. */}
       {!compact && (
         <p className={styles.text}>
           <span className={styles.name}>{t('app.name')}</span>

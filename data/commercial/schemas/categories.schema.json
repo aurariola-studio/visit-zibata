@@ -44,6 +44,11 @@
             "type": "string",
             "minLength": 1
           },
+          "hue": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 359
+          },
           "order": {
             "type": "integer",
             "minimum": -9007199254740991,
@@ -56,7 +61,8 @@
               "minLength": 1
             }
           },
-          "subcategories": {
+          "giros": {
+            "minItems": 1,
             "type": "array",
             "items": {
               "type": "object",
@@ -82,17 +88,25 @@
                   ],
                   "additionalProperties": false
                 },
+                "icon": {
+                  "type": "string",
+                  "minLength": 1
+                },
                 "synonyms": {
                   "type": "array",
                   "items": {
                     "type": "string",
                     "minLength": 1
                   }
+                },
+                "general": {
+                  "type": "boolean"
                 }
               },
               "required": [
                 "id",
                 "label",
+                "icon",
                 "synonyms"
               ],
               "additionalProperties": false
@@ -105,7 +119,7 @@
           "icon",
           "order",
           "synonyms",
-          "subcategories"
+          "giros"
         ],
         "additionalProperties": false
       }

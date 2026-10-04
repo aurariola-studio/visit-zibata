@@ -11,6 +11,8 @@ export const paths = {
   rawOsmMeta: `${ROOT}data/geographic/raw/osm.meta.json`,
   rawBuildings: `${ROOT}data/geographic/raw/overture-buildings.geojson`,
   rawBuildingsMeta: `${ROOT}data/geographic/raw/overture-buildings.meta.json`,
+  rawTreeCover: `${ROOT}data/geographic/raw/overture-tree-cover.geojson`,
+  rawTreeCoverMeta: `${ROOT}data/geographic/raw/overture-tree-cover.meta.json`,
   extent: `${ROOT}data/geographic/extent.json`,
   manifest: `${ROOT}data/geographic/manifest.json`,
   plazas: `${ROOT}data/commercial/plazas.json`,
@@ -25,7 +27,15 @@ export const paths = {
 export interface GeoConfig {
   area: { name: string; bbox: [number, number, number, number] }
   zibataSeedPolygon: [number, number][]
+  /** Suelo ya planeado que aún no tiene calles: se suma al contorno calculado. */
+  boundaryExtensions: { name: string; source: string; polygon: [number, number][] }[]
   sources: { overpassEndpoints: string[]; overtureRelease: string }
+  /** Árboles generados dentro de la cobertura arbórea real (scripts/map/lib/trees.ts). */
+  trees: {
+    spacingM: number
+    greenSpacingM: number
+    roadClearanceM: Record<string, number>
+  }
   tiles: {
     minZoom: number
     maxZoom: number

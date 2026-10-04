@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, plazaMarker, waitForMap } from './helpers.ts'
+import { openApp, panel, plazaMarker, waitForMap, waitForSheet } from './helpers.ts'
 
 // Solo en proyectos con pantalla táctil (teléfono Android, iPhone con WebKit y tableta).
 test.describe('Interacción táctil', () => {
@@ -53,15 +53,16 @@ test.describe('Interacción táctil', () => {
     await waitForMap(page)
     const handle = page.getByRole('button', { name: 'Ampliar panel' })
     await expect(handle).toBeInViewport()
-    // La hoja termina su transición de entrada antes de medir el asa.
-    await page.waitForTimeout(600)
+    await waitForSheet(page)
     const box = await handle.boundingBox()
     if (!box) throw new Error('Sin asa de la hoja')
     const x = box.x + box.width / 2
     const y = box.y + box.height / 2
     const client = await page.context().newCDPSession(page)
     await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] })
-    for (let step = 1; step <= 8; step++) {
+    // Arrastre largo (560 px): pasa del punto medio entre hoja colapsada y expandida, así que la hoja se
+    // abre por posición y no depende de la velocidad del gesto, que con la máquina cargada baja del umbral.
+    for (let step = 1; step <= 14; step++) {
       await client.send('Input.dispatchTouchEvent', {
         type: 'touchMove',
         touchPoints: [{ x, y: y - step * 40 }],

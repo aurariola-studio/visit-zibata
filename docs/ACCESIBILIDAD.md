@@ -17,7 +17,7 @@ se ha hecho una verificación técnica y de uso, no una auditoría de conformida
 
 ## Estructura para lectores de pantalla
 
-- Un `<h1>` visible solo para lectores ("Zibatá · Comer y beber"), `<h2>` por panel (plaza o lugar).
+- Un `<h1>` visible solo para lectores ("Visit Zibatá · Comer y beber"), `<h2>` por panel (plaza o lugar).
 - Regiones: `main`, `search`, la región del mapa (`Mapa 3D interactivo de Zibatá`) y el panel
   (`Información de lugares`, complementario).
 - **Una sola región `aria-live`** en toda la interfaz, para los resultados y los avisos: al escribir se

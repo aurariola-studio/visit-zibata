@@ -12,7 +12,9 @@
       "previousName": null,
       "plazaId": "xentric-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -22,6 +24,7 @@
       "verificationNotes": [
         "Nuevo. 'Emprendedor' parece un rótulo genérico del directorio, no un nombre comercial verificable → no apto para producción sin nombre real."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://xentriczibata.com/plaza-comercial/",
@@ -48,7 +51,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -58,6 +63,7 @@
       "verificationNotes": [
         "Candidato descartado: la ficha del propio medio lo ubica en El Refugio, fuera de Zibatá (la guía lo incluye por cercanía)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://zibatahoy.com/listing/corazon-de-maiz/",
@@ -92,7 +98,9 @@
       "previousName": null,
       "plazaId": "paseo-zibata",
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -102,6 +110,7 @@
       "verificationNotes": [
         "Descartado: tienda de servicios para fiestas y dulcería (la comida es accesoria) → fuera del alcance comida y bebida."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.facebook.com/p/Spiruleka-Paseo-Zibat%C3%A1-100063521470459/",
@@ -136,7 +145,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -146,6 +157,7 @@
       "verificationNotes": [
         "Probable marca virtual de delivery que opera desde la cocina de La Chilakleta: no es un local independiente → descartado como lugar físico."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/las-chopeaditas-zibata/dkTeBECjUi2rxizer6JLFw",
@@ -181,7 +193,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -191,6 +205,7 @@
       "verificationNotes": [
         "Barra de comida preparada dentro del supermercado HEB Zibatá. Excluido por la regla de supermercados (no es un lugar de comida independiente)."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://www.ubereats.com/mx/store/meet-&-eat-by-heb-zibata/znX9K4FxXR2jX1jJPrcqOg",
@@ -226,7 +241,9 @@
       "previousName": null,
       "plazaId": null,
       "category": null,
-      "subcategory": null,
+      "giros": [
+        "otros"
+      ],
       "beta": null,
       "newRecord": true,
       "replacedBy": null,
@@ -236,6 +253,7 @@
       "verificationNotes": [
         "Probable traducción de 'Boba Station' (única tienda de té boba localizada en Zibatá): se consolida con boba-station."
       ],
+      "fieldVerifiedAt": null,
       "sources": [
         {
           "url": "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",

@@ -35,37 +35,42 @@
             "type": "string",
             "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
-          "category": {
-            "type": "string",
-            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          "giros": {
+            "minItems": 1,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
           },
-          "subcategory": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-              },
-              {
-                "type": "null"
-              }
-            ]
+          "secundarios": {
+            "default": [],
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
           },
           "description": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 1
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "localNumber": {
-            "anyOf": [
-              {
-                "type": "string",
-                "minLength": 1
+                "type": "object",
+                "properties": {
+                  "es": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "en": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "es"
+                ],
+                "additionalProperties": false
               },
               {
                 "type": "null"
@@ -302,16 +307,42 @@
                     "type": "null"
                   }
                 ]
+              },
+              "rappi": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "uberEats": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "didiFood": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "additionalProperties": false
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            }
           },
           "active": {
             "type": "boolean"
@@ -349,8 +380,7 @@
                 "minItems": 1,
                 "type": "array",
                 "items": {
-                  "type": "string",
-                  "format": "uri"
+                  "type": "string"
                 }
               }
             },
@@ -368,10 +398,9 @@
           "slug",
           "name",
           "plazaId",
-          "category",
-          "subcategory",
+          "giros",
+          "secundarios",
           "description",
-          "localNumber",
           "hours",
           "location",
           "googleMapsUri",
@@ -379,7 +408,6 @@
           "phone",
           "photos",
           "links",
-          "tags",
           "active"
         ],
         "additionalProperties": false

@@ -17,13 +17,13 @@ categoría, aperturas y cierres. Tras cruzar **287 URLs de evidencia**, el datas
 La lista beta era una buena hipótesis de partida, pero no una fuente fiable:
 
 - **15 de sus 76 activos no pudieron verificarse**: sin rastro, solo en Juriquilla, solo en delivery, o un
-  platillo registrado como negocio («MEZCLA»).
+  platillo registrado como negocio ("MEZCLA").
 - **5 de sus 28 inactivos siguen operando**: Honu, Ciao Bella, Los Morros de Sonora, Burger & Fries Forever
   y Sixties Burger.
 - **2 plazas mal asignadas**, **31 nombres** y **10 categorías** corregidos.
 - **4 negocios cerrados o sustituidos**: Mr. Bagel, Grand Antonella, Tacos El Pata y Piotl Rosticería, hoy
   Ichos.
-- Tres «plazas» sin oferta real de comida: FoodTrucks Pickleball, Plaza Walmart y Distrito Nandú (en obra).
+- Tres "plazas" sin oferta real de comida: FoodTrucks Pickleball, Plaza Walmart y Distrito Nandú (en obra).
 
 No se afirma que la lista esté completa. Sin visitas presenciales, 48 candidatos quedan **inciertos** y 9
 locales publicados tienen plaza de confianza baja: son los prioritarios para verificar en campo.
@@ -86,8 +86,8 @@ Detalle generado en [`sources.md`](sources.md).
 | Plaza Walmart | removed → inactiva | 0 (0) | Supermercado |
 | Xentric Zibatá | active · high | 11 (8) | Piotl → Ichos; Kekas incierto; Honu recuperado; 4 nuevos del directorio oficial |
 | Plaza Zielo | active · high | 8 (9) | 2 inciertos (El Tapatío, Los del Mandil); 1 nuevo |
-| MOL Pitahaya | active · medium | 1 (1) | Antes «Mol Jamadi»; dirección Cerro del Huizache 49 |
-| Zibatá Golf | likely_active · medium | 1 (1) | Antes «Campo de Golf» |
+| MOL Pitahaya | active · medium | 1 (1) | Antes "Mol Jamadi"; dirección Cerro del Huizache 49 |
+| Zibatá Golf | likely_active · medium | 1 (1) | Antes "Campo de Golf" |
 | Centro Zibatá | active · medium | 5 (3) | Dirección Pitahayas 199; 1 nuevo (Starbucks), 1 recuperado (Sixties Burger) |
 | Distrito Nandú | coming_soon → inactiva | 0 (0) | En desarrollo; rendimientos desde enero de 2027 |
 
@@ -133,7 +133,7 @@ No publicados:
   Michoacana (Xentric Anáhuac), La Rue, Soba Express, Repostería Eddi Mena, Marie Panadería Artesanal y
   Parrilla de agave.
 - **Rechazados (5):** Corazón de Maíz, Spiruleka, Meet & Eat by HEB, Las Chopeaditas (marca virtual) y
-  «Emprendedor» (sin nombre real).
+  "Emprendedor" (sin nombre real).
 - **Duplicado:** Estación Boba (= Boba Station).
 - **Próximamente:** Andador 58.
 
@@ -155,8 +155,8 @@ están en `data/research/` con su evidencia.
 
 | Negocio | Evidencia |
 | --- | --- |
-| Mr. Bagel | Restaurant Guru «Permanently closed» y anuncio de cierre indefinido; estaba en Paseo Zibatá, no en Xentric Anáhuac |
-| Grand Antonella Café | Página oficial «CERRADO PERMANENTEMENTE» |
+| Mr. Bagel | Restaurant Guru "Permanently closed" y anuncio de cierre indefinido; estaba en Paseo Zibatá, no en Xentric Anáhuac |
+| Grand Antonella Café | Página oficial "CERRADO PERMANENTEMENTE" |
 | Tacos El Pata Zibatá | La lista oficial de sucursales omite Zibatá; tienda de delivery cerrada desde 2025-07-22 |
 | Piotl Rosticería (`removed`) | Su local 208 y su teléfono aparecen hoy como Ichos en el directorio oficial |
 
@@ -180,7 +180,7 @@ están en `data/research/` con su evidencia.
 
 La taxonomía conserva sus 17 categorías y pasa de 24 a 27 subcategorías:
 
-- `pollo` pasa a llamarse «Pollo y alitas» y gana la subcategoría `alitas`.
+- `pollo` pasa a llamarse "Pollo y alitas" y gana la subcategoría `alitas`.
 - `tacos-y-antojitos` gana `esquites-y-snacks`.
 - `postres` gana `pasteleria`.
 
@@ -199,8 +199,8 @@ Recategorizaciones (10):
 | Agave Grill | Carne y parrilla | Tacos y antojitos |
 | DiezyNueve (Hoyo 19) | Bistró | Bar y pub |
 
-Las categorías sin locales (`otros`) siguen ocultas en la interfaz. Con subcategorías asignadas, «panadería»,
-«alitas» y «esquites» ya encuentran resultados; antes, «panadería» devolvía 0.
+Las categorías sin locales (`otros`) siguen ocultas en la interfaz. Con subcategorías asignadas, "panadería",
+"alitas" y "esquites" ya encuentran resultados; antes, "panadería" devolvía 0.
 
 ## 13. Location Corrections
 
@@ -244,7 +244,7 @@ Validación técnica:
 
 Observaciones:
 
-- **Búsqueda por «bar»:** devuelve Sinforosa y Cafele por el sinónimo «barista» de la subcategoría café de
+- **Búsqueda por "bar":** devuelve Sinforosa y Cafele por el sinónimo "barista" de la subcategoría café de
   especialidad. Es el comportamiento previo de coincidencia literal, que no distingue palabras; no se tocó el
   motor de búsqueda.
 - **Datos de contacto incompletos:** 67 locales sin teléfono y 73 sin horario, porque solo se publicaron datos
@@ -276,7 +276,7 @@ Plaza de confianza baja (tomada del beta, pendiente de campo):
 - **Contenido:** horarios (73 sin horario), teléfonos, fotos con licencia y coordenadas por local.
 - **Fuentes no legibles:** Instagram y Facebook por dentro; localizadores oficiales con JavaScript (Carl's Jr.,
   Starbucks, Subway, Domino's, Nutrisa, KFC).
-- **Negocios sin presencia web:** pueden faltar negocios pequeños (pozolería «Emprendedor», food trucks
+- **Negocios sin presencia web:** pueden faltar negocios pequeños (pozolería "Emprendedor", food trucks
   eventuales).
 
 ## 18. Recommendations
@@ -288,7 +288,7 @@ Plaza de confianza baja (tomada del beta, pendiente de campo):
 3. **Revisión trimestral** con el procedimiento de [`methodology.md`](methodology.md#8-cómo-repetir-la-investigación).
    Prioridad: aperturas en Distrito Nandú, Xenica y Pabellón Zibatá, y los `likely_active` sin señal
    reciente.
-4. **Búsqueda:** valorar coincidencia literal por palabra, para que «bar» no encuentre «barista».
+4. **Búsqueda:** valorar coincidencia literal por palabra, para que "bar" no encuentre "barista".
 5. **UI:** mostrar la fecha de verificación en la ficha; el dato ya viene en el dataset.
 
 ---
@@ -326,23 +326,23 @@ Resultados de la ejecución del 2026-09-14/15:
 - **E2E:**
   - En raíz: 50 superadas, 4 omitidas por diseño.
   - Con subruta de GitHub Pages: 50 superadas, 4 omitidas.
-  - Se ajustaron solo las expectativas ligadas a datos (conteos de plaza, «Plaza Condesa», «Rometta
-    Gastrobar» y el enlace oficial de Bendito Bocado).
+  - Se ajustaron solo las expectativas ligadas a datos (conteos de plaza, "Plaza Condesa", "Rometta
+    Gastrobar" y el enlace oficial de Bendito Bocado).
   - Una prueba medía distancias con un selector que dejaba de encontrar la plaza renombrada; se corrigió.
 - **Carga (build estático con subruta, 9 viewports):** 0 errores de consola y de página, 0 peticiones
   fallidas, solo el propio host y 0 marcadores bajo la interfaz o fuera de pantalla. Las 9 plazas activas
   quedan representadas en escritorio y tablet vertical.
 - **Plazas (escritorio y móvil):** en las 9 plazas activas, panel con conteo, nombres y orden idénticos al
-  dataset, URL, marcador seleccionado, «Cómo llegar» y cierre (18/18). También funcionan el cambio de plaza,
+  dataset, URL, marcador seleccionado, "Cómo llegar" y cierre (18/18). También funcionan el cambio de plaza,
   atrás, zoom y clic fuera.
 - **Recorridos críticos J1–J5:** 10/10 en escritorio y móvil.
 - **Accesibilidad:** axe sin violaciones en 16/16 estados.
 - **Integración específica del nuevo dataset:**
-  - Selector con las 9 plazas y nombres corregidos («Plaza Condesa», «MOL Pitahaya», «Zibatá Golf»).
-  - Pastilla «Pollo y alitas» con 2 locales.
-  - «panadería» → 4 resultados (antes 0), «alitas» → 2, «esquites» → 2.
+  - Selector con las 9 plazas y nombres corregidos ("Plaza Condesa", "MOL Pitahaya", "Zibatá Golf").
+  - Pastilla "Pollo y alitas" con 2 locales.
+  - "panadería" → 4 resultados (antes 0), "alitas" → 2, "esquites" → 2.
   - Ficha de Cafele con horario oficial (`Lun–Dom 07:00–21:30`, estado abierto/cerrado calculado por la app)
     y enlace oficial.
-  - «Cómo llegar» del local nuevo Pizca de Azúcar a las coordenadas de Xentric Anáhuac.
+  - "Cómo llegar" del local nuevo Pizca de Azúcar a las coordenadas de Xentric Anáhuac.
   - Enlaces a registros retirados (Piotl Rosticería, Mr. Bagel) muestran el inicio. Es el comportamiento
     previo P4-URL-021: sin aviso.

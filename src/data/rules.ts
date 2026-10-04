@@ -17,6 +17,19 @@ export const GOOGLE_PLACE_ID_PATTERN = /^[A-Za-z0-9_-]{10,}$/
 
 export const HEX_COLOR_PATTERN = /^#[0-9a-f]{6}$/i
 
+/**
+ * Verificación en sitio ("campo:AAAA-MM-DD"). Es la otra forma válida de respaldar un registro además
+ * de una URL pública: alguien fue al lugar ese día y lo vio abierto. Muchos negocios de barrio no
+ * tienen web ni aparecen en plataformas de reparto, y la alternativa (dejarlos fuera de la guía) haría
+ * peor a la guía sin hacerla más veraz.
+ */
+export const FIELD_SOURCE_PATTERN = /^campo:\d{4}-\d{2}-\d{2}$/
+
+/** Una fuente válida: URL pública http(s) o verificación en sitio. */
+export function isValidSource(value: string): boolean {
+  return isHttpUrl(value) || FIELD_SOURCE_PATTERN.test(value)
+}
+
 export const LOCATION_CONFIDENCE = ['high', 'medium', 'low'] as const
 
 /**

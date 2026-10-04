@@ -31,11 +31,19 @@ export function buildCatalog(
     return { ...plaza, categories: deriveCategoryIds(ordered, sortedCategories) }
   })
 
+  // Los giros y su categoría, una sola vez: es el índice del que dependen filtros, buscador y fichas.
+  const giroById = new Map(sortedCategories.flatMap((c) => c.giros.map((g) => [g.id, g] as const)))
+  const categoryOfGiro = new Map(
+    sortedCategories.flatMap((c) => c.giros.map((g) => [g.id, c] as const)),
+  )
+
   return {
     categories: sortedCategories,
     plazas,
     places,
     categoryById: new Map(sortedCategories.map((c) => [c.id, c])),
+    giroById,
+    categoryOfGiro,
     plazaById: new Map(plazas.map((p) => [p.id, p])),
     plazaBySlug: new Map(plazas.map((p) => [p.slug, p])),
     placeById: new Map(places.map((p) => [p.id, p])),
@@ -67,15 +75,16 @@ export function sanitizeDataset(
     return problem === null
   })
   const plazaIds = new Set(plazas.map((plaza) => plaza.id))
-  const categoryById = new Map(dataset.categories.map((category) => [category.id, category]))
+  const giroIds = new Set(dataset.categories.flatMap((c) => c.giros.map((giro) => giro.id)))
 
   const places: Place[] = []
   for (const place of dataset.places) {
-    const category = categoryById.get(place.category)
+    // Los giros que no existen se ignoran; si no queda ninguno, el local no se puede colocar.
+    const giros = place.giros.filter((giro) => giroIds.has(giro))
     const problem = !plazaIds.has(place.plazaId)
       ? `plaza "${place.plazaId}" inexistente`
-      : !category
-        ? `categoría "${place.category}" inexistente`
+      : giros.length === 0
+        ? 'sin ningún giro que exista'
         : place.verification && !PUBLISHABLE_STATUS.includes(place.verification.status)
           ? `estado "${place.verification.status}" no publicable`
           : !uniqueSlug(`place:${place.slug}`)
@@ -86,9 +95,9 @@ export function sanitizeDataset(
       continue
     }
     let fixed = place
-    if (place.subcategory && !category?.subcategories.some((s) => s.id === place.subcategory)) {
-      notes.push(`local [${place.id}]: subcategoría "${place.subcategory}" ignorada`)
-      fixed = { ...fixed, subcategory: null }
+    if (giros.length !== place.giros.length) {
+      notes.push(`local [${place.id}]: giro inexistente ignorado`)
+      fixed = { ...fixed, giros }
     }
     if (place.location && !isWithinBounds(place.location, bounds)) {
       notes.push(`local [${place.id}]: coordenadas fuera de Zibatá ignoradas`)

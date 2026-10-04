@@ -24,19 +24,24 @@ import {
 import { DesktopSidePanel } from '../components/panel/DesktopSidePanel.tsx'
 import { EmptyState } from '../components/ui/EmptyState.tsx'
 import { useCatalogState } from '../data/CatalogContext.tsx'
+import { GuideBar } from '../features/about/GuideBar.tsx'
+import { InfoDialog } from '../features/about/InfoDialog.tsx'
+import { LocaleSwitch } from '../features/about/LocaleSwitch.tsx'
 import { FilterBar } from '../features/filters/FilterBar.tsx'
 import { MapErrorBoundary } from '../features/map/MapErrorBoundary.tsx'
 import type { MapStatus } from '../features/map/types.ts'
-import { hasSeenOnboarding, OnboardingModal } from '../features/onboarding/OnboardingModal.tsx'
+import { hasSeenOnboarding } from '../features/onboarding/seen.ts'
 import { PlaceDetail } from '../features/places/PlaceDetail.tsx'
 import { ExplorePanel } from '../features/plazas/ExplorePanel.tsx'
 import { PlazaPanel } from '../features/plazas/PlazaPanel.tsx'
 import { ResultsPanel } from '../features/plazas/ResultsPanel.tsx'
+import { ProfileButton } from '../features/profile/ProfileButton.tsx'
 import { SearchBar } from '../features/search/SearchBar.tsx'
 import { useElementBottom } from '../hooks/useElementBottom.ts'
 import { useIsDesktop, useMediaQuery } from '../hooks/useMediaQuery.ts'
 import { useOnlineStatus } from '../hooks/useOnlineStatus.ts'
-import { t } from '../i18n/index.ts'
+import { t, useLocale } from '../i18n/index.ts'
+import { type InfoTopic, parseHash } from '../lib/url-state.ts'
 import type { Catalog, Place } from '../types/domain.ts'
 import { useAppDispatch } from './AppStateContext.tsx'
 import styles from './Experience.module.css'
@@ -54,10 +59,18 @@ const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_DEB
 const MapDebugPanel = DEBUG_ENABLED
   ? lazy(() => import('../features/map/debug/MapDebugPanel.tsx'))
   : null
+/** El tutorial solo se ve en la primera visita de la sesión: no tiene por qué pesar en el arranque. */
+const OnboardingModal = lazy(() =>
+  import('../features/onboarding/OnboardingModal.tsx').then((module) => ({
+    default: module.OnboardingModal,
+  })),
+)
 
 const appTitle = `${t('app.name')} · ${t('app.tagline')}`
 
 export function Experience() {
+  // Suscribe la interfaz al idioma activo: al cambiarlo, todo vuelve a renderizarse con sus textos.
+  useLocale()
   const { state } = useCatalogState()
   if (state.status === 'error') {
     return (
@@ -148,7 +161,7 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
   // Tan estrecho que la atribución y la fila de controles no caben lado a lado.
   const veryNarrow = useMediaQuery('(max-width: 439px)')
   const experience = useExperience(catalog)
-  const { state, panel, favorites, filtersActive, matching } = experience
+  const { state, panel, favorites, filtersActive } = experience
   const panelWidth = usePanelWidth()
   const viewportHeight = useViewportHeight()
   const sheetPeek = panel.kind === 'idle' ? 'small' : 'medium'
@@ -173,7 +186,11 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
   useUrlSync(catalog)
 
   useEffect(() => {
-    if (!hasSeenOnboarding()) dispatch({ type: 'showTutorial' })
+    // Al abrir la guía no hay ninguna plaza ni lugar seleccionados: se empieza por la vista de Zibatá.
+    // Un enlace compartido sí abre su ficha, y entonces el tutorial no aparece encima de ella.
+    const target = parseHash(window.location.hash)
+    const isDeepLink = target.plazaSlug !== null || target.placeSlug !== null
+    if (!isDeepLink && !hasSeenOnboarding()) dispatch({ type: 'showTutorial' })
   }, [dispatch])
 
   useEffect(() => {
@@ -201,6 +218,10 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
     [dispatch],
   )
   const clearFilters = useCallback(() => dispatch({ type: 'clearFilters' }), [dispatch])
+  const openInfo = useCallback(
+    (topic: InfoTopic) => dispatch({ type: 'openInfo', topic }),
+    [dispatch],
+  )
   const closePanel = useCallback(
     (event?: { detail?: number }) => {
       dispatch({ type: 'closePanel' })
@@ -219,7 +240,16 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
   // El buscador y el tutorial gestionan su propio Escape antes (preventDefault / <dialog>).
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || event.defaultPrevented || state.tutorialVisible) return
+      // Con una hoja abierta (información, tutorial o tu perfil) manda ella: Escape la cierra a ella,
+      // no al panel que hay debajo.
+      if (
+        event.key !== 'Escape' ||
+        event.defaultPrevented ||
+        state.tutorialVisible ||
+        state.infoTopic ||
+        document.querySelector('[role="dialog"][aria-modal="true"]')
+      )
+        return
       if (panel.kind === 'place') {
         dispatch({ type: 'closePlace' })
         if (panel.fromResults) returnFocus({ detail: 0 })
@@ -234,7 +264,15 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
     }
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [dispatch, panel, state.tutorialVisible, closePanel, closeResults, returnFocus])
+  }, [
+    dispatch,
+    panel,
+    state.tutorialVisible,
+    state.infoTopic,
+    closePanel,
+    closeResults,
+    returnFocus,
+  ])
 
   const onMapStatus = useCallback(
     (status: MapStatus) => dispatch({ type: 'mapStatusChanged', status }),
@@ -261,14 +299,18 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
         left: 40,
         right: desktopPanelOpen ? panelWidth + 40 : 88,
       }
-    : { top: topbarBottom + 8, bottom: sheetPeekHeight + 16 + overSheet, left: 16, right: 16 }
+    : {
+        top: topbarBottom + 8,
+        bottom: sheetPeekHeight + 16 + overSheet,
+        left: 16,
+        // Los controles del mapa, cuando van en columna, ocupan el borde derecho: encuadrar una plaza
+        // debajo de ellos la dejaría sin etiqueta (y sin poder pulsarla).
+        right: controlsInRow ? 16 : 64,
+      }
 
-  const resultCount =
-    panel.kind === 'plaza'
-      ? panel.places.length
-      : state.selectedPlazaId
-        ? matching.filter((place) => place.plazaId === state.selectedPlazaId).length
-        : matching.length
+  // Lo que hay en la lista ahora mismo: con una plaza abierta, sus lugares; buscando, todo Zibatá.
+  // No depende de si además hay una ficha abierta encima.
+  const resultCount = experience.visibleCount
 
   // Una sola región viva para toda la interfaz: avisos y número de resultados (no se duplican anuncios).
   const announcement = !online
@@ -395,23 +437,29 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
           className={styles.topbar}
           style={isDesktop && desktopPanelOpen ? { right: `${panelWidth + 32}px` } : undefined}
         >
-          <div className={styles.searchCard}>
-            <Brand compact={!isDesktop} />
-            <SearchBar
-              value={state.searchQuery}
-              onChange={(query) => dispatch({ type: 'setQuery', query })}
-              inputRef={searchInputRef}
-            />
-            {isDesktop && !desktopPanelOpen && (
-              <button
-                type="button"
-                className={styles.listButton}
-                onClick={() => dispatch({ type: 'openList' })}
-              >
-                <List aria-hidden="true" />
-                {t('explore.openList')}
-              </button>
-            )}
+          <div className={styles.topRow}>
+            <div className={styles.searchCard}>
+              <Brand compact={!isDesktop} />
+              <SearchBar
+                value={state.searchQuery}
+                onChange={(query) => dispatch({ type: 'setQuery', query })}
+                inputRef={searchInputRef}
+              />
+              {/* El idioma se cambia de un toque y desde cualquier vista, no escondido en una hoja. */}
+              <LocaleSwitch />
+              {isDesktop && !desktopPanelOpen && (
+                <button
+                  type="button"
+                  className={styles.listButton}
+                  onClick={() => dispatch({ type: 'openList' })}
+                >
+                  <List aria-hidden="true" />
+                  {t('explore.openList')}
+                </button>
+              )}
+            </div>
+            {/* Tu rincón, fuera de la tarjeta y en la esquina donde se busca una cuenta. */}
+            <ProfileButton onOpenInfo={openInfo} onOpenPlace={openPlace} />
           </div>
           {!online && (
             <div className={styles.notice} data-tone="offline">
@@ -435,10 +483,7 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
           <FilterBar
             categories={experience.visibleCategories}
             categoryCounts={experience.categoryCounts}
-            totalCount={[...experience.categoryCounts.values()].reduce(
-              (sum, count) => sum + count,
-              0,
-            )}
+            totalCount={experience.totalCount}
             activeCategoryId={state.activeCategoryId}
             onCategoryChange={setCategory}
             plazas={experience.activePlazas}
@@ -456,6 +501,19 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
             }}
           />
         </header>
+
+        {/*
+         * En escritorio la franja de la guía vive en el mapa, sobre la atribución. Va en un
+         * <footer> y no en un <div>: es el pie de la guía (quién la hace y cómo corregirla) y,
+         * dentro de <main>, no añade ningún punto de referencia extra para el lector de pantalla.
+         * De paso le da al generador de la imagen social algo estable que ocultar, porque las
+         * clases de los módulos CSS llevan un hash distinto en cada build.
+         */}
+        {isDesktop && (
+          <footer className={styles.guideBar}>
+            <GuideBar onOpen={openInfo} />
+          </footer>
+        )}
       </main>
 
       {isDesktop ? (
@@ -474,10 +532,19 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
         </BottomSheet>
       )}
 
-      <OnboardingModal
-        open={state.tutorialVisible}
-        onClose={() => dispatch({ type: 'dismissTutorial' })}
-      />
+      {state.infoTopic && (
+        <InfoDialog
+          topic={state.infoTopic}
+          onClose={() => dispatch({ type: 'closeInfo' })}
+          onGoTo={openInfo}
+        />
+      )}
+
+      {state.tutorialVisible && (
+        <Suspense fallback={null}>
+          <OnboardingModal open onClose={() => dispatch({ type: 'dismissTutorial' })} />
+        </Suspense>
+      )}
 
       {MapDebugPanel && debugRequested && map && (
         <Suspense fallback={null}>

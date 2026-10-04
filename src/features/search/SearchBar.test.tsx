@@ -24,7 +24,7 @@ describe('SearchBar', () => {
     expect(screen.getByRole('search')).toBeInTheDocument()
     expect(screen.getByRole('searchbox', { name: 'Buscar lugares' })).toHaveAttribute(
       'placeholder',
-      'Busca café, tacos, una plaza…',
+      'Busca café, tacos o una zona…',
     )
   })
 

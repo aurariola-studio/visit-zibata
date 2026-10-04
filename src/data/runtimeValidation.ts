@@ -93,7 +93,9 @@ const nullish =
 
 const isLinks = (value: unknown) =>
   isObject(value) &&
-  ['website', 'instagram', 'facebook', 'tiktok'].every((key) => nullish(isUrl)(value[key])) &&
+  ['website', 'instagram', 'facebook', 'tiktok', 'rappi', 'uberEats', 'didiFood'].every((key) =>
+    nullish(isUrl)(value[key]),
+  ) &&
   nullish(isPhone)(value.whatsapp)
 
 const isPosition = (value: unknown) =>
@@ -119,10 +121,13 @@ const checkPlace: Check = (value) => {
     field(value, 'slug', isSlug, 'slug no válido'),
     field(value, 'name', isText, 'nombre vacío'),
     field(value, 'plazaId', isSlug, 'plaza no válida'),
-    field(value, 'category', isSlug, 'categoría no válida'),
-    field(value, 'subcategory', nullable(isSlug), 'subcategoría no válida'),
-    field(value, 'description', nullable(isText), 'descripción no válida'),
-    field(value, 'localNumber', nullable(isText), 'número de local no válido'),
+    field(
+      value,
+      'giros',
+      (list) => Array.isArray(list) && list.length > 0 && list.length <= 3 && list.every(isSlug),
+      'giros no válidos (de uno a tres)',
+    ),
+    field(value, 'description', nullable(isLocalizedText), 'descripción no válida'),
     field(value, 'hours', nullable(isHours), 'horario no válido'),
     field(value, 'location', nullable(isLatLng), 'coordenadas no válidas'),
     field(
@@ -140,7 +145,6 @@ const checkPlace: Check = (value) => {
     field(value, 'phone', nullable(isPhone), 'teléfono no válido'),
     field(value, 'photos', arrayOf(isPhoto), 'fotografía no válida'),
     field(value, 'links', isLinks, 'enlace no válido'),
-    field(value, 'tags', arrayOf(isText), 'etiqueta no válida'),
     field(value, 'active', (active) => typeof active === 'boolean', 'active debe ser booleano'),
   ])
 }
@@ -151,11 +155,23 @@ const checkPlaza: Check = (value) => {
     field(value, 'id', isSlug, 'identificador no válido'),
     field(value, 'slug', isSlug, 'slug no válido'),
     field(value, 'name', isText, 'nombre vacío'),
-    field(value, 'description', nullable(isText), 'descripción no válida'),
+    field(value, 'description', nullable(isLocalizedText), 'descripción no válida'),
     field(value, 'address', nullable(isText), 'dirección no válida'),
     field(value, 'coordinates', isLatLng, 'coordenadas no válidas'),
     field(value, 'geometry', isGeometry, 'geometría no válida'),
     field(value, 'active', (active) => typeof active === 'boolean', 'active debe ser booleano'),
+    field(
+      value,
+      'comingSoon',
+      (flag) => flag === undefined || typeof flag === 'boolean',
+      'comingSoon debe ser booleano',
+    ),
+    field(
+      value,
+      'googleMapsUri',
+      (uri) => uri === undefined || (typeof uri === 'string' && isGoogleMapsUrl(uri)),
+      'enlace de Maps no válido',
+    ),
     field(value, 'placeIds', arrayOf(isSlug), 'placeIds no válido'),
     field(value, 'categories', arrayOf(isSlug), 'categories no válido'),
     field(
@@ -168,11 +184,13 @@ const checkPlaza: Check = (value) => {
   ])
 }
 
-const isSubcategory = (value: unknown) =>
+const isGiro = (value: unknown) =>
   isObject(value) &&
   isSlug(value.id) &&
   isLocalizedText(value.label) &&
-  arrayOf(isText)(value.synonyms)
+  isText(value.icon) &&
+  arrayOf(isText)(value.synonyms) &&
+  (value.general === undefined || typeof value.general === 'boolean')
 
 const checkCategory: Check = (value) => {
   if (!isObject(value)) return 'no es un objeto'
@@ -180,9 +198,20 @@ const checkCategory: Check = (value) => {
     field(value, 'id', isSlug, 'identificador no válido'),
     field(value, 'label', isLocalizedText, 'etiqueta vacía'),
     field(value, 'icon', isText, 'icono vacío'),
+    field(
+      value,
+      'hue',
+      (hue) => hue === undefined || (typeof hue === 'number' && hue >= 0 && hue <= 359),
+      'hue fuera de rango (0-359)',
+    ),
     field(value, 'order', Number.isInteger, 'orden no válido'),
     field(value, 'synonyms', arrayOf(isText), 'sinónimo no válido'),
-    field(value, 'subcategories', arrayOf(isSubcategory), 'subcategoría no válida'),
+    field(
+      value,
+      'giros',
+      (list) => Array.isArray(list) && list.length > 0 && list.every(isGiro),
+      'giro no válido',
+    ),
   ])
 }
 

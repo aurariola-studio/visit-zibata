@@ -61,16 +61,6 @@
   outline-offset: -3px;
 }
 
-.badge {
-  position: absolute;
-  right: 0.2rem;
-  bottom: 0.15rem;
-  font-size: 0.5625rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--olive-600);
-}
-
 .spinning {
   animation: spin 1s linear infinite;
 }
@@ -97,14 +87,18 @@
 
 /* Punto de "mi ubicación": solo en memoria, nunca se guarda ni se envía. */
 .userDot {
-  width: 1.1rem;
-  height: 1.1rem;
-  border: 3px solid white;
+  /* Va por debajo de los marcadores de plaza (que llevan z-index por cercanía) y no intercepta clics:
+     es una referencia, no un control. Con el halo se distingue aunque caiga sobre una etiqueta. */
+  z-index: 1;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 2.5px solid white;
   border-radius: 50%;
   background: #2f6fde;
   box-shadow:
-    0 0 0 6px rgb(47 111 222 / 0.25),
-    0 2px 6px rgb(0 0 0 / 0.3);
+    0 0 0 4px rgb(47 111 222 / 0.18),
+    0 1px 4px rgb(31 36 25 / 0.35);
+  pointer-events: none;
 }
 
 @media (max-width: 899px) {

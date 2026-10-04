@@ -1,5 +1,6 @@
 import { Search, X } from 'lucide-react'
 import { type RefObject, useId, useRef } from 'react'
+import { useMediaQuery } from '../../hooks/useMediaQuery.ts'
 import { t } from '../../i18n/index.ts'
 import styles from './SearchBar.module.css'
 
@@ -14,6 +15,9 @@ export function SearchBar({ value, onChange, inputRef: externalRef }: SearchBarP
   const id = useId()
   const localRef = useRef<HTMLInputElement>(null)
   const inputRef = externalRef ?? localRef
+  // En un teléfono el campo comparte barra con la marca, el idioma y la información: el aviso largo
+  // no cabe entero y un texto cortado se lee peor que uno corto.
+  const narrow = useMediaQuery('(max-width: 560px)')
   return (
     <search className={styles.searchLandmark}>
       {/* biome-ignore lint/a11y/useSemanticElements: role explícito para lectores que aún no reconocen <search>. */}
@@ -33,9 +37,10 @@ export function SearchBar({ value, onChange, inputRef: externalRef }: SearchBarP
           ref={inputRef}
           id={id}
           className={styles.input}
+          data-clearable={value.length > 0}
           type="search"
           value={value}
-          placeholder={t('search.placeholder')}
+          placeholder={t(narrow ? 'search.placeholderShort' : 'search.placeholder')}
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}

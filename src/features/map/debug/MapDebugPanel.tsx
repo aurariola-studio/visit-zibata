@@ -36,9 +36,9 @@ const PLAZA_OUTLINE = 'debug-plaza-outline'
 const PLAZA_IDS = 'debug-plaza-ids'
 
 export default function MapDebugPanel({ map }: { map: MapLibreMap }) {
-  const [cursor, setCursor] = useState<string>('—')
+  const [cursor, setCursor] = useState<string>('sin dato')
   const [camera, setCamera] = useState('')
-  const [feature, setFeature] = useState<string>('—')
+  const [feature, setFeature] = useState<string>('sin dato')
   const [tiles, setTiles] = useState(false)
   const [collisions, setCollisions] = useState(false)
   const [plazas, setPlazas] = useState(true)
@@ -67,10 +67,10 @@ export default function MapDebugPanel({ map }: { map: MapLibreMap }) {
       if (hit) {
         const p = hit.properties ?? {}
         setFeature(
-          `${hit.layer.id} · id ${p.id ?? '—'}${p.plazaId ? ` · plaza ${p.plazaId}` : ''} · h ${p.height ?? '—'} m · ${p.type ?? ''} · ${p.src ?? ''}`,
+          `${hit.layer.id} · id ${p.id ?? '('}${p.plazaId ? ` · plaza ${p.plazaId}` : ''} · h ${p.height ?? ')'} m · ${p.type ?? ''} · ${p.src ?? ''}`,
         )
       } else {
-        setFeature('—')
+        setFeature('sin dato')
       }
     }
     updateCamera()

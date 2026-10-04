@@ -1,16 +1,21 @@
 # Zibatá · Comer y beber
 
 Guía interactiva en 3D para descubrir dónde comer y beber en **Zibatá, Querétaro**. El mapa es el
-producto: se explora Zibatá, se elige una plaza y se descubren sus lugares, con búsqueda, filtros, ficha
-de cada establecimiento y enlace a Google Maps para llegar.
+producto: se explora Zibatá, se elige una zona y se descubren sus lugares, con búsqueda, filtros, ficha
+de cada establecimiento y enlace a Google Maps para llegar. En los datos y el código esas zonas se
+llaman `plaza`.
 
 - Sitio **100 % estático** (GitHub Pages u otro hosting): sin backend, cuentas, API keys ni servicios de pago.
 - Mapa propio con **MapLibre GL JS**: edificios 3D, calles, áreas verdes y agua a partir de OpenStreetMap y
   Overture Maps: el 96 % de las vialidades dibujadas cae sobre el plano del cliente (a 11 m) y el plano
   queda cubierto al 89 % (ver [docs/MAPA.md](docs/MAPA.md)).
-- **76 locales verificados en 9 plazas activas** (investigación del 2026-09-14 sobre la lista beta del cliente, con
-  fuentes y confianza por registro en [research/](research/audit-report.md)); 17 categorías.
-- Escritorio (panel lateral) y móvil (hoja inferior), en español y preparado para más idiomas. Diseñado
+- **101 locales verificados en 11 zonas activas**, revisados uno por uno con el propietario el
+  2026-09-22: 100 con descripción propia del negocio, 92 con horario, 88 con ubicación exacta y 78 con
+  teléfono ([research/](research/audit-report.md) guarda fuentes y confianza por registro). 15
+  categorías con sus giros, y un local puede tener dos giros reales (El Hornero es parrilla argentina y
+  pizzería).
+- Escritorio (panel lateral) y móvil (hoja inferior), en **español e inglés** (se cambia de un toque en la
+  barra superior) y preparado para más idiomas. Diseñado
   para WCAG 2.1 AA: sin violaciones graves o críticas de axe, navegable con teclado y probado con NVDA
   (alcance y límites en [docs/ACCESIBILIDAD.md](docs/ACCESIBILIDAD.md)).
 
@@ -47,8 +52,9 @@ npm run dev            # http://localhost:5173
 | `npm run data:import -- <csv>` | Importa locales desde CSV |
 | `npm run images:optimize` | Optimiza fotos (AVIF/WebP + miniaturas) y las registra |
 | `npm run images:og` | Regenera la imagen para redes sociales (con `npm run preview` activo) |
-| `npm run images:icons` | Regenera los iconos «maskable» del manifiesto |
-| `npm run map:fetch` | Descarga OSM + edificios de Overture (≈15 min) |
+| `npm run images:icons` | Regenera los iconos "maskable" del manifiesto |
+| `npm run data:apply-review -- <carpeta>` | Aplica las respuestas del formulario de verificación del propietario |
+| `npm run map:fetch` | Descarga OSM + edificios y cobertura arbórea de Overture (≈15 min) |
 | `npm run map:build` | Genera PMTiles, edificios de plazas, extensión y manifiesto |
 | `npm run map:georef` | Georreferencia el plano del cliente |
 | `npm run map:suggest-plaza -- --lat=… --lng=…` | Sugiere la geometría de una plaza |
@@ -82,7 +88,7 @@ Guía completa: [docs/DATOS.md](docs/DATOS.md).
   (`lun-vie 08:00-22:00; dom cerrado`).
 - **Añadir imágenes:** originales en `data/commercial/photos-src/<id-del-lugar>/` y `npm run images:optimize`.
   Solo fotos propias o con licencia: nunca de Google ni de redes sociales.
-- **Google Maps:** «Cómo llegar» usa `googleMapsUri`, o las coordenadas del local/plaza (+ `googlePlaceId`
+- **Google Maps:** "Cómo llegar" usa `googleMapsUri`, o las coordenadas del local/plaza (+ `googlePlaceId`
   si existe). Funciona sin ningún dato de Google.
 - **Desactivar sin borrar:** `"active": false` en el local o la plaza.
 
@@ -111,6 +117,9 @@ npm run map:fetch && npm run map:build
 | [docs/PIPELINE-GIS.md](docs/PIPELINE-GIS.md) | Cómo se generan las teselas y el manifiesto |
 | [docs/PRUEBAS.md](docs/PRUEBAS.md) | Qué se prueba, con qué y qué queda fuera |
 | [docs/SEGURIDAD.md](docs/SEGURIDAD.md) | CSP, privacidad, dependencias |
+| [docs/MARCA.md](docs/MARCA.md) | Propuesta de identidad "Visit Zibatá" (nombre, logo, paleta, SEO) |
+| [docs/ESCALABILIDAD.md](docs/ESCALABILIDAD.md) | Evaluación: escalar más allá de comer y beber |
+| [docs/CUENTAS.md](docs/CUENTAS.md) | Evaluación: pasar a una arquitectura con usuarios |
 | [docs/ACCESIBILIDAD.md](docs/ACCESIBILIDAD.md) | Teclado, lector de pantalla, límites conocidos |
 | [docs/DESPLIEGUE.md](docs/DESPLIEGUE.md) | Publicación y requisitos del hosting |
 | [docs/CONTRIBUIR.md](docs/CONTRIBUIR.md) | Flujo de trabajo y convenciones |

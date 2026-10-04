@@ -24,21 +24,52 @@
   opacity: 0.55;
 }
 
-.badge {
+/*
+ * Ocupa todo el marco a propósito: el tamaño de la placa es un porcentaje de este contenedor, y si
+ * se encogiera al tamaño de su contenido los porcentajes se medirían contra sí mismos.
+ */
+.badges {
   position: relative;
-  display: grid;
-  place-items: center;
-  width: 44%;
-  max-width: 5.5rem;
-  aspect-ratio: 1;
-  border-radius: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Una sola placa para todos los giros principales, no una por dibujo: con una placa por dibujo se
+ * tocaban entre sí y rozaban el borde del círculo. Esta crece a lo ancho con la cuenta, deja aire
+ * alrededor y da sitio a los tres cuando hay tres.
+ */
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+  width: var(--illo-badge, 46%);
+  height: var(--illo-badge-alto, 46%);
+  padding: 0 3%;
+  border-radius: 28% / 26%;
   background: rgb(255 255 255 / 0.6);
   box-shadow: 0 8px 20px -12px rgb(31 36 25 / 0.45);
 }
 
+.badges[data-count="2"] .badge {
+  --illo-badge: 66%;
+  --illo-badge-alto: 42%;
+  border-radius: 20% / 32%;
+}
+
+.badges[data-count="3"] .badge {
+  --illo-badge: 82%;
+  --illo-badge-alto: 38%;
+  border-radius: 15% / 34%;
+}
+
 .badge svg {
-  width: 56%;
-  height: 56%;
+  width: auto;
+  height: 62%;
 }
 
 .illustration[data-size="sm"] .contours {
@@ -46,7 +77,18 @@
 }
 
 .illustration[data-size="sm"] .badge {
-  width: 64%;
+  --illo-badge: 60%;
+  --illo-badge-alto: 60%;
   background: rgb(255 255 255 / 0.5);
   box-shadow: none;
+}
+
+.illustration[data-size="sm"] .badges[data-count="2"] .badge {
+  --illo-badge: 80%;
+  --illo-badge-alto: 50%;
+}
+
+.illustration[data-size="sm"] .badges[data-count="3"] .badge {
+  --illo-badge: 90%;
+  --illo-badge-alto: 42%;
 }

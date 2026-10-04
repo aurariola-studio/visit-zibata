@@ -43,16 +43,24 @@ export const mapTheme = {
     outside: '#e9e1d4',
   },
 
+  /**
+   * Copas de árbol: verdes de la familia olivo/lima, apagados como el resto de la maqueta para no
+   * competir con las plazas. Los árboles bajos van más claros; los altos, más profundos.
+   */
+  tree: {
+    low: '#bccf9c',
+    high: '#93ad6b',
+    trunk: '#b9a88f',
+  },
+
+  /**
+   * El color propio de cada plaza vive en `src/config/palette.ts` (lo comparten mapa y paneles); aquí
+   * solo quedan los estados que no dependen de la plaza.
+   */
   plaza: {
-    site: '#dbe9c1',
-    siteHover: '#cde3a6',
-    siteSelected: '#bcd98a',
-    siteOutline: '#9fc45a',
-    siteOutlineSelected: '#536c2a',
-    building: '#a7c86a',
-    buildingHover: '#8cba37',
-    buildingSelected: '#5f7d2d',
+    /** Plaza sin resultados con los filtros puestos. */
     buildingDimmed: '#dfe3d3',
+    /** Plaza sin lugares publicados: presente en la maqueta, pero sin identidad propia. */
     inactiveBuilding: '#e6dccb',
   },
 

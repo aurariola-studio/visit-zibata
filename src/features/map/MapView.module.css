@@ -2,6 +2,9 @@
   position: absolute;
   inset: 0;
   background: #ebe4d7;
+  /* Contexto de apilamiento propio: los marcadores ordenan su z-index por cercanía (hasta ~11 000) y,
+     sin esto, competían con el panel, la barra superior y los controles, y los tapaban. */
+  isolation: isolate;
 }
 
 .canvas {
@@ -64,6 +67,16 @@
   color: var(--ink-600);
 }
 
+/*
+ * Plegada, MapLibre deja el contenedor 4 px más corto que su propio botón: la ⓘ se descolgaba y abría
+ * un hueco raro entre la franja de la guía y el mapa. Con el alto del botón, plegada y desplegada
+ * ocupan exactamente la misma franja.
+ */
+.root :global(.maplibregl-ctrl-attrib.maplibregl-compact) {
+  box-sizing: border-box;
+  min-height: 24px;
+}
+
 /* Nunca llega bajo los controles del mapa (a la derecha): en pantallas estrechas pasa a dos líneas. */
 .root :global(.maplibregl-ctrl-bottom-left .maplibregl-ctrl-attrib) {
   box-sizing: border-box;
@@ -78,9 +91,14 @@
   color: var(--ink-700);
 }
 
-/* En móvil la hoja inferior ocupa el borde: la atribución (obligatoria por la ODbL) se coloca encima. */
+/*
+ * En móvil la hoja inferior ocupa el borde: la atribución (obligatoria por la ODbL) se coloca encima.
+ * A la izquierda arranca donde arranca la franja de la guía (--space-4 menos los 10 px de margen que
+ * pone MapLibre), para que las dos piezas del pie compartan el mismo borde.
+ */
 .root :global(.maplibregl-ctrl-bottom-left) {
   bottom: var(--attribution-bottom, 0px);
+  left: calc(var(--space-4) - 10px);
   margin-bottom: var(--safe-bottom);
   transition: bottom var(--duration-slow) var(--ease-out);
 }

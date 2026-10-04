@@ -10,6 +10,8 @@
     "includes": [
       "**",
       "!public/map",
+      "!public/flags",
+      "!public/brands",
       "!data/geographic/raw",
       "!data/geographic/processed",
       "!data/**/*.json",

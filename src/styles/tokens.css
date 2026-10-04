@@ -31,6 +31,13 @@
   --lime-100: #e7f1d4;
   --lime-50: #f3f8ea;
 
+  /*
+   * El oro de la firma de autoría. La marca de aurariola usa #b7791f, que sobre las superficies
+   * arena se queda en 3,3:1 y no llega al 4,5:1 que pide un texto de 11 px. Este es el mismo oro
+   * oscurecido hasta 5:1 contra la superficie más apagada.
+   */
+  --gold-700: #8a5a10;
+
   --danger-600: #a3402b;
   --danger-50: #fbede9;
 
@@ -52,16 +59,25 @@
   /* Tipografía */
   --font-sans:
     "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  /* Solo para la firma de autoría: monoespaciada, como la marca de aurariola. */
+  --font-mono: "Kode Mono", ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
 
+  /*
+   * Escala de texto (rem sobre 16 px). Documentada en docs/ARQUITECTURA.md § Tipografía:
+   *   2xs 11  etiqueta legal y pie          xs 12  versalitas de sección
+   *   sm 13   metadatos y enlaces           base 15  cuerpo
+   *   md 17   nombre de lugar en listas     lg 22  subtítulos
+   *   xl 24   título de ficha               2xl 30  título de panel y de hoja
+   */
   --text-2xs: 0.6875rem;
   --text-xs: 0.75rem;
   --text-sm: 0.8125rem;
   --text-base: 0.9375rem;
   --text-md: 1.0625rem;
   --text-lg: 1.375rem;
-  --text-xl: 1.875rem;
-  --text-2xl: 2.5rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.875rem;
 
   /* Espaciado y forma */
   --space-1: 0.25rem;

@@ -32,7 +32,7 @@
   /* En pantallas bajas (móvil en horizontal) el contenido se desplaza: las acciones siguen al alcance. */
   max-height: calc(100dvh - 2.5rem);
   overflow-y: auto;
-  padding: var(--space-5) var(--space-6) var(--space-6);
+  padding: var(--space-4) var(--space-5) var(--space-5);
   border-radius: var(--radius-xl);
   background: var(--sand-25);
   box-shadow: var(--shadow-lg);
@@ -40,8 +40,9 @@
 
 .close {
   position: absolute;
-  top: var(--space-3);
-  right: var(--space-3);
+  /* Mismos márgenes que el contenido de la tarjeta: alineado con el título y con los botones de abajo. */
+  top: var(--space-4);
+  right: var(--space-5);
   display: grid;
   place-items: center;
   width: 2.25rem;
@@ -57,15 +58,25 @@
   height: 1rem;
 }
 
+/* La ilustración vive en su propio panel: se lee como imagen y ordena la tarjeta. */
+.artBox {
+  display: grid;
+  place-items: center;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--sand-50);
+}
+
 .art {
   width: 100%;
   height: auto;
-  margin: var(--space-2) 0 var(--space-1);
 }
 
 /* La ilustración es decorativa: sin altura suficiente se omite y el paso cabe completo. */
 @media (max-height: 480px) {
-  .art {
+  .artBox {
     display: none;
   }
 }
@@ -81,7 +92,7 @@
 .title {
   font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.05;
 }
 
@@ -93,7 +104,7 @@
 .dots {
   display: flex;
   gap: 0.35rem;
-  margin: var(--space-1) 0;
+  margin: var(--space-2) 0 0;
 }
 
 .dots span {

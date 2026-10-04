@@ -1,0 +1,57 @@
+import { expect, test } from '@playwright/test'
+import { isMobile, openApp } from './helpers.ts'
+
+test.describe('Información de la guía', () => {
+  test('se llega desde la pantalla inicial y cada página tiene su propia ruta', async ({
+    page,
+  }) => {
+    await openApp(page)
+    // En escritorio, la franja del mapa; en móvil, tu sello de la barra superior.
+    if (isMobile(page)) {
+      await page.getByRole('button', { name: 'Tu Zibatá' }).click()
+      await page
+        .getByRole('dialog', { name: 'Tu Zibatá' })
+        .getByRole('button', { name: 'Privacidad' })
+        .click()
+    } else {
+      await expect(page.getByText('Guía independiente de establecimientos')).toBeVisible()
+      await page.getByRole('button', { name: 'Privacidad' }).first().click()
+    }
+
+    const privacy = page.getByRole('dialog', { name: 'Privacidad' })
+    await expect(privacy).toBeVisible()
+    await expect(privacy).toContainText('no usa cuentas, analítica ni cookies')
+    await expect(page).toHaveURL(/#\/info\/privacidad$/)
+    // Sin canal de contacto todavía: se explica, no se dibuja un enlace que no lleva a ningún sitio.
+    await expect(privacy.getByRole('link')).toHaveCount(0)
+
+    // Desde una página se llega a las otras dos.
+    await privacy.getByRole('button', { name: 'Sugiere un cambio' }).click()
+    await expect(page.getByRole('dialog', { name: 'Sugiere un cambio' })).toBeVisible()
+    await expect(page).toHaveURL(/#\/info\/sugerir$/)
+
+    await page.getByRole('dialog').getByRole('button', { name: 'Cerrar', exact: true }).click()
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+    await expect(page).toHaveURL(/#\/$/)
+  })
+
+  test('una ruta de información se puede abrir directamente', async ({ page }) => {
+    await openApp(page, { hash: '#/info/acerca' })
+    const about = page.getByRole('dialog', { name: 'Acerca de esta guía' })
+    await expect(about).toBeVisible()
+    await expect(about).toContainText('OpenStreetMap')
+    // Cerrar con Escape deja la guía en su vista normal.
+    await page.keyboard.press('Escape')
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+  })
+
+  test('el idioma se cambia desde la barra y se recuerda', async ({ page }) => {
+    await openApp(page)
+    await page.getByRole('button', { name: 'View the guide in English' }).click()
+    // El cambio alcanza a toda la interfaz, no solo a una hoja.
+    await expect(page.getByRole('searchbox', { name: 'Search places' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Ver la guía en Español' })).toBeVisible()
+    await page.reload()
+    await expect(page.getByRole('searchbox', { name: 'Search places' })).toBeVisible()
+  })
+})

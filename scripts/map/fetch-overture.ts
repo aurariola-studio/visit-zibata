@@ -6,7 +6,7 @@
  * OSM + Microsoft ML Buildings + Google Open Buildings. Tarda ~15 min: DuckDB debe leer los índices
  * de todos los archivos Parquet del tema.
  *
- * Datos © OpenStreetMap contributors, Overture Maps Foundation — licencia ODbL 1.0.
+ * Datos © OpenStreetMap contributors, Overture Maps Foundation: licencia ODbL 1.0.
  */
 import { mkdirSync, rmSync } from 'node:fs'
 import { DuckDBInstance } from '@duckdb/node-api'
@@ -47,7 +47,7 @@ const count = await connection.runAndReadAll(
 const total = Number(count.getRowObjects()[0]?.n ?? 0)
 
 writeJson(paths.rawBuildingsMeta, {
-  source: 'Overture Maps Foundation — theme=buildings',
+  source: 'Overture Maps Foundation: theme=buildings',
   release,
   license: 'ODbL-1.0',
   attribution: '© OpenStreetMap contributors, Overture Maps Foundation',

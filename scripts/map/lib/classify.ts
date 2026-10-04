@@ -4,6 +4,27 @@
  */
 import type { OsmTags } from './osm.ts'
 
+/** Palabras que en español van en minúscula dentro de un nombre propio (salvo al empezarlo). */
+const MINOR_WORDS = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'e', 'en', 'al', 'a'])
+
+/**
+ * Nombre tal como se rotula en el mapa. OSM guarda algunos nombres en mayúsculas ("PARQUE NANDÚ")
+ * y otros no ("El Jamadi"); el rótulo los unifica en capital inicial para que el mapa no grite. Un
+ * nombre que ya trae minúsculas se respeta tal cual: sus mayúsculas son intencionadas (siglas, marcas).
+ */
+export function displayName(raw: string): string {
+  if (/\p{Ll}/u.test(raw)) return raw
+  return raw
+    .toLocaleLowerCase('es')
+    .split(/(\s+|-)/)
+    .map((part, index) =>
+      /^\s+$|^-$/.test(part) || (index > 0 && MINOR_WORDS.has(part))
+        ? part
+        : part.replace(/^\p{L}/u, (letter) => letter.toLocaleUpperCase('es')),
+    )
+    .join('')
+}
+
 export type RoadClass = 'highway' | 'primary' | 'tertiary' | 'street' | 'service' | 'path'
 
 const ROAD_CLASS: Record<string, RoadClass> = {
@@ -43,7 +64,7 @@ export function classifyRoad(tags: OsmTags): RoadProperties | null {
   return {
     class: roadClass,
     link: highway.endsWith('_link'),
-    ...(tags.name ? { name: tags.name } : {}),
+    ...(tags.name ? { name: displayName(tags.name) } : {}),
     ...(tags.junction === 'roundabout' || tags.junction === 'circular' ? { roundabout: true } : {}),
     ...(tags.oneway === 'yes' ? { oneway: true } : {}),
   }

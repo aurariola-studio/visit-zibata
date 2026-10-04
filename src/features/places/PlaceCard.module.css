@@ -34,7 +34,8 @@
   width: 3.5rem;
   height: 3.5rem;
   overflow: hidden;
-  border-radius: 0.875rem;
+  /* Redondo como un avatar: es el logo del negocio, y así se ven en sus redes. */
+  border-radius: 50%;
   box-shadow: inset 0 0 0 1px var(--color-border);
 }
 
@@ -59,11 +60,30 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  min-width: 0;
   overflow: hidden;
   font-size: var(--text-sm);
   color: var(--color-text-muted);
   white-space: nowrap;
+}
+
+/*
+ * El recorte va aquí y no en la fila: en un contenedor flex, `text-overflow` no alcanza al texto
+ * suelto, así que la línea se cortaba a media palabra y sin puntos suspensivos. Hace falta para
+ * cualquier local con giros de nombre largo, tenga secundarios o no: dieciséis de los ciento uno
+ * pasan de treinta caracteres.
+ */
+.categoryText {
+  min-width: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Los giros que no cupieron, contados: dice que hay más sin ocupar la línea. */
+.mas {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--clay-600, var(--olive-600));
 }
 
 .category svg {

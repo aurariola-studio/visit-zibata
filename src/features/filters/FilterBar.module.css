@@ -1,4 +1,10 @@
+/*
+ * `align-self` porque la barra superior alinea a la izquierda para que el buscador no se estire, y
+ * sin esto la fila de pastillas crece hasta su ancho de contenido: se sale de la pantalla y, como no
+ * desborda dentro de su carril, las flechas de desplazamiento nunca aparecen.
+ */
 .bar {
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -127,7 +133,8 @@
   align-items: center;
   gap: var(--space-2);
   height: 2.125rem;
-  padding: 0 0.4rem 0 0.8rem;
+  /* Simétrico: con o sin la cifra de resultados, "Limpiar filtros" queda centrado en su pastilla. */
+  padding: 0 0.4rem;
   border-radius: var(--radius-pill);
   background: var(--color-surface);
   backdrop-filter: var(--blur-surface);
@@ -138,6 +145,7 @@
 }
 
 .results {
+  padding-left: 0.4rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
@@ -156,4 +164,58 @@
 .clear:hover {
   background: var(--lime-300);
   color: var(--ink-900);
+}
+
+/*
+ * Desplegable de plazas: el control cerrado ya usa el lenguaje de las demás pastillas. La lista es del
+ * sistema operativo y no se puede estilar en todos los navegadores; donde el navegador permite
+ * personalizarla (`appearance: base-select`), toma la misma superficie, radios y acento que el resto de
+ * la interfaz. Donde no, sigue apareciendo la lista nativa de siempre.
+ */
+@supports (appearance: base-select) {
+  .select select,
+  .select select::picker(select) {
+    appearance: base-select;
+  }
+
+  .select select {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+  }
+
+  .select select::picker-icon {
+    display: none;
+  }
+
+  .select select::picker(select) {
+    margin-top: 0.35rem;
+    padding: 0.3rem;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-solid);
+    box-shadow:
+      0 0 0 1px var(--color-border),
+      var(--shadow-lg);
+  }
+
+  .select option {
+    padding: 0.45rem 0.6rem;
+    border-radius: var(--radius-sm);
+    color: var(--ink-800);
+    font-size: var(--text-sm);
+  }
+
+  .select option:hover {
+    background: var(--lime-50);
+  }
+
+  .select option:checked {
+    background: var(--olive-600);
+    color: white;
+  }
+
+  .select option::checkmark {
+    display: none;
+  }
 }

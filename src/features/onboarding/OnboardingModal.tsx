@@ -1,34 +1,18 @@
 /**
- * Tutorial ligero de 3 pasos. Se puede cerrar o saltar y no vuelve a mostrarse en la sesión
+ * Tutorial ligero de 4 pasos. Se puede cerrar o saltar y no vuelve a mostrarse en la sesión
  * (sessionStorage). Es un componente aislado: quitarlo no afecta al resto de la app.
  */
 import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { t } from '../../i18n/index.ts'
 import styles from './OnboardingModal.module.css'
-
-const STORAGE_KEY = 'zibata:onboarding-visto'
-
-export function hasSeenOnboarding(): boolean {
-  try {
-    return window.sessionStorage.getItem(STORAGE_KEY) === '1'
-  } catch {
-    return false
-  }
-}
-
-function markSeen(): void {
-  try {
-    window.sessionStorage.setItem(STORAGE_KEY, '1')
-  } catch {
-    // Sin almacenamiento disponible: el tutorial podría reaparecer al recargar, sin más efectos.
-  }
-}
+import { markOnboardingSeen } from './seen.ts'
 
 const STEPS = [
   { title: 'onboarding.step1.title', body: 'onboarding.step1.body', art: 'explore' },
   { title: 'onboarding.step2.title', body: 'onboarding.step2.body', art: 'plaza' },
   { title: 'onboarding.step3.title', body: 'onboarding.step3.body', art: 'discover' },
+  { title: 'onboarding.step4.title', body: 'onboarding.step4.body', art: 'marks' },
 ] as const
 
 function StepArt({ kind }: { kind: (typeof STEPS)[number]['art'] }) {
@@ -40,60 +24,88 @@ function StepArt({ kind }: { kind: (typeof STEPS)[number]['art'] }) {
           <stop offset="1" stopColor="#e6ddcd" />
         </linearGradient>
       </defs>
-      <path d="M20 84 120 34l100 50-100 50z" fill="url(#onb-ground)" stroke="#d1c3b0" />
+      {/* La maqueta cabe entera en el lienzo: ningún vértice queda cortado. */}
+      <path d="M24 78 120 34l96 44-96 44z" fill="url(#onb-ground)" stroke="#d1c3b0" />
       <path
-        d="M44 84l76-38M70 97l76-38M96 110l76-38"
+        d="M46 78l74-34M68 89l74-34M90 100l74-34"
         stroke="#fffdf9"
         strokeWidth="5"
         strokeLinecap="round"
       />
       {[
-        [78, 66],
-        [104, 54],
-        [150, 84],
-        [128, 96],
-        [176, 72],
+        [72, 62],
+        [100, 50],
+        [148, 78],
+        [126, 90],
+        [170, 66],
       ].map(([x, y]) => (
         <g key={`${x}-${y}`} transform={`translate(${x} ${y})`}>
           <path d="M0 0l12-6 12 6v10l-12 6-12-6z" fill="#fbf8f2" stroke="#d1c3b0" />
           <path d="M0 0l12 6 12-6" fill="none" stroke="#e6ddcd" />
         </g>
       ))}
-      {kind !== 'explore' && (
-        <g transform="translate(108 68)">
-          <path d="M0 0l16-8 16 8v16l-16 8-16-8z" fill={kind === 'plaza' ? '#8cba37' : '#a7c86a'} />
-          <path d="M0 0l16 8 16-8-16-8z" fill="#b8d77c" />
-          <path d="M16 8v24l16-8V0z" fill="#6a8736" />
+      {/* Volumen isométrico completo: cara izquierda, derecha y techo cierran en el mismo vértice
+          inferior (antes la cara derecha sobresalía y el edificio parecía cortado). */}
+      {kind !== 'explore' && kind !== 'marks' && (
+        <g transform="translate(104 70)">
+          <path d="M16 -8l16 8v16l-16 8-16-8V0z" fill={kind === 'plaza' ? '#8cba37' : '#a7c86a'} />
+          <path d="M0 0l16-8 16 8-16 8z" fill="#b8d77c" />
+          <path d="M32 0v16l-16 8V8z" fill="#6a8736" />
         </g>
       )}
       {kind === 'plaza' && (
-        <g transform="translate(96 26)">
+        <g transform="translate(92 16)">
           <rect width="56" height="22" rx="11" fill="#536c2a" />
           <circle cx="44" cy="11" r="7" fill="#8cba37" />
           <rect x="10" y="8" width="24" height="6" rx="3" fill="#f3f8ea" />
-          <path d="M28 22v14" stroke="#536c2a" strokeWidth="2" />
+          <path d="M28 22v24" stroke="#536c2a" strokeWidth="2" />
         </g>
       )}
+      {/* Paso 1: el gesto rodea la maqueta entera (girar y arrastrar), con el punto de contacto encima. */}
       {kind === 'explore' && (
-        <g
-          transform="translate(150 20)"
-          fill="none"
-          stroke="#536c2a"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        >
-          <path d="M8 22c10-14 30-14 40 0" />
-          <path d="M40 14l8 8-10 3" />
-          <circle cx="28" cy="44" r="9" fill="#e7f1d4" />
+        <g fill="none" stroke="#536c2a" strokeWidth="2.5" strokeLinecap="round">
+          <path d="M26 100a106 50 0 0 0 188 0" strokeLinejoin="round" />
+          <path d="M207 112l7-12-13 3" strokeLinejoin="round" />
+          <circle cx="120" cy="74" r="9" fill="#e7f1d4" />
         </g>
       )}
       {kind === 'discover' && (
-        <g transform="translate(150 16)">
-          <rect width="72" height="52" rx="10" fill="#fcfaf6" stroke="#d1c3b0" />
+        <g transform="translate(156 12)">
+          <rect width="68" height="50" rx="10" fill="#fcfaf6" stroke="#d1c3b0" />
           <rect x="8" y="9" width="16" height="16" rx="5" fill="#e7f1d4" />
-          <rect x="30" y="11" width="32" height="5" rx="2.5" fill="#435a22" />
-          <rect x="30" y="20" width="22" height="4" rx="2" fill="#b9a88f" />
-          <rect x="8" y="33" width="56" height="11" rx="5.5" fill="#536c2a" />
+          <rect x="30" y="11" width="30" height="5" rx="2.5" fill="#435a22" />
+          <rect x="30" y="20" width="20" height="4" rx="2" fill="#b9a88f" />
+          <rect x="8" y="32" width="52" height="10" rx="5" fill="#536c2a" />
+        </g>
+      )}
+      {/* Paso 4: la ficha con sus tres marcas (visita, favorito y estrellas), en grande y al centro. */}
+      {kind === 'marks' && (
+        <g transform="translate(62 18)">
+          <rect width="116" height="84" rx="14" fill="#fcfaf6" stroke="#d1c3b0" />
+          <rect x="14" y="14" width="26" height="26" rx="8" fill="#e7f1d4" />
+          <rect x="48" y="16" width="52" height="7" rx="3.5" fill="#435a22" />
+          <rect x="48" y="29" width="34" height="6" rx="3" fill="#b9a88f" />
+          <g transform="translate(14 52)">
+            <rect width="40" height="18" rx="9" fill="#536c2a" />
+            <path
+              d="M11 9.4l2.6 2.8 5.4-5.6"
+              fill="none"
+              stroke="#fcfaf6"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <rect x="24" y="7" width="10" height="4" rx="2" fill="#e7f1d4" />
+          </g>
+          <path
+            d="M64 54c2.4-3.4 7.6-3 9 1 1.4-4 6.6-4.4 9-1 2.4 3.4-1 8.4-9 13-8-4.6-11.4-9.6-9-13z"
+            fill="#c0453c"
+          />
+          {/* La tercera marca es la calificación, y desde esta ronda son estrellas. */}
+          <path
+            fill="#536c2a"
+            d="M99 51.5l2.6 5.3 5.8.85-4.2 4.1 1 5.8-5.2-2.75-5.2 2.75 1-5.8-4.2-4.1 5.8-.85z"
+          />
         </g>
       )}
     </svg>
@@ -121,7 +133,7 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
   }, [open])
 
   const finish = () => {
-    markSeen()
+    markOnboardingSeen()
     onClose()
   }
 
@@ -160,7 +172,9 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
         >
           <X aria-hidden="true" />
         </button>
-        <StepArt kind={current.art} />
+        <div className={styles.artBox}>
+          <StepArt kind={current.art} />
+        </div>
         <p className={styles.progress}>
           {t('onboarding.progress', { current: step + 1, total: STEPS.length })}
         </p>

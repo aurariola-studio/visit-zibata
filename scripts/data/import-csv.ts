@@ -3,7 +3,7 @@
  *
  * Importa locales desde CSV (UTF-8, con encabezados) a data/commercial/places.json.
  * - Crea los locales nuevos y actualiza los existentes (mismo id) con las columnas no vacías,
- *   conservando lo que no viene en el CSV (fotos, tags, googlePlaceId…).
+ *   conservando lo que no viene en el CSV (fotos, googlePlaceId…).
  * - Recalcula `placeIds` y `categories` de cada plaza y valida todo el conjunto antes de escribir.
  */
 import { readFileSync } from 'node:fs'
@@ -97,17 +97,14 @@ parsed.data.forEach((row, index) => {
       ...previous,
       name: incoming.name,
       plazaId: incoming.plazaId,
-      category: incoming.category,
+      giros: incoming.giros,
       active: incoming.active,
-      subcategory: incoming.subcategory ?? previous.subcategory,
       description: incoming.description ?? previous.description,
-      localNumber: incoming.localNumber ?? previous.localNumber,
       hours: incoming.hours ?? previous.hours,
       location: incoming.location ?? previous.location,
       googleMapsUri: incoming.googleMapsUri ?? previous.googleMapsUri,
       phone: incoming.phone ?? previous.phone,
       links,
-      tags: incoming.tags.length > 0 ? incoming.tags : previous.tags,
     })
     updated++
   } else {

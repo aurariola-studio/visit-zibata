@@ -1,13 +1,22 @@
 import { expect, test } from '@playwright/test'
-import { isMobile, openApp, panel, waitForMap } from './helpers.ts'
+import {
+  isMobile,
+  openApp,
+  panel,
+  placeById,
+  placesInPlaza,
+  waitForMap,
+  waitForSheet,
+} from './helpers.ts'
 
 test.describe('Plazas y lugares', () => {
   test('abre el detalle de un lugar y el botón "Cómo llegar" lleva a Google Maps', async ({
     page,
     context,
   }) => {
-    // Nunca se sale a internet en los tests: Google Maps se simula.
-    await context.route(/^https:\/\/www\.google\.com\/maps/, (route) =>
+    // Nunca se sale a internet en los tests: Google Maps se simula, también sus enlaces cortos (los
+    // que aporta el propietario para los locales con ubicación propia verificada).
+    await context.route(/^https:\/\/(www\.google\.com\/maps|maps\.app\.goo\.gl)/, (route) =>
       route.fulfill({
         status: 200,
         contentType: 'text/html',
@@ -27,16 +36,20 @@ test.describe('Plazas y lugares', () => {
       'https://www.facebook.com/p/Bendito-Bocado-Zibat%C3%A1-61552620264859/',
     )
 
+    // Con ubicación propia verificada, la ruta lleva a la puerta del local; sin ella, a la plaza por
+    // nombre y dirección (nunca a unas coordenadas que Google rotularía con el negocio más cercano).
     const directions = region.getByRole('link', { name: /Cómo llegar/ })
     await expect(directions).toHaveAttribute(
       'href',
-      'https://www.google.com/maps/dir/?api=1&destination=20.68097%2C-100.316595',
+      placeById('bendito-bocado').googleMapsUri ??
+        'https://www.google.com/maps/dir/?api=1&destination=Plaza+Condesa%2C+Av.+Paseo+de+las+Pitahayas+9-B%2C+Zibat%C3%A1',
     )
     await expect(directions).toHaveAttribute('target', '_blank')
     const popupPromise = page.waitForEvent('popup')
     await directions.click()
     const popup = await popupPromise
-    await expect(popup).toHaveURL(/^https:\/\/www\.google\.com\/maps\/dir\/\?api=1&destination=/)
+    // Abre Google Maps: la ruta a la plaza o el sitio exacto del local, según lo verificado.
+    await expect(popup).toHaveURL(/^https:\/\/(www\.google\.com\/maps|maps\.app\.goo\.gl)/)
     await popup.close()
 
     await region.getByRole('button', { name: 'Volver a Plaza Condesa' }).click()
@@ -51,10 +64,47 @@ test.describe('Plazas y lugares', () => {
     )
   })
 
+  test('compartir un lugar copia siempre la misma URL, sin el filtro desde el que se comparte', async ({
+    page,
+  }) => {
+    // Se entra con una categoría activa a propósito: el hash de la vista la arrastra y la URL que
+    // se comparte no debe llevarla, o el mismo lugar generaría una URL distinta por cada filtro.
+    await openApp(page, { hash: '#/lugar/tomassa?categoria=italiana' })
+    const region = panel(page)
+    await expect(region.getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
+    await expect(page).toHaveURL(/categoria=italiana/)
+
+    const compartir = region.getByRole('button', { name: 'Compartir Tomassa' })
+    await expect(compartir).toBeVisible()
+    // La hoja del sistema abriría un diálogo nativo que Playwright no puede cerrar: se fuerza la
+    // rama del portapapeles, que es la que se puede comprobar.
+    await page.evaluate(() => {
+      Reflect.deleteProperty(Navigator.prototype, 'share')
+      Object.defineProperty(navigator, 'share', { value: undefined, configurable: true })
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: {
+          writeText: (texto: string) => {
+            ;(window as unknown as { copiado?: string }).copiado = texto
+            return Promise.resolve()
+          },
+        },
+      })
+    })
+    await compartir.click()
+
+    const copiado = await page.evaluate(() => (window as unknown as { copiado?: string }).copiado)
+    expect(copiado).toMatch(/#\/lugar\/tomassa$/)
+    expect(copiado).not.toContain('categoria')
+    await expect(region.getByRole('status')).toHaveText('Enlace copiado')
+  })
+
   test('"atrás" en el navegador cierra la plaza seleccionada', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)
-    await page.getByRole('combobox', { name: 'Plaza' }).selectOption({ label: 'Plaza Zielo' })
+    await page
+      .getByRole('combobox', { name: 'Filtrar por zona' })
+      .selectOption({ label: 'Plaza Zielo' })
     await expect(page).toHaveURL(/#\/plaza\/plaza-zielo$/)
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Plaza Zielo' })).toBeVisible()
     await page.goBack()
@@ -83,17 +133,56 @@ test.describe('Plazas y lugares', () => {
     test.skip(!isMobile(page), 'Solo aplica a la hoja inferior móvil')
     await openApp(page)
     await waitForMap(page)
-    await page.getByRole('button', { name: 'Ver plazas' }).click()
+    await page.getByRole('button', { name: 'Explora Zibatá' }).click()
     const handle = page.getByRole('button', { name: 'Reducir panel' })
     await expect(handle).toHaveAttribute('aria-expanded', 'true')
-    await expect(page.getByRole('button', { name: /^Xentric Anáhuac, 20 lugares/ })).toBeVisible()
+    await waitForSheet(page)
+    await expect(
+      page.getByRole('button', {
+        name: new RegExp(`^Xentric Anáhuac, ${placesInPlaza('Xentric Anáhuac')} lugares`),
+      }),
+    ).toBeVisible()
     const box = await panel(page).boundingBox()
     const viewport = page.viewportSize()
     expect(box && viewport ? box.height / viewport.height : 1).toBeLessThan(0.9)
     await handle.click()
+    await waitForSheet(page)
     await expect(page.getByRole('button', { name: 'Ampliar panel' })).toHaveAttribute(
       'aria-expanded',
       'false',
     )
+  })
+
+  test('el ritmo vertical de la ficha se mantiene en sus tres pasos', async ({ page }) => {
+    // Lo que se vigila no son los números, es la uniformidad: cada relación repite siempre el mismo
+    // paso. Se rompe en cuanto alguien añade un bloque con margen propio, que es como se desordenó
+    // antes. La escala está escrita en PlaceDetail.module.css.
+    await openApp(page, { hash: '#/lugar/al-grano' })
+    await waitForMap(page)
+    const huecos = await page.evaluate(() => {
+      const entre = (padre: Element | null) => {
+        if (!padre) return []
+        const hijos = [...padre.children].filter(
+          (hijo) => !hijo.classList.contains('visually-hidden'),
+        )
+        return hijos.slice(1).map((hijo, i) => {
+          const previo = hijos[i] as HTMLElement
+          return Math.round(
+            hijo.getBoundingClientRect().top - previo.getBoundingClientRect().bottom,
+          )
+        })
+      }
+      const ficha = document.querySelector('[class*="detail_"]')
+      return {
+        bloques: entre(ficha),
+        cabecera: entre(document.querySelector('[class*="header_"]')),
+      }
+    })
+    expect(huecos.bloques.length).toBeGreaterThan(2)
+    expect(huecos.cabecera.length).toBeGreaterThan(1)
+    expect(new Set(huecos.bloques).size, `bloques: ${huecos.bloques}`).toBe(1)
+    expect(new Set(huecos.cabecera).size, `cabecera: ${huecos.cabecera}`).toBe(1)
+    // El paso de dentro es menor que el de fuera: son dos niveles, no uno con ruido.
+    expect(huecos.cabecera[0]).toBeLessThan(huecos.bloques[0] as number)
   })
 })

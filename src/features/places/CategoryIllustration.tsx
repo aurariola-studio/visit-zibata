@@ -4,38 +4,33 @@
  */
 import type { CSSProperties } from 'react'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
+import { categoryTone } from '../../config/palette.ts'
+import type { Category } from '../../types/domain.ts'
 import styles from './CategoryIllustration.module.css'
 
-const TONES = [
-  ['#e7f1d4', '#b8d77c', '#536c2a'],
-  ['#f1ebe0', '#d1c3b0', '#6b5d48'],
-  ['#e9efdc', '#9fc45a', '#435a22'],
-  ['#f3ece2', '#c9b79c', '#5c4f3c'],
-] as const
-
-function toneFor(key: string) {
-  let hash = 0
-  for (const char of key) hash = (hash * 31 + char.charCodeAt(0)) >>> 0
-  return TONES[hash % TONES.length] ?? TONES[0]
-}
-
 export function CategoryIllustration({
-  categoryId,
-  icon,
+  category,
+  icons,
   label,
   size = 'md',
 }: {
-  categoryId: string
-  icon: string
+  /** La categoría entera: de ella salen el tono y el icono de respaldo, ambos desde los datos. */
+  category: Category | undefined
+  /** Los dibujos de los giros principales del local; por defecto, el de la categoría. */
+  icons?: readonly string[]
   /** Sin etiqueta la ilustración es decorativa (oculta a lectores de pantalla). */
   label?: string
   size?: 'sm' | 'md' | 'lg'
 }) {
-  const [background, accent, ink] = toneFor(categoryId)
+  // El color dice de qué se come, no de qué plaza es: mismo tono para la misma categoría en toda la guía.
+  const { soft, ink } = categoryTone(category)
+  // Solo los principales entran aquí, los tres si son tres: caben porque comparten una sola placa
+  // en vez de llevar una cada uno. Los secundarios enseñan su dibujo en la ficha.
+  const dibujos = (icons?.length ? icons : [category?.icon ?? 'utensils-crossed']).slice(0, 3)
   const common = {
     className: styles.illustration,
     'data-size': size,
-    style: { '--illo-bg': background, '--illo-accent': accent, '--illo-ink': ink } as CSSProperties,
+    style: { '--illo-bg': soft, '--illo-accent': ink, '--illo-ink': ink } as CSSProperties,
   }
   const content = (
     <>
@@ -51,8 +46,12 @@ export function CategoryIllustration({
         <circle cx="152" cy="34" r="16" />
         <circle cx="152" cy="34" r="28" />
       </svg>
-      <span className={styles.badge}>
-        <CategoryIcon name={icon} strokeWidth={1.6} />
+      <span className={styles.badges} data-count={dibujos.length}>
+        <span className={styles.badge}>
+          {dibujos.map((name) => (
+            <CategoryIcon key={name} name={name} strokeWidth={1.6} />
+          ))}
+        </span>
       </span>
     </>
   )

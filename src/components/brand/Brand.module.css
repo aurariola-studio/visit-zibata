@@ -5,9 +5,14 @@
   flex-shrink: 0;
 }
 
-.brand svg {
-  border-radius: 9px;
-  box-shadow: var(--shadow-sm);
+/*
+ * Sin esquina redondeada ni sombra: el símbolo anterior era una baldosa llena y las necesitaba
+ * para no flotar. Este es una brújula sobre el fondo, y una sombra bajo un aro calado se cuela por
+ * el centro. `block` quita el hueco que deja la línea base debajo de una imagen en línea.
+ */
+.brand img {
+  display: block;
+  flex-shrink: 0;
 }
 
 .text {
@@ -18,6 +23,7 @@
 
 .name {
   font-family: var(--font-display);
+  font-weight: 600;
   font-size: 1.625rem;
   letter-spacing: -0.01em;
   color: var(--ink-900);

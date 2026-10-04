@@ -90,6 +90,7 @@ describe('appReducer', () => {
       placeId: null,
       categoryId: null,
       missingLink: true,
+      infoTopic: null,
     })
     expect(synced.missingLinkNotice).toBe(true)
     expect(appReducer(synced, { type: 'dismissNotice' }).missingLinkNotice).toBe(false)

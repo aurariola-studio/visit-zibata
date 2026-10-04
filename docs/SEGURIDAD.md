@@ -11,7 +11,8 @@ ataque se reduce a lo que el navegador ejecuta y a los enlaces que ofrece la gu�
   todas las peticiones van al propio origen. Un E2E comprueba que un recorrido completo no genera ni una
   petición externa.
 - **Google Maps solo como enlace.** Nunca Google Places, ni scraping, ni descarga de fotos.
-- **Sin datos personales.** No hay cuentas, formularios ni rastreo. Los favoritos viven en
+- **Sin datos personales.** No hay cuentas, formularios ni rastreo. Los favoritos, las
+  calificaciones y el recuento de fichas abiertas (que solo sirve para ordenar sus listas) viven en
   `localStorage` del dispositivo y nunca salen de él.
 
 ## Content Security Policy
@@ -21,10 +22,17 @@ cabeceras propias), solo en producción: el servidor de desarrollo necesita esti
 
 ```
 default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:;
-font-src 'self'; connect-src 'self'; worker-src 'self' blob:; child-src 'self' blob:;
+font-src 'self'; connect-src 'self' https://api.web3forms.com; worker-src 'self' blob:; child-src 'self' blob:;
 manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'
 ```
 
+- `connect-src` abre un único destino externo, **api.web3forms.com**, y solo se usa al pulsar "Enviar"
+  en "Sugiere un cambio". Navegar por la guía no hace ninguna petición fuera del propio origen. El
+  correo de destino no viaja en el código: vive en Web3Forms, atado a la clave pública del formulario.
+  La clave se pasa en `VITE_WEB3FORMS_KEY` (ver `.env.example`), no está en el repositorio y, como
+  cualquier variable `VITE_*`, Vite la incrusta en el JavaScript publicado: es una clave de cliente,
+  pública por diseño, y lo que la protege es la lista de dominios permitidos en el panel de Web3Forms
+  más el campo trampa del formulario. Sin clave, el formulario no se dibuja.
 - `blob:` en imágenes y workers lo usa MapLibre internamente; `data:` lo usan iconos embebidos.
 - `frame-ancestors` **no** puede declararse en `<meta>`: si el hosting admite cabeceras, añade
   `Frame-Ancestors: 'none'` o `X-Frame-Options: DENY` (ver [DESPLIEGUE.md](DESPLIEGUE.md)).

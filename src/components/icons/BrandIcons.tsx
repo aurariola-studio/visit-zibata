@@ -1,4 +1,10 @@
-/** Logotipos de redes sociales (Simple Icons, CC0 1.0). Solo decorativos: el texto va en aria-label. */
+/**
+ * Logotipos de las redes sociales a las que enlaza una ficha: Simple Icons (CC0 1.0), silueta rellena
+ * del color del enlace. Solo decorativos: el nombre va en el aria-label del enlace.
+ *
+ * Los de reparto (Rappi y Uber Eats) no van aquí: son sus iconos de aplicación, a todo color, y viven
+ * como archivo estático en `public/brands`.
+ */
 import type { SVGProps } from 'react'
 
 const PATHS = {

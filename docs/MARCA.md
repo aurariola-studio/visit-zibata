@@ -1,0 +1,201 @@
+# Propuesta de identidad: Visit Zibatá
+
+Fecha: 2026-09-29 · Estado: **nombre y marca implementados en la v4.0.0**
+
+El producto se llama Visit Zibatá y tiene símbolo propio. Lo que queda abierto es el dominio, el SEO
+sin hash y el uso del topónimo, que están más abajo.
+
+## 1. Nombre
+
+**Visit Zibatá** (dominio `visitzibata.com`, disponible). Decidido e implementado: `app.name` en los
+dos idiomas, `<title>`, Open Graph y manifiesto PWA.
+
+A favor:
+
+- El patrón `visit<lugar>` lo entiende cualquiera: es el lenguaje de las oficinas de turismo
+  (visitmexico.com, visitportugal.com, visitoslo.com). Comunica "guía oficial de un lugar" sin
+  explicar nada.
+- Funciona en español y en inglés sin traducirse, que importa porque la guía ya es bilingüe.
+- Escala: si mañana entran compras, servicios o eventos, el nombre no se queda corto (cosa que
+  "Comer y beber" sí).
+- El dominio está libre y es corto.
+
+En contra, a decidir con los ojos abiertos:
+
+- **"Zibatá" es el nombre de un desarrollo inmobiliario privado.** Ese patrón de nombre funciona para
+  ciudades y países, donde nadie es dueño del topónimo. Antes de registrar dominio y redes conviene
+  revisar si el nombre está registrado como marca y, si se puede, hablar con el desarrollador: una
+  guía independiente que usa su nombre puede leerse como oficial. Alternativas si hubiera fricción:
+  **Guía Zibatá**, **Zibatá Local**, **Antojo Zibatá** (más específico de comida) o un nombre propio
+  que no dependa del topónimo (**Cañada**, por las cañadas arboladas del fraccionamiento).
+- "Visit" sugiere turismo, y la mayoría de quienes usan la guía **viven** ahí. Se compensa con el
+  descriptor: *Visit Zibatá · Qué comer, dónde y cuándo*.
+
+Arquitectura de nombre propuesta:
+
+| Elemento | Texto |
+|---|---|
+| Marca | Visit Zibatá |
+| Descriptor (es) | Guía de Zibatá: dónde comer y beber |
+| Descriptor (en) | The guide to Zibatá: where to eat and drink |
+| Nombre en la app (PWA) | Visit Zibatá |
+| Voz | Directa, sin superlativos ni "el mejor". Nunca opina de un negocio; describe. |
+
+## 2. Símbolo
+
+**Una brújula cuya aguja es la letra Z.** Dice las dos cosas a la vez y con el mismo peso: la Z de
+Zibatá, y que esto es una guía.
+
+### Cómo está construido
+
+Se dibuja una sola mitad, de la punta al centro, y la otra es esa misma **girada 180 grados**.
+Encajan exactas sin ajuste porque el punto medio de la diagonal de una Z es su centro. El grosor
+nace en cero en las dos puntas y crece hasta el centro, así que la pieza entera es a la vez la aguja
+de una brújula y la letra, y el punto donde cambia de color es el pivote. El aro y la rosa repiten el
+olivo de la mitad de arriba: nada se lee como un objeto pegado encima del otro.
+
+El contorno **no** se genera desplazando una línea central a los dos lados por igual. Ese método
+falla en los codos de una Z: por fuera no puede cerrar más apretado que el propio grosor (sale media
+luna) y por dentro las dos orillas se cruzan, el lazo se recorre al revés y el relleno lo cancela
+(queda una grieta donde debía haber esquina). Cada tramo se desplaza por su cuenta y se juntan en la
+esquina, con inglete por dentro y una vuelta de tensión regulada por fuera, que es como se construye
+una letra.
+
+El color se parte en **horizontal**, con hueco. Como la diagonal queda a 22 grados de la horizontal,
+el corte la atraviesa muy oblicuo y el hueco se lee como una franja larga; perpendicular al trazo
+mide cerca del 15 % de su grosor.
+
+### Los dos cortes
+
+| Archivo | Cuándo | Qué cambia |
+|---|---|---|
+| `public/logo.svg` | 40 px o más | Trazo 19, aro 11, hueco 12 |
+| `public/favicon.svg` | menos de 40 px, y el favicon | Trazo, aro y puntas más gordos, hueco 8 |
+
+Es la misma relación que hay entre el corte de titular y el de texto de una tipografía: con el corte
+grande, a 16 px el hueco se come la diagonal y la Z se parte en dos piezas sueltas. Aun con el corte
+chico, a 16 px la letra es más una insinuación que una letra: es el límite de meter una letra dentro
+de un aro, y se acepta a sabiendas.
+
+### Reglas de uso
+
+- **Colores**: olivo `#536C2A` el aro, la rosa y la mitad de arriba; lima `#8CBA37` la mitad de
+  abajo. Sobre fondo oscuro, la parte olivo pasa a papel `#F7F4ED`. En los iconos de aplicación, que
+  van sobre olivo, la mitad de abajo usa el lima claro `#B8D77C`: el lima de marca queda demasiado
+  cerca del olivo del fondo y la aguja pierde sus dos mitades.
+- **Zona de respeto**: el largo de la punta del norte por los cuatro lados.
+- **Tamaño mínimo**: 16 px, con el corte chico.
+- **No**: deformar, girar (la inclinación ya está en el dibujo), recolorear fuera de la paleta,
+  ponerle sombra (el aro es calado y se cuela por el centro) ni meterlo en una baldosa redondeada,
+  salvo en los iconos de aplicación, donde el recorte lo pone el sistema.
+- **Una sola fuente**: `public/logo.svg`. De ahí salen los cinco PNG de icono (`npm run
+  images:icons`) y el símbolo de la imagen social (`npm run images:og`). El símbolo no se copia a
+  mano en ningún otro sitio.
+- **Entra por `<img>`, no en línea**: en línea suma cerca de 3 KB gzip y el paquete inicial está en
+  119,8 de 120 KB de presupuesto.
+
+### Firma de autoría
+
+"by aurariola.com" en la franja inferior y en "Acerca de esta guía", en monoespaciada y con el punto
+en oro. Del sello de aurariola se toma solo eso; el anillo de píxeles se queda fuera para no competir
+con la marca de la guía. El oro de esa marca (`#b7791f`) se queda en 3,3:1 sobre las superficies
+arena y no llega al 4,5:1 que pide un texto de 11 px, así que se usa el mismo oro oscurecido hasta
+5:1 (`--gold-700`).
+
+### Qué se descartó por el camino
+
+El símbolo anterior (volumen isométrico dentro de una baldosa) decía "plaza" pero no decía ni el
+lugar ni que esto fuera una guía. Antes de la brújula se probaron y se rechazaron: un pin con una
+cañada dentro (demasiado liso y demasiado genérico), un sello con el paisaje (leía a club campestre,
+no a guía) y varias Z sueltas dentro de un aro (el aro y la letra se leían como dos objetos
+apilados, no como una pieza).
+
+## 3. Paleta
+
+Se conserva la base actual y se completa con los tonos que el mapa ya usa, para que producto y marca
+hablen igual:
+
+| Rol | Color | Uso |
+|---|---|---|
+| Olivo | `#536C2A` | Acción principal, marca, estados activos |
+| Lima | `#8CBA37` | Acentos, confirmaciones, insignias |
+| Arena | `#D1C3B0` | Superficies cálidas, bordes, el suelo del mapa |
+| Crema | `#FCFAF6` | Fondo de tarjetas y hojas |
+| Tinta | `#1F2419` | Texto principal |
+| Cañada | `#93AD6B` | Arbolado del mapa, ilustraciones |
+| Agua | `#B2CDC8` | Cuerpos de agua, información neutra |
+
+Reglas: un solo acento por pantalla; el color de plaza (generado en HSL) nunca compite con el olivo de
+marca; contraste mínimo AA 4.5:1 para texto y 3:1 para iconos (ya se cumple y hay pruebas que lo
+verifican).
+
+## 4. Tipografía
+
+- **Instrument Sans** se queda para interfaz y datos; 600 para etiquetas en versalitas, 500 para cuerpo.
+  Números con `tabular-nums` en horarios y conteos (ya aplicado).
+- **Instrument Serif se sustituye en los títulos** (ronda 2): tiene el ojo pequeño y el interletraje muy
+  cerrado, así que "Explora Zibatá" sale apretado y más solemne de lo que la guía quiere sonar.
+  - **Fraunces 600: adoptada el 2026-09-23.** Serif cálida, de ojo grande, pensada para titulares; se lee
+    grande sin ponerse formal y mantiene el aire editorial. Ya es `--font-display` en la guía
+    (autoalojada con `@fontsource/fraunces`, solo el peso 600). Los rótulos del mapa siguen en Instrument
+    Serif: sus glifos se generan aparte, en el pipeline de teselas.
+  - **Alternativa: Bricolage Grotesque 700**: sin serifas, más urbana y joven; se aleja del tono "guía
+    de lugar".
+  - Cambiarlo toca un solo token (`--font-display`) y ninguna de las dos pesa más que la actual. Ambas
+    se autoalojan con `@fontsource`, sin pedir nada a Google en tiempo de ejecución.
+
+## 5. Iconografía
+
+- Base **Lucide** (trazo 2 px, esquinas redondeadas) más siete iconos propios dibujados con la misma
+  geometría: taco, tortilla, torta, baguette, sushi, palillos, gofre y cafetera de filtro.
+- Regla: **un icono por giro, no por categoría** (ya implementado) y ninguno decorativo: si un icono no
+  ayuda a distinguir, no va.
+- Pendiente para la identidad: un set de 3–4 ilustraciones de cabecera (cañada, plaza, mesa) para
+  "Acerca de", redes y la imagen para compartir.
+
+## 6. SEO y presencia
+
+Lo que ya está: `<title>` y descripción por idioma, Open Graph con imagen propia, CSP estricta, sitio
+estático y rápido (119,8 KB de JS inicial), y ahora `<html lang>` que cambia con el idioma.
+
+Lo que falta para `visitzibata.com`:
+
+1. **Dominio propio con HTTPS** apuntando a GitHub Pages (CNAME) y redirección de `www`.
+2. **`hreflang`** entre las versiones español e inglés, y `canonical` por ruta.
+3. **Datos estructurados** `ItemList` de la guía y `Restaurant`/`LocalBusiness` por ficha, **solo con
+   datos verificados** (nombre, dirección, horario, teléfono, enlaces). Sin inventar `aggregateRating`:
+   la guía no publica medias.
+4. **Rutas legibles** para compartir e indexar (`/plaza/paseo-zibata`, `/lugar/el-hornero`) en vez del
+   hash actual. Requiere que GitHub Pages sirva `index.html` en 404, o mover a un hosting con
+   reescrituras; hoy el hash impide que Google indexe cada ficha.
+5. **`sitemap.xml` y `robots.txt`** generados en el build a partir del dataset.
+6. Fichas de la propia guía en Google Business y redes con el mismo nombre y logo.
+
+Palabras clave reales por las que buscaría alguien: "dónde comer en Zibatá", "restaurantes Zibatá",
+"plazas Zibatá", "qué abre hoy en Zibatá", "desayunos Zibatá". La página principal debería responder
+literalmente a la primera.
+
+## 7. Qué implica implementarlo
+
+| Ámbito | Trabajo |
+|---|---|
+| Producto | Hecho en la v4.0.0: nombre en `index.html`, manifiesto PWA, `app.name`, Brand, iconos y OG |
+| Diseño | Hecho: símbolo en SVG en dos cortes, favicon, iconos "any" y "maskable", apple-touch. Faltan las ilustraciones |
+| Datos | Ninguno: la identidad no toca el dataset |
+| Dominio | Compra, CNAME, HTTPS, redirecciones, hreflang |
+| SEO | Rutas sin hash (cambio de enrutado), sitemap, datos estructurados |
+| Riesgo | Revisar el uso del topónimo antes de registrar marca o dominio |
+
+Estimación: la parte de producto y diseño es una tarde larga; las rutas sin hash y los datos
+estructurados, un par de días con pruebas. Nada de esto bloquea la publicación actual.
+
+## 8. Recomendación
+
+1. **Sigue abierta la pregunta del topónimo**, y es lo único con riesgo real. El nombre y el símbolo
+   ya están en la app, pero antes de registrar marca o dominio conviene revisar si "Zibatá" está
+   registrado y, si se puede, hablar con el desarrollador. Mientras tanto, la guía publica la leyenda
+   de independencia en la franja inferior: "Guía independiente de establecimientos y servicios de la
+   zona", que es la protección práctica frente a un nombre todavía sin registrar.
+2. Con eso resuelto: registrar `visitzibata.com` y apuntarlo a GitHub Pages.
+3. Dejar las rutas sin hash y los datos estructurados para la ronda siguiente, cuando el contenido esté
+   cerrado: son lo que de verdad mueve el SEO, y conviene hacerlo una sola vez.

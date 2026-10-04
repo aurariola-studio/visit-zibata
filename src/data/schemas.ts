@@ -13,6 +13,7 @@ import {
   HEX_COLOR_PATTERN,
   isGoogleMapsUrl,
   isSafePhotoSrc,
+  isValidSource,
   isValidTimeRange,
   LOCATION_CONFIDENCE,
   RESEARCH_STATUS,
@@ -22,6 +23,7 @@ import {
 
 export {
   DAY_KEYS,
+  FIELD_SOURCE_PATTERN,
   isGoogleMapsUrl,
   LOCATION_CONFIDENCE,
   PUBLISHABLE_STATUS,
@@ -109,50 +111,95 @@ export const LinksSchema = z.strictObject({
   facebook: httpUrl.nullish(),
   tiktok: httpUrl.nullish(),
   whatsapp: e164Phone.nullish(),
+  // Reparto: el enlace lo da cada negocio; sin él no se dibuja botón (nunca uno que no lleve a nada).
+  rappi: httpUrl.nullish(),
+  uberEats: httpUrl.nullish(),
+  didiFood: httpUrl.nullish(),
 })
+
+/** URL pública o verificación en sitio ("campo:AAAA-MM-DD"); ver isValidSource en rules.ts. */
+const source = z
+  .string()
+  .refine(isValidSource, 'Usa una URL https o "campo:AAAA-MM-DD" (verificación en sitio)')
 
 export const VerificationSchema = z.strictObject({
   status: z.enum(RESEARCH_STATUS),
   confidence: z.enum(LOCATION_CONFIDENCE),
   lastVerifiedAt: z.iso.date(),
-  sources: z.array(httpUrl).min(1),
+  sources: z.array(source).min(1),
 })
 
-export const PlaceSchema = z.strictObject({
-  id: slug,
-  slug: slug,
-  name: nonEmptyText,
-  plazaId: slug,
-  category: slug,
-  subcategory: slug.nullable(),
-  description: nonEmptyText.nullable(),
-  localNumber: nonEmptyText.nullable(),
-  hours: HoursSchema.nullable(),
-  location: LatLngSchema.nullable(),
-  googleMapsUri: httpUrl
-    .refine(isGoogleMapsUrl, 'Debe ser un enlace https de Google Maps')
-    .nullable(),
-  googlePlaceId: z
-    .string()
-    .regex(GOOGLE_PLACE_ID_PATTERN, 'Identificador de Google Place no válido')
-    .nullable(),
-  phone: e164Phone.nullable(),
-  photos: z.array(PhotoSchema),
-  links: LinksSchema,
-  tags: z.array(nonEmptyText),
-  active: z.boolean(),
-  verification: VerificationSchema.optional(),
-})
+const googleMapsUrl = httpUrl.refine(isGoogleMapsUrl, 'Debe ser un enlace https de Google Maps')
+
+export const PlaceSchema = z
+  .strictObject({
+    id: slug,
+    slug: slug,
+    name: nonEmptyText,
+    plazaId: slug,
+    /**
+     * Los giros **principales**: lo que define al local (El Hornero: parrilla argentina y pizza). Van
+     * en orden y son los que llevan icono en la lista y en la ilustración redonda. La categoría no se
+     * escribe aquí: se deduce de los giros con el catálogo.
+     */
+    giros: z.array(slug).min(1).max(3),
+    /**
+     * Los giros **secundarios**: lo demás que se vende ahí. En la lista salen solo como texto y su
+     * dibujo aparece únicamente en la ficha. Filtran y se buscan igual que los principales, porque son
+     * igual de ciertos; lo que cambia es el peso visual, no si el local aparece.
+     */
+    secundarios: z.array(slug).max(2).default([]),
+    /**
+     * La descripción la escribe el propio negocio, en español. El inglés es una traducción
+     * generada: la ficha la marca como tal y deja ver el original. Sin `en`, se lee el original.
+     */
+    description: LocalizedTextSchema.nullable(),
+    hours: HoursSchema.nullable(),
+    location: LatLngSchema.nullable(),
+    /**
+     * Ubicación propia del local (`location`) y su enlace de Maps: solo cuando está verificada y es la
+     * actual. Si faltan, la ficha lleva a la plaza, que siempre es correcta.
+     */
+    googleMapsUri: googleMapsUrl.nullable(),
+    googlePlaceId: z
+      .string()
+      .regex(GOOGLE_PLACE_ID_PATTERN, 'Identificador de Google Place no válido')
+      .nullable(),
+    phone: e164Phone.nullable(),
+    photos: z.array(PhotoSchema),
+    links: LinksSchema,
+    active: z.boolean(),
+    verification: VerificationSchema.optional(),
+  })
+  .superRefine((place, ctx) => {
+    // Tres giros como tope entre los dos niveles: un local que necesita más de tres no se está
+    // describiendo, se está enumerando.
+    if (place.giros.length + place.secundarios.length > 3)
+      ctx.addIssue({ code: 'custom', message: 'Entre giros y secundarios el tope son tres' })
+    const repetido = place.secundarios.find((giro) => place.giros.includes(giro))
+    if (repetido)
+      ctx.addIssue({ code: 'custom', message: `"${repetido}" no puede ser principal y secundario` })
+  })
 
 export const PlazaSchema = z.strictObject({
   id: slug,
   slug: slug,
   name: nonEmptyText,
-  description: nonEmptyText.nullable(),
+  description: LocalizedTextSchema.nullable(),
   address: nonEmptyText.nullable(),
   coordinates: LatLngSchema,
   geometry: PlazaGeometrySchema,
   active: z.boolean(),
+  /**
+   * Plaza confirmada y en construcción: aparece en el mapa y en la lista con la leyenda
+   * "Próximamente", sin locales, y no entra en filtros ni conteos.
+   */
+  comingSoon: z.boolean().optional(),
+  /**
+   * Enlace de Google Maps de la plaza aportado y comprobado por quien mantiene la guía. Con él, "Cómo
+   * llegar" abre ese sitio exacto en vez de buscar por nombre y dirección.
+   */
+  googleMapsUri: googleMapsUrl.optional(),
   placeIds: z.array(slug),
   categories: z.array(slug),
   /** Procedencia de la ubicación, para saber qué plazas conviene verificar en campo. */
@@ -161,19 +208,27 @@ export const PlazaSchema = z.strictObject({
   verification: VerificationSchema.optional(),
 })
 
-export const SubcategorySchema = z.strictObject({
+/**
+ * Un giro: el tag que llevan los locales. Cada uno tiene su dibujo, salvo el marcado como `general`,
+ * que es el cajón de "es esto, en general" de su categoría y comparte dibujo con ella.
+ */
+export const GiroSchema = z.strictObject({
   id: slug,
   label: LocalizedTextSchema,
+  icon: nonEmptyText,
   synonyms: z.array(nonEmptyText),
+  general: z.boolean().optional(),
 })
 
 export const CategorySchema = z.strictObject({
   id: slug,
   label: LocalizedTextSchema,
   icon: nonEmptyText,
+  /** Tono (0-359) de la placa de color en listas y fichas; sin él se usa un neutro. */
+  hue: z.number().int().min(0).max(359).optional(),
   order: z.number().int(),
   synonyms: z.array(nonEmptyText),
-  subcategories: z.array(SubcategorySchema),
+  giros: z.array(GiroSchema).min(1),
 })
 
 const datasetMeta = {

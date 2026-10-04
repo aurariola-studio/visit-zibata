@@ -12,8 +12,11 @@ export const INTERACTIVE_PLAZA_LAYERS = ['plaza-buildings', 'plaza-sites-fill'] 
 export const LAYER = {
   plazaSitesFill: 'plaza-sites-fill',
   plazaSitesOutline: 'plaza-sites-outline',
+  plazaSitesSoon: 'plaza-sites-soon',
   plazaBuildings: 'plaza-buildings',
   plazaBuildingsInactive: 'plaza-buildings-inactive',
   buildings: 'buildings',
   buildingsOutside: 'buildings-outside',
+  trees: 'trees',
+  treeTrunks: 'tree-trunks',
 } as const

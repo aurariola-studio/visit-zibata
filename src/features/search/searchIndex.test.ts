@@ -23,6 +23,24 @@ describe('createSearchIndex', () => {
     expect(index.search('CAFÉ')).toContain('cafe-aurora')
   })
 
+  it('un giro secundario se busca igual que un principal', () => {
+    // El nivel es peso visual, no visibilidad: quien busca tacos tiene que encontrar la panadería
+    // que además los hace, aunque en la lista el dibujo sea el del pan.
+    const propio = createSearchIndex(
+      buildCatalog(categoriesFixture, plazasFixture, [
+        ...placesFixture,
+        makePlace({
+          id: 'pan-con-tacos',
+          plazaId: 'plaza-norte',
+          name: 'Pan con Tacos',
+          giros: ['panaderia'],
+          secundarios: ['taqueria'],
+        }),
+      ]),
+    )
+    expect(propio.search('taqueria')).toContain('pan-con-tacos')
+  })
+
   it('usa sinónimos de la categoría ("coffee" → café)', () => {
     const results = index.search('coffee')
     expect(results).toContain('cafe-aurora')
@@ -34,10 +52,9 @@ describe('createSearchIndex', () => {
     expect(index.search('taquria')).toContain('tacos-el-farol')
   })
 
-  it('busca en subcategoría, plaza, tags y descripción', () => {
+  it('busca en los giros, la plaza y la descripción', () => {
     expect(index.search('panaderia')).toContain('panaderia-trigo')
     expect(index.search('plaza sur')).toContain('panaderia-trigo')
-    expect(index.search('terraza')).toEqual(['cafe-aurora'])
     expect(index.search('masa madre')).toContain('panaderia-trigo')
   })
 
@@ -51,14 +68,14 @@ describe('createSearchIndex', () => {
     const extra = [
       makePlace({ id: 'golf-bar', plazaId: 'plaza-norte', name: 'Golf Bar' }),
       makePlace({ id: 'gastro', plazaId: 'plaza-norte', name: 'Gastrobar Uno' }),
-      makePlace({ id: 'mariscos', plazaId: 'plaza-norte', name: 'Mariscos', tags: ['camarón'] }),
+      makePlace({ id: 'mariscos', plazaId: 'plaza-norte', name: 'Mariscos' }),
     ]
     const extended = createSearchIndex(
       buildCatalog(categoriesFixture, plazasFixture, [...placesFixture, ...extra]),
     )
     expect(extended.search('bar')).toEqual(['golf-bar'])
     // Sin inicio de palabra, cuenta la subcadena literal antes que la aproximación.
-    expect(extended.search('ron')).toEqual(['mariscos'])
+    expect(extended.search('isco')).toEqual(['mariscos'])
   })
 
   it('exige que cada palabra coincida', () => {
