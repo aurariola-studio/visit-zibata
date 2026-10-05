@@ -78,7 +78,9 @@ ese archivo igual que el hosting; contra el sitio publicado conviene confirmarlo
 
 ## Requisitos del hosting
 
-- **Peticiones `Range`** para PMTiles (GitHub Pages, Netlify, Cloudflare Pages, Vercel, S3, nginx…).
+- **Nada especial.** Las teselas del mapa se sirven sueltas, así que ya **no** hace falta que el
+  servidor admita peticiones `Range`. Ese requisito estuvo vigente hasta la v4.7.0 y es lo que rompió
+  el mapa al mudarse a un Worker con assets estáticos, que no hace byte serving.
 - **Sin *fallback* SPA**: existe un archivo por ruta, así que un camino inexistente debe responder
   404 con el `404.html` del build, no la portada con un 200.
 - **Archivos servidos sin barra final añadida**: `/lugar/tomassa` debe entregar `lugar/tomassa.html`
@@ -131,7 +133,7 @@ curl -I http://localhost:4173/lugar/inventado    # 404
 grep -c "<url>" dist/sitemap.xml                 # 232
 ```
 
-Para imitar un hosting en subruta (404 reales, `Range`, 301 de directorios), este repositorio se probó
+Para imitar un hosting en subruta (404 reales, 301 de directorios), este repositorio se probó
 además con `BASE_PATH=/visit-zibata/` y un servidor estático estricto sobre `dist/`.
 
 ## Reversión
