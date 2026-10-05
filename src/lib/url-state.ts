@@ -52,7 +52,7 @@ const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
  * y Vite va en modo `mpa` a propósito, sin reserva, para que un camino inventado dé 404 de verdad.
  * Acotarla a estas rutas conserva esa propiedad también mientras se desarrolla.
  */
-export const APP_ROUTE = /^(?:en\/)?(?:(?:lugar|plaza|place|area|info)\/[a-z0-9-]+)?$/
+export const APP_ROUTE = /^(?:en\/?)?(?:(?:lugar|plaza|place|area|info)\/[a-z0-9-]+)?$/
 
 export interface UrlState {
   locale: Locale
@@ -110,15 +110,19 @@ export function buildPath(state: UrlState, base: string): string {
   const { locale } = state
   const words = SEGMENTS[locale]
   const root = base.endsWith('/') ? base : `${base}/`
-  const prefix = PREFIX[locale] ? `${root}${PREFIX[locale]}/` : root
+  // El prefijo del idioma va SIN barra final: cada ruta es un archivo `.html` plano, y así se
+  // sirve tal cual en vez de redirigir al índice de una carpeta. La portada española es la raíz,
+  // que sí la lleva por definición.
+  const prefix = PREFIX[locale] ? `${root}${PREFIX[locale]}` : root
+  const inner = PREFIX[locale] ? `${prefix}/` : prefix
 
   // Una página de información es su propia ruta: al cerrarla se vuelve a la plaza o ficha que sigue
   // en el estado, y el enlace se puede compartir tal cual.
-  if (state.infoTopic) return `${prefix}${words.info}/${INFO_SLUGS[locale][state.infoTopic]}`
+  if (state.infoTopic) return `${inner}${words.info}/${INFO_SLUGS[locale][state.infoTopic]}`
 
   let path = prefix
-  if (state.placeSlug) path = `${prefix}${words.place}/${state.placeSlug}`
-  else if (state.plazaSlug) path = `${prefix}${words.plaza}/${state.plazaSlug}`
+  if (state.placeSlug) path = `${inner}${words.place}/${state.placeSlug}`
+  else if (state.plazaSlug) path = `${inner}${words.plaza}/${state.plazaSlug}`
   return state.categorySlug ? `${path}?${words.category}=${state.categorySlug}` : path
 }
 

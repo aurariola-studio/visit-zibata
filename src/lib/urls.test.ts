@@ -110,7 +110,11 @@ describe('estado en la URL · árbol inglés', () => {
     expect(buildPath({ ...VACIO, locale: 'en', infoTopic: 'privacidad' }, BASE)).toBe(
       '/visit-zibata/en/info/privacy',
     )
-    expect(buildPath({ ...VACIO, locale: 'en' }, BASE)).toBe('/visit-zibata/en/')
+    // Sin barra final: es un archivo plano, no el índice de una carpeta.
+    expect(buildPath({ ...VACIO, locale: 'en' }, BASE)).toBe('/visit-zibata/en')
+    // Y se interpreta igual con barra o sin ella, por si alguien la escribe.
+    expect(parsePath('/visit-zibata/en', '', BASE).locale).toBe('en')
+    expect(parsePath('/visit-zibata/en/', '', BASE).locale).toBe('en')
   })
 
   it('la URL dice el idioma, y es reversible', () => {

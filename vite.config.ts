@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
 import pkg from './package.json' with { type: 'json' }
+import { prerender } from './scripts/build/prerender.ts'
 import { APP_ROUTE } from './src/lib/url-state.ts'
 
 // BASE_PATH permite publicar en un subdirectorio (GitHub Pages: "/<repo>/") sin acoplar el código a
@@ -269,6 +270,7 @@ export default defineConfig({
     contentSecurityPolicy(),
     notFoundPage(),
     cloudflareHeaders(),
+    prerender({ base, siteUrl }),
   ],
   build: {
     target: 'es2022',

@@ -122,6 +122,17 @@ export const es = {
 
   'brand.by': 'un proyecto de',
 
+  /*
+   * Textos que solo salen en los metadatos de cada página prerenderizada: título de pestaña,
+   * resultado de búsqueda y vista previa al compartir. Nunca se ven dentro de la aplicación.
+   */
+  'seo.home.title': 'Visit Zibatá · La guía de zibateños para zibateños',
+  'seo.home.description':
+    'Explora Zibatá, Querétaro, en un mapa 3D y descubre qué hay en cada plaza: horarios, contacto y cómo llegar.',
+  'seo.title': '{name} · Visit Zibatá',
+  'seo.place.fallback': '{giros} en {plaza}, Zibatá. Horario, contacto y cómo llegar.',
+  'seo.plaza.fallback': '{name}, Zibatá. Qué hay, horarios y cómo llegar.',
+
   'share.action': 'Compartir',
   'share.place': 'Compartir {name}',
   /* Etiqueta, no frase: lleva el nombre, los giros y la zona, que es lo que la guía ya publica. */
