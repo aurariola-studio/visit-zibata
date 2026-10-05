@@ -47,7 +47,7 @@ manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-
 - El esquema de datos rechaza `javascript:`, `data:` y rutas absolutas en enlaces y fotos. La misma regla
   se aplica al cargar los datos en el navegador (`src/data/rules.ts`), así que un archivo publicado sin
   pasar por el build tampoco puede colar un enlace peligroso: el registro se descarta con un aviso.
-- El estado de la URL (`/plaza/...`, `?categoria=...`) se valida contra una expresión de slug antes de
+- El estado de la URL (`/zona/...`, `?categoria=...`) se valida contra una expresión de slug antes de
   usarse, también en el árbol inglés y al traducir un enlace antiguo con hash. Un camino que no
   corresponde a ninguna página la responde el 404 del sitio, así que nada inventado llega a la
   aplicación; si aun así llegara (una plaza despublicada entre dos despliegues), se muestra un aviso

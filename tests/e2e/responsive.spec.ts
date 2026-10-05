@@ -48,7 +48,7 @@ for (const size of SIZES) {
       page,
     }, testInfo) => {
       test.skip(!size.project.includes(testInfo.project.name), 'Tamaño de otro tipo de dispositivo')
-      for (const path of ['', 'plaza/paseo-zibata']) {
+      for (const path of ['', 'zona/paseo-zibata']) {
         await openApp(page, { path })
         await waitForMap(page)
         await page.waitForTimeout(900)

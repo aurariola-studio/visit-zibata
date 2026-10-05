@@ -72,7 +72,7 @@ export function placeById(id: string): DatasetPlace {
 /**
  * Abre la app sin el tutorial, salvo que se pida lo contrario.
  *
- * `path` va relativo a la base (`plaza/condesa`, no `/plaza/condesa`), que es lo que hace que la
+ * `path` va relativo a la base (`zona/condesa`, no `/zona/condesa`), que es lo que hace que la
  * suite valga igual publicada en la raíz que en un subdirectorio.
  */
 export async function openApp(page: Page, { path = '', onboarding = false } = {}): Promise<void> {

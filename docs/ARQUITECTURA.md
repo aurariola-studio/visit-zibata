@@ -6,9 +6,9 @@
   mapa → zona → local → detalle.
 - **"Zona" en la interfaz, `plaza` en el código.** Lo que agrupa locales no siempre es una plaza
   comercial (el campus de la Anáhuac o el campo de golf no lo son), así que la interfaz los llama
-  zonas. El tipo de dominio y los datos mantienen `plaza` como identificador estable; la palabra
-  visible vive en `src/i18n` y el segmento de la URL en `src/lib/url-state.ts`, que escribe
-  `/plaza/…` en español y `/area/…` en inglés.
+  zonas. **La URL también es interfaz**, así que lleva la palabra visible: `/zona/…` en español y
+  `/area/…` en inglés (`src/lib/url-state.ts`). El tipo de dominio, los datos y el código mantienen
+  `plaza` como identificador estable, y nada de eso sale a la pantalla.
 - **Estático y portable.** Solo HTML, CSS, JS, JSON, GeoJSON, PMTiles, imágenes y fuentes. Sin backend,
   cuentas, API keys ni servicios de pago. Cualquier hosting estático sirve.
 - **Datos separados del código** y validados dos veces: con Zod en el build y con comprobaciones ligeras
@@ -54,7 +54,7 @@ public/           Assets publicados tal cual (map/, icons/, images/)
 
 `src/app/state.ts` (reducer puro, testeado). Correspondencia con el brief: `selectedPlaza` (también actúa
 como filtro de plaza), `selectedPlace`, `activeCategory`, `searchQuery`, `tutorialVisible`, `mapLoaded`
-(`mapStatus`). `useExperience` deriva resultados, conteos y el modo del panel. La URL (`/plaza/…`,
+(`mapStatus`). `useExperience` deriva resultados, conteos y el modo del panel. La URL (`/zona/…`,
 `/lugar/…`, `?categoria=`, `/info/…`, y su árbol en inglés bajo `/en`) se sincroniza en `useUrlSync`,
 que es el **único** sitio que la escribe.
 
@@ -205,7 +205,7 @@ El estado compartible vive en la **ruta** (`src/lib/url-state.ts`), con un árbo
 | Español | Inglés |
 | --- | --- |
 | `/` | `/en` |
-| `/plaza/<slug>` | `/en/area/<slug>` |
+| `/zona/<slug>` | `/en/area/<slug>` |
 | `/lugar/<slug>` | `/en/place/<slug>` |
 | `/info/{acerca,privacidad,sugerir}` | `/en/info/{about,privacy,suggest}` |
 | `?categoria=desayunos-y-cafe` | `?category=breakfast-and-coffee` |
@@ -238,7 +238,8 @@ el navegador no trae ninguna de las dos, el botón no se dibuja.
 ## Una página por ruta (SEO y vistas previas)
 
 `scripts/build/prerender.ts` es un plugin de build que escribe **232 páginas** (116 por idioma: la
-portada, 15 zonas, 101 locales y 3 páginas de información), más `sitemap.xml` y `robots.txt`. Nada de
+portada, las 11 zonas activas, 101 locales y 3 páginas de información), más `sitemap.xml` y
+`robots.txt`. Las zonas sin actividad no tienen página: no se indexa lo que no se puede visitar. Nada de
 esto se escribe a mano: sale de `data/commercial/*.json` en cada compilación, así que añadir un local
 o cambiarle el nombre se refleja solo en la siguiente publicación.
 

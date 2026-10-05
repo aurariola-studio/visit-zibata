@@ -23,7 +23,7 @@ test.describe('Plazas y lugares', () => {
         body: '<title>Google Maps (simulado)</title>',
       }),
     )
-    await openApp(page, { path: 'plaza/condesa' })
+    await openApp(page, { path: 'zona/condesa' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Plaza Condesa' })).toBeVisible()
 
@@ -107,7 +107,7 @@ test.describe('Plazas y lugares', () => {
     await page
       .getByRole('combobox', { name: 'Filtrar por zona' })
       .selectOption({ label: 'Plaza Zielo' })
-    await expect(page).toHaveURL(/\/plaza\/plaza-zielo$/)
+    await expect(page).toHaveURL(/\/zona\/plaza-zielo$/)
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Plaza Zielo' })).toBeVisible()
     await page.goBack()
     await expect(page).not.toHaveURL(/plaza-zielo/)
@@ -115,7 +115,7 @@ test.describe('Plazas y lugares', () => {
   })
 
   test('se pueden guardar favoritos y filtrar por ellos', async ({ page }) => {
-    await openApp(page, { path: 'plaza/plaza-zielo' })
+    await openApp(page, { path: 'zona/plaza-zielo' })
     const region = panel(page)
     await region.getByRole('button', { name: 'Guardar en favoritos: Escarola' }).click()
     await expect(

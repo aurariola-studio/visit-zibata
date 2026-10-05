@@ -46,7 +46,7 @@ const BASE = '/visit-zibata/'
 
 describe('estado en la URL · árbol español', () => {
   it('interpreta plaza, lugar y categoría', () => {
-    expect(parsePath('/visit-zibata/plaza/paseo-zibata', '?categoria=italiana', BASE)).toEqual({
+    expect(parsePath('/visit-zibata/zona/paseo-zibata', '?categoria=italiana', BASE)).toEqual({
       ...VACIO,
       locale: 'es',
       plazaSlug: 'paseo-zibata',
@@ -72,7 +72,7 @@ describe('estado en la URL · árbol español', () => {
   it('ignora rutas desconocidas o slugs inválidos', () => {
     const vacio = { ...VACIO, locale: 'es' }
     expect(parsePath('/visit-zibata/', '', BASE)).toEqual(vacio)
-    expect(parsePath('/visit-zibata/plaza/<script>', '', BASE)).toEqual(vacio)
+    expect(parsePath('/visit-zibata/zona/<script>', '', BASE)).toEqual(vacio)
     expect(parsePath('/visit-zibata/otra/cosa', '?categoria=A B', BASE)).toEqual(vacio)
   })
 
@@ -83,8 +83,8 @@ describe('estado en la URL · árbol español', () => {
       plazaSlug: 'condesa',
       categorySlug: 'bebidas',
     }
-    expect(buildPath(state, BASE)).toBe('/visit-zibata/plaza/condesa?categoria=bebidas')
-    expect(parsePath('/visit-zibata/plaza/condesa', '?categoria=bebidas', BASE)).toEqual(state)
+    expect(buildPath(state, BASE)).toBe('/visit-zibata/zona/condesa?categoria=bebidas')
+    expect(parsePath('/visit-zibata/zona/condesa', '?categoria=bebidas', BASE)).toEqual(state)
     // El lugar manda sobre la plaza: su ficha ya dice a qué plaza pertenece.
     expect(
       buildPath(
@@ -142,7 +142,7 @@ describe('enlaces antiguos con hash', () => {
   it('se traducen a su ruta equivalente, conservando el filtro', () => {
     expect(pathFromLegacyHash('#/lugar/tomassa', BASE)).toBe('/visit-zibata/lugar/tomassa')
     expect(pathFromLegacyHash('#/plaza/condesa?categoria=bebidas', BASE)).toBe(
-      '/visit-zibata/plaza/condesa?categoria=bebidas',
+      '/visit-zibata/zona/condesa?categoria=bebidas',
     )
     expect(pathFromLegacyHash('#/info/privacidad', BASE)).toBe('/visit-zibata/info/privacidad')
   })

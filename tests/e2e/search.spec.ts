@@ -73,7 +73,7 @@ test.describe('Búsqueda y filtros', () => {
   })
 
   test('con una plaza abierta, la búsqueda mira en todo Zibatá', async ({ page }) => {
-    await openApp(page, { path: 'plaza/plaza-luna' })
+    await openApp(page, { path: 'zona/plaza-luna' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Plaza Luna' })).toBeVisible()
 
@@ -125,7 +125,7 @@ test.describe('Búsqueda y filtros', () => {
     await expect(topCategories.getByRole('button', { name: /^Todo/ })).toHaveText(
       new RegExp(`${placesInPlaza('Paseo Zibatá')}$`),
     )
-    await expect(page).toHaveURL(/\/plaza\/paseo-zibata\?categoria=desayunos-y-cafe$/)
+    await expect(page).toHaveURL(/\/zona\/paseo-zibata\?categoria=desayunos-y-cafe$/)
 
     await page.getByRole('button', { name: 'Limpiar filtros' }).first().click()
     await expect(page.getByRole('combobox', { name: 'Filtrar por zona' })).toHaveValue('')

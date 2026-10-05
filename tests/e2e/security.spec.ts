@@ -24,7 +24,7 @@ test.describe('Seguridad', () => {
       if (/^https?:/.test(url) && !url.startsWith(origin)) external.push(url)
     })
 
-    await openApp(page, { path: 'plaza/condesa' })
+    await openApp(page, { path: 'zona/condesa' })
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveAttribute(
       'content',
       /script-src 'self'/,

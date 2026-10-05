@@ -36,14 +36,14 @@ test.describe('Teclado, enlaces y favoritos', () => {
     await expect(region.getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
-    await expect(page).toHaveURL(/\/plaza\/paseo-zibata$/)
+    await expect(page).toHaveURL(/\/zona\/paseo-zibata$/)
     await page.keyboard.press('Escape')
     await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeHidden()
     await expect(page).toHaveURL(/\/$/)
   })
 
   test('Escape en el buscador borra el texto sin cerrar la plaza abierta', async ({ page }) => {
-    await openApp(page, { path: 'plaza/paseo-zibata' })
+    await openApp(page, { path: 'zona/paseo-zibata' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
     const search = page.getByRole('searchbox', { name: 'Buscar lugares' })
@@ -60,7 +60,7 @@ test.describe('Teclado, enlaces y favoritos', () => {
    * (una 404 propia en vez de llevar a la portada). El aviso interno sigue en el código como red
    * de seguridad por si alguna vez se sirve una página que el dato ya no respalda.
    */
-  for (const path of ['lugar/no-existe', 'plaza/plaza-walmart', 'esto-no-existe']) {
+  for (const path of ['lugar/no-existe', 'zona/plaza-walmart', 'esto-no-existe']) {
     test(`un enlace a un registro no publicado responde 404 propio (${path})`, async ({ page }) => {
       const response = await page.goto(`./${path}`)
       expect(response?.status()).toBe(404)
@@ -95,7 +95,7 @@ test.describe('Teclado, enlaces y favoritos', () => {
   })
 
   test('una sola región viva anuncia el número de resultados', async ({ page }) => {
-    await openApp(page, { path: 'plaza/paseo-zibata' })
+    await openApp(page, { path: 'zona/paseo-zibata' })
     await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('pizza')
     const live = page.locator('[aria-live]')
     await expect(live).toHaveCount(1)

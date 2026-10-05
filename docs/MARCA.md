@@ -163,7 +163,8 @@ Hecho, por orden en que se fue resolviendo:
 2. **Dominio propio con HTTPS**, `visitzibata.com` en Cloudflare, servido por un Worker con assets
    estáticos y con `www` redirigido (ver [DESPLIEGUE.md](DESPLIEGUE.md)).
 3. **Rutas legibles** para compartir e indexar, con un árbol por idioma: `/lugar/el-hornero` y
-   `/en/place/el-hornero`. El hash se quedó en el camino porque lo que va después de `#` nunca llega
+   `/en/place/el-hornero`, `/zona/paseo-zibata` y `/en/area/paseo-zibata`. Llevan la palabra que se
+   ve en pantalla, no la del código: la URL se comparte y se dicta, así que es interfaz. El hash se quedó en el camino porque lo que va después de `#` nunca llega
    al servidor, así que ningún rastreador veía más que la portada.
 4. **Una página real por ruta**: 232 archivos HTML generados en el build desde el dataset, cada uno
    con su `<title>`, su `description` y su `canonical`.

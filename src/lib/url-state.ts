@@ -2,9 +2,9 @@
  * Estado compartible en la ruta, con un árbol por idioma.
  *
  *   /                                 inicio
- *   /plaza/paseo-zibata               plaza seleccionada
+ *   /zona/paseo-zibata                zona seleccionada
  *   /lugar/tomassa                    ficha de un lugar (su plaza se deduce)
- *   /plaza/paseo-zibata?categoria=italiana
+ *   /zona/paseo-zibata?categoria=italiana
  *   /info/privacidad                  una página de información
  *
  *   /en/                              lo mismo en inglés, con los segmentos traducidos
@@ -32,7 +32,7 @@ export type InfoTopic = (typeof INFO_TOPICS)[number]
  * español (es el identificador interno) y se escribe traducido.
  */
 const SEGMENTS = {
-  es: { place: 'lugar', plaza: 'plaza', info: 'info', category: 'categoria' },
+  es: { place: 'lugar', plaza: 'zona', info: 'info', category: 'categoria' },
   en: { place: 'place', plaza: 'area', info: 'info', category: 'category' },
 } as const satisfies Record<Locale, Record<string, string>>
 
@@ -52,7 +52,7 @@ const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
  * y Vite va en modo `mpa` a propósito, sin reserva, para que un camino inventado dé 404 de verdad.
  * Acotarla a estas rutas conserva esa propiedad también mientras se desarrolla.
  */
-export const APP_ROUTE = /^(?:en\/?)?(?:(?:lugar|plaza|place|area|info)\/[a-z0-9-]+)?$/
+export const APP_ROUTE = /^(?:en\/?)?(?:(?:lugar|zona|place|area|info)\/[a-z0-9-]+)?$/
 
 export interface UrlState {
   locale: Locale
@@ -129,9 +129,9 @@ export function buildPath(state: UrlState, base: string): string {
 /**
  * Traduce un enlace antiguo con hash a su ruta equivalente, o `null` si no lo es.
  *
- * El formato viejo era `#/lugar/x`, `#/plaza/x` o `#/info/x`, siempre en español y con el filtro en
- * `?categoria=` **dentro** del hash. Los enlaces que ya circulan tienen que seguir llevando a donde
- * prometían, y esto es más barato que mantener dos formatos vivos.
+ * El formato viejo era `#/lugar/x`, `#/plaza/x` o `#/info/x`: siempre en español, con `plaza` donde
+ * ahora va `zona` y con el filtro en `?categoria=` **dentro** del hash. Los enlaces que ya circulan
+ * tienen que seguir llevando a donde prometían, y esto es más barato que mantener dos formatos vivos.
  */
 export function pathFromLegacyHash(hash: string, base: string): string | null {
   const raw = hash.replace(/^#/, '')
