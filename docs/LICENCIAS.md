@@ -1,5 +1,22 @@
 # Licencias y atribuciones
 
+## Licencia de este proyecto
+
+Son dos licencias distintas a propósito, porque son dos cosas distintas:
+
+| Qué | Licencia | Qué significa |
+| --- | --- | --- |
+| **El código** (`src/`, `scripts/`, configuración) | [MIT](../LICENSE) | Cualquiera puede usarlo, modificarlo y redistribuirlo, incluso comercialmente, conservando el aviso de copyright. |
+| **Los datos comerciales** (`data/commercial/`, `research/`) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es) | La investigación de los locales se puede reutilizar citando la fuente: "Visit Zibatá (visitzibata.com)". |
+
+Dos cosas que **no** cubre lo anterior y mandan sobre ello:
+
+- **Las capas del mapa** (`public/map/zibata.pmtiles`, `plaza-buildings.geojson`) derivan de
+  OpenStreetMap y se distribuyen bajo **ODbL 1.0**, no bajo CC BY. Es obligación heredada de la
+  fuente, no una elección.
+- **Los logotipos y marcas de terceros** (redes sociales, aplicaciones de reparto) son de sus
+  titulares y su licencia es la que diga cada uno, como se detalla más abajo.
+
 ## Datos cartográficos
 
 | Fuente | Uso en el proyecto | Licencia | Atribución requerida |
