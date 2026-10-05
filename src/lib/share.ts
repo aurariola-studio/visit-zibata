@@ -1,15 +1,14 @@
 /**
  * Compartir un lugar: una sola URL por lugar, y el texto con los datos que ya publica la guía.
  *
- * La URL se arma a propósito **sin** el estado de la vista. El hash de la aplicación arrastra la
- * categoría activa (`#/lugar/tomassa?categoria=pizza`), así que compartir "lo que tengo en
+ * La URL se arma a propósito **sin** el estado de la vista. La ruta de la aplicación arrastra la
+ * categoría activa (`/lugar/tomassa?categoria=pizza`), así que compartir "lo que tengo en
  * pantalla" produciría una URL distinta por cada filtro desde el que alguien comparta el mismo
- * lugar. Que todos los enlaces entrantes apunten a la misma URL es lo único que este botón aporta
- * de verdad al SEO.
+ * lugar. Que todos los enlaces entrantes apunten a la misma URL es lo que este botón aporta al SEO.
  *
- * Lo que NO aporta, para no prometerlo: las rutas viven en el hash y los rastreadores no indexan
- * fragmentos, de modo que `#/lugar/tomassa` es para Google la misma URL que la portada. Que cada
- * ficha se indexe por separado depende de mover el enrutado fuera del hash (ver docs/MARCA.md).
+ * Es siempre la del árbol español, también al compartir desde el inglés: es la URL `x-default`
+ * del lugar, y la página a la que llega declara su `hreflang` en inglés, así que el buscador y
+ * quien abra el enlace encuentran la versión que les toca sin partir los enlaces entrantes en dos.
  */
 import { SITE_URL } from '../config/site.ts'
 
@@ -25,15 +24,21 @@ export interface SharePayload {
  */
 export type ShareOutcome = 'shared' | 'copied' | 'cancelled' | 'unsupported'
 
-/** Raíz pública: la de compilación si la hay, y si no la del navegador, siempre con barra final. */
+/**
+ * Raíz pública: la de compilación si la hay, y si no la del navegador, siempre con barra final.
+ *
+ * La base sale de `BASE_URL` y no de `window.location.pathname`: desde que el enrutado dejó el
+ * hash, el camino de la página es `/lugar/tomassa` o `/en/place/tomassa`, así que leerlo
+ * devolvería la ficha abierta como si fuera la raíz del sitio.
+ */
 function siteRoot(): string {
-  const root = SITE_URL || `${window.location.origin}${window.location.pathname}`
+  const root = SITE_URL || `${window.location.origin}${import.meta.env.BASE_URL}`
   return root.replace(/\/?$/, '/')
 }
 
 /** La URL canónica de un lugar: la misma desde cualquier filtro, idioma o pantalla. */
 export function placeUrl(slug: string): string {
-  return `${siteRoot()}#/lugar/${slug}`
+  return `${siteRoot()}lugar/${slug}`
 }
 
 /**

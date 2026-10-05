@@ -18,12 +18,16 @@ afterEach(() => {
 
 describe('placeUrl', () => {
   it('es la misma URL desde cualquier filtro: no arrastra el estado de la vista', () => {
-    window.location.hash = '#/lugar/tomassa?categoria=pizza'
+    window.history.replaceState(null, '', '/lugar/tomassa?categoria=pizza')
     const desdeFiltro = placeUrl('tomassa')
-    window.location.hash = '#/plaza/plaza-luna'
+    window.history.replaceState(null, '', '/en/area/plaza-luna')
     expect(placeUrl('tomassa')).toBe(desdeFiltro)
-    expect(desdeFiltro).toMatch(/#\/lugar\/tomassa$/)
     expect(desdeFiltro).not.toContain('categoria')
+  })
+
+  it('es la ruta sin almohadilla, que es la que indexan los buscadores', () => {
+    expect(placeUrl('tomassa')).toMatch(/\/lugar\/tomassa$/)
+    expect(placeUrl('tomassa')).not.toContain('#')
   })
 
   it('es absoluta, que es lo que se pega en un chat', () => {
