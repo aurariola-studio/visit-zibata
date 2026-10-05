@@ -93,12 +93,16 @@ test.describe('Plazas y lugares', () => {
     })
     await compartir.click()
 
+    // El acuse primero, porque dura 2,4 segundos y se borra solo. Lo que se copió sigue en `window`
+    // cuando se quiera mirar; el aviso no espera a nadie, y cada viaje al navegador que se meta por
+    // delante se come parte de esos dos segundos. En un runner cargado eso basta para no verlo.
+    await expect(region.getByRole('status')).toHaveText('Enlace copiado')
+
     const copiado = await page.evaluate(() => (window as unknown as { copiado?: string }).copiado)
     expect(copiado).toMatch(/\/lugar\/tomassa$/)
     expect(copiado).not.toContain('categoria')
     // Sin almohadilla: es la ruta que indexan los buscadores, no el formato antiguo.
     expect(copiado).not.toContain('#')
-    await expect(region.getByRole('status')).toHaveText('Enlace copiado')
   })
 
   test('"atrás" en el navegador cierra la plaza seleccionada', async ({ page }) => {
