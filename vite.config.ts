@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
@@ -78,13 +80,51 @@ function contentSecurityPolicy(): Plugin {
 }
 
 /**
- * 404.html estático para hostings como GitHub Pages: una ruta inexistente muestra una página propia (sin
- * JavaScript) con enlace a la guía, en vez de la página genérica del hosting.
+ * 404.html propio. Lo sirve el hosting cuando una ruta no existe, y desde que el enrutado salió del
+ * hash eso pasa de verdad: un error de tecleo en `/lugar/...` o el enlace guardado de un local que
+ * ya cerró llegan aquí. Antes era un texto suelto de cuando el proyecto no tenía identidad.
+ *
+ * Sin JavaScript y con el estilo en línea a propósito: es la página que aparece cuando algo falla,
+ * así que no debe depender de que el resto cargue. Lo único externo es el símbolo, que es un
+ * archivo del propio sitio.
+ *
+ * Va en los dos idiomas, porque una ruta que no existe no dice en cuál estaba la persona.
  */
 function notFoundPage(): Plugin {
+  let outDir = 'dist'
   return {
     name: 'zibata-404',
-    apply: 'build',
+    // Build y preview, no desarrollo. `vite preview` resuelve la configuración como `serve`, así
+    // que con `apply: 'build'` el plugin quedaba fuera y `configurePreviewServer` nunca corría.
+    apply: (_config, env) => env.command === 'build' || env.isPreview === true,
+    configResolved(config) {
+      // `resolve` porque `outDir` puede venir relativo a la raíz del proyecto o ya absoluto.
+      outDir = resolve(config.root, config.build.outDir)
+    },
+    /**
+     * `vite preview` responde un 404 vacío en vez de servir esta página, así que sin esto la suite
+     * E2E no podría comprobar lo que ve de verdad quien escribe mal un enlace.
+     *
+     * La función devuelta se registra justo después del middleware de reserva de Vite, que ya ha
+     * traducido `/lugar/tomassa` a `/lugar/tomassa.html` si ese archivo existe, pero todavía no ha
+     * respondido. Por eso "la ruta acaba en .html" equivale a "hay página": cuando no la hay, el
+     * camino llega tal cual se pidió y toca contestar aquí.
+     */
+    configurePreviewServer(server) {
+      return () => {
+        server.middlewares.use((req, res, next) => {
+          if (req.method !== 'GET' && req.method !== 'HEAD') return next()
+          if (!req.headers.accept?.includes('text/html')) return next()
+          const path = (req.url ?? '/').split('?')[0] ?? '/'
+          if (path.endsWith('.html')) return next()
+          const page = resolve(outDir, '404.html')
+          if (!existsSync(page)) return next()
+          res.statusCode = 404
+          res.setHeader('Content-Type', 'text/html; charset=utf-8')
+          res.end(req.method === 'HEAD' ? undefined : readFileSync(page))
+        })
+      }
+    },
     generateBundle() {
       this.emitFile({
         type: 'asset',
@@ -93,25 +133,41 @@ function notFoundPage(): Plugin {
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="robots" content="noindex" />
     <title>Página no encontrada · Visit Zibatá</title>
     <link rel="icon" type="image/svg+xml" href="${base}favicon.svg" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; img-src 'self'" />
     <style>
-      body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 1.5rem;
-        background: #f4efe6; color: #1f2419; font: 1rem/1.5 system-ui, sans-serif; text-align: center; }
-      h1 { font-size: 1.5rem; margin: 0 0 .5rem; }
-      a { display: inline-block; margin-top: 1rem; padding: .7rem 1.4rem; border-radius: 999px;
-        background: #536c2a; color: #fff; font-weight: 600; text-decoration: none; }
-      a:focus-visible { outline: 3px solid #1f2419; outline-offset: 3px; }
+      :root { --olivo: #536c2a; --tinta: #1f2419; --apagado: #62655a; --papel: #f8f4ed; }
+      * { box-sizing: border-box; margin: 0; }
+      body { min-height: 100svh; display: grid; place-items: center; padding: 1.5rem;
+        background: var(--papel); color: var(--tinta); text-align: center;
+        font: 1rem/1.55 "Instrument Sans", ui-sans-serif, system-ui, sans-serif; }
+      /* La misma trama de puntos del resto de la marca, muy tenue. */
+      body::before { content: ""; position: fixed; inset: 0; pointer-events: none;
+        background-image: radial-gradient(var(--olivo) 1px, transparent 1px);
+        background-size: 26px 26px; opacity: .07; }
+      main { position: relative; max-width: 30rem; display: grid; justify-items: center; gap: .75rem; }
+      img { width: 72px; height: 72px; }
+      h1 { font-family: "Fraunces", "Iowan Old Style", Georgia, serif; font-weight: 600;
+        font-size: 1.75rem; line-height: 1.15; letter-spacing: -.01em; margin-top: .5rem; }
+      p { color: var(--apagado); }
+      .en { font-size: .875rem; }
+      a { margin-top: 1.25rem; padding: .75rem 1.5rem; border-radius: 999px;
+        background: var(--olivo); color: #fff; font-weight: 600; text-decoration: none; }
+      a:hover { background: #435a22; }
+      a:focus-visible { outline: 3px solid var(--tinta); outline-offset: 3px; }
+      @media (prefers-reduced-motion: no-preference) { a { transition: background-color .15s; } }
     </style>
   </head>
   <body>
     <main>
+      <img src="${base}logo.svg" alt="" width="72" height="72" />
       <h1>Esta página no existe</h1>
-      <p>La dirección no corresponde a ninguna página de la guía.</p>
-      <a href="${base}">Ir al mapa de Visit Zibatá</a>
+      <p>La dirección no corresponde a ningún lugar ni zona de la guía. Puede que esté mal escrita, o que ese lugar ya no esté publicado.</p>
+      <p class="en" lang="en">This address is not part of the guide.</p>
+      <a href="${base}">Ir a la guía</a>
     </main>
   </body>
 </html>
