@@ -2,6 +2,82 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.6.0]: 2026-10-05
+
+### Cambiado
+
+- **Las rutas salen del hash y se abre un árbol por idioma.** `#/lugar/tomassa` pasa a
+  `/lugar/tomassa`, y el inglés tiene el suyo: `/en/place/tomassa`. También `/plaza/x` y
+  `/en/area/x`, `/info/privacidad` y `/en/info/privacy`. El motivo es tajante: **lo que va después
+  de `#` nunca se envía al servidor**, así que el rastreador de Google o el de WhatsApp solo veían
+  la portada, daba igual el enlace. El hash existía porque GitHub Pages no sabe reescribir rutas;
+  desde que el sitio lo sirve un Worker de Cloudflare con un archivo por ruta, ya no hace falta.
+- **El filtro de categoría se traduce entero, nombre y valor**: `?categoria=desayunos-y-cafe` y
+  `?category=breakfast-and-coffee`. Una URL mitad en un idioma y mitad en otro no la reconoce nadie,
+  y no había enlaces antiguos que respetar porque el filtro nunca llegó a publicarse.
+- **La URL manda sobre la preferencia de idioma guardada.** Antes ganaba lo que dijera el
+  dispositivo; ahora un enlace a `/en/place/x` abre en inglés aunque este navegador tenga el español
+  recordado. La preferencia sigue valiendo para quien entra por la portada, y solo al cargar: si
+  redirigiera también con el botón atrás, no se podría volver al árbol español.
+- **Cambiar de idioma lleva a la misma página en el otro árbol**, no a la portada: el idioma entra en
+  el cálculo de la ruta, así que `LocaleSwitch` no necesita navegar por su cuenta y sigue habiendo un
+  único sitio que escribe la URL.
+- **Un enlace a un lugar o una zona que no se publica ahora responde 404**, con la página propia del
+  sitio, en vez de abrir la guía con un aviso. Es lo correcto: esa dirección no existe, y devolver un
+  200 hacía que Google indexara la portada bajo mil direcciones distintas. El aviso en la aplicación
+  se queda como red de seguridad para el caso raro de que un registro desaparezca entre dos
+  despliegues.
+- **El `404.html` estrena la marca del sitio.** Era un texto suelto de cuando el proyecto no tenía
+  identidad, y desde que el enrutado salió del hash es una página que la gente ve de verdad. Sin
+  JavaScript y con el estilo en línea a propósito: es lo que aparece cuando algo falla, así que no
+  debe depender de que el resto cargue.
+
+### Añadido
+
+- **Una página real por ruta: 232 archivos HTML** (116 por idioma), cada uno con su `<html lang>`,
+  su `<title>`, su `description`, su `canonical` y las tres `hreflang` (`es`, `en` y `x-default`
+  apuntando al español). Las 232 cargan exactamente la misma aplicación; lo único distinto es el
+  `<head>`. No se escriben a mano: salen de `data/commercial/*.json` en cada compilación, así que
+  añadir un local o cambiarle el nombre se refleja solo en la siguiente publicación.
+- **`sitemap.xml` y `robots.txt`** con los dos árboles, generados en el mismo paso.
+- **Una imagen de vista previa por local** (`dist/og/<slug>.jpg`), compuesta al publicar y no
+  guardada en el repositorio. Hoy ningún local tiene foto, así que la mitad derecha de la tarjeta
+  usa el tono de su categoría; el día que haya fotos, esa misma mitad las toma sin tocar código. Se
+  renderiza con el navegador de Playwright, que ya era dependencia, en una sola página con las 101
+  tarjetas, y se pasa por `sharp` a JPEG: en PNG pesaban 20 MB y en JPEG pesan 1,9 MB.
+- **`slug: { es, en }` en las 18 categorías** de `research/taxonomy.json`, derivado de su etiqueta
+  inglesa, con esquema Zod, validación en runtime y regeneración de `categories.json`. El `id` sigue
+  siendo la clave estable con la que los locales se relacionan con su categoría; el slug es cara
+  pública y se puede retocar sin tocar un dato. La validación exige que no se repitan **dentro de un
+  mismo idioma** y el build falla si colisionan; entre idiomas sí pueden coincidir (`bar` es `bar`).
+- **Pruebas de rutas** (`src/lib/urls.test.ts`) de los dos árboles, el parámetro traducido y la
+  traducción de un enlace antiguo con hash. Corren con la base `/visit-zibata/` y nunca con la raíz,
+  a propósito: así una ruta construida sin tener en cuenta la base falla en vez de pasar por
+  casualidad.
+
+### Corregido
+
+- **Un enlace antiguo con hash sigue llevando a donde prometía.** Al cargar se traduce a su ruta y se
+  reescribe, de modo que a partir de ahí todo funciona con el formato nuevo.
+- **`vite preview` servía su propio 404 vacío**, así que la prueba de la página de error no
+  comprobaba nada. Un plugin le hace servir el `404.html` del build, como el hosting real. El plugin
+  no puede declararse `apply: 'build'`: `vite preview` resuelve la configuración como `serve`, y con
+  eso quedaba fuera y su middleware no llegaba a registrarse.
+- **Las rutas son archivos planos** (`dist/lugar/tomassa.html`) y no carpetas con índice. Cloudflare
+  sirve un archivo individual sin barra final, pero redirige `/lugar/tomassa` a `/lugar/tomassa/` si
+  es una carpeta: un salto extra en cada enlace compartido y una URL canónica distinta de la que se
+  comparte.
+- **La detección del idioma del navegador se retira.** Con un árbol por idioma, detectarlo hacía que
+  un rastreador que pide la portada en inglés acabara redirigido a `/en` y la portada española
+  dejara de indexarse. La preferencia elegida a mano se conserva.
+
+### Nota de despliegue
+
+El paso de imágenes va **después** del build en `deploy.yml`, nunca antes: el build limpia `dist/`,
+así que unas imágenes generadas primero desaparecerían sin dejar rastro y cada enlace compartido
+volvería a mostrar la imagen de la portada. Los navegadores de Playwright se instalan antes del build
+porque la composición de esas imágenes también usa Chromium.
+
 ## [4.5.1]: 2026-10-05
 
 ### Añadido
