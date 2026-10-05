@@ -35,7 +35,12 @@ datos → lint, tipos y tests → build → presupuesto de rendimiento → E2E (
 falla, no se publica nada.
 
 Las acciones están fijadas por SHA y `wrangler` está fijado en el lockfile (Dependabot las actualiza).
-En cuentas de organización, Gitleaks necesita `GITLEAKS_LICENSE`.
+
+La búsqueda de secretos usa el **binario** de Gitleaks con la versión fijada, no `gitleaks-action`:
+esa acción exige clave de licencia cuando el repositorio vive en una organización, y desde el
+traslado a `aurariola-studio` vive en una. El binario es el mismo escáner, MIT y sin clave. Si algún
+día se prefiere volver a la acción, hace falta una clave de gitleaks.io en el secreto
+`GITLEAKS_LICENSE`.
 
 ### Cabeceras
 

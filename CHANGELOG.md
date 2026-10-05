@@ -2,6 +2,16 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.5.0]: 2026-10-05
+
+### Corregido
+
+- **Gitleaks fallaba desde el traslado a la organización.** `gitleaks-action` exige clave de licencia
+  cuando el repositorio pertenece a una organización: *"[aurariola-studio] is an organization. License
+  key is required."*. Pasa a usarse el **binario** con la versión fijada (8.30.1), que es el mismo
+  escáner bajo licencia MIT y no pide clave. El `checkout` del workflow de publicación gana
+  `fetch-depth: 0`, porque el escaneo recorre la historia y no solo el árbol de trabajo.
+
 ## [4.4.0]: 2026-10-04
 
 ### Cambiado
