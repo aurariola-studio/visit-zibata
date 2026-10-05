@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
 import pkg from './package.json' with { type: 'json' }
+import { APP_ROUTE } from './src/lib/url-state.ts'
 
 // BASE_PATH permite publicar en un subdirectorio (GitHub Pages: "/<repo>/") sin acoplar el código a
 // un hosting concreto. En local y en hostings en raíz es "/".
@@ -168,6 +169,29 @@ function cloudflareHeaders(): Plugin {
   }
 }
 
+/**
+ * En desarrollo, las rutas de la aplicación entregan `index.html`.
+ *
+ * En producción existe un archivo por ruta (lo genera el prerenderizado), pero aquí no, y el modo
+ * `mpa` está puesto a propósito para que un camino inventado responda 404 de verdad, como hará el
+ * servidor real. Esta pasarela reconoce **solo** las rutas que la aplicación sirve, así que un
+ * error de tecleo sigue dando 404 mientras se desarrolla, igual que en producción.
+ */
+function devRoutes(): Plugin {
+  return {
+    name: 'zibata-dev-routes',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        const path = (req.url ?? '/').split('?')[0] ?? '/'
+        const relative = path.startsWith(base) ? path.slice(base.length) : path.replace(/^\//, '')
+        if (APP_ROUTE.test(relative.replace(/\/$/, ''))) req.url = base
+        next()
+      })
+    },
+  }
+}
+
 export default defineConfig({
   base,
   define: {
@@ -182,7 +206,14 @@ export default defineConfig({
   // Sin fallback a index.html, igual que GitHub Pages: un asset inexistente responde 404 también en
   // `vite preview` y en los tests E2E (las rutas de la app viven en el hash).
   appType: 'mpa',
-  plugins: [react(), socialMeta(), contentSecurityPolicy(), notFoundPage(), cloudflareHeaders()],
+  plugins: [
+    react(),
+    devRoutes(),
+    socialMeta(),
+    contentSecurityPolicy(),
+    notFoundPage(),
+    cloudflareHeaders(),
+  ],
   build: {
     target: 'es2022',
     // MapLibre (~800 KB min) vive en su propio chunk diferido; el aviso por defecto no aporta.

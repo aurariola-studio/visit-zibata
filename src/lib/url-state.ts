@@ -1,52 +1,149 @@
 /**
- * Estado compartible en el hash (funciona en GitHub Pages sin reescrituras de rutas):
- *   #/                               inicio
- *   #/plaza/paseo-zibata              plaza seleccionada
- *   #/lugar/tomassa                   ficha de un lugar (su plaza se deduce)
- *   #/plaza/paseo-zibata?categoria=pizza
- *   #/info/privacidad                 una página de información (cada una con su enlace propio)
+ * Estado compartible en la ruta, con un árbol por idioma.
+ *
+ *   /                                 inicio
+ *   /plaza/paseo-zibata               plaza seleccionada
+ *   /lugar/tomassa                    ficha de un lugar (su plaza se deduce)
+ *   /plaza/paseo-zibata?categoria=italiana
+ *   /info/privacidad                  una página de información
+ *
+ *   /en/                              lo mismo en inglés, con los segmentos traducidos
+ *   /en/area/paseo-zibata
+ *   /en/place/tomassa
+ *   /en/area/paseo-zibata?category=italian
+ *   /en/info/privacy
+ *
+ * Hasta la v4.6.0 todo esto vivía en el hash (`#/lugar/tomassa`), porque GitHub Pages no sabe
+ * reescribir rutas. Ya no: el sitio lo sirve un Worker con un archivo por ruta. El cambio no es
+ * cosmético, es el requisito del SEO: **lo que va después de `#` nunca se envía al servidor**, así
+ * que el robot de WhatsApp o de Google solo veía la portada y toda vista previa salía genérica.
+ *
+ * Este módulo es puro a propósito: no sabe de catálogo ni de React, recibe y devuelve texto. Por
+ * eso trabaja con el **slug** de la categoría y no con su id: traducir uno en otro necesita el
+ * catálogo, y eso es trabajo de `useUrlSync`.
  */
+import type { Locale } from '../i18n/index.ts'
+
 export const INFO_TOPICS = ['acerca', 'privacidad', 'sugerir'] as const
 export type InfoTopic = (typeof INFO_TOPICS)[number]
 
-const isInfoTopic = (value: string): value is InfoTopic =>
-  (INFO_TOPICS as readonly string[]).includes(value)
+/**
+ * Los segmentos de ruta por idioma. El tema de información se guarda siempre con su clave en
+ * español (es el identificador interno) y se escribe traducido.
+ */
+const SEGMENTS = {
+  es: { place: 'lugar', plaza: 'plaza', info: 'info', category: 'categoria' },
+  en: { place: 'place', plaza: 'area', info: 'info', category: 'category' },
+} as const satisfies Record<Locale, Record<string, string>>
 
-export interface UrlState {
-  plazaSlug: string | null
-  placeSlug: string | null
-  categoryId: string | null
-  infoTopic: InfoTopic | null
-}
+const INFO_SLUGS = {
+  es: { acerca: 'acerca', privacidad: 'privacidad', sugerir: 'sugerir' },
+  en: { acerca: 'about', privacidad: 'privacy', sugerir: 'suggest' },
+} as const satisfies Record<Locale, Record<InfoTopic, string>>
+
+/** Prefijo de ruta de cada idioma. El español no lleva: es el idioma por omisión del sitio. */
+const PREFIX: Record<Locale, string> = { es: '', en: 'en' }
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
-export function parseHash(hash: string): UrlState {
-  const [path = '', query = ''] = hash.replace(/^#/, '').split('?')
-  const segments = path.split('/').filter(Boolean)
-  const params = new URLSearchParams(query)
-  const category = params.get('categoria')
+/**
+ * Las rutas que la aplicación sirve, sin la base. La usa el servidor de desarrollo para entregar
+ * `index.html`: en producción existe un archivo por ruta, pero en desarrollo no hay prerenderizado
+ * y Vite va en modo `mpa` a propósito, sin reserva, para que un camino inventado dé 404 de verdad.
+ * Acotarla a estas rutas conserva esa propiedad también mientras se desarrolla.
+ */
+export const APP_ROUTE = /^(?:en\/)?(?:(?:lugar|plaza|place|area|info)\/[a-z0-9-]+)?$/
+
+export interface UrlState {
+  locale: Locale
+  plazaSlug: string | null
+  placeSlug: string | null
+  /** El slug de la categoría en el idioma de la URL, no su id. */
+  categorySlug: string | null
+  infoTopic: InfoTopic | null
+}
+
+/** Quita la base de despliegue (`/` o `/subdirectorio/`) y deja los segmentos limpios. */
+function segmentsOf(pathname: string, base: string): string[] {
+  const root = base.endsWith('/') ? base : `${base}/`
+  const relative = pathname.startsWith(root) ? pathname.slice(root.length) : pathname
+  return relative.split('/').filter(Boolean)
+}
+
+/**
+ * El idioma que pide la URL. Se usa antes de que exista el estado de la aplicación, en el arranque
+ * de i18n, para que un enlace a `/en/place/x` mande sobre la preferencia guardada del dispositivo.
+ */
+export function localeFromPath(pathname: string, base: string): Locale | null {
+  return segmentsOf(pathname, base)[0] === PREFIX.en ? 'en' : null
+}
+
+export function parsePath(pathname: string, search: string, base: string): UrlState {
+  const segments = segmentsOf(pathname, base)
+  const locale: Locale = segments[0] === PREFIX.en ? 'en' : 'es'
+  if (locale === 'en') segments.shift()
+
+  const words = SEGMENTS[locale]
+  const params = new URLSearchParams(search)
+  const category = params.get(words.category)
   const state: UrlState = {
+    locale,
     plazaSlug: null,
     placeSlug: null,
-    categoryId: category && SLUG.test(category) ? category : null,
+    categorySlug: category && SLUG.test(category) ? category : null,
     infoTopic: null,
   }
+
   const [kind, slug] = segments
   if (slug && SLUG.test(slug)) {
-    if (kind === 'plaza') state.plazaSlug = slug
-    if (kind === 'lugar') state.placeSlug = slug
-    if (kind === 'info' && isInfoTopic(slug)) state.infoTopic = slug
+    if (kind === words.plaza) state.plazaSlug = slug
+    if (kind === words.place) state.placeSlug = slug
+    if (kind === words.info) {
+      const topic = INFO_TOPICS.find((candidate) => INFO_SLUGS[locale][candidate] === slug)
+      if (topic) state.infoTopic = topic
+    }
   }
   return state
 }
 
-export function buildHash(state: UrlState): string {
+export function buildPath(state: UrlState, base: string): string {
+  const { locale } = state
+  const words = SEGMENTS[locale]
+  const root = base.endsWith('/') ? base : `${base}/`
+  const prefix = PREFIX[locale] ? `${root}${PREFIX[locale]}/` : root
+
   // Una página de información es su propia ruta: al cerrarla se vuelve a la plaza o ficha que sigue
   // en el estado, y el enlace se puede compartir tal cual.
-  if (state.infoTopic) return `#/info/${state.infoTopic}`
-  let path = '#/'
-  if (state.placeSlug) path = `#/lugar/${state.placeSlug}`
-  else if (state.plazaSlug) path = `#/plaza/${state.plazaSlug}`
-  return state.categoryId ? `${path}?categoria=${state.categoryId}` : path
+  if (state.infoTopic) return `${prefix}${words.info}/${INFO_SLUGS[locale][state.infoTopic]}`
+
+  let path = prefix
+  if (state.placeSlug) path = `${prefix}${words.place}/${state.placeSlug}`
+  else if (state.plazaSlug) path = `${prefix}${words.plaza}/${state.plazaSlug}`
+  return state.categorySlug ? `${path}?${words.category}=${state.categorySlug}` : path
+}
+
+/**
+ * Traduce un enlace antiguo con hash a su ruta equivalente, o `null` si no lo es.
+ *
+ * El formato viejo era `#/lugar/x`, `#/plaza/x` o `#/info/x`, siempre en español y con el filtro en
+ * `?categoria=` **dentro** del hash. Los enlaces que ya circulan tienen que seguir llevando a donde
+ * prometían, y esto es más barato que mantener dos formatos vivos.
+ */
+export function pathFromLegacyHash(hash: string, base: string): string | null {
+  const raw = hash.replace(/^#/, '')
+  if (!raw.startsWith('/')) return null
+  const [path = '', query = ''] = raw.split('?')
+  const [kind, slug] = path.split('/').filter(Boolean)
+  if (!kind || !slug || !SLUG.test(slug)) return null
+
+  const category = new URLSearchParams(query).get('categoria')
+  const state: UrlState = {
+    locale: 'es',
+    plazaSlug: kind === 'plaza' ? slug : null,
+    placeSlug: kind === 'lugar' ? slug : null,
+    categorySlug: category && SLUG.test(category) ? category : null,
+    infoTopic: INFO_TOPICS.find((topic) => kind === 'info' && topic === slug) ?? null,
+  }
+  if (!state.plazaSlug && !state.placeSlug && !state.infoTopic) return null
+  return buildPath(state, base)
 }
