@@ -35,8 +35,15 @@ Preparación, una sola vez:
 
 A partir de ahí, cada push a `main` ejecuta `.github/workflows/deploy.yml`: `npm ci` → Gitleaks →
 validación de datos → lint, tipos y tests → build → imágenes de vista previa → presupuesto de
-rendimiento → E2E (Chromium y WebKit) → `wrangler deploy`, que sube `dist/` como assets del Worker
-(ver `wrangler.jsonc`). Si cualquier paso falla, no se publica nada.
+rendimiento → humo E2E → `wrangler deploy`, que sube `dist/` como assets del Worker (ver
+`wrangler.jsonc`). Si cualquier paso falla, no se publica nada.
+
+El E2E de aquí es un **humo** (un proyecto, una base, unos siete minutos) y no la suite entera: la
+matriz completa, con los cuatro navegadores y las dos bases, la corre `ci.yml` en el pull request y
+es la que bloquea la fusión. Repetirla al publicar añadía media hora sin cubrir nada nuevo, y llegó
+a tumbar un despliegue por una prueba sensible al tiempo que ya había pasado dos veces. El humo no
+sobra, en cambio: al fusionar con squash, el commit que llega a `main` es un commit nuevo que nunca
+existió en el pull request, y esto comprueba el artefacto exacto que se va a publicar.
 
 El paso de imágenes va **después** del build y no antes: el build limpia `dist/`, así que unas
 imágenes generadas primero desaparecerían sin dejar rastro y cada enlace compartido volvería a

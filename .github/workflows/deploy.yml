@@ -1,4 +1,4 @@
-# Publicación en Cloudflare: install → validate → test → build → imágenes → presupuesto → e2e → deploy.
+# Publicación en Cloudflare: install → validate → test → build → imágenes → presupuesto → humo → deploy.
 #
 # Se compila y se publica desde aquí, y NO con la integración de Git de Cloudflare, a propósito: esa
 # integración compila por su cuenta y no corre las pruebas, así que publicaría igual con el
@@ -66,8 +66,10 @@ jobs:
           npm run typecheck
           npm test
       # Antes del build porque la composición de las imágenes de vista previa también usa Chromium.
+      # Solo Chromium: la matriz completa, con WebKit y las dos bases, la corre ci.yml en el pull
+      # request y es la que bloquea la fusión.
       - name: Instalar navegadores de Playwright
-        run: npx playwright install --with-deps chromium webkit
+        run: npx playwright install --with-deps chromium
       - name: Build de producción
         run: npm run build
       # Después del build, nunca antes: el build limpia dist/, así que unas imágenes generadas
@@ -77,8 +79,15 @@ jobs:
         run: npm run images:og-places
       - name: Presupuesto de rendimiento
         run: npm run perf:budget
-      - name: E2E contra el build
-        run: npm run test:e2e
+      # Humo, no la suite entera: ci.yml ya corrió los 264 tests en las dos bases sobre este mismo
+      # código. Repetirlos aquí añadía media hora a cada publicación sin cubrir nada nuevo, y una
+      # prueba sensible al tiempo llegó a tumbar un despliegue que ya había pasado dos veces.
+      #
+      # Pero algo tiene que correr: al fusionar con squash, el commit que llega a main es un commit
+      # nuevo que nunca existió en el pull request. Esto comprueba ese artefacto exacto, el que se
+      # va a publicar, en un recorrido de unos siete minutos.
+      - name: Humo contra el build que se publica
+        run: npx playwright test --project=desktop
       - name: Informe de Playwright
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
