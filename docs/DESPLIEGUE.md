@@ -5,7 +5,7 @@ hay backend, base de datos, variables secretas ni servicios de pago.
 
 ## Estado actual (2026-10-04)
 
-Código en <https://github.com/JesusOrihuela/visit-zibata>. Alojamiento: **Cloudflare**, Worker con
+Código en <https://github.com/aurariola-studio/visit-zibata>. Alojamiento: **Cloudflare**, Worker con
 assets estáticos llamado `visit-zibata`, en `visitzibata.com`.
 
 No es un proyecto de Pages: Cloudflare está integrando Pages dentro de Workers y los sitios estáticos
