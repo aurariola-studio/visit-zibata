@@ -153,3 +153,16 @@
   font-size: var(--text-2xs);
   color: var(--color-text-muted);
 }
+
+/*
+ * El campo trampa, etiqueta incluida. Fuera de la pantalla en vez de `display: none`: hay robots
+ * que saltan lo que está oculto de forma evidente, y así el campo sigue existiendo en el HTML,
+ * que es donde lo busca el que se quiere pillar.
+ */
+.trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

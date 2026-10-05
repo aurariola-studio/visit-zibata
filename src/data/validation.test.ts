@@ -74,6 +74,35 @@ describe('validateRelations', () => {
     expect(errorsOf(validateRelations(dataset, bounds))).toEqual([])
   })
 
+  it('un slug de categoría repetido dentro de un idioma es un error, entre idiomas no', () => {
+    const [primera, segunda, ...resto] = categoriesFixture
+    if (!primera || !segunda) throw new Error('el fixture necesita dos categorías')
+
+    // Mismo slug en inglés: haría ambigua la URL de filtro del árbol inglés.
+    const chocan = {
+      ...dataset,
+      categories: [
+        primera,
+        { ...segunda, slug: { ...segunda.slug, en: primera.slug.en } },
+        ...resto,
+      ],
+    }
+    expect(errorsOf(validateRelations(chocan, bounds))).toContain(
+      `Slug de categoría duplicado en en: "${primera.slug.en}"`,
+    )
+
+    // El mismo texto en los dos idiomas de UNA categoría no estorba: son árboles distintos.
+    const cruzado = {
+      ...dataset,
+      categories: [
+        { ...primera, slug: { es: primera.slug.es, en: primera.slug.es } },
+        segunda,
+        ...resto,
+      ],
+    }
+    expect(errorsOf(validateRelations(cruzado, bounds))).toEqual([])
+  })
+
   it('detecta IDs duplicados y referencias inexistentes', () => {
     const broken = {
       ...dataset,

@@ -447,5 +447,24 @@ local solo lleva el id del giro.
 - `synonyms`: palabras con las que la búsqueda encuentra la categoría o el giro ("coffee", "nieve",
   "boba"…).
 - `general: true` marca el giro que es "la categoría entera"; comparte icono con ella.
+- `slug`: `{ es, en }`, lo que sale en la URL del filtro (`?categoria=desayunos-y-cafe`,
+  `?category=breakfast-and-coffee`). Ver abajo.
 - Las categorías sin locales activos no aparecen en los filtros.
 - Si cambias el `id` de un giro, actualiza los locales que lo usan (la validación te avisará).
+
+### `slug` de categoría: el id no es la URL
+
+El `id` de una categoría es la **clave estable**: es con lo que se relaciona todo lo demás y nunca
+cambia. El `slug` es **cara pública**, uno por idioma, y se puede retocar sin tocar un solo dato:
+
+```json
+{ "id": "desayunos-y-cafe", "slug": { "es": "desayunos-y-cafe", "en": "breakfast-and-coffee" } }
+```
+
+Que hoy el slug español coincida con el id es historia, no obligación. El inglés se deriva de la
+etiqueta inglesa de la categoría. Se traduce el valor y no solo el nombre del parámetro porque una URL
+mitad en un idioma y mitad en otro no la reconoce nadie, y no había enlaces antiguos que respetar.
+
+La validación exige que los slugs **no se repitan dentro de un mismo idioma**, y el build falla si
+colisionan. Entre idiomas sí pueden coincidir: `bar` es `bar` en los dos, y eso no estorba porque cada
+árbol de rutas se lee con su propio diccionario.

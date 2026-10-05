@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { localeFromPath } from '../lib/url-state.ts'
 import type { LocalizedText } from '../types/domain.ts'
 import { en } from './en.ts'
 import { es, type MessageKey, type Messages } from './es.ts'
@@ -27,18 +28,23 @@ function storedLocale(): Locale | null {
 }
 
 /**
- * Idioma activo: el elegido a mano; si no, el primero que pide el navegador y esté disponible; si no,
- * español.
+ * Idioma activo: **manda la URL**, y si no la trae, lo elegido a mano en este dispositivo.
+ *
+ * Que la URL mande es la consecuencia de tener un árbol por idioma: `/en/place/x` tiene que leerse
+ * en inglés aunque el dispositivo recuerde español, porque esa dirección es la versión inglesa de
+ * esa página y así la indexan los buscadores.
+ *
+ * Ya NO se usa el idioma del navegador. Es deliberado y tiene costo: quien llegue por primera vez
+ * con el navegador en inglés verá la portada en español y tendrá que tocar el botón de idioma (una
+ * vez: a partir de ahí se recuerda). A cambio, `/` es español de forma determinista. Si se dejara
+ * el idioma del navegador, un rastreador (que pide inglés) sería reenviado de `/` a `/en/` y la
+ * portada en español dejaría de indexarse bien, que es justo lo que este cambio vino a arreglar.
  */
 function resolveLocale(): Locale {
-  const stored = typeof window === 'undefined' ? null : storedLocale()
-  if (stored) return stored
-  const requested = typeof navigator === 'undefined' ? [] : (navigator.languages ?? [])
-  for (const tag of requested) {
-    const base = tag.toLowerCase().split('-')[0]
-    if (isLocale(base)) return base
-  }
-  return DEFAULT_LOCALE
+  if (typeof window === 'undefined') return DEFAULT_LOCALE
+  const fromPath = localeFromPath(window.location.pathname, import.meta.env.BASE_URL)
+  if (fromPath) return fromPath
+  return storedLocale() ?? DEFAULT_LOCALE
 }
 
 export let locale: Locale = resolveLocale()

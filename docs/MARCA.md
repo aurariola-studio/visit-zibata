@@ -2,8 +2,8 @@
 
 Fecha: 2026-09-29 · Estado: **nombre y marca implementados en la v4.0.0**
 
-El producto se llama Visit Zibatá y tiene símbolo propio. Lo que queda abierto es el dominio, el SEO
-sin hash y el uso del topónimo, que están más abajo.
+El producto se llama Visit Zibatá y tiene símbolo propio. El dominio y el SEO sin hash ya están
+hechos (§6); lo que queda abierto es el uso del topónimo, que está más abajo.
 
 ## 1. Nombre
 
@@ -97,8 +97,8 @@ de un aro, y se acepta a sabiendas.
 
 ### Firma de autoría
 
-"by aurariola.com" en la franja inferior y en "Acerca de esta guía", en monoespaciada y con el punto
-en oro. Del sello de aurariola se toma solo eso; el anillo de píxeles se queda fuera para no competir
+El lockup oficial de aurariola.com (símbolo, "un proyecto de" y wordmark) en la franja inferior y
+en "Acerca de esta guía", con Kode Mono y el punto en oro. Del sello de aurariola se toma solo eso; el anillo de píxeles se queda fuera para no competir
 con la marca de la guía. El oro de esa marca (`#b7791f`) se queda en 3,3:1 sobre las superficies
 arena y no llega al 4,5:1 que pide un texto de 11 px, así que se usa el mismo oro oscurecido hasta
 5:1 (`--gold-700`).
@@ -156,21 +156,32 @@ verifican).
 
 ## 6. SEO y presencia
 
-Lo que ya está: `<title>` y descripción por idioma, Open Graph con imagen propia, CSP estricta, sitio
-estático y rápido (119,8 KB de JS inicial), y ahora `<html lang>` que cambia con el idioma.
+Hecho, por orden en que se fue resolviendo:
 
-Lo que falta para `visitzibata.com`:
+1. **`<title>` y descripción por idioma**, Open Graph con imagen propia, CSP estricta, sitio estático
+   y rápido, y `<html lang>` que cambia con el idioma.
+2. **Dominio propio con HTTPS**, `visitzibata.com` en Cloudflare, servido por un Worker con assets
+   estáticos y con `www` redirigido (ver [DESPLIEGUE.md](DESPLIEGUE.md)).
+3. **Rutas legibles** para compartir e indexar, con un árbol por idioma: `/lugar/el-hornero` y
+   `/en/place/el-hornero`, `/zona/paseo-zibata` y `/en/area/paseo-zibata`. Llevan la palabra que se
+   ve en pantalla, no la del código: la URL se comparte y se dicta, así que es interfaz. El hash se quedó en el camino porque lo que va después de `#` nunca llega
+   al servidor, así que ningún rastreador veía más que la portada.
+4. **Una página real por ruta**: 232 archivos HTML generados en el build desde el dataset, cada uno
+   con su `<title>`, su `description` y su `canonical`.
+5. **`hreflang`** `es`, `en` y `x-default` entre las dos versiones de cada página, con el español
+   como `x-default`.
+6. **`sitemap.xml` y `robots.txt`** generados en el build con los dos árboles.
+7. **Imagen de vista previa por local**, compuesta al publicar. Mientras ningún local tenga foto usa
+   el tono de su categoría; cuando haya fotos, las toma sin tocar código.
+8. **404 propio** con la marca del sitio, que es lo que ve quien escribe mal un enlace o guarda el de
+   un local que ya no se publica.
 
-1. **Dominio propio con HTTPS** apuntando a GitHub Pages (CNAME) y redirección de `www`.
-2. **`hreflang`** entre las versiones español e inglés, y `canonical` por ruta.
-3. **Datos estructurados** `ItemList` de la guía y `Restaurant`/`LocalBusiness` por ficha, **solo con
-   datos verificados** (nombre, dirección, horario, teléfono, enlaces). Sin inventar `aggregateRating`:
-   la guía no publica medias.
-4. **Rutas legibles** para compartir e indexar (`/plaza/paseo-zibata`, `/lugar/el-hornero`) en vez del
-   hash actual. Requiere que GitHub Pages sirva `index.html` en 404, o mover a un hosting con
-   reescrituras; hoy el hash impide que Google indexe cada ficha.
-5. **`sitemap.xml` y `robots.txt`** generados en el build a partir del dataset.
-6. Fichas de la propia guía en Google Business y redes con el mismo nombre y logo.
+Lo que falta:
+
+- **Datos estructurados** `ItemList` de la guía y `Restaurant`/`LocalBusiness` por ficha, **solo con
+  datos verificados** (nombre, dirección, horario, teléfono, enlaces). Sin inventar `aggregateRating`:
+  la guía no publica medias.
+- Fichas de la propia guía en Google Business y redes con el mismo nombre y logo.
 
 Palabras clave reales por las que buscaría alguien: "dónde comer en Zibatá", "restaurantes Zibatá",
 "plazas Zibatá", "qué abre hoy en Zibatá", "desayunos Zibatá". La página principal debería responder
@@ -183,12 +194,12 @@ literalmente a la primera.
 | Producto | Hecho en la v4.0.0: nombre en `index.html`, manifiesto PWA, `app.name`, Brand, iconos y OG |
 | Diseño | Hecho: símbolo en SVG en dos cortes, favicon, iconos "any" y "maskable", apple-touch. Faltan las ilustraciones |
 | Datos | Ninguno: la identidad no toca el dataset |
-| Dominio | Compra, CNAME, HTTPS, redirecciones, hreflang |
-| SEO | Rutas sin hash (cambio de enrutado), sitemap, datos estructurados |
+| Dominio | Hecho: `visitzibata.com` en Cloudflare, HTTPS, `www` redirigido |
+| SEO | Hecho: rutas sin hash, página por ruta, hreflang, sitemap, imagen por local, 404 propio. Faltan los datos estructurados |
 | Riesgo | Revisar el uso del topónimo antes de registrar marca o dominio |
 
-Estimación: la parte de producto y diseño es una tarde larga; las rutas sin hash y los datos
-estructurados, un par de días con pruebas. Nada de esto bloquea la publicación actual.
+Estimación: la parte de producto y diseño fue una tarde larga; las rutas sin hash y el prerenderizado,
+un par de días con pruebas. Los datos estructurados quedan pendientes y no bloquean nada.
 
 ## 8. Recomendación
 
@@ -197,6 +208,7 @@ estructurados, un par de días con pruebas. Nada de esto bloquea la publicación
    registrado y, si se puede, hablar con el desarrollador. Mientras tanto, la guía publica la leyenda
    de independencia en la franja inferior: "Guía independiente de establecimientos y servicios de la
    zona", que es la protección práctica frente a un nombre todavía sin registrar.
-2. Con eso resuelto: registrar `visitzibata.com` y apuntarlo a GitHub Pages.
-3. Dejar las rutas sin hash y los datos estructurados para la ronda siguiente, cuando el contenido esté
-   cerrado: son lo que de verdad mueve el SEO, y conviene hacerlo una sola vez.
+2. Hecho: `visitzibata.com` registrado en Cloudflare y servido por un Worker con assets estáticos.
+3. Hecho también las rutas sin hash y la página por ruta, que es lo que de verdad mueve el SEO. Los
+   datos estructurados quedan para la ronda siguiente, cuando el contenido esté cerrado: dependen de
+   que el horario y el teléfono estén verificados, y conviene hacerlos una sola vez.

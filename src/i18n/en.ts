@@ -117,6 +117,13 @@ export const en = {
 
   'brand.by': 'a project by',
 
+  'seo.home.title': 'Visit Zibatá · By locals, for locals',
+  'seo.home.description':
+    'Explore Zibatá, Querétaro, on a 3D map and find what each plaza has: hours, contact and directions.',
+  'seo.title': '{name} · Visit Zibatá',
+  'seo.place.fallback': '{giros} at {plaza}, Zibatá. Hours, contact and directions.',
+  'seo.plaza.fallback': '{name}, Zibatá. What is there, hours and directions.',
+
   'share.action': 'Share',
   'share.place': 'Share {name}',
   'share.text': '{name} · {giros} · {plaza}',
@@ -218,6 +225,7 @@ export const en = {
   'suggest.ok': 'Thank you. I will check it and it enters the next update.',
   'suggest.error': 'It could not be sent. Please try again in a while.',
   'suggest.required': 'Write your message.',
+  'suggest.trap': 'Leave this field empty',
   'suggest.note':
     'On sending, your message goes out through Web3Forms and arrives by email. The guide stores no information.',
 

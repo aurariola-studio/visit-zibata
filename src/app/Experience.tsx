@@ -41,7 +41,7 @@ import { useElementBottom } from '../hooks/useElementBottom.ts'
 import { useIsDesktop, useMediaQuery } from '../hooks/useMediaQuery.ts'
 import { useOnlineStatus } from '../hooks/useOnlineStatus.ts'
 import { t, useLocale } from '../i18n/index.ts'
-import { type InfoTopic, parseHash } from '../lib/url-state.ts'
+import { type InfoTopic, parsePath } from '../lib/url-state.ts'
 import type { Catalog, Place } from '../types/domain.ts'
 import { useAppDispatch } from './AppStateContext.tsx'
 import styles from './Experience.module.css'
@@ -188,7 +188,11 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
   useEffect(() => {
     // Al abrir la guía no hay ninguna plaza ni lugar seleccionados: se empieza por la vista de Zibatá.
     // Un enlace compartido sí abre su ficha, y entonces el tutorial no aparece encima de ella.
-    const target = parseHash(window.location.hash)
+    const target = parsePath(
+      window.location.pathname,
+      window.location.search,
+      import.meta.env.BASE_URL,
+    )
     const isDeepLink = target.plazaSlug !== null || target.placeSlug !== null
     if (!isDeepLink && !hasSeenOnboarding()) dispatch({ type: 'showTutorial' })
   }, [dispatch])

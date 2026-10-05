@@ -29,7 +29,7 @@ registrar tres implementaciones nuevas. Lo que falta es el contrato que esas cos
 | Estado de la aplicación | `AppState` es solo navegación y vista. No hay identidad en ningún sitio, así que añadirla es aditivo, no una reescritura. | Un contexto de sesión al lado. |
 | Validación | Zod en el build y validación registro a registro en runtime (`runtimeValidation.ts`), que omite lo inválido con aviso. Sirve igual para una respuesta de API que para un JSON. | Nada. |
 | Disciplina asíncrona | Ya existe: `CatalogProvider` cancela al desmontar, hay reintento, y hay pruebas de datos caídos, mapa caído, PMTiles caídos y sin conexión. | Nada. |
-| Enrutado y OAuth | El hash no estorba: con PKCE el código vuelve en la **query**, y `useUrlSync` conserva `window.location.search` al reescribir la URL. | Limpiar el parámetro tras canjearlo. |
+| Enrutado y OAuth | Con PKCE el código vuelve en la **query**, y `useUrlSync` conserva `window.location.search` al reescribir la URL. | Limpiar el parámetro tras canjearlo. |
 | Dependencias | No hay enrutador ni librería de estado ni de datos que quitar o pelear. | Nada. |
 
 ## Lo que no está listo
@@ -81,10 +81,11 @@ quedan dos caminos:
 
 - apoyarse en un tercero (Supabase, Auth0, Clerk) con el token en JavaScript, con lo que eso implica
   para XSS y para la promesa de "todo es del propio origen";
-- mudar el alojamiento a uno que sirva cabeceras y rutas, que es la misma mudanza que pide el SEO sin
-  hash ([MARCA.md](MARCA.md) §6).
+- mudar el alojamiento a uno que sirva cabeceras y rutas.
 
-Es una decisión de infraestructura, no de código, y conviene tomarla junto con la del enrutado.
+Esa mudanza ya se hizo por el SEO ([MARCA.md](MARCA.md) §6): el sitio lo sirve un Worker de
+Cloudflare con assets estáticos y cabeceras propias, así que de los dos caminos queda abierto solo el
+primero, y es una decisión de infraestructura, no de código.
 
 ### 6. Lo publicado promete lo contrario
 
@@ -142,19 +143,17 @@ salir de GitHub Pages:
 |---|---|---|
 | `Range` para PMTiles | Obligatorio | Igual de obligatorio. **Verificarlo antes de mudarse: sin él no hay mapa.** |
 | CSP | En un `<meta>` porque GitHub Pages no sirve cabeceras | Pasa a cabecera, y por fin se puede declarar `frame-ancestors` (hoy imposible, ver [SEGURIDAD.md](SEGURIDAD.md)) |
-| Reescrituras | No hacen falta: las rutas viven en el hash | Hacen falta si se saca el enrutado del hash |
+| Reescrituras | No hacen falta: hay un archivo HTML por ruta, generado en el build | Igual: el prerenderizado ya cubre el enrutado |
 | Variables de entorno | `BASE_PATH` y `SITE_URL` al compilar | Más la URL y la clave pública del backend |
 
 Cloudflare Pages, Netlify y Vercel cumplen las cuatro, y los tres ya aparecen en DESPLIEGUE.md como
 compatibles con `Range`.
 
-**Lo que se desbloquea de paso, y es el momento de hacerlo:** prerenderizar una página por lugar y
-por plaza en el build. Son 101 + 15 archivos HTML con su propio `<title>` y sus propias etiquetas de
-Open Graph, sobre el mismo paquete de JavaScript. Eso sí hace indexable cada ficha y da vista previa
-propia al compartir, que es justo lo que el botón de compartir no puede dar
-([ARQUITECTURA.md](ARQUITECTURA.md) § Enlaces y compartir). No necesita servidor ni dependencia nueva:
-el build ya transforma el HTML con dos plugins propios (`socialMeta`, `notFoundPage`) y esto es el
-mismo patrón emitiendo varios archivos.
+**Esto ya está hecho y no espera al backend:** el build prerenderiza una página por lugar, por plaza
+y por página de información, en los dos idiomas (232 archivos), cada una con su `<title>`, su
+`description`, su `canonical`, sus `hreflang` y su imagen de vista previa. No necesitó servidor ni
+dependencia nueva: es el mismo patrón de los plugins de `vite.config.ts`, emitiendo varios archivos
+([ARQUITECTURA.md](ARQUITECTURA.md) § Una página por ruta).
 
 **2. Identidad anónima.** Lo que describes tiene nombre y está resuelto: *anonymous sign-in*. Al
 primer gesto que lo necesite, el backend crea un usuario real sin correo ni contraseña y guarda la
@@ -272,15 +271,15 @@ entre dispositivos evita la cuenta y es mala idea: quien tenga el código es due
 
 ### Qué hace falta montar
 
-**Paso cero: subir el repositorio a un remoto.** Hoy `git remote -v` está vacío y `v1.0.0-mvp` es una
-etiqueta local; el proyecto existe en una sola carpeta.
+**Paso cero, ya hecho: subir el repositorio a un remoto.** El código vive en
+<https://github.com/aurariola-studio/visit-zibata> y se publica desde GitHub Actions.
 
-| Qué | Para qué | Costo |
-|---|---|---|
-| Dominio `visitzibata.com` | Identificado como libre en [MARCA.md](MARCA.md) | ~12 USD/año |
-| Cloudflare Pages conectado al repo | Alojamiento, cabeceras, Turnstile, CDN | 0 |
-| Proyecto de backend, región este de EE. UU. | Identidad y señales | 0, o ~25 USD/mes al crecer |
-| Reescribir `.github/workflows/deploy.yml` | Hoy publica en GitHub Pages | — |
+| Qué | Para qué | Costo | Estado |
+|---|---|---|---|
+| Dominio `visitzibata.com` | Identificado como libre en [MARCA.md](MARCA.md) | ~12 USD/año | Hecho |
+| Alojamiento en Cloudflare | Cabeceras, Turnstile, CDN | 0 | Hecho: Worker con assets estáticos |
+| `.github/workflows/deploy.yml` | Compilar, pasar las puertas y publicar | 0 | Hecho |
+| Proyecto de backend, región este de EE. UU. | Identidad y señales | 0, o ~25 USD/mes al crecer | Pendiente |
 
 Y tres cosas que no son cuentas y son el trabajo real:
 

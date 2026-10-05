@@ -220,8 +220,17 @@ export const GiroSchema = z.strictObject({
   general: z.boolean().optional(),
 })
 
+/**
+ * El slug que sale a la URL, por idioma. NO es el identificador: `id` es la clave estable con la
+ * que los locales se relacionan con su categoría y nunca cambia, mientras que el slug es cara
+ * pública y se puede retocar sin tocar un solo dato. Hoy el de español coincide con el id por
+ * historia, no por obligación.
+ */
+export const LocalizedSlugSchema = z.strictObject({ es: slug, en: slug })
+
 export const CategorySchema = z.strictObject({
   id: slug,
+  slug: LocalizedSlugSchema,
   label: LocalizedTextSchema,
   icon: nonEmptyText,
   /** Tono (0-359) de la placa de color en listas y fichas; sin él se usa un neutro. */

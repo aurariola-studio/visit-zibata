@@ -24,7 +24,7 @@ test.describe('Seguridad', () => {
       if (/^https?:/.test(url) && !url.startsWith(origin)) external.push(url)
     })
 
-    await openApp(page, { hash: '#/plaza/condesa' })
+    await openApp(page, { path: 'zona/condesa' })
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveAttribute(
       'content',
       /script-src 'self'/,
@@ -44,7 +44,7 @@ test.describe('Seguridad', () => {
   test('los enlaces externos abren en otra pestaña sin acceso a la página (noopener)', async ({
     page,
   }) => {
-    await openApp(page, { hash: '#/lugar/bendito-bocado' })
+    await openApp(page, { path: 'lugar/bendito-bocado' })
     const links = panel(page).locator('a[target="_blank"]')
     await expect(links.first()).toBeVisible()
     for (const link of await links.all()) {

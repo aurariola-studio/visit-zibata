@@ -18,10 +18,15 @@ y podría medir otra aplicación.
 
 ## Niveles
 
-**Unitarios y de componentes (Vitest, 144 pruebas).** Lógica pura y componentes con Testing Library:
+**Unitarios y de componentes (Vitest, 247 pruebas).** Lógica pura y componentes con Testing Library:
 esquemas y validación de datos (Zod y la validación ligera de runtime, en paridad), relaciones entre
-colecciones, catálogo, horarios, búsqueda, filtros, URLs, cámara, hoja inferior, enlaces a Google Maps del
+colecciones, catálogo, horarios, búsqueda, filtros, rutas, cámara, hoja inferior, enlaces a Google Maps del
 dataset publicado y componentes de la ficha.
+
+Las de rutas (`src/lib/urls.test.ts`) cubren los dos árboles de idioma, el parámetro de categoría
+traducido y la traducción de un enlace antiguo con hash. Corren con la base `/visit-zibata/` y nunca
+con la raíz, a propósito: así una ruta construida sin tener en cuenta la base falla la prueba en vez
+de pasar por casualidad.
 
 **End to end (Playwright, 4 proyectos).** Contra el build de producción servido como en el hosting:
 
@@ -33,9 +38,17 @@ dataset publicado y componentes de la ficha.
 | `webkit-iphone` | WebKit | iPhone 13, táctil |
 
 Cubren: mapa 3D y marcadores, plazas y fichas, búsqueda y filtros, favoritos, enlaces profundos y botón
-atrás, teclado (salto al buscador, Escape), aviso de enlaces caducados, región viva única, táctil (toques
+atrás, teclado (salto al buscador, Escape), 404 propio, región viva única, táctil (toques
 y arrastre de la hoja), responsive en 9 tamaños, seguridad (CSP, enlaces externos, 404) y degradación
 (sin WebGL2, sin datos, sin chunk del mapa, sin PMTiles, sin conexión, registro inválido).
+
+Los enlaces profundos se abren con el ayudante `openApp(page, { path })`, que navega a la ruta real
+(`lugar/tomassa`) en vez de a un hash. Es el mismo camino que recorre quien pega el enlace en la barra
+de direcciones: se pide una página distinta al servidor, no un fragmento de la portada.
+
+El 404 se comprueba contra `vite preview`, que por omisión responde un 404 vacío; un plugin de
+`vite.config.ts` le hace servir el `404.html` del build para que la prueba mire la misma página que
+el hosting.
 
 **Accesibilidad.** axe-core en inicio, plaza y ficha (sin violaciones graves o críticas), recorrido de
 teclado y foco. Ver [ACCESIBILIDAD.md](ACCESIBILIDAD.md).
@@ -53,8 +66,9 @@ de `data/commercial/*.json` con los ayudantes `placesInPlaza`, `placesInCategory
 escritos a mano. Así una alta, una baja o una ubicación verificada no rompen la suite; solo la rompe un
 fallo de verdad.
 
-El idioma se fija en las pruebas (español): jsdom y los navegadores de Playwright se anuncian en inglés y
-la guía ahora los obedece.
+El idioma se fija en las pruebas (español). Desde el enrutado por idioma la guía ya no mira el idioma
+del navegador (ver [ARQUITECTURA.md](ARQUITECTURA.md) § Idioma), así que el español es lo que
+responde la raíz de forma determinista; el inglés se prueba pidiendo su árbol.
 
 ## Estabilidad
 
@@ -72,7 +86,9 @@ la guía ahora los obedece.
   las barras dinámicas ni el comportamiento real de `100dvh` en iOS.
 - **Arrastre táctil en WebKit**: Playwright solo inyecta gestos de arrastre táctil en Chromium; en WebKit
   se prueban toques.
-- **Publicación real** en GitHub Pages (ver [DESPLIEGUE.md](DESPLIEGUE.md)).
+- **Publicación real** en Cloudflare (ver [DESPLIEGUE.md](DESPLIEGUE.md)). En particular, que un
+  archivo plano se sirva sin redirigir a la versión con barra final se verificó en `vite preview` y
+  en la documentación de Cloudflare, no contra el sitio publicado.
 - **Lectores de pantalla distintos de NVDA** (VoiceOver, JAWS, TalkBack).
 - Navegadores antiguos sin WebGL2: se detecta y se ofrece la guía en modo lista, pero no se prueba en un
   navegador antiguo real.

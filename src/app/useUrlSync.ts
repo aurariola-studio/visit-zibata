@@ -1,42 +1,109 @@
-/** Sincroniza plaza / lugar / categoría con el hash de la URL (enlaces compartibles, botón atrás). */
+/**
+ * Sincroniza plaza, lugar, categoría e idioma con la ruta (enlaces compartibles, botón atrás).
+ *
+ * Es el **único** sitio que escribe la URL. Tenerlo centralizado es lo que evita que el cambio de
+ * idioma, la selección y el filtro se pisen entre sí, y lo que hace que cambiar de idioma sea
+ * simplemente "cambia el idioma y la URL se recalcula sola" en vez de una navegación aparte.
+ *
+ * Aquí vive también la traducción entre el **slug** que viaja en la URL y el **id** que usa el
+ * estado: `url-state` es puro y no conoce el catálogo, así que no puede hacerla.
+ */
 import { useEffect, useLayoutEffect, useRef } from 'react'
-import { buildHash, parseHash } from '../lib/url-state.ts'
-import type { Catalog } from '../types/domain.ts'
+import { type Locale, setLocale, useLocale } from '../i18n/index.ts'
+import {
+  buildPath,
+  localeFromPath,
+  parsePath,
+  pathFromLegacyHash,
+  type UrlState,
+} from '../lib/url-state.ts'
+import type { Catalog, Category } from '../types/domain.ts'
 import { useAppDispatch, useAppState } from './AppStateContext.tsx'
+
+const BASE = import.meta.env.BASE_URL
+
+const categoryBySlug = (catalog: Catalog, locale: Locale, slug: string): Category | undefined =>
+  catalog.categories.find((category) => category.slug[locale] === slug)
+
+const currentUrl = () => `${window.location.pathname}${window.location.search}`
 
 export function useUrlSync(catalog: Catalog): void {
   const state = useAppState()
   const dispatch = useAppDispatch()
-  /** Último hash derivado del estado; `null` hasta el primer render (en el que manda la URL). */
-  const lastHash = useRef<string | null>(null)
+  const locale = useLocale()
+  /** Última ruta derivada del estado; `null` hasta el primer render (en el que manda la URL). */
+  const lastPath = useRef<string | null>(null)
+  /** El idioma vigente, para que el efecto de abajo no tenga que depender de él al leer la URL. */
+  const localeRef = useRef(locale)
+  localeRef.current = locale
 
-  // URL → estado: al cargar y con atrás/adelante del navegador. Antes de pintar (layout effect): si fuera
-  // un efecto normal, una selección hecha en cuanto aparece la interfaz (dispositivo lento o un toque
-  // rápido) quedaría pisada por esta sincronización inicial.
+  // URL → estado: al cargar y con atrás/adelante del navegador. Antes de pintar (layout effect): si
+  // fuera un efecto normal, una selección hecha en cuanto aparece la interfaz (dispositivo lento o un
+  // toque rápido) quedaría pisada por esta sincronización inicial.
   useLayoutEffect(() => {
-    const syncFromLocation = () => {
-      const parsed = parseHash(window.location.hash)
+    const replace = (url: string) => window.history.replaceState(null, '', url)
+
+    const syncFromLocation = (inicial: boolean) => {
+      // Un enlace antiguo con hash sigue llevando a donde prometía: se traduce a su ruta y se
+      // reescribe, de modo que a partir de ahí todo funciona con el formato nuevo.
+      if (inicial && window.location.hash) {
+        replace(pathFromLegacyHash(window.location.hash, BASE) ?? currentUrl())
+      }
+
+      const explicit = localeFromPath(window.location.pathname, BASE)
+      const parsed = parsePath(window.location.pathname, window.location.search, BASE)
+      const active = localeRef.current
+
       const place = parsed.placeSlug ? catalog.placeBySlug.get(parsed.placeSlug) : undefined
       const plaza = place
         ? catalog.plazaById.get(place.plazaId)
         : parsed.plazaSlug
           ? catalog.plazaBySlug.get(parsed.plazaSlug)
           : undefined
-      const category = parsed.categoryId ? catalog.categoryById.get(parsed.categoryId) : undefined
+      const category = parsed.categorySlug
+        ? categoryBySlug(catalog, parsed.locale, parsed.categorySlug)
+        : undefined
+
+      if (explicit) {
+        // La URL dice el idioma y manda: también al volver atrás desde el otro árbol.
+        if (explicit !== active) setLocale(explicit)
+      } else if (inicial && active !== parsed.locale) {
+        // Portada española con el inglés recordado en este dispositivo: se lleva a su árbol sin
+        // perder la página. Solo al cargar; si lo hiciera también con atrás, pelearía con el
+        // botón atrás y no se podría volver al árbol español. Un rastreador no tiene preferencia
+        // guardada, así que nunca pasa por aquí y `/` sigue siendo español de forma determinista.
+        replace(
+          buildPath(
+            {
+              locale: active,
+              plazaSlug: parsed.plazaSlug,
+              placeSlug: parsed.placeSlug,
+              categorySlug: category?.slug[active] ?? null,
+              infoTopic: parsed.infoTopic,
+            },
+            BASE,
+          ),
+        )
+      } else if (active !== parsed.locale) {
+        // Atrás hasta el árbol sin prefijo: vuelve el español.
+        setLocale(parsed.locale)
+      }
+
       // Un enlace a un lugar o plaza que ya no se publica: se avisa y se limpia la URL para no compartirlo.
       const missingLink =
         (parsed.placeSlug !== null && !place) || (parsed.plazaSlug !== null && !plaza?.active)
       if (missingLink) {
-        const clean = buildHash({
-          plazaSlug: null,
-          placeSlug: null,
-          categoryId: category?.id ?? null,
-          infoTopic: null,
-        })
-        window.history.replaceState(
-          null,
-          '',
-          `${window.location.pathname}${window.location.search}${clean}`,
+        replace(
+          buildPath(
+            {
+              locale: localeRef.current,
+              plazaSlug: null,
+              placeSlug: null,
+              categorySlug: category?.slug[localeRef.current] ?? null,
+              infoTopic: null,
+            },
+            BASE,
+          ),
         )
       }
       dispatch({
@@ -48,34 +115,46 @@ export function useUrlSync(catalog: Catalog): void {
         infoTopic: parsed.infoTopic,
       })
     }
-    syncFromLocation()
-    window.addEventListener('popstate', syncFromLocation)
-    return () => window.removeEventListener('popstate', syncFromLocation)
+
+    syncFromLocation(true)
+    const onPopState = () => syncFromLocation(false)
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
   }, [catalog, dispatch])
 
-  // Estado → URL: solo cuando el estado cambia, nunca en el primer render (evita pisar un enlace
-  // entrante antes de que el estado lo refleje).
+  // Estado → URL: solo cuando el estado cambia, nunca en el primer render. Esto último no es un
+  // detalle: en el primer render el efecto de arriba ya despachó lo que dice la URL, pero el estado
+  // todavía no lo refleja, así que escribir aquí borraría el enlace que acaba de abrirse.
+  //
+  // El idioma entra en las dependencias porque cambiarlo mueve la página al otro árbol, y eso es
+  // una escritura de URL como cualquier otra: así cambiar de idioma no necesita navegar por su
+  // cuenta y sigue habiendo un único escritor.
   useEffect(() => {
     const plaza = state.selectedPlazaId ? catalog.plazaById.get(state.selectedPlazaId) : undefined
     const place = state.selectedPlaceId ? catalog.placeById.get(state.selectedPlaceId) : undefined
-    const hash = buildHash({
+    const category = state.activeCategoryId
+      ? catalog.categoryById.get(state.activeCategoryId)
+      : undefined
+    const next: UrlState = {
+      locale,
       plazaSlug: plaza?.slug ?? null,
       placeSlug: place?.slug ?? null,
-      categoryId: state.activeCategoryId,
+      categorySlug: category?.slug[locale] ?? null,
       infoTopic: state.infoTopic,
-    })
-    const previous = lastHash.current
-    lastHash.current = hash
-    if (previous === null || previous === hash) return
-    if (hash === (window.location.hash || '#/')) return
+    }
+    const path = buildPath(next, BASE)
+    const previous = lastPath.current
+    lastPath.current = path
+    if (previous === null || path === currentUrl()) return
 
-    const url = `${window.location.pathname}${window.location.search}${hash}`
-    // Cambiar de plaza o lugar crea una entrada de historial (atrás la cierra); la categoría no.
-    const selectionChanged = hash.split('?')[0] !== previous.split('?')[0]
-    if (selectionChanged) window.history.pushState(null, '', url)
-    else window.history.replaceState(null, '', url)
+    // Cambiar de plaza, de lugar o de idioma crea una entrada de historial (atrás la deshace); el
+    // filtro de categoría no, porque es un ajuste de la misma vista.
+    const sameView = path.split('?')[0] === previous.split('?')[0]
+    if (sameView) window.history.replaceState(null, '', path)
+    else window.history.pushState(null, '', path)
   }, [
     catalog,
+    locale,
     state.selectedPlazaId,
     state.selectedPlaceId,
     state.activeCategoryId,

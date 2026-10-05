@@ -1,4 +1,4 @@
-# Publicación en Cloudflare: install → validate → test → build → presupuesto → e2e → deploy.
+# Publicación en Cloudflare: install → validate → test → build → imágenes → presupuesto → e2e → deploy.
 #
 # Se compila y se publica desde aquí, y NO con la integración de Git de Cloudflare, a propósito: esa
 # integración compila por su cuenta y no corre las pruebas, así que publicaría igual con el
@@ -65,14 +65,20 @@ jobs:
           npm run lint
           npm run typecheck
           npm test
+      # Antes del build porque la composición de las imágenes de vista previa también usa Chromium.
+      - name: Instalar navegadores de Playwright
+        run: npx playwright install --with-deps chromium webkit
       - name: Build de producción
         run: npm run build
+      # Después del build, nunca antes: el build limpia dist/, así que unas imágenes generadas
+      # primero desaparecerían sin dejar rastro y cada enlace compartido volvería a la imagen de
+      # la portada.
+      - name: Imágenes de vista previa por local
+        run: npm run images:og-places
       - name: Presupuesto de rendimiento
         run: npm run perf:budget
       - name: E2E contra el build
-        run: |
-          npx playwright install --with-deps chromium webkit
-          npm run test:e2e
+        run: npm run test:e2e
       - name: Informe de Playwright
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

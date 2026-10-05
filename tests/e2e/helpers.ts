@@ -69,12 +69,17 @@ export function placeById(id: string): DatasetPlace {
   return place
 }
 
-/** Abre la app (relativo a BASE_PATH) sin el tutorial, salvo que se pida lo contrario. */
-export async function openApp(page: Page, { hash = '', onboarding = false } = {}): Promise<void> {
+/**
+ * Abre la app sin el tutorial, salvo que se pida lo contrario.
+ *
+ * `path` va relativo a la base (`zona/condesa`, no `/zona/condesa`), que es lo que hace que la
+ * suite valga igual publicada en la raíz que en un subdirectorio.
+ */
+export async function openApp(page: Page, { path = '', onboarding = false } = {}): Promise<void> {
   if (!onboarding) {
     await page.addInitScript(() => window.sessionStorage.setItem('zibata:onboarding-visto', '1'))
   }
-  await page.goto(`./${hash}`)
+  await page.goto(`./${path}`)
 }
 
 /** Espera a que el mapa haya cargado (los marcadores de plazas solo aparecen con el mapa listo). */

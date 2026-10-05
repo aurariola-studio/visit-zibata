@@ -23,5 +23,16 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts", "playwright.config.ts", "scripts/**/*.ts", "tests/e2e/**/*.ts"]
+  /*
+   * `src/vite-env.d.ts` entra aquí porque vite.config.ts importa la regla de rutas de
+   * `src/lib/url-state.ts` (una sola fuente de verdad para app y build), y eso arrastra módulos de
+   * la aplicación que usan `import.meta.env`.
+   */
+  "include": [
+    "vite.config.ts",
+    "playwright.config.ts",
+    "scripts/**/*.ts",
+    "tests/e2e/**/*.ts",
+    "src/vite-env.d.ts"
+  ]
 }

@@ -3,6 +3,10 @@
 El sitio es 100 % estático: `npm run build` produce `dist/` y cualquier servidor de archivos lo sirve. No
 hay backend, base de datos, variables secretas ni servicios de pago.
 
+Desde la v4.6.0 el build escribe **232 páginas HTML** (una por ruta y por idioma), `sitemap.xml`,
+`robots.txt` y `404.html`. Los archivos son planos (`dist/lugar/tomassa.html`), no carpetas con
+índice, para que `/lugar/tomassa` se sirva directo y no haya que redirigir a `/lugar/tomassa/`.
+
 ## Estado actual (2026-10-04)
 
 Código en <https://github.com/aurariola-studio/visit-zibata>. Alojamiento: **Cloudflare**, Worker con
@@ -29,10 +33,15 @@ Preparación, una sola vez:
    - secreto `CLOUDFLARE_ACCOUNT_ID`
    - variable `PAGES_SITE_URL` (opcional; por omisión `https://visitzibata.com/`)
 
-A partir de ahí, cada push a `main` ejecuta `.github/workflows/deploy.yml`: `npm ci` → validación de
-datos → lint, tipos y tests → build → presupuesto de rendimiento → E2E (Chromium y WebKit) →
-`wrangler deploy`, que sube `dist/` como assets del Worker (ver `wrangler.jsonc`). Si cualquier paso
-falla, no se publica nada.
+A partir de ahí, cada push a `main` ejecuta `.github/workflows/deploy.yml`: `npm ci` → Gitleaks →
+validación de datos → lint, tipos y tests → build → imágenes de vista previa → presupuesto de
+rendimiento → E2E (Chromium y WebKit) → `wrangler deploy`, que sube `dist/` como assets del Worker
+(ver `wrangler.jsonc`). Si cualquier paso falla, no se publica nada.
+
+El paso de imágenes va **después** del build y no antes: el build limpia `dist/`, así que unas
+imágenes generadas primero desaparecerían sin dejar rastro y cada enlace compartido volvería a
+mostrar la imagen de la portada. Los navegadores de Playwright se instalan antes del build porque
+la composición de esas imágenes también usa Chromium.
 
 Las acciones están fijadas por SHA y `wrangler` está fijado en el lockfile (Dependabot las actualiza).
 
@@ -54,14 +63,19 @@ como Pages y Netlify.
 
 `wrangler.jsonc` fija `not_found_handling: "404-page"`: una ruta inexistente devuelve el `404.html`
 que genera el build, no la portada. Sin eso, un *fallback* tipo SPA convertiría cualquier error de
-tecleo en un 200 y Google indexaría basura. Hay una prueba E2E que lo comprueba en local; contra el
-sitio publicado conviene confirmarlo una vez con `curl -I https://visitzibata.com/no-existe`.
+tecleo en un 200 y Google indexaría basura. Desde que el enrutado salió del hash esto pasa de verdad:
+ahí llegan los errores de tecleo en `/lugar/...` y el enlace guardado de un local que ya no se
+publica. Hay pruebas E2E que lo comprueban en local, porque un plugin hace que `vite preview` sirva
+ese archivo igual que el hosting; contra el sitio publicado conviene confirmarlo una vez con
+`curl -I https://visitzibata.com/no-existe`.
 
 ## Requisitos del hosting
 
 - **Peticiones `Range`** para PMTiles (GitHub Pages, Netlify, Cloudflare Pages, Vercel, S3, nginx…).
-- **Sin *fallback* SPA**: las rutas de la app viven en el hash, así que un archivo inexistente debe
-  responder 404 (el build genera `404.html`).
+- **Sin *fallback* SPA**: existe un archivo por ruta, así que un camino inexistente debe responder
+  404 con el `404.html` del build, no la portada con un 200.
+- **Archivos servidos sin barra final añadida**: `/lugar/tomassa` debe entregar `lugar/tomassa.html`
+  tal cual. Un hosting que redirija a `/lugar/tomassa/` mete un salto en cada enlace compartido.
 - Tipos MIME correctos para `.pmtiles` (`application/octet-stream`), `.webmanifest` y `.woff2`.
 - Nada más: ni reescrituras, ni cabeceras especiales, ni certificados propios.
 
@@ -70,8 +84,13 @@ sitio publicado conviene confirmarlo una vez con `curl -I https://visitzibata.co
 ```bash
 npm run build                      # dist/ para servir en la raíz del dominio
 BASE_PATH=/subdirectorio/ npm run build
-SITE_URL=https://mi-dominio/ npm run build   # URLs absolutas de Open Graph
+SITE_URL=https://mi-dominio/ npm run build   # canonical, hreflang, sitemap y Open Graph absolutos
+npm run images:og-places                     # después del build: dist/og/<slug>.jpg
 ```
+
+`SITE_URL` ya no es solo cosa de Open Graph: de ahí salen el `canonical` y las `hreflang` de las 232
+páginas y las URLs del `sitemap.xml`. Sin ella el build funciona, pero esos enlaces quedan relativos
+y el sitemap no sirve para enviarlo a un buscador.
 
 En Git Bash (Windows), exporta `MSYS_NO_PATHCONV=1` antes de pasar rutas como `BASE_PATH`.
 
@@ -86,14 +105,27 @@ puede declarar.
 ## Verificación local de una publicación
 
 ```bash
-npm run build
+SITE_URL=https://visitzibata.com/ npm run build
+npm run images:og-places                         # después del build, que limpia dist/
 npm run preview -- --port 4173 --strictPort     # sirve dist/ igual que en producción
 npm run test:e2e                                 # E2E contra ese build
 npm run perf:budget                              # presupuesto de peso
 ```
 
-Para imitar GitHub Pages con más fidelidad (404 reales, `Range`, 301 de directorios), este repositorio se
-probó además con un servidor estático estricto sobre `dist/` publicado en una subruta.
+`vite preview` sirve el `404.html` del sitio porque el plugin `zibata-404` se lo pide; por omisión
+responde un 404 vacío y la prueba de esa página no valdría nada.
+
+Para comprobar el prerenderizado sin abrir el navegador:
+
+```bash
+curl -I http://localhost:4173/lugar/tomassa      # 200, sin redirección
+curl -I http://localhost:4173/en/place/tomassa   # 200
+curl -I http://localhost:4173/lugar/inventado    # 404
+grep -c "<url>" dist/sitemap.xml                 # 232
+```
+
+Para imitar un hosting en subruta (404 reales, `Range`, 301 de directorios), este repositorio se probó
+además con `BASE_PATH=/visit-zibata/` y un servidor estático estricto sobre `dist/`.
 
 ## Reversión
 

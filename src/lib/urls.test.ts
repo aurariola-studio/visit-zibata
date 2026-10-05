@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { makePlaza } from '../test/fixtures.ts'
 import { directionsUrl, plazaDirectionsUrl, telUrl, whatsappUrl } from './maps-url.ts'
-import { buildHash, parseHash } from './url-state.ts'
+import { buildPath, parsePath, pathFromLegacyHash, type UrlState } from './url-state.ts'
 
 describe('Google Maps', () => {
   const plaza = makePlaza({ id: 'plaza-norte', coordinates: { lat: 20.6793, lng: -100.315 } })
@@ -34,58 +34,123 @@ describe('Google Maps', () => {
   })
 })
 
-describe('estado en la URL (hash)', () => {
+const VACIO = {
+  plazaSlug: null,
+  placeSlug: null,
+  categorySlug: null,
+  infoTopic: null,
+} satisfies Omit<UrlState, 'locale'>
+
+/** Ninguna prueba usa la raíz: así se detecta cualquier ruta que se escriba sin la base. */
+const BASE = '/visit-zibata/'
+
+describe('estado en la URL · árbol español', () => {
   it('interpreta plaza, lugar y categoría', () => {
-    expect(parseHash('#/plaza/paseo-zibata?categoria=pizza')).toEqual({
+    expect(parsePath('/visit-zibata/zona/paseo-zibata', '?categoria=italiana', BASE)).toEqual({
+      ...VACIO,
+      locale: 'es',
       plazaSlug: 'paseo-zibata',
-      placeSlug: null,
-      categoryId: 'pizza',
-      infoTopic: null,
+      categorySlug: 'italiana',
     })
-    expect(parseHash('#/lugar/tomassa')).toEqual({
-      plazaSlug: null,
+    expect(parsePath('/visit-zibata/lugar/tomassa', '', BASE)).toEqual({
+      ...VACIO,
+      locale: 'es',
       placeSlug: 'tomassa',
-      categoryId: null,
-      infoTopic: null,
     })
   })
 
   it('cada página de información tiene su propia ruta', () => {
-    expect(parseHash('#/info/privacidad').infoTopic).toBe('privacidad')
-    expect(parseHash('#/info/sugerir').infoTopic).toBe('sugerir')
+    expect(parsePath('/visit-zibata/info/privacidad', '', BASE).infoTopic).toBe('privacidad')
+    expect(parsePath('/visit-zibata/info/sugerir', '', BASE).infoTopic).toBe('sugerir')
     // Un tema que no existe no abre nada.
-    expect(parseHash('#/info/loquesea').infoTopic).toBeNull()
+    expect(parsePath('/visit-zibata/info/loquesea', '', BASE).infoTopic).toBeNull()
     expect(
-      buildHash({ plazaSlug: 'condesa', placeSlug: null, categoryId: null, infoTopic: 'acerca' }),
-    ).toBe('#/info/acerca')
+      buildPath({ ...VACIO, locale: 'es', plazaSlug: 'condesa', infoTopic: 'acerca' }, BASE),
+    ).toBe('/visit-zibata/info/acerca')
   })
 
   it('ignora rutas desconocidas o slugs inválidos', () => {
-    const empty = { plazaSlug: null, placeSlug: null, categoryId: null, infoTopic: null }
-    expect(parseHash('')).toEqual(empty)
-    expect(parseHash('#/plaza/<script>')).toEqual(empty)
-    expect(parseHash('#/otra/cosa?categoria=A B')).toEqual(empty)
+    const vacio = { ...VACIO, locale: 'es' }
+    expect(parsePath('/visit-zibata/', '', BASE)).toEqual(vacio)
+    expect(parsePath('/visit-zibata/zona/<script>', '', BASE)).toEqual(vacio)
+    expect(parsePath('/visit-zibata/otra/cosa', '?categoria=A B', BASE)).toEqual(vacio)
   })
 
-  it('construye el hash y es reversible', () => {
-    const state = {
+  it('construye la ruta y es reversible', () => {
+    const state: UrlState = {
+      ...VACIO,
+      locale: 'es',
       plazaSlug: 'condesa',
-      placeSlug: null,
-      categoryId: 'bar-y-botana',
-      infoTopic: null,
+      categorySlug: 'bebidas',
     }
-    expect(buildHash(state)).toBe('#/plaza/condesa?categoria=bar-y-botana')
-    expect(parseHash(buildHash(state))).toEqual(state)
+    expect(buildPath(state, BASE)).toBe('/visit-zibata/zona/condesa?categoria=bebidas')
+    expect(parsePath('/visit-zibata/zona/condesa', '?categoria=bebidas', BASE)).toEqual(state)
+    // El lugar manda sobre la plaza: su ficha ya dice a qué plaza pertenece.
     expect(
-      buildHash({
-        plazaSlug: 'condesa',
-        placeSlug: 'bendito-bocado',
-        categoryId: null,
-        infoTopic: null,
-      }),
-    ).toBe('#/lugar/bendito-bocado')
-    expect(buildHash({ plazaSlug: null, placeSlug: null, categoryId: null, infoTopic: null })).toBe(
-      '#/',
+      buildPath(
+        { ...VACIO, locale: 'es', plazaSlug: 'condesa', placeSlug: 'bendito-bocado' },
+        BASE,
+      ),
+    ).toBe('/visit-zibata/lugar/bendito-bocado')
+    expect(buildPath({ ...VACIO, locale: 'es' }, BASE)).toBe('/visit-zibata/')
+  })
+})
+
+describe('estado en la URL · árbol inglés', () => {
+  it('usa sus propios segmentos y su propio parámetro de filtro', () => {
+    expect(buildPath({ ...VACIO, locale: 'en', placeSlug: 'tomassa' }, BASE)).toBe(
+      '/visit-zibata/en/place/tomassa',
     )
+    expect(
+      buildPath(
+        { ...VACIO, locale: 'en', plazaSlug: 'condesa', categorySlug: 'breakfast-and-coffee' },
+        BASE,
+      ),
+    ).toBe('/visit-zibata/en/area/condesa?category=breakfast-and-coffee')
+    expect(buildPath({ ...VACIO, locale: 'en', infoTopic: 'privacidad' }, BASE)).toBe(
+      '/visit-zibata/en/info/privacy',
+    )
+    // Sin barra final: es un archivo plano, no el índice de una carpeta.
+    expect(buildPath({ ...VACIO, locale: 'en' }, BASE)).toBe('/visit-zibata/en')
+    // Y se interpreta igual con barra o sin ella, por si alguien la escribe.
+    expect(parsePath('/visit-zibata/en', '', BASE).locale).toBe('en')
+    expect(parsePath('/visit-zibata/en/', '', BASE).locale).toBe('en')
+  })
+
+  it('la URL dice el idioma, y es reversible', () => {
+    const state: UrlState = {
+      ...VACIO,
+      locale: 'en',
+      plazaSlug: 'condesa',
+      categorySlug: 'drinks',
+    }
+    expect(parsePath('/visit-zibata/en/area/condesa', '?category=drinks', BASE)).toEqual(state)
+    expect(parsePath(buildPath(state, BASE).split('?')[0] ?? '', '?category=drinks', BASE)).toEqual(
+      state,
+    )
+  })
+
+  it('no mezcla árboles: los segmentos del otro idioma no se interpretan', () => {
+    // "lugar" no existe en el árbol inglés, así que no abre ninguna ficha.
+    expect(parsePath('/visit-zibata/en/lugar/tomassa', '', BASE).placeSlug).toBeNull()
+    // Y el parámetro español tampoco filtra en el árbol inglés.
+    expect(parsePath('/visit-zibata/en/', '?categoria=italiana', BASE).categorySlug).toBeNull()
+  })
+})
+
+describe('enlaces antiguos con hash', () => {
+  it('se traducen a su ruta equivalente, conservando el filtro', () => {
+    expect(pathFromLegacyHash('#/lugar/tomassa', BASE)).toBe('/visit-zibata/lugar/tomassa')
+    expect(pathFromLegacyHash('#/plaza/condesa?categoria=bebidas', BASE)).toBe(
+      '/visit-zibata/zona/condesa?categoria=bebidas',
+    )
+    expect(pathFromLegacyHash('#/info/privacidad', BASE)).toBe('/visit-zibata/info/privacidad')
+  })
+
+  it('lo que no es un enlace antiguo reconocible se deja en paz', () => {
+    expect(pathFromLegacyHash('', BASE)).toBeNull()
+    expect(pathFromLegacyHash('#seccion', BASE)).toBeNull()
+    expect(pathFromLegacyHash('#/otra/cosa', BASE)).toBeNull()
+    expect(pathFromLegacyHash('#/plaza/<script>', BASE)).toBeNull()
   })
 })

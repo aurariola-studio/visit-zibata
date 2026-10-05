@@ -23,6 +23,24 @@
             "type": "string",
             "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
+          "slug": {
+            "type": "object",
+            "properties": {
+              "es": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "en": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
+            "required": [
+              "es",
+              "en"
+            ],
+            "additionalProperties": false
+          },
           "label": {
             "type": "object",
             "properties": {
@@ -115,6 +133,7 @@
         },
         "required": [
           "id",
+          "slug",
           "label",
           "icon",
           "order",

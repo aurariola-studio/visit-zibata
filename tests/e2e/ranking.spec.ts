@@ -5,7 +5,7 @@ test.describe('Orden personal', () => {
   test('sin historial, la plaza muestra su orden curado; con gustos, lo preferido sube', async ({
     page,
   }) => {
-    await openApp(page, { hash: '#/plaza/paseo-zibata' })
+    await openApp(page, { path: 'zona/paseo-zibata' })
     await waitForSheet(page)
     const cards = panel(page).getByRole('button', { name: /^Ver detalles de/ })
     await expect(cards.first()).toBeVisible()
@@ -22,7 +22,7 @@ test.describe('Orden personal', () => {
   })
 
   test('marcar un favorito dentro de la lista no la reordena bajo el dedo', async ({ page }) => {
-    await openApp(page, { hash: '#/plaza/paseo-zibata' })
+    await openApp(page, { path: 'zona/paseo-zibata' })
     await waitForSheet(page)
     const region = panel(page)
     const cards = region.getByRole('button', { name: /^Ver detalles de/ })

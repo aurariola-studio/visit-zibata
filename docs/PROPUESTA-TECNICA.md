@@ -43,7 +43,9 @@ Plaza Walmart y Distrito Nandú quedan inactivas porque ninguno de sus locales e
 6. **Tipografía en el mapa sin glifos PBF:** MapLibre 6.7+ admite `font-faces`; el mapa usa los mismos
    archivos Instrument Sans / Serif que la interfaz.
 7. **GitHub Pages** con base configurable (`BASE_PATH`) y rutas en hash (`#/plaza/…`), que no fallan al
-   recargar. Portable a cualquier hosting estático.
+   recargar. Portable a cualquier hosting estático. (Decisión de la Fase 0, revertida en la v4.6.0: el
+   hash impedía indexar cada ficha, así que el sitio mudó a Cloudflare con una página por ruta. Ver
+   [ARQUITECTURA.md](ARQUITECTURA.md) § Enlaces y compartir.)
 
 ## 4. Limitaciones conocidas de las fuentes
 

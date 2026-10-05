@@ -1,9 +1,13 @@
 {
   "$comment": "Taxonomía curada de la guía (research/taxonomy.json → data/commercial/categories.json vía scripts/research/build-dataset.ts). El GIRO es el tag que lleva cada local: de uno a tres, en orden, y el primero decide el icono. La CATEGORÍA es el estante de la barra de filtros: agrupa giros, se nombra por el antojo y nunca por la cocina ni por el tipo de local, y no se escribe en el local (se deduce de sus giros). El giro marcado \"general\" es el cajón de \"es esto, en general\" y comparte dibujo con su categoría. \"hue\" (0-359) es el tono de la placa en listas y fichas. Etiquetas en Mayúsculas Principales, salvo conjunciones y preposiciones.",
-  "version": 16,
+  "version": 17,
   "categories": [
     {
       "id": "desayunos-y-cafe",
+      "slug": {
+        "es": "desayunos-y-cafe",
+        "en": "breakfast-and-coffee"
+      },
       "label": {
         "es": "Desayunos y Café",
         "en": "Breakfast & Coffee"
@@ -78,6 +82,10 @@
     },
     {
       "id": "tacos-y-antojitos",
+      "slug": {
+        "es": "tacos-y-antojitos",
+        "en": "tacos-and-street-food"
+      },
       "label": {
         "es": "Tacos y Antojitos",
         "en": "Tacos & Street Food"
@@ -183,6 +191,10 @@
     },
     {
       "id": "mexicana",
+      "slug": {
+        "es": "mexicana",
+        "en": "mexican"
+      },
       "label": {
         "es": "Mexicana",
         "en": "Mexican"
@@ -256,6 +268,10 @@
     },
     {
       "id": "carnes-y-parrilla",
+      "slug": {
+        "es": "carnes-y-parrilla",
+        "en": "grill-and-steak"
+      },
       "label": {
         "es": "Carnes y Parrilla",
         "en": "Grill & Steak"
@@ -309,6 +325,10 @@
     },
     {
       "id": "mariscos",
+      "slug": {
+        "es": "mariscos",
+        "en": "seafood"
+      },
       "label": {
         "es": "Mariscos",
         "en": "Seafood"
@@ -359,6 +379,10 @@
     },
     {
       "id": "hamburguesas",
+      "slug": {
+        "es": "hamburguesas",
+        "en": "fast-food"
+      },
       "label": {
         "es": "Comida Rápida",
         "en": "Fast Food"
@@ -437,6 +461,10 @@
     },
     {
       "id": "italiana",
+      "slug": {
+        "es": "italiana",
+        "en": "italian"
+      },
       "label": {
         "es": "Italiana",
         "en": "Italian"
@@ -505,6 +533,10 @@
     },
     {
       "id": "asiatica",
+      "slug": {
+        "es": "asiatica",
+        "en": "asian"
+      },
       "label": {
         "es": "Asiática",
         "en": "Asian"
@@ -583,6 +615,10 @@
     },
     {
       "id": "entre-panes",
+      "slug": {
+        "es": "entre-panes",
+        "en": "sandwiches-and-wraps"
+      },
       "label": {
         "es": "Entre Panes",
         "en": "Sandwiches & Wraps"
@@ -702,6 +738,10 @@
     },
     {
       "id": "saludable",
+      "slug": {
+        "es": "saludable",
+        "en": "healthy"
+      },
       "label": {
         "es": "Saludable",
         "en": "Healthy"
@@ -798,6 +838,10 @@
     },
     {
       "id": "panaderia-y-reposteria",
+      "slug": {
+        "es": "panaderia-y-reposteria",
+        "en": "bakery-and-pastry"
+      },
       "label": {
         "es": "Panadería y Repostería",
         "en": "Bakery & Pastry"
@@ -866,6 +910,10 @@
     },
     {
       "id": "botanas",
+      "slug": {
+        "es": "botanas",
+        "en": "snacks-and-bites"
+      },
       "label": {
         "es": "Para Picar",
         "en": "Snacks & Bites"
@@ -947,6 +995,10 @@
     },
     {
       "id": "postres-y-dulces",
+      "slug": {
+        "es": "postres-y-dulces",
+        "en": "desserts-and-sweets"
+      },
       "label": {
         "es": "Postres y Dulces",
         "en": "Desserts & Sweets"
@@ -1012,6 +1064,10 @@
     },
     {
       "id": "bebidas",
+      "slug": {
+        "es": "bebidas",
+        "en": "drinks"
+      },
       "label": {
         "es": "Bebidas",
         "en": "Drinks"
@@ -1068,6 +1124,10 @@
     },
     {
       "id": "internacional",
+      "slug": {
+        "es": "internacional",
+        "en": "international"
+      },
       "label": {
         "es": "Internacional",
         "en": "International"
@@ -1103,6 +1163,10 @@
     },
     {
       "id": "casera",
+      "slug": {
+        "es": "casera",
+        "en": "home-cooking"
+      },
       "label": {
         "es": "Casera y Fondas",
         "en": "Home Cooking"
@@ -1138,6 +1202,10 @@
     },
     {
       "id": "bar",
+      "slug": {
+        "es": "bar",
+        "en": "bar"
+      },
       "label": {
         "es": "Bar",
         "en": "Bar"
@@ -1208,6 +1276,10 @@
     },
     {
       "id": "otros",
+      "slug": {
+        "es": "otros",
+        "en": "other"
+      },
       "label": {
         "es": "Otros",
         "en": "Other"

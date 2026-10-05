@@ -31,7 +31,8 @@ describe('ShareButton', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Compartir Tomassa' }))
     const carga = hoja.mock.calls[0]?.[0]
     expect(carga.text).toBe('Tomassa · Pizzería · Italiana · Plaza Luna')
-    expect(carga.url).toMatch(/#\/lugar\/tomassa$/)
+    expect(carga.url).toMatch(/\/lugar\/tomassa$/)
+    expect(carga.url).not.toContain('#')
   })
 
   it('sin hoja del sistema copia el enlace y lo acusa donde estaba el dedo', async () => {
