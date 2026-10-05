@@ -1,16 +1,17 @@
-# Publicación en Cloudflare Pages: install → validate → test → build → presupuesto → e2e → deploy.
+# Publicación en Cloudflare: install → validate → test → build → presupuesto → e2e → deploy.
 #
 # Se compila y se publica desde aquí, y NO con la integración de Git de Cloudflare, a propósito: esa
 # integración compila por su cuenta y no corre las pruebas, así que publicaría igual con el
 # presupuesto de peso roto, con axe en rojo o con los tests de CSP fallando. Las puertas de este
 # repositorio solo sirven si nada se publica sin pasarlas.
 #
-# Requisitos en GitHub (Settings → Secrets and variables → Actions):
-#   secreto  CLOUDFLARE_API_TOKEN    token con permiso "Cloudflare Pages: Edit"
-#   secreto  CLOUDFLARE_ACCOUNT_ID   id de la cuenta de Cloudflare
-#   variable PAGES_SITE_URL          URL pública con barra final (p. ej. https://visitzibata.com/)
+# El destino es un Worker con assets estáticos (ver wrangler.jsonc), no un proyecto de Pages:
+# Cloudflare está integrando Pages dentro de Workers y los sitios nuevos se crean así.
 #
-# En Cloudflare, el proyecto de Pages debe quedar SIN integración de Git (Direct Upload).
+# Requisitos en GitHub (Settings → Secrets and variables → Actions):
+#   secreto  CLOUDFLARE_API_TOKEN    token de la plantilla "Edit Cloudflare Workers"
+#   secreto  CLOUDFLARE_ACCOUNT_ID   id de la cuenta de Cloudflare
+#   variable PAGES_SITE_URL          opcional; por omisión https://visitzibata.com/
 name: Deploy
 
 on:
@@ -25,19 +26,16 @@ concurrency:
   group: deploy
   cancel-in-progress: false
 
-env:
-  PAGES_PROJECT: visit-zibata
-
 jobs:
   deploy:
     name: Validar, testear, compilar y publicar
     runs-on: ubuntu-latest
     timeout-minutes: 40
     environment:
-      name: cloudflare-pages
+      name: cloudflare
       url: ${{ steps.publicar.outputs.url }}
     env:
-      # Cloudflare Pages sirve en la raíz del dominio, así que la base es "/".
+      # El sitio se sirve en la raíz del dominio, así que la base es "/".
       BASE_PATH: /
       SITE_URL: ${{ vars.PAGES_SITE_URL || 'https://visitzibata.com/' }}
     steps:
@@ -77,14 +75,11 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 7
-      - name: Publicar en Cloudflare Pages
+      - name: Publicar en Cloudflare
         id: publicar
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          npx wrangler pages deploy dist \
-            --project-name "$PAGES_PROJECT" \
-            --branch main \
-            --commit-dirty=true
-          echo "url=https://$PAGES_PROJECT.pages.dev/" >> "$GITHUB_OUTPUT"
+          npx wrangler deploy
+          echo "url=${{ vars.PAGES_SITE_URL || 'https://visitzibata.com/' }}" >> "$GITHUB_OUTPUT"

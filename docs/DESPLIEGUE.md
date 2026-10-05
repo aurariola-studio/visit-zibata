@@ -5,10 +5,14 @@ hay backend, base de datos, variables secretas ni servicios de pago.
 
 ## Estado actual (2026-10-04)
 
-Código en <https://github.com/JesusOrihuela/visit-zibata>. Alojamiento: **Cloudflare Pages**, proyecto
-`visit-zibata`.
+Código en <https://github.com/JesusOrihuela/visit-zibata>. Alojamiento: **Cloudflare**, Worker con
+assets estáticos llamado `visit-zibata`, en `visitzibata.com`.
 
-## Publicar en Cloudflare Pages
+No es un proyecto de Pages: Cloudflare está integrando Pages dentro de Workers y los sitios estáticos
+nuevos se crean así. Para el sitio no cambia nada (los mismos archivos de `dist/`, el mismo
+`_headers`), solo el comando de publicación.
+
+## Publicar en Cloudflare
 
 Se compila y se publica desde GitHub Actions, **no con la integración de Git de Cloudflare**. Es una
 decisión deliberada: esa integración compila por su cuenta y no corre las pruebas, así que publicaría
@@ -17,17 +21,18 @@ este repositorio solo sirven si nada se publica sin pasarlas.
 
 Preparación, una sola vez:
 
-1. En Cloudflare, crea el proyecto de Pages `visit-zibata` **sin conectar Git** (Direct Upload). Si ya
-   estaba conectado, desconéctalo o publicará dos veces y una de ellas sin pasar las puertas.
-2. Crea un token de API con el permiso **Cloudflare Pages: Edit** y anota el **Account ID**.
+1. El Worker `visit-zibata` debe quedar **sin integración de Git**, o publicará dos veces y una de
+   ellas sin pasar las puertas.
+2. Crea un token de API con la plantilla **Edit Cloudflare Workers** y anota el **Account ID**.
 3. En GitHub → Settings → Secrets and variables → Actions:
    - secreto `CLOUDFLARE_API_TOKEN`
    - secreto `CLOUDFLARE_ACCOUNT_ID`
-   - variable `PAGES_SITE_URL`, con barra final (por ejemplo `https://visitzibata.com/`)
+   - variable `PAGES_SITE_URL` (opcional; por omisión `https://visitzibata.com/`)
 
 A partir de ahí, cada push a `main` ejecuta `.github/workflows/deploy.yml`: `npm ci` → validación de
 datos → lint, tipos y tests → build → presupuesto de rendimiento → E2E (Chromium y WebKit) →
-`wrangler pages deploy`. Si cualquier paso falla, no se publica nada.
+`wrangler deploy`, que sube `dist/` como assets del Worker (ver `wrangler.jsonc`). Si cualquier paso
+falla, no se publica nada.
 
 Las acciones están fijadas por SHA y `wrangler` está fijado en el lockfile (Dependabot las actualiza).
 En cuentas de organización, Gitleaks necesita `GITLEAKS_LICENSE`.
@@ -37,7 +42,15 @@ En cuentas de organización, Gitleaks necesita `GITLEAKS_LICENSE`.
 `dist/_headers` lo genera el build (plugin `zibata-headers` en `vite.config.ts`) a partir de la misma
 constante que el `<meta>` de la CSP, para que no puedan divergir. Añade lo que un `<meta>` no puede
 declarar: `frame-ancestors`, `Referrer-Policy`, `X-Content-Type-Options`, `Permissions-Policy` y el
-`Cache-Control` por tipo de archivo. El formato es el de Cloudflare Pages y Netlify.
+`Cache-Control` por tipo de archivo. El formato lo entienden tanto los Workers con assets estáticos
+como Pages y Netlify.
+
+### El 404
+
+`wrangler.jsonc` fija `not_found_handling: "404-page"`: una ruta inexistente devuelve el `404.html`
+que genera el build, no la portada. Sin eso, un *fallback* tipo SPA convertiría cualquier error de
+tecleo en un 200 y Google indexaría basura. Hay una prueba E2E que lo comprueba en local; contra el
+sitio publicado conviene confirmarlo una vez con `curl -I https://visitzibata.com/no-existe`.
 
 ## Requisitos del hosting
 

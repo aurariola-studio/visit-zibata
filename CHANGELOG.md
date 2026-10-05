@@ -30,6 +30,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
   a crecer, lo siguiente es partir el catálogo de i18n por idioma (unos 5 KB, porque hoy viajan los
   dos y solo se usa uno), no otra subida del límite.
 - **`SITE_URL` apunta por omisión a `https://visitzibata.com/`**, el dominio del proyecto.
+- **El destino en Cloudflare es un Worker con assets estáticos, no un proyecto de Pages**, con su
+  `wrangler.jsonc`. Cloudflare está integrando Pages dentro de Workers y los sitios estáticos nuevos
+  se crean así. Para el sitio no cambia nada (los mismos archivos, el mismo `_headers`, que los
+  Workers con assets también leen); cambia el comando (`wrangler deploy`) y el permiso que necesita
+  el token. `not_found_handling: "404-page"` conserva los 404 reales, que es lo que impide que un
+  error de tecleo responda 200 y acabe indexado.
 
 ## [4.2.0]: 2026-10-04
 

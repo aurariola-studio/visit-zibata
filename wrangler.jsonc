@@ -1,0 +1,21 @@
+// Publicación en Cloudflare como Worker con assets estáticos.
+//
+// No es un proyecto de Pages: Cloudflare está integrando Pages dentro de Workers y los sitios
+// estáticos nuevos se crean así. Para el sitio no cambia nada (se sirven los mismos archivos de
+// dist/, con el mismo _headers), pero sí cambia el comando de publicación: `wrangler deploy` en
+// lugar de `wrangler pages deploy`.
+//
+// Sin `main`: es un Worker solo de assets, sin código propio. El día que haga falta una API, aquí
+// se añade el script y conviven.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "visit-zibata",
+  "compatibility_date": "2026-10-04",
+  "assets": {
+    "directory": "./dist",
+    // Una ruta inexistente devuelve el 404.html que genera el build, no la portada: la guía vive en
+    // el hash, así que un *fallback* tipo SPA convertiría cualquier error de tecleo en un 200 y
+    // Google indexaría basura. Hay una prueba E2E que lo comprueba.
+    "not_found_handling": "404-page"
+  }
+}
