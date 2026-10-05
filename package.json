@@ -1,7 +1,8 @@
 {
   "name": "zibata-comer-y-beber",
   "private": true,
-  "version": "4.2.0",
+  "license": "MIT",
+  "version": "4.3.0",
   "description": "Guía interactiva 3D de comida y bebida en Zibatá, Querétaro. Sitio estático, sin backend.",
   "type": "module",
   "engines": {

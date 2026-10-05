@@ -2,6 +2,35 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.3.0]: 2026-10-04
+
+### Añadido
+
+- **Licencias explícitas, que en un repositorio público faltaban.** Sin archivo `LICENSE` lo
+  predeterminado es "todos los derechos reservados": el código estaba a la vista y legalmente nadie
+  podía usarlo ni contribuir. Son dos licencias porque son dos cosas: **MIT** para el código y
+  **CC BY 4.0** para los datos comerciales y la investigación. Las capas del mapa siguen bajo ODbL
+  1.0, que es obligación heredada de OpenStreetMap y manda sobre lo anterior.
+- **`SECURITY.md` y `CONTRIBUTING.md` en la raíz**, apuntando a los documentos de `docs/`. GitHub
+  busca esos nombres exactos, así que con `docs/SEGURIDAD.md` y `docs/CONTRIBUIR.md` no aparecía el
+  botón de reportar una vulnerabilidad.
+- **`.nvmrc`**: los workflows fijaban Node 24 pero quien clonara no tenía forma de saberlo.
+
+### Corregido
+
+- **Gitleaks nunca se había ejecutado.** Estaba solo en `ci.yml`, que corre con pull requests, y
+  hasta ahora todo fue directo a `main`. Ahora también corre en el workflow de publicación.
+- **`ci.yml` probaba la subruta `/zibata-comer-y-beber/`**, nombre anterior al rebranding.
+
+### Cambiado
+
+- **El presupuesto de `initialJs` sube de 120 a 122 KB**, con la razón escrita al lado del número
+  como las dos subidas anteriores de `dataJs`: el botón de compartir de la v4.1.0 cuesta 0,7 KB gzip
+  medidos con y sin la función, y solo quedaban 0,1 de margen. Queda anotado que si el paquete vuelve
+  a crecer, lo siguiente es partir el catálogo de i18n por idioma (unos 5 KB, porque hoy viajan los
+  dos y solo se usa uno), no otra subida del límite.
+- **`SITE_URL` apunta por omisión a `https://visitzibata.com/`**, el dominio del proyecto.
+
 ## [4.2.0]: 2026-10-04
 
 ### Cambiado
