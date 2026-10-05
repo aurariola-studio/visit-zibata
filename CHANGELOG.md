@@ -2,6 +2,113 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.8.0]: 2026-10-05
+
+### Añadido
+
+- **Datos estructurados en las 232 páginas.** Cada ficha lleva un bloque JSON-LD con lo mismo que ya
+  dice la página, pero en el vocabulario de schema.org, para que el buscador no tenga que deducirlo
+  del texto: nombre, tipo de negocio, descripción, teléfono, dirección, coordenadas, enlace de Maps
+  y perfiles oficiales. La portada lista sus zonas y cada zona lista sus locales, como `ItemList` con
+  solo nombre y URL, porque los datos de cada destino los lee el buscador de su propia página.
+- **El tipo sale de la categoría, no todo es un `Restaurant`**: una panadería es `Bakery` y un bar es
+  `BarOrPub`. Cuando la categoría no identifica una forma concreta de negocio se usa el padre común
+  (`FoodEstablishment`), y "Otros" se queda en `LocalBusiness`, porque la guía va más allá de la
+  comida. Hoy salen 56 restaurantes, 13 cafeterías, 8 de comida rápida, 7 panaderías, 7 bares y 10
+  establecimientos sin forma más concreta.
+
+### Decisiones que quedan escritas
+
+- **Sin `openingHours`, a propósito.** El horario es el único dato de la ficha que se pudre solo
+  (festivos, temporada, un cambio cualquiera), y si el buscador anuncia "Abierto ahora" sobre un dato
+  viejo, alguien hace el viaje para encontrar la puerta cerrada. Hoy los 101 locales llevan el mismo
+  `lastVerifiedAt`, así que no hay forma de distinguir un horario fresco de uno rancio. Cuando exista
+  una segunda ronda de verificación, ese campo ya da el criterio y emitirlo pasa a ser un filtro. El
+  teléfono sí entra: no se pudre igual, y un número viejo es una llamada perdida, no un viaje.
+- **Nada que no esté en el dataset**: sin `aggregateRating` (la guía no publica medias), sin
+  `priceRange` (nadie lo ha verificado) y sin `review`.
+- **Un campo que falta se omite, no se rellena.** Eso deja 24 fichas sin teléfono, 13 sin coordenadas
+  y 3 sin dirección: exactamente las que no tienen el dato.
+- La dirección de un local es la de su zona, porque está dentro de una plaza y no tiene una propia.
+  La localidad, el estado y el país salen de `data/geographic/config.json`.
+
+### Cambiado
+
+- **El E2E del despliegue pasa a ser un humo** (un proyecto, una base). Los mismos 264 tests corrían
+  tres veces sobre el mismo código: dos en `ci.yml`, una por cada base, y otra más al publicar.
+  Publicar costaba más de media hora y una prueba sensible al tiempo llegó a tumbar un despliegue
+  que ya había pasado las dos rondas anteriores. No se quita del todo porque al fusionar con squash
+  el commit que llega a `main` nunca existió en el pull request, y es ese artefacto el que se publica.
+
+### Corregido
+
+- **Las 232 páginas llevaban dos descripciones.** El `index.html` de origen está formateado y sus
+  etiquetas largas reparten los atributos en varias líneas; los patrones del prerenderizado estaban
+  escritos con un solo espacio, así que no encontraban `description` ni `og:description`, creían que
+  no existían y añadían una segunda copia. Cada página publicaba la descripción general de la portada
+  **y** la suya, y el buscador elegía. Salió publicado en la v4.6.0 y no se vio porque no rompe nada
+  a la vista. Ahora los patrones toleran el salto de línea, y el build **falla** si alguna de esas
+  etiquetas aparece dos veces: un metadato duplicado deja de ser algo que nadie mira.
+- **El acuse de "Enlace copiado" se comprobaba demasiado tarde.** Vive 2,4 segundos y se borra solo;
+  la prueba hacía dos viajes al navegador antes de mirarlo, y en un runner cargado ya se había ido.
+  Se invierte el orden en vez de alargar la espera: así la carrera no existe, en lugar de ser menos
+  probable.
+
+### Nota
+
+El presupuesto de peso **no sube**: `initialJs` sigue en 121,7 KB porque nada de esto llega al
+navegador, se escribe al compilar. Lo que sí queda escrito es de qué están hechos esos 121,7 KB y
+cuánto cuesta la partición del catálogo de i18n, que el propio archivo ya había señalado en la
+v4.2.0 como la jugada siguiente.
+### Corregido
+
+- **El mapa no cargaba en producción.** `zibata.pmtiles` se lee con **peticiones Range**, y el hosting
+  (Cloudflare Workers con assets estáticos) no las sirve: a un `Range: bytes=0-16383` responde `200`
+  con los 2,1 MB enteros, sin `Accept-Ranges`, y lo mismo con cualquier otro archivo. La librería
+  aborta con *"Check that your storage backend supports HTTP Byte Serving"*, y la guía mostraba "El
+  mapa 3D no está disponible". No es una opción que se pueda activar: ese servidor no hace byte
+  serving.
+
+  **Las teselas pasan a servirse sueltas.** Al compilar, el archivo se extrae a 259 archivos
+  `dist/map/tiles/{z}/{x}/{y}.pbf` (z12 a z16) más su TileJSON, y MapLibre los pide uno a uno, como
+  cualquier mapa. Por la red cuesta **lo mismo**, 2,04 MB, porque dentro del archivo las teselas ya
+  viajaban comprimidas, y la mayor sigue pesando 98 KB. Encima quita 7 KB del paquete del mapa (283,5
+  a 276,4 KB), porque la librería `pmtiles` deja de viajar al navegador.
+
+  Se descartaron las dos alternativas. Mudar el archivo a R2 o S3, que es lo que recomienda Protomaps,
+  sería un segundo origen, y la guía promete y comprueba en sus pruebas que no hace ni una petición
+  externa. Y escribir un Worker que implemente los rangos dejaría el proyecto atado a que el hosting
+  haga algo especial, que es el problema de hoy con otro disfraz. El archivo único existe para no
+  poner millones de teselas en un bucket: con 259 esa ventaja no aplica y el costo sí.
+
+### Cambiado
+
+- **El requisito de `Range` desaparece del proyecto.** Ya no hace falta nada del hosting salvo que
+  responda 404 a lo que no existe. Las teselas se escriben en crudo para que funcionen en cualquier
+  servidor, y es el `Content-Type: application/x-protobuf` del `_headers` el que hace que el CDN las
+  comprima (ese tipo sí está en la lista que comprime Cloudflare; sin declararlo viajarían sin
+  comprimir y el mapa pasaría de 2 a 4,2 MB). Un hosting que no lea ese archivo sigue sirviendo el
+  mapa, solo que más pesado: nunca roto.
+- El presupuesto de peso mide ahora el directorio de teselas (`tiles`) en vez del archivo único. El
+  límite se queda en 2100 KB porque el peso por la red no cambió.
+- `pmtiles` pasa de dependencia a dependencia de desarrollo: ya solo se usa al compilar.
+
+### Por qué no lo vieron las pruebas
+
+`vite preview` **sí** sirve peticiones `Range`, así que las 222 pruebas E2E pasaban con el mapa roto en
+producción. El requisito estaba escrito en DESPLIEGUE.md desde el primer día y el propio `MapView.tsx`
+lo nombraba en un comentario, pero nadie lo volvió a comprobar al cambiar de hosting. Queda anotado en
+PRUEBAS.md, donde toca: toda la suite corre contra un servidor que no es el de verdad, así que una
+publicación se comprueba abriendo el sitio.
+
+### Documentación
+
+- **El README decía cosas que ya no eran ciertas** y es la portada de un repositorio público: se
+  llamaba "Zibatá · Comer y beber", prometía un sitio en GitHub Pages y describía una publicación que
+  ya no existe. Ahora dice qué es, dónde vive y cómo se publica, con las cifras del dataset al día.
+- ARQUITECTURA, MAPA, DESPLIEGUE, CUENTAS y PRUEBAS pierden el requisito de `Range` y explican el
+  porqué de las teselas sueltas donde corresponde.
+
 ## [4.7.0]: 2026-10-05
 
 ### Corregido
