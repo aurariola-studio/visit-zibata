@@ -124,6 +124,7 @@ npm run map:fetch && npm run map:build
 | [docs/DESPLIEGUE.md](docs/DESPLIEGUE.md) | Publicación y requisitos del hosting |
 | [docs/CONTRIBUIR.md](docs/CONTRIBUIR.md) | Flujo de trabajo y convenciones |
 | [docs/LICENCIAS.md](docs/LICENCIAS.md) | Licencias de datos, software, fuentes e iconos |
+| [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) | Cómo contribuir y cómo reportar una vulnerabilidad |
 | [CHANGELOG.md](CHANGELOG.md) | Cambios por versión |
 
 ## Publicación (GitHub Pages)
@@ -156,3 +157,10 @@ Datos © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (
 licencias de datos, software, fuentes tipográficas e iconos en [docs/LICENCIAS.md](docs/LICENCIAS.md) y
 `data/geographic/manifest.json`. Decisiones y hallazgos iniciales en
 [docs/PROPUESTA-TECNICA.md](docs/PROPUESTA-TECNICA.md).
+
+## Licencia
+
+Código bajo [MIT](LICENSE). Datos comerciales e investigación bajo
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es), citando "Visit Zibatá
+(visitzibata.com)". Las capas del mapa derivan de OpenStreetMap y van bajo ODbL 1.0. El detalle, en
+[docs/LICENCIAS.md](docs/LICENCIAS.md).

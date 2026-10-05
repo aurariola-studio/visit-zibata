@@ -14,6 +14,13 @@ const KB = 1024
 /**
  * Límites en KB gzip (salvo teselas, ya comprimidas). Margen de ~10 % sobre la medición de v1.0.0.
  *
+ * `initialJs` subió de 120 a 122 en la v4.2.0 por el botón de compartir de la ficha: medido con y sin
+ * la función, cuesta 0,7 KB gzip (119,9 → 120,6) y solo quedaban 0,1 de margen. Se midió antes si la
+ * función podía pagarse sola (dibujar sus dos iconos a mano en vez de importarlos de Lucide no ahorra
+ * nada) y cuál era la alternativa: partir el catálogo de i18n por idioma liberaría unos 5 KB, porque
+ * hoy viajan los dos idiomas y solo se usa uno, pero obligaría a una importación dinámica al cambiar
+ * de idioma en caliente. Si el paquete vuelve a crecer, esa partición es lo siguiente, no otra subida.
+ *
  * `pmtiles` es el archivo completo, que el navegador NO descarga entero: se piden por rango solo las
  * teselas visibles. Por eso el límite que de verdad afecta a la fluidez es `largestTile` (la tesela más
  * pesada del archivo), y el del archivo entero cuida el peso del repositorio y del despliegue. Subió de
@@ -24,7 +31,7 @@ const KB = 1024
  * se hace porque obligaría a recargar los datos al cambiar de idioma en caliente.
  */
 const BUDGET = {
-  initialJs: 120,
+  initialJs: 122,
   initialCss: 10,
   mapJs: 320,
   mapCss: 15,

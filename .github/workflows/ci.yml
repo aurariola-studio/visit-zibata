@@ -45,8 +45,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Raíz y subdirectorio, como en GitHub Pages de proyecto: detecta rutas absolutas rotas antes de publicar.
-        base: ['/', '/zibata-comer-y-beber/']
+        # Cloudflare Pages sirve en la raíz, pero se sigue probando una subruta: es lo que detecta una
+        # ruta absoluta mal escrita antes de publicarla, y mantiene el proyecto portable a otro hosting.
+        base: ['/', '/visit-zibata/']
     env:
       BASE_PATH: ${{ matrix.base }}
     steps:
