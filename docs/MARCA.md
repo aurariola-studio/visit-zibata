@@ -176,12 +176,15 @@ Hecho, por orden en que se fue resolviendo:
 8. **404 propio** con la marca del sitio, que es lo que ve quien escribe mal un enlace o guarda el de
    un local que ya no se publica.
 
+9. **Datos estructurados**: `ItemList` en la portada y en cada zona, y el negocio por ficha con el
+   tipo que le toca (`Bakery`, `BarOrPub`, `CafeOrCoffeeShop`…). Solo con datos verificados, sin
+   `aggregateRating` ni `priceRange`, y **sin horario** hasta que una segunda ronda de verificación
+   permita distinguir un dato fresco de uno rancio.
+
 Lo que falta:
 
-- **Datos estructurados** `ItemList` de la guía y `Restaurant`/`LocalBusiness` por ficha, **solo con
-  datos verificados** (nombre, dirección, horario, teléfono, enlaces). Sin inventar `aggregateRating`:
-  la guía no publica medias.
 - Fichas de la propia guía en Google Business y redes con el mismo nombre y logo.
+- El horario en los datos estructurados, cuando haya esa segunda verificación.
 
 Palabras clave reales por las que buscaría alguien: "dónde comer en Zibatá", "restaurantes Zibatá",
 "plazas Zibatá", "qué abre hoy en Zibatá", "desayunos Zibatá". La página principal debería responder
@@ -195,11 +198,12 @@ literalmente a la primera.
 | Diseño | Hecho: símbolo en SVG en dos cortes, favicon, iconos "any" y "maskable", apple-touch. Faltan las ilustraciones |
 | Datos | Ninguno: la identidad no toca el dataset |
 | Dominio | Hecho: `visitzibata.com` en Cloudflare, HTTPS, `www` redirigido |
-| SEO | Hecho: rutas sin hash, página por ruta, hreflang, sitemap, imagen por local, 404 propio. Faltan los datos estructurados |
+| SEO | Hecho: rutas sin hash, página por ruta, hreflang, sitemap, imagen por local, 404 propio y datos estructurados |
 | Riesgo | Revisar el uso del topónimo antes de registrar marca o dominio |
 
 Estimación: la parte de producto y diseño fue una tarde larga; las rutas sin hash y el prerenderizado,
-un par de días con pruebas. Los datos estructurados quedan pendientes y no bloquean nada.
+un par de días con pruebas; los datos estructurados, una tarde. Del bloque de SEO solo queda el
+horario, y no depende de código sino de volver a verificar los datos.
 
 ## 8. Recomendación
 
@@ -209,6 +213,7 @@ un par de días con pruebas. Los datos estructurados quedan pendientes y no bloq
    de independencia en la franja inferior: "Guía independiente de establecimientos y servicios de la
    zona", que es la protección práctica frente a un nombre todavía sin registrar.
 2. Hecho: `visitzibata.com` registrado en Cloudflare y servido por un Worker con assets estáticos.
-3. Hecho también las rutas sin hash y la página por ruta, que es lo que de verdad mueve el SEO. Los
-   datos estructurados quedan para la ronda siguiente, cuando el contenido esté cerrado: dependen de
-   que el horario y el teléfono estén verificados, y conviene hacerlos una sola vez.
+3. Hecho también las rutas sin hash, la página por ruta y los datos estructurados, que es lo que de
+   verdad mueve el SEO. El teléfono entra (77 de 101 verificados, y un número viejo es una llamada
+   perdida); el horario no, porque un "Abierto ahora" equivocado manda a alguien a una puerta
+   cerrada. Entra cuando una segunda ronda de verificación permita distinguir el dato fresco.
