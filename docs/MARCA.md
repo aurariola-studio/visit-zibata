@@ -16,8 +16,9 @@ A favor:
   (visitmexico.com, visitportugal.com, visitoslo.com). Comunica "guía oficial de un lugar" sin
   explicar nada.
 - Funciona en español y en inglés sin traducirse, que importa porque la guía ya es bilingüe.
-- Escala: si mañana entran compras, servicios o eventos, el nombre no se queda corto (cosa que
-  "Comer y beber" sí).
+- Escala: si mañana entran compras, servicios o eventos, el nombre no se queda corto. Por la misma
+  razón, el descriptor dejó de ser "Comer y beber" en la v4.4.0: acotaba el proyecto a lo que hoy
+  contiene en vez de a lo que quiere ser.
 - El dominio está libre y es corto.
 
 En contra, a decidir con los ojos abiertos:
@@ -36,8 +37,8 @@ Arquitectura de nombre propuesta:
 | Elemento | Texto |
 |---|---|
 | Marca | Visit Zibatá |
-| Descriptor (es) | Guía de Zibatá: dónde comer y beber |
-| Descriptor (en) | The guide to Zibatá: where to eat and drink |
+| Descriptor (es) | La guía de zibateños para zibateños |
+| Descriptor (en) | By locals, for locals |
 | Nombre en la app (PWA) | Visit Zibatá |
 | Voz | Directa, sin superlativos ni "el mejor". Nunca opina de un negocio; describe. |
 

@@ -2,6 +2,40 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.4.0]: 2026-10-04
+
+### Cambiado
+
+- **El lema deja de ser "Comer y beber" y pasa a "La guía de zibateños para zibateños"**, porque el
+  proyecto apunta más allá de la comida. En inglés va "By locals, for locals": el gentilicio no tiene
+  equivalente y forzarlo sonaría a traducción. Cambia en el `<h1>`, el título, Open Graph, el
+  manifiesto y la imagen social. Y también en los textos que describen la guía: el resumen de zonas,
+  los tres pasos del tutorial, "Acerca de esta guía" y la hoja de perfil. Se fue "busca un antojo" y
+  se fue "lo que más se te antoja", que acotaban a comida sin nombrarla. El criterio es que ningún
+  texto de interfaz prometa un alcance menor que el del proyecto.
+- **Sobre el mapa, la marca es solo el símbolo.** Antes la barra superior llevaba nombre y lema, que
+  competían con el buscador justo donde más falta hace el ancho. El nombre sigue estando para quien
+  escucha, en el `<h1>` oculto, así que no se pierde nada. Las pantallas de carga y de error sí
+  conservan el lockup completo: ahí la marca está sola y tiene sitio.
+- **La firma de autoría pasa a ser el lockup oficial de aurariola.com**: su símbolo, "un proyecto de"
+  y el wordmark, tal como lo define su guía de marca. Antes era un "by aurariola.com" inventado. El
+  símbolo se reconstruye desde la guía (anillo de píxeles sobre teja, rejilla de 256 con paso 32) y
+  respeta su regla principal: **un solo módulo en oro**, el cursor.
+- En la franja del mapa la firma va sin el conector: con el lockup entero, la leyenda de
+  independencia pasaba a dos renglones incluso a 1920 px. En "Acerca de esta guía" va completo.
+
+### Nota de accesibilidad
+
+El oro de marca (`#b7791f`) va **tal cual en el símbolo**, que es un dibujo y le basta con 3:1. En el
+punto del wordmark, que es texto de 11 px, se usa `--gold-700` (`#8a5a10`): el oro de marca se queda
+en 3,3:1 sobre las superficies arena cuando hace falta 4,5:1.
+
+### Pendiente
+
+La guía de marca pide **Kode Mono** para el wordmark y no está empaquetada: hoy cae a la monoespaciada
+del sistema. Añadirla cuesta unos 12 KB de fuente para cuatro palabras, así que es una decisión del
+propietario, no del código.
+
 ## [4.3.0]: 2026-10-04
 
 ### Añadido

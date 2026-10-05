@@ -26,7 +26,7 @@ export function GuideBar({ onOpen }: { onOpen: (topic: InfoTopic) => void }) {
           </button>
         ))}
       </nav>
-      <Signature className={styles.firma} />
+      <Signature className={styles.firma} compacta />
     </div>
   )
 }
