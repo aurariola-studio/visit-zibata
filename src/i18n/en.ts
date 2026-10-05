@@ -7,7 +7,7 @@ import type { Messages } from './es.ts'
 
 export const en = {
   'app.name': 'Visit Zibatá',
-  'app.tagline': 'Eat & drink',
+  'app.tagline': 'By locals, for locals',
   'app.mapLabel': 'Interactive 3D map of Zibatá',
 
   'search.label': 'Search places',
@@ -27,7 +27,7 @@ export const en = {
   'places.matching': { one: '{count} match', other: '{count} matches' },
 
   'explore.title': 'Explore Zibatá',
-  'explore.summary': '{plazas} with {places} to eat and drink',
+  'explore.summary': '{plazas} with {places} on the map',
   'explore.hint': 'Tap an area on the map or pick one from the list.',
   'explore.list': 'Areas',
   'explore.openList': 'Explore Zibatá',
@@ -115,6 +115,8 @@ export const en = {
   'favorites.filter': 'Favourites',
   'favorites.saved': 'Saved to favourites',
 
+  'brand.by': 'a project by',
+
   'share.action': 'Share',
   'share.place': 'Share {name}',
   'share.text': '{name} · {giros} · {plaza}',
@@ -158,10 +160,10 @@ export const en = {
     'Drag to move, pinch or scroll to zoom, and rotate with two fingers or right click.',
   'onboarding.step2.title': 'Pick an area',
   'onboarding.step2.body':
-    'Areas with places to eat and drink are highlighted in green. Tap one to see what’s there.',
+    'Areas with places are highlighted in green. Tap one to see what’s there.',
   'onboarding.step3.title': 'Open a place',
   'onboarding.step3.body':
-    'Filter by category or search a craving, then tap a card for hours, contact and directions.',
+    'Filter by category or search for what you need, then tap a card for hours, contact and directions.',
   'onboarding.step4.title': 'Leave your mark',
   'onboarding.step4.body':
     'On each place you can log your visits, save it with the heart and rate it with stars.',
@@ -181,9 +183,9 @@ export const en = {
   'about.languageEs': 'Español',
   'about.languageEn': 'English',
 
-  'about.aboutLead': 'A guide for deciding where to eat and drink in Zibatá.',
+  'about.aboutLead': 'A guide to what there is in Zibatá, so you can decide where to go.',
   'about.aboutBody':
-    'It brings the places of the area together on one map with what you need to decide. What each one serves, where it is, when it opens and how to get there.',
+    'It brings the places of the area together on one map with what you need to decide. What each one offers, where it is, when it opens and how to get there.',
   'about.aboutSources':
     'It is an independent guide, by the community and for the community, built from public information and updated whenever something changes.',
 
@@ -238,7 +240,7 @@ export const en = {
   'profile.zoneDone': 'visited',
   'profile.podium': 'Your usual three',
   'profile.position': 'Place {position}',
-  'profile.tastes': 'What you fancy most',
+  'profile.tastes': 'What you look for most',
   'profile.tasteCount': { one: '{count} place', other: '{count} places' },
   'profile.empty':
     'Log a visit, save a place with the heart or rate it, and your time in Zibatá will show up here.',

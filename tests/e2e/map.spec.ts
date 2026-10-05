@@ -64,7 +64,10 @@ test.describe('Mapa', () => {
     await openApp(page)
     await expect(page).toHaveTitle(/Zibatá/)
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Visit Zibatá · Comer y beber' }),
+      page.getByRole('heading', {
+        level: 1,
+        name: 'Visit Zibatá · La guía de zibateños para zibateños',
+      }),
     ).toBeAttached()
     const canvas = page.locator('canvas.maplibregl-canvas')
     await expect(canvas).toBeVisible()

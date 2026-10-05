@@ -52,9 +52,9 @@ try {
     const card = document.createElement('div')
     card.id = 'og-card'
     card.innerHTML = `<div class="inner">
-      <div class="eyebrow">${marca}Comer y beber</div>
+      <div class="eyebrow">${marca}De zibateños para zibateños</div>
       <h1>Visit Zibatá</h1>
-      <p>Explora el mapa 3D y descubre en qué plazas desayunar, comer, tomar café o salir por la noche.</p>
+      <p>Explora el mapa 3D y descubre qué hay en cada plaza de Zibatá.</p>
     </div>`
     card.querySelector('svg')?.setAttribute('width', '46')
     card.querySelector('svg')?.setAttribute('height', '46')

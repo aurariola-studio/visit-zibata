@@ -1,7 +1,7 @@
 {
-  "name": "Visit Zibatá · Comer y beber",
+  "name": "Visit Zibatá · La guía de zibateños para zibateños",
   "short_name": "Visit Zibatá",
-  "description": "Mapa 3D para descubrir dónde comer y beber en Zibatá, Querétaro.",
+  "description": "Mapa 3D para descubrir qué hay en Zibatá, Querétaro.",
   "lang": "es-MX",
   "start_url": "./",
   "scope": "./",

@@ -5,7 +5,7 @@
  */
 export const es = {
   'app.name': 'Visit Zibatá',
-  'app.tagline': 'Comer y beber',
+  'app.tagline': 'La guía de zibateños para zibateños',
   'app.mapLabel': 'Mapa 3D interactivo de Zibatá',
 
   'search.label': 'Buscar lugares',
@@ -25,7 +25,7 @@ export const es = {
   'places.matching': { one: '{count} coincide', other: '{count} coinciden' },
 
   'explore.title': 'Explora Zibatá',
-  'explore.summary': '{plazas} con {places} para comer y beber',
+  'explore.summary': '{plazas} con {places} en el mapa',
   'explore.hint': 'Toca una zona en el mapa o elige una de la lista.',
   'explore.list': 'Zonas',
   'explore.openList': 'Explora Zibatá',
@@ -120,6 +120,8 @@ export const es = {
   'favorites.filter': 'Favoritos',
   'favorites.saved': 'Guardado en favoritos',
 
+  'brand.by': 'un proyecto de',
+
   'share.action': 'Compartir',
   'share.place': 'Compartir {name}',
   /* Etiqueta, no frase: lleva el nombre, los giros y la zona, que es lo que la guía ya publica. */
@@ -164,10 +166,10 @@ export const es = {
     'Arrastra para moverte, pellizca o usa la rueda para acercarte y gira con dos dedos o clic derecho.',
   'onboarding.step2.title': 'Selecciona una zona',
   'onboarding.step2.body':
-    'Las zonas con lugares para comer y beber están resaltadas en verde. Tócalas para ver qué hay.',
+    'Las zonas con lugares están resaltadas en verde. Tócalas para ver qué hay.',
   'onboarding.step3.title': 'Abre la ficha de un lugar',
   'onboarding.step3.body':
-    'Filtra por categoría o busca un antojo, y toca una tarjeta para ver horario, contacto y cómo llegar.',
+    'Filtra por categoría o busca lo que necesites, y toca una tarjeta para ver horario, contacto y cómo llegar.',
   'onboarding.step4.title': 'Deja tu marca',
   'onboarding.step4.body':
     'En la ficha puedes registrar tus visitas al lugar, guardarlo con el corazón y calificarlo con estrellas.',
@@ -187,9 +189,9 @@ export const es = {
   'about.languageEs': 'Español',
   'about.languageEn': 'English',
 
-  'about.aboutLead': 'Una guía para decidir dónde comer y beber en Zibatá.',
+  'about.aboutLead': 'Una guía para saber qué hay en Zibatá y decidir adónde ir.',
   'about.aboutBody':
-    'Reúne en un mapa los lugares de la zona con lo que hace falta para decidir. Qué se come en cada uno, dónde está, a qué hora abre y cómo llegar.',
+    'Reúne en un mapa los lugares de la zona con lo que hace falta para decidir. Qué ofrece cada uno, dónde está, a qué hora abre y cómo llegar.',
   'about.aboutSources':
     'Es una guía independiente, de la comunidad para la comunidad, hecha con información pública y actualizada cuando algo cambia.',
 
@@ -244,7 +246,7 @@ export const es = {
   'profile.zoneDone': 'estrenada',
   'profile.podium': 'Tus tres de siempre',
   'profile.position': 'Puesto {position}',
-  'profile.tastes': 'Lo que más se te antoja',
+  'profile.tastes': 'Lo que más buscas',
   'profile.tasteCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.empty':
     'Registra una visita, guarda un lugar con el corazón o califícalo, y aquí verás tu paso por Zibatá.',

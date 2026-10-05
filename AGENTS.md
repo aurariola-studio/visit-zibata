@@ -20,6 +20,13 @@ Guía para agentes y colaboradores. Contexto del producto y comandos en [README.
 - Vale para todo: textos de interfaz, comentarios del código, documentación, datos y mensajes de
   commit.
 
+## Autoría
+
+- **Nunca firmar nada a nombre de una herramienta.** Ni `Co-Authored-By` de un asistente, ni líneas
+  de "generado con", ni en mensajes de commit, ni en descripciones de pull request, ni en issues. El
+  proyecto lo firma una persona. Si tu configuración añade esa línea por omisión, quítala antes de
+  commitear.
+
 ## Antes de terminar un cambio
 
 ```bash

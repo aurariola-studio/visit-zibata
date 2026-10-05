@@ -1,18 +1,40 @@
+/*
+ * El lockup de acreditación de aurariola.com: símbolo, "un proyecto de" y wordmark, en una línea
+ * que no se parte. Si no cabe, se encoge la leyenda antes que el wordmark, porque el wordmark es
+ * la marca y la leyenda es solo el conector.
+ */
 .signature {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  letter-spacing: -0.03em;
-  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   text-decoration: none;
   white-space: nowrap;
 }
 
-.signature:hover {
+.by {
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+}
+
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  /* Tracking negativo, como pide la guía de marca. */
+  letter-spacing: -0.04em;
+  color: var(--ink-700);
+}
+
+.signature:hover .wordmark {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
-/* El punto en oro es lo único que la marca de aurariola aporta aquí: sin el anillo de píxeles. */
+/* El punto en oro es lo que liga el wordmark con el píxel-cursor del símbolo. */
 .dot {
   color: var(--gold-700);
+}
+
+.tld {
+  color: var(--color-text-muted);
 }

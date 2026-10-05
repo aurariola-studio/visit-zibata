@@ -51,7 +51,7 @@ export function SuggestForm() {
         body: JSON.stringify({
           access_key: SUGGEST_FORM_KEY,
           subject: place.trim() ? `Zibatá · ${place.trim()}` : 'Zibatá · sugerencia',
-          from_name: 'Zibatá · Comer y beber',
+          from_name: 'Visit Zibatá',
           quien: who,
           lugar: place.trim(),
           mensaje: message.trim(),

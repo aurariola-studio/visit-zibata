@@ -439,7 +439,9 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
         >
           <div className={styles.topRow}>
             <div className={styles.searchCard}>
-              <Brand compact={!isDesktop} />
+              {/* Sobre el mapa, solo el símbolo: el nombre lo lleva el <h1> para quien
+                  escucha, y la barra superior ya va justa de ancho con el buscador. */}
+              <Brand compact />
               <SearchBar
                 value={state.searchQuery}
                 onChange={(query) => dispatch({ type: 'setQuery', query })}
