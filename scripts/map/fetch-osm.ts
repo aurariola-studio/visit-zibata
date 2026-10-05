@@ -56,7 +56,7 @@ async function fetchFreshest(): Promise<OverpassResult> {
           method: 'POST',
           headers: {
             'content-type': 'application/x-www-form-urlencoded',
-            'user-agent': 'zibata-comer-y-beber/map-pipeline (preparación de datos estáticos)',
+            'user-agent': 'visit-zibata/map-pipeline (preparación de datos estáticos)',
           },
           body: new URLSearchParams({ data: query }),
           signal: AbortSignal.timeout(280_000),
