@@ -54,6 +54,28 @@ describe('SuggestForm', () => {
     expect(await screen.findByRole('status')).toHaveTextContent(/Gracias/)
   })
 
+  it('el campo trampa existe, no lo alcanza ninguna persona y descarta el envío', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true })
+    vi.stubGlobal('fetch', fetchMock)
+    const { SuggestForm } = await load('clave-de-prueba')
+    const { container } = render(<SuggestForm />)
+
+    const trampa = container.querySelector<HTMLInputElement>('input[name="botcheck"]')
+    expect(trampa).not.toBeNull()
+    // Fuera del tabulador, y con etiqueta propia: quien lo encuentre sabe que debe dejarlo en blanco.
+    expect(trampa?.tabIndex).toBe(-1)
+    expect(screen.getByLabelText('No rellenes este campo')).toBe(trampa)
+
+    // Un robot que rellena todos los campos también rellena este, y entonces no se envía nada.
+    await userEvent.type(screen.getByLabelText(/Tu mensaje/), 'Compra seguidores baratos')
+    await userEvent.type(trampa as HTMLInputElement, 'http://spam.example')
+    await userEvent.click(screen.getByRole('button', { name: 'Enviar' }))
+
+    expect(fetchMock).not.toHaveBeenCalled()
+    // Ve el mismo acuse que si hubiera funcionado: no aprende que se le descartó.
+    expect(await screen.findByRole('status')).toHaveTextContent(/Gracias/)
+  })
+
   it('no envía nada sin decir qué cambia', async () => {
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)

@@ -33,6 +33,13 @@ export function SuggestForm() {
   const [contact, setContact] = useState('')
   const [who, setWho] = useState<(typeof WHO)[number]['value']>('vecino')
   const [invalid, setInvalid] = useState(false)
+  /**
+   * Campo trampa: existe en el formulario pero ninguna persona lo ve ni lo alcanza, así que si
+   * llega con algo escrito lo ha escrito un robot de los que rellenan todos los campos. Antes esto
+   * se enviaba siempre vacío y codificado a mano, de modo que el comentario prometía una defensa
+   * que no existía: sin campo en la página, nada podía rellenarlo nunca.
+   */
+  const [trap, setTrap] = useState('')
 
   if (!canSuggest()) return null
 
@@ -43,6 +50,12 @@ export function SuggestForm() {
       return
     }
     setInvalid(false)
+    // Se descarta aquí y no solo en el servidor: es más barato, y el acuse que ve el robot es el
+    // mismo que vería si hubiera funcionado, así que no aprende nada probando otra vez.
+    if (trap) {
+      setStatus('sent')
+      return
+    }
     setStatus('sending')
     try {
       const response = await fetch(SUGGEST_FORM_ENDPOINT, {
@@ -56,8 +69,8 @@ export function SuggestForm() {
           lugar: place.trim(),
           mensaje: message.trim(),
           contacto: contact.trim(),
-          // Campo trampa de Web3Forms: si un robot lo rellena, el envío se descarta sin captcha.
-          botcheck: '',
+          // Web3Forms descarta el envío si este campo viene relleno, sin necesidad de captcha.
+          botcheck: trap,
         }),
       })
       if (!response.ok) throw new Error(String(response.status))
@@ -65,6 +78,7 @@ export function SuggestForm() {
       setMessage('')
       setPlace('')
       setContact('')
+      setTrap('')
     } catch {
       setStatus('error')
     }
@@ -80,6 +94,22 @@ export function SuggestForm() {
 
   return (
     <form className={styles.form} onSubmit={submit} noValidate>
+      {/* Fuera de la vista y fuera del tabulador, pero **con etiqueta**: un control enfocable
+          escondido con `aria-hidden` es una violación de accesibilidad, y además deja a quien usa
+          lector de pantalla con un campo mudo que no sabe si debe rellenar. Así se lo encuentra
+          solo quien recorre los controles, y lo primero que oye es que lo deje en blanco. */}
+      <label className={styles.trap} htmlFor={`${ids}-trap`}>
+        {t('suggest.trap')}
+        <input
+          id={`${ids}-trap`}
+          type="text"
+          name="botcheck"
+          value={trap}
+          onChange={(event) => setTrap(event.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </label>
       <fieldset className={styles.who}>
         <legend className={styles.label}>{t('suggest.who')}</legend>
         <div className={styles.whoOptions}>

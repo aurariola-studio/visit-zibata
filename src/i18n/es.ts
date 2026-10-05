@@ -235,6 +235,8 @@ export const es = {
   'suggest.ok': 'Gracias. Lo reviso y entra en la próxima actualización.',
   'suggest.error': 'No se pudo enviar. Inténtalo de nuevo en un rato.',
   'suggest.required': 'Escribe tu mensaje.',
+  /* Etiqueta del campo trampa: solo la oyen los lectores de pantalla, y les dice que lo dejen. */
+  'suggest.trap': 'No rellenes este campo',
   'suggest.note':
     'Al enviar, tu mensaje se envía por Web3Forms y se recibe por correo. La guía no guarda ninguna información.',
 

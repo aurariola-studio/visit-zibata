@@ -225,6 +225,7 @@ export const en = {
   'suggest.ok': 'Thank you. I will check it and it enters the next update.',
   'suggest.error': 'It could not be sent. Please try again in a while.',
   'suggest.required': 'Write your message.',
+  'suggest.trap': 'Leave this field empty',
   'suggest.note':
     'On sending, your message goes out through Web3Forms and arrives by email. The guide stores no information.',
 
