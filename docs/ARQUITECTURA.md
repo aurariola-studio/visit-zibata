@@ -6,8 +6,9 @@
   mapa → zona → local → detalle.
 - **"Zona" en la interfaz, `plaza` en el código.** Lo que agrupa locales no siempre es una plaza
   comercial (el campus de la Anáhuac o el campo de golf no lo son), así que la interfaz los llama
-  zonas. El tipo de dominio, los datos y las rutas (`#/plaza/…`) mantienen `plaza` como identificador
-  estable: la palabra visible vive solo en `src/i18n`.
+  zonas. El tipo de dominio y los datos mantienen `plaza` como identificador estable; la palabra
+  visible vive en `src/i18n` y el segmento de la URL en `src/lib/url-state.ts`, que escribe
+  `/plaza/…` en español y `/area/…` en inglés.
 - **Estático y portable.** Solo HTML, CSS, JS, JSON, GeoJSON, PMTiles, imágenes y fuentes. Sin backend,
   cuentas, API keys ni servicios de pago. Cualquier hosting estático sirve.
 - **Datos separados del código** y validados dos veces: con Zod en el build y con comprobaciones ligeras
@@ -53,14 +54,14 @@ public/           Assets publicados tal cual (map/, icons/, images/)
 
 `src/app/state.ts` (reducer puro, testeado). Correspondencia con el brief: `selectedPlaza` (también actúa
 como filtro de plaza), `selectedPlace`, `activeCategory`, `searchQuery`, `tutorialVisible`, `mapLoaded`
-(`mapStatus`). `useExperience` deriva resultados, conteos y el modo del panel. La URL (`#/plaza/…`,
-`#/lugar/…`, `?categoria=`, `#/info/…`) se sincroniza en `useUrlSync` y funciona en GitHub Pages sin
-reescrituras.
+(`mapStatus`). `useExperience` deriva resultados, conteos y el modo del panel. La URL (`/plaza/…`,
+`/lugar/…`, `?categoria=`, `/info/…`, y su árbol en inglés bajo `/en`) se sincroniza en `useUrlSync`,
+que es el **único** sitio que la escribe.
 
 ### Información de la guía
 
-"Acerca de esta guía", "Privacidad" y "Corregir un dato" son **tres rutas propias** (`#/info/acerca`,
-`#/info/privacidad`, `#/info/corregir`): se enlazan y comparten por separado, y al cerrarlas se vuelve a
+"Acerca de esta guía", "Privacidad" y "Corregir un dato" son **tres rutas propias** (`/info/acerca`,
+`/info/privacidad`, `/info/sugerir`, y `/en/info/about`, `/en/info/privacy`, `/en/info/suggest`): se enlazan y comparten por separado, y al cerrarlas se vuelve a
 la plaza o ficha que seguía en el estado. En escritorio se llega desde la franja inferior del mapa
 (`GuideBar`); en móvil, donde esa franja se pelearía con la hoja y con la atribución, desde el botón de
 información de la barra superior. Cada página es su propia hoja (`InfoDialog`) y lleva a las otras dos.
@@ -181,33 +182,88 @@ componentes: si un texto necesita otro cuerpo, se elige el peldaño más cercano
 ## Idioma
 
 Los textos de interfaz viven en `src/i18n/<locale>.ts` y TypeScript exige que cada catálogo tenga todas
-las claves (`satisfies Messages`), así que no se publica media traducción. El idioma activo es el
-elegido a mano (se recuerda en este dispositivo), y si no, el primero del navegador que exista. Cambiarlo
-con `setLocale()` avisa a `useLocale()`, que re-renderiza la interfaz desde la raíz: no hace falta
-recargar ni pasar el idioma por props. Se cambia desde `LocaleSwitch`, en la barra superior: un botón
-que nombra el idioma al que lleva, visible en cualquier vista y sin abrir nada. Los datos (nombres y descripciones de los negocios) se quedan en
-el idioma en que los escribió su dueño; las categorías sí están traducidas.
+las claves (`satisfies Messages`), así que no se publica media traducción. El idioma activo lo decide
+`resolveLocale()` en este orden: **lo que diga la URL** (el prefijo `/en`), después el elegido a mano
+(se recuerda en este dispositivo) y, si no hay ninguno, el español.
+
+Nota deliberada: **no** se detecta el idioma del navegador. Al existir un árbol de rutas por idioma,
+detectarlo haría que un rastreador que pide la portada en inglés acabase redirigido a `/en`, y la
+portada española dejaría de indexarse. La preferencia guardada sí redirige, pero solo al cargar y
+nunca con el botón atrás, que si no se quedaría atrapado.
+
+Cambiar de idioma con `setLocale()` avisa a `useLocale()`, que re-renderiza la interfaz desde la raíz:
+no hace falta recargar ni pasar el idioma por props. Se cambia desde `LocaleSwitch`, en la barra
+superior: un botón que nombra el idioma al que lleva, visible en cualquier vista y sin abrir nada, y
+que lleva a la **misma página en el otro árbol** porque el idioma entra en el cálculo de la ruta. Los
+datos (nombres y descripciones de los negocios) se quedan en el idioma en que los escribió su dueño;
+las categorías sí están traducidas, incluido su slug de URL.
 
 ## Enlaces y compartir
 
-El estado compartible vive en el hash (`src/lib/url-state.ts`), que es lo que permite publicar en
-GitHub Pages sin reescrituras: `#/lugar/<slug>`, `#/plaza/<slug>` y `#/info/<tema>`, con la
-categoría activa como parámetro.
+El estado compartible vive en la **ruta** (`src/lib/url-state.ts`), con un árbol por idioma:
 
-El botón de compartir de la ficha (`src/lib/share.ts`) **no** comparte el hash de la vista: arma la
-URL canónica del lugar, sin la categoría ni ningún otro estado. Si la compartiera tal cual, el mismo
+| Español | Inglés |
+| --- | --- |
+| `/` | `/en` |
+| `/plaza/<slug>` | `/en/area/<slug>` |
+| `/lugar/<slug>` | `/en/place/<slug>` |
+| `/info/{acerca,privacidad,sugerir}` | `/en/info/{about,privacy,suggest}` |
+| `?categoria=desayunos-y-cafe` | `?category=breakfast-and-coffee` |
+
+El parámetro de categoría se traduce entero, nombre y valor: una URL mitad en un idioma y mitad en
+otro no la reconoce nadie, y no hay enlaces antiguos que respetar porque el filtro nunca se publicó.
+El valor que viaja es el **slug** de la categoría, no su `id` (ver [DATOS.md](DATOS.md)); traducir uno
+en otro necesita el catálogo, así que lo hace `useUrlSync` y `url-state.ts` se queda puro y testeable.
+
+Hasta la v4.6.0 todo esto vivía en el hash (`#/lugar/tomassa`), porque GitHub Pages no sabe reescribir
+rutas. El cambio no es cosmético: **lo que va después de `#` nunca se envía al servidor**, así que el
+rastreador de Google o de WhatsApp solo veía la portada. Lo que lo hace posible es que cada ruta sea
+un archivo de verdad (abajo), no una reescritura.
+
+Un enlace antiguo con hash sigue llevando a donde prometía: al cargar, `pathFromLegacyHash()` lo
+traduce a su ruta y la reescribe, de modo que a partir de ahí todo funciona con el formato nuevo. En
+desarrollo no hay prerenderizado, así que un plugin de `vite.config.ts` entrega `index.html` para las
+rutas que la aplicación sirve (`APP_ROUTE`) y **solo** para esas: un camino inventado responde 404
+mientras se desarrolla, igual que en producción.
+
+El botón de compartir de la ficha (`src/lib/share.ts`) **no** comparte la URL de la vista: arma la
+canónica del lugar, sin la categoría ni ningún otro estado. Si la compartiera tal cual, el mismo
 local daría una URL distinta por cada filtro desde el que alguien lo compartiera, y los enlaces
 entrantes se repartirían entre todas. La raíz sale de `SITE_URL` cuando se compiló con ella, para
-que compartir desde github.io y desde el dominio propio produzca el mismo enlace.
-
-Lo que esto **no** resuelve, para no darlo por hecho: los rastreadores no indexan fragmentos, así que
-`#/lugar/tomassa` es para Google la misma URL que la portada, y la vista previa de un enlace
-compartido es siempre la de Open Graph de `index.html`, porque los rastreadores de los chats no
-ejecutan JavaScript. Que cada ficha se indexe y previsualice por separado depende de sacar el
-enrutado del hash, que está planteado en [MARCA.md](MARCA.md) §6.
+que compartir desde dos dominios produzca el mismo enlace.
 
 Compartir usa la hoja del sistema (`navigator.share`) cuando existe y el portapapeles cuando no. Si
 el navegador no trae ninguna de las dos, el botón no se dibuja.
+
+## Una página por ruta (SEO y vistas previas)
+
+`scripts/build/prerender.ts` es un plugin de build que escribe **232 páginas** (116 por idioma: la
+portada, 15 zonas, 101 locales y 3 páginas de información), más `sitemap.xml` y `robots.txt`. Nada de
+esto se escribe a mano: sale de `data/commercial/*.json` en cada compilación, así que añadir un local
+o cambiarle el nombre se refleja solo en la siguiente publicación.
+
+Las 232 cargan exactamente la misma aplicación; lo único distinto es el `<head>`: `<html lang>`,
+`<title>`, `description`, `canonical` y las tres `hreflang` (`es`, `en` y `x-default` apuntando al
+español, que es el idioma por omisión del sitio). Las dos listas de páginas se generan con el mismo
+recorrido, así que la gemela en el otro idioma ocupa la misma posición y las `hreflang` salen sin
+emparejar por ruta.
+
+Son **archivos planos** (`dist/lugar/tomassa.html`) y no carpetas con índice. Cloudflare sirve un
+archivo individual sin barra final, pero redirige `/lugar/tomassa` a `/lugar/tomassa/` si es una
+carpeta: un salto extra en cada enlace compartido y una URL canónica distinta de la que se comparte.
+
+`scripts/images/generate-place-og.ts` (`npm run images:og-places`) compone una imagen de vista previa
+por local en `dist/og/<slug>.jpg`. No se guardan en el repositorio: se generan al publicar, después
+del build, porque el build limpia `dist`. Hoy ningún local tiene foto, así que la mitad derecha de la
+tarjeta usa el tono de su categoría; el día que haya fotos esa misma mitad las toma, la rama ya está
+escrita. Se renderiza con el navegador de Playwright, que ya es dependencia de desarrollo, en una sola
+página con las 101 tarjetas, y se pasa por `sharp` a JPEG: en PNG pesaban 20 MB, en JPEG 1,9 MB.
+
+El `404.html` lo genera `vite.config.ts` con la marca del sitio, sin JavaScript y con el estilo en
+línea: es la página que aparece cuando algo falla, así que no debe depender de que el resto cargue.
+Ahí llegan los errores de tecleo y el enlace guardado de un local que ya no se publica. `vite preview`
+responde un 404 vacío, así que un plugin lo hace servir este archivo y la suite E2E puede comprobar lo
+que se ve de verdad.
 
 ## Rendimiento
 
