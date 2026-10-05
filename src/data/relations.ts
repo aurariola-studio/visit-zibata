@@ -126,6 +126,14 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
   for (const dup of findDuplicates(categories.map((c) => c.id))) {
     error('categories', `ID de categoría duplicado: "${dup}"`, dup)
   }
+  // Los slugs van a la URL, así que deben ser únicos DENTRO de cada idioma: dos categorías con el
+  // mismo slug en inglés harían ambigua /en/area/x?category=…, y el filtro resolvería a la primera.
+  // Entre idiomas no importa que se repitan: viven en árboles distintos.
+  for (const locale of ['es', 'en'] as const) {
+    for (const dup of findDuplicates(categories.map((c) => c.slug[locale]))) {
+      error('categories', `Slug de categoría duplicado en ${locale}: "${dup}"`, dup)
+    }
+  }
   for (const category of categories) {
     for (const dup of findDuplicates(category.giros.map((giro) => giro.id))) {
       error('categories', `Giro duplicado "${dup}" en "${category.id}"`, category.id)

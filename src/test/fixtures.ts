@@ -7,6 +7,7 @@ import type { Catalog, Category, Place, Plaza } from '../types/domain.ts'
 export const categoriesFixture: Category[] = [
   {
     id: 'desayunos-y-cafe',
+    slug: { es: 'desayunos-y-cafe', en: 'breakfast-and-coffee' },
     label: { es: 'Desayunos y café' },
     icon: 'coffee',
     order: 10,
@@ -29,6 +30,7 @@ export const categoriesFixture: Category[] = [
   },
   {
     id: 'tacos-y-antojitos',
+    slug: { es: 'tacos-y-antojitos', en: 'tacos-and-street-food' },
     label: { es: 'Tacos y antojitos' },
     icon: 'taco',
     order: 30,
@@ -45,6 +47,7 @@ export const categoriesFixture: Category[] = [
   },
   {
     id: 'pizza',
+    slug: { es: 'pizza', en: 'pizza' },
     label: { es: 'Pizza' },
     icon: 'pizza',
     order: 70,

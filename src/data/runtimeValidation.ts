@@ -63,6 +63,9 @@ const isLatLng = (value: unknown) =>
 
 const isLocalizedText = (value: unknown) => isObject(value) && isText(value.es)
 
+/** El slug de URL necesita los dos idiomas: sin el inglés no hay página en ese árbol. */
+const isLocalizedSlug = (value: unknown) => isObject(value) && isSlug(value.es) && isSlug(value.en)
+
 const isHours = (value: unknown) =>
   isObject(value) &&
   Object.entries(value).every(([key, ranges]) =>
@@ -196,6 +199,7 @@ const checkCategory: Check = (value) => {
   if (!isObject(value)) return 'no es un objeto'
   return firstIssue([
     field(value, 'id', isSlug, 'identificador no válido'),
+    field(value, 'slug', isLocalizedSlug, 'slug de URL no válido'),
     field(value, 'label', isLocalizedText, 'etiqueta vacía'),
     field(value, 'icon', isText, 'icono vacío'),
     field(
