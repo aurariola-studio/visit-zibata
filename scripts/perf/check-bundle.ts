@@ -21,6 +21,22 @@ const KB = 1024
  * hoy viajan los dos idiomas y solo se usa uno, pero obligaría a una importación dinámica al cambiar
  * de idioma en caliente. Si el paquete vuelve a crecer, esa partición es lo siguiente, no otra subida.
  *
+ * Medición de la v4.6.0, para quien se tope con el techo: 121,7 de 122, es decir 0,3 KB de margen.
+ * Son dos archivos, y el desglose dice dónde está la grasa:
+ *
+ *     110,9 KB  index-*.js   React 19 y la aplicación
+ *      10,8 KB  i18n-*.js    los dos catálogos de idioma, de los que cada visita usa uno
+ *
+ * O sea que la partición de arriba sigue siendo la jugada, y ahora está medida. Su costo también:
+ * `setLocale()` se llama de forma síncrona desde el efecto de layout de `useUrlSync` y desde el
+ * botón de idioma, así que cargar el catálogo bajo demanda vuelve asíncrono el cambio de idioma y
+ * toca la sincronización de URL. No es un cambio de una tarde, pero tampoco una reescritura.
+ *
+ * El número no se sube porque el paquete no ha crecido: la v4.6.0 añadió 232 páginas, un árbol de
+ * rutas por idioma y las imágenes de vista previa sin mover `initialJs` ni un byte, porque todo eso
+ * ocurre al compilar. El margen apretado es un problema del próximo cambio que toque el paquete
+ * inicial, y entonces toca partir, no renumerar.
+ *
  * `pmtiles` es el archivo completo, que el navegador NO descarga entero: se piden por rango solo las
  * teselas visibles. Por eso el límite que de verdad afecta a la fluidez es `largestTile` (la tesela más
  * pesada del archivo), y el del archivo entero cuida el peso del repositorio y del despliegue. Subió de
