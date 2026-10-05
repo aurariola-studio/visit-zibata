@@ -1,5 +1,5 @@
 /**
- * MapView: el mapa es el producto. Crea MapLibre una sola vez, carga el estilo propio (PMTiles +
+ * MapView: el mapa es el producto. Crea MapLibre una sola vez, carga el estilo propio (teselas +
  * GeoJSON locales) y traduce el estado de la app (plaza seleccionada, filtros) a feature-state,
  * marcadores y cámara. No conoce la UI de paneles: recibe el espacio que ocupan como `padding`.
  */
@@ -83,10 +83,14 @@ export default function MapView({
   })
 
   // ── Creación del mapa (una vez por intento: "Reintentar" incrementa `attempt`) ──────────────
+  //
+  // `attempt` no se lee aquí dentro: está en las dependencias **para** que el efecto se vuelva a
+  // ejecutar, que es lo que rehace el mapa al pulsar "Reintentar". Sin él, el botón no haría nada.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: es el disparador del reintento, no un valor que el efecto consulte.
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
-    ensureMapRuntime({ reset: attempt > 0 })
+    ensureMapRuntime()
     const update = (next: MapStatus) => {
       setStatus(next)
       latest.current.onStatusChange?.(next)
@@ -98,7 +102,7 @@ export default function MapView({
       instance = new MapLibreMap({
         container,
         style: buildMapStyle({
-          pmtilesUrl: absoluteAssetUrl(MAP_ASSETS.pmtiles),
+          tilesUrl: absoluteAssetUrl(MAP_ASSETS.tiles),
           plazaBuildingsUrl: absoluteAssetUrl(MAP_ASSETS.plazaBuildings),
           plazas: latest.current.plazas,
           boundary: ZIBATA_EXTENT.boundary,
@@ -173,9 +177,9 @@ export default function MapView({
     })
     instance.on('error', (event) => {
       console.error('[mapa]', event.error)
-      // Sin la cartografía base (PMTiles inaccesible o un hosting sin peticiones Range) solo quedarían
-      // marcadores flotando: se informa y se ofrece reintentar. Teselas sueltas o capas secundarias
-      // (edificios de plazas, tipografías) no bloquean el mapa.
+      // Sin la cartografía base (el TileJSON no se pudo leer) solo quedarían marcadores flotando: se
+      // informa y se ofrece reintentar. Una tesela suelta o una capa secundaria (edificios de
+      // plazas, tipografías) no bloquean el mapa, y por eso se mira que el error no traiga `tile`.
       const { sourceId, tile } = event as typeof event & { sourceId?: string; tile?: unknown }
       if (sourceId === SOURCE.base && !tile && !baseFailed) {
         baseFailed = true

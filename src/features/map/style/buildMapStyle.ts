@@ -1,6 +1,6 @@
 /**
  * Construye el estilo completo de MapLibre a partir de los datos propios del proyecto
- * (PMTiles + GeoJSON locales). Sin servidores de mapas externos ni claves.
+ * (teselas propias + GeoJSON locales). Sin servidores de mapas externos ni claves.
  */
 import instrumentSans500 from '@fontsource/instrument-sans/files/instrument-sans-latin-500-normal.woff2?url'
 import instrumentSans600 from '@fontsource/instrument-sans/files/instrument-sans-latin-600-normal.woff2?url'
@@ -21,7 +21,7 @@ import { treeLayers } from './layers/trees.ts'
 import { mapTheme } from './theme.ts'
 
 export interface MapStyleOptions {
-  pmtilesUrl: string
+  tilesUrl: string
   plazaBuildingsUrl: string
   plazas: readonly Plaza[]
   boundary: Polygon
@@ -85,7 +85,7 @@ export function buildMapStyle(options: MapStyleOptions): StyleSpecification {
     sources: {
       [SOURCE.base]: {
         type: 'vector',
-        url: `pmtiles://${options.pmtilesUrl}`,
+        url: options.tilesUrl,
         attribution: MAP_ATTRIBUTION,
       },
       [SOURCE.plazaSites]: {
