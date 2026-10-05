@@ -23,13 +23,13 @@ test.describe('Plazas y lugares', () => {
         body: '<title>Google Maps (simulado)</title>',
       }),
     )
-    await openApp(page, { hash: '#/plaza/condesa' })
+    await openApp(page, { path: 'plaza/condesa' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Plaza Condesa' })).toBeVisible()
 
     await region.getByRole('button', { name: 'Ver detalles de Bendito Bocado' }).click()
     await expect(region.getByRole('heading', { level: 2, name: 'Bendito Bocado' })).toBeVisible()
-    await expect(page).toHaveURL(/#\/lugar\/bendito-bocado$/)
+    await expect(page).toHaveURL(/\/lugar\/bendito-bocado$/)
     // Enlace oficial verificado en la investigación (research/business-audit.json).
     await expect(region.getByRole('link', { name: /Facebook/ })).toHaveAttribute(
       'href',
@@ -57,7 +57,7 @@ test.describe('Plazas y lugares', () => {
   })
 
   test('un enlace directo a un lugar abre su ficha', async ({ page }) => {
-    await openApp(page, { hash: '#/lugar/tomassa' })
+    await openApp(page, { path: 'lugar/tomassa' })
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
     await expect(panel(page).getByRole('article', { name: 'Tomassa' })).toContainText(
       'Paseo Zibatá',
@@ -67,9 +67,9 @@ test.describe('Plazas y lugares', () => {
   test('compartir un lugar copia siempre la misma URL, sin el filtro desde el que se comparte', async ({
     page,
   }) => {
-    // Se entra con una categoría activa a propósito: el hash de la vista la arrastra y la URL que
+    // Se entra con una categoría activa a propósito: la ruta de la vista la arrastra y la URL que
     // se comparte no debe llevarla, o el mismo lugar generaría una URL distinta por cada filtro.
-    await openApp(page, { hash: '#/lugar/tomassa?categoria=italiana' })
+    await openApp(page, { path: 'lugar/tomassa?categoria=italiana' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
     await expect(page).toHaveURL(/categoria=italiana/)
@@ -94,8 +94,10 @@ test.describe('Plazas y lugares', () => {
     await compartir.click()
 
     const copiado = await page.evaluate(() => (window as unknown as { copiado?: string }).copiado)
-    expect(copiado).toMatch(/#\/lugar\/tomassa$/)
+    expect(copiado).toMatch(/\/lugar\/tomassa$/)
     expect(copiado).not.toContain('categoria')
+    // Sin almohadilla: es la ruta que indexan los buscadores, no el formato antiguo.
+    expect(copiado).not.toContain('#')
     await expect(region.getByRole('status')).toHaveText('Enlace copiado')
   })
 
@@ -105,7 +107,7 @@ test.describe('Plazas y lugares', () => {
     await page
       .getByRole('combobox', { name: 'Filtrar por zona' })
       .selectOption({ label: 'Plaza Zielo' })
-    await expect(page).toHaveURL(/#\/plaza\/plaza-zielo$/)
+    await expect(page).toHaveURL(/\/plaza\/plaza-zielo$/)
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Plaza Zielo' })).toBeVisible()
     await page.goBack()
     await expect(page).not.toHaveURL(/plaza-zielo/)
@@ -113,7 +115,7 @@ test.describe('Plazas y lugares', () => {
   })
 
   test('se pueden guardar favoritos y filtrar por ellos', async ({ page }) => {
-    await openApp(page, { hash: '#/plaza/plaza-zielo' })
+    await openApp(page, { path: 'plaza/plaza-zielo' })
     const region = panel(page)
     await region.getByRole('button', { name: 'Guardar en favoritos: Escarola' }).click()
     await expect(
@@ -157,7 +159,7 @@ test.describe('Plazas y lugares', () => {
     // Lo que se vigila no son los números, es la uniformidad: cada relación repite siempre el mismo
     // paso. Se rompe en cuanto alguien añade un bloque con margen propio, que es como se desordenó
     // antes. La escala está escrita en PlaceDetail.module.css.
-    await openApp(page, { hash: '#/lugar/al-grano' })
+    await openApp(page, { path: 'lugar/al-grano' })
     await waitForMap(page)
     const huecos = await page.evaluate(() => {
       const entre = (padre: Element | null) => {

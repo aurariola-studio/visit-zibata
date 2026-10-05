@@ -179,7 +179,7 @@ test.describe('Mapa', () => {
   test('"Volver a la vista de Zibatá" funciona también con una plaza abierta', async ({ page }) => {
     // Sin animaciones, la cámara salta a su destino y la medición es determinista.
     await page.emulateMedia({ reducedMotion: 'reduce' })
-    await openApp(page, { hash: '#/plaza/condesa' })
+    await openApp(page, { path: 'plaza/condesa' })
     await waitForMap(page)
     await expect(
       panel(page).getByRole('heading', { level: 2, name: 'Plaza Condesa' }),
@@ -222,7 +222,7 @@ test.describe('Mapa', () => {
     await expect(
       region.getByRole('list', { name: 'Lugares en esta zona' }).getByRole('listitem'),
     ).toHaveCount(placesInPlaza('Xentric Anáhuac'))
-    await expect(page).toHaveURL(/#\/plaza\/xentric-anahuac$/)
+    await expect(page).toHaveURL(/\/plaza\/xentric-anahuac$/)
     await expect(marker).toHaveAttribute('aria-pressed', 'true')
   })
 })

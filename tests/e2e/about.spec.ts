@@ -21,22 +21,22 @@ test.describe('Información de la guía', () => {
     const privacy = page.getByRole('dialog', { name: 'Privacidad' })
     await expect(privacy).toBeVisible()
     await expect(privacy).toContainText('no usa cuentas, analítica ni cookies')
-    await expect(page).toHaveURL(/#\/info\/privacidad$/)
+    await expect(page).toHaveURL(/\/info\/privacidad$/)
     // Sin canal de contacto todavía: se explica, no se dibuja un enlace que no lleva a ningún sitio.
     await expect(privacy.getByRole('link')).toHaveCount(0)
 
     // Desde una página se llega a las otras dos.
     await privacy.getByRole('button', { name: 'Sugiere un cambio' }).click()
     await expect(page.getByRole('dialog', { name: 'Sugiere un cambio' })).toBeVisible()
-    await expect(page).toHaveURL(/#\/info\/sugerir$/)
+    await expect(page).toHaveURL(/\/info\/sugerir$/)
 
     await page.getByRole('dialog').getByRole('button', { name: 'Cerrar', exact: true }).click()
     await expect(page.getByRole('dialog')).toHaveCount(0)
-    await expect(page).toHaveURL(/#\/$/)
+    await expect(page).toHaveURL(/\/$/)
   })
 
   test('una ruta de información se puede abrir directamente', async ({ page }) => {
-    await openApp(page, { hash: '#/info/acerca' })
+    await openApp(page, { path: 'info/acerca' })
     const about = page.getByRole('dialog', { name: 'Acerca de esta guía' })
     await expect(about).toBeVisible()
     await expect(about).toContainText('OpenStreetMap')

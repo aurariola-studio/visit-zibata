@@ -31,19 +31,19 @@ test.describe('Teclado, enlaces y favoritos', () => {
   })
 
   test('Escape cierra la ficha y después el panel de la plaza', async ({ page }) => {
-    await openApp(page, { hash: '#/lugar/tomassa' })
+    await openApp(page, { path: 'lugar/tomassa' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
-    await expect(page).toHaveURL(/#\/plaza\/paseo-zibata$/)
+    await expect(page).toHaveURL(/\/plaza\/paseo-zibata$/)
     await page.keyboard.press('Escape')
     await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeHidden()
-    await expect(page).toHaveURL(/#\/$/)
+    await expect(page).toHaveURL(/\/$/)
   })
 
   test('Escape en el buscador borra el texto sin cerrar la plaza abierta', async ({ page }) => {
-    await openApp(page, { hash: '#/plaza/paseo-zibata' })
+    await openApp(page, { path: 'plaza/paseo-zibata' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
     const search = page.getByRole('searchbox', { name: 'Buscar lugares' })
@@ -53,18 +53,22 @@ test.describe('Teclado, enlaces y favoritos', () => {
     await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
   })
 
-  for (const hash of ['#/lugar/no-existe', '#/plaza/plaza-walmart']) {
-    test(`un enlace a un registro no publicado avisa y limpia la URL (${hash})`, async ({
-      page,
-    }) => {
-      await openApp(page, { hash })
-      const message = 'Ese enlace apunta a un lugar que ya no está en la guía.'
-      await expect(page.getByRole('main').getByText(message)).toBeVisible()
-      // El mismo aviso llega a lectores de pantalla por la única región viva.
-      await expect(page.locator('[aria-live="polite"]')).toHaveText(message)
-      await expect(page).toHaveURL(/#\/$/)
-      await page.getByRole('button', { name: 'Cerrar aviso' }).click()
-      await expect(page.getByRole('main').getByText(message)).toBeHidden()
+  /*
+   * Desde que el enrutado salió del hash, un enlace a un registro no publicado lo rechaza el
+   * servidor: solo existe archivo para lo que está en la guía. Antes la aplicación cargaba y
+   * avisaba; ahora ni siquiera arranca, que es lo correcto para un buscador y lo que se decidió
+   * (una 404 propia en vez de llevar a la portada). El aviso interno sigue en el código como red
+   * de seguridad por si alguna vez se sirve una página que el dato ya no respalda.
+   */
+  for (const path of ['lugar/no-existe', 'plaza/plaza-walmart', 'esto-no-existe']) {
+    test(`un enlace a un registro no publicado responde 404 propio (${path})`, async ({ page }) => {
+      const response = await page.goto(`./${path}`)
+      expect(response?.status()).toBe(404)
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Esta página no existe')
+      // La 404 no debe indexarse, y tiene que llevar de vuelta a la guía.
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex')
+      await page.getByRole('link', { name: 'Ir a la guía' }).click()
+      await expect(page.getByRole('searchbox', { name: 'Buscar lugares' })).toBeVisible()
     })
   }
 
@@ -91,7 +95,7 @@ test.describe('Teclado, enlaces y favoritos', () => {
   })
 
   test('una sola región viva anuncia el número de resultados', async ({ page }) => {
-    await openApp(page, { hash: '#/plaza/paseo-zibata' })
+    await openApp(page, { path: 'plaza/paseo-zibata' })
     await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('pizza')
     const live = page.locator('[aria-live]')
     await expect(live).toHaveCount(1)

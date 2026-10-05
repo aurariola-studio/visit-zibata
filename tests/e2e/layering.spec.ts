@@ -3,7 +3,7 @@ import { isMobile, openApp, panel, waitForMap } from './helpers.ts'
 
 test.describe('capas y alineación', () => {
   test('las etiquetas de las zonas quedan por debajo del panel lateral', async ({ page }) => {
-    await openApp(page, { hash: '#/plaza/paseo-zibata' })
+    await openApp(page, { path: 'plaza/paseo-zibata' })
     await waitForMap(page)
     test.skip(isMobile(page), 'El panel lateral es de escritorio; en móvil es la hoja inferior.')
     await expect(panel(page)).toBeVisible()
@@ -42,7 +42,7 @@ test.describe('capas y alineación', () => {
   test('las pastillas de categoría del panel arrancan alineadas con el resto del contenido', async ({
     page,
   }) => {
-    await openApp(page, { hash: '#/plaza/paseo-zibata' })
+    await openApp(page, { path: 'plaza/paseo-zibata' })
     await waitForMap(page)
     const region = panel(page)
     const heading = region.getByRole('heading', { level: 2 }).first()

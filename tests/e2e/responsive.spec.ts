@@ -48,14 +48,14 @@ for (const size of SIZES) {
       page,
     }, testInfo) => {
       test.skip(!size.project.includes(testInfo.project.name), 'Tamaño de otro tipo de dispositivo')
-      for (const hash of ['', '#/plaza/paseo-zibata']) {
-        await openApp(page, { hash })
+      for (const path of ['', 'plaza/paseo-zibata']) {
+        await openApp(page, { path })
         await waitForMap(page)
         await page.waitForTimeout(900)
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth - window.innerWidth,
         )
-        expect(overflow, `desbordamiento en ${hash || 'inicio'}`).toBeLessThanOrEqual(0)
+        expect(overflow, `desbordamiento en ${path || 'inicio'}`).toBeLessThanOrEqual(0)
         const boxes = await layout(page)
         expect(boxes.attribution, 'la atribución de OpenStreetMap debe verse').not.toBeNull()
         const pairs = [
@@ -70,7 +70,7 @@ for (const size of SIZES) {
         const found = pairs
           .filter(([a, b]) => overlaps(boxes[a], boxes[b]))
           .map(([a, b]) => `${a}×${b}`)
-        expect(found, `solapes en ${hash || 'inicio'}`).toEqual([])
+        expect(found, `solapes en ${path || 'inicio'}`).toEqual([])
       }
     })
   })
