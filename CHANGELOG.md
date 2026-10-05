@@ -7,8 +7,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ### Cambiado
 
 - **Las rutas salen del hash y se abre un árbol por idioma.** `#/lugar/tomassa` pasa a
-  `/lugar/tomassa`, y el inglés tiene el suyo: `/en/place/tomassa`. También `/plaza/x` y
-  `/en/area/x`, `/info/privacidad` y `/en/info/privacy`. El motivo es tajante: **lo que va después
+  `/lugar/tomassa`, y el inglés tiene el suyo: `/en/place/tomassa`. También `/zona/x` y
+  `/en/area/x`, `/info/privacidad` y `/en/info/privacy`. La zona sale a la URL como **zona** y no
+  como `plaza`: la palabra del código se queda en el código, porque una URL se ve y se comparte. El motivo es tajante: **lo que va después
   de `#` nunca se envía al servidor**, así que el rastreador de Google o el de WhatsApp solo veían
   la portada, daba igual el enlace. El hash existía porque GitHub Pages no sabe reescribir rutas;
   desde que el sitio lo sirve un Worker de Cloudflare con un archivo por ruta, ya no hace falta.
@@ -70,6 +71,19 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **La detección del idioma del navegador se retira.** Con un árbol por idioma, detectarlo hacía que
   un rastreador que pide la portada en inglés acabara redirigido a `/en` y la portada española
   dejara de indexarse. La preferencia elegida a mano se conserva.
+
+### Corregido (hallazgos de la revisión)
+
+- **El campo trampa del formulario no protegia de nada.** Se enviaba `botcheck` siempre vacío y
+  codificado a mano, y no existía ningún campo en la página que un robot pudiera rellenar: el
+  comentario prometía una defensa que no podía ocurrir. Ahora el campo existe de verdad, fuera de
+  pantalla y fuera del tabulador, con etiqueta propia para quien use lector de pantalla (un control
+  enfocable con `aria-hidden` sería una violación de accesibilidad). Si llega relleno, el envío se
+  descarta antes de salir del navegador y el robot ve el mismo acuse que si hubiera funcionado.
+- **El paquete se llamaba `zibata-comer-y-beber`**, nombre anterior al cambio de lema, y su
+  descripción seguía diciendo "comida y bebida". Pasa a `visit-zibata`. También el `user-agent` con
+  el que el pipeline de mapas se presenta ante los servidores de OpenStreetMap, que es la única de
+  las dos cosas que se ve desde fuera.
 
 ### Nota de despliegue
 
