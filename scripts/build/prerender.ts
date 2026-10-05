@@ -20,6 +20,7 @@ import { en } from '../../src/i18n/en.ts'
 import { es } from '../../src/i18n/es.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
 import type { Category, Place, Plaza } from '../../src/types/domain.ts'
+import { bloque, listado, negocio } from './structured-data.ts'
 
 type Locale = 'es' | 'en'
 const LOCALES: Locale[] = ['es', 'en']
@@ -33,6 +34,8 @@ interface Page {
   description: string
   /** Imagen de vista previa, con base. Sin ella se usa la general del sitio. */
   image?: string
+  /** Datos estructurados de esta página, ya con URLs absolutas. Las de información no llevan. */
+  jsonLd?: Record<string, unknown>
 }
 
 const text = (value: unknown, locale: Locale): string => {
@@ -62,11 +65,21 @@ interface Dataset {
   places: Place[]
 }
 
-function pagesFor(locale: Locale, data: Dataset, base: string, ogDir: string): Page[] {
+function pagesFor(
+  locale: Locale,
+  data: Dataset,
+  base: string,
+  ogDir: string,
+  absolute: (href: string) => string,
+): Page[] {
   const copy = CATALOGS[locale]
   const giroLabel = new Map<string, string>()
+  const categoryOfGiro = new Map<string, Category>()
   for (const category of data.categories) {
-    for (const giro of category.giros) giroLabel.set(giro.id, text(giro.label, locale))
+    for (const giro of category.giros) {
+      giroLabel.set(giro.id, text(giro.label, locale))
+      categoryOfGiro.set(giro.id, category)
+    }
   }
   const plazaById = new Map(data.plazas.map((plaza) => [plaza.id, plaza]))
   const route = (state: Partial<Parameters<typeof buildPath>[0]>) =>
@@ -74,12 +87,26 @@ function pagesFor(locale: Locale, data: Dataset, base: string, ogDir: string): P
       { locale, plazaSlug: null, placeSlug: null, categorySlug: null, infoTopic: null, ...state },
       base,
     )
+  const activePlazas = data.plazas.filter((plaza) => plaza.active)
 
   const pages: Page[] = [
-    { href: route({}), title: copy['seo.home.title'], description: copy['seo.home.description'] },
+    {
+      href: route({}),
+      title: copy['seo.home.title'],
+      description: copy['seo.home.description'],
+      // La portada lista sus zonas, que es su contenido real. Listar aquí los 101 locales sería
+      // repetir en la raíz lo que cada zona ya dice de los suyos.
+      jsonLd: listado(
+        copy['seo.home.title'],
+        activePlazas.map((plaza) => ({
+          name: text(plaza.name, locale),
+          url: absolute(route({ plazaSlug: plaza.slug })),
+        })),
+      ),
+    },
   ]
 
-  for (const plaza of data.plazas.filter((p) => p.active)) {
+  for (const plaza of activePlazas) {
     const name = text(plaza.name, locale)
     pages.push({
       href: route({ plazaSlug: plaza.slug }),
@@ -87,23 +114,40 @@ function pagesFor(locale: Locale, data: Dataset, base: string, ogDir: string): P
       description: trim(
         text(plaza.description, locale) || fill(copy['seo.plaza.fallback'], { name }),
       ),
+      jsonLd: listado(
+        name,
+        data.places
+          .filter((place) => place.plazaId === plaza.id)
+          .map((place) => ({ name: place.name, url: absolute(route({ placeSlug: place.slug })) })),
+      ),
     })
   }
 
   for (const place of data.places) {
     const plaza = plazaById.get(place.plazaId)
-    const giros = place.giros.map((id) => giroLabel.get(id) ?? id).join(', ')
+    const giros = place.giros.map((id) => giroLabel.get(id) ?? id)
+    const image = `${ogDir}${place.slug}.jpg`
     pages.push({
       href: route({ placeSlug: place.slug }),
       title: fill(copy['seo.title'], { name: place.name }),
       description: trim(
         text(place.description, locale) ||
           fill(copy['seo.place.fallback'], {
-            giros,
+            giros: giros.join(', '),
             plaza: plaza ? text(plaza.name, locale) : 'Zibatá',
           }),
       ),
-      image: `${ogDir}${place.slug}.jpg`,
+      image,
+      jsonLd: negocio({
+        place,
+        plaza,
+        category: categoryOfGiro.get(place.giros[0] ?? ''),
+        giros,
+        url: absolute(route({ placeSlug: place.slug })),
+        plazaUrl: plaza?.active ? absolute(route({ plazaSlug: plaza.slug })) : undefined,
+        image: absolute(image),
+        locale,
+      }),
     })
   }
 
@@ -123,11 +167,43 @@ function pagesFor(locale: Locale, data: Dataset, base: string, ogDir: string): P
   return pages
 }
 
+/**
+ * Localiza una etiqueta del `<head>` por uno de sus atributos.
+ *
+ * `\s+` y no un espacio literal: el `index.html` de origen está formateado, y las etiquetas largas
+ * llevan sus atributos en líneas aparte. Un patrón escrito con un solo espacio no las encontraba, no
+ * reemplazaba nada y `setTag` caía en su rama de "no estaba", así que cada página terminaba con dos
+ * descripciones: la general de la portada y la suya. Salió publicado en las 232 de la v4.6.0.
+ */
+export const metaTag = (atributo: string, valor: string): RegExp =>
+  new RegExp(`<meta\\s+${atributo}="${valor}"[^>]*/>`)
+
 /** Reemplaza una etiqueta existente en el HTML, o la añade antes de `</head>` si no estaba. */
 function setTag(html: string, pattern: RegExp, tag: string): string {
   return pattern.test(html)
     ? html.replace(pattern, tag)
     : html.replace('</head>', `  ${tag}\n  </head>`)
+}
+
+/**
+ * Ninguna de estas etiquetas puede salir dos veces. Es una comprobación barata sobre algo que ya
+ * pasó: un patrón que deja de encajar no rompe nada visible, solo publica metadatos duplicados que
+ * nadie mira hasta que un buscador elige la copia equivocada. Aquí rompe el build.
+ */
+function comprobarUnicas(html: string, href: string): void {
+  const unicas: [string, RegExp][] = [
+    ['description', /<meta\s+name="description"/g],
+    ['og:description', /<meta\s+property="og:description"/g],
+    ['og:title', /<meta\s+property="og:title"/g],
+    ['og:url', /<meta\s+property="og:url"/g],
+    ['og:image', /<meta\s+property="og:image"\s/g],
+    ['canonical', /<link\s+rel="canonical"/g],
+    ['title', /<title>/g],
+  ]
+  for (const [nombre, patron] of unicas) {
+    const veces = html.match(patron)?.length ?? 0
+    if (veces > 1) throw new Error(`${href}: "${nombre}" aparece ${veces} veces en el head`)
+  }
 }
 
 export function prerender(options: { base: string; siteUrl?: string }): Plugin {
@@ -147,7 +223,6 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
       }
       const template = readFileSync(join(dist, 'index.html'), 'utf8')
       const ogDir = `${base}og/`
-      const byLocale = new Map(LOCALES.map((l) => [l, pagesFor(l, data, base, ogDir)] as const))
       // `href` ya lleva la base, y `siteUrl` es la raíz pública del despliegue, que también la
       // lleva (así la usan el resto de plugins). Si no se quitara antes de resolver, un sitio en
       // subdirectorio escribiría la base dos veces en cada `canonical` y en todo el sitemap.
@@ -156,6 +231,9 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
         const relative = href.startsWith(base) ? href.slice(base.length) : href.replace(/^\//, '')
         return new URL(relative, siteUrl).href
       }
+      const byLocale = new Map(
+        LOCALES.map((l) => [l, pagesFor(l, data, base, ogDir, absolute)] as const),
+      )
 
       const written: string[] = []
       for (const locale of LOCALES) {
@@ -181,42 +259,46 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
             .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(page.title)}</title>`)
           html = setTag(
             html,
-            /<meta name="description"[\s\S]*?\/>/,
+            metaTag('name', 'description'),
             `<meta name="description" content="${escapeHtml(page.description)}" />`,
           )
           html = setTag(
             html,
-            /<meta property="og:title"[^>]*\/>/,
+            metaTag('property', 'og:title'),
             `<meta property="og:title" content="${escapeHtml(page.title)}" />`,
           )
           html = setTag(
             html,
-            /<meta property="og:description"[\s\S]*?\/>/,
+            metaTag('property', 'og:description'),
             `<meta property="og:description" content="${escapeHtml(page.description)}" />`,
           )
           html = setTag(
             html,
-            /<meta property="og:url"[^>]*\/>/,
+            metaTag('property', 'og:url'),
             `<meta property="og:url" content="${escapeHtml(absolute(page.href))}" />`,
           )
           html = setTag(
             html,
-            /<meta property="og:locale"[^>]*\/>/,
+            metaTag('property', 'og:locale'),
             `<meta property="og:locale" content="${locale === 'en' ? 'en_US' : 'es_MX'}" />`,
           )
           if (page.image) {
             html = setTag(
               html,
-              /<meta property="og:image" [^>]*\/>/,
+              metaTag('property', 'og:image'),
               `<meta property="og:image" content="${escapeHtml(absolute(page.image))}" />`,
             )
           }
           html = setTag(
             html,
-            /<link rel="canonical"[^>]*\/>/,
+            /<link\s+rel="canonical"[^>]*\/>/,
             `<link rel="canonical" href="${escapeHtml(absolute(page.href))}" />`,
           )
           html = html.replace('</head>', `  ${alternates.filter(Boolean).join('\n  ')}\n  </head>`)
+          if (page.jsonLd) {
+            html = html.replace('</head>', `  ${bloque(page.jsonLd)}\n  </head>`)
+          }
+          comprobarUnicas(html, page.href)
 
           // Archivos planos (`lugar/tomassa.html`) y no carpetas con índice: así `/lugar/tomassa`
           // se sirve directo, mientras que una carpeta obligaría a redirigir a `/lugar/tomassa/`.
