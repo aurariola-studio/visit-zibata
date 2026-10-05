@@ -97,8 +97,8 @@ de un aro, y se acepta a sabiendas.
 
 ### Firma de autoría
 
-"by aurariola.com" en la franja inferior y en "Acerca de esta guía", en monoespaciada y con el punto
-en oro. Del sello de aurariola se toma solo eso; el anillo de píxeles se queda fuera para no competir
+El lockup oficial de aurariola.com (símbolo, "un proyecto de" y wordmark) en la franja inferior y
+en "Acerca de esta guía", con Kode Mono y el punto en oro. Del sello de aurariola se toma solo eso; el anillo de píxeles se queda fuera para no competir
 con la marca de la guía. El oro de esa marca (`#b7791f`) se queda en 3,3:1 sobre las superficies
 arena y no llega al 4,5:1 que pide un texto de 11 px, así que se usa el mismo oro oscurecido hasta
 5:1 (`--gold-700`).

@@ -2,6 +2,16 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.5.1]: 2026-10-05
+
+### Añadido
+
+- **Kode Mono para el wordmark de la firma**, que es lo que pide la guía de marca de aurariola.com y
+  hasta ahora caía a la monoespaciada del sistema. Cuesta **10,4 KB**: el navegador descarga solo
+  `kode-mono-latin-600-normal.woff2`, porque "aurariola.com" es latín puro y el archivo de latín
+  extendido nunca se pide. No bloquea el pintado (`font-display: swap`) y no toca `initialJs`; el
+  CSS inicial pasa de 9,7 a 9,8 KB con las declaraciones `@font-face`.
+
 ## [4.5.0]: 2026-10-05
 
 ### Corregido
