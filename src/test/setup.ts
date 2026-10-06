@@ -5,7 +5,7 @@ import { setLocale } from '../i18n/index.ts'
 
 // jsdom se anuncia en inglés: las pruebas comprueban la interfaz en español, que es el idioma base.
 // (En Playwright el idioma se fija en playwright.config.ts con `locale: 'es-MX'`.)
-setLocale('es')
+await setLocale('es')
 
 afterEach(() => {
   cleanup()

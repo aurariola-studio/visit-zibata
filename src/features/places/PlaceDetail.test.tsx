@@ -174,10 +174,12 @@ describe('PlaceDetail', () => {
   })
 
   describe('descripción traducida', () => {
-    afterEach(() => setLocale('es'))
+    afterEach(async () => {
+      await setLocale('es')
+    })
 
     it('en inglés se lee la traducción, marcada como generada y con el original a un clic', async () => {
-      setLocale('en')
+      await setLocale('en')
       await setup(
         makePlace({
           id: 'pan',
@@ -199,7 +201,7 @@ describe('PlaceDetail', () => {
     })
 
     it('sin traducción se lee el original y no aparece la leyenda', async () => {
-      setLocale('en')
+      await setLocale('en')
       await setup(
         makePlace({
           id: 'bagel',

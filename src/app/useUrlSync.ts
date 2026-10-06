@@ -66,7 +66,7 @@ export function useUrlSync(catalog: Catalog): void {
 
       if (explicit) {
         // La URL dice el idioma y manda: también al volver atrás desde el otro árbol.
-        if (explicit !== active) setLocale(explicit)
+        if (explicit !== active) void setLocale(explicit)
       } else if (inicial && active !== parsed.locale) {
         // Portada española con el inglés recordado en este dispositivo: se lleva a su árbol sin
         // perder la página. Solo al cargar; si lo hiciera también con atrás, pelearía con el
@@ -86,7 +86,7 @@ export function useUrlSync(catalog: Catalog): void {
         )
       } else if (active !== parsed.locale) {
         // Atrás hasta el árbol sin prefijo: vuelve el español.
-        setLocale(parsed.locale)
+        void setLocale(parsed.locale)
       }
 
       // Un enlace a un lugar o plaza que ya no se publica: se avisa y se limpia la URL para no compartirlo.

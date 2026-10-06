@@ -7,18 +7,14 @@
  * Las banderas son SVG de circle-flags (MIT), servidas como archivo estático: nadie las dibuja a mano
  * y no pesan en el paquete de la aplicación.
  */
-import { availableLocales, type Locale, setLocale, t, tIn, useLocale } from '../../i18n/index.ts'
+import { LLEVA_AL_IDIOMA, NOMBRE_DEL_IDIOMA } from '../../i18n/cambioDeIdioma.ts'
+import { availableLocales, type Locale, setLocale, t, useLocale } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
 import styles from './LocaleSwitch.module.css'
 
 const SHORT: Record<Locale, 'locale.shortEs' | 'locale.shortEn'> = {
   es: 'locale.shortEs',
   en: 'locale.shortEn',
-}
-
-const NAME: Record<Locale, 'about.languageEs' | 'about.languageEn'> = {
-  es: 'about.languageEs',
-  en: 'about.languageEn',
 }
 
 /** La bandera acompaña al código; el idioma lo dice el texto, no el país. */
@@ -28,12 +24,13 @@ export function LocaleSwitch() {
   const current = useLocale()
   const index = availableLocales.indexOf(current)
   const next = availableLocales[(index + 1) % availableLocales.length] ?? current
-  const label = tIn(next, 'locale.switchTo', { language: tIn(next, NAME[next]) })
+  const label = LLEVA_AL_IDIOMA[next].replace('{language}', NOMBRE_DEL_IDIOMA[next])
   return (
     <button
       type="button"
       className={styles.switch}
-      onClick={() => setLocale(next)}
+      // Sin `await`: la interfaz se re-renderiza sola cuando el catálogo esté (ver setLocale).
+      onClick={() => void setLocale(next)}
       aria-label={label}
       title={label}
     >
