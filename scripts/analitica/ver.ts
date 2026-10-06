@@ -43,18 +43,61 @@ function consultar(sql: string): Fila[] {
   const wrangler = fileURLToPath(
     new URL('../../node_modules/wrangler/bin/wrangler.js', import.meta.url),
   )
-  const salida = execFileSync(
-    process.execPath,
-    [wrangler, 'd1', 'execute', 'visit-zibata-analitica', donde, '--json', `--command=${sql}`],
-    { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 },
-  )
+  let salida: string
+  try {
+    salida = execFileSync(
+      process.execPath,
+      [wrangler, 'd1', 'execute', 'visit-zibata-analitica', donde, '--json', `--command=${sql}`],
+      { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 },
+    )
+  } catch (error) {
+    // Un fallo de wrangler sale como un volcado de Node de cincuenta líneas con el comando entero
+    // dentro. Aquí se queda el motivo y qué hacer: esto lo lee alguien que quiere ver un número, no
+    // depurar un proceso hijo.
+    throw new Error(explicar(error))
+  }
   const inicio = salida.indexOf('[')
   if (inicio === -1) throw new Error(`Respuesta inesperada de wrangler:\n${salida}`)
   const bloques = JSON.parse(salida.slice(inicio)) as { results: Fila[] }[]
   return bloques.flatMap((bloque) => bloque.results)
 }
 
-const filas = consultar(consulta)
+/** Traduce el fallo de wrangler a una frase y, cuando se reconoce, a qué hacer con él. */
+function explicar(error: unknown): string {
+  const fallo = error as { stderr?: string; stdout?: string }
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: es el escape ANSI, y quitar los colores de wrangler es justo lo que se quiere.
+  const salida = `${fallo.stderr ?? ''}${fallo.stdout ?? ''}`.replace(/\u001b\[[0-9;]*m/g, '')
+  const motivo = salida.match(/"text":\s*"([^"]+)"/)?.[1]
+
+  if (/7403|not authorized to access this service/i.test(salida)) {
+    return [
+      'Cloudflare rechazó la consulta: la cuenta no está autorizada para D1.',
+      '',
+      '  Suele ser pasajero, justo después de publicar. Vuelve a intentarlo.',
+      '  Si sigue: `npx wrangler whoami` y comprueba que `d1` esté entre los permisos;',
+      '  si no está, `npx wrangler login` para volver a concederlos.',
+    ].join('\n')
+  }
+  if (/no such table|SQLITE_ERROR/i.test(salida)) {
+    return 'La tabla de visitas no existe todavía. Créala con `npm run analitica:esquema`.'
+  }
+  if (/not logged in|Unable to authenticate|credentials/i.test(salida)) {
+    return 'Esta máquina no está identificada en Cloudflare. Ejecuta `npx wrangler login`.'
+  }
+  return `No se pudo leer la base de visitas${motivo ? `: ${motivo}` : '.'}`
+}
+
+/*
+ * Se corta aquí en vez de dejar que el error suba: una pila de Node no le dice nada a quien solo
+ * quería ver un número, y el mensaje de `explicar()` ya trae el motivo y el siguiente paso.
+ */
+let filas: Fila[]
+try {
+  filas = consultar(consulta)
+} catch (error) {
+  console.error(`\n${error instanceof Error ? error.message : String(error)}\n`)
+  process.exit(1)
+}
 
 if (filas.length === 0) {
   console.log(
