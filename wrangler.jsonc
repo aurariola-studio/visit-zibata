@@ -46,6 +46,7 @@
      * que se añada aquí. Preferible a que se cuele lo que no toca.
      */
     "run_worker_first": [
+      "/api/*",
       "/",
       "/lugar/*",
       "/zona/*",
