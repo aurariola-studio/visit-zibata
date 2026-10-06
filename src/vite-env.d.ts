@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly VITE_ENABLE_MAP_DEBUG?: string
   /** Clave pública de Web3Forms para "Sugiere un cambio" (ver src/config/site.ts). */
   readonly VITE_WEB3FORMS_KEY?: string
+  /** Clave pública del widget de Turnstile (ver src/lib/turnstile.ts). Sin ella no hay desafío. */
+  readonly VITE_TURNSTILE_SITEKEY?: string
 }
 
 interface ImportMeta {

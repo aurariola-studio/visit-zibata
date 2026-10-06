@@ -96,6 +96,31 @@ describe('la cuenta en el navegador', () => {
     expect(await cabecerasDeCuenta()).toEqual({ 'x-zibata-cuenta': SECRETO })
   })
 
+  it('el alta lleva la ficha del desafío cuando hay desafío', async () => {
+    vi.doMock('./turnstile.ts', () => ({ fichaDeDesafio: async () => 'ficha-de-prueba' }))
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
+    vi.stubGlobal('fetch', fetchMock)
+    const { asegurarCuenta } = await cargar()
+    await asegurarCuenta()
+    expect(fetchMock).toHaveBeenCalledWith('/api/cuenta', {
+      method: 'POST',
+      headers: { 'x-zibata-turnstile': 'ficha-de-prueba' },
+    })
+    vi.doUnmock('./turnstile.ts')
+  })
+
+  it('sin desafío configurado el alta va sin cabecera, que es el desarrollo de hoy', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
+    vi.stubGlobal('fetch', fetchMock)
+    const { asegurarCuenta } = await cargar()
+    await asegurarCuenta()
+    expect(fetchMock).toHaveBeenCalledWith('/api/cuenta', { method: 'POST', headers: undefined })
+  })
+
   it('olvidarla la borra de este dispositivo', async () => {
     vi.stubGlobal(
       'fetch',
