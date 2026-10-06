@@ -52,7 +52,6 @@ el almacenamiento local, donde vive Mi Zibatá (favoritos, calificaciones, visit
 fondo es que hoy la promesa es **comprobable**, porque una prueba falla si hay una sola petición
 externa, y así habría pasado a ser **confiada**. Se apagó en el panel de Cloudflare.
 
-## [4.7.1]: 2026-10-05
 ## [4.8.1]: 2026-10-06
 
 ### Cambiado

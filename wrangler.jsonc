@@ -13,14 +13,24 @@
   "compatibility_date": "2026-10-04",
   "main": "./worker/index.ts",
   "observability": { "enabled": true },
-  // La base de visitas. `database_id` lo da `npm run analitica:crear` una sola vez (ver
-  // docs/DESPLIEGUE.md); no es un secreto, es el identificador de la base. Si falta, el sitio
-  // funciona igual y no se cuenta nada: worker/index.ts lo comprueba.
+  /*
+   * La base de visitas. El `database_id` no es un secreto: identifica la base, no da acceso a ella,
+   * y por eso va versionado. Si falta o el enlace no existe, el sitio funciona igual y no se cuenta
+   * nada (worker/index.ts lo comprueba).
+   *
+   * El nombre del enlace es `ANALITICA` y tiene que coincidir con lo que lee el Worker. Ojo con
+   * `wrangler d1 create`: si se le deja escribir la configuración, añade **otra** entrada con un
+   * nombre derivado del de la base y deja esta sin tocar, así que el Worker no encuentra nada.
+   *
+   * Sin `remote`: `wrangler dev` usa una base local y no ensucia las visitas de verdad. Esa opción
+   * también la ofrece el asistente de creación, y aceptarla hace que probar en local escriba en
+   * producción.
+   */
   "d1_databases": [
     {
       "binding": "ANALITICA",
       "database_name": "visit-zibata-analitica",
-      "database_id": "PENDIENTE"
+      "database_id": "b24fe264-0bb4-47fc-bac5-091ce9459669"
     }
   ],
   "assets": {
