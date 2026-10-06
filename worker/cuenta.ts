@@ -27,6 +27,7 @@ export interface Sentencia {
   bind(...valores: unknown[]): Sentencia
   run(): Promise<unknown>
   first<T>(): Promise<T | null>
+  all<T>(): Promise<{ results?: T[] }>
 }
 
 /** Cabecera con la que el navegador dice quién es. */

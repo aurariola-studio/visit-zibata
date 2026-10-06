@@ -337,6 +337,31 @@ es una página) y lo que no debe llegar a la base.
 El Worker corre solo en las ocho rutas de página. Las teselas, las imágenes y los assets se sirven
 sin pasar por él, que es lo que mantiene el costo en cero y evita contar un archivo como una visita.
 
+## Los corazones (lo único que se publica)
+
+Cuántas personas han guardado cada lugar. Es la única señal de la comunidad que sale a la vista, y
+la decisión de que sea esa y no otra está razonada en [CUENTAS.md](CUENTAS.md): el corazón exige
+intención, va uno por cuenta y a esta escala se lee bien, mientras que las visitas miden curiosidad y
+se inflan recargando.
+
+**Las dos reglas viven en el SQL, no en la interfaz**, para que no haya forma de pedirle al servidor
+los números que decidió no publicar:
+
+- **Umbral de cinco.** Por debajo no se devuelve nada. "1 persona lo guardó" es peor que el silencio
+  para un local recién abierto, y con uno o dos delataría a quien lo guardó.
+- **Edad mínima de diez minutos.** Los corazones de una cuenta recién creada no cuentan. Convierte un
+  ataque instantáneo en uno que hay que sostener.
+
+El gesto es **local e instantáneo**, como siempre: se escribe en `localStorage` y la interfaz responde
+sin esperar a nadie. El aviso al servidor va detrás y nunca lo bloquea, porque lo que aporta es que
+el corazón cuente para el número público, no que funcione. Sin red, sin cuenta o con el servidor
+caído, los favoritos son los de siempre y el número sencillamente no aparece.
+
+Las estrellas **no se muestran nunca**, y la forma de garantizarlo es que la interfaz no las reciba:
+la fuente devuelve `rating: null` siempre. Sí alimentan el orden personal, donde la media de la
+comunidad **solo puede subir, nunca bajar** (`rankPlaces.ts`): sin ese tope, tres votos
+malintencionados hundirían a un negocio que no puede verlo ni rebatirlo.
+
 ## Rendimiento
 
 - Chunk principal ~108 KB gzip; MapLibre (~284 KB gzip) en un chunk aparte que empieza a descargarse en

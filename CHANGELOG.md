@@ -2,6 +2,43 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.11.0]: 2026-10-06
+
+Segundo paso del plan de [docs/CUENTAS.md](docs/CUENTAS.md), y el primero que se ve.
+
+### Añadido
+
+- **El corazón público.** La ficha dice cuántas personas han guardado el lugar. Es la única señal de
+  la comunidad que sale a la vista, y la decisión de que sea esa y no otra está razonada: el corazón
+  exige intención y va uno por cuenta, mientras que las visitas miden curiosidad y se inflan
+  recargando.
+- **Los favoritos viajan a la cuenta.** El gesto sigue siendo local e instantáneo; el aviso al
+  servidor va detrás y nunca lo bloquea. Lo que ya había guardado antes de que existieran las
+  cuentas sube con el primer gesto, para que nadie empiece de cero.
+
+### Decisiones que quedan escritas
+
+- **Las dos reglas del conteo viven en el SQL, no en la interfaz**, para que no haya forma de pedirle
+  al servidor los números que decidió no publicar. Umbral de cinco (por debajo no se devuelve nada,
+  porque con uno o dos delataría a quien lo guardó) y edad mínima de diez minutos (un ataque
+  instantáneo pasa a ser uno que hay que sostener).
+- **Las estrellas no se muestran, y se garantiza porque la interfaz no las recibe**: la fuente
+  devuelve `rating: null` siempre. Taparlas en el componente habría sido una promesa; no enviárselas
+  es un hecho.
+- **La media de la comunidad solo puede subir, nunca bajar.** Sin ese tope, con 101 locales y pocos
+  votos, tres votos malintencionados hunden a un negocio que no puede verlo ni rebatirlo, porque la
+  media no se publica. Así una brigada queda reducida a un empujón. El gusto propio sí puede restar,
+  porque ahí nadie ataca a nadie.
+- **Sin red, sin cuenta o con el servidor caído, la guía funciona igual**: los favoritos son los de
+  siempre y el número sencillamente no aparece.
+
+### Cambiado
+
+- **El aviso de privacidad lo dice.** Decía que los favoritos se guardaban únicamente en este
+  navegador, y dejó de ser cierto. Ahora dice que se envían, para qué, que viajan atados a un
+  identificador al azar sin correo ni nombre, y que ese identificador vive solo en este navegador:
+  borrarlo es empezar de cero. En los dos idiomas, con pruebas que lo exigen en la página.
+
 ## [4.10.0]: 2026-10-06
 
 Primer paso del plan de [docs/CUENTAS.md](docs/CUENTAS.md). Nada de esto se ve todavía: es la

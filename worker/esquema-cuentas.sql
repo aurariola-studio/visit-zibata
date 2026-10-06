@@ -20,3 +20,15 @@ CREATE TABLE IF NOT EXISTS credencial (
 );
 
 CREATE INDEX IF NOT EXISTS credencial_por_cuenta ON credencial (cuenta_id);
+
+-- Los corazones. La clave primaria ES la primera defensa contra el inflado: una cuenta cuenta una
+-- vez, y atacar exige fabricar cuentas, no repetir clics.
+CREATE TABLE IF NOT EXISTS favorito (
+  cuenta_id TEXT NOT NULL REFERENCES cuenta(id) ON DELETE CASCADE,
+  lugar_id  TEXT NOT NULL,
+  creado    TEXT NOT NULL,
+  PRIMARY KEY (cuenta_id, lugar_id)
+);
+
+-- El conteo público agrupa por lugar y cruza con cuenta para la edad mínima.
+CREATE INDEX IF NOT EXISTS favorito_por_lugar ON favorito (lugar_id);

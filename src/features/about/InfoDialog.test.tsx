@@ -12,6 +12,9 @@ describe('InfoDialog', () => {
     expect(screen.getByRole('dialog', { name: 'Privacidad' })).toBeInTheDocument()
     expect(screen.getByText(/no usa cuentas ni cookies de rastreo/)).toBeInTheDocument()
     expect(screen.getByText(/únicamente en este navegador/)).toBeInTheDocument()
+    // Que los favoritos salgan del dispositivo se dice, no se calla.
+    expect(screen.getByText(/se envían para que cuenten/)).toBeInTheDocument()
+    expect(screen.getByText(/sin correo, sin nombre/)).toBeInTheDocument()
     // El conteo de visitas se declara aquí: callarlo sería mentir por omisión.
     expect(screen.getByText(/una visita por página y por día/)).toBeInTheDocument()
     expect(screen.getByText(/no se vende ni se comparte/)).toBeInTheDocument()
