@@ -1,21 +1,50 @@
 import { useSyncExternalStore } from 'react'
 import { localeFromPath } from '../lib/url-state.ts'
 import type { LocalizedText } from '../types/domain.ts'
-import { en } from './en.ts'
 import { es, type MessageKey, type Messages } from './es.ts'
 
 export type Locale = 'es' | 'en'
+export const availableLocales: Locale[] = ['es', 'en']
 
 /**
- * Catálogos disponibles. Para añadir otro idioma: crear su archivo con `satisfies Messages`
- * (TypeScript exige todas las claves), registrarlo aquí y añadirlo al tipo `Locale`. No hay que tocar
- * ningún componente: los textos de interfaz salen de `t()` y los de datos de `localized()`.
+ * Los catálogos se cargan por separado: cada visita baja **el suyo**, no los dos.
+ *
+ * Hasta la v4.8.0 viajaban juntos y eso eran unos 5 KB que nadie usaba en cada carga. Lo que lo
+ * impedía era el botón de idioma, que escribe su etiqueta en el otro idioma; esas cuatro cadenas
+ * viven ahora en `cambioDeIdioma.ts` y el resto se aplaza.
+ *
+ * El español se importa de forma estática a propósito, no por pereza: es el idioma por omisión y el
+ * respaldo de `localized()`, así que `t()` nunca puede quedarse sin nada que devolver. El inglés se
+ * pide cuando hace falta, y `main.tsx` lo espera antes de pintar para que nadie vea un parpadeo.
+ *
+ * Para añadir otro idioma: crear su archivo con `satisfies Messages` (TypeScript exige todas las
+ * claves), añadirlo aquí, a `Locale`, a `availableLocales` y a `cambioDeIdioma.ts`.
  */
-const catalogs: Record<Locale, Messages> = { es, en }
+const cargadores: Record<Locale, () => Promise<Messages>> = {
+  es: async () => es,
+  en: async () => (await import('./en.ts')).en,
+}
+const cargados = new Map<Locale, Messages>([['es', es]])
+
+/**
+ * Deja listo un idioma, y lo pone en uso si es el activo. Llamarlo dos veces no cuesta.
+ *
+ * Lo segundo no es un extra: al arrancar en `/en/...`, `locale` ya vale `en` pero el catálogo inglés
+ * todavía no existe, así que `messages` apunta al español de respaldo. Sin esta línea la pantalla se
+ * quedaba con los datos en inglés (que son datos, no catálogo) y la interfaz en español.
+ */
+export async function cargarIdioma(target: Locale): Promise<void> {
+  if (!cargados.has(target)) cargados.set(target, await cargadores[target]())
+  if (target !== locale) return
+  messages = cargados.get(target) ?? es
+  for (const listener of listeners) listener()
+}
+
 const DEFAULT_LOCALE: Locale = 'es'
 const STORAGE_KEY = 'zibata:idioma'
 
-const isLocale = (value: unknown): value is Locale => typeof value === 'string' && value in catalogs
+const isLocale = (value: unknown): value is Locale =>
+  typeof value === 'string' && (availableLocales as string[]).includes(value)
 
 /** Idioma elegido a mano en esta guía (se recuerda en este dispositivo). */
 function storedLocale(): Locale | null {
@@ -48,15 +77,24 @@ function resolveLocale(): Locale {
 }
 
 export let locale: Locale = resolveLocale()
-let messages: Messages = catalogs[locale]
+/** Siempre hay catálogo: el español está desde el primer instante y es el respaldo. */
+let messages: Messages = cargados.get(locale) ?? es
 let pluralRules = new Intl.PluralRules(locale)
 const listeners = new Set<() => void>()
 
-/** Cambia el idioma de la interfaz y lo recuerda en este dispositivo. */
-export function setLocale(next: Locale): void {
+/**
+ * Cambia el idioma de la interfaz y lo recuerda en este dispositivo.
+ *
+ * Es `async` desde que los catálogos se cargan por separado: si el idioma de destino todavía no está,
+ * hay que esperarlo antes de cambiar, o se pintaría una pantalla con los textos del anterior. Quien
+ * no necesite esperar puede llamarla y olvidarse (`void setLocale(x)`): la interfaz se re-renderiza
+ * sola cuando termina.
+ */
+export async function setLocale(next: Locale): Promise<void> {
   if (next === locale) return
+  await cargarIdioma(next)
   locale = next
-  messages = catalogs[next]
+  messages = cargados.get(next) ?? es
   pluralRules = new Intl.PluralRules(next)
   try {
     window.localStorage.setItem(STORAGE_KEY, next)
@@ -84,8 +122,6 @@ export function useLocale(): Locale {
   )
 }
 
-export const availableLocales = Object.keys(catalogs) as Locale[]
-
 type Vars = Record<string, string | number>
 
 function interpolate(template: string, vars?: Vars): string {
@@ -105,15 +141,6 @@ function format(message: Message, rules: Intl.PluralRules, vars?: Vars): string 
 
 export function t(key: MessageKey, vars?: Vars): string {
   return format(messages[key], pluralRules, vars)
-}
-
-/**
- * Texto en un idioma concreto, sin cambiar el de la interfaz. Lo necesita el botón de idioma: su
- * etiqueta habla en el idioma al que lleva, para no mezclar los dos idiomas en una misma frase.
- */
-export function tIn(target: Locale, key: MessageKey, vars?: Vars): string {
-  if (target === locale) return t(key, vars)
-  return format(catalogs[target][key], new Intl.PluralRules(target), vars)
 }
 
 /** Texto de datos (categorías, subcategorías) en el idioma activo, con español como respaldo. */
