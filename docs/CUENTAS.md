@@ -1,12 +1,163 @@
-# Evaluación: pasar a una arquitectura con usuarios
+# Cuentas y señales de la comunidad
 
-Fecha: 2026-10-04 · Estado: **revisión, no es un plan aprobado**. Hoy
-[AGENTS.md](../AGENTS.md) prohíbe cuentas y backend; esta evaluación dice qué habría que mover si esa
-regla cambiara, no propone cambiarla.
+Fecha: 2026-10-04, decisiones tomadas el 2026-10-06 · Estado: **plan acordado, sin empezar**.
 
 Complementa a [ESCALABILIDAD.md](ESCALABILIDAD.md), que trata de ampliar el **catálogo** (más
 sectores). Aquí se trata de ampliar el **modelo**: identidad, datos personales en un servidor y
 señales de la comunidad.
+
+Lo que sigue hasta "Antecedentes" es el plan. El resto del documento es la evaluación que lo
+precedió, y se conserva porque explica por qué el plan es este y no otro.
+
+## Las decisiones
+
+Tomadas por el propietario el 2026-10-06, después de que el conteo de visitas (v4.9.0) demostrara que
+hay servidor y que cuesta cero.
+
+| Pregunta | Decisión |
+|---|---|
+| ¿Qué es público? | Los **corazones**. Las estrellas alimentan el orden pero **no se muestran**. Ver abajo |
+| ¿Para qué sirve Google? | **Solo** para llegar a lo tuyo desde varios dispositivos. No desbloquea nada más |
+| ¿Y si alguien borra el navegador? | **Se acepta la pérdida**, y se dice claro |
+| ¿Cuánta defensa contra el inflado? | Toda la que **no cueste dinero** |
+| ¿Los números públicos serán auditables? | **No.** Se guardan las filas para poder moderar, no para exhibir de dónde sale cada número |
+
+Y una regla que queda derogada: *"sin reseñas, ratings, publicidad"* y *"la guía no publica medias"*
+se escribieron cuando todo era local y no había con qué hacer nada mejor. La intención de fondo (una
+guía útil que recoja los menos datos posibles) manda sobre la letra.
+
+### Qué se publica, exactamente
+
+**Corazones, sí.** Requieren intención, van uno por cuenta y a esta escala se leen bien: "12 vecinos
+lo guardaron" dice algo verdadero. Con un umbral: **por debajo de cinco no se muestra nada**, porque
+"1 persona lo guardó" es peor que el silencio para un local recién abierto.
+
+**Visitas, no.** Miden curiosidad, no calidad; son lo más fácil de inflar (basta recargar) y lo más
+caro de defender sin guardar más datos por persona, que es lo contrario de lo que se busca. Y repiten
+la señal del corazón con más ruido. Si alguna vez hace falta superficie de popularidad, a esta escala
+rinde más una **lista** ("lo más abierto esta semana en tu zona") que un número por ficha.
+
+**Estrellas, nunca a la vista.** Pero con un matiz que no es menor: un promedio escondido que
+reordena sigue siendo visible **en su efecto**, y con 101 locales y pocos votos, tres votos
+malintencionados hunden a alguien que no puede verlo ni rebatirlo. Por eso el promedio global
+**solo puede subir, nunca bajar**: un lugar muy bien calificado gana impulso; uno mal calificado
+nunca cae por debajo de su línea base. Así una brigada no sirve como arma, solo como empujón, que
+hace menos daño y se nota antes.
+
+Con esto, *"la guía no publica medias"* **sigue siendo cierto**: se publica un conteo, nunca una nota.
+
+## El diseño
+
+### La identidad es una sola, y Google es solo otra llave
+
+La pieza que decide todo lo demás. Si la cuenta anónima y la de Google fueran dos cosas distintas, el
+día que llegue Google se perdería el historial de todo el mundo. Así que no lo son: hay **una cuenta**
+y puede tener **varias credenciales**.
+
+```sql
+cuenta(id TEXT PRIMARY KEY, creada TEXT)
+
+credencial(
+  proveedor TEXT,        -- 'dispositivo' hoy, 'google' mañana
+  sujeto    TEXT,        -- el secreto del navegador, o el `sub` de Google
+  cuenta_id TEXT,
+  creada    TEXT,
+  PRIMARY KEY (proveedor, sujeto)
+)
+```
+
+Entrar con Google no crea una cuenta: **añade una fila a `credencial`** apuntando a la que ya tienes.
+Por eso Google puede llegar después sin tocar nada de lo anterior, que es justo lo que se decidió.
+
+El `id` de cuenta es opaco y aleatorio. No se guarda correo, ni nombre, ni IP, ni user agent. El día
+que entre Google se guarda su `sub`, que es un identificador suyo, no un dato personal legible.
+
+### El secreto del dispositivo
+
+El Worker lo genera al primer gesto que lo necesite (dar un corazón, no al entrar), lo devuelve una
+vez y el navegador lo guarda junto a lo demás de Mi Zibatá. Viaja como cabecera en las escrituras.
+
+**Quien lo pierde, pierde la cuenta.** Es la decisión tomada, y la página de privacidad tiene que
+decirlo con esas palabras, no esconderlo. Un "código de transferencia" para recuperarla sería peor:
+quien tenga el código es dueño de los datos, y eso sí hay que prometerlo y sostenerlo.
+
+### Los datos
+
+```sql
+favorito(cuenta_id, lugar_id, creado,        PRIMARY KEY (cuenta_id, lugar_id))
+calificacion(cuenta_id, lugar_id, estrellas, actualizada, PRIMARY KEY (cuenta_id, lugar_id))
+visita(cuenta_id, lugar_id, veces, ultima,   PRIMARY KEY (cuenta_id, lugar_id))
+```
+
+Tres tablas, todas con la misma clave. Esa clave primaria **es** la primera defensa contra el
+inflado: una cuenta cuenta una vez, y atacar exige fabricar cuentas, no repetir clics.
+
+La tabla `visitas` del conteo anónimo (fecha, ruta, idioma) **no se toca y no se mezcla**: sigue sin
+identidad, como está hoy. Son dos cosas distintas y conviene que lo sigan siendo.
+
+### La fusión, que es donde se pierden los datos si se hace mal
+
+Cuando alguien entra con Google en un segundo dispositivo hay tres casos, y el tercero es el que hay
+que escribir con cuidado:
+
+1. **Google desconocido** → se añade la credencial a la cuenta de este dispositivo. Nada más.
+2. **Google conocido, dispositivo sin cuenta** → este dispositivo adopta esa cuenta.
+3. **Google conocido y dispositivo con cuenta propia** → hay que **fusionar**. Favoritos, la unión.
+   Visitas, la suma. Calificaciones, la más reciente por lugar. La credencial del dispositivo
+   reapunta a la cuenta que se queda, y la otra se borra.
+
+Tiene que ser idempotente (repetirla no cambia el resultado) y no puede perder nada. Es la única
+parte de todo esto que merece pruebas antes de escribir el código que la usa.
+
+### Contra el inflado, sin gastar un peso
+
+En este orden, porque cada capa encarece la anterior y ninguna cuesta dinero:
+
+1. **La clave primaria.** Una cuenta, un corazón. Estructural, gratis, y la que más trabajo ahorra.
+2. **Turnstile al crear la cuenta**, no en cada gesto. Es de Cloudflare, gratis y sin captcha visible.
+   Encarece fabricar cuentas, que es lo único que queda por atacar después de la capa 1.
+3. **Límite de ritmo por cuenta** en el Worker. Unas pocas escrituras por minuto bastan para una
+   persona y estorban a un robot.
+4. **Edad mínima**: los corazones de una cuenta recién creada no cuentan para el número público hasta
+   pasado un rato. Convierte un ataque instantáneo en uno que hay que sostener.
+5. **Se guardan las filas, no solo el contador.** Con un número suelto, un ataque es irreversible;
+   con las filas se borra lo sospechoso y se recalcula. Esto es para **poder moderar**, no para
+   exhibir de dónde sale cada número: lo segundo se descartó.
+
+Lo que esto **no** hace: eliminar el abuso. Lo encarece. Para corazones el daño de un ataque exitoso
+es bajo y se asume.
+
+### Qué cuesta
+
+Todo cabe en los planes gratuitos que ya se usan: Workers (100.000 peticiones al día), D1 (5 GB,
+millones de lecturas y 100.000 escrituras al día) y Turnstile. Con 101 locales y público de barrio,
+no se rozan. Si algún día se rozaran, sería una buena noticia y habría con qué pagarlo.
+
+### El orden de la obra
+
+Cada paso deja algo funcionando y se puede parar ahí:
+
+1. **Identidad y credencial de dispositivo, sin datos todavía.** Crear la cuenta, devolver el secreto,
+   reconocerla. Prueba el camino entero con el riesgo más bajo posible.
+2. **Favoritos al servidor**, con lo local como caché y la escritura optimista. Es la pieza que prueba
+   el patrón completo: carga, error, escritura pendiente y conflicto.
+3. **Calificaciones y visitas**, que ya son el mismo patrón.
+4. **El corazón público en la interfaz**, con su umbral de cinco, y el promedio que solo sube.
+5. **Google como credencial extra**, con la fusión. Lo último, porque hasta aquí no hace falta.
+
+### Lo que hay que reescribir cuando llegue el paso 2
+
+La página de privacidad, otra vez, y esta vez de verdad: deja de ser cierto que *"todo se guarda
+únicamente en este navegador"*. Habrá que decir qué sube, que no hay correo ni nombre, que perder el
+navegador es perder la cuenta, y cómo se borra todo. Se escribe cuando el paso 2 esté hecho, no
+antes, para no prometer una forma que todavía puede cambiar.
+
+## Antecedentes
+
+Lo que sigue es la evaluación del 2026-10-04, anterior a que existiera el servidor. Se conserva
+porque explica por qué el plan de arriba es este y no otro. Algunas de sus conclusiones ya no
+aplican: el alojamiento dejó de ser el bloqueo (hay Worker y D1 desde la v4.9.0) y la regla que
+prohíbe cuentas ya no está vigente.
 
 ## Conclusión corta
 
