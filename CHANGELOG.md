@@ -2,6 +2,37 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.11.1]: 2026-10-06
+
+La v4.11.0 no llegó a publicarse: la tiró su propio flujo de publicación.
+
+### Corregido
+
+- **Turnstile le faltaba la mitad del navegador.** El Worker exigía una ficha que nadie mandaba, así
+  que con la clave secreta ya puesta en producción, toda alta de cuenta habría respondido 403 en
+  silencio: los corazones seguirían guardándose en el dispositivo y el número público no crecería
+  nunca. Ahora el navegador pide la ficha, y pide el script de Cloudflare **tarde**: no al abrir una
+  página, sino la primera vez que alguien da un corazón. Quien solo lee la guía no descarga nada de
+  terceros, y el E2E que exige cero peticiones externas en todo el recorrido de lectura lo fija.
+- **Un script que ni carga ni falla dejaba la petición colgada.** El reloj de veinte segundos cubría
+  el desafío pero no la descarga, y una red que traga la conexión no dispara `load` ni `error`. Ahora
+  arranca antes que nada.
+- **La clave pública solo en el paso que la usa.** Estaba a nivel de job, así que la heredaban también
+  los tests, y ahí cambiaba su comportamiento: ocho pruebas de `cuenta.ts` que pasaban en el pull
+  request y en local se colgaron al publicar, en el único sitio donde nadie las estaba mirando. Esas
+  pruebas simulan ahora el módulo del desafío, para que no vuelvan a depender del entorno.
+- **La prueba de compartir ya no corre contra un reloj.** Afirmaba un acuse que vive 2,4 segundos y se
+  borra solo; con el runner cargado, a veces llegaba tarde. Ahora espera a lo copiado, que no caduca
+  y es lo que la prueba dice en su nombre que vino a comprobar.
+
+### Cambiado
+
+- **La CSP abre `challenges.cloudflare.com`** en `script-src` y en `frame-src`, que era `'none'`. Es
+  el primer script de terceros del proyecto y el costo queda escrito en
+  [docs/SEGURIDAD.md](docs/SEGURIDAD.md), no disimulado.
+- **Un widget de Turnstile tiene dos claves y hacen falta las dos.** Puestas por separado el fallo es
+  mudo, así que [docs/DESPLIEGUE.md](docs/DESPLIEGUE.md) lo dice con esas palabras y en ese orden.
+
 ## [4.11.0]: 2026-10-06
 
 Segundo paso del plan de [docs/CUENTAS.md](docs/CUENTAS.md), y el primero que se ve.

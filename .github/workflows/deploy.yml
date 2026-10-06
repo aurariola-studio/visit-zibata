@@ -39,10 +39,6 @@ jobs:
       # El sitio se sirve en la raíz del dominio, así que la base es "/".
       BASE_PATH: /
       SITE_URL: ${{ vars.PAGES_SITE_URL || 'https://visitzibata.com/' }}
-      # La mitad publica de Turnstile. Va como variable y no como secreto porque es publica de
-      # verdad: viaja en el JavaScript publicado. Si falta, el sitio se construye sin desafio y el
-      # Worker, que si tiene la mitad secreta, rechaza toda alta de cuenta. Van las dos o ninguna.
-      VITE_TURNSTILE_SITEKEY: ${{ vars.TURNSTILE_SITEKEY }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -76,6 +72,13 @@ jobs:
       - name: Instalar navegadores de Playwright
         run: npx playwright install --with-deps chromium
       - name: Build de producción
+        # La mitad pública de Turnstile, y solo en este paso. Va como variable y no como secreto
+        # porque es pública de verdad: viaja en el JavaScript publicado. A nivel de job la heredaban
+        # también los tests, y ahí cambiaba su comportamiento: es lo que tiró la publicación de la
+        # v4.11.0. Si falta, el sitio se construye sin desafío y el Worker, que sí tiene la mitad
+        # secreta, rechaza toda alta de cuenta. Van las dos o ninguna.
+        env:
+          VITE_TURNSTILE_SITEKEY: ${{ vars.TURNSTILE_SITEKEY }}
         run: npm run build
       # Después del build, nunca antes: el build limpia dist/, así que unas imágenes generadas
       # primero desaparecerían sin dejar rastro y cada enlace compartido volvería a la imagen de

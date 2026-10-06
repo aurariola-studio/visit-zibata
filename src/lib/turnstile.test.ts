@@ -45,6 +45,24 @@ describe('el desafío', () => {
     expect(await pendiente).toBeNull()
   })
 
+  it('un script que ni carga ni falla no deja la promesa colgada', async () => {
+    /*
+     * El caso que tiró la publicación de la v4.11.0, y el que de verdad puede pasarle a alguien: una
+     * red que traga la conexión (portal cautivo, proxy) no dispara ni `load` ni `error`. Sin un
+     * reloj por encima de la descarga, la promesa no se resuelve nunca.
+     */
+    vi.useFakeTimers()
+    try {
+      const { fichaDeDesafio } = await cargar(CLAVE)
+      const pendiente = fichaDeDesafio()
+      await vi.advanceTimersByTimeAsync(20_000)
+      expect(await pendiente).toBeNull()
+      expect(document.body.children).toHaveLength(0)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('devuelve la ficha y se lleva el widget al terminar', async () => {
     const { fichaDeDesafio } = await cargar(CLAVE)
     const remove = vi.fn()
