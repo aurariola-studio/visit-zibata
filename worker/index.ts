@@ -15,16 +15,18 @@
  * como visitas.
  */
 import { APUNTE, visitaDe } from './analitica.ts'
+import { atenderApi } from './api.ts'
+import type { Base } from './cuenta.ts'
 
 /** Lo mínimo de la plataforma que este Worker usa. */
 interface Entorno {
   ASSETS: { fetch(request: Request): Promise<Response> }
-  /** La base de visitas. Puede no estar (en desarrollo, o antes de crearla): entonces no se cuenta. */
-  ANALITICA?: {
-    prepare(sql: string): {
-      bind(...valores: unknown[]): { run(): Promise<unknown> }
-    }
-  }
+  /**
+   * La base. Puede no estar (en desarrollo, o antes de crearla): entonces no se cuenta y la API
+   * responde que no hay base, pero el sitio se sirve igual.
+   */
+  ANALITICA?: Base
+  TURNSTILE_SECRET?: string
 }
 
 interface Contexto {
@@ -53,6 +55,11 @@ async function contar(peticion: Request, respuesta: Response, entorno: Entorno):
 
 export default {
   async fetch(peticion: Request, entorno: Entorno, contexto: Contexto): Promise<Response> {
+    // La API primero: si la ruta es suya responde, y si no devuelve null y se sirve el archivo.
+    // Así las 232 páginas y la API conviven sin que ninguna sepa de la otra.
+    const api = await atenderApi(peticion, entorno)
+    if (api) return api
+
     const respuesta = await entorno.ASSETS.fetch(peticion)
     contexto.waitUntil(contar(peticion, respuesta, entorno))
     return respuesta

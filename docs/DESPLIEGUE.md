@@ -103,6 +103,23 @@ la base, no da acceso a ella, y por eso va versionado. Después, crea la tabla:
 npm run analitica:esquema
 ```
 
+Ese comando aplica `worker/esquema.sql`. Desde la v4.10.0 hay un segundo archivo con las tablas de
+identidad, que se aplica igual:
+
+```bash
+npx wrangler d1 execute visit-zibata-analitica --remote --file=worker/esquema-cuentas.sql
+```
+
+### Turnstile, antes de publicar el conteo de corazones
+
+Crear cuentas está abierto mientras no exista el secreto `TURNSTILE_SECRET`. Es deliberado, para
+poder desarrollar, y **tiene que dejar de estarlo antes de que el número de corazones se vea**: hasta
+entonces fabricar cuentas no sirve de nada, y a partir de entonces sí.
+
+Cuando llegue ese momento: crear un widget de Turnstile en el panel de Cloudflare (es gratis y no
+muestra captcha) y guardar su clave secreta con `npx wrangler secret put TURNSTILE_SECRET`. El Worker
+la detecta solo: si está, la exige; si no, no.
+
 El orden importa: la base tiene que existir **antes** del primer `wrangler deploy` con el enlace
 puesto, o la publicación falla.
 

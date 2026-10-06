@@ -2,6 +2,43 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.10.0]: 2026-10-06
+
+Primer paso del plan de [docs/CUENTAS.md](docs/CUENTAS.md). Nada de esto se ve todavía: es la
+tubería sobre la que van los corazones públicos.
+
+### Añadido
+
+- **Identidad sin registro.** Una cuenta es un identificador aleatorio y nada más: sin correo, sin
+  nombre, sin contraseña, sin IP y sin user agent. Se crea sola la primera vez que alguien hace algo
+  que haya que guardar fuera de su dispositivo, y **nunca al entrar**: quien solo mira la guía no
+  genera ninguna cuenta.
+- **Una cuenta, varias credenciales.** Hoy solo la del dispositivo. El día que entre Google se añade
+  una fila apuntando a la **misma** cuenta, y por eso nadie pierde su historial. Es la pieza que
+  decide todo lo demás, y está puesta desde el principio aunque todavía no se use.
+- `/api/cuenta` en el Worker, que convive con los 232 archivos del sitio sin que ninguno sepa del
+  otro: la API responde si la ruta es suya y, si no, devuelve el archivo.
+
+### Decisiones que quedan escritas
+
+- **Lo que se guarda del secreto es su huella, no el secreto.** Si alguien se llevara la base entera
+  no podría suplantar a nadie. SHA-256 a secas y no una derivación lenta: eso hace falta para
+  contraseñas, que son cortas y adivinables; un secreto de 256 bits aleatorios no se adivina por
+  fuerza bruta, así que gastar CPU en cada petición no compra nada.
+- **Quien pierde el secreto pierde la cuenta.** Es la decisión tomada, no un descuido. Un código de
+  recuperación sería peor: quien tuviera el código sería dueño de los datos.
+- **Nada de esto puede romper la guía.** Si el servidor no responde, si el almacenamiento está
+  bloqueado o si la respuesta viene rara, se sigue con lo local, que es lo que ha funcionado siempre.
+- **Turnstile queda enchufado pero no exigido**, porque mientras los corazones no se vean, fabricar
+  cuentas no sirve de nada. Tiene que exigirse antes de que se vean, y así está anotado en
+  DESPLIEGUE.md.
+
+### Nota
+
+El orden del plan cambia un poco: los favoritos al servidor y el conteo público van juntos en el paso
+siguiente. Sincronizarlos por separado no le da nada a nadie, porque ya funcionan en local y el
+secreto vive en el navegador; lo primero que alguien **ve** es el número de corazones.
+
 ## [4.9.0]: 2026-10-06
 
 ### Añadido
