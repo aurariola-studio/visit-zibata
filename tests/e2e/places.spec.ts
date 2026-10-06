@@ -64,6 +64,24 @@ test.describe('Plazas y lugares', () => {
     )
   })
 
+  test('la ficha servida lleva sus datos estructurados, sin horario ni medias', async ({
+    page,
+  }) => {
+    await openApp(page, { path: 'lugar/tomassa' })
+    const bloque = page.locator('script[type="application/ld+json"]')
+    await expect(bloque).toHaveCount(1)
+    const datos = JSON.parse((await bloque.textContent()) ?? '{}')
+
+    expect(datos['@context']).toBe('https://schema.org')
+    expect(datos['@type']).toBe('Restaurant')
+    expect(datos.name).toBe('Tomassa Almacén de Pastas')
+    expect(datos.address.addressCountry).toBe('MX')
+    // Lo que la guía no publica no se publica tampoco aquí: el horario se pudre y una media
+    // inventada es justo lo que este proyecto no hace.
+    expect(datos).not.toHaveProperty('openingHours')
+    expect(datos).not.toHaveProperty('aggregateRating')
+  })
+
   test('compartir un lugar copia siempre la misma URL, sin el filtro desde el que se comparte', async ({
     page,
   }) => {

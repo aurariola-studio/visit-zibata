@@ -260,6 +260,35 @@ tarjeta usa el tono de su categoría; el día que haya fotos esa misma mitad las
 escrita. Se renderiza con el navegador de Playwright, que ya es dependencia de desarrollo, en una sola
 página con las 101 tarjetas, y se pasa por `sharp` a JPEG: en PNG pesaban 20 MB, en JPEG 1,9 MB.
 
+### Datos estructurados
+
+Cada ficha lleva un bloque JSON-LD (`scripts/build/structured-data.ts`) con lo mismo que ya dice la
+página, pero en el vocabulario de schema.org: nombre, tipo de negocio, descripción, teléfono,
+dirección, coordenadas, enlace de Maps y perfiles oficiales. La portada lista sus zonas y cada zona
+lista sus locales, como `ItemList` con solo nombre y URL: los datos de cada destino los lee el
+buscador de su propia página, y duplicarlos aquí solo abriría la puerta a que las dos copias
+discrepen.
+
+El tipo no es siempre `Restaurant`: sale de la categoría del primer giro, así que una panadería es
+`Bakery` y un bar es `BarOrPub`. Cuando la categoría no identifica una forma concreta de negocio se
+usa el padre común (`FoodEstablishment`), y "Otros" se queda en `LocalBusiness`, porque la guía va
+más allá de la comida y ahí puede haber cualquier cosa. Mentir hacia abajo cuesta más que quedarse
+en el tipo general.
+
+Tres reglas, en orden de importancia:
+
+1. **Nada que no esté en el dataset.** Sin `aggregateRating`, sin `priceRange` y sin `review`. Lo que
+   se escribe aquí el buscador lo publica como hecho.
+2. **Sin `openingHours`, a propósito.** El horario es el único dato de la ficha que se pudre solo, y
+   un "Abierto ahora" equivocado manda a alguien a una puerta cerrada. Hoy los 101 locales llevan el
+   mismo `lastVerifiedAt`, así que no hay forma de distinguir un horario fresco de uno rancio; en
+   cuanto haya una segunda ronda de verificación, ese campo da el criterio y emitirlo es un filtro.
+3. **Un campo que falta se omite**, no se rellena. Hoy eso deja 24 fichas sin teléfono, 13 sin
+   coordenadas y 3 sin dirección, que son exactamente las que no tienen el dato.
+
+La dirección de un local es la de su zona: no tiene una propia porque está dentro de una plaza. La
+localidad, el estado y el país salen de `data/geographic/config.json`.
+
 El `404.html` lo genera `vite.config.ts` con la marca del sitio, sin JavaScript y con el estilo en
 línea: es la página que aparece cuando algo falla, así que no debe depender de que el resto cargue.
 Ahí llegan los errores de tecleo y el enlace guardado de un local que ya no se publica. `vite preview`

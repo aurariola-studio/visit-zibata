@@ -18,10 +18,14 @@ y podría medir otra aplicación.
 
 ## Niveles
 
-**Unitarios y de componentes (Vitest, 247 pruebas).** Lógica pura y componentes con Testing Library:
+**Unitarios y de componentes (Vitest, 257 pruebas).** Lógica pura y componentes con Testing Library:
 esquemas y validación de datos (Zod y la validación ligera de runtime, en paridad), relaciones entre
 colecciones, catálogo, horarios, búsqueda, filtros, rutas, cámara, hoja inferior, enlaces a Google Maps del
 dataset publicado y componentes de la ficha.
+
+Las de datos estructurados (`scripts/build/structured-data.test.ts`) cubren sobre todo lo que **no**
+debe salir: horario, medias y precios, aunque el dato exista en el registro. Un marcado de más es
+peor que uno de menos, porque el buscador lo publica como hecho.
 
 Las de rutas (`src/lib/urls.test.ts`) cubren los dos árboles de idioma, el parámetro de categoría
 traducido y la traducción de un enlace antiguo con hash. Corren con la base `/visit-zibata/` y nunca
