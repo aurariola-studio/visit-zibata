@@ -10,8 +10,12 @@ Guía para agentes y colaboradores. Contexto del producto y comandos en [README.
   puede romper la página, y hay pruebas que fijan lo que NO se guarda.
 - El mapa es MapLibre con datos propios (`public/map`). Google Maps solo como enlace externo; nunca Google
   Places, scraping ni descarga de fotos de terceros.
-- No inventar datos de negocios reales (horarios, teléfonos, descripciones, fotos). Sin reseñas, ratings,
-  publicidad, reservas ni rastreo.
+- No inventar datos de negocios reales (horarios, teléfonos, descripciones, fotos). Sin publicidad,
+  reservas ni rastreo, nunca.
+- Hoy tampoco hay reseñas ni notas públicas, y la guía no publica medias. Eso **cambia en parte** con
+  el plan de [docs/CUENTAS.md](docs/CUENTAS.md): se publicará un conteo de corazones (nunca una nota)
+  y las estrellas alimentarán el orden sin mostrarse. Hasta que ese plan se implemente, la regla
+  sigue valiendo tal cual.
 - Datos en `data/`, validados con los esquemas de `src/data/schemas.ts`. Textos de UI en `src/i18n/es.ts`.
 - Procesamiento GIS solo en `scripts/map` (Node), nunca en el navegador.
 - Imports relativos con extensión `.ts`/`.tsx` (los scripts corren con Node sin transpilar).
