@@ -15,7 +15,12 @@ export const ZIBATA_EXTENT = {
 }
 
 export const MAP_ASSETS = {
-  pmtiles: 'map/zibata.pmtiles',
+  /*
+   * El descriptor del juego de teselas, no el archivo PMTiles. Se sirven sueltas porque el hosting
+   * no hace peticiones Range (ver scripts/build/map-tiles.ts), y el TileJSON es lo que MapLibre pide
+   * primero: si falla, es un error de fuente y la guía puede avisar de que el mapa no cargó.
+   */
+  tiles: 'map/tiles.json',
   plazaBuildings: 'map/plaza-buildings.geojson',
 }
 

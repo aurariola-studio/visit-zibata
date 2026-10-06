@@ -9,7 +9,7 @@
   zonas. **La URL también es interfaz**, así que lleva la palabra visible: `/zona/…` en español y
   `/area/…` en inglés (`src/lib/url-state.ts`). El tipo de dominio, los datos y el código mantienen
   `plaza` como identificador estable, y nada de eso sale a la pantalla.
-- **Estático y portable.** Solo HTML, CSS, JS, JSON, GeoJSON, PMTiles, imágenes y fuentes. Sin backend,
+- **Estático y portable.** Solo HTML, CSS, JS, JSON, GeoJSON, teselas, imágenes y fuentes. Sin backend,
   cuentas, API keys ni servicios de pago. Cualquier hosting estático sirve.
 - **Datos separados del código** y validados dos veces: con Zod en el build y con comprobaciones ligeras
   (sin Zod) al cargarlos en el navegador, compartiendo las mismas reglas (`src/data/rules.ts`).
@@ -270,7 +270,9 @@ que se ve de verdad.
 
 - Chunk principal ~108 KB gzip; MapLibre (~284 KB gzip) en un chunk aparte que empieza a descargarse en
   paralelo a los datos. `npm run perf:budget` falla si el build supera el presupuesto acordado.
-- PMTiles por rangos HTTP: solo se descargan las teselas visibles (~200 KB en la vista inicial).
+- Teselas sueltas: el navegador baja solo las que entran en pantalla (~200 KB en la vista inicial) y
+  cada una se cachea por su cuenta. Hasta la v4.7.0 era un único archivo PMTiles leído por rangos HTTP;
+  se soltó porque el hosting dejó de servir rangos (ver `scripts/build/map-tiles.ts`).
 - Edificios con altura progresiva por zoom y un único estilo sin reconstrucciones: hover y selección usan
   feature-state.
 - Imágenes AVIF/WebP con `srcset`, `loading="lazy"`, `aspect-ratio` y color de relleno.

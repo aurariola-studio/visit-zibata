@@ -89,11 +89,13 @@ test.describe('Estados de error', () => {
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
   })
 
-  test('si la cartografía base (PMTiles) no carga, se informa y se recupera al reintentar', async ({
+  test('si la cartografía base no carga, se informa y se recupera al reintentar', async ({
     page,
   }) => {
+    // Se corta el TileJSON, no una tesela: es lo que MapLibre pide primero, y su fallo es el único
+    // que deja el mapa sin base. Una tesela suelta que falle no debe disparar este aviso.
     let available = false
-    await page.route(/zibata\.pmtiles/, (route) =>
+    await page.route(/map\/tiles\.json/, (route) =>
       available ? route.continue() : route.fulfill({ status: 404, body: 'Not found' }),
     )
     await openApp(page)

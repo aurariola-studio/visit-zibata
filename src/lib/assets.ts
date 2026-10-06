@@ -10,7 +10,7 @@ export function assetUrl(path: string): string {
   return `${base}${path.replace(/^\/+/, '')}`
 }
 
-/** URL absoluta (necesaria para el protocolo pmtiles:// y para fetch desde el worker del mapa). */
+/** URL absoluta: el worker del mapa pide las teselas desde su propio contexto, sin la página. */
 export function absoluteAssetUrl(path: string): string {
   return new URL(assetUrl(path), window.location.origin).href
 }

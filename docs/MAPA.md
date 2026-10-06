@@ -14,7 +14,7 @@ Cómo se construye y se dibuja el mapa 3D, y por qué. El *cómo ejecutarlo* est
 | Edificios de plazas | Overture + geometría de `plazas.json` | Capa propia e interactiva (`public/map/plaza-buildings.geojson`) |
 | Etiquetas de lugares | OpenStreetMap | Parques, golf, residenciales, escuelas, hitos |
 
-Todo el procesamiento GIS ocurre en `scripts/map` (Node) y se publica como PMTiles + GeoJSON. El navegador
+Todo el procesamiento GIS ocurre en `scripts/map` (Node) y se publica como teselas + GeoJSON. El navegador
 no calcula geometría: solo dibuja.
 
 ## Alturas de los edificios
@@ -100,12 +100,23 @@ en el futuro aparecen, basta con quitar `replaceExisting` y reconstruir.
 
 ## Teselas
 
-- MVT (geojson-vt, extent 4096, tolerancia 3) empaquetadas en PMTiles v3, z12–z16, gzip.
+- MVT (geojson-vt, extent 4096, tolerancia 3) empaquetadas en PMTiles v3, z12–z16, gzip. Ese archivo es
+  el **origen**, no lo que se sirve: al compilar se extrae a **259 teselas sueltas** en
+  `dist/map/tiles/{z}/{x}/{y}.pbf`, más su TileJSON.
 - **Edificios desde z13**, pero en z13 solo las huellas ≥ 60 m²: a esa escala las casetas y los fragmentos
   no se distinguen y encarecían la primera vista en móvil (z13 pasó de 300,9 a 230,6 KB, −23 %; la tesela
   mayor, de 130 a 95 KB).
-- El archivo completo pesa ~1,6 MB y se sirve por rangos HTTP: el navegador descarga solo las teselas que
-  necesita. El hosting debe admitir `Range` (GitHub Pages lo hace).
+- El navegador descarga solo las teselas que necesita, unos 200 KB en la vista inicial. El juego entero
+  pesa 2,04 MB por la red, lo mismo que pesaba el archivo único, porque dentro de él ya viajaban
+  comprimidas. En disco ocupan el doble: se escriben en crudo para no depender de que el hosting
+  entienda `Content-Encoding`, y es el CDN quien las comprime (de ahí el `Content-Type:
+  application/x-protobuf` del `_headers`, que es lo que activa esa compresión en Cloudflare).
+- **Por qué sueltas y no el archivo único.** PMTiles se lee con peticiones `Range`, y el hosting actual
+  no las sirve: devuelve 200 con el archivo entero y la librería aborta. Mudar el archivo a un almacén
+  que sí las sirva (R2, S3) era la salida que recomienda Protomaps, pero sería un segundo origen, y la
+  guía promete y comprueba que no hace ni una petición externa. El archivo único existe para no poner
+  millones de teselas en un bucket; con 259 esa ventaja no aplica y el costo sí. Ver
+  `scripts/build/map-tiles.ts`.
 
 ## Rótulos y marcadores
 

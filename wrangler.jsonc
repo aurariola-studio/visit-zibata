@@ -13,9 +13,9 @@
   "compatibility_date": "2026-10-04",
   "assets": {
     "directory": "./dist",
-    // Una ruta inexistente devuelve el 404.html que genera el build, no la portada: la guía vive en
-    // el hash, así que un *fallback* tipo SPA convertiría cualquier error de tecleo en un 200 y
-    // Google indexaría basura. Hay una prueba E2E que lo comprueba.
+    // Una ruta inexistente devuelve el 404.html que genera el build, no la portada. Un *fallback*
+    // tipo SPA convertiría cualquier error de tecleo en un 200 y Google indexaría basura; desde que
+    // el enrutado salió del hash (v4.6.0) eso pasa de verdad. Hay pruebas E2E que lo comprueban.
     "not_found_handling": "404-page"
   }
 }

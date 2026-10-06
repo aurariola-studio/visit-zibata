@@ -28,7 +28,7 @@ registrar tres implementaciones nuevas. Lo que falta es el contrato que esas cos
 | Migración del historial | `localProfileSnapshot()` ya devuelve exactamente lo que habría que subir una vez: favoritos, calificaciones, visitas e interacciones. | Llamarla al vincular la cuenta. |
 | Estado de la aplicación | `AppState` es solo navegación y vista. No hay identidad en ningún sitio, así que añadirla es aditivo, no una reescritura. | Un contexto de sesión al lado. |
 | Validación | Zod en el build y validación registro a registro en runtime (`runtimeValidation.ts`), que omite lo inválido con aviso. Sirve igual para una respuesta de API que para un JSON. | Nada. |
-| Disciplina asíncrona | Ya existe: `CatalogProvider` cancela al desmontar, hay reintento, y hay pruebas de datos caídos, mapa caído, PMTiles caídos y sin conexión. | Nada. |
+| Disciplina asíncrona | Ya existe: `CatalogProvider` cancela al desmontar, hay reintento, y hay pruebas de datos caídos, mapa caído, cartografía caída y sin conexión. | Nada. |
 | Enrutado y OAuth | Con PKCE el código vuelve en la **query**, y `useUrlSync` conserva `window.location.search` al reescribir la URL. | Limpiar el parámetro tras canjearlo. |
 | Dependencias | No hay enrutador ni librería de estado ni de datos que quitar o pelear. | Nada. |
 
@@ -137,17 +137,18 @@ servidor: que lo que hace la gente se vea.
 ### Las tres piezas
 
 **1. Alojamiento.** [DESPLIEGUE.md](DESPLIEGUE.md) ya lista los requisitos de hoy. Lo que cambia al
-salir de GitHub Pages:
+cambiar de hosting:
 
 | | Hoy | Con usuarios |
 |---|---|---|
-| `Range` para PMTiles | Obligatorio | Igual de obligatorio. **Verificarlo antes de mudarse: sin él no hay mapa.** |
-| CSP | En un `<meta>` porque GitHub Pages no sirve cabeceras | Pasa a cabecera, y por fin se puede declarar `frame-ancestors` (hoy imposible, ver [SEGURIDAD.md](SEGURIDAD.md)) |
+| `Range` para el mapa | **Ya no hace falta**: las teselas se sirven sueltas desde la v4.7.0 | Igual: nada que verificar |
+| CSP | En `<meta>` y en cabecera, de la misma constante | Igual, más el origen del backend en `connect-src` |
 | Reescrituras | No hacen falta: hay un archivo HTML por ruta, generado en el build | Igual: el prerenderizado ya cubre el enrutado |
 | Variables de entorno | `BASE_PATH` y `SITE_URL` al compilar | Más la URL y la clave pública del backend |
 
-Cloudflare Pages, Netlify y Vercel cumplen las cuatro, y los tres ya aparecen en DESPLIEGUE.md como
-compatibles con `Range`.
+Cualquier servidor de archivos estáticos cumple las cuatro. Esa lista encogió a propósito: el
+requisito de `Range` se quitó porque fue el que tumbó el mapa al mudarse a un Worker con assets
+estáticos, y un requisito que nadie vuelve a comprobar es una trampa esperando a la siguiente mudanza.
 
 **Esto ya está hecho y no espera al backend:** el build prerenderiza una página por lugar, por plaza
 y por página de información, en los dos idiomas (232 archivos), cada una con su `<title>`, su
@@ -200,7 +201,9 @@ Con ese reparto el paquete inicial no se mueve.
 
 ### Qué verificar antes de comprometerse
 
-1. **`Range` en el host elegido.** El mapa entero depende de ello.
+1. **Cómo sirve los archivos el host elegido.** Ya no hace falta `Range`, pero sí que un camino
+   inexistente dé 404 y que no se añada una barra final a los archivos. La lección de la v4.7.0 es
+   que esto se comprueba **contra el sitio publicado**, no en la documentación del proveedor.
 2. **Cuánto pesa el SDK**, medido y no supuesto, antes de decidir si se carga en diferido o se habla
    con la API a mano.
 3. **Qué hace el plan gratuito con la inactividad.** Varios proveedores suspenden proyectos sin
@@ -243,7 +246,7 @@ Proveedor alemán de máquinas virtuales, muy barato y muy bueno en lo suyo. No 
 entrega **una máquina vacía, no un servicio**: sistema, nginx, TLS, Postgres, respaldos, cortafuegos
 y actualizaciones pasan a ser trabajo propio, que es justo el trabajo que hoy no existe. Dos pegas
 concretas más: desde Querétaro a sus regiones europeas hay unos 150 ms (habría que usar la de Estados
-Unidos), y sin CDN delante el `zibata.pmtiles` de 2 MB por rangos se arrastra, así que acabaría
+Unidos), y sin CDN delante los 2 MB de teselas se arrastran, así que acabaría
 habiendo dos cosas que mantener en lugar de una. Tendría sentido el día que se quiera ser dueño de la
 base de datos; con 101 locales y público de barrio, los planes gratuitos quedan lejos de agotarse.
 

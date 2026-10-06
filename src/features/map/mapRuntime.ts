@@ -1,20 +1,19 @@
-/** Registro único (por página) del worker de MapLibre y del protocolo pmtiles://. */
+/** Registro único (por página) del worker de MapLibre. */
 
-import { addProtocol, removeProtocol, setWorkerUrl } from 'maplibre-gl'
+import { setWorkerUrl } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
-import { Protocol } from 'pmtiles'
 
 let registered = false
 
 /**
- * `reset`: al reintentar tras un fallo se registra un protocolo nuevo, porque pmtiles conserva en caché la
- * cabecera que no pudo leer y el reintento volvería a fallar aunque el archivo ya esté disponible.
+ * Hasta la v4.7.0 esto registraba además el protocolo `pmtiles://`, y `reset` existía para
+ * descartar la caché de una cabecera que no se había podido leer: sin eso, el reintento fallaba
+ * aunque el archivo ya estuviera disponible. Las teselas se sirven sueltas, así que no hay protocolo
+ * propio ni caché que invalidar, y reintentar es volver a pedirlas.
  */
-export function ensureMapRuntime({ reset = false }: { reset?: boolean } = {}): void {
-  if (!registered) setWorkerUrl(workerUrl)
-  if (registered && !reset) return
-  if (registered) removeProtocol('pmtiles')
-  addProtocol('pmtiles', new Protocol().tile)
+export function ensureMapRuntime(): void {
+  if (registered) return
+  setWorkerUrl(workerUrl)
   registered = true
 }
 

@@ -2,6 +2,57 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.7.0]: 2026-10-05
+
+### Corregido
+
+- **El mapa no cargaba en producción.** `zibata.pmtiles` se lee con **peticiones Range**, y el hosting
+  (Cloudflare Workers con assets estáticos) no las sirve: a un `Range: bytes=0-16383` responde `200`
+  con los 2,1 MB enteros, sin `Accept-Ranges`, y lo mismo con cualquier otro archivo. La librería
+  aborta con *"Check that your storage backend supports HTTP Byte Serving"*, y la guía mostraba "El
+  mapa 3D no está disponible". No es una opción que se pueda activar: ese servidor no hace byte
+  serving.
+
+  **Las teselas pasan a servirse sueltas.** Al compilar, el archivo se extrae a 259 archivos
+  `dist/map/tiles/{z}/{x}/{y}.pbf` (z12 a z16) más su TileJSON, y MapLibre los pide uno a uno, como
+  cualquier mapa. Por la red cuesta **lo mismo**, 2,04 MB, porque dentro del archivo las teselas ya
+  viajaban comprimidas, y la mayor sigue pesando 98 KB. Encima quita 7 KB del paquete del mapa (283,5
+  a 276,4 KB), porque la librería `pmtiles` deja de viajar al navegador.
+
+  Se descartaron las dos alternativas. Mudar el archivo a R2 o S3, que es lo que recomienda Protomaps,
+  sería un segundo origen, y la guía promete y comprueba en sus pruebas que no hace ni una petición
+  externa. Y escribir un Worker que implemente los rangos dejaría el proyecto atado a que el hosting
+  haga algo especial, que es el problema de hoy con otro disfraz. El archivo único existe para no
+  poner millones de teselas en un bucket: con 259 esa ventaja no aplica y el costo sí.
+
+### Cambiado
+
+- **El requisito de `Range` desaparece del proyecto.** Ya no hace falta nada del hosting salvo que
+  responda 404 a lo que no existe. Las teselas se escriben en crudo para que funcionen en cualquier
+  servidor, y es el `Content-Type: application/x-protobuf` del `_headers` el que hace que el CDN las
+  comprima (ese tipo sí está en la lista que comprime Cloudflare; sin declararlo viajarían sin
+  comprimir y el mapa pasaría de 2 a 4,2 MB). Un hosting que no lea ese archivo sigue sirviendo el
+  mapa, solo que más pesado: nunca roto.
+- El presupuesto de peso mide ahora el directorio de teselas (`tiles`) en vez del archivo único. El
+  límite se queda en 2100 KB porque el peso por la red no cambió.
+- `pmtiles` pasa de dependencia a dependencia de desarrollo: ya solo se usa al compilar.
+
+### Por qué no lo vieron las pruebas
+
+`vite preview` **sí** sirve peticiones `Range`, así que las 222 pruebas E2E pasaban con el mapa roto en
+producción. El requisito estaba escrito en DESPLIEGUE.md desde el primer día y el propio `MapView.tsx`
+lo nombraba en un comentario, pero nadie lo volvió a comprobar al cambiar de hosting. Queda anotado en
+PRUEBAS.md, donde toca: toda la suite corre contra un servidor que no es el de verdad, así que una
+publicación se comprueba abriendo el sitio.
+
+### Documentación
+
+- **El README decía cosas que ya no eran ciertas** y es la portada de un repositorio público: se
+  llamaba "Zibatá · Comer y beber", prometía un sitio en GitHub Pages y describía una publicación que
+  ya no existe. Ahora dice qué es, dónde vive y cómo se publica, con las cifras del dataset al día.
+- ARQUITECTURA, MAPA, DESPLIEGUE, CUENTAS y PRUEBAS pierden el requisito de `Range` y explican el
+  porqué de las teselas sueltas donde corresponde.
+
 ## [4.6.0]: 2026-10-05
 
 ### Cambiado

@@ -2,7 +2,7 @@
   "name": "visit-zibata",
   "private": true,
   "license": "MIT",
-  "version": "4.6.0",
+  "version": "4.7.0",
   "description": "Guía interactiva 3D de Zibatá, Querétaro: la guía de zibateños para zibateños. Sitio estático, sin backend.",
   "type": "module",
   "engines": {
@@ -44,7 +44,6 @@
     "fuse.js": "^7.5.0",
     "lucide-react": "^1.46.0",
     "maplibre-gl": "^6.10.0",
-    "pmtiles": "^4.5.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "zod": "^4.6.5"
@@ -69,6 +68,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "jsdom": "^29.1.1",
     "papaparse": "^5.7.0",
+    "pmtiles": "^4.5.0",
     "sharp": "^0.35.4",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",

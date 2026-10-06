@@ -40,7 +40,7 @@ de pasar por casualidad.
 Cubren: mapa 3D y marcadores, plazas y fichas, búsqueda y filtros, favoritos, enlaces profundos y botón
 atrás, teclado (salto al buscador, Escape), 404 propio, región viva única, táctil (toques
 y arrastre de la hoja), responsive en 9 tamaños, seguridad (CSP, enlaces externos, 404) y degradación
-(sin WebGL2, sin datos, sin chunk del mapa, sin PMTiles, sin conexión, registro inválido).
+(sin WebGL2, sin datos, sin chunk del mapa, sin cartografía base, sin conexión, registro inválido).
 
 Los enlaces profundos se abren con el ayudante `openApp(page, { path })`, que navega a la ruta real
 (`lugar/tomassa`) en vez de a un hash. Es el mismo camino que recorre quien pega el enlace en la barra
@@ -86,7 +86,10 @@ responde la raíz de forma determinista; el inglés se prueba pidiendo su árbol
   las barras dinámicas ni el comportamiento real de `100dvh` en iOS.
 - **Arrastre táctil en WebKit**: Playwright solo inyecta gestos de arrastre táctil en Chromium; en WebKit
   se prueban toques.
-- **Publicación real** en Cloudflare (ver [DESPLIEGUE.md](DESPLIEGUE.md)). En particular, que un
+- **Publicación real** en Cloudflare (ver [DESPLIEGUE.md](DESPLIEGUE.md)). Esto no es una nota
+  menor: en la v4.7.0 el mapa estuvo caído en producción con la suite entera en verde, porque
+  `vite preview` sí servía peticiones `Range` y el hosting real no. Toda la suite corre contra un
+  servidor que no es el de verdad, así que **una publicación se comprueba abriendo el sitio**. En particular, que un
   archivo plano se sirva sin redirigir a la versión con barra final se verificó en `vite preview` y
   en la documentación de Cloudflare, no contra el sitio publicado.
 - **Lectores de pantalla distintos de NVDA** (VoiceOver, JAWS, TalkBack).

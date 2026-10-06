@@ -1,25 +1,30 @@
-# Zibatá · Comer y beber
+# Visit Zibatá
 
-Guía interactiva en 3D para descubrir dónde comer y beber en **Zibatá, Querétaro**. El mapa es el
-producto: se explora Zibatá, se elige una zona y se descubren sus lugares, con búsqueda, filtros, ficha
-de cada establecimiento y enlace a Google Maps para llegar. En los datos y el código esas zonas se
-llaman `plaza`.
+La guía de zibateños para zibateños. Una guía interactiva en 3D de **Zibatá, Querétaro**, publicada en
+<https://visitzibata.com>. El mapa es el producto: se explora Zibatá, se elige una zona y se descubren
+sus lugares, con búsqueda, filtros, ficha de cada establecimiento y enlace a Google Maps para llegar.
+En la interfaz y en las URLs esas agrupaciones se llaman **zona**; en los datos y el código, `plaza`.
 
-- Sitio **100 % estático** (GitHub Pages u otro hosting): sin backend, cuentas, API keys ni servicios de pago.
-- Mapa propio con **MapLibre GL JS**: edificios 3D, calles, áreas verdes y agua a partir de OpenStreetMap y
-  Overture Maps: el 96 % de las vialidades dibujadas cae sobre el plano del cliente (a 11 m) y el plano
-  queda cubierto al 89 % (ver [docs/MAPA.md](docs/MAPA.md)).
+- Sitio **100 % estático**: sin backend, cuentas, API keys ni servicios de pago. Cualquier hosting de
+  archivos lo sirve. Hoy lo sirve un Worker de Cloudflare con assets estáticos
+  (ver [docs/DESPLIEGUE.md](docs/DESPLIEGUE.md)).
+- Mapa propio con **MapLibre GL JS** y teselas propias: edificios 3D, calles, áreas verdes y agua a
+  partir de OpenStreetMap y Overture Maps. El 96 % de las vialidades dibujadas cae sobre el plano del
+  cliente (a 11 m) y el plano queda cubierto al 89 % (ver [docs/MAPA.md](docs/MAPA.md)).
 - **101 locales verificados en 11 zonas activas**, revisados uno por uno con el propietario el
-  2026-09-22: 100 con descripción propia del negocio, 92 con horario, 88 con ubicación exacta y 78 con
-  teléfono ([research/](research/audit-report.md) guarda fuentes y confianza por registro). 15
+  2026-09-22: todos con descripción propia del negocio, 90 con horario, 88 con ubicación exacta y 77
+  con teléfono ([research/](research/audit-report.md) guarda fuentes y confianza por registro). 18
   categorías con sus giros, y un local puede tener dos giros reales (El Hornero es parrilla argentina y
   pizzería).
-- Escritorio (panel lateral) y móvil (hoja inferior), en **español e inglés** (se cambia de un toque en la
-  barra superior) y preparado para más idiomas. Diseñado
-  para WCAG 2.1 AA: sin violaciones graves o críticas de axe, navegable con teclado y probado con NVDA
-  (alcance y límites en [docs/ACCESIBILIDAD.md](docs/ACCESIBILIDAD.md)).
+- **Una página real por ruta**, en los dos idiomas: 232 archivos HTML con su título, su descripción, su
+  canonical, sus `hreflang` y sus datos estructurados, más una imagen de vista previa por local. Es lo
+  que hace que cada ficha se indexe y se comparta por separado.
+- Escritorio (panel lateral) y móvil (hoja inferior), en **español e inglés** (se cambia de un toque en
+  la barra superior, y cada idioma tiene su propio árbol de URLs) y preparado para más idiomas.
+  Diseñado para WCAG 2.1 AA: sin violaciones graves o críticas de axe, navegable con teclado y probado
+  con NVDA (alcance y límites en [docs/ACCESIBILIDAD.md](docs/ACCESIBILIDAD.md)).
 
-![Zibatá · Comer y beber](public/og-image.png)
+![Visit Zibatá](public/og-image.png)
 
 ## Requisitos
 
@@ -41,7 +46,7 @@ npm run dev            # http://localhost:5173
 | Comando | Descripción |
 | --- | --- |
 | `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Valida datos, comprueba tipos y genera `dist/` |
+| `npm run build` | Valida datos, comprueba tipos y genera `dist/` (incluye las 232 páginas, el sitemap y las teselas del mapa) |
 | `npm run preview` | Sirve `dist/` localmente |
 | `npm run check` | Lint + tipos + tests + build |
 | `npm run lint` / `lint:fix` | Biome (lint y formato) |
@@ -51,11 +56,12 @@ npm run dev            # http://localhost:5173
 | `npm run data:validate` | Valida `data/commercial` (`-- --fix` recalcula campos derivados) |
 | `npm run data:import -- <csv>` | Importa locales desde CSV |
 | `npm run images:optimize` | Optimiza fotos (AVIF/WebP + miniaturas) y las registra |
-| `npm run images:og` | Regenera la imagen para redes sociales (con `npm run preview` activo) |
+| `npm run images:og` | Regenera la imagen general para redes sociales (con `npm run preview` activo) |
+| `npm run images:og-places` | Compone la imagen de vista previa de cada local, **después** del build |
 | `npm run images:icons` | Regenera los iconos "maskable" del manifiesto |
 | `npm run data:apply-review -- <carpeta>` | Aplica las respuestas del formulario de verificación del propietario |
 | `npm run map:fetch` | Descarga OSM + edificios y cobertura arbórea de Overture (≈15 min) |
-| `npm run map:build` | Genera PMTiles, edificios de plazas, extensión y manifiesto |
+| `npm run map:build` | Genera `zibata.pmtiles` (el archivo fuente del mapa), edificios de plazas, extensión y manifiesto |
 | `npm run map:georef` | Georreferencia el plano del cliente |
 | `npm run map:suggest-plaza -- --lat=… --lng=…` | Sugiere la geometría de una plaza |
 
@@ -67,8 +73,8 @@ data/
   geographic/   config.json · extent.json · manifest.json · reference/ (plano) · raw/ (no versionado)
 docs/           Arquitectura, datos, mapa, pipeline GIS, pruebas, seguridad, accesibilidad,
                 despliegue, contribuir, licencias y release/
-public/         map/ (PMTiles + GeoJSON) · icons/ · images/ · favicon, OG, manifest
-scripts/        data/ (validar, importar) · map/ (pipeline GIS) · images/
+public/         map/ (archivo de teselas + GeoJSON) · icons/ · images/ · favicon, OG, manifest
+scripts/        build/ (prerenderizado, teselas, datos estructurados) · data/ · map/ · images/ · perf/
 src/            app/ · components/ · config/ · data/ · features/ · hooks/ · i18n/ · lib/ · styles/ · types/
 tests/e2e/      Playwright
 ```
@@ -127,28 +133,28 @@ npm run map:fetch && npm run map:build
 | [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) | Cómo contribuir y cómo reportar una vulnerabilidad |
 | [CHANGELOG.md](CHANGELOG.md) | Cambios por versión |
 
-## Publicación (GitHub Pages)
+## Publicación
 
-1. Sube el repositorio a GitHub (rama `main`).
-2. En **Settings → Pages**, elige **Source: GitHub Actions**.
-3. Cada push a `main` ejecuta `.github/workflows/deploy.yml`: instalación → validación → lint/tipos/tests →
-   build → E2E → publicación.
+El sitio vive en <https://visitzibata.com>, servido por un **Worker de Cloudflare con assets
+estáticos**. Cada push a `main` ejecuta `.github/workflows/deploy.yml`: instalación → Gitleaks →
+validación de datos → lint, tipos y tests → build → imágenes de vista previa → presupuesto de peso →
+humo E2E → `wrangler deploy`. Si cualquier paso falla, no se publica nada.
 
-**La guía todavía no está publicada:** la versión 1.0.0 se etiquetó en local, sin repositorio remoto (ver
-[docs/DESPLIEGUE.md](docs/DESPLIEGUE.md)).
+Se compila y se publica desde GitHub Actions y **no** con la integración de Git de Cloudflare, a
+propósito: esa integración compila por su cuenta y no corre las pruebas. El detalle, los secretos que
+hacen falta y cómo verificar una publicación, en [docs/DESPLIEGUE.md](docs/DESPLIEGUE.md).
 
-El sitio queda en `https://<usuario>.github.io/<repositorio>/`. Con dominio propio o un repositorio
-`<usuario>.github.io`, define las variables de repositorio `PAGES_BASE_PATH=/` y
-`PAGES_SITE_URL=https://tu-dominio/`.
-
-Las pull requests ejecutan `.github/workflows/ci.yml` (incluye búsqueda de secretos con Gitleaks; en cuentas
-de organización Gitleaks requiere `GITLEAKS_LICENSE`). Dependabot propone actualizaciones semanales.
+Las pull requests ejecutan `.github/workflows/ci.yml`, que corre la suite E2E completa en las dos bases
+(raíz y subdirectorio) y busca secretos con Gitleaks. Dependabot propone actualizaciones semanales.
 
 ### Otro hosting
 
-`npm run build` genera `dist/`, que se puede publicar en cualquier servidor estático. Si se sirve desde un
-subdirectorio: `BASE_PATH=/subdirectorio/ npm run build`. El servidor debe admitir peticiones HTTP `Range`
-(para PMTiles), algo habitual en Netlify, Cloudflare Pages, Vercel, S3 o nginx.
+`npm run build` genera `dist/`, que se puede publicar en cualquier servidor de archivos estáticos. Si
+se sirve desde un subdirectorio: `BASE_PATH=/subdirectorio/ npm run build`.
+
+No hay requisitos especiales: ni reescrituras, ni peticiones `Range`, ni cabeceras propias. Lo único
+que conviene es que el servidor devuelva **404** para una ruta inexistente (el build genera
+`404.html`) y que no añada una barra final a los archivos.
 
 ## Fuentes cartográficas y licencias
 

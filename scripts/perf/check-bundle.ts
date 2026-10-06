@@ -4,7 +4,7 @@
  * Presupuesto de rendimiento: falla si el build supera los límites de peso (gzip) acordados. Lo ejecuta la
  * CI para que una dependencia nueva o un dato inflado no degraden la carga sin que nadie lo note.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 import { ROOT } from '../data/lib/dataset.ts'
 
@@ -37,10 +37,14 @@ const KB = 1024
  * ocurre al compilar. El margen apretado es un problema del próximo cambio que toque el paquete
  * inicial, y entonces toca partir, no renumerar.
  *
- * `pmtiles` es el archivo completo, que el navegador NO descarga entero: se piden por rango solo las
- * teselas visibles. Por eso el límite que de verdad afecta a la fluidez es `largestTile` (la tesela más
- * pesada del archivo), y el del archivo entero cuida el peso del repositorio y del despliegue. Subió de
- * 1900 a 2100 KB al añadir el arbolado, y `dataJs` de 20 a 30 KB cuando el propietario verificó los
+ * `tiles` es el juego de teselas entero, que el navegador NO descarga: pide solo las que entran en
+ * pantalla. Por eso el límite que de verdad afecta a la fluidez es `largestTile` (la tesela más pesada),
+ * y el del conjunto cuida el peso del despliegue. Se miden **comprimidas**, que es como viajan: en
+ * disco pesan el doble porque se escriben en crudo y las comprime el CDN (ver scripts/build/map-tiles.ts).
+ * Hasta la v4.7.0 esto medía `dist/map/zibata.pmtiles`, un archivo único que se leía por rangos; el
+ * límite se mantiene en 2100 KB porque el peso por la red no cambió al soltar las teselas.
+ *
+ * `dataJs` subió de 20 a 30 KB cuando el propietario verificó los
  * 103 locales y el dataset ganó horarios, descripciones y ubicaciones propias (v1.5.0), y de 30 a 34
  * al hacerse bilingüe la guía (v3.0.0): las etiquetas y las descripciones viajan en los dos idiomas.
  * Si el dato vuelve a crecer, antes de subir el número toca partir el paquete por idioma, que hoy no
@@ -52,7 +56,7 @@ const BUDGET = {
   mapJs: 320,
   mapCss: 15,
   dataJs: 34,
-  pmtiles: 2100,
+  tiles: 2100,
   largestTile: 140,
 }
 
@@ -67,19 +71,35 @@ const sum = (names: string[]) =>
   names.reduce((total, name) => total + gz(`${DIST}assets/${name}`), 0)
 const matching = (pattern: RegExp) => assets.filter((name) => pattern.test(name))
 
+/** Recorre `dist/map/tiles` y mide cada tesela comprimida, que es como la recibe el navegador. */
+function medirTeselas(dir: string): { total: number; mayor: number } {
+  let total = 0
+  let mayor = 0
+  for (const entrada of readdirSync(dir, { withFileTypes: true })) {
+    const ruta = `${dir}/${entrada.name}`
+    if (entrada.isDirectory()) {
+      const hijo = medirTeselas(ruta)
+      total += hijo.total
+      mayor = Math.max(mayor, hijo.mayor)
+    } else if (entrada.name.endsWith('.pbf')) {
+      const peso = gz(ruta)
+      total += peso
+      mayor = Math.max(mayor, peso)
+    }
+  }
+  return { total, mayor }
+}
+
+const teselas = medirTeselas(`${DIST}map/tiles`)
+
 const measured = {
   initialJs: sum(referenced('.js')),
   initialCss: sum(referenced('.css')),
   mapJs: sum(matching(/^MapView-.*\.js$/)),
   mapCss: sum(matching(/^MapView-.*\.css$/)),
   dataJs: sum(matching(/^(categories|plazas|places)-.*\.js$/)),
-  pmtiles: statSync(`${DIST}map/zibata.pmtiles`).size / KB,
-  largestTile:
-    (
-      JSON.parse(readFileSync(`${ROOT}data/geographic/manifest.json`, 'utf8')) as {
-        outputs: { 'public/map/zibata.pmtiles': { largestTile: { bytes: number } } }
-      }
-    ).outputs['public/map/zibata.pmtiles'].largestTile.bytes / KB,
+  tiles: teselas.total,
+  largestTile: teselas.mayor,
 }
 
 let failed = false

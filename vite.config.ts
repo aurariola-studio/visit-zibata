@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
 import pkg from './package.json' with { type: 'json' }
+import { mapTiles } from './scripts/build/map-tiles.ts'
 import { prerender } from './scripts/build/prerender.ts'
 import { APP_ROUTE } from './src/lib/url-state.ts'
 
@@ -215,6 +216,14 @@ function cloudflareHeaders(): Plugin {
 /map/*
   Cache-Control: public, max-age=86400
 
+# Las teselas se escriben en crudo para que funcionen en cualquier hosting, y es este tipo el que
+# hace que el CDN las comprima: application/x-protobuf esta en la lista que Cloudflare comprime, y
+# sin declararlo viajan sin comprimir y el mapa pasa de 2 a 4,2 MB. Un hosting que no lea este
+# archivo sigue sirviendo el mapa, solo que mas pesado: nunca roto.
+/map/tiles/*
+  Content-Type: application/x-protobuf
+  Cache-Control: public, max-age=86400
+
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
@@ -271,6 +280,7 @@ export default defineConfig({
     notFoundPage(),
     cloudflareHeaders(),
     prerender({ base, siteUrl }),
+    mapTiles({ base }),
   ],
   build: {
     target: 'es2022',
