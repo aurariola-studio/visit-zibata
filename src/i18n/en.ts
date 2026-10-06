@@ -197,7 +197,10 @@ export const en = {
     'It is an independent guide, by the community and for the community, built from public information and updated whenever something changes.',
 
   'about.privacy': 'Privacy',
-  'about.privacyLead': 'This guide uses no accounts, no analytics and no tracking cookies.',
+  'about.privacyLead':
+    'This guide uses no accounts and no tracking cookies, and shares your data with no one.',
+  'about.privacyCounts':
+    'To know which places people care about, our own server adds one visit per page per day. That is all that is stored: "this page was opened 12 times today". Nothing records who, from where, or with what, so there is no way to follow anyone between two visits. The data is ours: it is neither sold nor shared.',
   'about.privacyBody':
     'Your favourites, your ratings, the places you open and your language are stored in this browser only. They are never sent to a server and you can erase them at any time by clearing this site’s data in your browser.',
   'about.privacyLocation':

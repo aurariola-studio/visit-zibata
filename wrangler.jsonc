@@ -5,14 +5,46 @@
 // dist/, con el mismo _headers), pero sí cambia el comando de publicación: `wrangler deploy` en
 // lugar de `wrangler pages deploy`.
 //
-// Sin `main`: es un Worker solo de assets, sin código propio. El día que haga falta una API, aquí
-// se añade el script y conviven.
+// Desde la v4.8.0 sí hay `main`: un script que sirve los mismos archivos y cuenta la visita. Ver
+// worker/index.ts, que empieza explicando lo que NO hace.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "visit-zibata",
   "compatibility_date": "2026-10-04",
+  "main": "./worker/index.ts",
+  "observability": { "enabled": true },
+  // La base de visitas. `database_id` lo da `npm run analitica:crear` una sola vez (ver
+  // docs/DESPLIEGUE.md); no es un secreto, es el identificador de la base. Si falta, el sitio
+  // funciona igual y no se cuenta nada: worker/index.ts lo comprueba.
+  "d1_databases": [
+    {
+      "binding": "ANALITICA",
+      "database_name": "visit-zibata-analitica",
+      "database_id": "PENDIENTE"
+    }
+  ],
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    /*
+     * El Worker corre **solo** en las rutas de página, y por eso van enumeradas una a una en vez de
+     * poner `true`. Con `true` cada tesela, cada imagen y cada archivo de `assets/` sería una
+     * invocación facturada, y son cientos por visita; así son ocho patrones y ni un archivo
+     * estático pasa por el código.
+     *
+     * Es una lista blanca a propósito: si mañana aparece un tipo de ruta nuevo, no se contará hasta
+     * que se añada aquí. Preferible a que se cuele lo que no toca.
+     */
+    "run_worker_first": [
+      "/",
+      "/lugar/*",
+      "/zona/*",
+      "/info/*",
+      "/en",
+      "/en/place/*",
+      "/en/area/*",
+      "/en/info/*"
+    ],
     // Una ruta inexistente devuelve el 404.html que genera el build, no la portada. Un *fallback*
     // tipo SPA convertiría cualquier error de tecleo en un 200 y Google indexaría basura; desde que
     // el enrutado salió del hash (v4.6.0) eso pasa de verdad. Hay pruebas E2E que lo comprueban.

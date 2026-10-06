@@ -207,7 +207,15 @@ export const es = {
     'Es una guía independiente, de la comunidad para la comunidad, hecha con información pública y actualizada cuando algo cambia.',
 
   'about.privacy': 'Privacidad',
-  'about.privacyLead': 'Esta guía no usa cuentas, analítica ni cookies de rastreo.',
+  'about.privacyLead':
+    'Esta guía no usa cuentas ni cookies de rastreo, y no comparte tus datos con nadie.',
+  /*
+   * Desde la v4.8.0 la guía sí cuenta visitas, así que el aviso lo dice. El texto es deliberadamente
+   * concreto: una promesa vaga ("respetamos tu privacidad") no se puede comprobar, y esta sí, porque
+   * describe exactamente las cuatro columnas que existen en la base.
+   */
+  'about.privacyCounts':
+    'Para saber qué lugares interesan, nuestro propio servidor suma una visita por página y por día. Eso es todo lo que se guarda: "esta página se abrió 12 veces hoy". No queda registro de quién, ni desde dónde, ni con qué, así que no hay manera de seguir a nadie entre dos visitas. El dato es nuestro: no se vende ni se comparte.',
   'about.privacyBody':
     'Tus favoritos, tus calificaciones, los lugares que abres y el idioma se guardan únicamente en este navegador. No se envían a ningún servidor y puedes borrarlos cuando quieras desde los datos del sitio en tu navegador.',
   'about.privacyLocation':

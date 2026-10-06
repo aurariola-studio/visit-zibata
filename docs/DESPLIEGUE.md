@@ -76,6 +76,43 @@ publica. Hay pruebas E2E que lo comprueban en local, porque un plugin hace que `
 ese archivo igual que el hosting; contra el sitio publicado conviene confirmarlo una vez con
 `curl -I https://visitzibata.com/no-existe`.
 
+## La base de visitas (D1)
+
+Desde la v4.8.0 el Worker cuenta visitas. Preparación, **una sola vez**:
+
+```bash
+npm run analitica:crear      # crea la base y devuelve su database_id
+```
+
+Pega ese `database_id` en `wrangler.jsonc` (donde dice `PENDIENTE`). No es un secreto: identifica la
+base, no da acceso a ella. Después, crea la tabla:
+
+```bash
+npm run analitica:esquema
+```
+
+El **token de la API de Cloudflare** necesita permiso `D1:Edit` además de `Workers Scripts:Edit`;
+sin él, `wrangler deploy` falla al publicar un Worker con enlace a D1. Se añade al mismo token que ya
+vive en el secreto `CLOUDFLARE_API_TOKEN`.
+
+Para leer los números:
+
+```bash
+npm run analitica:ver        # lo más abierto de los últimos 30 días
+```
+
+**Si algo de esto falta, el sitio funciona igual.** `worker/index.ts` comprueba que el enlace exista
+y, si no, sirve la página y no cuenta. Es deliberado: contar es lo accesorio.
+
+### Qué cuesta
+
+El Worker corre **solo en las ocho rutas de página** (`run_worker_first` en `wrangler.jsonc`), nunca
+en las teselas, las imágenes ni los archivos de `assets/`. Con `true` en vez de esa lista, cada
+archivo estático contaría como invocación facturada, y son cientos por visita.
+
+Como la tabla guarda un contador por día y ruta en vez de una fila por visita, son unas pocas
+escrituras por página y día, y la tabla se queda en cientos de filas al mes para siempre.
+
 ## Requisitos del hosting
 
 - **Nada especial.** Las teselas del mapa se sirven sueltas, así que ya **no** hace falta que el

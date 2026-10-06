@@ -2,6 +2,57 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.9.0]: 2026-10-06
+
+### Añadido
+
+- **La guía cuenta visitas, y son suyas.** `worker/` es el primer código de servidor del proyecto:
+  sirve los mismos archivos de `dist/` y suma una fila por **día, ruta e idioma** con un contador.
+  "El 5 de octubre, /lugar/tomassa se abrió 12 veces, en español". Eso es todo lo que se guarda.
+- **Se cuenta en el servidor, no en la página.** Cero bytes de JavaScript, que importa porque el
+  paquete inicial está a 300 bytes de su límite; no lo bloquea un bloqueador de anuncios; funciona
+  sin JavaScript; y es imposible que recoja algo de la persona porque nunca toca el navegador. A
+  cambio hay que descartar robots, que se hace por user agent.
+- `npm run analitica:crear`, `analitica:esquema` y `analitica:ver` para montar la base y leer los
+  números desde la máquina del propietario. No hay endpoint de lectura ni panel: una cosa menos que
+  proteger.
+
+### Decisiones que quedan escritas
+
+- **No hay identificador, ni cookie, ni IP, ni user agent, ni referente en la base.** No es que se
+  anonimice después: es que no se recoge. El costo hay que saberlo y está anotado: **no se puede
+  saber cuántas personas distintas** hubo, solo cuántas veces se abrió cada página. Para decidir qué
+  locales interesan alcanza, y a cambio no hay nada que prometer sobre el resto.
+- **Es un `UPSERT`, no un registro por visita.** Con una fila por visita la tabla crece sin fin y hay
+  que acordarse de purgarla; así se queda en cientos de filas al mes, y no existe ningún instante en
+  el que la base haya guardado un evento individual. Hay una prueba que falla si deja de serlo.
+- **Contar jamás puede romper la página.** La respuesta se obtiene primero y se devuelve igual aunque
+  la base no exista, esté caída o falle a mitad. Sin enlace a la base, el sitio sirve y no cuenta.
+- **El Worker corre solo en las ocho rutas de página.** Con `run_worker_first: true` cada tesela,
+  imagen y archivo de `assets/` sería una invocación facturada, y son cientos por visita. La lista
+  blanca también evita contar un archivo como si fuera una visita.
+
+### Cambiado
+
+- **El aviso de privacidad lo dice.** Decía "no usa cuentas, analítica ni cookies de rastreo", y la
+  parte de la analítica dejó de ser cierta. Ahora dice qué se cuenta, con qué detalle y qué no se
+  guarda, en los dos idiomas, y hay pruebas que lo exigen en la página que la gente abre, no solo en
+  el repositorio. Lo que **no** cambia es que navegar no genera peticiones a terceros: el conteo
+  ocurre en el mismo origen, así que la CSP no se tocó y la prueba de cero peticiones externas sigue
+  en pie.
+- La regla de AGENTS.md pasa de "nada de backend" a decir exactamente lo único que corre en el
+  servidor y bajo qué condiciones.
+
+### Por qué no se usó lo de Cloudflare
+
+Cloudflare Web Analytics estaba inyectándose solo en el sitio y la CSP lo bloqueaba. Es honesto (no
+usa cookies ni huella digital), y habría dado el mismo número gratis, pero exigía abrir `script-src`
+a un tercero. `script-src` es la directiva que más pesa: lo que entra por ahí se ejecuta y puede leer
+el almacenamiento local, donde vive Mi Zibatá (favoritos, calificaciones, visitas). La diferencia de
+fondo es que hoy la promesa es **comprobable**, porque una prueba falla si hay una sola petición
+externa, y así habría pasado a ser **confiada**. Se apagó en el panel de Cloudflare.
+
+## [4.7.1]: 2026-10-05
 ## [4.8.1]: 2026-10-06
 
 ### Cambiado

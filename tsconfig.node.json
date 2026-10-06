@@ -33,6 +33,7 @@
     "playwright.config.ts",
     "scripts/**/*.ts",
     "tests/e2e/**/*.ts",
+    "worker/**/*.ts",
     "src/vite-env.d.ts"
   ]
 }
