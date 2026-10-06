@@ -4,7 +4,10 @@ Guía para agentes y colaboradores. Contexto del producto y comandos en [README.
 
 ## Reglas del proyecto
 
-- Sitio estático: nada de backend, cuentas, API keys ni dependencias de servicios de pago en runtime.
+- Sitio estático: nada de cuentas, API keys ni dependencias de servicios de pago en runtime. Lo único
+  que corre en el servidor es `worker/`, que sirve los archivos y suma un contador de visitas por
+  página y día (sin cookies, sin IP, sin nada por persona). Si se cae, el sitio sigue: contar no
+  puede romper la página, y hay pruebas que fijan lo que NO se guarda.
 - El mapa es MapLibre con datos propios (`public/map`). Google Maps solo como enlace externo; nunca Google
   Places, scraping ni descarga de fotos de terceros.
 - No inventar datos de negocios reales (horarios, teléfonos, descripciones, fotos). Sin reseñas, ratings,

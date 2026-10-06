@@ -76,6 +76,72 @@ publica. Hay pruebas E2E que lo comprueban en local, porque un plugin hace que `
 ese archivo igual que el hosting; contra el sitio publicado conviene confirmarlo una vez con
 `curl -I https://visitzibata.com/no-existe`.
 
+## La base de visitas (D1)
+
+Desde la v4.8.0 el Worker cuenta visitas. Preparación, **una sola vez**.
+
+**1. Permiso en el token.** El token de la API de Cloudflare que vive en el secreto
+`CLOUDFLARE_API_TOKEN` necesita `D1:Edit` además de `Workers Scripts:Edit`; sin él, `wrangler deploy`
+falla al publicar un Worker con enlace a D1. En el panel de Cloudflare: icono de perfil (arriba a la
+derecha) → **My Profile** → **API Tokens** → el token → **Edit** → añadir el permiso
+**Account · D1 · Edit** → **Continue to summary** → **Update token**.
+
+Editar un token **no cambia su valor**, así que el secreto de GitHub se queda como está. Si en vez de
+editarlo se crea uno nuevo, hay que actualizar el secreto con `gh secret set CLOUDFLARE_API_TOKEN`.
+
+**2. La base.** Hace falta estar identificado en Cloudflare desde esta máquina (`npx wrangler login`
+abre el navegador; con `npx wrangler whoami` se comprueba).
+
+```bash
+npm run analitica:crear      # crea la base y devuelve su database_id
+```
+
+Pega ese `database_id` en `wrangler.jsonc`, donde dice `PENDIENTE`. **No es un secreto**: identifica
+la base, no da acceso a ella, y por eso va versionado. Después, crea la tabla:
+
+```bash
+npm run analitica:esquema
+```
+
+El orden importa: la base tiene que existir **antes** del primer `wrangler deploy` con el enlace
+puesto, o la publicación falla.
+
+### Ver los números
+
+```bash
+npm run analitica:ver                 # las páginas más abiertas de los últimos 30 días
+npm run analitica:ver -- --dias=7     # otra ventana
+npm run analitica:ver -- --local      # la base de desarrollo, la que llena `wrangler dev`
+```
+
+```
+  PÁGINA             IDIOMA  VISITAS
+  -----------------  ------  -------
+  /lugar/tomassa     es            3  ████████████████████████
+  /en/place/tomassa  en            1  ████████
+
+  5 visitas en 3 páginas  (es 80% · en 20%)
+```
+
+También se puede consultar desde el panel de Cloudflare, sin terminal: **Storage & Databases** →
+**D1** → `visit-zibata-analitica` → pestaña **Console**, y escribir SQL ahí.
+
+**No hay panel propio ni endpoint de lectura, a propósito.** Una página que mostrara estos números
+habría que protegerla, y proteger algo es justo el trabajo que este proyecto no quiere tener. Los
+números los mira quien tiene las llaves de Cloudflare.
+
+**Si algo de esto falta, el sitio funciona igual.** `worker/index.ts` comprueba que el enlace exista
+y, si no, sirve la página y no cuenta. Es deliberado: contar es lo accesorio.
+
+### Qué cuesta
+
+El Worker corre **solo en las ocho rutas de página** (`run_worker_first` en `wrangler.jsonc`), nunca
+en las teselas, las imágenes ni los archivos de `assets/`. Con `true` en vez de esa lista, cada
+archivo estático contaría como invocación facturada, y son cientos por visita.
+
+Como la tabla guarda un contador por día y ruta en vez de una fila por visita, son unas pocas
+escrituras por página y día, y la tabla se queda en cientos de filas al mes para siempre.
+
 ## Requisitos del hosting
 
 - **Nada especial.** Las teselas del mapa se sirven sueltas, así que ya **no** hace falta que el

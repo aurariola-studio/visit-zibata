@@ -2,7 +2,7 @@
   "name": "visit-zibata",
   "private": true,
   "license": "MIT",
-  "version": "4.8.1",
+  "version": "4.9.0",
   "description": "Guía interactiva 3D de Zibatá, Querétaro: la guía de zibateños para zibateños. Sitio estático, sin backend.",
   "type": "module",
   "engines": {
@@ -22,6 +22,9 @@
     "data:validate": "node scripts/data/validate-data.ts",
     "data:import": "node scripts/data/import-csv.ts",
     "data:apply-review": "node scripts/research/apply-owner-review.ts",
+    "analitica:crear": "wrangler d1 create visit-zibata-analitica",
+    "analitica:esquema": "wrangler d1 execute visit-zibata-analitica --remote --file=worker/esquema.sql",
+    "analitica:ver": "node scripts/analitica/ver.ts",
     "map:fetch": "npm run map:fetch:osm && npm run map:fetch:buildings && npm run map:fetch:trees",
     "map:fetch:osm": "node scripts/map/fetch-osm.ts",
     "map:fetch:buildings": "node scripts/map/fetch-overture.ts",

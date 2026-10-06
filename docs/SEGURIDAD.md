@@ -54,6 +54,22 @@ manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-
   y se limpia la URL para no compartirla.
 - React escapa el contenido; no se usa `dangerouslySetInnerHTML` en ninguna parte.
 
+## El conteo de visitas
+
+Desde la v4.8.0 hay código de servidor (`worker/`), y conviene decir qué cambia y qué no.
+
+**No cambia** la promesa de que navegar no genera peticiones a terceros: el conteo ocurre en el mismo
+origen que sirve la página, así que no sale nada hacia fuera y la prueba E2E que lo comprueba sigue
+en pie. Tampoco cambia la CSP: no hubo que abrir nada.
+
+**Sí cambia** que ahora existe una base de datos. Su superficie es deliberadamente mínima: el Worker
+solo escribe, con una única consulta parametrizada y fija (`worker/analitica.ts`), y no hay ningún
+camino por el que una petición pueda leer de ella ni alterar su forma. No hay endpoint de lectura: los
+números se consultan con `wrangler` desde la máquina del propietario.
+
+Lo que se guarda es un contador por día y ruta. Aunque alguien se hiciera con la base entera, no
+encontraría a nadie: no hay identificadores, ni IP, ni user agent, ni referente.
+
 ## Geolocalización
 
 El botón "Mi ubicación" pide permiso **solo tras una acción explícita** del usuario. La posición se usa

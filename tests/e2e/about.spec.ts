@@ -20,7 +20,9 @@ test.describe('Información de la guía', () => {
 
     const privacy = page.getByRole('dialog', { name: 'Privacidad' })
     await expect(privacy).toBeVisible()
-    await expect(privacy).toContainText('no usa cuentas, analítica ni cookies')
+    await expect(privacy).toContainText('no usa cuentas ni cookies de rastreo')
+    // Lo que sí se hace también se dice, y en la página que la gente abre, no solo en el repositorio.
+    await expect(privacy).toContainText('una visita por página y por día')
     await expect(page).toHaveURL(/\/info\/privacidad$/)
     // Sin canal de contacto todavía: se explica, no se dibuja un enlace que no lleva a ningún sitio.
     await expect(privacy.getByRole('link')).toHaveCount(0)

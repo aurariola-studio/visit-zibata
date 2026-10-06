@@ -10,8 +10,11 @@ describe('InfoDialog', () => {
     render(<InfoDialog topic="privacidad" onClose={vi.fn()} onGoTo={onGoTo} />)
 
     expect(screen.getByRole('dialog', { name: 'Privacidad' })).toBeInTheDocument()
-    expect(screen.getByText(/no usa cuentas, analítica ni cookies/)).toBeInTheDocument()
+    expect(screen.getByText(/no usa cuentas ni cookies de rastreo/)).toBeInTheDocument()
     expect(screen.getByText(/únicamente en este navegador/)).toBeInTheDocument()
+    // El conteo de visitas se declara aquí: callarlo sería mentir por omisión.
+    expect(screen.getByText(/una visita por página y por día/)).toBeInTheDocument()
+    expect(screen.getByText(/no se vende ni se comparte/)).toBeInTheDocument()
     // Las otras páginas no se amontonan aquí: son enlaces a su propia ruta.
     expect(screen.queryByText(/OpenStreetMap/)).not.toBeInTheDocument()
 

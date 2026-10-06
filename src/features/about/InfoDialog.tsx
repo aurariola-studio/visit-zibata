@@ -35,6 +35,7 @@ const PAGE = {
     lead: 'about.aboutLead',
     body: 'about.aboutBody',
     detail: 'about.aboutSources',
+    extra: null,
     link: 'about.open',
   },
   privacy: {
@@ -42,6 +43,8 @@ const PAGE = {
     lead: 'about.privacyLead',
     body: 'about.privacyBody',
     detail: 'about.privacyLocation',
+    // La cuarta: desde que se cuentan visitas, callarlo sería mentir por omisión.
+    extra: 'about.privacyCounts',
     link: 'about.privacy',
   },
   contribute: {
@@ -49,6 +52,7 @@ const PAGE = {
     lead: 'about.contributeLead',
     body: 'about.contributeBody',
     detail: 'about.contributeMeanwhile',
+    extra: null,
     link: 'about.fix',
   },
 } as const
@@ -134,6 +138,7 @@ export function InfoDialog({ topic, onClose, onGoTo }: InfoDialogProps) {
         ) : (
           <p className={styles.body}>{t(page.detail)}</p>
         )}
+        {page.extra && <p className={styles.body}>{t(page.extra)}</p>}
 
         {key === 'about' && (
           <>

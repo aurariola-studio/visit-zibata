@@ -302,6 +302,41 @@ Ahí llegan los errores de tecleo y el enlace guardado de un local que ya no se 
 responde un 404 vacío, así que un plugin lo hace servir este archivo y la suite E2E puede comprobar lo
 que se ve de verdad.
 
+## Visitas (lo único que corre en el servidor)
+
+`worker/` es el primer código de servidor del proyecto. Sirve los mismos archivos de `dist/` que
+antes y, de paso, suma una visita. Lo que guarda es una fila por **día, ruta e idioma** con un
+contador:
+
+| fecha | ruta | idioma | cuenta |
+|---|---|---|---|
+| 2026-10-05 | /lugar/tomassa | es | 12 |
+
+Eso es todo. No hay identificador, ni cookie, ni IP, ni user agent, ni referente: **no es que se
+anonimice después, es que no se recoge**. El costo de esa decisión hay que saberlo: no se puede saber
+cuántas personas distintas hubo, solo cuántas veces se abrió cada página. Para decidir qué locales
+interesan alcanza, y a cambio no hay nada que prometer sobre el resto.
+
+Tres decisiones que conviene no deshacer sin pensarlo:
+
+1. **Se cuenta en el servidor, no en la página.** Cero bytes de JavaScript (el paquete inicial está a
+   300 bytes de su límite), no lo bloquea un bloqueador de anuncios, funciona sin JavaScript, y es
+   imposible que recoja algo de la persona porque nunca toca el navegador. A cambio hay que filtrar
+   robots, que se hace por user agent en `worker/analitica.ts`.
+2. **Es un `UPSERT`, no un registro por visita.** Con una fila por visita la tabla crece sin fin y hay
+   que acordarse de purgarla; así se queda en cientos de filas al mes, y no existe ningún instante en
+   el que la base haya guardado un evento individual.
+3. **Contar jamás puede romper la página.** La respuesta se obtiene primero y se devuelve igual
+   aunque la base no exista, esté caída o falle a mitad: el apunte va en `waitUntil`, fuera del camino
+   de la respuesta, y envuelto en un `try`. Sin enlace a la base, el sitio sirve y no cuenta.
+
+La lógica vive en `worker/analitica.ts`, que es pura y no sabe de plataforma: se prueba entera sin
+levantar un Worker, y sus pruebas fijan sobre todo **lo que no debe contarse** (robots, 404, lo que no
+es una página) y lo que no debe llegar a la base.
+
+El Worker corre solo en las ocho rutas de página. Las teselas, las imágenes y los assets se sirven
+sin pasar por él, que es lo que mantiene el costo en cero y evita contar un archivo como una visita.
+
 ## Rendimiento
 
 - Chunk principal ~108 KB gzip; MapLibre (~284 KB gzip) en un chunk aparte que empieza a descargarse en

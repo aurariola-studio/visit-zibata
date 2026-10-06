@@ -28,3 +28,6 @@ Thumbs.db
 
 # Configuración local de agentes (no forma parte del producto)
 .claude/
+
+# Estado local de wrangler (base D1 de desarrollo, cachés).
+.wrangler/
