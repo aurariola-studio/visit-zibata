@@ -184,6 +184,20 @@ Hecho, por orden en que se fue resolviendo:
 Lo que falta:
 
 - Fichas de la propia guía en Google Business y redes con el mismo nombre y logo.
+
+### Imágenes de la ficha pública
+
+`npm run images:marca` genera dos que no son del sitio sino de su presencia en GitHub, y por eso
+viven en `docs/img/` y no en `public/`:
+
+| Archivo | Para qué | Dónde se sube |
+|---|---|---|
+| `social-preview.png` (1280×640) | La tarjeta del repositorio al compartir su enlace | Repositorio → Settings → General → Social preview |
+| `aurariola-oscuro.png` (512×512) | El símbolo de aurariola.com | Perfil de la organización |
+
+Se componen desde la misma fuente que el resto de la marca (el símbolo de `public/logo.svg` y la
+rejilla de `AurariolaMark.tsx`), así que si la marca cambia se regeneran en vez de retocarlas a mano.
+Subirlas es manual: GitHub no las toma del repositorio.
 - El horario en los datos estructurados, cuando haya esa segunda verificación.
 
 Palabras clave reales por las que buscaría alguien: "dónde comer en Zibatá", "restaurantes Zibatá",
