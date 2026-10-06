@@ -14,6 +14,8 @@
  * que es lo que ha funcionado siempre.
  */
 
+import { fichaDeDesafio } from './turnstile.ts'
+
 const CLAVE = 'zibata:cuenta'
 
 /** La misma cabecera que lee el Worker (worker/cuenta.ts). */
@@ -54,7 +56,13 @@ export async function asegurarCuenta(): Promise<string | null> {
 
   enCurso = (async () => {
     try {
-      const respuesta = await fetch('/api/cuenta', { method: 'POST' })
+      // El desafio se pide aqui y no antes: es la unica peticion de la guia que necesita demostrar
+      // que hay una persona detras, y cargar el script de Cloudflare solo tiene sentido en ella.
+      const ficha = await fichaDeDesafio()
+      const respuesta = await fetch('/api/cuenta', {
+        method: 'POST',
+        headers: ficha ? { 'x-zibata-turnstile': ficha } : undefined,
+      })
       if (!respuesta.ok) return null
       const datos = (await respuesta.json()) as { secreto?: unknown }
       if (typeof datos.secreto !== 'string' || !FORMA.test(datos.secreto)) return null

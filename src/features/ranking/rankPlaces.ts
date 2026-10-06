@@ -80,7 +80,16 @@ function communityScore(signal: CommunitySignal | null): number {
   if (!signal.rating) return saved
   // Una media alta con pocas valoraciones pesa menos que una sostenida por muchas.
   const confidence = Math.min(1, signal.rating.count / 20)
-  return 0.5 * saved + 0.5 * confidence * Math.tanh((signal.rating.average - 3.5) / 1.2)
+  /*
+   * La media de la comunidad **solo puede subir, nunca bajar** (`Math.max(0, …)`).
+   *
+   * Sin ese tope, con 101 locales y pocos votos, tres votos malintencionados hunden a un negocio que
+   * no puede verlo ni rebatirlo, porque la media no se publica. Así una brigada queda reducida a un
+   * empujón: puede promover algo inmerecido, que hace menos daño y se nota antes, pero no usarse
+   * como arma. El gusto propio sí puede restar (ver `directSignal`), porque ahí nadie ataca a nadie.
+   */
+  const comunidad = Math.max(0, Math.tanh((signal.rating.average - 3.5) / 1.2))
+  return 0.5 * saved + 0.5 * confidence * comunidad
 }
 
 /** Cuánto dice la persona de un lugar concreto (puede ser negativo: una calificación de 1 o 2). */

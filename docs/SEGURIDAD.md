@@ -21,10 +21,17 @@ Se inyecta en el build como `<meta http-equiv="Content-Security-Policy">` (GitHu
 cabeceras propias), solo en producción: el servidor de desarrollo necesita estilos en línea para HMR.
 
 ```
-default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:;
-font-src 'self'; connect-src 'self' https://api.web3forms.com; worker-src 'self' blob:; child-src 'self' blob:;
-manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'
+default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self';
+img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://api.web3forms.com;
+worker-src 'self' blob:; child-src 'self' blob:; manifest-src 'self'; object-src 'none';
+frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'
 ```
+
+- `script-src` y `frame-src` abren **challenges.cloudflare.com** desde la v4.11.0, para el desafío de
+  Turnstile que se pide al crear una cuenta. Es el único script de terceros de la guía y tiene un
+  costo que conviene tener escrito: `frame-src` era `'none'` y ya no lo es. A cambio, se carga tarde
+  y a propósito: el script no se descarga al abrir una página, sino la primera vez que alguien da un
+  corazón (ver `src/lib/turnstile.ts`). Leer la guía entera no trae nada de Cloudflare al navegador.
 
 - `connect-src` abre un único destino externo, **api.web3forms.com**, y solo se usa al pulsar "Enviar"
   en "Sugiere un cambio". Navegar por la guía no hace ninguna petición fuera del propio origen. El

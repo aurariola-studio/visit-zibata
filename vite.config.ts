@@ -41,25 +41,29 @@ function socialMeta(): Plugin {
 
 /**
  * Content Security Policy en `<meta>` (GitHub Pages no permite cabeceras propias). Solo en build: el
- * servidor de desarrollo inyecta estilos en línea para HMR. Todo es del propio origen salvo el envío
- * del formulario de sugerencias (api.web3forms.com, solo al pulsar enviar): sin CDN, sin analítica y
- * sin APIs externas al navegar; Google Maps solo se abre como enlace (navegación, no petición).
+ * servidor de desarrollo inyecta estilos en línea para HMR. Todo es del propio origen salvo dos
+ * destinos, y ninguno de los dos se toca navegando: el envío del formulario de sugerencias
+ * (api.web3forms.com, al pulsar enviar) y el desafío de Turnstile (challenges.cloudflare.com, al
+ * crear una cuenta con el primer corazón). Sin CDN, sin analítica y sin APIs externas al leer la
+ * guía; Google Maps solo se abre como enlace (navegación, no petición).
  * `blob:`/`data:` en imágenes y workers los usa MapLibre internamente. `frame-ancestors` no se puede
- * declarar en `<meta>`: requiere cabecera del hosting (ver docs/SECURITY.md).
+ * declarar en `<meta>`: requiere cabecera del hosting (ver docs/SEGURIDAD.md).
  */
 export const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
-  "script-src 'self'",
+  // Turnstile es el único script de terceros, y se descarga tarde: solo al crear una cuenta.
+  "script-src 'self' https://challenges.cloudflare.com",
   "style-src 'self'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  // Único destino externo: el envío de "Sugiere un cambio", y solo cuando la persona pulsa enviar.
+  // Único destino de connect-src: "Sugiere un cambio", y solo cuando la persona pulsa enviar.
   "connect-src 'self' https://api.web3forms.com",
   "worker-src 'self' blob:",
   "child-src 'self' blob:",
   "manifest-src 'self'",
   "object-src 'none'",
-  "frame-src 'none'",
+  // El desafío se dibuja dentro de un marco propio de Cloudflare. Era 'none' hasta que hubo cuentas.
+  'frame-src https://challenges.cloudflare.com',
   "base-uri 'self'",
   "form-action 'self'",
 ].join('; ')

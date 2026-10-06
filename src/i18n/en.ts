@@ -202,7 +202,7 @@ export const en = {
   'about.privacyCounts':
     'To know which places people care about, our own server adds one visit per page per day. That is all that is stored: "this page was opened 12 times today". Nothing records who, from where, or with what, so there is no way to follow anyone between two visits. The data is ours: it is neither sold nor shared.',
   'about.privacyBody':
-    'Your favourites, your ratings, the places you open and your language are stored in this browser only. They are never sent to a server and you can erase them at any time by clearing this site’s data in your browser.',
+    'Your ratings, the places you open and the language are stored only in this browser. So are your favourites, and they are also sent so they count towards how many people saved each place: they travel attached to a random identifier, with no email, no name and nothing that says who you are. That identifier lives only in this browser, so clearing the site data loses it and you start over.',
   'about.privacyLocation':
     'Your location is used only when you press the locate button, to centre the map, and it is never stored or transmitted. The map and the fonts are served from this same site, so browsing the guide makes no third-party requests. Links to Google Maps, social accounts or delivery apps open external sites, each with its own policy.',
 

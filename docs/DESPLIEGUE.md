@@ -116,9 +116,21 @@ Crear cuentas está abierto mientras no exista el secreto `TURNSTILE_SECRET`. Es
 poder desarrollar, y **tiene que dejar de estarlo antes de que el número de corazones se vea**: hasta
 entonces fabricar cuentas no sirve de nada, y a partir de entonces sí.
 
-Cuando llegue ese momento: crear un widget de Turnstile en el panel de Cloudflare (es gratis y no
-muestra captcha) y guardar su clave secreta con `npx wrangler secret put TURNSTILE_SECRET`. El Worker
-la detecta solo: si está, la exige; si no, no.
+Un widget de Turnstile tiene **dos claves, y hacen falta las dos**. Es el error fácil de cometer:
+con la secreta puesta y la pública sin poner, el Worker exige una ficha que el navegador nunca manda,
+y toda alta de cuenta responde 403 sin que se vea nada raro en la página (los corazones se quedan en
+el dispositivo, como siempre, y el número público deja de crecer).
+
+1. Panel de Cloudflare, **Turnstile**, **Add widget**: dominio del sitio, modo *Managed*.
+2. La clave **secreta** va al Worker: `npx wrangler secret put TURNSTILE_SECRET`. El Worker la
+   detecta solo, y si está la exige.
+3. La clave **pública** (site key) va al build, como variable del repositorio en GitHub:
+   `gh variable set TURNSTILE_SITEKEY --body "0x4AAA..."`. En local, en `.env` como
+   `VITE_TURNSTILE_SITEKEY`. Sin ella el build sale sin desafío.
+
+El script de Cloudflare no se descarga al abrir la guía: solo al crear una cuenta, que es la primera
+vez que alguien da un corazón (ver `src/lib/turnstile.ts`). Quien solo lee no carga nada de terceros,
+y eso está fijado por un E2E que exige cero peticiones externas en todo el recorrido de lectura.
 
 El orden importa: la base tiene que existir **antes** del primer `wrangler deploy` con el enlace
 puesto, o la publicación falla.

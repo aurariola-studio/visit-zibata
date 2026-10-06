@@ -111,13 +111,18 @@ test.describe('Plazas y lugares', () => {
     })
     await compartir.click()
 
-    // El acuse primero, porque dura 2,4 segundos y se borra solo. Lo que se copió sigue en `window`
-    // cuando se quiera mirar; el aviso no espera a nadie, y cada viaje al navegador que se meta por
-    // delante se come parte de esos dos segundos. En un runner cargado eso basta para no verlo.
-    await expect(region.getByRole('status')).toHaveText('Enlace copiado')
+    /*
+     * Se espera a lo copiado y no al acuse. El acuse vive 2,4 segundos y se borra solo, así que
+     * afirmarlo desde aquí es una carrera contra un temporizador que a veces se pierde en un runner
+     * cargado, por mucho que se mire primero. Lo copiado queda en `window` para siempre, que es lo
+     * que esta prueba dice en su nombre que vino a comprobar. El acuse está cubierto donde se puede
+     * comprobar sin reloj: ShareButton.test.tsx.
+     */
+    await expect
+      .poll(() => page.evaluate(() => (window as unknown as { copiado?: string }).copiado))
+      .toMatch(/\/lugar\/tomassa$/)
 
     const copiado = await page.evaluate(() => (window as unknown as { copiado?: string }).copiado)
-    expect(copiado).toMatch(/\/lugar\/tomassa$/)
     expect(copiado).not.toContain('categoria')
     // Sin almohadilla: es la ruta que indexan los buscadores, no el formato antiguo.
     expect(copiado).not.toContain('#')

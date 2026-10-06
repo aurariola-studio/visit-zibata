@@ -17,6 +17,17 @@ import {
   RESOLVER,
   secretoDe,
 } from './cuenta.ts'
+import {
+  ANADIR,
+  CONTEO,
+  CUANTOS_TIENE,
+  cambioDe,
+  EDAD_MINIMA_MS,
+  MAXIMO_POR_CUENTA,
+  MIOS,
+  QUITAR,
+  UMBRAL,
+} from './favoritos.ts'
 
 export interface EntornoApi {
   ANALITICA?: Base
@@ -28,10 +39,10 @@ export interface EntornoApi {
   TURNSTILE_SECRET?: string
 }
 
-const json = (datos: unknown, estado = 200): Response =>
+const json = (datos: unknown, estado = 200, cache = 'no-store'): Response =>
   new Response(JSON.stringify(datos), {
     status: estado,
-    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
+    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': cache },
   })
 
 /** Comprueba el desafío de Turnstile. Sin clave configurada, no se exige. */
@@ -99,6 +110,70 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
   if (ruta === '/api/cuenta' && peticion.method === 'GET') {
     const cuenta = await cuentaDe(peticion, entorno.ANALITICA)
     return cuenta ? json({ cuenta }) : json({ error: 'sin cuenta' }, 401)
+  }
+
+  /*
+   * El conteo público. Es lo único de esta API que no lleva identidad y lo único que se cachea: lo
+   * pide cada visita y cambia despacio, así que cinco minutos de caché en el navegador ahorran casi
+   * todas las consultas sin que nadie note el retraso.
+   *
+   * Sin `caches.default`: es una extensión de Cloudflare que obligaría a traer sus tipos enteros, y
+   * a esta escala una consulta por visita a D1 no se nota (el plan gratuito da millones al día).
+   */
+  if (ruta === '/api/corazones' && peticion.method === 'GET') {
+    const limite = new Date(Date.now() - EDAD_MINIMA_MS).toISOString()
+    const filas = await entorno.ANALITICA.prepare(CONTEO)
+      .bind(limite, UMBRAL)
+      .all<{ lugar: string; cuantos: number }>()
+    const conteo: Record<string, number> = {}
+    for (const fila of filas.results ?? []) conteo[fila.lugar] = fila.cuantos
+
+    return json(conteo, 200, 'public, max-age=300')
+  }
+
+  // A partir de aquí hace falta cuenta.
+  const cuenta = await cuentaDe(peticion, entorno.ANALITICA)
+
+  if (ruta === '/api/favoritos' && peticion.method === 'GET') {
+    if (!cuenta) return json({ lugares: [] })
+    const filas = await entorno.ANALITICA.prepare(MIOS).bind(cuenta).all<{ lugar_id: string }>()
+    return json({ lugares: (filas.results ?? []).map((fila) => fila.lugar_id) })
+  }
+
+  if (ruta === '/api/favoritos' && peticion.method === 'POST') {
+    if (!cuenta) return json({ error: 'sin cuenta' }, 401)
+    let cuerpo: unknown
+    try {
+      cuerpo = await peticion.json()
+    } catch {
+      return json({ error: 'cuerpo no válido' }, 400)
+    }
+    const cambio = cambioDe(cuerpo)
+    if (!cambio) return json({ error: 'cambio no válido' }, 400)
+
+    if (cambio.anadir.length > 0) {
+      const tiene = await entorno.ANALITICA.prepare(CUANTOS_TIENE)
+        .bind(cuenta)
+        .first<{ total: number }>()
+      if ((tiene?.total ?? 0) + cambio.anadir.length > MAXIMO_POR_CUENTA) {
+        return json({ error: 'demasiados favoritos' }, 409)
+      }
+    }
+
+    const ahora = new Date().toISOString()
+    try {
+      await entorno.ANALITICA.batch([
+        ...cambio.anadir.map((lugar) =>
+          (entorno.ANALITICA as Base).prepare(ANADIR).bind(cuenta, lugar, ahora),
+        ),
+        ...cambio.quitar.map((lugar) =>
+          (entorno.ANALITICA as Base).prepare(QUITAR).bind(cuenta, lugar),
+        ),
+      ])
+    } catch {
+      return json({ error: 'no se pudo guardar' }, 500)
+    }
+    return json({ ok: true })
   }
 
   return json({ error: 'no existe' }, 404)

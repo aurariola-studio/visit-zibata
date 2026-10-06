@@ -12,6 +12,7 @@
 #   secreto  CLOUDFLARE_API_TOKEN    token de la plantilla "Edit Cloudflare Workers"
 #   secreto  CLOUDFLARE_ACCOUNT_ID   id de la cuenta de Cloudflare
 #   variable PAGES_SITE_URL          opcional; por omisión https://visitzibata.com/
+#   variable TURNSTILE_SITEKEY       clave pública del widget; sin ella no se crean cuentas
 name: Deploy
 
 on:
@@ -38,6 +39,10 @@ jobs:
       # El sitio se sirve en la raíz del dominio, así que la base es "/".
       BASE_PATH: /
       SITE_URL: ${{ vars.PAGES_SITE_URL || 'https://visitzibata.com/' }}
+      # La mitad publica de Turnstile. Va como variable y no como secreto porque es publica de
+      # verdad: viaja en el JavaScript publicado. Si falta, el sitio se construye sin desafio y el
+      # Worker, que si tiene la mitad secreta, rechaza toda alta de cuenta. Van las dos o ninguna.
+      VITE_TURNSTILE_SITEKEY: ${{ vars.TURNSTILE_SITEKEY }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:

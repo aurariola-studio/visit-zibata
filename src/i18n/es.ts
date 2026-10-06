@@ -217,7 +217,7 @@ export const es = {
   'about.privacyCounts':
     'Para saber qué lugares interesan, nuestro propio servidor suma una visita por página y por día. Eso es todo lo que se guarda: "esta página se abrió 12 veces hoy". No queda registro de quién, ni desde dónde, ni con qué, así que no hay manera de seguir a nadie entre dos visitas. El dato es nuestro: no se vende ni se comparte.',
   'about.privacyBody':
-    'Tus favoritos, tus calificaciones, los lugares que abres y el idioma se guardan únicamente en este navegador. No se envían a ningún servidor y puedes borrarlos cuando quieras desde los datos del sitio en tu navegador.',
+    'Tus calificaciones, los lugares que abres y el idioma se guardan únicamente en este navegador. Tus favoritos también, y además se envían para que cuenten en el número de personas que guardaron cada lugar: viajan atados a un identificador al azar, sin correo, sin nombre y sin nada que diga quién eres. Ese identificador vive solo en este navegador, así que si borras los datos del sitio se pierde y empiezas de cero.',
   'about.privacyLocation':
     'Tu ubicación se utiliza solo al pulsar el botón para centrar el mapa y no se guarda ni se transmite. El mapa y las tipografías se sirven desde este mismo sitio, de modo que navegar por la guía no genera peticiones a terceros. Los enlaces a Google Maps, redes sociales o reparto abren sitios externos, cada uno con su propia política.',
 
