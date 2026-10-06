@@ -182,7 +182,14 @@ componentes: si un texto necesita otro cuerpo, se elige el peldaño más cercano
 ## Idioma
 
 Los textos de interfaz viven en `src/i18n/<locale>.ts` y TypeScript exige que cada catálogo tenga todas
-las claves (`satisfies Messages`), así que no se publica media traducción. El idioma activo lo decide
+las claves (`satisfies Messages`), así que no se publica media traducción. **Cada visita baja un solo
+idioma**: el español va en el paquete (es el idioma por omisión y el respaldo de `localized()`, así
+que `t()` nunca se queda sin nada), y el inglés se pide cuando hace falta. Por eso `setLocale()` es
+asíncrona.
+
+Lo único que viaja siempre en los dos idiomas son las cuatro cadenas de `cambioDeIdioma.ts`: el botón
+de idioma escribe su etiqueta en el idioma **al que lleva**, así que la primera pantalla ya las
+necesita. Unos 120 bytes, a cambio de que el catálogo que no se usa deje de viajar. El idioma activo lo decide
 `resolveLocale()` en este orden: **lo que diga la URL** (el prefijo `/en`), después el elegido a mano
 (se recuerda en este dispositivo) y, si no hay ninguno, el español.
 

@@ -2,6 +2,43 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.8.1]: 2026-10-06
+
+### Cambiado
+
+- **Cada visita baja un solo idioma.** Hasta ahora el catálogo viajaba con el español **y** el inglés
+  en el mismo archivo, y nadie usa los dos: eran unos kilobytes de lastre en cada carga. El paquete
+  inicial pasa de **121,7 a 119,3 KB**.
+
+  Es la jugada que el propio presupuesto tenía escrita desde la v4.2.0 (*"si el paquete vuelve a
+  crecer, esa partición es lo siguiente, no otra subida"*), y tocó hacerla cuando el aviso de
+  privacidad nuevo desbordó el límite por 0,1 KB. Recortar un aviso de privacidad para que quepa en
+  un presupuesto de bytes habría sido optimizar justo lo que no toca.
+
+  Lo que lo impedía era el botón de idioma: escribe su etiqueta en el idioma **al que lleva**, así
+  que la primera pantalla ya necesitaba el otro catálogo. Esas cuatro cadenas viven ahora en
+  `cambioDeIdioma.ts`, unos 120 bytes que sí viajan siempre, y con eso el resto se puede aplazar.
+  `tIn()` desaparece: era su único uso.
+
+- **`setLocale()` pasa a ser asíncrona.** Si el idioma de destino todavía no está, hay que esperarlo
+  antes de cambiar, o se pintaría una pantalla con los textos del anterior. Quien no necesite esperar
+  llama y se olvida (`void setLocale(x)`): la interfaz se re-renderiza sola.
+- El español sigue importándose de forma estática, a propósito: es el idioma por omisión y el
+  respaldo de `localized()`, así que `t()` nunca puede quedarse sin nada que devolver.
+
+### Corregido
+
+- **Un enlace en inglés abría con la interfaz en español.** Al arrancar en `/en/...`, `locale` ya
+  valía `en` pero el catálogo inglés aún no existía, así que los textos apuntaban al respaldo y ahí
+  se quedaban: cargar el catálogo no lo ponía en uso. En pantalla se veía mitad y mitad, con los
+  datos en inglés (que son datos, no catálogo) y la interfaz en español. Encontrado abriendo la
+  página, no en las pruebas.
+
+### Nota de implementación
+
+El catálogo se espera **encadenado** y no con `await` de nivel superior en `main.tsx`. Ese `await`
+vuelve asíncrono el módulo de entrada y Rollup reparte el código de otra manera: medido, el paquete
+inicial no bajaba (121,9 KB) y el CSS inicial se iba de 9,8 a 10,7, rompiendo su propio límite.
 ## [4.8.0]: 2026-10-05
 
 ### Añadido

@@ -14,12 +14,15 @@ const KB = 1024
 /**
  * Límites en KB gzip (salvo teselas, ya comprimidas). Margen de ~10 % sobre la medición de v1.0.0.
  *
- * `initialJs` subió de 120 a 122 en la v4.2.0 por el botón de compartir de la ficha: medido con y sin
- * la función, cuesta 0,7 KB gzip (119,9 → 120,6) y solo quedaban 0,1 de margen. Se midió antes si la
- * función podía pagarse sola (dibujar sus dos iconos a mano en vez de importarlos de Lucide no ahorra
- * nada) y cuál era la alternativa: partir el catálogo de i18n por idioma liberaría unos 5 KB, porque
- * hoy viajan los dos idiomas y solo se usa uno, pero obligaría a una importación dinámica al cambiar
- * de idioma en caliente. Si el paquete vuelve a crecer, esa partición es lo siguiente, no otra subida.
+ * `initialJs` subió de 120 a 122 en la v4.2.0 por el botón de compartir de la ficha, y el comentario de
+ * entonces dejaba escrito qué hacer cuando el paquete volviera a crecer: partir el catálogo de i18n
+ * por idioma, no subir el número. En la v4.7.1 pasó justo eso (el aviso de privacidad del conteo de
+ * visitas desbordó el límite por 0,1 KB) y se hizo: cada visita baja un idioma y el paquete quedó en
+ * 119,3 KB. El límite se mantiene en 122 porque ahora sí hay margen, no porque sobre.
+ *
+ * Si vuelve a apretar, lo siguiente ya no es esta partición. Hay que medir antes: el reparto de
+ * fragmentos es sensible (ver la nota sobre `await` de nivel superior en el registro de cambios), así
+ * que conviene comprobar el desglose real de `dist/index.html` en vez de suponer dónde está el peso.
  *
  * Medición de la v4.6.0, para quien se tope con el techo: 121,7 de 122, es decir 0,3 KB de margen.
  * Son dos archivos, y el desglose dice dónde está la grasa:
