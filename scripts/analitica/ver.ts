@@ -65,6 +65,7 @@ function consultar(sql: string): Fila[] {
 /** Traduce el fallo de wrangler a una frase y, cuando se reconoce, a qué hacer con él. */
 function explicar(error: unknown): string {
   const fallo = error as { stderr?: string; stdout?: string }
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: es el escape ANSI, y quitar los colores de wrangler es justo lo que se quiere.
   const salida = `${fallo.stderr ?? ''}${fallo.stdout ?? ''}`.replace(/\u001b\[[0-9;]*m/g, '')
   const motivo = salida.match(/"text":\s*"([^"]+)"/)?.[1]
 
