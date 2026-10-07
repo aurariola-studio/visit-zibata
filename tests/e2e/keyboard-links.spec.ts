@@ -23,7 +23,7 @@ test.describe('Teclado, enlaces y favoritos', () => {
     await page.keyboard.press('Escape')
     await expect(dialog).toBeHidden()
     await expect
-      .poll(() => page.evaluate(() => sessionStorage.getItem('zibata:onboarding-visto')))
+      .poll(() => page.evaluate(() => localStorage.getItem('zibata:onboarding-visto')))
       .toBe('1')
     await page.reload()
     await expect(page.getByRole('searchbox', { name: 'Buscar lugares' })).toBeVisible()

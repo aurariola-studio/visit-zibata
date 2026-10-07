@@ -59,7 +59,7 @@ const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_DEB
 const MapDebugPanel = DEBUG_ENABLED
   ? lazy(() => import('../features/map/debug/MapDebugPanel.tsx'))
   : null
-/** El tutorial solo se ve en la primera visita de la sesión: no tiene por qué pesar en el arranque. */
+/** El tutorial solo se ve en la primera visita: no tiene por qué pesar en el arranque. */
 const OnboardingModal = lazy(() =>
   import('../features/onboarding/OnboardingModal.tsx').then((module) => ({
     default: module.OnboardingModal,
