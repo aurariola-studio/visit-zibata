@@ -2,6 +2,22 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.12.1]: 2026-10-06
+
+### Corregido
+
+- **El icono se perdia en una pestana en modo oscuro.** El simbolo suelto es olivo oscuro sobre fondo
+  transparente, asi que contra el gris de una pestana oscura casi no se leia. Ahora el favicon va
+  sobre su baldosa olivo, con el simbolo en papel, y se lee igual en los dos modos.
+
+### Cambiado
+
+- **El corte chico del simbolo pasa a `public/simbolo.svg`**, y `public/favicon.svg` es ese corte ya
+  montado sobre la baldosa, generado por `npm run images:icons`. No se edita a mano, para que el
+  simbolo siga teniendo una sola fuente por corte. Esquina de 56 de 256 (a 16 px, una de 48 se lee
+  casi cuadrada) y simbolo al 78 % (al 84 % el aro toca la curva, comparados los tres antes de
+  elegir).
+
 ## [4.12.0]: 2026-10-06
 
 Crear una cuenta cuesta trabajo de CPU, no un captcha. La guía vuelve a no tener ni un script de

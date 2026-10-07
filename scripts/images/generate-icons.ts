@@ -11,31 +11,66 @@
  *  - apple-touch: a sangre y sin esquina, porque iOS aplica su propia máscara y redondear dos veces
  *    deja un borde sucio.
  *
+ * Y el favicon de la pestaña, que sale del corte chico (`public/simbolo.svg`) y no del grande: a
+ * 16 px el corte grande se cierra y la Z deja de leerse. También va sobre baldosa olivo, y por la
+ * misma razón que los otros: el símbolo suelto es olivo oscuro, y en una pestaña de navegador en
+ * modo oscuro se pierde contra el fondo. Con baldosa se lee igual en los dos modos, y el icono deja
+ * de depender del tema de quien mira.
+ *
  * Sobre el olivo el símbolo va en papel y en lima clara: el lima de la marca (#8cba37) queda
  * demasiado cerca del olivo del fondo y la aguja pierde sus dos mitades.
  */
-import { readFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import sharp from 'sharp'
 import { ROOT } from '../data/lib/dataset.ts'
 
 const OLIVO = '#536c2a'
 const LIENZO = 256
 
-const fuente = readFileSync(`${ROOT}public/logo.svg`, 'utf8')
-const dentro = fuente.match(/<\/title>([\s\S]*)<\/svg>/)?.[1]
-if (!dentro) throw new Error('public/logo.svg no tiene el formato esperado')
-// Sobre fondo oscuro se invierte la marca: el olivo pasa a papel y el lima a su tono claro.
-const simbolo = dentro.replaceAll('#536C2A', '#f7f4ed').replaceAll('#8CBA37', '#b8d77c')
-if (simbolo === dentro) throw new Error('public/logo.svg no usa los colores esperados')
+/** El dibujo de un corte, ya invertido para ir sobre olivo. */
+function simboloDe(archivo: string): string {
+  const fuente = readFileSync(`${ROOT}${archivo}`, 'utf8')
+  const dentro = fuente.match(/<\/title>([\s\S]*)<\/svg>/)?.[1]
+  if (!dentro) throw new Error(`${archivo} no tiene el formato esperado`)
+  // Sobre fondo oscuro se invierte la marca: el olivo pasa a papel y el lima a su tono claro.
+  const invertido = dentro.replaceAll('#536C2A', '#f7f4ed').replaceAll('#8CBA37', '#b8d77c')
+  if (invertido === dentro) throw new Error(`${archivo} no usa los colores esperados`)
+  return invertido
+}
+
+const simbolo = simboloDe('public/logo.svg')
+const simboloChico = simboloDe('public/simbolo.svg')
 
 /** `escala` < 1 mete el símbolo en la zona segura; `radio` 0 deja el fondo a sangre. */
-const lienzo = (escala: number, radio: number) => {
+const lienzo = (escala: number, radio: number, dibujo: string = simbolo) => {
   const margen = (LIENZO * (1 - escala)) / 2
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${LIENZO} ${LIENZO}">
   <rect width="${LIENZO}" height="${LIENZO}" rx="${radio}" fill="${OLIVO}"/>
-  <g transform="translate(${margen} ${margen}) scale(${escala})">${simbolo}</g>
+  <g transform="translate(${margen} ${margen}) scale(${escala})">${dibujo}</g>
 </svg>`
 }
+
+/*
+ * El favicon sale como SVG y no como PNG: la pestaña lo pide a 16 y a 32 px según la pantalla, y un
+ * vector sirve los dos sin pesar dos archivos. La baldosa va algo más redondeada que la de los
+ * iconos de aplicación (56 de 256, un 22 %, frente a 48) porque a 16 px una esquina de 48 se lee
+ * casi cuadrada. Y el símbolo va al 78 % y no al 84 % de los otros: en la pestaña no hay máscara del
+ * sistema que se coma el borde, así que sobra margen, pero al 84 % el aro empieza a tocar la curva
+ * de la esquina. Comparados los tres a 16 y 32 px antes de elegir.
+ */
+const FAVICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${LIENZO} ${LIENZO}"><title>Visit Zibatá</title>${lienzo(
+  0.78,
+  56,
+  simboloChico,
+)
+  .replace(/^<svg[^>]*>/, '')
+  .replace('</svg>', '')}</svg>`
+writeFileSync(
+  `${ROOT}public/favicon.svg`,
+  `${FAVICON}
+`,
+)
+console.log('✓ public/favicon.svg')
 
 const SALIDAS = [
   { file: 'public/icons/icon-192.png', size: 192, svg: lienzo(0.84, 48) },
