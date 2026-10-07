@@ -5,8 +5,8 @@
  * algo que haya que guardar fuera de su dispositivo, y nunca al entrar. Quien solo mira la guía no
  * genera ninguna cuenta, y eso es deliberado.
  *
- * Lo que se guarda aquí es un secreto que el servidor entregó una vez y del que allí solo vive su
- * huella. **Quien lo pierde, pierde la cuenta**: es la decisión tomada (ver docs/CUENTAS.md), y la
+ * Lo que se guarda aquí es un secreto que este navegador generó y del que en el servidor solo vive
+ * su huella. **Quien lo pierde, pierde la cuenta**: es la decisión tomada (ver docs/CUENTAS.md), y la
  * página de privacidad lo dice con esas palabras.
  *
  * Nada de esto puede romper la guía. Si el servidor no responde, si el almacenamiento está bloqueado
@@ -14,7 +14,7 @@
  * que es lo que ha funcionado siempre.
  */
 
-import { fichaDeDesafio } from './turnstile.ts'
+import { secretoConPrueba } from './prueba-de-trabajo.ts'
 
 const CLAVE = 'zibata:cuenta'
 
@@ -56,18 +56,22 @@ export async function asegurarCuenta(): Promise<string | null> {
 
   enCurso = (async () => {
     try {
-      // El desafio se pide aqui y no antes: es la unica peticion de la guia que necesita demostrar
-      // que hay una persona detras, y cargar el script de Cloudflare solo tiene sentido en ella.
-      const ficha = await fichaDeDesafio()
+      /*
+       * El secreto lo genera este navegador, no el servidor: la prueba de trabajo consiste
+       * precisamente en buscar uno cuya huella empiece por ceros (ver prueba-de-trabajo.ts). Cuesta
+       * uno o dos segundos repartidos en trozos, y no bloquea nada porque el corazón ya está puesto.
+       */
+      const secreto = await secretoConPrueba()
+      if (!secreto || !FORMA.test(secreto)) return null
       const respuesta = await fetch('/api/cuenta', {
         method: 'POST',
-        headers: ficha ? { 'x-zibata-turnstile': ficha } : undefined,
+        headers: { [CABECERA]: secreto },
       })
+      // Un 409 es la huella repetida, que con 256 bits de azar no pasa nunca; cualquier fallo deja
+      // la guía como estaba y el siguiente gesto vuelve a intentarlo.
       if (!respuesta.ok) return null
-      const datos = (await respuesta.json()) as { secreto?: unknown }
-      if (typeof datos.secreto !== 'string' || !FORMA.test(datos.secreto)) return null
-      guardar(datos.secreto)
-      return datos.secreto
+      guardar(secreto)
+      return secreto
     } catch {
       return null
     } finally {

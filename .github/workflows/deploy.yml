@@ -12,7 +12,6 @@
 #   secreto  CLOUDFLARE_API_TOKEN    token de la plantilla "Edit Cloudflare Workers"
 #   secreto  CLOUDFLARE_ACCOUNT_ID   id de la cuenta de Cloudflare
 #   variable PAGES_SITE_URL          opcional; por omisión https://visitzibata.com/
-#   variable TURNSTILE_SITEKEY       clave pública del widget; sin ella no se crean cuentas
 name: Deploy
 
 on:
@@ -72,13 +71,6 @@ jobs:
       - name: Instalar navegadores de Playwright
         run: npx playwright install --with-deps chromium
       - name: Build de producción
-        # La mitad pública de Turnstile, y solo en este paso. Va como variable y no como secreto
-        # porque es pública de verdad: viaja en el JavaScript publicado. A nivel de job la heredaban
-        # también los tests, y ahí cambiaba su comportamiento: es lo que tiró la publicación de la
-        # v4.11.0. Si falta, el sitio se construye sin desafío y el Worker, que sí tiene la mitad
-        # secreta, rechaza toda alta de cuenta. Van las dos o ninguna.
-        env:
-          VITE_TURNSTILE_SITEKEY: ${{ vars.TURNSTILE_SITEKEY }}
         run: npm run build
       # Después del build, nunca antes: el build limpia dist/, así que unas imágenes generadas
       # primero desaparecerían sin dejar rastro y cada enlace compartido volvería a la imagen de

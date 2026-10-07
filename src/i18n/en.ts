@@ -205,7 +205,7 @@ export const en = {
   'about.privacyBody':
     'Your ratings, the places you open and the language are stored only in this browser. So are your favourites, and they are also sent so they count towards how many people saved each place: they travel attached to a random identifier, with no email, no name and nothing that says who you are. That identifier lives only in this browser, so clearing the site data loses it and you start over.',
   'about.privacyLocation':
-    'Your location is used only when you press the locate button, to centre the map, and it is never stored or transmitted. The map and the fonts are served from this same site, so browsing the guide makes no third-party requests. Links to Google Maps, social accounts or delivery apps open external sites, each with its own policy.',
+    'Your location is used only when you press the locate button, to centre the map, and it is never stored or transmitted. The map and the fonts are served from this same site, and saving a place calls no one either, so using the guide makes no third-party requests at all. Links to Google Maps, social accounts or delivery apps open external sites, each with its own policy.',
 
   'about.contribute': 'Suggest a change',
   'about.contributeLead': 'Is a place missing or is something no longer right?',

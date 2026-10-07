@@ -8,15 +8,8 @@
  * hay cookies. La identidad viaja en una cabecera que el navegador manda a propósito, no en algo que
  * se adjunte solo a cada petición.
  */
-import {
-  ALTA,
-  type Base,
-  huella,
-  nuevaCuenta,
-  nuevoSecreto,
-  RESOLVER,
-  secretoDe,
-} from './cuenta.ts'
+import { base64url, cumpleLaPrueba, digestDe } from '../src/lib/prueba-de-trabajo.ts'
+import { ALTA, type Base, huella, nuevaCuenta, RESOLVER, secretoDe } from './cuenta.ts'
 import {
   ANADIR,
   CONTEO,
@@ -31,12 +24,6 @@ import {
 
 export interface EntornoApi {
   ANALITICA?: Base
-  /**
-   * Clave de Turnstile para que crear cuentas cueste algo. Mientras no esté, el alta queda abierta:
-   * es deliberado para poder desarrollar, y **tiene que estar antes de que el conteo de corazones se
-   * publique**, que es cuando fabricar cuentas empieza a servir de algo (ver docs/DESPLIEGUE.md).
-   */
-  TURNSTILE_SECRET?: string
 }
 
 const json = (datos: unknown, estado = 200, cache = 'no-store'): Response =>
@@ -44,25 +31,6 @@ const json = (datos: unknown, estado = 200, cache = 'no-store'): Response =>
     status: estado,
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': cache },
   })
-
-/** Comprueba el desafío de Turnstile. Sin clave configurada, no se exige. */
-async function pasaTurnstile(peticion: Request, entorno: EntornoApi): Promise<boolean> {
-  if (!entorno.TURNSTILE_SECRET) return true
-  const token = peticion.headers.get('x-zibata-turnstile')
-  if (!token) return false
-  try {
-    const respuesta = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ secret: entorno.TURNSTILE_SECRET, response: token }),
-    })
-    const resultado = (await respuesta.json()) as { success?: boolean }
-    return resultado.success === true
-  } catch {
-    // Si el verificador no responde, no se abre la puerta: crear cuenta puede esperar.
-    return false
-  }
-}
 
 /** La cuenta de quien hace esta petición, o `null` si no trae una credencial que exista. */
 export async function cuentaDe(peticion: Request, base: Base): Promise<string | null> {
@@ -88,23 +56,34 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
   // Sin base no hay identidad posible. Se dice, en vez de fallar de una forma rara.
   if (!entorno.ANALITICA) return json({ error: 'sin base de datos' }, 503)
 
+  /*
+   * El alta. El secreto lo trae el navegador, no lo reparte el servidor, porque es él quien tuvo que
+   * buscarlo hasta que su huella empezó por ceros (ver src/lib/prueba-de-trabajo.ts). Aquí solo se
+   * comprueba, que es un hash.
+   *
+   * Que cada prueba valga una sola vez sale gratis: la huella es la clave primaria de `credencial`,
+   * así que repetir un secreto ya usado choca contra el índice y no crea nada. Sin tabla de sellos,
+   * sin caducidades y sin limpieza periódica.
+   */
   if (ruta === '/api/cuenta' && peticion.method === 'POST') {
-    if (!(await pasaTurnstile(peticion, entorno))) {
-      return json({ error: 'verificación requerida' }, 403)
-    }
-    const secreto = nuevoSecreto()
+    const secreto = secretoDe(peticion.headers)
+    if (!secreto) return json({ error: 'falta el secreto' }, 400)
+    const digest = await digestDe(secreto)
+    if (!cumpleLaPrueba(digest)) return json({ error: 'prueba de trabajo no válida' }, 403)
+    const sujeto = base64url(digest)
     const id = nuevaCuenta()
     const ahora = new Date().toISOString()
     try {
       await entorno.ANALITICA.batch([
         entorno.ANALITICA.prepare(ALTA[0]).bind(id, ahora),
-        entorno.ANALITICA.prepare(ALTA[1]).bind('dispositivo', await huella(secreto), id, ahora),
+        entorno.ANALITICA.prepare(ALTA[1]).bind('dispositivo', sujeto, id, ahora),
       ])
     } catch {
-      return json({ error: 'no se pudo crear la cuenta' }, 500)
+      // Casi siempre es la huella repetida, que es la prueba reutilizada. No se distingue a propósito:
+      // decir cuál de los dos fue solo le sirve a quien lo está intentando.
+      return json({ error: 'no se pudo crear la cuenta' }, 409)
     }
-    // El secreto se entrega **una sola vez**: aquí no se vuelve a leer nunca, solo su huella.
-    return json({ secreto }, 201)
+    return json({ ok: true }, 201)
   }
 
   if (ruta === '/api/cuenta' && peticion.method === 'GET') {
