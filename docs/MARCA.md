@@ -71,7 +71,10 @@ mide cerca del 15 % de su grosor.
 | Archivo | Cuándo | Qué cambia |
 |---|---|---|
 | `public/logo.svg` | 40 px o más | Trazo 19, aro 11, hueco 12 |
-| `public/favicon.svg` | menos de 40 px, y el favicon | Trazo, aro y puntas más gordos, hueco 8 |
+| `public/simbolo.svg` | menos de 40 px | Trazo, aro y puntas más gordos, hueco 8 |
+
+`public/favicon.svg` no es un tercer corte: es el corte chico ya montado sobre su baldosa, y lo
+genera `npm run images:icons`. No se edita a mano.
 
 Es la misma relación que hay entre el corte de titular y el de texto de una tipografía: con el corte
 grande, a 16 px el hueco se come la diagonal y la Z se parte en dos piezas sueltas. Aun con el corte
@@ -88,9 +91,16 @@ de un aro, y se acepta a sabiendas.
 - **Tamaño mínimo**: 16 px, con el corte chico.
 - **No**: deformar, girar (la inclinación ya está en el dibujo), recolorear fuera de la paleta,
   ponerle sombra (el aro es calado y se cuela por el centro) ni meterlo en una baldosa redondeada,
-  salvo en los iconos de aplicación, donde el recorte lo pone el sistema.
-- **Una sola fuente**: `public/logo.svg`. De ahí salen los cinco PNG de icono (`npm run
-  images:icons`) y el símbolo de la imagen social (`npm run images:og`). El símbolo no se copia a
+  salvo en los iconos de aplicación y en el favicon de la pestaña.
+- **El favicon va sobre baldosa olivo** por la misma razón que los iconos de aplicación, más una
+  propia: el símbolo suelto es olivo oscuro y en una pestaña en modo oscuro se pierde contra el
+  fondo. Con baldosa se lee igual en los dos modos y deja de depender del tema de quien mira. La
+  esquina va algo más redondeada que en los iconos de aplicación (56 de 256 frente a 48), porque a
+  16 px una esquina de 48 se lee casi cuadrada, y el símbolo al 78 % en vez del 84 %, porque aquí no
+  hay máscara del sistema que se coma el borde pero al 84 % el aro toca la curva.
+- **Una sola fuente por corte**: `public/logo.svg` y `public/simbolo.svg`. De ahí salen los cinco PNG
+  de icono y el favicon (`npm run images:icons`) y el símbolo de la imagen social (`npm run
+  images:og`). El símbolo no se copia a
   mano en ningún otro sitio.
 - **Entra por `<img>`, no en línea**: en línea suma cerca de 3 KB gzip y el paquete inicial está en
   119,8 de 120 KB de presupuesto.
