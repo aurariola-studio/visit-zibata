@@ -147,8 +147,8 @@ export function InfoDialog({ topic, onClose, onGoTo, onShowTutorial }: InfoDialo
             <h3 className={styles.blockTitle}>{t('about.credits')}</h3>
             <p className={styles.body}>{t('about.creditsBody')}</p>
             <p className={styles.colophon}>
-              <span className={styles.version}>{t('about.version', { version: APP_VERSION })}</span>
               <Signature />
+              <span className={styles.version}>{t('about.version', { version: APP_VERSION })}</span>
             </p>
           </>
         )}

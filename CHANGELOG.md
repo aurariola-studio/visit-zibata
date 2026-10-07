@@ -14,6 +14,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **El tutorial se abria encima de una pagina de informacion compartida.** Quien recibia un enlace a
   /info/privacidad se encontraba el tutorial por delante. Esas rutas cuentan ya como enlace directo,
   igual que las de una zona o un lugar.
+- **La firma de autoria flotaba medio renglon por encima de la version** en "Acerca de esta guia".
+  La linea base de una caja flex la pone su primer hijo, y ahi es un SVG. Ahora van apiladas y
+  alineadas a la derecha, la firma arriba y la version debajo, y el conector empieza en mayuscula
+  porque abre la frase.
 - **`analitica:ver` reintenta una vez ante el error 7403 de Cloudflare.** Es un rechazo pasajero (tres
   veces en una semana, siempre con el permiso de D1 correcto y siempre bien al segundo intento). Solo
   se reintenta ese codigo; cualquier otro fallo sale directo.

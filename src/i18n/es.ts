@@ -120,7 +120,7 @@ export const es = {
   'favorites.filter': 'Favoritos',
   'favorites.saved': 'Guardado en favoritos',
 
-  'brand.by': 'un proyecto de',
+  'brand.by': 'Un proyecto de',
 
   /*
    * Textos que solo salen en los metadatos de cada página prerenderizada: título de pestaña,

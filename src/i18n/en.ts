@@ -115,7 +115,7 @@ export const en = {
   'favorites.filter': 'Favourites',
   'favorites.saved': 'Saved to favourites',
 
-  'brand.by': 'a project by',
+  'brand.by': 'A project by',
 
   'seo.home.title': 'Visit Zibatá · By locals, for locals',
   'seo.home.description':
