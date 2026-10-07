@@ -2,22 +2,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 /*
- * El desafio se simula siempre, y por eso vale la pena explicarlo: con el modulo de verdad, esta
- * prueba pasaba a depender de si la maquina que la corre tiene configurada la clave publica de
- * Turnstile. La tenia el flujo de publicacion y no la tenian ni el de pull request ni mi portatil,
- * asi que ocho pruebas que pasaban en todas partes se colgaron al publicar, en el unico sitio donde
- * nadie las estaba mirando. Lo que esta prueba comprueba es `cuenta.ts`; el desafio tiene el suyo.
- */
-let ficha: string | null = null
-vi.mock('./turnstile.ts', () => ({ fichaDeDesafio: async () => ficha }))
-
-/**
- * Un secreto falso con la forma del real: 43 caracteres de base64url. Se escribe legible y repetitivo
- * a propósito. Uno aleatorio de verdad lo marca Gitleaks como clave filtrada, y una excepción
- * permanente en el escáner para callar a un dato de prueba es peor que escribir el dato de prueba
- * de forma que no se confunda con una clave.
+ * La prueba de trabajo se simula, y por eso vale la pena explicarlo: con el módulo de verdad, cada
+ * caso buscaría un secreto válido a base de hashes y la suite tardaría minutos. Lo que se comprueba
+ * aquí es `cuenta.ts`; la prueba tiene la suya en prueba-de-trabajo.test.ts, y que el servidor la
+ * exija se comprueba en worker/.
  */
 const SECRETO = 'secreto-de-prueba-no-abre-nada-aaaaaaaaaaaa'
+let encontrado: string | null = SECRETO
+vi.mock('./prueba-de-trabajo.ts', () => ({ secretoConPrueba: async () => encontrado }))
 
 /** El módulo guarda el alta en vuelo en un módulo, así que cada prueba lo importa limpio. */
 async function cargar() {
@@ -25,9 +17,11 @@ async function cargar() {
   return import('./cuenta.ts')
 }
 
+const respondeBien = () => vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ok: true }) })
+
 beforeEach(() => {
   window.localStorage.clear()
-  ficha = null
+  encontrado = SECRETO
 })
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -45,9 +39,7 @@ describe('la cuenta en el navegador', () => {
   })
 
   it('se crea una sola vez y se reutiliza', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
+    const fetchMock = respondeBien()
     vi.stubGlobal('fetch', fetchMock)
     const { asegurarCuenta } = await cargar()
 
@@ -57,10 +49,20 @@ describe('la cuenta en el navegador', () => {
     expect(window.localStorage.getItem('zibata:cuenta')).toBe(SECRETO)
   })
 
+  it('el alta manda el secreto en la cabecera, y el servidor no devuelve ninguno', async () => {
+    // Desde la prueba de trabajo el secreto lo trae el navegador: el servidor solo guarda su huella.
+    const fetchMock = respondeBien()
+    vi.stubGlobal('fetch', fetchMock)
+    const { asegurarCuenta } = await cargar()
+    await asegurarCuenta()
+    expect(fetchMock).toHaveBeenCalledWith('/api/cuenta', {
+      method: 'POST',
+      headers: { 'x-zibata-cuenta': SECRETO },
+    })
+  })
+
   it('dos gestos seguidos no crean dos cuentas', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
+    const fetchMock = respondeBien()
     vi.stubGlobal('fetch', fetchMock)
     const { asegurarCuenta } = await cargar()
 
@@ -78,64 +80,42 @@ describe('la cuenta en el navegador', () => {
     expect(hayCuenta()).toBe(false)
   })
 
-  it('una respuesta rara no se guarda', async () => {
-    for (const cuerpo of [{}, { secreto: 123 }, { secreto: 'corto' }, { secreto: `${SECRETO}x` }]) {
+  it('si el servidor rechaza el alta, no se guarda nada', async () => {
+    // Un 403 es una prueba que no cumple y un 409 una huella repetida. En los dos casos la guía se
+    // queda como estaba y el siguiente gesto vuelve a intentarlo.
+    for (const estado of [403, 409, 500]) {
       window.localStorage.clear()
-      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => cuerpo }))
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: estado }))
       const { asegurarCuenta } = await cargar()
       expect(await asegurarCuenta()).toBeNull()
       expect(window.localStorage.getItem('zibata:cuenta')).toBeNull()
     }
   })
 
+  it('si no se encuentra un secreto válido, no se pide nada al servidor', async () => {
+    encontrado = null
+    const fetchMock = respondeBien()
+    vi.stubGlobal('fetch', fetchMock)
+    const { asegurarCuenta } = await cargar()
+    expect(await asegurarCuenta()).toBeNull()
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   it('un secreto guardado con mala forma se descarta y se pide otro', async () => {
     window.localStorage.setItem('zibata:cuenta', 'basura')
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
-    vi.stubGlobal('fetch', fetchMock)
+    vi.stubGlobal('fetch', respondeBien())
     const { asegurarCuenta } = await cargar()
     expect(await asegurarCuenta()).toBe(SECRETO)
   })
 
   it('las cabeceras llevan el secreto con el nombre que espera el Worker', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) }),
-    )
+    vi.stubGlobal('fetch', respondeBien())
     const { cabecerasDeCuenta } = await cargar()
     expect(await cabecerasDeCuenta()).toEqual({ 'x-zibata-cuenta': SECRETO })
   })
 
-  it('el alta lleva la ficha del desafío cuando hay desafío', async () => {
-    ficha = 'ficha-de-prueba'
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
-    vi.stubGlobal('fetch', fetchMock)
-    const { asegurarCuenta } = await cargar()
-    await asegurarCuenta()
-    expect(fetchMock).toHaveBeenCalledWith('/api/cuenta', {
-      method: 'POST',
-      headers: { 'x-zibata-turnstile': 'ficha-de-prueba' },
-    })
-  })
-
-  it('sin desafío configurado el alta va sin cabecera, que es el desarrollo de hoy', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
-    vi.stubGlobal('fetch', fetchMock)
-    const { asegurarCuenta } = await cargar()
-    await asegurarCuenta()
-    expect(fetchMock).toHaveBeenCalledWith('/api/cuenta', { method: 'POST', headers: undefined })
-  })
-
   it('olvidarla la borra de este dispositivo', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) }),
-    )
+    vi.stubGlobal('fetch', respondeBien())
     const { asegurarCuenta, hayCuenta, olvidarCuenta } = await cargar()
     await asegurarCuenta()
     expect(hayCuenta()).toBe(true)

@@ -26,7 +26,6 @@ interface Entorno {
    * responde que no hay base, pero el sitio se sirve igual.
    */
   ANALITICA?: Base
-  TURNSTILE_SECRET?: string
 }
 
 interface Contexto {

@@ -113,25 +113,58 @@ parte de todo esto que merece pruebas antes de escribir el código que la usa.
 
 En este orden, porque cada capa encarece la anterior y ninguna cuesta dinero:
 
-1. **La clave primaria.** Una cuenta, un corazón. Estructural, gratis, y la que más trabajo ahorra.
-2. **Turnstile al crear la cuenta**, no en cada gesto. Es de Cloudflare, gratis y sin captcha visible.
-   Encarece fabricar cuentas, que es lo único que queda por atacar después de la capa 1.
-3. **Límite de ritmo por cuenta** en el Worker. Unas pocas escrituras por minuto bastan para una
-   persona y estorban a un robot.
-4. **Edad mínima**: los corazones de una cuenta recién creada no cuentan para el número público hasta
-   pasado un rato. Convierte un ataque instantáneo en uno que hay que sostener.
-5. **Se guardan las filas, no solo el contador.** Con un número suelto, un ataque es irreversible;
+1. **La clave primaria `(cuenta_id, lugar_id)`.** Una cuenta, un corazón. Estructural, gratis, y la
+   que más trabajo ahorra: atacar exige fabricar cuentas, no repetir clics.
+2. **Prueba de trabajo al crear la cuenta**, no en cada gesto. El navegador busca un secreto cuya
+   huella empiece por 16 ceros; el servidor lo comprueba con un hash. Que cada prueba valga una sola
+   vez sale gratis, porque la huella es la clave primaria de `credencial`.
+3. **Límite de ritmo** en el borde de Cloudflare sobre `POST /api/cuenta`. Es configuración, no
+   código, y la IP la cuenta Cloudflare sin que llegue nunca a este código ni a la base.
+4. **Edad mínima de 24 horas**: los corazones de una cuenta recién creada no cuentan para el número
+   público. Convierte un ataque instantáneo en uno que hay que sostener un día entero.
+5. **Umbral de 5** y **tope por cuenta**. El umbral es un suelo de privacidad; el tope sigue al
+   catálogo (ver abajo).
+6. **Se guardan las filas, no solo el contador.** Con un número suelto, un ataque es irreversible;
    con las filas se borra lo sospechoso y se recalcula. Esto es para **poder moderar**, no para
    exhibir de dónde sale cada número: lo segundo se descartó.
 
 Lo que esto **no** hace: eliminar el abuso. Lo encarece. Para corazones el daño de un ataque exitoso
 es bajo y se asume.
 
+#### Por qué una prueba de trabajo y no un captcha
+
+La capa 2 fue Turnstile durante la v4.11, y se cambió por una razón concreta. Turnstile funciona
+rechazando navegadores: ese es su trabajo. Quien usa Tor, un bloqueador duro o una red que filtra
+dominios se quedaba fuera, y el fallo era **mudo**: su corazón se guardaba en su dispositivo, no
+contaba nunca, y no había nada que pudiera hacer al respecto. Se comprobó en un navegador real antes
+de decidirlo: el widget ni emitía ficha ni dibujaba nada que se pudiera resolver.
+
+La prueba de trabajo no rechaza a nadie: solo usa `crypto.subtle`, que existe en todos los
+navegadores, y de paso devolvió la política de seguridad a `script-src 'self'` y `frame-src 'none'`,
+sin un solo script de terceros en toda la guía.
+
+El costo, sin adornos: es más débil contra alguien decidido, porque la CPU se alquila y en código
+nativo cada intento cuesta una fracción. Lo que para en seco es el bucle de veinte líneas que pide
+mil cuentas, que es la forma que de verdad tiene este problema en una guía de barrio. El resto lo
+sostienen las capas 3, 4 y 5.
+
+#### Qué escala y qué no
+
+| Defensa | ¿Escala? |
+|---|---|
+| Clave primaria | Sí, es estructural |
+| Prueba de trabajo (16 bits) | Es un dial. Lo que manda para elegirlo es el peor teléfono que se quiera admitir, no el mejor |
+| Límite de ritmo | Sí, lo aplica Cloudflare |
+| Edad mínima (24 h) | Sí: mide tiempo, no gente |
+| Umbral (5) | **No sube a propósito.** Es un suelo de privacidad, no un filtro de popularidad: con uno o dos, el número delata a quien lo guardó, y esa razón no cambia con el tamaño. Atarlo a la población solo escondería a los locales pequeños cuando la guía creciera |
+| Tope por cuenta (150) | Sigue al catálogo, y lo ata una prueba: `worker/favoritos.test.ts` lee `data/` y falla si los lugares se acercan al tope. Así no se queda en un número de otra época, que es lo que le pasó al 500 anterior con 101 locales |
+| Tope por petición (100) | Es un guardia de tamaño de cuerpo, no depende de nada |
+
 ### Qué cuesta
 
-Todo cabe en los planes gratuitos que ya se usan: Workers (100.000 peticiones al día), D1 (5 GB,
-millones de lecturas y 100.000 escrituras al día) y Turnstile. Con 101 locales y público de barrio,
-no se rozan. Si algún día se rozaran, sería una buena noticia y habría con qué pagarlo.
+Todo cabe en los planes gratuitos que ya se usan: Workers (100.000 peticiones al día) y D1 (5 GB,
+millones de lecturas y 100.000 escrituras al día). La prueba de trabajo no cuesta nada porque la paga
+el navegador de quien crea la cuenta. Con 101 locales y público de barrio, no se rozan. Si algún día se rozaran, sería una buena noticia y habría con qué pagarlo.
 
 ### El orden de la obra
 

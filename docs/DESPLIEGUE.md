@@ -110,30 +110,28 @@ identidad, que se aplica igual:
 npx wrangler d1 execute visit-zibata-analitica --remote --file=worker/esquema-cuentas.sql
 ```
 
-### Turnstile, antes de publicar el conteo de corazones
+### Crear cuentas cuesta trabajo, y no hace falta configurar nada
 
-Crear cuentas está abierto mientras no exista el secreto `TURNSTILE_SECRET`. Es deliberado, para
-poder desarrollar, y **tiene que dejar de estarlo antes de que el número de corazones se vea**: hasta
-entonces fabricar cuentas no sirve de nada, y a partir de entonces sí.
+Desde la v4.12 el alta de una cuenta exige una prueba de trabajo que el navegador calcula solo (ver
+[CUENTAS.md](CUENTAS.md)). No hay claves, ni secretos, ni servicios externos que dar de alta: funciona
+igual en desarrollo y en produccion.
 
-Un widget de Turnstile tiene **dos claves, y hacen falta las dos**. Es el error fácil de cometer:
-con la secreta puesta y la pública sin poner, el Worker exige una ficha que el navegador nunca manda,
-y toda alta de cuenta responde 403 sin que se vea nada raro en la página (los corazones se quedan en
-el dispositivo, como siempre, y el número público deja de crecer).
+Lo que si conviene anadir, porque es gratis y son tres minutos en el panel de Cloudflare, es una regla
+de **Rate limiting** sobre el alta:
 
-1. Panel de Cloudflare, **Turnstile**, **Add widget**: dominio del sitio, modo *Managed*.
-2. La clave **secreta** va al Worker: `npx wrangler secret put TURNSTILE_SECRET`. El Worker la
-   detecta solo, y si está la exige.
-3. La clave **pública** (site key) va al build, como variable del repositorio en GitHub:
-   `gh variable set TURNSTILE_SITEKEY --body "0x4AAA..."`. En local, en `.env` como
-   `VITE_TURNSTILE_SITEKEY`. Sin ella el build sale sin desafío.
+1. Panel de Cloudflare, dominio `visitzibata.com`.
+2. **Security** -> **WAF** -> **Rate limiting rules** -> **Create rule**.
+3. Condicion: **URI Path** equals `/api/cuenta`, y **Request Method** equals `POST`.
+4. Contar por **IP**, 5 peticiones cada 10 segundos. Accion **Block**, 10 segundos.
 
-El script de Cloudflare no se descarga al abrir la guía: solo al crear una cuenta, que es la primera
-vez que alguien da un corazón (ver `src/lib/turnstile.ts`). Quien solo lee no carga nada de terceros,
-y eso está fijado por un E2E que exige cero peticiones externas en todo el recorrido de lectura.
+La IP la usa Cloudflare para contar y no llega nunca a este codigo ni a la base.
+
+**Si vienes de la v4.11**, que llevaba Turnstile: borra el secreto con
+`npx wrangler secret delete TURNSTILE_SECRET`, la variable con
+`gh variable delete TURNSTILE_SITEKEY` y el widget desde el panel. Ya no los lee nadie.
 
 El orden importa: la base tiene que existir **antes** del primer `wrangler deploy` con el enlace
-puesto, o la publicación falla.
+puesto, o la publicacion falla.
 
 ### Ver los números
 

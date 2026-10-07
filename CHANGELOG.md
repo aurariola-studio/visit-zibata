@@ -2,6 +2,41 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.12.0]: 2026-10-06
+
+Crear una cuenta cuesta trabajo de CPU, no un captcha. La guía vuelve a no tener ni un script de
+terceros.
+
+### Cambiado
+
+- **Prueba de trabajo en lugar de Turnstile.** El navegador busca un secreto cuya huella empiece por
+  16 ceros; el servidor lo comprueba con un solo hash. Medio segundo en un escritorio, dos o tres en
+  un telefono de gama media, repartidos en trozos y sin bloquear nada: el corazon ya esta puesto en el
+  dispositivo y nadie espera a esto.
+- **El motivo del cambio**, que es el que importa: Turnstile funciona rechazando navegadores. Quien
+  usa Tor, un bloqueador duro o una red que filtra dominios se quedaba fuera, y el fallo era mudo (su
+  corazon se guardaba en su dispositivo y no contaba nunca). Comprobado en un navegador real: el
+  widget ni emitia ficha ni dibujaba nada que se pudiera resolver. La prueba de trabajo no rechaza a
+  nadie, porque solo usa `crypto.subtle`.
+- **La politica de seguridad vuelve a `script-src 'self'` y `frame-src 'none'`.** Era el precio que se
+  habia pagado por el captcha.
+- **El secreto lo genera el navegador**, no el servidor: buscarlo *es* la prueba. Que cada prueba valga
+  una sola vez sale gratis, porque la huella es la clave primaria de `credencial`.
+- **Edad minima de 24 horas** en vez de 10 minutos. Diez minutos eran un cafe; un dia obliga a
+  sostener el ataque. A una persona no le cuesta nada.
+- **Tope por cuenta atado al catalogo** (150 para 101 lugares), con una prueba que lee `data/` y falla
+  si se acercan. El 500 anterior no freno nunca nada.
+- **El umbral de 5 se queda en 5, a proposito.** Es un suelo de privacidad, no un filtro de
+  popularidad: con uno o dos el numero delata a quien lo guardo, y esa razon no cambia con el tamano.
+  Atarlo a la poblacion solo esconderia a los locales pequenos cuando la guía creciera.
+- **El aviso de privacidad lo dice**: usar la guía, y guardar un lugar, no generan ni una peticion a
+  terceros. Antes solo se decia de navegar.
+
+### Eliminado
+
+- `src/lib/turnstile.ts`, la variable `VITE_TURNSTILE_SITEKEY` y el secreto `TURNSTILE_SECRET`. En
+  [docs/DESPLIEGUE.md](docs/DESPLIEGUE.md) quedan los comandos para borrarlos de Cloudflare y GitHub.
+
 ## [4.11.2]: 2026-10-06
 
 ### Corregido

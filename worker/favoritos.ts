@@ -15,17 +15,38 @@
  *    puede comprar sin gastar dinero.
  */
 
-/** Por debajo de esto no se publica nada. */
+/**
+ * Por debajo de esto no se publica nada, y **no sube con el tamaño de la guía a propósito**.
+ *
+ * Es un suelo de privacidad, no un filtro de popularidad: con uno o dos, el número delata a quien lo
+ * guardó. Esa razón no cambia porque haya cien personas o cien mil, así que atarlo a la población
+ * solo conseguiría esconder a los locales pequeños cuando la guía creciera, que es justo a quienes
+ * esto quiere servir. Al principio casi nada llega a cinco y casi nada enseña número: es lo correcto.
+ */
 export const UMBRAL = 5
 
-/** Cuánto tiene que vivir una cuenta antes de que sus corazones cuenten para el público. */
-export const EDAD_MINIMA_MS = 10 * 60 * 1000
+/**
+ * Cuánto tiene que vivir una cuenta antes de que sus corazones cuenten para el público.
+ *
+ * Un día y no diez minutos. Escala sola, porque mide tiempo y no gente, pero diez minutos no eran
+ * nada: quien quisiera inflar un número esperaba un café. Veinticuatro horas obligan a sostener el
+ * ataque un día entero, y a una persona no le cuestan nada, porque su corazón ya se ve en su
+ * dispositivo desde el primer momento y lo único que llega tarde es el número público.
+ */
+export const EDAD_MINIMA_MS = 24 * 60 * 60 * 1000
 
 /** Tope por petición: un gesto manda uno, y la subida inicial manda lo que ya había. */
 export const MAXIMO_POR_PETICION = 100
 
-/** Tope por cuenta. Nadie guarda 500 lugares de 101; es un freno contra el crecimiento sin fin. */
-export const MAXIMO_POR_CUENTA = 500
+/**
+ * Tope por cuenta. Nadie guarda más lugares de los que hay, así que esto sigue al catálogo.
+ *
+ * El Worker no puede contar los lugares (no tiene los datos), así que el número se escribe aquí y lo
+ * ata una prueba: `favoritos.test.ts` lee `data/` y falla si el catálogo se le acerca. Así no se
+ * queda en un número de otra época sin que nadie se entere, que es lo que le pasó al 500 anterior
+ * con 101 locales: no frenó nunca nada.
+ */
+export const MAXIMO_POR_CUENTA = 150
 
 /** La misma forma que tienen los slugs del catálogo. Lo que no encaje no llega al SQL. */
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/

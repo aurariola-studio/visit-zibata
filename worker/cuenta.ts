@@ -1,3 +1,5 @@
+import { base64url, digestDe } from '../src/lib/prueba-de-trabajo.ts'
+
 /**
  * Identidad sin registro: quién es quien escribe, sin saber quién es.
  *
@@ -37,27 +39,18 @@ export const CABECERA = 'x-zibata-cuenta'
 export type Proveedor = 'dispositivo' | 'google'
 
 /**
- * El secreto que se le entrega al navegador: 32 bytes aleatorios en base64url.
- *
- * `crypto.getRandomValues` y no un UUID: un UUID v4 tiene 122 bits de azar y encima un formato
- * reconocible, mientras que esto da 256 y no se parece a nada. No cuesta más y cierra la puerta a
- * adivinarlo.
- */
-export function nuevoSecreto(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(32))
-  return base64url(bytes)
-}
-
-/**
  * La huella de un secreto, que es lo único que se guarda.
  *
  * SHA-256 a secas, sin sal ni derivación lenta: eso hace falta para contraseñas, que son cortas y
  * adivinables. Un secreto de 256 bits aleatorios no se adivina por fuerza bruta ni con todo el
  * tiempo del mundo, así que una función rápida sobra y evita gastar CPU en cada petición.
+ *
+ * El secreto ya no lo reparte el servidor: lo trae el navegador, porque es él quien tuvo que
+ * buscarlo hasta que su huella cumplió la prueba de trabajo (ver src/lib/prueba-de-trabajo.ts). Aquí
+ * sigue sin guardarse nunca en claro.
  */
 export async function huella(secreto: string): Promise<string> {
-  const datos = new TextEncoder().encode(secreto)
-  return base64url(new Uint8Array(await crypto.subtle.digest('SHA-256', datos)))
+  return base64url(await digestDe(secreto))
 }
 
 /** El identificador de una cuenta. Opaco a propósito: no codifica nada de nadie. */
@@ -75,12 +68,6 @@ export function secretoDe(cabeceras: Headers): string | null {
   const valor = cabeceras.get(CABECERA)?.trim()
   if (!valor) return null
   return /^[A-Za-z0-9_-]{43}$/.test(valor) ? valor : null
-}
-
-function base64url(bytes: Uint8Array): string {
-  let texto = ''
-  for (const byte of bytes) texto += String.fromCharCode(byte)
-  return btoa(texto).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
 /** Alta de una cuenta con su primera credencial, en una sola ida a la base. */

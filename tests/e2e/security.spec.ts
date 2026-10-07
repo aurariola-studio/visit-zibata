@@ -27,7 +27,7 @@ test.describe('Seguridad', () => {
     await openApp(page, { path: 'zona/condesa' })
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveAttribute(
       'content',
-      /script-src 'self' https:\/\/challenges\.cloudflare\.com/,
+      /script-src 'self'; /,
     )
     await waitForMap(page)
     const region = panel(page)
@@ -38,8 +38,8 @@ test.describe('Seguridad', () => {
     await page.waitForTimeout(2500)
 
     expect(violations).toEqual([])
-    // Ni una peticion fuera del origen en todo el recorrido. Incluye a Cloudflare: la CSP le abre la
-    // puerta para el desafio, pero leer la guia no la cruza nunca, y eso es lo que se esta fijando.
+    // Ni una peticion fuera del origen en todo el recorrido, ni leyendo ni guardando: la prueba de
+    // trabajo que cuesta crear una cuenta se calcula aqui dentro y no habla con nadie.
     expect(external).toEqual([])
   })
 
