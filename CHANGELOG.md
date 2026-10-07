@@ -9,6 +9,11 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - **El tutorial salia en cada visita.** La marca de "ya lo vio" estaba en `sessionStorage`, asi que
   volvia a aparecer cada vez que se abria el navegador. Pasa a `localStorage`: se muestra una vez por
   dispositivo. Quien limpie el almacenamiento vuelve a verlo, igual que pierde sus favoritos.
+- **No habia forma de volver a abrir el tutorial.** Ahora hay un enlace "Ver el tutorial" junto a
+  Privacidad y Sugiere un cambio, en las tres paginas de informacion.
+- **El tutorial se abria encima de una pagina de informacion compartida.** Quien recibia un enlace a
+  /info/privacidad se encontraba el tutorial por delante. Esas rutas cuentan ya como enlace directo,
+  igual que las de una zona o un lugar.
 - **`analitica:ver` reintenta una vez ante el error 7403 de Cloudflare.** Es un rechazo pasajero (tres
   veces en una semana, siempre con el permiso de D1 correcto y siempre bien al segundo intento). Solo
   se reintenta ese codigo; cualquier otro fallo sale directo.

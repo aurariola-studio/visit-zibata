@@ -15,7 +15,12 @@ describe('LocaleSwitch', () => {
     render(
       <>
         <LocaleSwitch />
-        <InfoDialog topic="privacidad" onClose={() => {}} onGoTo={() => {}} />
+        <InfoDialog
+          topic="privacidad"
+          onClose={() => {}}
+          onGoTo={() => {}}
+          onShowTutorial={() => {}}
+        />
       </>,
     )
     // La etiqueta habla en el idioma al que lleva: nunca mezcla los dos en una misma frase, y está

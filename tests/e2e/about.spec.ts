@@ -48,6 +48,23 @@ test.describe('Información de la guía', () => {
     await expect(page.getByRole('dialog')).toHaveCount(0)
   })
 
+  test('el tutorial no tapa una página compartida y se vuelve a abrir desde los enlaces', async ({
+    page,
+  }) => {
+    // Sin la marca de "ya lo vio": si el tutorial fuera a salir solo, aquí saldría.
+    await openApp(page, { path: 'info/acerca', onboarding: true })
+    const about = page.getByRole('dialog', { name: 'Acerca de esta guía' })
+    await expect(about).toBeVisible()
+    // Quien abre /info/acerca viene a leer eso, no a que le expliquen el mapa por encima.
+    await expect(page.getByRole('button', { name: 'Saltar' })).toHaveCount(0)
+
+    // Y desde que se recuerda por dispositivo, esta es la única forma de volver a verlo.
+    await about.getByRole('button', { name: 'Ver el tutorial' }).click()
+    await expect(page.getByRole('button', { name: 'Saltar' })).toBeVisible()
+    // Por el id del título: "Explora Zibatá" también es el botón de la barra superior.
+    await expect(page.locator('#onboarding-title')).toHaveText('Explora Zibatá')
+  })
+
   test('el idioma se cambia desde la barra y se recuerda', async ({ page }) => {
     await openApp(page)
     await page.getByRole('button', { name: 'View the guide in English' }).click()

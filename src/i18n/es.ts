@@ -195,6 +195,7 @@ export const es = {
   'about.openShort': 'Acerca',
   'about.title': 'Acerca de esta guía',
   'about.fix': 'Sugiere un cambio',
+  'about.tutorial': 'Ver el tutorial',
   'about.moreLabel': 'Más sobre la guía',
   'about.independent': 'Guía independiente de establecimientos y servicios de la zona.',
   'about.languageEs': 'Español',
