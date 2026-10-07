@@ -2,6 +2,25 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.13.0]: 2026-10-06
+
+### Anadido
+
+- **El tutorial tiene ruta propia** (`/info/tutorial` y `/en/info/tutorial`), como las otras tres
+  ventanas de informacion. Era la unica emergente que el boton atras no cerraba: con el tutorial
+  abierto, atras sacaba de la pagina. Ahora cierra la ventana.
+- Es un tema de informacion mas, asi que la fila de enlaces de las tres paginas lo lista sin ningun
+  caso especial. La franja del mapa sigue mostrando solo las tres de texto.
+
+### Cambiado
+
+- **Las dos paginas del tutorial llevan `noindex` y no entran en el sitemap.** La ruta existe para
+  compartirla y para el boton atras, no para competir en un buscador: son cuatro pasos sobre gestos
+  del mapa, sin texto que indexar. El prerenderizador gana `fueraDelIndice` para marcarlas.
+- El build pasa de 232 a 234 paginas, con 232 en el sitemap.
+- En la primera visita el tutorial sigue saliendo sin tocar la URL. Cambiarla al entrar dejaria
+  `/info/tutorial` como puerta de la guia y como lo que se copia de la barra de direcciones.
+
 ## [4.12.1]: 2026-10-06
 
 ### Corregido
