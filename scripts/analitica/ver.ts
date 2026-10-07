@@ -43,18 +43,30 @@ function consultar(sql: string): Fila[] {
   const wrangler = fileURLToPath(
     new URL('../../node_modules/wrangler/bin/wrangler.js', import.meta.url),
   )
-  let salida: string
-  try {
-    salida = execFileSync(
+  const ejecutar = () =>
+    execFileSync(
       process.execPath,
       [wrangler, 'd1', 'execute', 'visit-zibata-analitica', donde, '--json', `--command=${sql}`],
       { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 },
     )
-  } catch (error) {
+
+  let salida: string
+  try {
+    salida = ejecutar()
+  } catch (primero) {
     // Un fallo de wrangler sale como un volcado de Node de cincuenta líneas con el comando entero
     // dentro. Aquí se queda el motivo y qué hacer: esto lo lee alguien que quiere ver un número, no
     // depurar un proceso hijo.
-    throw new Error(explicar(error))
+    //
+    // El 7403 es aparte: aparece a ratos y se va solo (tres veces en una semana, siempre con el
+    // permiso de D1 bien puesto y siempre bien al segundo intento), así que se reintenta una vez
+    // antes de molestar a nadie. Cualquier otro fallo sale directo, sin esperas inútiles.
+    if (!ES_PASAJERO.test(detalleDe(primero))) throw new Error(explicar(primero))
+    try {
+      salida = ejecutar()
+    } catch (segundo) {
+      throw new Error(explicar(segundo))
+    }
   }
   const inicio = salida.indexOf('[')
   if (inicio === -1) throw new Error(`Respuesta inesperada de wrangler:\n${salida}`)
@@ -62,18 +74,26 @@ function consultar(sql: string): Fila[] {
   return bloques.flatMap((bloque) => bloque.results)
 }
 
-/** Traduce el fallo de wrangler a una frase y, cuando se reconoce, a qué hacer con él. */
-function explicar(error: unknown): string {
+/** El rechazo de Cloudflare que no significa nada: ni permisos ni configuración, solo mala hora. */
+const ES_PASAJERO = /7403|not authorized to access this service/i
+
+/** Lo que wrangler escribió, sin los colores, para poder buscar dentro. */
+function detalleDe(error: unknown): string {
   const fallo = error as { stderr?: string; stdout?: string }
   // biome-ignore lint/suspicious/noControlCharactersInRegex: es el escape ANSI, y quitar los colores de wrangler es justo lo que se quiere.
-  const salida = `${fallo.stderr ?? ''}${fallo.stdout ?? ''}`.replace(/\u001b\[[0-9;]*m/g, '')
+  return `${fallo.stderr ?? ''}${fallo.stdout ?? ''}`.replace(/\u001b\[[0-9;]*m/g, '')
+}
+
+/** Traduce el fallo de wrangler a una frase y, cuando se reconoce, a qué hacer con él. */
+function explicar(error: unknown): string {
+  const salida = detalleDe(error)
   const motivo = salida.match(/"text":\s*"([^"]+)"/)?.[1]
 
-  if (/7403|not authorized to access this service/i.test(salida)) {
+  if (ES_PASAJERO.test(salida)) {
     return [
-      'Cloudflare rechazó la consulta: la cuenta no está autorizada para D1.',
+      'Cloudflare rechazó la consulta dos veces: la cuenta no está autorizada para D1.',
       '',
-      '  Suele ser pasajero, justo después de publicar. Vuelve a intentarlo.',
+      '  Es pasajero a menudo, y ya se reintentó una vez. Prueba de nuevo en un minuto.',
       '  Si sigue: `npx wrangler whoami` y comprueba que `d1` esté entre los permisos;',
       '  si no está, `npx wrangler login` para volver a concederlos.',
     ].join('\n')

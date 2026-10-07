@@ -119,12 +119,16 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Versión y firma cierran la hoja en la misma línea, y se apilan si no caben. */
+/*
+ * La firma cierra la hoja, con la versión debajo. Apiladas y no en una línea: la firma es un lockup
+ * con símbolo, y al alinear por línea base junto a un texto suelto quedaba flotando medio renglón
+ * por encima, porque la línea base de una caja flex la pone su primer hijo y ahí es un SVG.
+ */
 .colophon {
   display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
   margin: 0;
 }
 

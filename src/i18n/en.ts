@@ -115,7 +115,7 @@ export const en = {
   'favorites.filter': 'Favourites',
   'favorites.saved': 'Saved to favourites',
 
-  'brand.by': 'a project by',
+  'brand.by': 'A project by',
 
   'seo.home.title': 'Visit Zibatá · By locals, for locals',
   'seo.home.description':
@@ -185,6 +185,7 @@ export const en = {
   'about.openShort': 'About',
   'about.title': 'About this guide',
   'about.fix': 'Suggest a change',
+  'about.tutorial': 'See the tutorial',
   'about.moreLabel': 'More about the guide',
   'about.independent': 'An independent guide to the area’s businesses and services.',
   'about.languageEs': 'Español',

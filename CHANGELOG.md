@@ -2,6 +2,26 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico.
 
+## [4.11.2]: 2026-10-06
+
+### Corregido
+
+- **El tutorial salia en cada visita.** La marca de "ya lo vio" estaba en `sessionStorage`, asi que
+  volvia a aparecer cada vez que se abria el navegador. Pasa a `localStorage`: se muestra una vez por
+  dispositivo. Quien limpie el almacenamiento vuelve a verlo, igual que pierde sus favoritos.
+- **No habia forma de volver a abrir el tutorial.** Ahora hay un enlace "Ver el tutorial" junto a
+  Privacidad y Sugiere un cambio, en las tres paginas de informacion.
+- **El tutorial se abria encima de una pagina de informacion compartida.** Quien recibia un enlace a
+  /info/privacidad se encontraba el tutorial por delante. Esas rutas cuentan ya como enlace directo,
+  igual que las de una zona o un lugar.
+- **La firma de autoria flotaba medio renglon por encima de la version** en "Acerca de esta guia".
+  La linea base de una caja flex la pone su primer hijo, y ahi es un SVG. Ahora van apiladas y
+  alineadas a la derecha, la firma arriba y la version debajo, y el conector empieza en mayuscula
+  porque abre la frase.
+- **`analitica:ver` reintenta una vez ante el error 7403 de Cloudflare.** Es un rechazo pasajero (tres
+  veces en una semana, siempre con el permiso de D1 correcto y siempre bien al segundo intento). Solo
+  se reintenta ese codigo; cualquier otro fallo sale directo.
+
 ## [4.11.1]: 2026-10-06
 
 La v4.11.0 no llegó a publicarse: la tiró su propio flujo de publicación.

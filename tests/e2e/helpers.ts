@@ -77,7 +77,7 @@ export function placeById(id: string): DatasetPlace {
  */
 export async function openApp(page: Page, { path = '', onboarding = false } = {}): Promise<void> {
   if (!onboarding) {
-    await page.addInitScript(() => window.sessionStorage.setItem('zibata:onboarding-visto', '1'))
+    await page.addInitScript(() => window.localStorage.setItem('zibata:onboarding-visto', '1'))
   }
   await page.goto(`./${path}`)
 }

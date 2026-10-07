@@ -61,9 +61,11 @@ interface InfoDialogProps {
   topic: InfoTopic
   onClose: () => void
   onGoTo: (topic: InfoTopic) => void
+  /** Vuelve a abrir el tutorial. Sin esto no habría forma de verlo otra vez (ver onboarding/seen.ts). */
+  onShowTutorial: () => void
 }
 
-export function InfoDialog({ topic, onClose, onGoTo }: InfoDialogProps) {
+export function InfoDialog({ topic, onClose, onGoTo, onShowTutorial }: InfoDialogProps) {
   // La hoja se redibuja al cambiar de idioma aunque se abra sola (p. ej. en una prueba).
   useLocale()
   const dialogRef = useRef<HTMLDivElement>(null)
@@ -145,8 +147,8 @@ export function InfoDialog({ topic, onClose, onGoTo }: InfoDialogProps) {
             <h3 className={styles.blockTitle}>{t('about.credits')}</h3>
             <p className={styles.body}>{t('about.creditsBody')}</p>
             <p className={styles.colophon}>
-              <span className={styles.version}>{t('about.version', { version: APP_VERSION })}</span>
               <Signature />
+              <span className={styles.version}>{t('about.version', { version: APP_VERSION })}</span>
             </p>
           </>
         )}
@@ -162,6 +164,14 @@ export function InfoDialog({ topic, onClose, onGoTo }: InfoDialogProps) {
               {t(PAGE[TOPIC[other]].link)}
             </button>
           ))}
+          {/*
+           * El tutorial va aquí y no en una página propia: no tiene texto que leer ni URL que
+           * compartir, es un botón. Desde que se recuerda por dispositivo y ya no reaparece solo,
+           * esta es la única forma de volver a verlo.
+           */}
+          <button type="button" className={styles.moreLink} onClick={onShowTutorial}>
+            {t('about.tutorial')}
+          </button>
         </nav>
       </div>
     </div>,

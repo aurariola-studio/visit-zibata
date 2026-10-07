@@ -59,7 +59,7 @@ const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ENABLE_MAP_DEB
 const MapDebugPanel = DEBUG_ENABLED
   ? lazy(() => import('../features/map/debug/MapDebugPanel.tsx'))
   : null
-/** El tutorial solo se ve en la primera visita de la sesión: no tiene por qué pesar en el arranque. */
+/** El tutorial solo se ve en la primera visita: no tiene por qué pesar en el arranque. */
 const OnboardingModal = lazy(() =>
   import('../features/onboarding/OnboardingModal.tsx').then((module) => ({
     default: module.OnboardingModal,
@@ -187,13 +187,15 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
 
   useEffect(() => {
     // Al abrir la guía no hay ninguna plaza ni lugar seleccionados: se empieza por la vista de Zibatá.
-    // Un enlace compartido sí abre su ficha, y entonces el tutorial no aparece encima de ella.
+    // Un enlace compartido sí abre su ficha, y entonces el tutorial no aparece encima de ella. Las
+    // páginas de información cuentan igual: quien llega a /info/privacidad viene a leer eso.
     const target = parsePath(
       window.location.pathname,
       window.location.search,
       import.meta.env.BASE_URL,
     )
-    const isDeepLink = target.plazaSlug !== null || target.placeSlug !== null
+    const isDeepLink =
+      target.plazaSlug !== null || target.placeSlug !== null || target.infoTopic !== null
     if (!isDeepLink && !hasSeenOnboarding()) dispatch({ type: 'showTutorial' })
   }, [dispatch])
 
@@ -543,6 +545,10 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
           topic={state.infoTopic}
           onClose={() => dispatch({ type: 'closeInfo' })}
           onGoTo={openInfo}
+          onShowTutorial={() => {
+            dispatch({ type: 'closeInfo' })
+            dispatch({ type: 'showTutorial' })
+          }}
         />
       )}
 
