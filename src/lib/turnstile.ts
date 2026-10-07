@@ -22,8 +22,13 @@ const CLAVE = import.meta.env.VITE_TURNSTILE_SITEKEY?.trim() ?? ''
 
 const SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
 
-/** Pasado esto se deja de esperar. El corazón ya está puesto en el dispositivo; lo que se pierde es
- * que cuente para el número público, y eso no justifica dejar nada colgando. */
+/**
+ * Pasado esto se deja de esperar, y el reloj cubre **también la descarga del script**. Hace falta que
+ * lo cubra: una red que no responde (portal cautivo, proxy que traga la conexión) no dispara ni
+ * `load` ni `error`, y sin un límite por encima la promesa se queda colgada para siempre. El corazón
+ * ya está puesto en el dispositivo; lo único que se pierde es que cuente para el número público, y
+ * eso no justifica dejar nada esperando.
+ */
 const PACIENCIA_MS = 20_000
 
 interface Api {
@@ -62,57 +67,71 @@ function cargar(): Promise<Api | null> {
 }
 
 /**
- * Pide una ficha, o `null` si no hay desafío configurado, el script no carga o la persona no lo
- * resuelve. Nunca lanza: quien llama tiene que poder seguir sin ella.
+ * Pide una ficha, o `null` si no hay desafío configurado, el script no carga, la persona no lo
+ * resuelve o se acaba la paciencia. Nunca lanza: quien llama tiene que poder seguir sin ella.
  */
-export async function fichaDeDesafio(): Promise<string | null> {
-  if (!CLAVE) return null
-  const api = await cargar()
-  if (!api) return null
-
-  const contenedor = document.createElement('div')
-  /*
-   * El estilo va por CSSOM y no en una hoja: son cinco declaraciones para un elemento que vive unos
-   * segundos como mucho, y asignar `style.x` desde JavaScript no choca con `style-src 'self'` (lo
-   * que la política bloquea son los atributos y las etiquetas `<style>` que vienen en el HTML).
-   */
-  Object.assign(contenedor.style, {
-    position: 'fixed',
-    insetInlineStart: '50%',
-    insetBlockStart: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: '1000',
-  })
-  document.body.append(contenedor)
+export function fichaDeDesafio(): Promise<string | null> {
+  if (!CLAVE) return Promise.resolve(null)
 
   return new Promise<string | null>((resolver) => {
-    let id: string | undefined
     let cerrado = false
+    let api: Api | null = null
+    let id: string | undefined
+    let contenedor: HTMLElement | null = null
+    let reloj: ReturnType<typeof setTimeout>
+
     const terminar = (ficha: string | null) => {
       if (cerrado) return
       cerrado = true
       clearTimeout(reloj)
-      if (id !== undefined) {
+      if (api && id !== undefined) {
         try {
           api.remove(id)
         } catch {
           // Si el widget ya se fue solo, mejor.
         }
       }
-      contenedor.remove()
+      contenedor?.remove()
       resolver(ficha)
     }
-    const reloj = setTimeout(() => terminar(null), PACIENCIA_MS)
-    try {
-      id = api.render(contenedor, {
-        sitekey: CLAVE,
-        appearance: 'interaction-only',
-        callback: (ficha: string) => terminar(ficha),
-        'error-callback': () => terminar(null),
-        'timeout-callback': () => terminar(null),
+
+    // El reloj arranca antes que nada, para que cubra la descarga del script y no solo el desafío.
+    reloj = setTimeout(() => terminar(null), PACIENCIA_MS)
+
+    void (async () => {
+      api = await cargar()
+      if (cerrado) return
+      if (!api) {
+        terminar(null)
+        return
+      }
+
+      contenedor = document.createElement('div')
+      /*
+       * El estilo va por CSSOM y no en una hoja: son cinco declaraciones para un elemento que vive
+       * unos segundos como mucho, y asignar `style.x` desde JavaScript no choca con `style-src
+       * 'self'` (lo que la política bloquea son los atributos y las etiquetas `<style>` del HTML).
+       */
+      Object.assign(contenedor.style, {
+        position: 'fixed',
+        insetInlineStart: '50%',
+        insetBlockStart: '50%',
+        transform: 'translate(-50%, -50%)',
+        zIndex: '1000',
       })
-    } catch {
-      terminar(null)
-    }
+      document.body.append(contenedor)
+
+      try {
+        id = api.render(contenedor, {
+          sitekey: CLAVE,
+          appearance: 'interaction-only',
+          callback: (ficha: string) => terminar(ficha),
+          'error-callback': () => terminar(null),
+          'timeout-callback': () => terminar(null),
+        })
+      } catch {
+        terminar(null)
+      }
+    })()
   })
 }

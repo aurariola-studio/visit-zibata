@@ -1,6 +1,16 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+/*
+ * El desafio se simula siempre, y por eso vale la pena explicarlo: con el modulo de verdad, esta
+ * prueba pasaba a depender de si la maquina que la corre tiene configurada la clave publica de
+ * Turnstile. La tenia el flujo de publicacion y no la tenian ni el de pull request ni mi portatil,
+ * asi que ocho pruebas que pasaban en todas partes se colgaron al publicar, en el unico sitio donde
+ * nadie las estaba mirando. Lo que esta prueba comprueba es `cuenta.ts`; el desafio tiene el suyo.
+ */
+let ficha: string | null = null
+vi.mock('./turnstile.ts', () => ({ fichaDeDesafio: async () => ficha }))
+
 /**
  * Un secreto falso con la forma del real: 43 caracteres de base64url. Se escribe legible y repetitivo
  * a propósito. Uno aleatorio de verdad lo marca Gitleaks como clave filtrada, y una excepción
@@ -17,6 +27,7 @@ async function cargar() {
 
 beforeEach(() => {
   window.localStorage.clear()
+  ficha = null
 })
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -97,7 +108,7 @@ describe('la cuenta en el navegador', () => {
   })
 
   it('el alta lleva la ficha del desafío cuando hay desafío', async () => {
-    vi.doMock('./turnstile.ts', () => ({ fichaDeDesafio: async () => 'ficha-de-prueba' }))
+    ficha = 'ficha-de-prueba'
     const fetchMock = vi
       .fn()
       .mockResolvedValue({ ok: true, json: async () => ({ secreto: SECRETO }) })
@@ -108,7 +119,6 @@ describe('la cuenta en el navegador', () => {
       method: 'POST',
       headers: { 'x-zibata-turnstile': 'ficha-de-prueba' },
     })
-    vi.doUnmock('./turnstile.ts')
   })
 
   it('sin desafío configurado el alta va sin cabecera, que es el desarrollo de hoy', async () => {
