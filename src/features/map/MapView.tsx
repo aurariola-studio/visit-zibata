@@ -12,8 +12,14 @@ import {
   type PaddingOptions,
 } from 'maplibre-gl'
 import { useEffect, useRef, useState } from 'react'
-import { MAP_ASSETS, MAP_LIMITS, MAP_LOCALE, ZIBATA_EXTENT } from '../../config/map.ts'
-import { t } from '../../i18n/index.ts'
+import {
+  MAP_ASSETS,
+  MAP_LIMITS,
+  MAP_LOCALE,
+  MAP_LOCALE_EN,
+  ZIBATA_EXTENT,
+} from '../../config/map.ts'
+import { locale as idiomaActivo, t } from '../../i18n/index.ts'
 import { absoluteAssetUrl } from '../../lib/assets.ts'
 import { registrar } from '../../lib/eventos.ts'
 import type { Plaza } from '../../types/domain.ts'
@@ -140,7 +146,7 @@ export default function MapView({
         maxPitch: MAP_LIMITS.maxPitch,
         attributionControl: false,
         // Etiquetas del propio MapLibre (atribución, teclado) en español, como el resto de la interfaz.
-        locale: MAP_LOCALE,
+        locale: idiomaActivo === 'en' ? MAP_LOCALE_EN : MAP_LOCALE,
         canvasContextAttributes: { antialias: true },
         renderWorldCopies: false,
         fadeDuration: 180,

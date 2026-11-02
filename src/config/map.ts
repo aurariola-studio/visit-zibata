@@ -87,6 +87,10 @@ export const PLAZA_FOCUS_PITCH = 58
  * Textos propios de MapLibre (atribución y ayuda de teclado) en español: por defecto llegan en inglés y un
  * lector de pantalla los mezclaría con la interfaz. Las claves son las de `maplibre-gl`.
  */
+/**
+ * Textos propios de MapLibre (atribución y ayuda de teclado) por idioma. Por defecto llegan en inglés:
+ * en la guía en español se traducen, y en la inglesa se dejan como vienen para no mezclar idiomas.
+ */
 export const MAP_LOCALE: Record<string, string> = {
   'AttributionControl.ToggleAttribution': 'Mostrar u ocultar la atribución',
   'AttributionControl.MapFeedback': 'Comentarios sobre el mapa',
@@ -96,4 +100,16 @@ export const MAP_LOCALE: Record<string, string> = {
   'NavigationControl.ResetBearing': 'Orientar al norte',
   'GeolocateControl.FindMyLocation': 'Mostrar mi ubicación',
   'GeolocateControl.LocationNotAvailable': 'Ubicación no disponible',
+}
+
+/** Lo mismo en inglés, explícito y no heredado: si algún día MapLibre cambia su defecto, no se nota. */
+export const MAP_LOCALE_EN: Record<string, string> = {
+  'AttributionControl.ToggleAttribution': 'Show or hide the attribution',
+  'AttributionControl.MapFeedback': 'Map feedback',
+  'Map.Title': 'Map',
+  'NavigationControl.ZoomIn': 'Zoom in',
+  'NavigationControl.ZoomOut': 'Zoom out',
+  'NavigationControl.ResetBearing': 'Reset bearing to north',
+  'GeolocateControl.FindMyLocation': 'Show my location',
+  'GeolocateControl.LocationNotAvailable': 'Location not available',
 }

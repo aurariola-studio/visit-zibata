@@ -399,7 +399,11 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
 
       {place.description && <Description text={place.description} />}
 
-      <HoursTable hours={place.hours} cerrado={place.cierre !== undefined} />
+      <HoursTable
+        hours={place.hours}
+        cerrado={place.cierre !== undefined}
+        revisado={place.verification?.lastVerifiedAt}
+      />
 
       {links.length > 0 && (
         <section className={styles.contact} aria-label={t('place.contact')} data-nosnippet="">

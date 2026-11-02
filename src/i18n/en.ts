@@ -82,6 +82,8 @@ export const en = {
   'hours.closed': 'Closed',
   'hours.closedAllDay': 'Closed',
   'hours.today': 'Today',
+  'hours.none': 'No opening hours published.',
+  'hours.reviewed': 'Hours checked on {date}.',
 
   'day.mon': 'Monday',
   'day.tue': 'Tuesday',
@@ -318,7 +320,7 @@ export const en = {
   'profile.tasteCount': { one: '{count} place', other: '{count} places' },
   'profile.empty':
     'Log a visit, save a place with the heart or rate it, and your time in Zibatá will show up here.',
-  'profile.storage': 'All of this stays in this browser.',
+  'profile.storage': 'Saved in this browser and synced with the guide, without your name.',
 
   'locale.label': 'Language',
   'locale.shortEs': 'ES',

@@ -81,6 +81,8 @@ export const es = {
   'hours.closed': 'Cerrado',
   'hours.closedAllDay': 'Cerrado',
   'hours.today': 'Hoy',
+  'hours.none': 'Sin horario publicado.',
+  'hours.reviewed': 'Horario revisado el {date}.',
 
   'day.mon': 'Lunes',
   'day.tue': 'Martes',
@@ -358,7 +360,11 @@ export const es = {
   'profile.tasteCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.empty':
     'Registra una visita, guarda un lugar con el corazón o califícalo, y aquí verás tu paso por Zibatá.',
-  'profile.storage': 'Todo esto se queda en este navegador.',
+  /*
+   * No es solo local: la cuenta anónima del servidor guarda lo mismo para poder recuperarlo en otro
+   * aparato, sin nombre ni correo. La política lo detalla; aquí no puede decir menos.
+   */
+  'profile.storage': 'Se guarda en este navegador y se sincroniza con la guía, sin tu nombre.',
 
   'locale.label': 'Idioma',
   'locale.shortEs': 'ES',
