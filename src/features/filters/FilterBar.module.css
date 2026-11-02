@@ -43,8 +43,9 @@
  * El selector de zona: la única cápsula de la guía que lleva fondo propio.
  *
  * Es cápsula porque elige de un conjunto, igual que las categorías. Y es la excepción con fondo
- * porque no elige en sitio: abre una lista del sistema, así que necesita leerse como un campo que
- * se despliega y no como una de dieciocho opciones ya visibles.
+ * porque no elige en sitio: abre una lista, así que necesita leerse como un campo que se despliega y
+ * no como una de dieciocho opciones ya visibles. La lista la dibuja la app (ver `.lista`), no el
+ * sistema, para que abra donde el botón y mida lo mismo que él.
  *
  * Sólida y sin desenfoque, aunque flote sobre el mapa: nada que se lea contra calles y arbolado
  * puede fiarse de lo que haya detrás.
