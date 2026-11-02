@@ -5,6 +5,11 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # 6.16 mueve el estarcido a un contexto por fotograma y deja de exponer la transformación en el
+      # painter: de ahí cuelgan las sombras en vivo y el límite de alejamiento de la cámara.
+      - dependency-name: maplibre-gl
+        versions: ['>=6.11.0']
     groups:
       mapa:
         patterns: ["maplibre-gl", "pmtiles", "@maplibre/*"]
