@@ -1,6 +1,14 @@
 import { AxeBuilder } from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
-import { isMobile, openApp, panel, placesInPlaza, plazaMarker, waitForMap } from './helpers.ts'
+import {
+  elegirZona,
+  isMobile,
+  openApp,
+  panel,
+  placesInPlaza,
+  plazaMarker,
+  waitForMap,
+} from './helpers.ts'
 
 test.describe('Estados de error @mapa', () => {
   test('sin WebGL2 se explica el problema y la guía sigue funcionando con la lista', async ({
@@ -142,9 +150,7 @@ test.describe('Accesibilidad', () => {
     }
     expect(await scan()).toEqual([])
 
-    await page
-      .getByRole('combobox', { name: 'Filtrar por zona' })
-      .selectOption({ label: 'Xentric Zibatá' })
+    await elegirZona(page, 'Xentric Zibatá')
     await expect(
       panel(page).getByRole('heading', { level: 2, name: 'Xentric Zibatá' }),
     ).toBeVisible()

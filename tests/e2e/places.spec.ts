@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import {
+  elegirZona,
   isMobile,
   openApp,
   panel,
@@ -131,9 +132,7 @@ test.describe('Plazas y lugares', () => {
   test('"atrás" en el navegador cierra la plaza seleccionada', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)
-    await page
-      .getByRole('combobox', { name: 'Filtrar por zona' })
-      .selectOption({ label: 'Plaza Zielo' })
+    await elegirZona(page, 'Plaza Zielo')
     await expect(page).toHaveURL(/\/es\/zona\/plaza-zielo$/)
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Plaza Zielo' })).toBeVisible()
     await page.goBack()
