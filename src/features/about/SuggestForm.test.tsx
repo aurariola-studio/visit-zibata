@@ -13,7 +13,11 @@ const SELLO = 'sello-de-prueba-que-no-vale-nada-aaaaaaaaaa'
 vi.mock('../../lib/prueba-de-trabajo.ts', () => ({ secretoConPrueba: async () => SELLO }))
 
 describe('SuggestForm', () => {
-  beforeEach(() => vi.restoreAllMocks())
+  beforeEach(() => {
+    vi.restoreAllMocks()
+    // El formulario guarda borrador y acuse en la sesión; sin vaciarlo, una prueba arrastra la otra.
+    sessionStorage.clear()
+  })
   afterEach(() => vi.unstubAllGlobals())
 
   it('envía a nuestro propio servidor, sin salir del origen', async () => {

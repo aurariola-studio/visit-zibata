@@ -332,6 +332,8 @@ export const es = {
   'suggest.ok': 'Gracias. Lo revisamos y entra en la próxima actualización.',
   'suggest.error': 'No se pudo enviar. Inténtalo de nuevo en un rato.',
   'suggest.required': 'Escribe tu mensaje.',
+  'suggest.contactInvalid': 'Ese correo no parece un correo. Revísalo o déjalo en blanco.',
+  'suggest.again': 'Enviar otro mensaje',
   /* Etiqueta del campo trampa: solo la oyen los lectores de pantalla, y les dice que lo dejen. */
   'suggest.trap': 'No rellenes este campo',
   'suggest.note':

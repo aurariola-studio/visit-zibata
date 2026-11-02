@@ -293,6 +293,8 @@ export const en = {
   'suggest.ok': 'Thank you. We will check it and it goes into the next update.',
   'suggest.error': 'It could not be sent. Please try again in a while.',
   'suggest.required': 'Write your message.',
+  'suggest.contactInvalid': 'That does not look like an email address. Fix it or leave it empty.',
+  'suggest.again': 'Send another message',
   'suggest.trap': 'Leave this field empty',
   'suggest.note':
     'Your message is stored on the guide’s own server so it can be acted on. Nothing else: no account, no address.',
