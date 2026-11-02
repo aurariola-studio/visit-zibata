@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, placesInCategory, placesInPlaza } from './helpers.ts'
+import { elegirZona, openApp, panel, placesInCategory, placesInPlaza } from './helpers.ts'
 
 test.describe('Búsqueda y filtros', () => {
   test('encuentra lugares ignorando acentos, con sinónimos y con errores menores', async ({
@@ -82,7 +82,7 @@ test.describe('Búsqueda y filtros', () => {
     await expect(region.getByRole('heading', { name: 'Resultados' })).toBeVisible()
     await expect(region.getByRole('link', { name: 'Ver detalles de Tacos el Pata' })).toBeVisible()
     // La plaza sigue elegida y vuelve en cuanto se borra la búsqueda.
-    await expect(page.getByRole('combobox', { name: 'Filtrar por zona' })).toHaveValue('plaza-luna')
+    await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText('Plaza Luna')
     await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('')
     await expect(region.getByRole('heading', { level: 2, name: 'Plaza Luna' })).toBeVisible()
   })
@@ -101,9 +101,7 @@ test.describe('Búsqueda y filtros', () => {
     page,
   }) => {
     await openApp(page)
-    await page
-      .getByRole('combobox', { name: 'Filtrar por zona' })
-      .selectOption({ label: 'Paseo Zibatá' })
+    await elegirZona(page, 'Paseo Zibatá')
     const topCategories = page.getByRole('list', { name: 'Categorías' }).first()
     await topCategories.getByRole('link', { name: /Desayunos y Café/ }).click()
 
@@ -132,7 +130,9 @@ test.describe('Búsqueda y filtros', () => {
     await expect(page).toHaveURL(/\/es\/zona\/paseo-zibata\?categoria=desayunos-y-cafe$/)
 
     await page.getByRole('button', { name: 'Limpiar filtros' }).first().click()
-    await expect(page.getByRole('combobox', { name: 'Filtrar por zona' })).toHaveValue('')
+    await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText(
+      'Todas las zonas',
+    )
     await expect(topCategories.getByRole('link', { name: /^Todo/ })).toHaveAttribute(
       'aria-current',
       'true',

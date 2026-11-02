@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { openApp, panel, placesInPlaza, plazaMarker, waitForMap } from './helpers.ts'
+import { elegirZona, openApp, panel, placesInPlaza, plazaMarker, waitForMap } from './helpers.ts'
 
 /**
  * Plazas representadas en pantalla: marcadores visibles dentro de la vista, ya lleven nombre, solo la
@@ -56,8 +56,12 @@ const coveredBySheet = (page: Page) =>
   })
 
 /** Nº de plazas activas según el selector de plazas (sin la opción "Todas"). */
-const activePlazaCount = async (page: Page) =>
-  (await page.getByRole('combobox', { name: 'Filtrar por zona' }).locator('option').count()) - 1
+const activePlazaCount = async (page: Page) => {
+  await page.getByRole('button', { name: 'Filtrar por zona' }).click()
+  const total = await page.getByRole('option').count()
+  await page.keyboard.press('Escape')
+  return total - 1
+}
 
 /** Los grados de giro de un elemento, leídos de su matriz de transformación. */
 const anguloDe = async (locator: import('@playwright/test').Locator): Promise<number> =>
@@ -287,9 +291,7 @@ test.describe('Móvil en horizontal', () => {
     // con más lugares siga marcada y que el resto se alcance por el selector (se usa justo después).
     await expect.poll(() => coveredBySheet(page)).toEqual([])
     await expect(page.getByRole('button', { name: /^Xentric Anáhuac/ })).toBeVisible()
-    await page
-      .getByRole('combobox', { name: 'Filtrar por zona' })
-      .selectOption({ label: 'Paseo Zibatá' })
+    await elegirZona(page, 'Paseo Zibatá')
     await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
     const header = await page
       .locator('header', { has: page.getByRole('searchbox', { name: 'Buscar lugares' }) })

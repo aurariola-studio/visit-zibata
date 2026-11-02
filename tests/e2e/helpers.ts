@@ -139,6 +139,24 @@ export const panel = (page: Page) =>
     .or(page.getByRole('complementary', { name: 'Información de lugares' }))
 
 /**
+ * Elige una zona en la lista de zonas. `null` deja "Todas las zonas".
+ *
+ * La lista es de la app y no un `select`: se abre con el botón y cada opción es un `option` del
+ * listbox, así que se elige como cualquier otra opción y se espera a que la lista se cierre.
+ */
+export async function elegirZona(page: Page, nombre: string | null): Promise<void> {
+  await page.getByRole('button', { name: 'Filtrar por zona' }).click()
+  const lista = page.getByRole('listbox', { name: 'Filtrar por zona' })
+  await lista.waitFor()
+  await lista.getByRole('option', { name: nombre ?? 'Todas las zonas', exact: true }).click()
+  await lista.waitFor({ state: 'detached' })
+}
+
+/** La zona que muestra el botón ahora mismo. */
+export const zonaElegida = (page: Page) =>
+  page.getByRole('button', { name: 'Filtrar por zona' }).innerText()
+
+/**
  * Marcador de una zona tal como lo alcanzaría una persona. Cuando el espacio no da ni para el punto
  * (pantallas muy estrechas con la vista alejada) se acerca la cámara con el selector de zonas, igual
  * que haría alguien que la busca, y se cierra el panel para dejar el mapa como estaba.
@@ -150,7 +168,7 @@ export async function plazaMarker(page: Page, name: string): Promise<Locator> {
     // La colocación de marcadores se estabiliza cuando termina el movimiento de la cámara.
     await page.waitForTimeout(1200)
     if ((await marker.getAttribute('data-mode')) !== 'hidden') return marker
-    await page.getByRole('combobox', { name: 'Filtrar por zona' }).selectOption({ label: name })
+    await elegirZona(page, name)
     await page.waitForTimeout(1500)
     await page
       .getByRole('button', { name: 'Cerrar panel' })
