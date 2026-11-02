@@ -20,8 +20,11 @@ interface BottomSheetProps {
 }
 
 const EXPANDED_RATIO = 0.86
-/** Expandida deja visibles la búsqueda, los filtros y una franja de mapa (~165 px de barra + 27 px). */
-const EXPANDED_TOP_RESERVED = 192
+/**
+ * Expandida deja visibles la búsqueda, los filtros y una franja de mapa de unos 110 px. Antes reservaba
+ * 27: en un teléfono quedaba una tira de 25 px que se lee como un fallo de pintado, no como mapa.
+ */
+const EXPANDED_TOP_RESERVED = 275
 const SMALL_PEEK = 104
 /** Barra superior (búsqueda y filtros, ~160 px) más una franja mínima de mapa que debe seguir visible. */
 const TOP_RESERVED = 256
@@ -49,7 +52,12 @@ export function collapsedHeightFor(
 export function expandedHeightFor(viewport: number): number {
   const belowTopbar = viewport - EXPANDED_TOP_RESERVED
   const ratio = viewport * EXPANDED_RATIO
-  return Math.round(belowTopbar >= viewport * 0.6 ? Math.min(ratio, belowTopbar) : ratio)
+  /*
+   * Si respetar la franja deja la hoja por debajo del 55 % de la pantalla, se prefiere la hoja grande:
+   * leer manda sobre ver el mapa. Antes el umbral era el 60 %, y con la franja nueva los teléfonos de
+   * 667 px caían en el lado de la hoja grande y volvían a dejar una tira de 93 px.
+   */
+  return Math.round(belowTopbar >= viewport * 0.55 ? Math.min(ratio, belowTopbar) : ratio)
 }
 
 export function useViewportHeight(): number {

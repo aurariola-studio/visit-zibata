@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { createPortal } from 'react-dom'
 import { plazaTones } from '../../config/palette.ts'
 import { t } from '../../i18n/index.ts'
 import type { Category, Plaza } from '../../types/domain.ts'
@@ -88,6 +89,7 @@ export function FilterBar({
   const listaRef = useRef<HTMLDivElement>(null)
   const cajaRef = useRef<HTMLDivElement>(null)
   const [abierto, setAbierto] = useState(false)
+  const [posicion, setPosicion] = useState({ top: 0, left: 0, width: 0, arriba: false })
   const [activo, setActivo] = useState(0)
   const tecladoRef = useRef(false)
   const hasSelection = filtersActive || selectedPlazaId !== null
@@ -123,6 +125,16 @@ export function FilterBar({
   const etiquetaZona = opciones[indiceElegido]?.nombre ?? t('filters.allPlazas')
 
   const abrir = (): void => {
+    const caja = botonRef.current?.getBoundingClientRect()
+    if (caja) {
+      setPosicion({
+        top: caja.bottom + 6,
+        left: caja.left,
+        width: caja.width,
+        // Hacia arriba si no cabe debajo: con la hoja abierta, la mitad de la pantalla está ocupada.
+        arriba: caja.bottom + 6 + 320 > window.innerHeight,
+      })
+    }
     setActivo(indiceElegido)
     setAbierto(true)
   }
@@ -140,7 +152,11 @@ export function FilterBar({
   useEffect(() => {
     if (!abierto) return
     const fuera = (event: PointerEvent): void => {
-      if (!cajaRef.current?.contains(event.target as Node)) setAbierto(false)
+      const destino = event.target as Node
+      // La lista vive fuera de la cápsula (en un portal) para poder dibujarse sobre la hoja.
+      if (!cajaRef.current?.contains(destino) && !listaRef.current?.contains(destino)) {
+        setAbierto(false)
+      }
     }
     document.addEventListener('pointerdown', fuera)
     return () => document.removeEventListener('pointerdown', fuera)
@@ -257,37 +273,47 @@ export function FilterBar({
             <span className={styles.valor}>{etiquetaZona}</span>
             <ChevronDown aria-hidden="true" className={styles.chevron} />
           </button>
-          {abierto && (
-            <div
-              id={listaId}
-              ref={listaRef}
-              role="listbox"
-              tabIndex={-1}
-              className={styles.lista}
-              aria-label={t('filters.plaza')}
-              aria-activedescendant={`${listaId}-${activo}`}
-              onKeyDown={alTeclearLista}
-            >
-              {opciones.map((opcion, indice) => (
-                <div
-                  key={opcion.id ?? 'todas'}
-                  id={`${listaId}-${indice}`}
-                  role="option"
-                  tabIndex={-1}
-                  aria-selected={opcion.id === selectedPlazaId}
-                  data-activo={indice === activo}
-                  className={styles.opcion}
-                  onPointerDown={(event) => {
-                    event.preventDefault()
-                    elegir(indice)
-                  }}
-                  onMouseEnter={() => setActivo(indice)}
-                >
-                  {opcion.nombre}
-                </div>
-              ))}
-            </div>
-          )}
+          {abierto &&
+            createPortal(
+              <div
+                id={listaId}
+                ref={listaRef}
+                role="listbox"
+                tabIndex={-1}
+                className={styles.lista}
+                style={{
+                  position: 'fixed',
+                  left: posicion.left,
+                  width: posicion.width,
+                  ...(posicion.arriba
+                    ? { bottom: window.innerHeight - posicion.top + 12 }
+                    : { top: posicion.top }),
+                }}
+                aria-label={t('filters.plaza')}
+                aria-activedescendant={`${listaId}-${activo}`}
+                onKeyDown={alTeclearLista}
+              >
+                {opciones.map((opcion, indice) => (
+                  <div
+                    key={opcion.id ?? 'todas'}
+                    id={`${listaId}-${indice}`}
+                    role="option"
+                    tabIndex={-1}
+                    aria-selected={opcion.id === selectedPlazaId}
+                    data-activo={indice === activo}
+                    className={styles.opcion}
+                    onPointerDown={(event) => {
+                      event.preventDefault()
+                      elegir(indice)
+                    }}
+                    onMouseEnter={() => setActivo(indice)}
+                  >
+                    {opcion.nombre}
+                  </div>
+                ))}
+              </div>,
+              document.body,
+            )}
         </div>
 
         {/*
