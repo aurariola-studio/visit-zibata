@@ -131,13 +131,13 @@ describe('la marca de abierto', () => {
   it('un local abierto lleva su punto, con texto para quien no lo ve', async () => {
     const place = makePlace({ id: 'abre', plazaId: 'plaza-sur', name: 'Abre', hours: allDay })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Abierto ahora: Abre')).toBeInTheDocument()
+    expect(screen.getByText('Abierto ahora, Abre')).toBeInTheDocument()
   })
 
   it('un local cerrado lleva el suyo, y no dice "abierto"', async () => {
     const place = makePlace({ id: 'cierra', plazaId: 'plaza-sur', name: 'Cierra', hours: nunca })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Cerrado ahora: Cierra')).toBeInTheDocument()
+    expect(screen.getByText('Cerrado ahora, Cierra')).toBeInTheDocument()
     expect(screen.queryByText(/Abierto ahora/)).not.toBeInTheDocument()
   })
 
@@ -150,7 +150,7 @@ describe('la marca de abierto', () => {
       cierre: { motivo: 'remodelacion', desde: '2026-10-09' },
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Cerrado temporalmente: En obra')).toBeInTheDocument()
+    expect(screen.getByText('Cerrado temporalmente, En obra')).toBeInTheDocument()
     expect(screen.queryByText(/Abierto ahora/)).not.toBeInTheDocument()
   })
 
@@ -159,7 +159,7 @@ describe('la marca de abierto', () => {
     // afirmar que están cerrados, y la guía no lo sabe.
     const place = makePlace({ id: 'sin', plazaId: 'plaza-sur', name: 'Sin' })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Sin horario publicado: Sin')).toBeInTheDocument()
+    expect(screen.getByText('Sin horario publicado, Sin')).toBeInTheDocument()
     expect(screen.queryByText(/Abierto ahora/)).not.toBeInTheDocument()
     expect(screen.queryByText(/Cerrado ahora/)).not.toBeInTheDocument()
   })

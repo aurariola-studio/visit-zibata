@@ -126,10 +126,10 @@ export const en = {
   'favorites.filter': 'Favourites',
   'filters.openNow': 'Open now',
   'filters.switches': 'Quick filters',
-  'filters.openNowLabel': 'Open now: {name}',
-  'filters.closedNowLabel': 'Closed now: {name}',
-  'filters.unknownHoursLabel': 'No opening hours published: {name}',
-  'filters.temporarilyClosedLabel': 'Temporarily closed: {name}',
+  'filters.openNowLabel': 'Open now, {name}',
+  'filters.closedNowLabel': 'Closed now, {name}',
+  'filters.unknownHoursLabel': 'No opening hours published, {name}',
+  'filters.temporarilyClosedLabel': 'Temporarily closed, {name}',
 
   'closure.title': 'Temporarily closed',
   'closure.remodelacion': 'For refurbishment.',
@@ -157,16 +157,16 @@ export const en = {
   'seo.categories': 'Categories',
   'seo.category.name': '{label} in Zibatá',
   'seo.category.description': {
-    one: '{label} is one of the categories of Zibatá: {lugares} in {zonas}, with hours, contact and directions.',
+    one: '{label} is one of the categories of Zibatá. {lugares} in {zonas}, with hours, contact and directions.',
     other:
-      '{label} is one of the categories of Zibatá: {lugares} across {zonas}, with hours, contact and directions.',
+      '{label} is one of the categories of Zibatá. {lugares} across {zonas}, with hours, contact and directions.',
   },
   'seo.category.descriptionSinZona': {
-    one: '{label} is one of the categories of Zibatá: {lugares}, with hours, contact and directions.',
+    one: '{label} is one of the categories of Zibatá. {lugares}, with hours, contact and directions.',
     other:
-      '{label} is one of the categories of Zibatá: {lugares}, with hours, contact and directions.',
+      '{label} is one of the categories of Zibatá. {lugares}, with hours, contact and directions.',
   },
-  'seo.category.title': '{label} in Zibatá: {giros}',
+  'seo.category.title': '{label} in Zibatá, {giros}',
   'seo.category.places': 'Places in this category',
   'seo.category.zones': 'Where to find them',
   'seo.category.zoneCount': { one: '{count} area', other: '{count} areas' },
@@ -189,7 +189,7 @@ export const en = {
 
   'map.zoomIn': 'Zoom in',
   'map.zoomOut': 'Zoom out',
-  'map.rotate': 'Rotate the map: drag, or press to turn an eighth of a turn',
+  'map.rotate': 'Rotate the map. Drag, or press to turn an eighth of a turn',
   'map.resetNorth': 'Face north',
   'map.reset': 'Back to the Zibatá view',
   'map.locate': 'Show my location',
@@ -262,11 +262,11 @@ export const en = {
 
   'about.termsTitle': 'Terms of use',
   'about.termsWhat':
-    'This guide is an independent project. It has no commercial relationship with any of the places listed: nobody pays to be here, to rank higher or to be featured, and there is no advertising. A place being listed is not a recommendation or an endorsement, only that it exists in the area and there is enough information to describe it.',
+    'This guide is an independent project. It has no commercial relationship with any of the places listed. Nobody pays to be here, to rank higher or to be featured, and there is no advertising. A place being listed is not a recommendation or an endorsement, only that it exists in the area and there is enough information to describe it.',
   'about.termsData':
-    'The information comes from public sources and from what each business corrects, and it is reviewed each season. Even so it can be out of date: opening hours change, a phone number stops working, a place closes without notice. The guide is offered as it is, with no guarantee that every detail is accurate today. For anything that matters (the hours before heading out, a price, a booking), confirm it directly with the place.',
+    'The information comes from public sources and from what each business corrects, and it is reviewed each season. Even so it can be out of date. Opening hours change, a phone number stops working, a place closes without notice. The guide is offered as it is, with no guarantee that every detail is accurate today. For anything that matters (the hours before heading out, a price, a booking), confirm it directly with the place.',
   'about.termsFix':
-    'If something about your business is wrong, or you would rather not be listed, write through "Suggest a change or contact us" and it is corrected or removed in the next update. No explanation needed: asking is enough.',
+    'If something about your business is wrong, or you would rather not be listed, write through "Suggest a change or contact us" and it is corrected or removed in the next update. No explanation needed. Asking is enough.',
   'about.termsContent':
     'The text, the map and the code of this guide belong to whoever maintains it. Each business name, logo and trademark belongs to that business, and is used here only to identify it. Links to Google Maps, social accounts or delivery apps lead to third-party sites, and what happens there follows their own rules.',
 
@@ -274,9 +274,9 @@ export const en = {
   'about.contributeLead':
     'Is a place missing, is something incorrect or would you like to contact us?',
   'about.contributeBody':
-    'Anyone can write, a neighbour, a customer or the business itself: every correction helps, be it opening hours, a phone number, social accounts or the description. You can also exercise your ARCO rights or ask us anything.',
+    'Anyone can write, a neighbour, a customer or the business itself. Every correction helps, be it opening hours, a phone number, social accounts or the description. You can also exercise your ARCO rights or ask us anything.',
   'about.contributeMeanwhile':
-    'What you write goes straight to whoever maintains the guide, with no third-party service in between. No account and no email needed: the contact field is optional and only serves to reply to you. The guide is reviewed each season, and anything a business asks to correct enters the next update.',
+    'What you write goes straight to whoever maintains the guide, with no third-party service in between. No account and no email needed. The contact field is optional and only serves to reply to you. The guide is reviewed each season, and anything a business asks to correct enters the next update.',
 
   'suggest.title': 'Tell us what changes or write your message',
   'suggest.who': 'Who is writing?',
@@ -297,7 +297,7 @@ export const en = {
   'suggest.again': 'Send another message',
   'suggest.trap': 'Leave this field empty',
   'suggest.note':
-    'Your message is stored on the guide’s own server so it can be acted on. Nothing else: no account, no address.',
+    'Your message is stored on the guide’s own server so it can be acted on. Nothing else. No account, no address.',
 
   'about.credits': 'Data and credits',
   'about.creditsBody':
@@ -313,7 +313,7 @@ export const en = {
     one: 'You have visited {count} place in Zibatá, across {zones} of its {total} areas.',
     other: 'You have visited {count} places in Zibatá, across {zones} of its {total} areas.',
   },
-  'profile.noVisits': 'All of Zibatá still to discover: {total} areas and {places} places.',
+  'profile.noVisits': 'All of Zibatá still to discover. {total} areas and {places} places.',
   'profile.zonesLabel': 'Areas of Zibatá',
   'profile.zoneDone': 'visited',
   'profile.podium': 'Your usual three',

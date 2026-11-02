@@ -32,6 +32,7 @@ import { MapLoader } from '../features/map/MapLoader.tsx'
 import { realismoActivo } from '../features/map/realismo/modo.ts'
 import type { MapStatus } from '../features/map/types.ts'
 import { hasSeenOnboarding } from '../features/onboarding/seen.ts'
+import { PlaceSkeleton } from '../features/places/PlaceSkeleton.tsx'
 import { ExplorePanel } from '../features/plazas/ExplorePanel.tsx'
 import { PlazaPanel } from '../features/plazas/PlazaPanel.tsx'
 import { ResultsPanel } from '../features/plazas/ResultsPanel.tsx'
@@ -391,11 +392,8 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
         <AppErrorBoundary variant="panel">
           <Suspense
             fallback={
-              // La ficha viaja en su propio trozo. Con el hueco vacío, el panel se veía roto mientras
-              // llegaba; con el aviso, se ve que está cargando.
-              <p className={styles.panelLoading} role="status">
-                {t('data.loading')}
-              </p>
+              // La ficha viaja en su propio trozo: mientras llega, el esqueleto ocupa su forma.
+              <PlaceSkeleton />
             }
           >
             <PlaceDetail

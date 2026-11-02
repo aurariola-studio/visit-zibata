@@ -1,0 +1,91 @@
+/*
+ * El esqueleto de la ficha. Cuatro bloques con la forma y las distancias de la ficha real: avatar,
+ * título, una línea corta de dirección, el hueco del botón y dos líneas de texto.
+ *
+ * Los tonos salen de los tokens de arena: no inventa un gris, usa el mismo papel que el resto.
+ */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: none;
+  border-radius: var(--radius-round);
+  background: var(--sand-100);
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.line {
+  height: 0.9rem;
+  border-radius: var(--radius-control);
+  background: var(--sand-100);
+}
+
+.line[data-width="38"] {
+  width: 38%;
+  height: 0.7rem;
+}
+.line[data-width="52"] {
+  width: 52%;
+}
+.line[data-width="70"] {
+  width: 70%;
+  height: 1.5rem;
+}
+.line[data-width="78"] {
+  width: 78%;
+}
+.line[data-width="92"] {
+  width: 92%;
+}
+
+.thin {
+  height: 2.75rem;
+  border-radius: var(--radius-control);
+  background: var(--sand-100);
+}
+
+.actions {
+  height: 2.75rem;
+  border-radius: var(--radius-control);
+  background: var(--sand-100);
+}
+
+/*
+ * El brillo entra solo si el sistema no pide movimiento reducido. Es una pista de que algo está
+ * llegando, no una decoración.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .avatar,
+  .line,
+  .thin,
+  .actions {
+    animation: brillo 1.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes brillo {
+    from {
+      opacity: 0.6;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

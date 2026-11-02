@@ -137,10 +137,10 @@ export const es = {
   // Nombre del grupo de interruptores para quien lo escucha; a la vista no lleva título.
   'filters.switches': 'Filtros rápidos',
   // Para el punto de la tarjeta, que no lleva texto a la vista. Lo lee un lector de pantalla.
-  'filters.openNowLabel': 'Abierto ahora: {name}',
-  'filters.closedNowLabel': 'Cerrado ahora: {name}',
-  'filters.unknownHoursLabel': 'Sin horario publicado: {name}',
-  'filters.temporarilyClosedLabel': 'Cerrado temporalmente: {name}',
+  'filters.openNowLabel': 'Abierto ahora, {name}',
+  'filters.closedNowLabel': 'Cerrado ahora, {name}',
+  'filters.unknownHoursLabel': 'Sin horario publicado, {name}',
+  'filters.temporarilyClosedLabel': 'Cerrado temporalmente, {name}',
 
   /*
    * El aviso de cierre temporal. Va en la ficha, antes del horario, porque es lo único que hay que
@@ -197,7 +197,7 @@ export const es = {
       '{label} es una de las categorías de Zibatá. Conoce {lugares} de la localidad. Horarios, contacto y cómo llegar a cada uno.',
   },
   // Con dos o más giros que la etiqueta no dice, el título los nombra: es lo que la gente busca.
-  'seo.category.title': '{label} en Zibatá: {giros}',
+  'seo.category.title': '{label} en Zibatá, {giros}',
   'seo.category.places': 'Lugares de esta categoría',
   'seo.category.zones': 'Dónde están',
   'seo.category.zoneCount': { one: '{count} zona', other: '{count} zonas' },
@@ -220,7 +220,7 @@ export const es = {
 
   'map.zoomIn': 'Acercar',
   'map.zoomOut': 'Alejar',
-  'map.rotate': 'Girar el mapa: arrastra, o pulsa para girar un octavo de vuelta',
+  'map.rotate': 'Girar el mapa. Arrastra, o pulsa para girar un octavo de vuelta',
   'map.resetNorth': 'Orientar al norte',
   'map.reset': 'Volver a la vista de Zibatá',
   'map.locate': 'Mostrar mi ubicación',
@@ -306,20 +306,20 @@ export const es = {
 
   'about.termsTitle': 'Términos de uso',
   'about.termsWhat':
-    'Esta guía es un proyecto independiente. No tiene relación comercial con ninguno de los lugares que aparecen: nadie paga por estar, por salir más arriba ni por aparecer destacado, y no hay publicidad. Que un lugar esté aquí no es una recomendación ni un respaldo, solo que existe en la zona y hay datos suficientes para describirlo.',
+    'Esta guía es un proyecto independiente. No tiene relación comercial con ninguno de los lugares que aparecen. Nadie paga por estar, por salir más arriba ni por aparecer destacado, y no hay publicidad. Que un lugar esté aquí no es una recomendación ni un respaldo, solo que existe en la zona y hay datos suficientes para describirlo.',
   'about.termsData':
-    'La información se reúne de fuentes públicas y de lo que corrige cada negocio, y se revisa por temporada. Aun así puede estar desactualizada: los horarios cambian, un teléfono deja de servir y un local cierra sin avisar. La guía se ofrece tal como está, sin garantía de que cada dato sea exacto hoy. Para algo que importe (el horario antes de salir, un precio, una reserva), confírmalo directo con el lugar.',
+    'La información se reúne de fuentes públicas y de lo que corrige cada negocio, y se revisa por temporada. Aun así puede estar desactualizada. Los horarios cambian, un teléfono deja de servir y un local cierra sin avisar. La guía se ofrece tal como está, sin garantía de que cada dato sea exacto hoy. Para algo que importe (el horario antes de salir, un precio, una reserva), confírmalo directo con el lugar.',
   'about.termsFix':
-    'Si un dato de tu negocio está mal, o prefieres no aparecer, escribe por "Sugiere un cambio o contáctanos" y se corrige o se quita en la siguiente actualización. No hace falta explicar por qué: basta con pedirlo.',
+    'Si un dato de tu negocio está mal, o prefieres no aparecer, escribe por "Sugiere un cambio o contáctanos" y se corrige o se quita en la siguiente actualización. No hace falta explicar por qué. Basta con pedirlo.',
   'about.termsContent':
     'Los textos, el mapa y el código de la guía son de quien la mantiene. El nombre, el logotipo y la marca de cada negocio son de ese negocio, y aquí se usan solo para identificarlo. Los enlaces a Google Maps, redes sociales o reparto llevan a sitios de terceros, y lo que ocurra ahí se rige por sus propias reglas.',
 
   'about.contribute': 'Sugiere un cambio o contáctanos',
   'about.contributeLead': '¿Falta un lugar, hay un dato incorrecto o quieres escribirnos?',
   'about.contributeBody':
-    'Escribe quien sea, vecino, cliente o el propio negocio: toda corrección suma, sea un horario, un teléfono, las redes o la descripción. También puedes ejercer tus derechos ARCO o hacer cualquier consulta.',
+    'Escribe quien sea, vecino, cliente o el propio negocio. Toda corrección suma, sea un horario, un teléfono, las redes o la descripción. También puedes ejercer tus derechos ARCO o hacer cualquier consulta.',
   'about.contributeMeanwhile':
-    'Lo que escribas llega directo a quien mantiene la guía, sin pasar por ningún servicio de terceros. No hace falta cuenta ni correo: el contacto es opcional y solo sirve para responderte. La guía se revisa por temporada, y lo que pida corregir un negocio entra en la siguiente actualización.',
+    'Lo que escribas llega directo a quien mantiene la guía, sin pasar por ningún servicio de terceros. No hace falta cuenta ni correo. El contacto es opcional y solo sirve para responderte. La guía se revisa por temporada, y lo que pida corregir un negocio entra en la siguiente actualización.',
 
   'suggest.title': 'Cuéntanos qué cambia o escribe tu mensaje',
   'suggest.who': '¿Quién escribe?',
@@ -341,7 +341,7 @@ export const es = {
   /* Etiqueta del campo trampa: solo la oyen los lectores de pantalla, y les dice que lo dejen. */
   'suggest.trap': 'No rellenes este campo',
   'suggest.note':
-    'Tu mensaje se guarda en el servidor de la guía para poder atenderlo. Nada más: ni cuenta, ni dirección.',
+    'Tu mensaje se guarda en el servidor de la guía para poder atenderlo. Nada más. Ni cuenta ni dirección.',
 
   'about.credits': 'Datos y créditos',
   'about.creditsBody':
@@ -357,7 +357,7 @@ export const es = {
     one: 'Has visitado {count} lugar de Zibatá, en {zones} de sus {total} zonas.',
     other: 'Has visitado {count} lugares de Zibatá, en {zones} de sus {total} zonas.',
   },
-  'profile.noVisits': 'Todo Zibatá por estrenar: {total} zonas y {places} lugares.',
+  'profile.noVisits': 'Todo Zibatá por estrenar. {total} zonas y {places} lugares.',
   'profile.zonesLabel': 'Zonas de Zibatá',
   'profile.zoneDone': 'visitada',
   'profile.podium': 'Tus tres de siempre',
