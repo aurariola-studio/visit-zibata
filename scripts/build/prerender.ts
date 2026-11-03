@@ -20,6 +20,7 @@ import { dirname, join } from 'node:path'
 import type { Plugin } from 'vite'
 import { en } from '../../src/i18n/en.ts'
 import { es } from '../../src/i18n/es.ts'
+import { etiquetaDeCategoria, ganchoDeCategoria, type Traductor } from '../../src/lib/categorias.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
@@ -269,32 +270,22 @@ export function pagesFor(
    */
   for (const categoria of categoriasConPagina) {
     const lugares = porCategoria.get(categoria.id) ?? []
-    const etiqueta = text(categoria.label, locale)
+    const traducir: Traductor = (clave, vars) => fill(copy[clave], vars ?? {})
+    const etiqueta = etiquetaDeCategoria(categoria, locale, traducir)
     const name = fill(copy['seo.category.name'], { label: etiqueta })
     const zonas = activePlazas.filter((plaza) =>
       lugares.some((place) => place.plazaId === plaza.id),
     )
-    // En singular y plural, y sin "en 0 zonas" si ninguno de sus locales está en una zona activa.
-    const resumen = fill(
-      conCantidad(
-        copy[zonas.length === 0 ? 'seo.category.descriptionSinZona' : 'seo.category.description'],
-        lugares.length,
-        locale,
-      ),
-      {
-        label: etiqueta,
-        lugares: conCantidad(copy['places.count'], lugares.length, locale),
-        zonas: conCantidad(copy['seo.category.zoneCount'], zonas.length, locale),
-      },
-    )
+    // La descripción arranca con el gancho de la categoría y cuenta cuántos lugares hay.
+    const resumen = fill(conCantidad(copy['seo.category.description'], lugares.length, locale), {
+      hook: ganchoDeCategoria(categoria, locale, traducir),
+    })
     /*
      * El título nombra lo que la gente busca cuando la etiqueta es más general ("Comida Rápida" se
      * busca como "hamburguesas" o "alitas"): los dos giros con más locales que la etiqueta no dice.
      * Con menos de dos no se añade nada, porque un solo giro suelto sonaría a hueco.
      */
-    const titulo = tituloDeCategoria(categoria, lugares, locale, (clave, vars) =>
-      fill(copy[clave], vars ?? {}),
-    )
+    const titulo = tituloDeCategoria(categoria, lugares, locale, traducir)
     pages.push({
       href: route({ categorySlug: categoria.slug[locale] }),
       lastmod: masReciente(lugares),

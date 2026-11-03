@@ -105,34 +105,29 @@ describe.each([
 describe.each([
   [
     'es',
-    'Conoce 1 lugar en 1 zona de la localidad. Horario, contacto y cómo llegar.',
-    'Conoce 1 lugar de la localidad.',
+    'Encuentra lo mejor de Belleza de Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte.',
   ],
   [
     'en',
-    '1 place in 1 area, with hours, contact and directions.',
-    '1 place, with hours, contact and directions.',
+    'Find the best Beauty in Zibatá. Meet the one place the community has to offer, with hours, contact and directions.',
   ],
-] as const)(
-  'la descripción de una categoría con un solo local (%s)',
-  (idioma, conZona, sinZona) => {
-    const paginaDeCategoria = (datos: Dataset) =>
-      pagesFor(idioma, datos, '/', absoluta).find((pagina) =>
-        /\/(categoria|category)\//.test(pagina.href),
-      )
+] as const)('la descripción de una categoría con un solo local (%s)', (idioma, singular) => {
+  const paginaDeCategoria = (datos: Dataset) =>
+    pagesFor(idioma, datos, '/', absoluta).find((pagina) =>
+      /\/(categoria|category)\//.test(pagina.href),
+    )
 
-    it('habla en singular, sin "los" ni "cada uno"', () => {
-      const pagina = paginaDeCategoria(sintetico)
-      expect(pagina?.description).toContain(conZona)
-      expect(pagina?.description).not.toMatch(/\b1 (lugares|places|zonas|areas)\b|cada uno/)
-    })
+  it('habla en singular, sin "1 lugares" ni zonas que contar', () => {
+    const pagina = paginaDeCategoria(sintetico)
+    expect(pagina?.description).toContain(singular)
+    expect(pagina?.description).not.toMatch(/\b1 (lugares|places)\b/)
+    expect(pagina?.description).not.toMatch(/zonas?\b|areas?\b/)
+  })
 
-    it('si su único local está en una zona que no está activa, no dice "0 zonas"', () => {
-      const plazaInactiva = { ...plaza, active: false } as unknown as Plaza
-      const pagina = paginaDeCategoria({ ...sintetico, plazas: [plazaInactiva] })
-      expect(pagina).toBeDefined()
-      expect(pagina?.description).toContain(sinZona)
-      expect(pagina?.description).not.toMatch(/\b0 |zonas?\b|areas?\b/)
-    })
-  },
-)
+  it('no cambia si su único local está en una zona que no está activa', () => {
+    const plazaInactiva = { ...plaza, active: false } as unknown as Plaza
+    const pagina = paginaDeCategoria({ ...sintetico, plazas: [plazaInactiva] })
+    expect(pagina).toBeDefined()
+    expect(pagina?.description).toBe(paginaDeCategoria(sintetico)?.description)
+  })
+})

@@ -24,6 +24,29 @@ const data: Dataset = {
 const plazasActivas = new Set(data.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
 const visibles = data.places.filter((place) => place.active && plazasActivas.has(place.plazaId))
 
+/*
+ * El filtro usa la etiqueta corta ("Italiana", "Saludable"); el título, la descripción y el h1 la
+ * dicen completa. Estas formas no salen de los datos y aquí quedan fijadas.
+ */
+const NOMBRE_LARGO: Record<Idioma, Record<string, string>> = {
+  es: {
+    mexicana: 'Comida Mexicana',
+    italiana: 'Comida Italiana',
+    asiatica: 'Comida Asiática',
+    saludable: 'Comida Saludable',
+    casera: 'Comida Casera',
+    internacional: 'Comida Internacional',
+  },
+  en: {
+    mexicana: 'Mexican food',
+    italiana: 'Italian food',
+    asiatica: 'Asian food',
+    saludable: 'Healthy food',
+    casera: 'Home cooking',
+    internacional: 'International food',
+  },
+}
+
 const absoluta = (href: string) => `https://visitzibata.com${href}`
 const paginas = {
   es: pagesFor('es', data, '/', absoluta),
@@ -369,7 +392,8 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     expect(titulos.size).toBe(todas.length)
     for (const categoria of conLocales) {
       const pagina = de(idioma, ruta(categoria.slug[idioma]))
-      const etiqueta = categoria.label[idioma] ?? categoria.label.es
+      const etiqueta =
+        NOMBRE_LARGO[idioma][categoria.id] ?? categoria.label[idioma] ?? categoria.label.es
       expect(pagina.title).toContain(etiqueta)
       expect(pagina.description).toContain(etiqueta)
       expect(pagina.contenido).toContain(`<h1>${etiqueta.replace(/&/g, '&amp;')}`)
