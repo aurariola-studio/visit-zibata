@@ -250,7 +250,7 @@ try {
   // El paso del mapa del tutorial muestra el mismo mapa, recortado y sin la marca encima.
   await mkdir(`${ROOT}public/tutorial`, { recursive: true })
   await sharp(`${ROOT}public/og-image.png`)
-    .extract({ left: 160, top: 0, width: 800, height: 400 })
+    .extract({ left: 500, top: 0, width: 700, height: 400 })
     .webp({ quality: 82 })
     .toFile(`${ROOT}public/tutorial/mapa.webp`)
   console.log('✓ public/tutorial/mapa.webp')

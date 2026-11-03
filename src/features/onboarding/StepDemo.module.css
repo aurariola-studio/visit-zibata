@@ -25,57 +25,32 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1.14);
+  transform-origin: 50% 50%;
 }
 
-.drag,
-.pinch,
-.pinchInner,
-.tap {
+.finger,
+.fingerA,
+.fingerB {
   position: absolute;
+  z-index: 2;
+  width: 1rem;
+  height: 1rem;
   border-radius: var(--radius-round);
+  background: rgb(31 36 25 / 0.3);
+  border: 2px solid rgb(252 250 246 / 0.92);
+  box-shadow: 0 1px 6px rgb(31 36 25 / 0.3);
   pointer-events: none;
 }
 
-/* El punto que arrastra y la pinza que acerca: dos gestos, no una decoración del mapa. */
-.drag {
-  left: 32%;
-  top: 58%;
-  width: 0.65rem;
-  height: 0.65rem;
-  background: var(--sand-25);
-  box-shadow:
-    0 0 0 1.5px rgb(31 36 25 / 0.18),
-    0 2px 8px rgb(31 36 25 / 0.35);
+.finger {
+  left: 55%;
+  top: 55%;
 }
 
-.drag::after {
-  content: "";
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0.5rem;
-  width: 3.25rem;
-  height: 1.5rem;
-  border-top: 2px dashed rgb(252 250 246 / 0.85);
-  border-radius: 50%;
-  transform: rotate(-18deg);
-}
-
-.pinch {
-  left: 63%;
-  top: 38%;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid rgb(252 250 246 / 0.9);
-  box-shadow: 0 1px 6px rgb(31 36 25 / 0.25);
-}
-
-.pinchInner {
-  left: 68%;
-  top: 43%;
-  width: 0.4rem;
-  height: 0.4rem;
-  background: var(--sand-25);
-  box-shadow: 0 0 0 1.5px rgb(31 36 25 / 0.15);
+.fingerA,
+.fingerB {
+  opacity: 0;
 }
 
 /* ── Búsqueda, con las piezas reales de la barra y la lista ───────────────────────────────── */
@@ -140,7 +115,7 @@
   gap: 2px;
 }
 
-/* La tercera tarjeta se pliega cuando la búsqueda termina: se ve el filtro, no solo el texto. */
+/* La taquería se pliega cuando la búsqueda termina: se ve el filtro, no solo el texto. */
 .searchItem {
   max-height: 4rem;
   overflow: hidden;
@@ -176,6 +151,12 @@
   transform-origin: top left;
 }
 
+/* En las marcas la ficha entra entera, sin desplazamiento. */
+.fichaInner[data-marks] {
+  width: 122%;
+  transform: scale(0.82);
+}
+
 /* ── Toque de las marcas ────────────────────────────────────────────────────────────────────── */
 
 .tap {
@@ -195,19 +176,19 @@
  */
 @media (prefers-reduced-motion: no-preference) {
   .mapImage {
-    animation: mapMove 9s var(--ease-out) both;
+    animation: mapCamera 8s var(--ease-out) both;
   }
 
-  .drag {
-    animation: dragMove 4s var(--ease-out) both;
+  .finger {
+    animation: dragFinger 8s var(--ease-out) both;
   }
 
-  .pinch {
-    animation: pinch 2.2s var(--ease-out) 4.2s both;
+  .fingerA {
+    animation: pinchStart 8s var(--ease-out) both;
   }
 
-  .pinchInner {
-    animation: pinchInner 2.2s var(--ease-out) 4.2s both;
+  .fingerB {
+    animation: pinchEnd 8s var(--ease-out) both;
   }
 
   /* La ficha real se desplaza despacio para enseñar el horario y el contacto. */
@@ -215,7 +196,6 @@
     animation: fichaScroll 10s var(--ease-out) both;
   }
 
-  /* Las marcas ya están a la vista arriba: allí no hay desplazamiento, solo un toque. */
   .fichaInner[data-marks] {
     animation: none;
   }
@@ -234,70 +214,89 @@
     animation: press 0.35s var(--ease-out) 7s both;
   }
 
-  @keyframes mapMove {
-    0% {
-      transform: scale(1.02) rotate(0deg);
+  /*
+   * Primero un dedo arrastra el mapa; después dos dedos lo acercan. No hay rotación: el mapa real
+   * no gira para arrastrarlo y girar la imagen entera se veía de juguete.
+   */
+  @keyframes mapCamera {
+    0%,
+    10% {
+      transform: scale(1.14) translate(0, 0);
     }
-    40% {
-      transform: scale(1.05) translate(-14px, 7px) rotate(0deg);
-    }
+    45%,
     55% {
-      transform: scale(1.12) translate(0, 0) rotate(0deg);
+      transform: scale(1.14) translate(-34px, -12px);
     }
-    72% {
-      transform: scale(1.12) rotate(0deg);
-    }
+    80%,
     100% {
-      transform: scale(1.16) rotate(4deg);
+      transform: scale(1.24) translate(-8px, -4px);
     }
   }
 
-  @keyframes dragMove {
-    0% {
+  @keyframes dragFinger {
+    0%,
+    8% {
       opacity: 0;
-      left: 28%;
-      top: 54%;
-      transform: scale(0.75);
+      left: 55%;
+      top: 55%;
     }
     15% {
       opacity: 1;
     }
-    85% {
+    45% {
       opacity: 1;
+      left: 47%;
+      top: 50%;
     }
+    55%,
     100% {
       opacity: 0;
-      left: 38%;
-      top: 62%;
-      transform: scale(1);
+      left: 47%;
+      top: 50%;
     }
   }
 
-  @keyframes pinch {
-    0% {
+  @keyframes pinchStart {
+    0%,
+    52% {
       opacity: 0;
-      transform: scale(1.9);
+      left: 49%;
+      top: 50%;
     }
-    30% {
+    58% {
       opacity: 1;
     }
+    78% {
+      left: 42%;
+      top: 45%;
+    }
+    90%,
     100% {
       opacity: 0;
-      transform: scale(0.7);
+      left: 42%;
+      top: 45%;
     }
   }
 
-  @keyframes pinchInner {
-    0% {
+  @keyframes pinchEnd {
+    0%,
+    52% {
       opacity: 0;
-      transform: scale(1.9);
+      left: 51%;
+      top: 50%;
     }
-    30% {
+    58% {
       opacity: 1;
     }
+    78% {
+      left: 58%;
+      top: 55%;
+    }
+    90%,
     100% {
       opacity: 0;
-      transform: scale(0.7);
+      left: 58%;
+      top: 55%;
     }
   }
 
@@ -345,7 +344,7 @@
     }
     24% {
       left: 82%;
-      top: 13%;
+      top: 12%;
       transform: scale(1);
     }
     29% {
@@ -355,8 +354,8 @@
       transform: scale(1);
     }
     54% {
-      left: 28%;
-      top: 85%;
+      left: 27%;
+      top: 80%;
     }
     59% {
       transform: scale(0.75);
@@ -366,7 +365,7 @@
     }
     78% {
       left: 17%;
-      top: 96%;
+      top: 92%;
     }
     83% {
       transform: scale(0.75);
@@ -377,7 +376,7 @@
     100% {
       opacity: 0;
       left: 17%;
-      top: 96%;
+      top: 92%;
     }
   }
 }

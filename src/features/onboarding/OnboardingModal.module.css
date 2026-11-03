@@ -1,5 +1,5 @@
 .dialog {
-  width: min(28rem, calc(100vw - 2rem));
+  width: min(30rem, calc(100vw - 2rem));
   padding: 0;
   border: 0;
   border-radius: var(--radius-xl);
@@ -30,10 +30,10 @@
   flex-direction: column;
   gap: var(--space-2);
   /* Alto fijo: el tutorial no cambia de tamaño al cambiar de paso. */
-  height: 41rem;
+  height: 36rem;
   max-height: calc(100dvh - 0.5rem);
   overflow-y: auto;
-  padding: var(--space-2) var(--space-5) var(--space-5);
+  padding: var(--space-5);
 
   /*
    * Concentricidad: los 28 de la tarjeta menos sus 20 de relleno lateral.
@@ -73,7 +73,7 @@
 .stage {
   position: relative;
   flex: none;
-  height: 20rem;
+  height: 14.5rem;
   margin-bottom: var(--space-1);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -99,7 +99,7 @@
   flex-direction: column;
   justify-content: center;
   gap: var(--space-2);
-  height: 10rem;
+  height: 9.5rem;
 }
 
 .title {
@@ -112,6 +112,8 @@
 
 .body {
   color: var(--ink-700);
+  font-size: var(--text-base);
+  line-height: 1.5;
 }
 
 .dots {
@@ -160,28 +162,29 @@
   .dialog {
     inset: auto 0 0;
     width: 100%;
+    max-width: none;
     margin: 0;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
   .card {
-    height: min(41rem, calc(100dvh - 0.5rem));
+    height: min(36rem, calc(100dvh - 0.5rem));
     padding-bottom: calc(var(--space-5) + var(--safe-bottom));
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
   .stage {
-    height: 19rem;
+    height: 14.5rem;
   }
 
   .copy {
-    height: 11.5rem;
+    height: 10.5rem;
   }
 }
 
 /* En pantallas bajas la miniatura se acorta, pero la tarjeta conserva su alto y se desplaza. */
 @media (max-height: 560px) {
   .stage {
-    height: 13rem;
+    height: 12.5rem;
   }
 }

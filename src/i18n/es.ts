@@ -265,8 +265,7 @@ export const es = {
   'onboarding.step5.body':
     'Desde "Sugiere un cambio o contáctanos" puedes avisar de un dato incorrecto, pedir que se retire un lugar o escribir lo que necesites. Llega directo a quien mantiene la guía.',
   'onboarding.demo.place1': 'Café de la plaza',
-  'onboarding.demo.place2': 'Café del parque',
-  'onboarding.demo.place3': 'Taquería del parque',
+  'onboarding.demo.place2': 'Taquería del parque',
   'onboarding.demo.query': 'café',
   'onboarding.demo.description': 'Café de barrio con desayunos y pan del día.',
   'onboarding.demo.message': 'Quiero corregir un horario',

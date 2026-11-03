@@ -23,8 +23,7 @@ export type DemoKind = 'map' | 'search' | 'detail' | 'marks' | 'suggest'
 
 interface DemoData {
   place: Place
-  second: Place
-  third: Place
+  other: Place
   plaza: Plaza
 }
 
@@ -36,7 +35,7 @@ export function StepDemo({ kind }: { kind: DemoKind }) {
     <div className={styles.demo} aria-hidden="true" inert>
       {kind === 'map' && <MapDemo />}
       {kind === 'search' && demo && (
-        <SearchDemo catalog={catalog} place={demo.place} second={demo.second} third={demo.third} />
+        <SearchDemo catalog={catalog} place={demo.place} other={demo.other} />
       )}
       {kind === 'detail' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} />}
       {kind === 'marks' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} marks />}
@@ -77,7 +76,7 @@ function useTyping(text: string, speed: number, delay = 0): { shown: string; don
   return { shown: text.slice(0, count), done: count >= text.length }
 }
 
-/** Tres locales de ejemplo con la forma de uno real, sin datos de ningún negocio. */
+/** Dos locales de ejemplo con la forma de uno real, sin datos de ningún negocio. */
 function buildDemo(catalog: Catalog): DemoData | null {
   const cafes = catalog.places.filter(
     (place) => catalog.categoryOfGiro.get(place.giros[0] ?? '')?.id === 'desayunos-y-cafe',
@@ -89,12 +88,10 @@ function buildDemo(catalog: Catalog): DemoData | null {
   if (!base) return null
   const plaza = catalog.plazaById.get(base.plazaId)
   if (!plaza) return null
-  const other = cafes[1] ?? base
   const taco = tacos[0] ?? base
   return {
     place: genericPlace(base, t('onboarding.demo.place1'), 'demo-cafe-1'),
-    second: genericPlace(other, t('onboarding.demo.place2'), 'demo-cafe-2'),
-    third: genericPlace(taco, t('onboarding.demo.place3'), 'demo-taco-1'),
+    other: genericPlace(taco, t('onboarding.demo.place2'), 'demo-taco-1'),
     plaza,
   }
 }
@@ -133,29 +130,19 @@ function MapDemo() {
     <div className={styles.map}>
       {/* Recorte del mapa real que ya usa la tarjeta social, sin la marca encima. */}
       <img className={styles.mapImage} src={assetUrl('tutorial/mapa.webp')} alt="" />
-      <span className={styles.drag} />
-      <span className={styles.pinch} />
-      <span className={styles.pinchInner} />
+      <span className={styles.finger} />
+      <span className={styles.fingerA} />
+      <span className={styles.fingerB} />
     </div>
   )
 }
 
-function SearchDemo({
-  catalog,
-  place,
-  second,
-  third,
-}: {
-  catalog: Catalog
-  place: Place
-  second: Place
-  third: Place
-}) {
+function SearchDemo({ catalog, place, other }: { catalog: Catalog; place: Place; other: Place }) {
   const query = t('onboarding.demo.query')
   const { shown, done } = useTyping(query, 180, 700)
   const categories = catalog.categories.slice(0, 4)
   const counts = new Map(categories.map((category, index) => [category.id, 18 - index * 3]))
-  const count = done ? 2 : 3
+  const count = done ? 1 : 2
 
   return (
     <div className={styles.search}>
@@ -179,9 +166,8 @@ function SearchDemo({
         <p className={styles.searchCount}>{t('filters.results', { count })}</p>
         <div className={styles.searchList}>
           <PlaceCard place={place} onOpen={() => {}} showPlaza compact />
-          <PlaceCard place={second} onOpen={() => {}} showPlaza compact />
           <div className={styles.searchItem} data-hide={done || undefined}>
-            <PlaceCard place={third} onOpen={() => {}} showPlaza compact />
+            <PlaceCard place={other} onOpen={() => {}} showPlaza compact />
           </div>
         </div>
       </div>
