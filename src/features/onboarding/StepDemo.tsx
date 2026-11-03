@@ -2,12 +2,11 @@
  * Las cinco miniaturas del tutorial.
  *
  * La búsqueda, la ficha y el contacto son las piezas de verdad, montadas en pequeño y con datos de
- * ejemplo: el buscador real, las cápsulas reales, la tarjeta real y la ficha real. Las miniaturas
- * quedan inertes, así que solo se miran; el texto de la tarjeta es el que explica. El mapa y las
- * marcas usan la misma materia y la misma animación de un solo pase.
+ * ejemplo. La búsqueda filtra de tres resultados a dos; la ficha se desplaza para enseñar horario y
+ * contacto; el formulario escribe el mensaje y responde al enviar. Las piezas quedan inertes: solo
+ * se miran. El mapa y las marcas usan la misma materia y una animación de un solo pase.
  */
-import { Check, Clock, Coffee, Heart, MapPin, Phone, Star } from 'lucide-react'
-import { type CSSProperties, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { useMediaQuery } from '../../hooks/useMediaQuery.ts'
 import { t } from '../../i18n/index.ts'
@@ -25,6 +24,7 @@ export type DemoKind = 'map' | 'search' | 'detail' | 'marks' | 'suggest'
 interface DemoData {
   place: Place
   second: Place
+  third: Place
   plaza: Plaza
 }
 
@@ -36,10 +36,10 @@ export function StepDemo({ kind }: { kind: DemoKind }) {
     <div className={styles.demo} aria-hidden="true" inert>
       {kind === 'map' && <MapDemo />}
       {kind === 'search' && demo && (
-        <SearchDemo catalog={catalog} place={demo.place} second={demo.second} />
+        <SearchDemo catalog={catalog} place={demo.place} second={demo.second} third={demo.third} />
       )}
       {kind === 'detail' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} />}
-      {kind === 'marks' && <MarksDemo zone={demo?.plaza.name ?? ''} />}
+      {kind === 'marks' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} marks />}
       {kind === 'suggest' && <SuggestDemo />}
     </div>
   )
@@ -49,7 +49,7 @@ export function StepDemo({ kind }: { kind: DemoKind }) {
  * Escribe un texto letra a letra y avisa cuando termina. Con movimiento reducido lo enseña entero
  * desde el principio, que es el estado final de la animación.
  */
-function useTyping(text: string, speed: number): { shown: string; done: boolean } {
+function useTyping(text: string, speed: number, delay = 0): { shown: string; done: boolean } {
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const [count, setCount] = useState(reduced ? text.length : 0)
 
@@ -60,30 +60,41 @@ function useTyping(text: string, speed: number): { shown: string; done: boolean 
     }
     setCount(0)
     let index = 0
-    const timer = window.setInterval(() => {
-      index += 1
-      setCount(index)
-      if (index >= text.length) window.clearInterval(timer)
-    }, speed)
-    return () => window.clearInterval(timer)
-  }, [text, speed, reduced])
+    let interval = 0
+    const start = window.setTimeout(() => {
+      interval = window.setInterval(() => {
+        index += 1
+        setCount(index)
+        if (index >= text.length) window.clearInterval(interval)
+      }, speed)
+    }, delay)
+    return () => {
+      window.clearTimeout(start)
+      window.clearInterval(interval)
+    }
+  }, [text, speed, delay, reduced])
 
   return { shown: text.slice(0, count), done: count >= text.length }
 }
 
-/** Dos locales de ejemplo con la misma forma que uno real, sin datos de ningún negocio. */
+/** Tres locales de ejemplo con la forma de uno real, sin datos de ningún negocio. */
 function buildDemo(catalog: Catalog): DemoData | null {
   const cafes = catalog.places.filter(
     (place) => catalog.categoryOfGiro.get(place.giros[0] ?? '')?.id === 'desayunos-y-cafe',
+  )
+  const tacos = catalog.places.filter(
+    (place) => catalog.categoryOfGiro.get(place.giros[0] ?? '')?.id === 'tacos-y-antojitos',
   )
   const base = cafes[0] ?? catalog.places[0]
   if (!base) return null
   const plaza = catalog.plazaById.get(base.plazaId)
   if (!plaza) return null
   const other = cafes[1] ?? base
+  const taco = tacos[0] ?? base
   return {
     place: genericPlace(base, t('onboarding.demo.place1'), 'demo-cafe-1'),
     second: genericPlace(other, t('onboarding.demo.place2'), 'demo-cafe-2'),
+    third: genericPlace(taco, t('onboarding.demo.place3'), 'demo-taco-1'),
     plaza,
   }
 }
@@ -129,10 +140,22 @@ function MapDemo() {
   )
 }
 
-function SearchDemo({ catalog, place, second }: { catalog: Catalog; place: Place; second: Place }) {
-  const { shown } = useTyping(place.name, 55)
+function SearchDemo({
+  catalog,
+  place,
+  second,
+  third,
+}: {
+  catalog: Catalog
+  place: Place
+  second: Place
+  third: Place
+}) {
+  const query = t('onboarding.demo.query')
+  const { shown, done } = useTyping(query, 180, 700)
   const categories = catalog.categories.slice(0, 4)
   const counts = new Map(categories.map((category, index) => [category.id, 18 - index * 3]))
+  const count = done ? 2 : 3
 
   return (
     <div className={styles.search}>
@@ -153,17 +176,31 @@ function SearchDemo({ catalog, place, second }: { catalog: Catalog; place: Place
         />
       </div>
       <div className={styles.searchResults}>
-        <PlaceCard place={place} onOpen={() => {}} showPlaza />
-        <PlaceCard place={second} onOpen={() => {}} showPlaza />
+        <p className={styles.searchCount}>{t('filters.results', { count })}</p>
+        <div className={styles.searchList}>
+          <PlaceCard place={place} onOpen={() => {}} showPlaza compact />
+          <PlaceCard place={second} onOpen={() => {}} showPlaza compact />
+          <div className={styles.searchItem} data-hide={done || undefined}>
+            <PlaceCard place={third} onOpen={() => {}} showPlaza compact />
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-function DetailDemo({ place, plaza }: { place: Place; plaza: Plaza }) {
+function DetailDemo({
+  place,
+  plaza,
+  marks = false,
+}: {
+  place: Place
+  plaza: Plaza
+  marks?: boolean
+}) {
   return (
-    <div className={styles.ficha}>
-      <div className={styles.fichaInner}>
+    <div className={styles.fichaFrame} data-marks={marks || undefined}>
+      <div className={styles.fichaInner} data-marks={marks || undefined}>
         <PlaceDetail
           place={place}
           plaza={plaza}
@@ -173,73 +210,17 @@ function DetailDemo({ place, plaza }: { place: Place; plaza: Plaza }) {
           focusOnMount={false}
         />
       </div>
-    </div>
-  )
-}
-
-function MarksDemo({ zone }: { zone: string }) {
-  return (
-    <div className={styles.detail}>
-      <Head zone={zone} />
-      <Rows />
-      <div className={styles.markRow}>
-        <span className={styles.visit}>
-          <Check className={styles.visitCheck} />
-          {t('visit.action')}
-        </span>
-        <span className={styles.heart}>
-          <Heart className={styles.actionIcon} />
-        </span>
-      </div>
-      <div className={styles.rating}>
-        <span className={styles.stars}>
-          {[0, 1, 2, 3, 4].map((index) => (
-            <Star key={index} className={styles.star} />
-          ))}
-        </span>
-        <span className={styles.ratingLabel}>{t('rating.legend')}</span>
-      </div>
-      <span className={`${styles.tap} ${styles.tapMarks}`} />
+      {marks && <span className={`${styles.tap} ${styles.tapMarks}`} />}
     </div>
   )
 }
 
 function SuggestDemo() {
   return (
-    <div className={styles.contact}>
-      <SuggestForm demo />
-      <span className={`${styles.tap} ${styles.tapSend}`} />
-    </div>
-  )
-}
-
-function Head({ zone }: { zone: string }) {
-  return (
-    <div className={styles.head}>
-      <span className={styles.avatar}>
-        <Coffee className={styles.avatarIcon} />
-      </span>
-      <span className={styles.titles}>
-        <span className={styles.name}>{t('onboarding.demo.place1')}</span>
-        <span className={styles.zone}>{zone}</span>
-      </span>
-    </div>
-  )
-}
-
-function Rows() {
-  return (
-    <div className={styles.rows}>
-      {[
-        { icon: Clock, label: t('place.hours') },
-        { icon: Phone, label: t('place.contact') },
-        { icon: MapPin, label: t('place.location') },
-      ].map(({ icon: Icon, label }, index) => (
-        <span key={label} className={styles.row} style={{ '--i': index } as CSSProperties}>
-          <Icon className={styles.rowIcon} />
-          {label}
-        </span>
-      ))}
+    <div className={styles.contactFrame}>
+      <div className={styles.contactInner}>
+        <SuggestForm demo />
+      </div>
     </div>
   )
 }

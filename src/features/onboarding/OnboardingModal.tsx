@@ -86,15 +86,17 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
             <X aria-hidden="true" />
           </button>
         </div>
-        <div className={styles.stage} data-demo={current.demo}>
+        <div className={styles.stage}>
           <StepDemo key={step} kind={current.demo} />
         </div>
-        <h2 id="onboarding-title" className={styles.title}>
-          {t(current.title)}
-        </h2>
-        <p id="onboarding-body" className={styles.body}>
-          {t(current.body)}
-        </p>
+        <div className={styles.copy}>
+          <h2 id="onboarding-title" className={styles.title}>
+            {t(current.title)}
+          </h2>
+          <p id="onboarding-body" className={styles.body}>
+            {t(current.body)}
+          </p>
+        </div>
         <div className={styles.dots} aria-hidden="true">
           {STEPS.map((item, index) => (
             <span key={item.demo} data-active={index === step} />

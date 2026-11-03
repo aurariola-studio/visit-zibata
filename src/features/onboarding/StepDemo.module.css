@@ -84,7 +84,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  gap: 6px;
   height: 100%;
+  padding: 8px;
   overflow: hidden;
 }
 
@@ -102,7 +104,6 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 8px;
 }
 
 .searchBar {
@@ -120,187 +121,59 @@
 .searchResults {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
   margin-top: auto;
   padding: 6px;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  border-radius: var(--radius-md);
   background: var(--sand-25);
-  box-shadow: 0 -1px 6px rgb(31 36 25 / 0.08);
+  box-shadow: 0 1px 6px rgb(31 36 25 / 0.1);
 }
 
-/* ── Ficha, con el componente real y un desplazamiento lento ───────────────────────────────── */
-
-.ficha {
-  height: 100%;
-  overflow: hidden;
-}
-
-.fichaInner {
-  height: auto;
-}
-
-/* ── Marcas ─────────────────────────────────────────────────────────────────────────────────── */
-
-.detail {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  height: 100%;
-  padding: 7px 8px;
-}
-
-.head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.avatar {
-  display: grid;
-  place-items: center;
-  width: 1.9rem;
-  height: 1.9rem;
-  flex: none;
-  border-radius: var(--radius-control);
-  color: var(--olive-600);
-  background: var(--lime-100);
-  box-shadow: inset 0 0 0 1px var(--color-border);
-}
-
-.avatarIcon {
-  width: 0.95rem;
-  height: 0.95rem;
-}
-
-.titles {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  gap: 1px;
-}
-
-.name {
-  overflow: hidden;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  font-stretch: var(--title-stretch);
-  line-height: 1.1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.zone {
-  overflow: hidden;
+.searchCount {
+  padding: 0 4px 4px;
   color: var(--color-text-muted);
-  font-size: 8.5px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  font-size: var(--text-xs);
 }
 
-.rows {
+.searchList {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 1.05rem;
-  padding: 0 7px;
-  border-radius: var(--radius-control);
-  background: var(--color-surface-muted);
-  color: var(--ink-700);
-  font-size: 9px;
-}
-
-.rowIcon {
-  width: 0.65rem;
-  height: 0.65rem;
-  flex: none;
-  color: var(--olive-600);
-}
-
-.markRow {
-  display: flex;
-  gap: 5px;
-  margin-top: auto;
-}
-
-.visit {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  height: 1.65rem;
-  border-radius: var(--radius-control);
-  color: var(--sand-25);
-  background: var(--color-accent);
-  font-size: 9.5px;
-  font-weight: var(--weight-strong);
-}
-
-.visitCheck {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.heart {
-  display: grid;
-  place-items: center;
-  width: 1.65rem;
-  height: 1.65rem;
-  border-radius: var(--radius-control);
-  color: var(--heart-600);
-  background: var(--color-surface-muted);
-  box-shadow: inset 0 0 0 1px var(--color-border-strong);
-}
-
-.heart svg {
-  fill: var(--heart-600);
-}
-
-.actionIcon {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 1px;
-}
-
-.stars {
-  display: flex;
   gap: 2px;
 }
 
-.star {
-  width: 0.8rem;
-  height: 0.8rem;
-  color: var(--olive-600);
-  fill: var(--olive-600);
-}
-
-.ratingLabel {
-  color: var(--color-text-muted);
-  font-size: 9px;
-}
-
-/* ── Contacto, con el formulario real ───────────────────────────────────────────────────────── */
-
-.contact {
-  height: 100%;
+/* La tercera tarjeta se pliega cuando la búsqueda termina: se ve el filtro, no solo el texto. */
+.searchItem {
+  max-height: 4rem;
   overflow: hidden;
-  padding: 8px;
+  opacity: 1;
+  transition:
+    max-height var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+
+.searchItem[data-hide] {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* ── Ficha y marcas, con el componente real dentro de un marco ─────────────────────────────── */
+
+.fichaFrame,
+.contactFrame {
+  position: relative;
+  height: 100%;
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--sand-25);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55);
+}
+
+.fichaInner,
+.contactInner {
+  width: 111%;
+  transform: scale(0.9);
+  transform-origin: top left;
 }
 
 /* ── Toque de las marcas ────────────────────────────────────────────────────────────────────── */
@@ -309,9 +182,9 @@
   z-index: 3;
   width: 0.6rem;
   height: 0.6rem;
-  background: var(--sand-25);
+  background: var(--olive-600);
   box-shadow:
-    0 0 0 1.5px rgb(31 36 25 / 0.18),
+    0 0 0 2px var(--sand-25),
     0 2px 8px rgb(31 36 25 / 0.35);
   opacity: 0;
 }
@@ -322,75 +195,60 @@
  */
 @media (prefers-reduced-motion: no-preference) {
   .mapImage {
-    animation: mapMove 5.2s var(--ease-out) both;
+    animation: mapMove 9s var(--ease-out) both;
   }
 
   .drag {
-    animation: dragMove 3s var(--ease-out) both;
+    animation: dragMove 4s var(--ease-out) both;
   }
 
   .pinch {
-    animation: pinch 2.2s var(--ease-out) 2.2s both;
+    animation: pinch 2.2s var(--ease-out) 4.2s both;
   }
 
   .pinchInner {
-    animation: pinchInner 2.2s var(--ease-out) 2.2s both;
+    animation: pinchInner 2.2s var(--ease-out) 4.2s both;
   }
 
   /* La ficha real se desplaza despacio para enseñar el horario y el contacto. */
   .fichaInner {
-    animation: fichaScroll 9s var(--ease-out) both;
+    animation: fichaScroll 10s var(--ease-out) both;
   }
 
-  .head {
-    animation: rise 0.4s var(--ease-out) 0.1s both;
-  }
-
-  .row {
-    animation: rise 0.35s var(--ease-out) calc(0.25s + var(--i) * 0.1s) both;
-  }
-
-  .heart {
-    animation: press 0.35s var(--ease-out) 1s both;
-  }
-
-  .heart svg {
-    animation: fill 0.4s var(--ease-out) 1s both;
-  }
-
-  .visit {
-    animation: press 0.35s var(--ease-out) 2.1s both;
-  }
-
-  .visitCheck {
-    animation: pop 0.35s var(--ease-out) 2.1s both;
-  }
-
-  .star {
-    animation: fill 0.35s var(--ease-out) 3.3s both;
+  /* Las marcas ya están a la vista arriba: allí no hay desplazamiento, solo un toque. */
+  .fichaInner[data-marks] {
+    animation: none;
   }
 
   .tapMarks {
     animation: tapMarks 4.4s var(--ease-out) both;
   }
 
+  /* El formulario real se desplaza para enseñar los campos y el envío sin apretarlo. */
+  .contactInner {
+    animation: contactScroll 9s var(--ease-out) both;
+  }
+
   /* El formulario real conserva su botón; aquí solo se añade el gesto de enviar. */
-  .contact :global(form[data-demo] button[type="submit"]) {
-    animation: press 0.35s var(--ease-out) 2s both;
+  .contactFrame :global(form[data-demo] button[type="submit"]) {
+    animation: press 0.35s var(--ease-out) 7s both;
   }
 
   @keyframes mapMove {
     0% {
-      transform: scale(1.02) translate(0, 0);
+      transform: scale(1.02) rotate(0deg);
     }
     40% {
-      transform: scale(1.02) translate(-10px, 5px);
+      transform: scale(1.05) translate(-14px, 7px) rotate(0deg);
     }
     55% {
-      transform: scale(1.12) translate(0, 0);
+      transform: scale(1.12) translate(0, 0) rotate(0deg);
+    }
+    72% {
+      transform: scale(1.12) rotate(0deg);
     }
     100% {
-      transform: scale(1.12) translate(0, 0);
+      transform: scale(1.16) rotate(4deg);
     }
   }
 
@@ -401,16 +259,16 @@
       top: 54%;
       transform: scale(0.75);
     }
-    20% {
+    15% {
       opacity: 1;
     }
-    90% {
+    85% {
       opacity: 1;
     }
     100% {
       opacity: 0;
-      left: 36%;
-      top: 61%;
+      left: 38%;
+      top: 62%;
       transform: scale(1);
     }
   }
@@ -446,22 +304,22 @@
   @keyframes fichaScroll {
     0%,
     18% {
-      transform: translateY(0);
+      transform: scale(0.9) translateY(0);
     }
     82%,
     100% {
-      transform: translateY(-210px);
+      transform: scale(0.9) translateY(-260px);
     }
   }
 
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(5px);
+  @keyframes contactScroll {
+    0%,
+    22% {
+      transform: scale(0.9) translateY(0);
     }
-    to {
-      opacity: 1;
-      transform: none;
+    78%,
+    100% {
+      transform: scale(0.9) translateY(-26%);
     }
   }
 
@@ -475,26 +333,6 @@
     }
   }
 
-  @keyframes fill {
-    from {
-      fill: transparent;
-    }
-    to {
-      fill: currentColor;
-    }
-  }
-
-  @keyframes pop {
-    from {
-      transform: scale(0.4);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-
   @keyframes tapMarks {
     0% {
       opacity: 0;
@@ -502,12 +340,12 @@
       top: 55%;
       transform: scale(0.8);
     }
-    10% {
+    12% {
       opacity: 1;
     }
     24% {
-      left: 94%;
-      top: 79%;
+      left: 82%;
+      top: 13%;
       transform: scale(1);
     }
     29% {
@@ -516,30 +354,30 @@
     34% {
       transform: scale(1);
     }
-    50% {
-      left: 46%;
-      top: 79%;
+    54% {
+      left: 28%;
+      top: 85%;
     }
-    55% {
+    59% {
       transform: scale(0.75);
     }
-    60% {
+    64% {
       transform: scale(1);
     }
-    76% {
-      left: 11%;
-      top: 92%;
+    78% {
+      left: 17%;
+      top: 96%;
     }
-    81% {
+    83% {
       transform: scale(0.75);
     }
-    86% {
+    88% {
       transform: scale(1);
     }
     100% {
       opacity: 0;
-      left: 11%;
-      top: 92%;
+      left: 17%;
+      top: 96%;
     }
   }
 }

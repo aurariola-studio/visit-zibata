@@ -28,9 +28,11 @@ interface PlaceCardProps {
   onOpen: (place: Place) => void
   /** Muestra la plaza (útil en resultados de búsqueda que mezclan plazas). */
   showPlaza?: boolean
+  /** Una fila más baja, para listas de muestra donde tienen que caber varias. */
+  compact?: boolean
 }
 
-export function PlaceCard({ place, onOpen, showPlaza = false }: PlaceCardProps) {
+export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }: PlaceCardProps) {
   const catalog = useCatalog()
   const plaza = catalog.plazaById.get(place.plazaId)
   /*
@@ -100,7 +102,7 @@ export function PlaceCard({ place, onOpen, showPlaza = false }: PlaceCardProps) 
       : DEFAULT_PLAZA_TONE
 
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-compact={compact || undefined}>
       {/*
        * Un enlace de verdad, no un botón. Abrir un lugar es navegar: la ruta existe, se comparte
        * y funciona sin JavaScript. Siendo botón, el navegador no podía ofrecer abrir en otra

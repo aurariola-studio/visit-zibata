@@ -234,6 +234,8 @@ export const en = {
     'Use "Suggest a change or contact us" to report a wrong detail, ask for a place to be removed or write what you need. It goes straight to whoever maintains the guide.',
   'onboarding.demo.place1': 'Café on the square',
   'onboarding.demo.place2': 'Café in the park',
+  'onboarding.demo.place3': 'Taquería in the park',
+  'onboarding.demo.query': 'coffee',
   'onboarding.demo.description': 'A neighbourhood café with breakfast and fresh bread.',
   'onboarding.demo.message': 'I want to fix an opening time',
   'onboarding.next': 'Next',
