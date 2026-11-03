@@ -1,6 +1,7 @@
 /*
- * El esqueleto de la ficha. Cuatro bloques con la forma y las distancias de la ficha real: avatar,
- * título, una línea corta de dirección, el hueco del botón y dos líneas de texto.
+ * El esqueleto de la ficha: los mismos bloques y las mismas distancias que la ficha real, en el mismo
+ * orden. Ocupa el alto disponible y el último bloque crece, así que en el panel de escritorio llena la
+ * columna y en la hoja del móvil se queda en su mínimo.
  *
  * Los tonos salen de los tokens de arena: no inventa un gris, usa el mismo papel que el resto.
  */
@@ -8,7 +9,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  /* Alto completo del hueco que ocupa la ficha, sea el panel o la hoja. */
+  height: 100%;
+  min-height: 0;
   padding-top: var(--space-2);
+}
+
+.bloque {
+  background: var(--sand-100);
+  border-radius: var(--radius-control);
 }
 
 .head {
@@ -30,42 +39,117 @@
   flex-direction: column;
   gap: var(--space-2);
   flex: 1;
+  min-width: 0;
 }
 
-.line {
-  height: 0.9rem;
-  border-radius: var(--radius-control);
-  background: var(--sand-100);
-}
-
-.line[data-width="38"] {
-  width: 38%;
-  height: 0.7rem;
-}
-.line[data-width="52"] {
-  width: 52%;
-}
-.line[data-width="70"] {
+.titulo {
   width: 70%;
+  max-width: 14rem;
   height: 1.5rem;
 }
-.line[data-width="78"] {
-  width: 78%;
-}
-.line[data-width="92"] {
-  width: 92%;
+
+.chips {
+  display: flex;
+  gap: var(--space-2);
 }
 
-.thin {
-  height: 2.75rem;
-  border-radius: var(--radius-control);
+.chip {
+  width: 4.5rem;
+  height: 0.75rem;
+  border-radius: var(--radius-pill);
   background: var(--sand-100);
 }
 
-.actions {
+.chip[data-ancho="corto"] {
+  width: 3rem;
+}
+
+.direccion {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pin {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: none;
+  border-radius: var(--radius-round);
+  background: var(--sand-100);
+}
+
+.linea {
+  height: 0.8rem;
+}
+
+/* Dentro de una fila (dirección, estrellas) la línea ocupa lo que sobra, nunca el alto. */
+.direccion > .linea,
+.estrellas > .linea {
+  flex: 1;
+  max-width: 11rem;
+}
+
+.linea[data-ancho="corto"] {
+  width: 40%;
+}
+.linea[data-ancho="medio"] {
+  width: 60%;
+}
+.linea[data-ancho="largo"] {
+  width: 100%;
+}
+
+.acciones {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.boton {
+  flex: 1;
   height: 2.75rem;
   border-radius: var(--radius-control);
+}
+
+.icono {
+  width: 3.25rem;
+  height: 2.75rem;
+  border-radius: var(--radius-control);
+}
+
+.estrellas {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.estrella {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: var(--radius-round);
   background: var(--sand-100);
+}
+
+/*
+ * El cuerpo crece con el hueco disponible: las líneas y la tarjeta de horario se quedan arriba y el
+ * sobrante se lo come el hueco final, que no pinta nada. Así en escritorio no hay un bloque gigante y
+ * en la hoja recortada del móvil nada se sale.
+ */
+.cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.tarjeta {
+  height: 4.5rem;
+  border-radius: var(--radius-md);
+}
+
+.hueco {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 /*
@@ -74,9 +158,10 @@
  */
 @media (prefers-reduced-motion: no-preference) {
   .avatar,
-  .line,
-  .thin,
-  .actions {
+  .bloque,
+  .chip,
+  .pin,
+  .estrella {
     animation: brillo 1.4s ease-in-out infinite alternate;
   }
 
