@@ -89,7 +89,14 @@ export function FilterBar({
   const listaRef = useRef<HTMLDivElement>(null)
   const cajaRef = useRef<HTMLDivElement>(null)
   const [abierto, setAbierto] = useState(false)
-  const [posicion, setPosicion] = useState({ top: 0, left: 0, width: 0, arriba: false })
+  const [posicion, setPosicion] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+    arriba: false,
+    bottom: 0,
+    maxAlto: 0,
+  })
   const [activo, setActivo] = useState(0)
   const tecladoRef = useRef(false)
   const hasSelection = filtersActive || selectedPlazaId !== null
@@ -133,6 +140,10 @@ export function FilterBar({
         width: caja.width,
         // Hacia arriba si no cabe debajo: con la hoja abierta, la mitad de la pantalla está ocupada.
         arriba: caja.bottom + 6 + 320 > window.innerHeight,
+        // Abriendo hacia arriba, el borde inferior va 6 px sobre el botón y el alto lo fija el
+        // espacio que queda hasta el borde superior. Sin esto, la lista nacía bajo la pantalla.
+        bottom: window.innerHeight - caja.top + 6,
+        maxAlto: Math.max(0, caja.top - 14),
       })
     }
     setActivo(indiceElegido)
@@ -286,7 +297,7 @@ export function FilterBar({
                   left: posicion.left,
                   width: posicion.width,
                   ...(posicion.arriba
-                    ? { bottom: window.innerHeight - posicion.top + 12 }
+                    ? { top: 'auto', bottom: posicion.bottom, maxHeight: posicion.maxAlto }
                     : { top: posicion.top }),
                 }}
                 aria-label={t('filters.plaza')}
