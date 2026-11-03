@@ -237,6 +237,7 @@ export const en = {
   'onboarding.demo.place3': 'Pizzeria on the square',
   'onboarding.demo.place4': "Grandma's café",
   'onboarding.demo.place5': 'Breakfast of the day',
+  'onboarding.demo.place6': 'City café',
   'onboarding.demo.query': 'coffee',
   'onboarding.demo.description': 'A neighbourhood café with breakfast and fresh bread.',
   'onboarding.demo.message': 'I want to fix an opening time',

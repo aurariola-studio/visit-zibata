@@ -269,6 +269,7 @@ export const es = {
   'onboarding.demo.place3': 'Pizzería de la plaza',
   'onboarding.demo.place4': 'Café de la Abuela',
   'onboarding.demo.place5': 'Desayunos del Día',
+  'onboarding.demo.place6': 'Café de la Ciudad',
   'onboarding.demo.query': 'café',
   'onboarding.demo.description': 'Café de barrio con desayunos y pan del día.',
   'onboarding.demo.message': 'Quiero corregir un horario',

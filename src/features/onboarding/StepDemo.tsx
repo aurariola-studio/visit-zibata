@@ -26,7 +26,7 @@ interface DemoData {
   place: Place
   plaza: Plaza
   /** Los cuatro resultados de ejemplo del paso de buscar. */
-  results: [Place, Place, Place, Place]
+  results: [Place, Place, Place, Place, Place]
 }
 
 export function StepDemo({ kind }: { kind: DemoKind }) {
@@ -103,8 +103,9 @@ function buildDemo(catalog: Catalog): DemoData | null {
     }),
     plaza,
     /*
-     * Los cuatro resultados que se turnan al filtrar, en el orden del paso: sin filtros, cafés,
-     * zona y abierto ahora. Así cada filtro no solo baja el número, también cambia lo que se ve.
+     * Los resultados que se turnan al filtrar, en el orden del paso: sin filtros, cafés, zona, y
+     * abierto ahora, y el que queda cuando se escribe. Así cada filtro no solo baja el número,
+     * también cambia lo que se ve.
      */
     results: [
       genericPlace(base, {
@@ -132,6 +133,13 @@ function buildDemo(catalog: Catalog): DemoData | null {
         id: 'demo-dia',
         name: t('onboarding.demo.place5'),
         giros: ['desayunos', 'cafeteria'],
+        plazaId: plazaId('xentric-anahuac'),
+        hours: horario(true),
+      }),
+      genericPlace(base, {
+        id: 'demo-ciudad',
+        name: t('onboarding.demo.place6'),
+        giros: ['cafeteria', 'panaderia'],
         plazaId: plazaId('xentric-anahuac'),
         hours: horario(true),
       }),
@@ -180,7 +188,7 @@ function SearchDemo({
   zone,
 }: {
   catalog: Catalog
-  results: [Place, Place, Place, Place]
+  results: [Place, Place, Place, Place, Place]
   zone: string
 }) {
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -210,7 +218,7 @@ function SearchAnimation({
   reduced,
 }: {
   catalog: Catalog
-  results: [Place, Place, Place, Place]
+  results: [Place, Place, Place, Place, Place]
   zone: string
   reduced: boolean
 }) {
@@ -244,9 +252,16 @@ function SearchAnimation({
   const openNow = phase >= 3
   const selectedZone = phase >= 2 ? zone : null
   const count = done ? 1 : phase >= 3 ? 2 : phase >= 2 ? 3 : phase >= 1 ? 4 : 12
-  // Cada filtro deja a la vista el resultado que le toca, no el mismo local con otro número.
-  const shownPlace =
-    phase === 0 ? results[0] : phase === 1 ? results[1] : phase === 2 ? results[2] : results[3]
+  // Cada filtro deja a la vista el resultado que le toca, y al escribir queda el que sobrevive.
+  const shownPlace = done
+    ? results[4]
+    : phase === 0
+      ? results[0]
+      : phase === 1
+        ? results[1]
+        : phase === 2
+          ? results[2]
+          : results[3]
 
   return (
     <div className={styles.search}>
