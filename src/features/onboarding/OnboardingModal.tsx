@@ -175,9 +175,15 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
         <div className={styles.artBox}>
           <StepArt kind={current.art} />
         </div>
-        <p className={styles.progress}>
-          {t('onboarding.progress', { current: step + 1, total: STEPS.length })}
-        </p>
+        <div className={styles.progressRow}>
+          <p className={styles.progress}>
+            {t('onboarding.progress', { current: step + 1, total: STEPS.length })}
+          </p>
+          {/* Saltar está en todos los pasos: no hace falta recorrer el tutorial para cerrarlo. */}
+          <button type="button" className={styles.skip} onClick={finish}>
+            {t('onboarding.skip')}
+          </button>
+        </div>
         <h2 id="onboarding-title" className={styles.title}>
           {t(current.title)}
         </h2>
@@ -190,11 +196,7 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
           ))}
         </div>
         <div className={styles.actions}>
-          {step === 0 ? (
-            <button type="button" className={styles.secondary} onClick={finish}>
-              {t('onboarding.skip')}
-            </button>
-          ) : (
+          {step > 0 && (
             <button
               type="button"
               className={styles.secondary}
