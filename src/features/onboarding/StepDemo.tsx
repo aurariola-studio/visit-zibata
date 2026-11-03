@@ -348,16 +348,17 @@ function DetailDemo({
          */
         const caja = inner.getBoundingClientRect()
         const escala = caja.width / inner.offsetWidth || 1
-        const centroDe = (el: Element | null) => {
+        const centroDe = (el: Element | null, desvio = 0) => {
           if (!el) return null
           const r = el.getBoundingClientRect()
           return {
-            x: Math.round((r.left - caja.left + r.width / 2) / escala),
-            y: Math.round((r.top - caja.top + r.height / 2) / escala),
+            x: Math.round((r.left - caja.left + r.width / 2) / escala) + desvio,
+            y: Math.round((r.top - caja.top + r.height / 2) / escala) + desvio,
           }
         }
         const personal = inner.querySelector('section[data-nosnippet]') as HTMLElement | null
-        const corazon = centroDe(inner.querySelector('button[aria-pressed]'))
+        // En el corazón el dedo toca la esquina del botón: en el centro lo tapaba entero.
+        const corazon = centroDe(inner.querySelector('button[aria-pressed]'), 12)
         const estrellas = centroDe(inner.querySelectorAll('span[data-fill]')[3] ?? null)
         const visita = centroDe(personal?.querySelector('button') ?? null)
         const top = personal ? (personal.getBoundingClientRect().top - caja.top) / escala : 0
