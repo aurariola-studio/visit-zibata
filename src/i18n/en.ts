@@ -217,20 +217,28 @@ export const en = {
   'data.retry': 'Try again',
   'data.loading': 'Loading places…',
 
-  'onboarding.step1.title': 'Explore Zibatá',
+  'onboarding.step1.title': 'How do I get around the map?',
   'onboarding.step1.body':
-    'Drag to move, pinch or scroll to zoom, and rotate with two fingers or right click.',
-  'onboarding.step2.title': 'Pick an area',
+    'Drag to move around Zibatá, pinch or scroll to zoom, and rotate with two fingers or a right click. Tap an area to see what is there, and use the corner buttons to zoom, rotate or return to the full view.',
+  'onboarding.step2.title': 'How do I search and filter?',
   'onboarding.step2.body':
-    'Areas with places are highlighted in green. Tap one to see what’s there.',
-  'onboarding.step3.title': 'Open a place',
+    'Type in the search box, pick a category or keep only what is open now. The area you have open narrows the search, and you can release it to search the whole guide.',
+  'onboarding.step3.title': 'What is on a place page?',
   'onboarding.step3.body':
-    'Filter by category or search for what you need, then tap a card for hours, contact and directions.',
-  'onboarding.step4.title': 'Leave your mark',
+    'Opening hours, contact and socials, address, directions and sharing. When hours are not published, the page says so instead of making them up.',
+  'onboarding.step4.title': 'What happens to what I save?',
   'onboarding.step4.body':
-    'On each place you can log your visits, save it with the heart and rate it with stars.',
+    'The heart, visits and stars travel with a random identifier, with no email and no name. The guide never publishes reviews or an average, and your stars only help with ordering.',
+  'onboarding.step5.title': 'How do I suggest a change?',
+  'onboarding.step5.body':
+    'Use "Suggest a change or contact us" to report a wrong detail, ask for a place to be removed or write what you need. It goes straight to whoever maintains the guide.',
+  'onboarding.demo.place1': 'Café on the square',
+  'onboarding.demo.place2': 'Café in the park',
+  'onboarding.demo.zone': 'Zibatá',
+  'onboarding.demo.category1': 'Coffee',
+  'onboarding.demo.category2': 'Tacos',
+  'onboarding.demo.message': 'I want to fix an opening time',
   'onboarding.next': 'Next',
-  'onboarding.back': 'Back',
   'onboarding.skip': 'Skip',
   'onboarding.start': 'Start exploring',
   'onboarding.close': 'Close',
@@ -242,7 +250,8 @@ export const en = {
   'about.fix': 'Suggest or contact',
   'about.tutorial': 'See the tutorial',
   'about.tutorialTitle': 'How to use the guide',
-  'about.tutorialLead': 'The four steps to move around the map, find a place and save it.',
+  'about.tutorialLead':
+    'Five questions to get around the map, search, read a place page, keep your own marks and suggest a change.',
   'about.moreLabel': 'More about the guide',
   'about.independent': 'An independent guide to the area’s businesses and services.',
 

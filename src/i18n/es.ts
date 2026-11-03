@@ -249,20 +249,28 @@ export const es = {
   'data.retry': 'Reintentar',
   'data.loading': 'Cargando lugares…',
 
-  'onboarding.step1.title': 'Explora Zibatá',
+  'onboarding.step1.title': '¿Cómo me muevo por el mapa?',
   'onboarding.step1.body':
-    'Arrastra para moverte, pellizca o usa la rueda para acercarte y gira con dos dedos o clic derecho.',
-  'onboarding.step2.title': 'Selecciona una zona',
+    'Arrastra para recorrer Zibatá, pellizca o usa la rueda para acercarte, y gira con dos dedos o con clic derecho. Toca una zona para ver qué hay, y usa los botones de la esquina para acercar, girar o volver a la vista general.',
+  'onboarding.step2.title': '¿Cómo busco y filtro?',
   'onboarding.step2.body':
-    'Las zonas con lugares están resaltadas en verde. Tócalas para ver qué hay.',
-  'onboarding.step3.title': 'Abre la ficha de un lugar',
+    'Escribe en el buscador, elige una categoría o deja solo lo que está abierto ahora. La zona abierta acota la búsqueda, y puedes soltarla para buscar en toda la guía.',
+  'onboarding.step3.title': '¿Qué encuentro en la ficha?',
   'onboarding.step3.body':
-    'Filtra por categoría o busca lo que necesites, y toca una tarjeta para ver horario, contacto y cómo llegar.',
-  'onboarding.step4.title': 'Deja tu marca',
+    'Horario, contacto y redes, dirección, cómo llegar y compartir. Si un horario no está publicado, la ficha lo dice en vez de inventarlo.',
+  'onboarding.step4.title': '¿Qué pasa con lo que guardo?',
   'onboarding.step4.body':
-    'En la ficha puedes registrar tus visitas al lugar, guardarlo con el corazón y calificarlo con estrellas.',
+    'El corazón, las visitas y las estrellas viajan con un identificador al azar, sin correo y sin nombre. La guía no publica reseñas ni una media, y tus estrellas solo ayudan a ordenar.',
+  'onboarding.step5.title': '¿Cómo sugiero un cambio?',
+  'onboarding.step5.body':
+    'Desde "Sugiere un cambio o contáctanos" puedes avisar de un dato incorrecto, pedir que se retire un lugar o escribir lo que necesites. Llega directo a quien mantiene la guía.',
+  'onboarding.demo.place1': 'Café de la plaza',
+  'onboarding.demo.place2': 'Café del parque',
+  'onboarding.demo.zone': 'Zibatá',
+  'onboarding.demo.category1': 'Café',
+  'onboarding.demo.category2': 'Tacos',
+  'onboarding.demo.message': 'Quiero corregir un horario',
   'onboarding.next': 'Siguiente',
-  'onboarding.back': 'Anterior',
   'onboarding.skip': 'Saltar',
   'onboarding.start': 'Empezar a explorar',
   'onboarding.close': 'Cerrar',
@@ -275,7 +283,7 @@ export const es = {
   'about.tutorial': 'Ver el tutorial',
   'about.tutorialTitle': 'Cómo usar la guía',
   'about.tutorialLead':
-    'Los cuatro pasos para moverte por el mapa, encontrar un lugar y guardarlo.',
+    'Cinco preguntas para moverte por el mapa, buscar, leer una ficha, guardar lo tuyo y sugerir un cambio.',
   'about.moreLabel': 'Más sobre la guía',
   'about.independent': 'Guía independiente de establecimientos y servicios de la zona.',
 

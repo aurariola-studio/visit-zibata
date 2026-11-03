@@ -1,0 +1,783 @@
+/*
+ * Las miniaturas del tutorial.
+ *
+ * Todo sale de los tokens y de las formas de la app: la misma esquina de control, la misma cápsula,
+ * la misma tinta. No son controles, así que no llevan foco ni hover; solo se miran. Las animaciones
+ * cuentan la acción (escribir, tocar, enviar) y el estado final queda visible con movimiento reducido.
+ */
+.demo {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Mapa ────────────────────────────────────────────────────────────────────────────────────── */
+
+.map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.mapImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.drag,
+.pinch,
+.pinchInner,
+.tap {
+  position: absolute;
+  border-radius: var(--radius-round);
+  pointer-events: none;
+}
+
+/* El punto que arrastra y la pinza que acerca: dos gestos, no una decoración del mapa. */
+.drag {
+  left: 32%;
+  top: 58%;
+  width: 0.65rem;
+  height: 0.65rem;
+  background: var(--sand-25);
+  box-shadow:
+    0 0 0 1.5px rgb(31 36 25 / 0.18),
+    0 2px 8px rgb(31 36 25 / 0.35);
+}
+
+.drag::after {
+  content: "";
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  width: 3.25rem;
+  height: 1.5rem;
+  border-top: 2px dashed rgb(252 250 246 / 0.85);
+  border-radius: 50%;
+  transform: rotate(-18deg);
+}
+
+.pinch {
+  left: 63%;
+  top: 38%;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid rgb(252 250 246 / 0.9);
+  box-shadow: 0 1px 6px rgb(31 36 25 / 0.25);
+}
+
+.pinchInner {
+  left: 68%;
+  top: 43%;
+  width: 0.4rem;
+  height: 0.4rem;
+  background: var(--sand-25);
+  box-shadow: 0 0 0 1.5px rgb(31 36 25 / 0.15);
+}
+
+/* ── Buscador ────────────────────────────────────────────────────────────────────────────────── */
+
+.search {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 100%;
+  padding: 8px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 1.9rem;
+  padding: 0 9px;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-solid);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.fieldIcon {
+  width: 0.8rem;
+  height: 0.8rem;
+  flex: none;
+  color: var(--ink-500);
+}
+
+.query {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.caret,
+.messageCaret {
+  width: 1px;
+  height: 0.8rem;
+  flex: none;
+  background: var(--olive-600);
+}
+
+.chips {
+  display: flex;
+  gap: 5px;
+  overflow: hidden;
+}
+
+.chip,
+.chipActive {
+  display: inline-flex;
+  align-items: center;
+  height: 1.15rem;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  font-size: 9px;
+  font-weight: var(--weight-strong);
+  white-space: nowrap;
+}
+
+.chipActive {
+  color: var(--sand-25);
+  background: var(--color-accent);
+}
+
+.chip {
+  color: var(--ink-700);
+  background: var(--color-surface-solid);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: auto;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 1.9rem;
+  padding: 0 8px;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-solid);
+  box-shadow:
+    inset 0 0 0 1px var(--color-border),
+    0 1px 2px rgb(31 36 25 / 0.06);
+}
+
+.resultDot {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  border-radius: var(--radius-round);
+  color: var(--olive-600);
+  background: var(--lime-100);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.resultIcon {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.resultText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.resultName {
+  overflow: hidden;
+  color: var(--ink-900);
+  font-size: 10px;
+  font-weight: var(--weight-strong);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.resultZone {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 8px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ── Ficha y marcas ──────────────────────────────────────────────────────────────────────────── */
+
+.detail,
+.suggest {
+  position: relative;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  padding: 7px 8px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex: none;
+  border-radius: var(--radius-control);
+  color: var(--olive-600);
+  background: var(--lime-100);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.avatarIcon {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.name {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  font-stretch: var(--title-stretch);
+  line-height: 1.1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.zone {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 8.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 1.05rem;
+  padding: 0 7px;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-muted);
+  color: var(--ink-700);
+  font-size: 9px;
+}
+
+.rowIcon {
+  width: 0.65rem;
+  height: 0.65rem;
+  flex: none;
+  color: var(--olive-600);
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+  margin-top: auto;
+}
+
+.primary {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 1.65rem;
+  border-radius: var(--radius-control);
+  color: var(--sand-25);
+  background: var(--color-accent);
+  font-size: 9.5px;
+  font-weight: var(--weight-strong);
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: var(--radius-control);
+  color: var(--heart-600);
+  background: var(--color-surface-muted);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.actionIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.markRow {
+  display: flex;
+  gap: 5px;
+  margin-top: auto;
+}
+
+.visit {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 1.65rem;
+  border-radius: var(--radius-control);
+  color: var(--sand-25);
+  background: var(--color-accent);
+  font-size: 9.5px;
+  font-weight: var(--weight-strong);
+}
+
+.visitCheck {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.heart {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: var(--radius-control);
+  color: var(--heart-600);
+  background: var(--color-surface-muted);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.heart svg {
+  fill: var(--heart-600);
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--olive-600);
+  fill: var(--olive-600);
+}
+
+.ratingLabel {
+  color: var(--color-text-muted);
+  font-size: 9px;
+}
+
+/* ── Sugerir ─────────────────────────────────────────────────────────────────────────────────── */
+
+.suggest {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  padding: 8px 10px;
+}
+
+.suggestLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--olive-700);
+  font-size: 10px;
+  font-weight: var(--weight-strong);
+  text-decoration: underline;
+  text-decoration-color: var(--sand-400);
+  text-underline-offset: 2px;
+}
+
+.miniField {
+  display: flex;
+  align-items: center;
+  height: 1.35rem;
+  padding: 0 8px;
+  border-radius: var(--radius-control);
+  color: var(--ink-500);
+  background: var(--color-surface-solid);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  font-size: 9px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 2.75rem;
+  padding: 7px 9px;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-solid);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.messageText {
+  color: var(--ink-700);
+  font-size: 9.5px;
+  line-height: 1.35;
+}
+
+.messageCaret {
+  margin-top: 0.1rem;
+}
+
+.send {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-end;
+  gap: 5px;
+  height: 1.6rem;
+  padding: 0 12px;
+  border-radius: var(--radius-control);
+  color: var(--sand-25);
+  background: var(--color-accent);
+  font-size: 9.5px;
+  font-weight: var(--weight-strong);
+}
+
+/* ── Toques de las acciones ─────────────────────────────────────────────────────────────────── */
+
+.tap {
+  z-index: 3;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--sand-25);
+  box-shadow:
+    0 0 0 1.5px rgb(31 36 25 / 0.18),
+    0 2px 8px rgb(31 36 25 / 0.35);
+  opacity: 0;
+}
+
+/*
+ * Movimiento. Todo empieza en el estado final y la animación lo trae desde un poco antes, para que
+ * quien pide movimiento reducido vea la miniatura completa y quieta.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .mapImage {
+    animation: mapMove 5.2s var(--ease-out) both;
+  }
+
+  .drag {
+    animation: dragMove 3s var(--ease-out) both;
+  }
+
+  .pinch {
+    animation: pinch 2.2s var(--ease-out) 2.2s both;
+  }
+
+  .pinchInner {
+    animation: pinchInner 2.2s var(--ease-out) 2.2s both;
+  }
+
+  .caret,
+  .messageCaret {
+    animation: blink 1s steps(1) infinite;
+  }
+
+  .results[data-ready="false"] .result {
+    opacity: 0;
+  }
+
+  .results[data-ready="true"] .result {
+    animation: rise 0.45s var(--ease-out) calc(0.3s + var(--i) * 0.16s) both;
+  }
+
+  .head {
+    animation: rise 0.4s var(--ease-out) 0.1s both;
+  }
+
+  .row {
+    animation: rise 0.35s var(--ease-out) calc(0.25s + var(--i) * 0.1s) both;
+  }
+
+  .primary {
+    animation: press 0.35s var(--ease-out) 1.4s both;
+  }
+
+  .tapDetail {
+    animation: tapDetail 2.6s var(--ease-out) both;
+  }
+
+  .heart {
+    animation: press 0.35s var(--ease-out) 1s both;
+  }
+
+  .heart svg {
+    animation: fill 0.4s var(--ease-out) 1s both;
+  }
+
+  .visit {
+    animation: press 0.35s var(--ease-out) 2.1s both;
+  }
+
+  .visitCheck {
+    animation: pop 0.35s var(--ease-out) 2.1s both;
+  }
+
+  .star {
+    animation: fill 0.35s var(--ease-out) 3.3s both;
+  }
+
+  .tapMarks {
+    animation: tapMarks 4.4s var(--ease-out) both;
+  }
+
+  .tapSend[data-ready="true"] {
+    animation: tapSend 1.4s var(--ease-out) both;
+  }
+
+  .send[data-ready="true"] {
+    animation: press 0.35s var(--ease-out) 0.85s both;
+  }
+
+  @keyframes mapMove {
+    0% {
+      transform: scale(1.02) translate(0, 0);
+    }
+    40% {
+      transform: scale(1.02) translate(-10px, 5px);
+    }
+    55% {
+      transform: scale(1.12) translate(0, 0);
+    }
+    100% {
+      transform: scale(1.12) translate(0, 0);
+    }
+  }
+
+  @keyframes dragMove {
+    0% {
+      opacity: 0;
+      left: 28%;
+      top: 54%;
+      transform: scale(0.75);
+    }
+    20% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      left: 36%;
+      top: 61%;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pinch {
+    0% {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+  }
+
+  @keyframes pinchInner {
+    0% {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes press {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(0.96);
+    }
+  }
+
+  @keyframes fill {
+    from {
+      fill: transparent;
+    }
+    to {
+      fill: currentColor;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      transform: scale(0.4);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes tapDetail {
+    0% {
+      opacity: 0;
+      left: 48%;
+      top: 46%;
+      transform: scale(0.8);
+    }
+    15% {
+      opacity: 1;
+    }
+    55% {
+      left: 62%;
+      top: 86%;
+      transform: scale(1);
+    }
+    62% {
+      transform: scale(0.75);
+    }
+    70% {
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      left: 62%;
+      top: 86%;
+    }
+  }
+
+  @keyframes tapMarks {
+    0% {
+      opacity: 0;
+      left: 55%;
+      top: 55%;
+      transform: scale(0.8);
+    }
+    10% {
+      opacity: 1;
+    }
+    24% {
+      left: 94%;
+      top: 79%;
+      transform: scale(1);
+    }
+    29% {
+      transform: scale(0.75);
+    }
+    34% {
+      transform: scale(1);
+    }
+    50% {
+      left: 46%;
+      top: 79%;
+    }
+    55% {
+      transform: scale(0.75);
+    }
+    60% {
+      transform: scale(1);
+    }
+    76% {
+      left: 11%;
+      top: 92%;
+    }
+    81% {
+      transform: scale(0.75);
+    }
+    86% {
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      left: 11%;
+      top: 92%;
+    }
+  }
+
+  @keyframes tapSend {
+    0% {
+      opacity: 0;
+      left: 50%;
+      top: 50%;
+      transform: scale(0.8);
+    }
+    20% {
+      opacity: 1;
+    }
+    60% {
+      left: 85%;
+      top: 76%;
+      transform: scale(1);
+    }
+    68% {
+      transform: scale(0.75);
+    }
+    76% {
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      left: 85%;
+      top: 76%;
+    }
+  }
+}
