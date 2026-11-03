@@ -401,8 +401,8 @@
   }
 
   /*
-   * Tres gestos de arrastre mientras la ficha se desplaza, en el mismo compás que el desplazamiento
-   * (18% a 82%): el dedo sube, se suelta y vuelve a subir, y se apaga cuando el movimiento termina.
+   * Tres gestos de arrastre mientras la ficha baja, en el mismo compás que el desplazamiento
+   * (18% a 82%), y uno hacia abajo cuando la ficha vuelve arriba (90% a 100%).
    */
   @keyframes fichaFinger {
     0%,
@@ -450,10 +450,25 @@
       opacity: 1;
       top: 46%;
     }
-    83%,
-    100% {
+    83% {
       opacity: 0;
       top: 44%;
+    }
+    88% {
+      opacity: 0;
+      top: 46%;
+    }
+    91% {
+      opacity: 1;
+      top: 50%;
+    }
+    98% {
+      opacity: 1;
+      top: 64%;
+    }
+    100% {
+      opacity: 0;
+      top: 66%;
     }
   }
 
