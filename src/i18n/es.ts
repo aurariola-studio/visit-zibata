@@ -39,6 +39,10 @@ export const es = {
   'results.empty.title': 'Sin resultados',
   'results.empty.body':
     'No encontramos lugares con esos criterios. Prueba otra palabra o limpia los filtros.',
+  'results.empty.zone': 'Sin resultados en {plaza}',
+  'results.empty.zoneBody':
+    'No hay coincidencias en esta zona. Busca en toda la guía o limpia los filtros.',
+  'results.empty.wholeGuide': 'Buscar en toda la guía',
 
   'plaza.label': 'Zona',
   'plaza.places': 'Lugares en esta zona',

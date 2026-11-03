@@ -36,6 +36,9 @@ export const en = {
   'results.title': 'Results',
   'results.empty.title': 'Nothing found',
   'results.empty.body': 'No places match that. Try another word or clear the filters.',
+  'results.empty.zone': 'Nothing in {plaza}',
+  'results.empty.zoneBody': 'No matches in this area. Search the whole guide or clear the filters.',
+  'results.empty.wholeGuide': 'Search the whole guide',
 
   'plaza.label': 'Area',
   'plaza.places': 'Places in this area',

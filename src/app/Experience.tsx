@@ -364,7 +364,8 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
         right: controlsInRow ? 16 : 64,
       }
 
-  // Lo que hay en la lista ahora mismo: con una plaza abierta, sus lugares; buscando, todo Zibatá.
+  // Lo que hay en la lista ahora mismo: con una plaza abierta, sus lugares; buscando, lo que haya en
+  // la plaza elegida (o en todo Zibatá si no hay ninguna).
   // No depende de si además hay una ficha abierta encima.
   //
   // Ya no se pinta en la barra de filtros (lo dicen las cabeceras de los paneles, junto a la lista
@@ -430,7 +431,15 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
       break
     case 'results':
       content = (
-        <ResultsPanel places={panel.places} onOpenPlace={openPlace} onClearFilters={closeResults} />
+        <ResultsPanel
+          places={panel.places}
+          onOpenPlace={openPlace}
+          onClearFilters={closeResults}
+          plazaName={
+            state.selectedPlazaId ? catalog.plazaById.get(state.selectedPlazaId)?.name : undefined
+          }
+          onClearPlaza={() => selectPlaza(null)}
+        />
       )
       break
     case 'explore':
