@@ -137,13 +137,12 @@
 }
 
 .again {
+  composes: base boton fantasma from "../../styles/controls.module.css";
+  height: auto;
+  padding: 0;
   font-size: var(--text-sm);
   color: var(--olive-700);
   text-decoration: underline;
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
 }
 
 .sent {
