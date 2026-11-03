@@ -24,6 +24,8 @@ export type DemoKind = 'map' | 'search' | 'detail' | 'marks' | 'suggest'
 
 interface DemoData {
   place: Place
+  /** Segundo local de ejemplo, para que la lista cambie al aplicar filtros. */
+  other: Place
   plaza: Plaza
 }
 
@@ -35,7 +37,12 @@ export function StepDemo({ kind }: { kind: DemoKind }) {
     <div className={styles.demo} aria-hidden="true" inert>
       {kind === 'map' && <MapDemo />}
       {kind === 'search' && demo && (
-        <SearchDemo catalog={catalog} place={demo.place} zone={demo.plaza.name} />
+        <SearchDemo
+          catalog={catalog}
+          place={demo.place}
+          other={demo.other}
+          zone={demo.plaza.name}
+        />
       )}
       {kind === 'detail' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} />}
       {kind === 'marks' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} marks />}
@@ -87,6 +94,7 @@ function buildDemo(catalog: Catalog): DemoData | null {
   if (!plaza) return null
   return {
     place: genericPlace(base, t('onboarding.demo.place1'), 'demo-cafe-1'),
+    other: genericPlace(base, t('onboarding.demo.place2'), 'demo-cafe-2'),
     plaza,
   }
 }
@@ -132,7 +140,17 @@ function MapDemo() {
   )
 }
 
-function SearchDemo({ catalog, place, zone }: { catalog: Catalog; place: Place; zone: string }) {
+function SearchDemo({
+  catalog,
+  place,
+  other,
+  zone,
+}: {
+  catalog: Catalog
+  place: Place
+  other: Place
+  zone: string
+}) {
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const [cycle, setCycle] = useState(0)
 
@@ -143,18 +161,27 @@ function SearchDemo({ catalog, place, zone }: { catalog: Catalog; place: Place; 
   }, [reduced])
 
   return (
-    <SearchAnimation key={cycle} catalog={catalog} place={place} zone={zone} reduced={reduced} />
+    <SearchAnimation
+      key={cycle}
+      catalog={catalog}
+      place={place}
+      other={other}
+      zone={zone}
+      reduced={reduced}
+    />
   )
 }
 
 function SearchAnimation({
   catalog,
   place,
+  other,
   zone,
   reduced,
 }: {
   catalog: Catalog
   place: Place
+  other: Place
   zone: string
   reduced: boolean
 }) {
@@ -188,6 +215,8 @@ function SearchAnimation({
   const openNow = phase >= 3
   const selectedZone = phase >= 2 ? zone : null
   const count = done ? 1 : phase >= 3 ? 2 : phase >= 2 ? 3 : phase >= 1 ? 4 : 12
+  // La lista cambia con cada filtro: el primer resultado no es siempre el mismo local.
+  const shownPlace = phase % 2 === 1 && !done ? other : place
 
   return (
     <div className={styles.search}>
@@ -222,7 +251,7 @@ function SearchAnimation({
       <div className={styles.searchResults}>
         <p className={styles.searchCount}>{t('filters.results', { count })}</p>
         <div className={styles.searchList}>
-          <PlaceCard place={place} onOpen={() => {}} showPlaza compact />
+          <PlaceCard place={shownPlace} onOpen={() => {}} showPlaza compact />
         </div>
       </div>
     </div>
@@ -271,7 +300,9 @@ function DetailDemo({
   /*
    * La ficha real mide distinto en cada idioma y con cada dato. Se mide su alto y se desplaza
    * exactamente lo que sobra, para que el final también se vea. En las marcas, el desplazamiento
-   * lleva hasta el bloque personal. La animación no arranca hasta que la medida está puesta.
+   * lleva hasta el bloque personal, y además se miden los tres puntos que toca el dedo: el corazón
+   * de arriba, la cuarta estrella y la visita. Así el dedo cae donde está cada control y no donde
+   * supone una medida fija. La animación no arranca hasta que las medidas están puestas.
    */
   useLayoutEffect(() => {
     const frame = frameRef.current
@@ -279,11 +310,35 @@ function DetailDemo({
     if (!frame || !inner) return
     const medir = () => {
       if (marks) {
+        /*
+         * Los puntos se miden dentro de la ficha, en sus propias unidades: el dedo vive dentro de
+         * la ficha y se mueve con ella, así que da igual el desplazamiento o la escala de la
+         * miniatura. La escala se saca comparando el ancho dibujado con el de maquetación, y de
+         * paso sirve durante la entrada de la tarjeta.
+         */
+        const caja = inner.getBoundingClientRect()
+        const escala = caja.width / inner.offsetWidth || 1
+        const centroDe = (el: Element | null) => {
+          if (!el) return null
+          const r = el.getBoundingClientRect()
+          return {
+            x: Math.round((r.left - caja.left + r.width / 2) / escala),
+            y: Math.round((r.top - caja.top + r.height / 2) / escala),
+          }
+        }
         const personal = inner.querySelector('section[data-nosnippet]') as HTMLElement | null
-        const top = personal
-          ? (personal.getBoundingClientRect().top - inner.getBoundingClientRect().top) / 0.82
-          : 0
+        const corazon = centroDe(inner.querySelector('button[aria-pressed]'))
+        const estrellas = centroDe(inner.querySelectorAll('span[data-fill]')[3] ?? null)
+        const visita = centroDe(personal?.querySelector('button') ?? null)
+        const top = personal ? (personal.getBoundingClientRect().top - caja.top) / escala : 0
         frame.style.setProperty('--marks-scroll', `-${Math.ceil(Math.max(0, top - 42))}px`)
+        for (const [nombre, punto] of [
+          ['--tap-corazon', corazon],
+          ['--tap-estrellas', estrellas],
+          ['--tap-visita', visita],
+        ] as const) {
+          if (punto) frame.style.setProperty(nombre, `${punto.x}px ${punto.y}px`)
+        }
         return
       }
       const visible = frame.clientHeight - 12
@@ -292,10 +347,20 @@ function DetailDemo({
     }
     medir()
     setReady(true)
+    // La letra llega después del primer trazado y puede mover un poco el contenido.
+    document.fonts?.ready.then(medir)
+    /*
+     * La ficha entra deslizándose desde la derecha, y mientras dura el dedo quedaría a un lado.
+     * Cuando el deslizamiento termina se vuelve a medir, ya con la ficha quieta.
+     */
+    inner.addEventListener('animationend', medir)
     const observer = new ResizeObserver(medir)
     observer.observe(frame)
     observer.observe(inner)
-    return () => observer.disconnect()
+    return () => {
+      inner.removeEventListener('animationend', medir)
+      observer.disconnect()
+    }
   }, [marks])
 
   const demo = marks
@@ -330,8 +395,10 @@ function DetailDemo({
           focusOnMount={false}
           demo={demo}
         />
+        {/* En las marcas el dedo va dentro de la ficha: así se mueve con ella y cae sobre su control. */}
+        {marks && <span className={`${styles.finger} ${styles.marksFinger}`} />}
       </div>
-      <span className={`${styles.finger} ${marks ? styles.marksFinger : styles.fichaFinger}`} />
+      {!marks && <span className={`${styles.finger} ${styles.fichaFinger}`} />}
     </div>
   )
 }

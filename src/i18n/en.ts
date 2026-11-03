@@ -233,6 +233,7 @@ export const en = {
   'onboarding.step5.body':
     'Did you see a wrong opening time, a phone number that no longer works or a place that has closed? Do you have a business in Zibatá you want to promote or update? Write to us from "Suggest a change or contact us". We would love to hear from you.',
   'onboarding.demo.place1': 'Café on the square',
+  'onboarding.demo.place2': 'Café by the park',
   'onboarding.demo.query': 'coffee',
   'onboarding.demo.description': 'A neighbourhood café with breakfast and fresh bread.',
   'onboarding.demo.message': 'I want to fix an opening time',

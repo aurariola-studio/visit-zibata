@@ -265,6 +265,7 @@ export const es = {
   'onboarding.step5.body':
     '¿Viste un horario equivocado, un teléfono que ya no funciona o un lugar que cerró? ¿Tienes un local en Zibatá que quieres promocionar o actualizar? Escríbenos desde "Sugiere un cambio o contáctanos". Nos encantará leerte.',
   'onboarding.demo.place1': 'Café de la plaza',
+  'onboarding.demo.place2': 'Cafetería del parque',
   'onboarding.demo.query': 'café',
   'onboarding.demo.description': 'Café de barrio con desayunos y pan del día.',
   'onboarding.demo.message': 'Quiero corregir un horario',

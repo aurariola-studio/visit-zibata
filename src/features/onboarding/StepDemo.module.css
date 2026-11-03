@@ -54,8 +54,13 @@
   top: 72%;
 }
 
-/* El dedo de las marcas: toca el corazón, las estrellas y la visita. Quieto, no se dibuja. */
+/* El dedo de las marcas se coloca con los puntos medidos dentro de la ficha. */
 .marksFinger {
+  left: 0;
+  top: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: -0.5rem 0 0 -0.5rem;
   opacity: 0;
 }
 
@@ -236,6 +241,10 @@
   transform-origin: top left;
 }
 
+.fichaInner {
+  position: relative;
+}
+
 /* En las marcas la ficha se coloca en el bloque personal, donde están estrellas y visitas. */
 .fichaInner[data-marks] {
   width: 122%;
@@ -255,12 +264,12 @@
     animation: dragFinger 8s var(--ease-out) infinite alternate;
   }
 
-  /* Un gesto corto y repetido, para que el dedo se vea moverse mientras la ficha se desplaza. */
-  .fichaFinger {
-    animation: fichaFinger 1.8s var(--ease-out) infinite;
+  /* El dedo acompaña al desplazamiento de la ficha, no a un reloj aparte. */
+  .fichaFrame[data-ready] .fichaFinger {
+    animation: fichaFinger 10s var(--ease-out) infinite;
   }
 
-  .marksFinger {
+  .fichaFrame[data-ready] .marksFinger {
     animation: marksFinger 10s var(--ease-out) infinite;
   }
 
@@ -272,9 +281,9 @@
     animation: pinchEnd 8s var(--ease-out) infinite alternate;
   }
 
-  /* La ficha real se desplaza despacio para enseñar el horario y el contacto, y vuelve. */
+  /* La ficha real se desplaza de arriba abajo y vuelve de un salto, en el mismo compás que el dedo. */
   .fichaInner[data-ready] {
-    animation: fichaScroll 10s var(--ease-out) infinite alternate;
+    animation: fichaScroll 10s linear infinite;
   }
 
   .fichaInner[data-marks][data-ready] {
@@ -383,30 +392,68 @@
       transform: scale(0.9) translateY(0);
     }
     82%,
-    100% {
+    90% {
       transform: scale(0.9) translateY(var(--ficha-scroll, -260px));
+    }
+    100% {
+      transform: scale(0.9) translateY(0);
     }
   }
 
+  /*
+   * Tres gestos de arrastre mientras la ficha se desplaza, en el mismo compás que el desplazamiento
+   * (18% a 82%): el dedo sube, se suelta y vuelve a subir, y se apaga cuando el movimiento termina.
+   */
   @keyframes fichaFinger {
-    0% {
+    0%,
+    18% {
       opacity: 0;
       left: 50%;
-      top: 68%;
+      top: 66%;
     }
-    12% {
+    21% {
       opacity: 1;
     }
-    60% {
+    37% {
       opacity: 1;
-      left: 50%;
       top: 46%;
     }
-    76%,
+    40% {
+      opacity: 0;
+      top: 44%;
+    }
+    42% {
+      opacity: 0;
+      top: 66%;
+    }
+    45% {
+      opacity: 1;
+      top: 64%;
+    }
+    59% {
+      opacity: 1;
+      top: 46%;
+    }
+    62% {
+      opacity: 0;
+      top: 44%;
+    }
+    64% {
+      opacity: 0;
+      top: 66%;
+    }
+    67% {
+      opacity: 1;
+      top: 64%;
+    }
+    80% {
+      opacity: 1;
+      top: 46%;
+    }
+    83%,
     100% {
       opacity: 0;
-      left: 50%;
-      top: 43%;
+      top: 44%;
     }
   }
 
@@ -427,14 +474,14 @@
 
   /*
    * El dedo de las marcas toca el corazón arriba y, ya desplazada la ficha, las estrellas y la
-   * visita. Los toques caen a 1,4, 3,8 y 5,8 s, cuando el estado cambia.
+   * visita. Los puntos llegan medidos desde el componente, así que caen sobre cada control. Los
+   * toques caen a 1,4, 3,8 y 5,8 s, cuando el estado cambia.
    */
   @keyframes marksFinger {
     0%,
     8% {
       opacity: 0;
-      left: 83%;
-      top: 8%;
+      translate: var(--tap-corazon, 83% 8%);
       transform: scale(1);
     }
     10%,
@@ -449,13 +496,11 @@
     }
     26% {
       opacity: 0;
-      left: 83%;
-      top: 8%;
+      translate: var(--tap-corazon, 83% 8%);
     }
     32% {
       opacity: 0;
-      left: 35%;
-      top: 24%;
+      translate: var(--tap-estrellas, 35% 24%);
     }
     34%,
     48% {
@@ -469,13 +514,11 @@
     }
     52% {
       opacity: 0;
-      left: 35%;
-      top: 24%;
+      translate: var(--tap-estrellas, 35% 24%);
     }
     54% {
       opacity: 0;
-      left: 23%;
-      top: 47%;
+      translate: var(--tap-visita, 23% 47%);
     }
     56%,
     72% {
@@ -490,8 +533,7 @@
     78%,
     100% {
       opacity: 0;
-      left: 23%;
-      top: 47%;
+      translate: var(--tap-visita, 23% 47%);
     }
   }
 
