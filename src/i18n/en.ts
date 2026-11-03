@@ -231,7 +231,7 @@ export const en = {
     'Tap the heart to save the place, mark the day you went and rate it with stars. You will also see how many people have saved it.',
   'onboarding.step5.title': 'How do I suggest a change?',
   'onboarding.step5.body':
-    'Use "Suggest a change or contact us" to report a wrong detail, ask for a place to be removed or write what you need. It goes straight to whoever maintains the guide.',
+    'Did you see a wrong opening time, a phone number that no longer works or a place that has closed? Write to us from "Suggest a change or contact us". You can also ask for a business to be removed. We would love to hear from you.',
   'onboarding.demo.place1': 'Café on the square',
   'onboarding.demo.query': 'coffee',
   'onboarding.demo.description': 'A neighbourhood café with breakfast and fresh bread.',

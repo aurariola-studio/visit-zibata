@@ -180,6 +180,11 @@
   .copy {
     height: 10.5rem;
   }
+
+  /* En el teléfono el cuerpo baja un escalón para que el paso más largo quepa sin mover la tarjeta. */
+  .body {
+    font-size: var(--text-sm);
+  }
 }
 
 /* En pantallas bajas la miniatura se acorta, pero la tarjeta conserva su alto y se desplaza. */
