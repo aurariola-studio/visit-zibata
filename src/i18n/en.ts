@@ -222,7 +222,7 @@ export const en = {
     'Drag to move around Zibatá, pinch or scroll to zoom, and rotate with two fingers or a right click. Tap an area to see what is there, and use the corner buttons to zoom, rotate or return to the full view.',
   'onboarding.step2.title': 'How do I search and filter?',
   'onboarding.step2.body':
-    'Type in the search box, pick a category or keep only what is open now. The area you have open narrows the search, and you can release it to search the whole guide.',
+    'Type what you are looking for or pick a category. Above you can also narrow by area or keep only what is open now, and remove any filter whenever you want.',
   'onboarding.step3.title': 'What is on a place page?',
   'onboarding.step3.body':
     'Opening hours, contact and socials, address, directions and sharing. When hours are not published, the page says so instead of making them up.',
@@ -233,7 +233,6 @@ export const en = {
   'onboarding.step5.body':
     'Use "Suggest a change or contact us" to report a wrong detail, ask for a place to be removed or write what you need. It goes straight to whoever maintains the guide.',
   'onboarding.demo.place1': 'Café on the square',
-  'onboarding.demo.place2': 'Taquería in the park',
   'onboarding.demo.query': 'coffee',
   'onboarding.demo.description': 'A neighbourhood café with breakfast and fresh bread.',
   'onboarding.demo.message': 'I want to fix an opening time',

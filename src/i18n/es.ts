@@ -254,7 +254,7 @@ export const es = {
     'Arrastra para recorrer Zibatá, pellizca o usa la rueda para acercarte, y gira con dos dedos o con clic derecho. Toca una zona para ver qué hay, y usa los botones de la esquina para acercar, girar o volver a la vista general.',
   'onboarding.step2.title': '¿Cómo busco y filtro?',
   'onboarding.step2.body':
-    'Escribe en el buscador, elige una categoría o deja solo lo que está abierto ahora. La zona abierta acota la búsqueda, y puedes soltarla para buscar en toda la guía.',
+    'Escribe lo que buscas o elige una categoría. Arriba también puedes acotar por zona o dejar solo lo que está abierto ahora, y quitar cualquier filtro cuando quieras.',
   'onboarding.step3.title': '¿Qué encuentro en la ficha?',
   'onboarding.step3.body':
     'Horario, contacto y redes, dirección, cómo llegar y compartir. Si un horario no está publicado, la ficha lo dice en vez de inventarlo.',
@@ -265,7 +265,6 @@ export const es = {
   'onboarding.step5.body':
     'Desde "Sugiere un cambio o contáctanos" puedes avisar de un dato incorrecto, pedir que se retire un lugar o escribir lo que necesites. Llega directo a quien mantiene la guía.',
   'onboarding.demo.place1': 'Café de la plaza',
-  'onboarding.demo.place2': 'Taquería del parque',
   'onboarding.demo.query': 'café',
   'onboarding.demo.description': 'Café de barrio con desayunos y pan del día.',
   'onboarding.demo.message': 'Quiero corregir un horario',
