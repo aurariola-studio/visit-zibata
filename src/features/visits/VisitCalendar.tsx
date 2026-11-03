@@ -61,6 +61,11 @@ export function VisitCalendar({
   // Cuántas casillas vacías van antes del día 1 para que caiga en su columna.
   const hueco = (primero - PRIMER_DIA + 7) % 7
   const dias = new Date(year, month + 1, 0).getDate()
+  /*
+   * Siempre seis semanas. Un mes de cuatro o cinco filas dejaba el calendario más bajo y, al cambiar
+   * de mes, el componente daba un salto. Las casillas que sobran se reservan al final.
+   */
+  const sobran = Math.max(0, 42 - hueco - dias)
 
   const mover = (delta: number) => {
     const destino = new Date(year, month + delta, 1)
@@ -146,7 +151,7 @@ export function VisitCalendar({
         {/* Las casillas vacías antes del día 1. Se nombran por el día del mes anterior que les
             correspondería, que es un dato estable y no una posición. */}
         {Array.from({ length: hueco }, (_, i) => clave(year, month, i - hueco + 1)).map((vacia) => (
-          <span key={vacia} />
+          <span key={vacia} className={styles.vacio} aria-hidden="true" />
         ))}
         {Array.from({ length: dias }, (_, i) => {
           const fecha = clave(year, month, i + 1)
@@ -172,6 +177,9 @@ export function VisitCalendar({
             </button>
           )
         })}
+        {Array.from({ length: sobran }, (_, i) => clave(year, month + 1, i + 1)).map((vacia) => (
+          <span key={vacia} className={styles.vacio} aria-hidden="true" />
+        ))}
       </div>
     </div>
   )
