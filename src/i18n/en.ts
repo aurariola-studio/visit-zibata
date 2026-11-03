@@ -228,7 +228,7 @@ export const en = {
     'Here you will find the opening hours, contact and socials, address and directions. You can also share the place with anyone.',
   'onboarding.step4.title': 'What happens to what I save?',
   'onboarding.step4.body':
-    'The heart, visits and stars travel with a random identifier, with no email and no name. The guide never publishes reviews or an average, and your stars only help with ordering.',
+    'Tap the heart to save the place, mark the day you went and rate it with stars. You will also see how many people have saved it.',
   'onboarding.step5.title': 'How do I suggest a change?',
   'onboarding.step5.body':
     'Use "Suggest a change or contact us" to report a wrong detail, ask for a place to be removed or write what you need. It goes straight to whoever maintains the guide.',

@@ -21,9 +21,19 @@ function fillOf(value: number | null, position: number): 0 | 0.5 | 1 {
   return filled >= 1 ? 1 : filled >= 0.5 ? 0.5 : 0
 }
 
-export function RatingStars({ placeId, placeName }: { placeId: string; placeName: string }) {
+export function RatingStars({
+  placeId,
+  placeName,
+  demoValue,
+}: {
+  placeId: string
+  placeName: string
+  /** En la demostración, la nota que se enciende sin guardarla. */
+  demoValue?: number | null
+}) {
   const { ratingOf, rate } = useRatings()
-  const current = ratingOf(placeId)
+  const demo = demoValue !== undefined
+  const current = demo ? demoValue : ratingOf(placeId)
   const [preview, setPreview] = useState<number | null>(null)
   const groupId = useId()
   const shown = preview ?? current
@@ -43,13 +53,13 @@ export function RatingStars({ placeId, placeName }: { placeId: string; placeName
             name: placeName,
           })}
           onChange={() => {
-            rate(placeId, value)
+            if (!demo) rate(placeId, value)
             // Elegida la nota, el texto pasa a confirmarla; la vista previa vuelve al siguiente hover.
             setPreview(null)
           }}
           onClick={() => {
             // Volver a pulsar la actual la quita (el change no se dispara si ya está marcada).
-            if (current === value) rate(placeId, value)
+            if (!demo && current === value) rate(placeId, value)
             setPreview(null)
           }}
           onFocus={() => setPreview(value)}

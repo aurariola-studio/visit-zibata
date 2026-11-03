@@ -32,6 +32,7 @@ export function VisitButton({
   placeId,
   placeName,
   sinSuperficie = false,
+  demoDate,
 }: {
   placeId: string
   placeName: string
@@ -40,9 +41,11 @@ export function VisitButton({
    * no es su esquina sino que no tiene superficie: una no sale de la guía y la otra sí.
    */
   sinSuperficie?: boolean
+  /** En la demostración, la visita ya registrada, sin tocar las visitas reales. */
+  demoDate?: string | null
 }) {
   const { registrar, quitar, datesOf } = useVisits()
-  const fechas = datesOf(placeId)
+  const fechas = demoDate !== undefined ? (demoDate ? [demoDate] : []) : datesOf(placeId)
   const ultima = fechas.at(-1)
   const [abierto, setAbierto] = useState(false)
   const [calendarioAbierto, setCalendarioAbierto] = useState(false)
@@ -66,9 +69,10 @@ export function VisitButton({
             <Suspense fallback={null}>
               <VisitCalendar
                 fechas={fechas}
-                onToggle={(fecha: string) =>
+                onToggle={(fecha: string) => {
+                  if (demoDate !== undefined) return
                   fechas.includes(fecha) ? quitar(placeId, fecha) : registrar(placeId, fecha)
-                }
+                }}
                 onClose={() => setCalendarioAbierto(false)}
               />
             </Suspense>

@@ -231,23 +231,10 @@
   transform-origin: top left;
 }
 
-/* En las marcas la ficha entra entera, sin desplazamiento. */
+/* En las marcas la ficha se coloca en el bloque personal, donde están estrellas y visitas. */
 .fichaInner[data-marks] {
   width: 122%;
-  transform: scale(0.82);
-}
-
-/* ── Toque de las marcas ────────────────────────────────────────────────────────────────────── */
-
-.tap {
-  z-index: 3;
-  width: 0.6rem;
-  height: 0.6rem;
-  background: var(--olive-600);
-  box-shadow:
-    0 0 0 2px var(--sand-25),
-    0 2px 8px rgb(31 36 25 / 0.35);
-  opacity: 0;
+  transform: scale(0.82) translateY(var(--marks-scroll, -80px));
 }
 
 /*
@@ -280,12 +267,8 @@
     animation: fichaScroll 10s var(--ease-out) infinite alternate;
   }
 
-  .fichaInner[data-marks] {
-    animation: none;
-  }
-
-  .tapMarks {
-    animation: tapMarks 4.4s var(--ease-out) infinite;
+  .fichaInner[data-marks][data-ready] {
+    animation: marksScroll 10s var(--ease-out) infinite alternate;
   }
 
   /* El formulario real se desplaza para enseñar los campos y el envío, y vuelve. */
@@ -418,6 +401,20 @@
     }
   }
 
+  @keyframes marksScroll {
+    0%,
+    18% {
+      transform: scale(0.82) translateY(0);
+    }
+    30%,
+    82% {
+      transform: scale(0.82) translateY(var(--marks-scroll, -80px));
+    }
+    100% {
+      transform: scale(0.82) translateY(var(--marks-scroll, -80px));
+    }
+  }
+
   @keyframes contactScroll {
     0%,
     22% {
@@ -436,54 +433,6 @@
     }
     45% {
       transform: scale(0.96);
-    }
-  }
-
-  @keyframes tapMarks {
-    0% {
-      opacity: 0;
-      left: 55%;
-      top: 55%;
-      transform: scale(0.8);
-    }
-    12% {
-      opacity: 1;
-    }
-    24% {
-      left: 82%;
-      top: 12%;
-      transform: scale(1);
-    }
-    29% {
-      transform: scale(0.75);
-    }
-    34% {
-      transform: scale(1);
-    }
-    54% {
-      left: 27%;
-      top: 80%;
-    }
-    59% {
-      transform: scale(0.75);
-    }
-    64% {
-      transform: scale(1);
-    }
-    78% {
-      left: 17%;
-      top: 92%;
-    }
-    83% {
-      transform: scale(0.75);
-    }
-    88% {
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0;
-      left: 17%;
-      top: 92%;
     }
   }
 }

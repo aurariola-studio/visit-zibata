@@ -260,7 +260,7 @@ export const es = {
     'Aquí encuentras el horario, el contacto y las redes, la dirección y cómo llegar. También puedes compartir la ficha con quien quieras.',
   'onboarding.step4.title': '¿Qué pasa con lo que guardo?',
   'onboarding.step4.body':
-    'El corazón, las visitas y las estrellas viajan con un identificador al azar, sin correo y sin nombre. La guía no publica reseñas ni una media, y tus estrellas solo ayudan a ordenar.',
+    'Toca el corazón para guardar el lugar, marca el día en que fuiste y califica con estrellas. También verás cuántas personas lo han guardado.',
   'onboarding.step5.title': '¿Cómo sugiero un cambio?',
   'onboarding.step5.body':
     'Desde "Sugiere un cambio o contáctanos" puedes avisar de un dato incorrecto, pedir que se retire un lugar o escribir lo que necesites. Llega directo a quien mantiene la guía.',

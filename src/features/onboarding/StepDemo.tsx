@@ -17,6 +17,7 @@ import { PlaceCard } from '../places/PlaceCard.tsx'
 import { PlaceDetail } from '../places/PlaceDetail.tsx'
 import { CategoryChips } from '../plazas/CategoryChips.tsx'
 import { SearchBar } from '../search/SearchBar.tsx'
+import { today } from '../visits/useVisits.ts'
 import styles from './StepDemo.module.css'
 
 export type DemoKind = 'map' | 'search' | 'detail' | 'marks' | 'suggest'
@@ -232,20 +233,55 @@ function DetailDemo({
   plaza: Plaza
   marks?: boolean
 }) {
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const frameRef = useRef<HTMLDivElement>(null)
   const innerRef = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
+  const [phase, setPhase] = useState(reduced ? 4 : 0)
+
+  // Las marcas cuentan una historia corta: corazón, comunidad, estrellas y visita, en bucle.
+  useEffect(() => {
+    if (!marks) return
+    if (reduced) {
+      setPhase(4)
+      return
+    }
+    let timers: number[] = []
+    const start = () => {
+      setPhase(0)
+      timers = [
+        window.setTimeout(() => setPhase(1), 1000),
+        window.setTimeout(() => setPhase(2), 3000),
+        window.setTimeout(() => setPhase(3), 4500),
+        window.setTimeout(() => setPhase(4), 6000),
+      ]
+    }
+    start()
+    const loop = window.setInterval(start, 10000)
+    return () => {
+      for (const timer of timers) window.clearTimeout(timer)
+      window.clearInterval(loop)
+    }
+  }, [marks, reduced])
 
   /*
    * La ficha real mide distinto en cada idioma y con cada dato. Se mide su alto y se desplaza
-   * exactamente lo que sobra, para que el final también se vea. La animación no arranca hasta que
-   * la medida está puesta.
+   * exactamente lo que sobra, para que el final también se vea. En las marcas, el desplazamiento
+   * lleva hasta el bloque personal. La animación no arranca hasta que la medida está puesta.
    */
   useLayoutEffect(() => {
     const frame = frameRef.current
     const inner = innerRef.current
     if (!frame || !inner) return
     const medir = () => {
+      if (marks) {
+        const personal = inner.querySelector('section[data-nosnippet]') as HTMLElement | null
+        const top = personal
+          ? (personal.getBoundingClientRect().top - inner.getBoundingClientRect().top) / 0.82
+          : 0
+        frame.style.setProperty('--marks-scroll', `-${Math.ceil(Math.max(0, top - 42))}px`)
+        return
+      }
       const visible = frame.clientHeight - 12
       const extra = Math.max(0, inner.getBoundingClientRect().height - visible)
       frame.style.setProperty('--ficha-scroll', `-${Math.ceil(extra / 0.9)}px`)
@@ -256,7 +292,17 @@ function DetailDemo({
     observer.observe(frame)
     observer.observe(inner)
     return () => observer.disconnect()
-  }, [])
+  }, [marks])
+
+  const demo = marks
+    ? {
+        favorite: phase >= 1,
+        favorites: phase >= 1 ? 13 : 12,
+        yours: phase >= 1,
+        rating: phase >= 2 ? 4 : null,
+        visitDate: phase >= 3 ? today() : null,
+      }
+    : undefined
 
   return (
     <div
@@ -278,13 +324,10 @@ function DetailDemo({
           onBack={() => {}}
           onClose={() => {}}
           focusOnMount={false}
+          demo={demo}
         />
       </div>
-      {marks ? (
-        <span className={`${styles.tap} ${styles.tapMarks}`} />
-      ) : (
-        <span className={`${styles.finger} ${styles.fichaFinger}`} />
-      )}
+      <span className={`${styles.finger} ${styles.fichaFinger}`} />
     </div>
   )
 }

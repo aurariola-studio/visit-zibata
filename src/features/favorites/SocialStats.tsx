@@ -17,17 +17,28 @@ import styles from './SocialStats.module.css'
 import { usePlaceSocialStats } from './socialStats.ts'
 import { useFavorites } from './useFavorites.ts'
 
-export function SocialStats({ placeId }: { placeId: string }) {
+export function SocialStats({
+  placeId,
+  demoFavorites,
+  demoYours,
+}: {
+  placeId: string
+  /** En la demostración, el número de personas que lo guardaron. */
+  demoFavorites?: number | null
+  /** En la demostración, si el corazón de la persona ya está puesto. */
+  demoYours?: boolean
+}) {
   const stats = usePlaceSocialStats(placeId)
   const { has } = useFavorites()
-  if (!stats?.favorites) return null
-  const tuyo = has(placeId)
+  const favorites = demoFavorites !== undefined ? demoFavorites : stats?.favorites
+  if (!favorites) return null
+  const tuyo = demoYours ?? has(placeId)
 
   return (
     <p className={styles.stats}>
       <span className={styles.item}>
         <Heart aria-hidden="true" fill={tuyo ? 'currentColor' : 'none'} />
-        <span className={styles.value}>{t('place.savedCount', { count: stats.favorites })}</span>
+        <span className={styles.value}>{t('place.savedCount', { count: favorites })}</span>
       </span>
     </p>
   )
