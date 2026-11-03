@@ -13,7 +13,7 @@
  * copias de esta regla acabarían diciendo cosas distintas.
  */
 import type { MessageKey, Messages } from '../i18n/es.ts'
-import type { Category, Place } from '../types/domain.ts'
+import type { Category, Giro, Place } from '../types/domain.ts'
 
 /** Las categorías de un local, sin repetir y en el orden en que aparecen sus giros. */
 export function categoriasDe(
@@ -114,6 +114,28 @@ export function ganchoDeCategoria(
   return clave
     ? traducir(clave)
     : traducir('seo.category.hook', { nombre: etiquetaDeCategoria(categoria, idioma, traducir) })
+}
+
+/**
+ * Giros que son solo el adjetivo. En el filtro se leen cortos ("Italiana"); en la descripción de una
+ * ficha se leen completos ("Comida Italiana"), igual que en la página de su categoría.
+ */
+const GIROS_ADJETIVOS = {
+  'cocina-italiana': 'italiana',
+  'cocina-internacional': 'internacional',
+  'cocina-mexicana': 'mexicana',
+  'cocina-asiatica': 'asiatica',
+  saludable: 'saludable',
+} as const satisfies Record<string, keyof typeof NOMBRES>
+
+/** La etiqueta de un giro para leerla en una frase: completa si es solo el adjetivo. */
+export function etiquetaDeGiro(
+  giro: Pick<Giro, 'id' | 'label'>,
+  idioma: 'es' | 'en',
+  traducir: Traductor,
+): string {
+  const categoria = GIROS_ADJETIVOS[giro.id as keyof typeof GIROS_ADJETIVOS]
+  return categoria ? traducir(NOMBRES[categoria]) : (giro.label[idioma] ?? giro.label.es)
 }
 
 export function conCantidad(mensaje: Mensaje, cantidad: number, idioma: string): string {
