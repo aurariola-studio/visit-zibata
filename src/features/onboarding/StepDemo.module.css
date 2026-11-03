@@ -34,12 +34,12 @@
 .fingerB {
   position: absolute;
   z-index: 2;
-  width: 1rem;
-  height: 1rem;
+  width: 1.1rem;
+  height: 1.1rem;
   border-radius: var(--radius-round);
-  background: rgb(31 36 25 / 0.3);
-  border: 2px solid rgb(252 250 246 / 0.92);
-  box-shadow: 0 1px 6px rgb(31 36 25 / 0.3);
+  background: rgb(31 36 25 / 0.5);
+  border: 2px solid rgb(252 250 246 / 0.95);
+  box-shadow: 0 1px 6px rgb(31 36 25 / 0.4);
   pointer-events: none;
 }
 
@@ -52,6 +52,11 @@
 .fichaFinger {
   left: 50%;
   top: 72%;
+}
+
+/* El dedo de las marcas: toca el corazón, las estrellas y la visita. Quieto, no se dibuja. */
+.marksFinger {
+  opacity: 0;
 }
 
 .fingerA,
@@ -250,8 +255,13 @@
     animation: dragFinger 8s var(--ease-out) infinite alternate;
   }
 
+  /* Un gesto corto y repetido, para que el dedo se vea moverse mientras la ficha se desplaza. */
   .fichaFinger {
-    animation: fichaFinger 10s var(--ease-out) infinite alternate;
+    animation: fichaFinger 1.8s var(--ease-out) infinite;
+  }
+
+  .marksFinger {
+    animation: marksFinger 10s var(--ease-out) infinite;
   }
 
   .fingerA {
@@ -379,39 +389,109 @@
   }
 
   @keyframes fichaFinger {
-    0%,
-    18% {
+    0% {
       opacity: 0;
       left: 50%;
-      top: 72%;
+      top: 68%;
     }
-    24% {
+    12% {
       opacity: 1;
     }
-    78% {
+    60% {
       opacity: 1;
       left: 50%;
-      top: 38%;
+      top: 46%;
     }
-    88%,
+    76%,
     100% {
       opacity: 0;
       left: 50%;
-      top: 38%;
+      top: 43%;
     }
   }
 
   @keyframes marksScroll {
     0%,
-    18% {
+    20% {
       transform: scale(0.82) translateY(0);
     }
-    30%,
-    82% {
+    32%,
+    88% {
       transform: scale(0.82) translateY(var(--marks-scroll, -80px));
     }
+    98%,
     100% {
-      transform: scale(0.82) translateY(var(--marks-scroll, -80px));
+      transform: scale(0.82) translateY(0);
+    }
+  }
+
+  /*
+   * El dedo de las marcas toca el corazón arriba y, ya desplazada la ficha, las estrellas y la
+   * visita. Los toques caen a 1,4, 3,8 y 5,8 s, cuando el estado cambia.
+   */
+  @keyframes marksFinger {
+    0%,
+    8% {
+      opacity: 0;
+      left: 83%;
+      top: 8%;
+      transform: scale(1);
+    }
+    10%,
+    22% {
+      opacity: 1;
+    }
+    14% {
+      transform: scale(0.72);
+    }
+    18% {
+      transform: scale(1);
+    }
+    26% {
+      opacity: 0;
+      left: 83%;
+      top: 8%;
+    }
+    32% {
+      opacity: 0;
+      left: 35%;
+      top: 24%;
+    }
+    34%,
+    48% {
+      opacity: 1;
+    }
+    38% {
+      transform: scale(0.72);
+    }
+    42% {
+      transform: scale(1);
+    }
+    52% {
+      opacity: 0;
+      left: 35%;
+      top: 24%;
+    }
+    54% {
+      opacity: 0;
+      left: 23%;
+      top: 47%;
+    }
+    56%,
+    72% {
+      opacity: 1;
+    }
+    58% {
+      transform: scale(0.72);
+    }
+    62% {
+      transform: scale(1);
+    }
+    78%,
+    100% {
+      opacity: 0;
+      left: 23%;
+      top: 47%;
     }
   }
 

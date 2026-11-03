@@ -138,7 +138,7 @@ function SearchDemo({ catalog, place, zone }: { catalog: Catalog; place: Place; 
 
   useEffect(() => {
     if (reduced) return
-    const id = window.setInterval(() => setCycle((value) => value + 1), 8000)
+    const id = window.setInterval(() => setCycle((value) => value + 1), 10000)
     return () => window.clearInterval(id)
   }, [reduced])
 
@@ -160,15 +160,20 @@ function SearchAnimation({
 }) {
   const [phase, setPhase] = useState(reduced ? 4 : 0)
 
+  /*
+   * Cada filtro baja el número de resultados y se queda a la vista un momento antes del siguiente:
+   * categoría, zona, abierto ahora y, al final, el texto escrito. Doce, cuatro, tres, dos y uno:
+   * los cinco números se leen distintos, así que se ve qué hizo cada filtro.
+   */
   useEffect(() => {
     if (reduced) {
       setPhase(4)
       return
     }
     const timers = [
-      window.setTimeout(() => setPhase(1), 1000),
-      window.setTimeout(() => setPhase(2), 2000),
-      window.setTimeout(() => setPhase(3), 3000),
+      window.setTimeout(() => setPhase(1), 1200),
+      window.setTimeout(() => setPhase(2), 3000),
+      window.setTimeout(() => setPhase(3), 4800),
     ]
     return () => {
       for (const timer of timers) window.clearTimeout(timer)
@@ -176,13 +181,13 @@ function SearchAnimation({
   }, [reduced])
 
   const query = t('onboarding.demo.query')
-  const { shown } = useTyping(query, 180, reduced ? 0 : 5000)
+  const { shown, done } = useTyping(query, 150, reduced ? 0 : 6000)
   const categories = catalog.categories.slice(0, 4)
   const counts = new Map(categories.map((category, index) => [category.id, 18 - index * 3]))
   const activeCategory = phase >= 1 ? (categories[0]?.id ?? null) : null
-  const openNow = phase >= 2
-  const selectedZone = phase >= 3 ? zone : null
-  const count = phase >= 1 ? 1 : 2
+  const openNow = phase >= 3
+  const selectedZone = phase >= 2 ? zone : null
+  const count = done ? 1 : phase >= 3 ? 2 : phase >= 2 ? 3 : phase >= 1 ? 4 : 12
 
   return (
     <div className={styles.search}>
@@ -239,21 +244,20 @@ function DetailDemo({
   const [ready, setReady] = useState(false)
   const [phase, setPhase] = useState(reduced ? 4 : 0)
 
-  // Las marcas cuentan una historia corta: corazón, comunidad, estrellas y visita, en bucle.
+  // Las marcas cuentan una historia corta: corazón, estrellas y visita, en bucle.
   useEffect(() => {
     if (!marks) return
     if (reduced) {
-      setPhase(4)
+      setPhase(3)
       return
     }
     let timers: number[] = []
     const start = () => {
       setPhase(0)
       timers = [
-        window.setTimeout(() => setPhase(1), 1000),
-        window.setTimeout(() => setPhase(2), 3000),
-        window.setTimeout(() => setPhase(3), 4500),
-        window.setTimeout(() => setPhase(4), 6000),
+        window.setTimeout(() => setPhase(1), 1400),
+        window.setTimeout(() => setPhase(2), 3800),
+        window.setTimeout(() => setPhase(3), 5800),
       ]
     }
     start()
@@ -327,7 +331,7 @@ function DetailDemo({
           demo={demo}
         />
       </div>
-      <span className={`${styles.finger} ${styles.fichaFinger}`} />
+      <span className={`${styles.finger} ${marks ? styles.marksFinger : styles.fichaFinger}`} />
     </div>
   )
 }

@@ -263,7 +263,7 @@ export const es = {
     'Toca el corazón para guardar el lugar, marca el día en que fuiste y califica con estrellas. También verás cuántas personas lo han guardado.',
   'onboarding.step5.title': '¿Cómo sugiero un cambio?',
   'onboarding.step5.body':
-    '¿Viste un horario equivocado, un teléfono que ya no funciona o un lugar que cerró? Escríbenos desde "Sugiere un cambio o contáctanos". También puedes pedir que se retire un negocio. Nos encantará leerte.',
+    '¿Viste un horario equivocado, un teléfono que ya no funciona o un lugar que cerró? ¿Tienes un local en Zibatá que quieres promocionar o actualizar? Escríbenos desde "Sugiere un cambio o contáctanos". Nos encantará leerte.',
   'onboarding.demo.place1': 'Café de la plaza',
   'onboarding.demo.query': 'café',
   'onboarding.demo.description': 'Café de barrio con desayunos y pan del día.',
