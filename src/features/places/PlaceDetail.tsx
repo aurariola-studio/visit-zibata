@@ -72,6 +72,8 @@ interface PlaceDetailProps {
   backLabel: string
   onBack: () => void
   onClose: () => void
+  /** En una miniatura de demostración el foco no debe saltar al título. */
+  focusOnMount?: boolean
 }
 
 interface ContactLink {
@@ -115,7 +117,14 @@ function Description({ text }: { text: LocalizedText }) {
   )
 }
 
-export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceDetailProps) {
+export function PlaceDetail({
+  place,
+  plaza,
+  backLabel,
+  onBack,
+  onClose,
+  focusOnMount = true,
+}: PlaceDetailProps) {
   const catalog = useCatalog()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const directions = placeDirections(place, plaza)
@@ -131,8 +140,9 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia el lugar mostrado.
   useEffect(() => {
+    if (!focusOnMount) return
     focusPanelHeading(headingRef.current)
-  }, [place.id])
+  }, [place.id, focusOnMount])
 
   const brand = (name: BrandName) => <BrandIcon name={name} />
   /**

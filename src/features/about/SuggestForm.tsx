@@ -14,6 +14,7 @@
  */
 import { useEffect, useId, useRef, useState } from 'react'
 import { SUGGEST_FORM_ENDPOINT } from '../../config/site.ts'
+import { useMediaQuery } from '../../hooks/useMediaQuery.ts'
 import { t } from '../../i18n/index.ts'
 import { secretoConPrueba } from '../../lib/prueba-de-trabajo.ts'
 import styles from './SuggestForm.module.css'
@@ -53,9 +54,16 @@ const WHO = [
   { value: 'otro', label: 'suggest.whoOther' },
 ] as const
 
-export function SuggestForm() {
+export function SuggestForm({ demo = false }: { demo?: boolean }) {
   const ids = useId()
-  const borrador = leerBorrador()
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const borrador = demo
+    ? {
+        message: '',
+        place: t('onboarding.demo.place1'),
+        contact: '',
+      }
+    : leerBorrador()
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState(borrador.message)
   const [place, setPlace] = useState(borrador.place)
@@ -73,9 +81,29 @@ export function SuggestForm() {
   const [trap, setTrap] = useState('')
 
   // El borrador se guarda mientras se escribe: cerrar la ventana, pulsar Atrás o recargar ya no lo borra.
+  // En la demostración del tutorial no se toca: pisaría lo que la persona tenga a medio escribir.
   useEffect(() => {
+    if (demo) return
     sessionStorage.setItem(BORRADOR, JSON.stringify({ message, place, contact }))
-  }, [message, place, contact])
+  }, [message, place, contact, demo])
+
+  // La demostración escribe el mensaje para que se vea el formulario llenándose, sin enviar nada.
+  useEffect(() => {
+    if (!demo) return
+    const texto = t('onboarding.demo.message')
+    if (reduced) {
+      setMessage(texto)
+      return
+    }
+    setMessage('')
+    let index = 0
+    const timer = window.setInterval(() => {
+      index += 1
+      setMessage(texto.slice(0, index))
+      if (index >= texto.length) window.clearInterval(timer)
+    }, 45)
+    return () => window.clearInterval(timer)
+  }, [demo, reduced])
 
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -162,7 +190,7 @@ export function SuggestForm() {
   }
 
   return (
-    <form className={styles.form} onSubmit={submit} noValidate>
+    <form className={styles.form} onSubmit={submit} noValidate data-demo={demo || undefined}>
       {/* Fuera de la vista y fuera del tabulador, pero **con etiqueta**: un control enfocable
           escondido con `aria-hidden` es una violación de accesibilidad, y además deja a quien usa
           lector de pantalla con un campo mudo que no sabe si debe rellenar. Así se lo encuentra

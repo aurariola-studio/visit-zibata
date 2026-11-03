@@ -86,7 +86,7 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
             <X aria-hidden="true" />
           </button>
         </div>
-        <div className={styles.stage}>
+        <div className={styles.stage} data-demo={current.demo}>
           <StepDemo key={step} kind={current.demo} />
         </div>
         <h2 id="onboarding-title" className={styles.title}>

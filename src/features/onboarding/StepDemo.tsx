@@ -1,39 +1,45 @@
 /**
  * Las cinco miniaturas del tutorial.
  *
- * Son piezas de la guía montadas en pequeño, con locales de ejemplo y sin datos reales. El buscador
- * escribe, la ficha recibe un toque en Cómo llegar, las marcas se encienden y el formulario envía.
- * No son controles: cuentan la acción con una animación de un solo pase y quedan quietas con
- * movimiento reducido. El texto de la tarjeta es el que explica, así que la miniatura va oculta a
- * lectores de pantalla.
+ * La búsqueda, la ficha y el contacto son las piezas de verdad, montadas en pequeño y con datos de
+ * ejemplo: el buscador real, las cápsulas reales, la tarjeta real y la ficha real. Las miniaturas
+ * quedan inertes, así que solo se miran; el texto de la tarjeta es el que explica. El mapa y las
+ * marcas usan la misma materia y la misma animación de un solo pase.
  */
-import {
-  Check,
-  Clock,
-  Coffee,
-  Heart,
-  MapPin,
-  Navigation,
-  Phone,
-  Search,
-  Send,
-  Star,
-} from 'lucide-react'
-import { type CSSProperties, useEffect, useState } from 'react'
+import { Check, Clock, Coffee, Heart, MapPin, Phone, Star } from 'lucide-react'
+import { type CSSProperties, useEffect, useMemo, useState } from 'react'
+import { useCatalog } from '../../data/CatalogContext.tsx'
 import { useMediaQuery } from '../../hooks/useMediaQuery.ts'
 import { t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
+import type { Catalog, Place, Plaza } from '../../types/domain.ts'
+import { SuggestForm } from '../about/SuggestForm.tsx'
+import { PlaceCard } from '../places/PlaceCard.tsx'
+import { PlaceDetail } from '../places/PlaceDetail.tsx'
+import { CategoryChips } from '../plazas/CategoryChips.tsx'
+import { SearchBar } from '../search/SearchBar.tsx'
 import styles from './StepDemo.module.css'
 
 export type DemoKind = 'map' | 'search' | 'detail' | 'marks' | 'suggest'
 
+interface DemoData {
+  place: Place
+  second: Place
+  plaza: Plaza
+}
+
 export function StepDemo({ kind }: { kind: DemoKind }) {
+  const catalog = useCatalog()
+  const demo = useMemo(() => buildDemo(catalog), [catalog])
+
   return (
-    <div className={styles.demo} aria-hidden="true">
+    <div className={styles.demo} aria-hidden="true" inert>
       {kind === 'map' && <MapDemo />}
-      {kind === 'search' && <SearchDemo />}
-      {kind === 'detail' && <DetailDemo />}
-      {kind === 'marks' && <MarksDemo />}
+      {kind === 'search' && demo && (
+        <SearchDemo catalog={catalog} place={demo.place} second={demo.second} />
+      )}
+      {kind === 'detail' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} />}
+      {kind === 'marks' && <MarksDemo zone={demo?.plaza.name ?? ''} />}
       {kind === 'suggest' && <SuggestDemo />}
     </div>
   )
@@ -65,6 +71,52 @@ function useTyping(text: string, speed: number): { shown: string; done: boolean 
   return { shown: text.slice(0, count), done: count >= text.length }
 }
 
+/** Dos locales de ejemplo con la misma forma que uno real, sin datos de ningún negocio. */
+function buildDemo(catalog: Catalog): DemoData | null {
+  const cafes = catalog.places.filter(
+    (place) => catalog.categoryOfGiro.get(place.giros[0] ?? '')?.id === 'desayunos-y-cafe',
+  )
+  const base = cafes[0] ?? catalog.places[0]
+  if (!base) return null
+  const plaza = catalog.plazaById.get(base.plazaId)
+  if (!plaza) return null
+  const other = cafes[1] ?? base
+  return {
+    place: genericPlace(base, t('onboarding.demo.place1'), 'demo-cafe-1'),
+    second: genericPlace(other, t('onboarding.demo.place2'), 'demo-cafe-2'),
+    plaza,
+  }
+}
+
+function genericPlace(base: Place, name: string, id: string): Place {
+  const clone: Place = {
+    ...base,
+    id,
+    slug: id,
+    name,
+    description: { es: t('onboarding.demo.description'), en: t('onboarding.demo.description') },
+    hours: {
+      mon: ['08:00-22:00'],
+      tue: ['08:00-22:00'],
+      wed: ['08:00-22:00'],
+      thu: ['08:00-22:00'],
+      fri: ['08:00-22:00'],
+      sat: ['09:00-23:00'],
+      sun: ['09:00-21:00'],
+    },
+    location: null,
+    googleMapsUri: null,
+    googlePlaceId: null,
+    phone: null,
+    photos: [],
+    links: { website: 'https://example.com', instagram: 'https://instagram.com/' },
+    active: true,
+  }
+  delete clone.cierre
+  delete clone.verification
+  return clone
+}
+
 function MapDemo() {
   return (
     <div className={styles.map}>
@@ -77,63 +129,58 @@ function MapDemo() {
   )
 }
 
-function SearchDemo() {
-  const query = t('onboarding.demo.place1')
-  const { shown, done } = useTyping(query, 55)
-  const rows = [t('onboarding.demo.place1'), t('onboarding.demo.place2')]
+function SearchDemo({ catalog, place, second }: { catalog: Catalog; place: Place; second: Place }) {
+  const { shown } = useTyping(place.name, 55)
+  const categories = catalog.categories.slice(0, 4)
+  const counts = new Map(categories.map((category, index) => [category.id, 18 - index * 3]))
 
   return (
     <div className={styles.search}>
-      <div className={styles.field}>
-        <Search className={styles.fieldIcon} />
-        <span className={styles.query}>{shown}</span>
-        <span className={styles.caret} />
+      <img className={styles.searchMap} src={assetUrl('tutorial/mapa.webp')} alt="" />
+      <div className={styles.searchTop}>
+        <div className={styles.searchBar}>
+          <SearchBar value={shown} onChange={() => {}} />
+        </div>
+        <CategoryChips
+          categories={categories}
+          counts={counts}
+          totalCount={42}
+          activeId={null}
+          onChange={() => {}}
+          hrefFor={() => '#'}
+          label={t('filters.categories')}
+          variant="floating"
+        />
       </div>
-      <div className={styles.chips}>
-        <span className={styles.chipActive}>{t('filters.allCategories')}</span>
-        <span className={styles.chip}>{t('onboarding.demo.category1')}</span>
-        <span className={styles.chip}>{t('onboarding.demo.category2')}</span>
-      </div>
-      <div className={styles.results} data-ready={done}>
-        {rows.map((name, index) => (
-          <span key={name} className={styles.result} style={{ '--i': index } as CSSProperties}>
-            <span className={styles.resultDot}>
-              <Coffee className={styles.resultIcon} />
-            </span>
-            <span className={styles.resultText}>
-              <span className={styles.resultName}>{name}</span>
-              <span className={styles.resultZone}>{t('onboarding.demo.zone')}</span>
-            </span>
-          </span>
-        ))}
+      <div className={styles.searchResults}>
+        <PlaceCard place={place} onOpen={() => {}} showPlaza />
+        <PlaceCard place={second} onOpen={() => {}} showPlaza />
       </div>
     </div>
   )
 }
 
-function DetailDemo() {
+function DetailDemo({ place, plaza }: { place: Place; plaza: Plaza }) {
   return (
-    <div className={styles.detail}>
-      <Head />
-      <Rows />
-      <div className={styles.actions}>
-        <span className={styles.primary}>
-          <Navigation className={styles.actionIcon} />
-          {t('place.directions')}
-        </span>
-        <span className={styles.iconButton}>
-          <Heart className={styles.actionIcon} />
-        </span>
+    <div className={styles.ficha}>
+      <div className={styles.fichaInner}>
+        <PlaceDetail
+          place={place}
+          plaza={plaza}
+          backLabel={t('place.backToPlaza', { plaza: plaza.name })}
+          onBack={() => {}}
+          onClose={() => {}}
+          focusOnMount={false}
+        />
       </div>
-      <span className={`${styles.tap} ${styles.tapDetail}`} />
     </div>
   )
 }
 
-function MarksDemo() {
+function MarksDemo({ zone }: { zone: string }) {
   return (
     <div className={styles.detail}>
-      <Head />
+      <Head zone={zone} />
       <Rows />
       <div className={styles.markRow}>
         <span className={styles.visit}>
@@ -158,27 +205,15 @@ function MarksDemo() {
 }
 
 function SuggestDemo() {
-  const message = t('onboarding.demo.message')
-  const { shown, done } = useTyping(message, 45)
-
   return (
-    <div className={styles.suggest}>
-      <span className={styles.suggestLink}>{t('about.contribute')}</span>
-      <span className={styles.miniField}>{t('suggest.place')}</span>
-      <div className={styles.message}>
-        <span className={styles.messageText}>{shown || t('suggest.message')}</span>
-        <span className={styles.messageCaret} />
-      </div>
-      <span className={styles.send} data-ready={done}>
-        <Send className={styles.actionIcon} />
-        {t('suggest.send')}
-      </span>
-      <span className={`${styles.tap} ${styles.tapSend}`} data-ready={done} />
+    <div className={styles.contact}>
+      <SuggestForm demo />
+      <span className={`${styles.tap} ${styles.tapSend}`} />
     </div>
   )
 }
 
-function Head() {
+function Head({ zone }: { zone: string }) {
   return (
     <div className={styles.head}>
       <span className={styles.avatar}>
@@ -186,7 +221,7 @@ function Head() {
       </span>
       <span className={styles.titles}>
         <span className={styles.name}>{t('onboarding.demo.place1')}</span>
-        <span className={styles.zone}>{t('onboarding.demo.zone')}</span>
+        <span className={styles.zone}>{zone}</span>
       </span>
     </div>
   )

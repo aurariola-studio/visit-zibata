@@ -86,6 +86,25 @@
   color: var(--olive-600);
 }
 
+/*
+ * La búsqueda, la ficha y el contacto necesitan más alto que una ilustración: son piezas reales.
+ * El resto de pasos mantienen la proporción del mapa.
+ */
+.stage[data-demo="search"] {
+  aspect-ratio: auto;
+  height: 19rem;
+}
+
+.stage[data-demo="detail"] {
+  aspect-ratio: auto;
+  height: 26rem;
+}
+
+.stage[data-demo="suggest"] {
+  aspect-ratio: auto;
+  height: 29rem;
+}
+
 .title {
   font-family: var(--font-display);
   font-size: var(--title-lg);
@@ -161,5 +180,17 @@
   .stage {
     aspect-ratio: auto;
     height: 10rem;
+  }
+
+  .stage[data-demo="search"] {
+    height: 14rem;
+  }
+
+  .stage[data-demo="detail"] {
+    height: 16rem;
+  }
+
+  .stage[data-demo="suggest"] {
+    height: 18rem;
   }
 }
