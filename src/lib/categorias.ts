@@ -119,6 +119,9 @@ export function ganchoDeCategoria(
 /**
  * Giros que son solo el adjetivo. En el filtro se leen cortos ("Italiana"); en la descripción de una
  * ficha se leen completos ("Comida Italiana"), igual que en la página de su categoría.
+ *
+ * Al añadir un giro de esta clase hay que sumarlo aquí y su nombre a los dos catálogos de i18n; si
+ * no, la ficha y la página de la categoría lo dirán corto.
  */
 const GIROS_ADJETIVOS = {
   'cocina-italiana': 'italiana',
