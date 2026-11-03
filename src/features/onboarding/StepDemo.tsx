@@ -2,11 +2,11 @@
  * Las cinco miniaturas del tutorial.
  *
  * La búsqueda, la ficha y el contacto son las piezas de verdad, montadas en pequeño y con datos de
- * ejemplo. La búsqueda filtra de tres resultados a dos; la ficha se desplaza para enseñar horario y
- * contacto; el formulario escribe el mensaje y responde al enviar. Las piezas quedan inertes: solo
- * se miran. El mapa y las marcas usan la misma materia y una animación de un solo pase.
+ * ejemplo. La búsqueda enseña los filtros y el texto; la ficha se desplaza hasta el final; el
+ * formulario escribe el mensaje y responde. Las piezas quedan inertes: solo se miran. Las
+ * animaciones se repiten y con movimiento reducido quedan quietas.
  */
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { useMediaQuery } from '../../hooks/useMediaQuery.ts'
 import { t } from '../../i18n/index.ts'
@@ -232,9 +232,45 @@ function DetailDemo({
   plaza: Plaza
   marks?: boolean
 }) {
+  const frameRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
+  const [ready, setReady] = useState(false)
+
+  /*
+   * La ficha real mide distinto en cada idioma y con cada dato. Se mide su alto y se desplaza
+   * exactamente lo que sobra, para que el final también se vea. La animación no arranca hasta que
+   * la medida está puesta.
+   */
+  useLayoutEffect(() => {
+    const frame = frameRef.current
+    const inner = innerRef.current
+    if (!frame || !inner) return
+    const medir = () => {
+      const visible = frame.clientHeight - 12
+      const extra = Math.max(0, inner.getBoundingClientRect().height - visible)
+      frame.style.setProperty('--ficha-scroll', `-${Math.ceil(extra / 0.9)}px`)
+    }
+    medir()
+    setReady(true)
+    const observer = new ResizeObserver(medir)
+    observer.observe(frame)
+    observer.observe(inner)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className={styles.fichaFrame} data-marks={marks || undefined}>
-      <div className={styles.fichaInner} data-marks={marks || undefined}>
+    <div
+      className={styles.fichaFrame}
+      data-marks={marks || undefined}
+      data-ready={ready || undefined}
+      ref={frameRef}
+    >
+      <div
+        className={styles.fichaInner}
+        data-marks={marks || undefined}
+        data-ready={ready || undefined}
+        ref={innerRef}
+      >
         <PlaceDetail
           place={place}
           plaza={plaza}
@@ -244,7 +280,11 @@ function DetailDemo({
           focusOnMount={false}
         />
       </div>
-      {marks && <span className={`${styles.tap} ${styles.tapMarks}`} />}
+      {marks ? (
+        <span className={`${styles.tap} ${styles.tapMarks}`} />
+      ) : (
+        <span className={`${styles.finger} ${styles.fichaFinger}`} />
+      )}
     </div>
   )
 }

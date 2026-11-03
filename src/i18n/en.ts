@@ -225,7 +225,7 @@ export const en = {
     'Type what you are looking for or pick a category. Above you can also narrow by area or keep only what is open now, and remove any filter whenever you want.',
   'onboarding.step3.title': 'What is on a place page?',
   'onboarding.step3.body':
-    'Opening hours, contact and socials, address, directions and sharing. When hours are not published, the page says so instead of making them up.',
+    'Here you will find the opening hours, contact and socials, address and directions. You can also share the place with anyone.',
   'onboarding.step4.title': 'What happens to what I save?',
   'onboarding.step4.body':
     'The heart, visits and stars travel with a random identifier, with no email and no name. The guide never publishes reviews or an average, and your stars only help with ordering.',

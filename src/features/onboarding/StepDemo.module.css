@@ -48,6 +48,12 @@
   top: 55%;
 }
 
+/* El dedo de la ficha: sube mientras la ficha se desplaza. */
+.fichaFinger {
+  left: 50%;
+  top: 72%;
+}
+
 .fingerA,
 .fingerB {
   opacity: 0;
@@ -257,6 +263,10 @@
     animation: dragFinger 8s var(--ease-out) infinite alternate;
   }
 
+  .fichaFinger {
+    animation: fichaFinger 10s var(--ease-out) infinite alternate;
+  }
+
   .fingerA {
     animation: pinchStart 8s var(--ease-out) infinite alternate;
   }
@@ -266,7 +276,7 @@
   }
 
   /* La ficha real se desplaza despacio para enseñar el horario y el contacto, y vuelve. */
-  .fichaInner {
+  .fichaInner[data-ready] {
     animation: fichaScroll 10s var(--ease-out) infinite alternate;
   }
 
@@ -381,7 +391,30 @@
     }
     82%,
     100% {
-      transform: scale(0.9) translateY(-260px);
+      transform: scale(0.9) translateY(var(--ficha-scroll, -260px));
+    }
+  }
+
+  @keyframes fichaFinger {
+    0%,
+    18% {
+      opacity: 0;
+      left: 50%;
+      top: 72%;
+    }
+    24% {
+      opacity: 1;
+    }
+    78% {
+      opacity: 1;
+      left: 50%;
+      top: 38%;
+    }
+    88%,
+    100% {
+      opacity: 0;
+      left: 50%;
+      top: 38%;
     }
   }
 

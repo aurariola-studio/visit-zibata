@@ -257,7 +257,7 @@ export const es = {
     'Escribe lo que buscas o elige una categoría. Arriba también puedes acotar por zona o dejar solo lo que está abierto ahora, y quitar cualquier filtro cuando quieras.',
   'onboarding.step3.title': '¿Qué encuentro en la ficha?',
   'onboarding.step3.body':
-    'Horario, contacto y redes, dirección, cómo llegar y compartir. Si un horario no está publicado, la ficha lo dice en vez de inventarlo.',
+    'Aquí encuentras el horario, el contacto y las redes, la dirección y cómo llegar. También puedes compartir la ficha con quien quieras.',
   'onboarding.step4.title': '¿Qué pasa con lo que guardo?',
   'onboarding.step4.body':
     'El corazón, las visitas y las estrellas viajan con un identificador al azar, sin correo y sin nombre. La guía no publica reseñas ni una media, y tus estrellas solo ayudan a ordenar.',
