@@ -24,9 +24,9 @@ export type DemoKind = 'map' | 'search' | 'detail' | 'marks' | 'suggest'
 
 interface DemoData {
   place: Place
-  /** Segundo local de ejemplo, para que la lista cambie al aplicar filtros. */
-  other: Place
   plaza: Plaza
+  /** Los cuatro resultados de ejemplo del paso de buscar. */
+  results: [Place, Place, Place, Place]
 }
 
 export function StepDemo({ kind }: { kind: DemoKind }) {
@@ -37,12 +37,7 @@ export function StepDemo({ kind }: { kind: DemoKind }) {
     <div className={styles.demo} aria-hidden="true" inert>
       {kind === 'map' && <MapDemo />}
       {kind === 'search' && demo && (
-        <SearchDemo
-          catalog={catalog}
-          place={demo.place}
-          other={demo.other}
-          zone={demo.plaza.name}
-        />
+        <SearchDemo catalog={catalog} results={demo.results} zone={demo.plaza.name} />
       )}
       {kind === 'detail' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} />}
       {kind === 'marks' && demo && <DetailDemo place={demo.place} plaza={demo.plaza} marks />}
@@ -92,29 +87,68 @@ function buildDemo(catalog: Catalog): DemoData | null {
   if (!base) return null
   const plaza = catalog.plazaById.get(base.plazaId)
   if (!plaza) return null
+  // Si la plaza del guion no existe en el catálogo, se usa la del local base.
+  const plazaId = (id: string) => (catalog.plazaById.has(id) ? id : base.plazaId)
+  const horario = (abierto: boolean) => {
+    const dia = abierto ? ['08:00-22:00'] : []
+    return { mon: dia, tue: dia, wed: dia, thu: dia, fri: dia, sat: dia, sun: dia }
+  }
   return {
-    place: genericPlace(base, t('onboarding.demo.place1'), 'demo-cafe-1'),
-    other: genericPlace(base, t('onboarding.demo.place2'), 'demo-cafe-2'),
+    place: genericPlace(base, {
+      id: 'demo-cafe',
+      name: t('onboarding.demo.place1'),
+      giros: base.giros,
+      plazaId: base.plazaId,
+      hours: horario(true),
+    }),
     plaza,
+    /*
+     * Los cuatro resultados que se turnan al filtrar, en el orden del paso: sin filtros, cafés,
+     * zona y abierto ahora. Así cada filtro no solo baja el número, también cambia lo que se ve.
+     */
+    results: [
+      genericPlace(base, {
+        id: 'demo-italiana',
+        name: t('onboarding.demo.place3'),
+        giros: ['pizza', 'cocina-italiana'],
+        plazaId: plazaId('xentric-zibata'),
+        hours: horario(true),
+      }),
+      genericPlace(base, {
+        id: 'demo-brunch',
+        name: t('onboarding.demo.place2'),
+        giros: ['brunch', 'cafeteria'],
+        plazaId: plazaId('plaza-loop'),
+        hours: horario(true),
+      }),
+      genericPlace(base, {
+        id: 'demo-abuela',
+        name: t('onboarding.demo.place4'),
+        giros: ['desayunos', 'cafeteria'],
+        plazaId: plazaId('xentric-anahuac'),
+        hours: horario(false),
+      }),
+      genericPlace(base, {
+        id: 'demo-dia',
+        name: t('onboarding.demo.place5'),
+        giros: ['desayunos', 'cafeteria'],
+        plazaId: plazaId('xentric-anahuac'),
+        hours: horario(true),
+      }),
+    ],
   }
 }
 
-function genericPlace(base: Place, name: string, id: string): Place {
+function genericPlace(
+  base: Place,
+  demo: { id: string; name: string; giros: string[]; plazaId: string; hours: Place['hours'] },
+): Place {
   const clone: Place = {
     ...base,
-    id,
-    slug: id,
-    name,
+    ...demo,
+    slug: demo.id,
+    secundarios: [],
     description: { es: t('onboarding.demo.description'), en: t('onboarding.demo.description') },
-    hours: {
-      mon: ['08:00-22:00'],
-      tue: ['08:00-22:00'],
-      wed: ['08:00-22:00'],
-      thu: ['08:00-22:00'],
-      fri: ['08:00-22:00'],
-      sat: ['09:00-23:00'],
-      sun: ['09:00-21:00'],
-    },
     location: null,
     googleMapsUri: null,
     googlePlaceId: null,
@@ -142,13 +176,11 @@ function MapDemo() {
 
 function SearchDemo({
   catalog,
-  place,
-  other,
+  results,
   zone,
 }: {
   catalog: Catalog
-  place: Place
-  other: Place
+  results: [Place, Place, Place, Place]
   zone: string
 }) {
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -164,8 +196,7 @@ function SearchDemo({
     <SearchAnimation
       key={cycle}
       catalog={catalog}
-      place={place}
-      other={other}
+      results={results}
       zone={zone}
       reduced={reduced}
     />
@@ -174,14 +205,12 @@ function SearchDemo({
 
 function SearchAnimation({
   catalog,
-  place,
-  other,
+  results,
   zone,
   reduced,
 }: {
   catalog: Catalog
-  place: Place
-  other: Place
+  results: [Place, Place, Place, Place]
   zone: string
   reduced: boolean
 }) {
@@ -215,8 +244,9 @@ function SearchAnimation({
   const openNow = phase >= 3
   const selectedZone = phase >= 2 ? zone : null
   const count = done ? 1 : phase >= 3 ? 2 : phase >= 2 ? 3 : phase >= 1 ? 4 : 12
-  // La lista cambia con cada filtro: el primer resultado no es siempre el mismo local.
-  const shownPlace = phase % 2 === 1 && !done ? other : place
+  // Cada filtro deja a la vista el resultado que le toca, no el mismo local con otro número.
+  const shownPlace =
+    phase === 0 ? results[0] : phase === 1 ? results[1] : phase === 2 ? results[2] : results[3]
 
   return (
     <div className={styles.search}>
