@@ -92,8 +92,6 @@
  * aún no caben, se recortan (el texto completo va en `title`).
  */
 
-/* El renglón de los secundarios pesa menos: es lo demás que se vende, no lo que define al local. */
-
 .title {
   /* Reparte las líneas en vez de dejar una palabra suelta abajo ("La Marmota Wings and / Beer"). */
   text-wrap: balance;
