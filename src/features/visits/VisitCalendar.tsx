@@ -13,7 +13,7 @@
  * por la rejilla como en cualquier tabla, y el mes se anuncia al cambiar.
  */
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { locale, t } from '../../i18n/index.ts'
 import { today } from './useVisits.ts'
 import styles from './VisitCalendar.module.css'
@@ -38,11 +38,49 @@ export function VisitCalendar({
   const [year, setYear] = useState(() => Number(hoy.slice(0, 4)))
   const [month, setMonth] = useState(() => Number(hoy.slice(5, 7)) - 1)
   const rejilla = useRef<HTMLDivElement>(null)
+  const caja = useRef<HTMLDivElement>(null)
   const tituloId = useId()
 
   // Al abrirse, el foco entra en la rejilla: quien navega con teclado no tiene que buscarla.
   useEffect(() => {
     rejilla.current?.querySelector<HTMLButtonElement>('button[tabindex="0"]')?.focus()
+  }, [])
+
+  /*
+   * El calendario flota fijo sobre la página, colocado a mano a partir del botón que lo abre.
+   *
+   * Flotando dentro de la ficha quedaba recortado: el panel y la hoja del móvil tienen el borde
+   * redondeado y `overflow: hidden`, así que la parte que sobresalía desaparecía. Y abierto hacia
+   * abajo con el botón cerca del final, se salía por el borde de la pantalla. Fijo, se coloca donde
+   * hay sitio: debajo del botón si cabe con su margen, y si no arriba, y nunca a menos de 16 px del
+   * borde. Se recoloca al desplazar, porque el botón se mueve y el calendario no.
+   */
+  useLayoutEffect(() => {
+    const elemento = caja.current
+    const ancla = elemento?.parentElement
+    if (!elemento || !ancla) return
+    const colocar = () => {
+      const marco = ancla.getBoundingClientRect()
+      const alto = elemento.offsetHeight
+      const ancho = elemento.offsetWidth
+      const margen = 16
+      const abajo = window.innerHeight - marco.bottom - margen
+      const arriba = marco.top - margen
+      const top = abajo >= alto || abajo >= arriba ? marco.bottom + 8 : marco.top - alto - 8
+      const izquierda = Math.min(
+        Math.max(margen, marco.left),
+        Math.max(margen, window.innerWidth - ancho - margen),
+      )
+      elemento.style.top = `${Math.round(top)}px`
+      elemento.style.left = `${Math.round(izquierda)}px`
+    }
+    colocar()
+    window.addEventListener('scroll', colocar, true)
+    window.addEventListener('resize', colocar)
+    return () => {
+      window.removeEventListener('scroll', colocar, true)
+      window.removeEventListener('resize', colocar)
+    }
   }, [])
 
   const nombreDelMes = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(
@@ -58,12 +96,14 @@ export function VisitCalendar({
   )
 
   const primero = new Date(year, month, 1).getDay()
-  // Cuántas casillas vacías van antes del día 1 para que caiga en su columna.
+  // Cuántas casillas del mes anterior van antes del día 1 para que caiga en su columna.
   const hueco = (primero - PRIMER_DIA + 7) % 7
   const dias = new Date(year, month + 1, 0).getDate()
+  const diasDelMesAnterior = new Date(year, month, 0).getDate()
   /*
-   * Siempre seis semanas. Un mes de cuatro o cinco filas dejaba el calendario más bajo y, al cambiar
-   * de mes, el componente daba un salto. Las casillas que sobran se reservan al final.
+   * Siempre seis semanas, y sin huecos: las casillas que sobran se rellenan con los días de los
+   * meses vecinos, tenues y sin poder pulsarse. Antes eran casillas vacías, y un mes de cuatro o
+   * cinco filas dejaba el calendario más bajo y daba un salto al cambiar.
    */
   const sobran = Math.max(0, 42 - hueco - dias)
 
@@ -95,7 +135,7 @@ export function VisitCalendar({
   }
 
   return (
-    <div className={styles.calendario} role="dialog" aria-labelledby={tituloId}>
+    <div className={styles.calendario} role="dialog" aria-labelledby={tituloId} ref={caja}>
       <div className={styles.cabecera}>
         <button
           type="button"
@@ -148,10 +188,11 @@ export function VisitCalendar({
         aria-label={nombreDelMes}
         onKeyDown={porTeclado}
       >
-        {/* Las casillas vacías antes del día 1. Se nombran por el día del mes anterior que les
-            correspondería, que es un dato estable y no una posición. */}
-        {Array.from({ length: hueco }, (_, i) => clave(year, month, i - hueco + 1)).map((vacia) => (
-          <span key={vacia} className={styles.vacio} aria-hidden="true" />
+        {/* Los últimos días del mes anterior completan la primera semana. Se ven, no se pulsan. */}
+        {Array.from({ length: hueco }, (_, i) => diasDelMesAnterior - hueco + 1 + i).map((dia) => (
+          <span key={`anterior-${dia}`} className={styles.ajeno} aria-hidden="true">
+            {dia}
+          </span>
         ))}
         {Array.from({ length: dias }, (_, i) => {
           const fecha = clave(year, month, i + 1)
@@ -177,8 +218,11 @@ export function VisitCalendar({
             </button>
           )
         })}
-        {Array.from({ length: sobran }, (_, i) => clave(year, month + 1, i + 1)).map((vacia) => (
-          <span key={vacia} className={styles.vacio} aria-hidden="true" />
+        {/* Y los primeros del siguiente, para que la última semana tampoco quede a medias. */}
+        {Array.from({ length: sobran }, (_, i) => i + 1).map((dia) => (
+          <span key={`siguiente-${dia}`} className={styles.ajeno} aria-hidden="true">
+            {dia}
+          </span>
         ))}
       </div>
     </div>

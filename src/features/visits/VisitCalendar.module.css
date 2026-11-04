@@ -6,12 +6,13 @@
  * lo que hay debajo se queda donde estaba, que es lo que se espera de algo que se abre y se
  * cierra.
  *
- * Anclado al botón y no centrado en la pantalla: no es una decisión que interrumpa, es un detalle
- * del control que la pide, y aparece donde está el dedo.
+ * Fijo y colocado desde el botón (ver `VisitCalendar`), no absoluto dentro de la ficha: los paneles
+ * y la hoja del móvil recortan lo que sobresale, y el calendario abierto hacia abajo con el botón
+ * cerca del final se salía por el borde de la pantalla. `top` y `left` los pone el componente.
  */
 .calendario {
-  position: absolute;
-  top: calc(100% + var(--space-2));
+  position: fixed;
+  top: 0;
   left: 0;
   z-index: var(--z-panel);
   display: grid;
@@ -52,6 +53,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-md);
   font-weight: var(--weight-strong);
+  text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -108,9 +110,17 @@
   aspect-ratio: 1;
 }
 
-/* Una casilla vacía también reserva su alto: las seis semanas miden lo mismo. */
-.vacio {
+/* Una casilla del mes vecino también reserva su alto y se lee tenue: rellena la semana, no se pulsa. */
+.ajeno {
+  display: grid;
+  place-items: center;
   aspect-ratio: 1;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-strong);
+  line-height: 1;
+  opacity: 0.5;
 }
 
 /* Un día cualquiera se tiñe suave; uno ya registrado, que va lleno de olivo, se oscurece. */
