@@ -32,6 +32,7 @@ const LINKS = [
   { topic: 'acerca', label: 'about.openShort' },
   { topic: 'privacidad', label: 'about.privacy' },
   { topic: 'sugerir', label: 'about.fix' },
+  { topic: 'tutorial', label: 'about.tutorial' },
 ] as const
 
 /** Cuántos lugares y cuántos antojos se enseñan. */

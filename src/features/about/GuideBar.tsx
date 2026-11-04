@@ -6,22 +6,27 @@
 import { Signature } from '../../components/brand/Signature.tsx'
 import { t, useLocale } from '../../i18n/index.ts'
 import { alPulsarEnlace } from '../../lib/navegacion.ts'
-import { type InfoPagina, type InfoTopic, rutaDeInfo } from '../../lib/url-state.ts'
+import { type InfoTopic, rutaDeInfo } from '../../lib/url-state.ts'
 import styles from './GuideBar.module.css'
 
 /**
  * En la franja el nombre va corto: el ancho que ahorra se lo lleva la leyenda.
  *
- * Solo las tres páginas de texto. El tutorial también tiene ruta, pero aquí estorbaría: esta franja
- * dice quién hace la guía y cómo corregirla, y se llega a él desde cualquiera de las tres.
+ * Las cuatro rutas, tutorial incluido: desde que se puede volver a ver, esta franja es una de las
+ * dos puertas que tiene quien ya pasó por él la primera vez (la otra es Tu Zibatá). Solo sale solo
+ * en la primera visita, así que sin un enlace no habría forma de encontrarlo.
  */
-const LABEL: Record<InfoPagina, 'about.openShort' | 'about.privacy' | 'about.fix'> = {
+const LABEL: Record<
+  InfoTopic,
+  'about.openShort' | 'about.privacy' | 'about.fix' | 'about.tutorial'
+> = {
   acerca: 'about.openShort',
   privacidad: 'about.privacy',
   sugerir: 'about.fix',
+  tutorial: 'about.tutorial',
 }
 
-const PAGINAS = Object.keys(LABEL) as InfoPagina[]
+const PAGINAS = Object.keys(LABEL) as InfoTopic[]
 
 export function GuideBar({ onOpen }: { onOpen: (topic: InfoTopic) => void }) {
   const idioma = useLocale()
