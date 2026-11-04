@@ -238,6 +238,66 @@ describe('el panel y atender una sugerencia', () => {
   })
 })
 
+describe('las escrituras del panel no leen el cuerpo de quien no puede entrar', () => {
+  /** Un cuerpo en flujo, sin `content-length`, que cuenta cuántos trozos se le pidieron. */
+  function pedidaGigante(ruta: string, cabeceras: HeadersInit = {}) {
+    const estado = { pedidos: 0 }
+    const flujo = new ReadableStream<Uint8Array>({
+      pull(controlador) {
+        estado.pedidos++
+        controlador.enqueue(new Uint8Array(64 * 1024).fill(120))
+      },
+    })
+    const peticion = new Request(`${SITIO}${ruta}`, {
+      method: 'POST',
+      headers: cabeceras,
+      body: flujo,
+      duplex: 'half',
+    } as RequestInit)
+    return { peticion, estado }
+  }
+
+  it.each([
+    '/api/panel/contenido/foto',
+    '/api/panel/contenido/negocio',
+    '/api/panel/contenido/categorias',
+  ])('un POST anónimo a %s es un 403 y no baja nada', async (ruta) => {
+    const { base } = baseFalsa()
+    const { peticion, estado } = pedidaGigante(ruta, PROPIO)
+    expect((await atenderApi(peticion, { ANALITICA: base }))?.status).toBe(403)
+    // El flujo precarga un trozo al crearse; lo que importa es que no se siguió leyendo.
+    expect(estado.pedidos).toBeLessThanOrEqual(1)
+  })
+
+  it('con Access pero desde otra página tampoco lee el cuerpo', async () => {
+    const { base } = baseFalsa()
+    const { peticion, estado } = pedidaGigante('/api/panel/contenido/foto', {
+      'sec-fetch-site': 'cross-site',
+    })
+    const entorno: EntornoApi = { ANALITICA: base, PANEL_ABIERTO: 'si' }
+    // Con el flag pero desde un nombre que no es local, Access dice que no antes que el origen.
+    expect((await atenderApi(peticion, entorno))?.status).toBe(403)
+    expect(estado.pedidos).toBeLessThanOrEqual(1)
+  })
+
+  it('quien sí puede entrar y se pasa del tope recibe 413', async () => {
+    const { base } = baseFalsa()
+    const flujo = new ReadableStream<Uint8Array>({
+      pull(controlador) {
+        controlador.enqueue(new Uint8Array(1024 * 1024).fill(120))
+      },
+    })
+    const peticion = new Request(`${LOCAL}/api/panel/contenido/foto`, {
+      method: 'POST',
+      headers: PROPIO,
+      body: flujo,
+      duplex: 'half',
+    } as RequestInit)
+    const respuesta = await atenderApi(peticion, { ANALITICA: base, PANEL_ABIERTO: 'si' })
+    expect(respuesta?.status).toBe(413)
+  })
+})
+
 describe('el flag de desarrollo junto a un token de GitHub', () => {
   const negocio = {
     nombre: 'Panadería de prueba',

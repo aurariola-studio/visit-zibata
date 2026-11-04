@@ -142,8 +142,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
   if (!entorno.ANALITICA) return json({ error: 'sin base de datos' }, 503)
 
   /*
+   * Las escrituras del panel pasan por Access y por el origen ANTES de leer una sola línea del
+   * cuerpo: quien no es de la casa no hace que el Worker baje seis megas de una foto. Cada
+   * manejador repite las dos comprobaciones, a propósito (ninguno depende de que esta se mantenga).
+   */
+  if (peticion.method === 'POST' && ruta.startsWith('/api/panel/')) {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+  }
+
+  /*
    * El cuerpo de toda escritura se lee aquí, una sola vez y con tope en bytes, antes de la prueba de
-   * trabajo, de la cuenta y de Access: ninguna ruta baja a memoria más de lo que le toca, venga o no
+   * trabajo y de la cuenta: ninguna ruta baja a memoria más de lo que le toca, venga o no
    * `Content-Length`. Los manejadores de abajo solo interpretan el texto.
    */
   let texto = ''
