@@ -6,6 +6,12 @@
   background: transparent;
   color: var(--color-text);
   overflow: visible;
+  /*
+   * El navegador limita un `dialog` a `calc(100% - 34px)` de alto. La tarjeta ya se limita sola al
+   * alto de la pantalla, así que ese tope solo servía para cortarla por abajo en los teléfonos
+   * bajos: con la tarjeta más alta que el tope, los botones se salían de la pantalla.
+   */
+  max-height: none;
 }
 
 .dialog::backdrop {
@@ -173,12 +179,21 @@
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
+  /*
+   * La miniatura se queda con el alto que sobra. La tarjeta mide lo que mide la pantalla, el texto
+   * ocupa lo suyo y lo demás es imagen: antes el bloque de texto reservaba 12 rem y la miniatura no
+   * cedía, así que sobraba hueco debajo del vídeo y de la letra, y la tarjeta acababa desplazándose
+   * con los botones pegados al borde.
+   */
   .stage {
-    height: 14.5rem;
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 9rem;
+    margin-top: var(--space-2);
   }
 
   .copy {
-    height: 12rem;
+    height: auto;
   }
 
   /* En el teléfono el cuerpo baja un escalón para que el paso más largo quepa sin mover la tarjeta. */
