@@ -115,12 +115,11 @@
   display: grid;
   place-items: center;
   aspect-ratio: 1;
-  color: var(--color-text-muted);
+  color: var(--sand-300);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: var(--weight-strong);
   line-height: 1;
-  opacity: 0.5;
 }
 
 /* Un día cualquiera se tiñe suave; uno ya registrado, que va lleno de olivo, se oscurece. */
