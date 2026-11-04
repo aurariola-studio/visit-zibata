@@ -78,15 +78,12 @@ const dato = <T>(archivo: string): T =>
     ),
   ) as T
 const lugares = dato<{
-  places: { id: string; slug: string; active: boolean; giros: string[]; secundarios?: string[] }[]
+  places: { id: string; slug: string; active: boolean; giros: string[] }[]
 }>('places.json').places
 const categorias = dato<{
   categories: { id: string; slug: { es: string; en: string }; giros: { id: string }[] }[]
 }>('categories.json').categories
-const girosDe = (lugar: { giros: string[]; secundarios?: string[] }) => [
-  ...lugar.giros,
-  ...(lugar.secundarios ?? []),
-]
+const girosDe = (lugar: { giros: string[] }) => lugar.giros
 /** Cuántos locales tiene una categoría, con la misma regla que el filtro de la aplicación. */
 const localesDe = (categoria: (typeof categorias)[number]): number =>
   lugares.filter((lugar) =>

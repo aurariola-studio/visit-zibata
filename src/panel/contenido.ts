@@ -67,7 +67,6 @@ interface Negocio {
   name: string
   plazaId: string
   giros: string[]
-  secundarios: string[]
   description: { es: string; en?: string } | null
   hours: Record<string, string[]> | null
   location: { lat: number; lng: number } | null
@@ -96,15 +95,11 @@ export interface EstadoContenido {
 
 export type ModoContenido = 'negocios' | 'categorias'
 
-interface GiroElegido {
-  id: string
-  rol: 'principal' | 'secundario'
-}
-
 interface FormularioAbierto {
   id: string
   nombre: string
-  seleccion: GiroElegido[]
+  /** Los giros elegidos, en orden: el primero manda. */
+  seleccion: string[]
   fotos: Foto[]
   sucio: boolean
   consultaGiro: string
@@ -343,7 +338,6 @@ function pintarZonaNegocios(): void {
           negocio.name,
           plazas.get(negocio.plazaId) ?? '',
           ...negocio.giros.map((giro) => giros.get(giro) ?? giro),
-          ...negocio.secundarios.map((giro) => giros.get(giro) ?? giro),
         ].join(' '),
       ).includes(buscado)
     })
@@ -477,9 +471,7 @@ const sinonimosDe = (valor: string): string[] => [
 
 function localesDeGiros(giros: Iterable<string>): Negocio[] {
   const buscados = new Set(giros)
-  return (datos?.places ?? []).filter((negocio) =>
-    [...negocio.giros, ...negocio.secundarios].some((giro) => buscados.has(giro)),
-  )
+  return (datos?.places ?? []).filter((negocio) => negocio.giros.some((giro) => buscados.has(giro)))
 }
 
 const esVisible = (negocio: Negocio): boolean =>
@@ -718,10 +710,7 @@ function pintarFormulario(negocio: Negocio | null): void {
   formularioActual = {
     id: negocio?.id ?? '',
     nombre: negocio?.name ?? '',
-    seleccion: [
-      ...(negocio?.giros ?? []).map((id) => ({ id, rol: 'principal' as const })),
-      ...(negocio?.secundarios ?? []).map((id) => ({ id, rol: 'secundario' as const })),
-    ],
+    seleccion: [...(negocio?.giros ?? [])],
     fotos: (negocio?.photos ?? []).map((foto) => ({ ...foto })),
     sucio: false,
     consultaGiro: '',
@@ -791,7 +780,7 @@ function pintarFormulario(negocio: Negocio | null): void {
 
       <section class="editor-seccion">
         <h3>Giros <span class="nota">el primero manda</span></h3>
-        <p class="ayuda">El primero decide el icono de la ficha y la prioridad del buscador. Los secundarios salen como texto y se buscan igual.</p>
+        <p class="ayuda">El primero decide el icono de la ficha y la prioridad del buscador. Los demás salen detrás, con su icono, y todos se buscan igual.</p>
         <div data-giros-zona data-grupo="giros"></div>
       </section>
 
@@ -932,33 +921,23 @@ function pintarGirosFormulario(): void {
   const zona = dialogo?.querySelector<HTMLElement>('[data-giros-zona]')
   if (!zona || !formularioActual) return
   const seleccion = formularioActual.seleccion
-  const principales = seleccion.filter((giro) => giro.rol === 'principal')
-  const secundarios = seleccion.filter((giro) => giro.rol === 'secundario')
   const total = seleccion.length
-  const usados = new Set(seleccion.map((giro) => giro.id))
+  const usados = new Set(seleccion)
   const buscado = normalizar(formularioActual.consultaGiro)
 
-  const fila = (elegido: GiroElegido, puesto: number | null) => {
-    const nombre = mapaDeGiros().get(elegido.id) ?? elegido.id
-    const categoria = categoriaDeGiro(elegido.id)
-    const principal = elegido.rol === 'principal'
-    const indice = principales.findIndex((fila) => fila.id === elegido.id)
-    return `<li class="giro-elegido" data-giro-id="${texto(elegido.id)}" data-rol="${elegido.rol}">
-      <span class="giro-puesto" aria-hidden="true">${puesto ?? '·'}</span>
+  const fila = (id: string, indice: number) => {
+    const nombre = mapaDeGiros().get(id) ?? id
+    const categoria = categoriaDeGiro(id)
+    return `<li class="giro-elegido" data-giro-id="${texto(id)}">
+      <span class="giro-puesto" aria-hidden="true">${indice + 1}</span>
       <span class="giro-texto">
         <span class="negocio-nombre">${texto(nombre)}</span>
         <span class="meta">${texto(categoria)}</span>
       </span>
-      <span class="marca-rol">${principal ? 'Principal' : 'Secundario'}</span>
       <span class="giro-acciones">
-        <button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-giro-rol="${texto(elegido.id)}">${principal ? 'Hacer secundario' : 'Hacer principal'}</button>
-        ${
-          principal
-            ? `<button type="button" class="${controls.base} ${controls.botonIcono} ${controls.mini} ${controls.fantasma}" data-giro-subir="${texto(elegido.id)}" aria-label="Subir ${texto(nombre)}" title="Subir"${indice === 0 ? ' disabled' : ''}>↑</button>
-               <button type="button" class="${controls.base} ${controls.botonIcono} ${controls.mini} ${controls.fantasma}" data-giro-bajar="${texto(elegido.id)}" aria-label="Bajar ${texto(nombre)}" title="Bajar"${indice === principales.length - 1 ? ' disabled' : ''}>↓</button>`
-            : ''
-        }
-        <button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-giro-quitar="${texto(elegido.id)}">Quitar</button>
+        <button type="button" class="${controls.base} ${controls.botonIcono} ${controls.mini} ${controls.fantasma}" data-giro-subir="${texto(id)}" aria-label="Subir ${texto(nombre)}" title="Subir"${indice === 0 ? ' disabled' : ''}>↑</button>
+        <button type="button" class="${controls.base} ${controls.botonIcono} ${controls.mini} ${controls.fantasma}" data-giro-bajar="${texto(id)}" aria-label="Bajar ${texto(nombre)}" title="Bajar"${indice === total - 1 ? ' disabled' : ''}>↓</button>
+        <button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-giro-quitar="${texto(id)}">Quitar</button>
       </span>
     </li>`
   }
@@ -989,11 +968,8 @@ function pintarGirosFormulario(): void {
     .join('')
 
   zona.innerHTML = `
-    <ol class="giros-elegidos">
-      ${principales.map((giro, indice) => fila(giro, indice + 1)).join('')}
-      ${secundarios.map((giro) => fila(giro, null)).join('')}
-    </ol>
-    <p class="giros-cuenta"><strong>${numero(principales.length)}</strong> principales y <strong>${numero(secundarios.length)}</strong> secundarios · ${numero(total)} de 3 en total${total >= 3 ? ': quita uno para añadir otro' : ''}</p>
+    <ol class="giros-elegidos">${seleccion.map((id, indice) => fila(id, indice)).join('')}</ol>
+    <p class="giros-cuenta"><strong>${numero(total)}</strong> de 3 en total${total >= 3 ? ': quita uno para añadir otro' : ''}</p>
     <div class="buscador-giro">
       <input class="${controls.campo}" type="search" data-buscar-giro placeholder="Buscar un giro para añadir" aria-label="Buscar un giro" value="${texto(formularioActual.consultaGiro)}" />
       <div class="giro-catalogo" tabindex="0" role="group" aria-label="Giros disponibles">${grupos || '<p class="vacio">No queda ningún giro que coincida.</p>'}</div>
@@ -1002,43 +978,22 @@ function pintarGirosFormulario(): void {
 
 function moverGiro(id: string, direccion: -1 | 1): void {
   if (!formularioActual) return
-  const principales = formularioActual.seleccion.filter((giro) => giro.rol === 'principal')
-  const indice = principales.findIndex((giro) => giro.id === id)
-  const destino = indice + direccion
-  if (indice < 0 || destino < 0 || destino >= principales.length) return
-  const elegido = principales[indice]
-  const vecino = principales[destino]
-  if (!elegido || !vecino) return
   const lista = formularioActual.seleccion
-  const posicionA = lista.indexOf(elegido)
-  const posicionB = lista.indexOf(vecino)
-  lista[posicionA] = vecino
-  lista[posicionB] = elegido
-  formularioActual.sucio = true
-  pintarGirosFormulario()
-}
-
-function cambiarRolGiro(id: string): void {
-  if (!formularioActual) return
-  const giro = formularioActual.seleccion.find((fila) => fila.id === id)
-  if (!giro) return
-  const principales = formularioActual.seleccion.filter((fila) => fila.rol === 'principal')
-  const secundarios = formularioActual.seleccion.filter((fila) => fila.rol === 'secundario')
-  if (giro.rol === 'principal') {
-    // Un local sin giro principal no se puede describir ni ordenar en el buscador.
-    if (principales.length <= 1 || secundarios.length >= 2) return
-    giro.rol = 'secundario'
-  } else {
-    if (principales.length >= 3) return
-    giro.rol = 'principal'
-  }
+  const indice = lista.indexOf(id)
+  const destino = indice + direccion
+  if (indice < 0 || destino < 0 || destino >= lista.length) return
+  const elegido = lista[indice]
+  const vecino = lista[destino]
+  if (!elegido || !vecino) return
+  lista[indice] = vecino
+  lista[destino] = elegido
   formularioActual.sucio = true
   pintarGirosFormulario()
 }
 
 function quitarGiro(id: string): void {
   if (!formularioActual) return
-  formularioActual.seleccion = formularioActual.seleccion.filter((giro) => giro.id !== id)
+  formularioActual.seleccion = formularioActual.seleccion.filter((giro) => giro !== id)
   formularioActual.sucio = true
   pintarGirosFormulario()
 }
@@ -1046,12 +1001,8 @@ function quitarGiro(id: string): void {
 function anadirGiro(id: string): void {
   if (!formularioActual) return
   if (formularioActual.seleccion.length >= 3) return
-  if (formularioActual.seleccion.some((giro) => giro.id === id)) return
-  const principales = formularioActual.seleccion.filter((giro) => giro.rol === 'principal')
-  formularioActual.seleccion.push({
-    id,
-    rol: principales.length < 3 ? 'principal' : 'secundario',
-  })
+  if (formularioActual.seleccion.includes(id)) return
+  formularioActual.seleccion.push(id)
   formularioActual.sucio = true
   pintarGirosFormulario()
 }
@@ -1572,16 +1523,14 @@ function validarNegocio(formEl: HTMLFormElement): string[] {
   const descripcionEn = valorDe(formEl, 'descripcionEn')
   const lat = valorDe(formEl, 'lat')
   const lng = valorDe(formEl, 'lng')
-  const principales =
-    formularioActual?.seleccion.filter((giro) => giro.rol === 'principal').length ?? 0
   const total = formularioActual?.seleccion.length ?? 0
 
   if (!nombre) problemas.push('nombre: El nombre es obligatorio.')
   if (!plazaId) problemas.push('plazaId: Elige una plaza.')
-  if (principales === 0) problemas.push('giros: Elige al menos un giro principal.')
-  if (total > 3) problemas.push('giros: Entre principales y secundarios el tope son tres.')
+  if (total === 0) problemas.push('giros: Elige al menos un giro.')
+  if (total > 3) problemas.push('giros: El tope son tres giros.')
   if (formularioActual && formularioActual.seleccion.length > 0) {
-    const ids = formularioActual.seleccion.map((giro) => giro.id)
+    const ids = formularioActual.seleccion
     if (new Set(ids).size !== ids.length) problemas.push('giros: Hay un giro repetido.')
   }
   if (!descripcionEs) problemas.push('descripcionEs: Falta la descripción en español.')
@@ -1614,13 +1563,7 @@ function leerFormulario(formulario: HTMLFormElement): {
   const descripcionEn = valorDe(formulario, 'descripcionEn')
   const latTexto = valorDe(formulario, 'lat')
   const lngTexto = valorDe(formulario, 'lng')
-  const principales =
-    formularioActual?.seleccion.filter((giro) => giro.rol === 'principal').map((giro) => giro.id) ??
-    []
-  const secundarios =
-    formularioActual?.seleccion
-      .filter((giro) => giro.rol === 'secundario')
-      .map((giro) => giro.id) ?? []
+  const giros = formularioActual?.seleccion ?? []
 
   const horario: Record<string, string[]> = {}
   for (const fila of formulario.querySelectorAll<HTMLElement>('.horario-fila')) {
@@ -1651,8 +1594,7 @@ function leerFormulario(formulario: HTMLFormElement): {
     id: formulario.dataset.id || undefined,
     nombre,
     plazaId,
-    giros: principales,
-    secundarios,
+    giros,
     descripcionEs,
     descripcionEn,
     telefono: valorDe(formulario, 'telefono'),
@@ -1842,11 +1784,6 @@ function alPulsarEditor(evento: Event): void {
   const quitar = objetivo.closest<HTMLElement>('[data-giro-quitar]')
   if (quitar?.dataset.giroQuitar) {
     quitarGiro(quitar.dataset.giroQuitar)
-    return
-  }
-  const rol = objetivo.closest<HTMLElement>('[data-giro-rol]')
-  if (rol?.dataset.giroRol) {
-    cambiarRolGiro(rol.dataset.giroRol)
     return
   }
   const subirGiro = objetivo.closest<HTMLElement>('[data-giro-subir]')

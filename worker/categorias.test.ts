@@ -205,9 +205,7 @@ describe('añadir y mover giros', () => {
       expect.objectContaining({ id: movido.id }),
     )
 
-    const locales = dataset.places.filter((place) =>
-      [...place.giros, ...place.secundarios].includes(giroNoGeneral.giro.id),
-    )
+    const locales = dataset.places.filter((place) => place.giros.includes(giroNoGeneral.giro.id))
     expect(preparado.afectados.locales).toBe(locales.length)
     expect(preparado.afectados.plazas).toBe(new Set(locales.map((place) => place.plazaId)).size)
   })
@@ -374,9 +372,7 @@ describe('el impacto', () => {
     const preparado = prepararCategorias(dataset, crudo, cuerpo, HOY)
     if (!preparado.ok) throw new Error('no preparó')
     const giros = new Set(giroNoGeneral.categoria.giros.map((giro) => giro.id))
-    const locales = dataset.places.filter((place) =>
-      [...place.giros, ...place.secundarios].some((giro) => giros.has(giro)),
-    )
+    const locales = dataset.places.filter((place) => place.giros.some((giro) => giros.has(giro)))
     expect(preparado.afectados.locales).toBe(locales.length)
   })
 })

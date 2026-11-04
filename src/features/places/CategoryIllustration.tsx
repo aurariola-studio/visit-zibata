@@ -24,8 +24,8 @@ export function CategoryIllustration({
 }) {
   // El color dice de qué se come, no de qué plaza es: mismo tono para la misma categoría en toda la guía.
   const { soft, ink } = categoryTone(category)
-  // Solo los principales entran aquí, los tres si son tres: caben porque comparten una sola placa
-  // en vez de llevar una cada uno. Los secundarios enseñan su dibujo en la ficha.
+  // Los giros del local entran aquí, los tres si son tres: caben porque comparten una sola placa en
+  // vez de llevar una cada uno.
   const dibujos = (icons?.length ? icons : [category?.icon ?? 'utensils-crossed']).slice(0, 3)
   const common = {
     className: styles.illustration,

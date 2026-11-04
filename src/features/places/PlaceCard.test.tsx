@@ -45,19 +45,16 @@ describe('PlaceCard', () => {
     expect(screen.getByText(/Plaza Sur/)).toBeInTheDocument()
   })
 
-  it('en la lista, el icono es de los principales y los secundarios solo se leen', async () => {
+  it('cada giro lleva su icono junto al texto', async () => {
     const place = makePlace({
       id: 'trigo',
       plazaId: 'plaza-sur',
       name: 'Trigo',
-      giros: ['panaderia'],
-      secundarios: ['cafeteria'],
+      giros: ['panaderia', 'cafeteria'],
     })
     const { container } = await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    // Los dos se nombran...
     expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
-    // ...pero solo el principal lleva dibujo junto al texto.
-    expect(container.querySelectorAll('[class*="category"] svg')).toHaveLength(1)
+    expect(container.querySelectorAll('[class*="category"] svg')).toHaveLength(2)
   })
 
   it('nombra los giros que caben en la línea y cuenta el resto', async () => {
@@ -67,8 +64,7 @@ describe('PlaceCard', () => {
       id: 'trigo',
       plazaId: 'plaza-sur',
       name: 'Trigo',
-      giros: ['panaderia', 'cafeteria'],
-      secundarios: ['taqueria'],
+      giros: ['panaderia', 'cafeteria', 'taqueria'],
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
     expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()

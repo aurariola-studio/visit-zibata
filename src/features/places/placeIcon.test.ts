@@ -54,25 +54,21 @@ describe('iconos y taxonomía del dataset publicado', () => {
     ).toBe(3)
   })
 
-  it('cada local tiene de uno a tres giros entre los dos niveles y todos existen', () => {
+  it('cada local tiene de uno a tres giros y todos existen', () => {
     for (const entry of catalog.places) {
       expect(entry.giros.length, entry.id).toBeGreaterThan(0)
-      expect(entry.giros.length + entry.secundarios.length, entry.id).toBeLessThanOrEqual(3)
+      expect(entry.giros.length, entry.id).toBeLessThanOrEqual(3)
       for (const giro of allGiroIds(entry)) expect(catalog.giroById.has(giro), giro).toBe(true)
-      // Un giro no puede estar en los dos niveles a la vez.
-      for (const giro of entry.secundarios) expect(entry.giros, entry.id).not.toContain(giro)
+      // Sin repetidos: el mismo giro no cuenta dos veces.
+      expect(new Set(entry.giros).size, entry.id).toBe(entry.giros.length)
     }
   })
 
-  it('el icono de donde solo cabe uno sale de los principales, nunca de un secundario', () => {
+  it('el icono de donde solo cabe uno sale del primer giro', () => {
     for (const entry of catalog.places) {
-      if (entry.secundarios.length === 0) continue
       const nombre = placeIconName(entry, catalog)
-      const dibujosSecundarios = entry.secundarios.map((id) => catalog.giroById.get(id)?.icon)
-      const dibujosPrincipales = entry.giros.map((id) => catalog.giroById.get(id)?.icon)
-      expect(dibujosPrincipales, entry.id).toContain(nombre)
-      if (!dibujosPrincipales.includes(dibujosSecundarios[0]))
-        expect(dibujosSecundarios, entry.id).not.toContain(nombre)
+      const primero = catalog.giroById.get(entry.giros[0] ?? '')?.icon
+      expect(nombre, entry.id).toBe(primero ?? 'utensils-crossed')
     }
   })
 

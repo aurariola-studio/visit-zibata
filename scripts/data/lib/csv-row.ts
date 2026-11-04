@@ -1,6 +1,6 @@
 /**
  * Conversión de una fila del CSV de importación en un `Place` validado.
- * Columnas: id (opcional), name, plaza, giros y secundarios (separados por ";"), description, hours, lat,
+ * Columnas: id (opcional), name, plaza, giros (separados por ";", en orden), description, hours, lat,
  * lng, googleMapsUri, website, instagram, facebook, tiktok, whatsapp, phone, active.
  * `description` es el original en español y `descriptionEn` su traducción, que puede faltar.
  */
@@ -15,7 +15,6 @@ export const CSV_COLUMNS = [
   'name',
   'plaza',
   'giros',
-  'secundarios',
   'description',
   'descriptionEn',
   'hours',
@@ -114,7 +113,8 @@ export function rowToPlace(row: CsvRow, id: string, context: RowContext): RowRes
   const plaza = row.plaza ? findPlaza(row.plaza, context.plazas) : undefined
   if (!plaza) errors.push(`Plaza no encontrada: "${row.plaza ?? ''}" (créala antes en plazas.json)`)
 
-  // Los giros vienen en dos columnas, separados por ";", y valen su id o su etiqueta.
+  // Los giros vienen en una columna, separados por ";", y valen su id o su etiqueta. El orden manda:
+  // el primero es el que define al local.
   const leerGiros = (texto: string, campo: string) => {
     const salida: string[] = []
     for (const value of texto
@@ -128,17 +128,12 @@ export function rowToPlace(row: CsvRow, id: string, context: RowContext): RowRes
     return salida
   }
   const giros = leerGiros(row.giros ?? '', 'Giro')
-  const secundarios = leerGiros(row.secundarios ?? '', 'Giro secundario').filter(
-    (giro) => !giros.includes(giro),
-  )
   if (giros.length === 0) {
     giros.push('otros')
     warnings.push('Sin giros: se asigna "otros"')
   }
-  if (giros.length + secundarios.length > 3) {
-    errors.push(
-      `Demasiados giros (${giros.length + secundarios.length}); entre principales y secundarios el máximo son tres`,
-    )
+  if (giros.length > 3) {
+    errors.push(`Demasiados giros (${giros.length}); el máximo son tres`)
   }
 
   let hours = null
@@ -169,7 +164,6 @@ export function rowToPlace(row: CsvRow, id: string, context: RowContext): RowRes
     name,
     plazaId: plaza?.id ?? '',
     giros,
-    secundarios,
     description: localizedDescription(row),
     hours,
     location,

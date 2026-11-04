@@ -308,7 +308,6 @@ describe('los giros que el filtro dice cortos se leen completos en la descripci�
       name: 'Local Prueba',
       plazaId: 'plaza-prueba',
       giros: [giro],
-      secundarios: [],
       // Sin texto del negocio, la descripción es solo el contexto: el giro y la zona.
       description: null,
       cierre: undefined,
@@ -406,8 +405,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
   const categoriaDeGiro = new Map(
     data.categories.flatMap((c) => c.giros.map((g) => [g.id, c.id] as const)),
   )
-  const idsDe = (place: Place) =>
-    new Set([...place.giros, ...(place.secundarios ?? [])].map((g) => categoriaDeGiro.get(g)))
+  const idsDe = (place: Place) => new Set(place.giros.map((g) => categoriaDeGiro.get(g)))
   const conLocales = data.categories.filter((c) => data.places.some((p) => idsDe(p).has(c.id)))
 
   it('hay una por cada categoría que tiene al menos un local', () => {
@@ -553,9 +551,7 @@ describe('los locales ocultos', () => {
 
 describe('las páginas de categoría en los dos idiomas', () => {
   const conLocales = data.categories.filter((c) =>
-    visibles.some((p) =>
-      [...p.giros, ...(p.secundarios ?? [])].some((g) => c.giros.some((g2) => g2.id === g)),
-    ),
+    visibles.some((p) => p.giros.some((g) => c.giros.some((g2) => g2.id === g))),
   )
 
   it('ocupan la misma posición, que es lo que empareja las hreflang', () => {

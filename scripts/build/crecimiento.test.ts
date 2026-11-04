@@ -50,7 +50,6 @@ const peluqueria = {
   name: 'Estilo X',
   plazaId: 'plaza-prueba',
   giros: ['peluqueria'],
-  secundarios: [],
   description: { es: 'Cortes y color.', en: 'Haircuts and colour.' },
   cierre: undefined,
   links: { website: null, instagram: null, facebook: null, tiktok: null, whatsapp: null },

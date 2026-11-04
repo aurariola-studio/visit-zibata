@@ -34,9 +34,9 @@ export const EMPTY_FILTERS: Filters = {
 }
 
 /**
- * Las categorías en las que aparece un local: las de todos sus giros, principales y secundarios,
- * sin repetir. Un secundario pesa menos a la vista, pero es igual de cierto: si Castore hace ramen,
- * tiene que salir al filtrar Asiática.
+ * Las categorías en las que aparece un local: las de todos sus giros, sin repetir. Un giro del final
+ * de la lista se ve menos, pero es igual de cierto: si Castore hace ramen, tiene que salir al
+ * filtrar Asiática.
  */
 export function categoriesOf(place: Place, catalog: Catalog): string[] {
   return [

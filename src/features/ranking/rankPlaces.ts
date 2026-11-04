@@ -228,8 +228,8 @@ export function rankPlaces(
     if (!place) continue
     const signal = directSignal(id, signals, now)
     // Los giros pesan por sí mismos y, a través de ellos, su categoría: quien marca pizzerías
-    // aprende a que le gusten las pizzas, y de paso lo italiano. Los secundarios cuentan igual:
-    // que el ramen de Castore sea su tercer renglón no lo hace menos cierto.
+    // aprende a que le gusten las pizzas, y de paso lo italiano. Todos cuentan: que el ramen de
+    // Castore sea su tercer renglón no lo hace menos cierto.
     for (const giro of allGiroIds(place)) {
       add(`g:${giro}`, signal)
       const category = categoryOfGiro(giro)

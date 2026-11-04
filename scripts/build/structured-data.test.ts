@@ -36,7 +36,6 @@ const hacerLugar = (extra: Partial<Place> = {}): Place =>
     name: 'x',
     plazaId: 'condesa',
     giros: ['pizza'],
-    secundarios: [],
     description: null,
     hours: null,
     location: null,

@@ -22,7 +22,7 @@ export function categoriasDe(
 ): Category[] {
   const vistas = new Set<string>()
   const resultado: Category[] = []
-  for (const giro of [...place.giros, ...(place.secundarios ?? [])]) {
+  for (const giro of place.giros) {
     const categoria = categoryOfGiro.get(giro)
     if (categoria && !vistas.has(categoria.id)) {
       vistas.add(categoria.id)
@@ -178,7 +178,7 @@ export function girosDeCategoria(
   const etiqueta = sinAcentos(categoria.label[idioma] ?? categoria.label.es)
   const cuenta = new Map<string, number>()
   for (const place of places) {
-    for (const giro of new Set([...place.giros, ...(place.secundarios ?? [])])) {
+    for (const giro of new Set(place.giros)) {
       cuenta.set(giro, (cuenta.get(giro) ?? 0) + 1)
     }
   }

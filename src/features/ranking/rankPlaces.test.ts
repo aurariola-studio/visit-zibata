@@ -52,21 +52,21 @@ describe('rankPlaces', () => {
     expect(ranked.indexOf('sushi-b')).toBeLessThan(ranked.indexOf('pizza-a'))
   })
 
-  it('un giro secundario arrastra igual que un principal', () => {
-    // El nivel es peso visual, no visibilidad: a quien le gusta el sushi hay que subirle la
-    // pizzería que además lo hace, aunque en la lista el dibujo sea el de la pizza.
-    const conSecundario = [
+  it('cualquier giro arrastra igual', () => {
+    // A quien le gusta el sushi hay que subirle la pizzería que además lo hace, aunque en la lista
+    // el dibujo sea el de la pizza.
+    const conDos = [
       ...places,
-      makePlace({ id: 'pizza-c', plazaId: 'p1', giros: ['pizza'], secundarios: ['sushi'] }),
+      makePlace({ id: 'pizza-c', plazaId: 'p1', giros: ['pizza', 'sushi'] }),
     ]
-    const porId = new Map(conSecundario.map((place) => [place.id, place]))
+    const porId = new Map(conDos.map((place) => [place.id, place]))
     const signals: PreferenceSignals = {
       ...none,
       favorites: new Set(['sushi-a']),
       interactions: new Map([['sushi-a', { opens: 5, lastOpenedAt: NOW - DAY }]]),
     }
     const ranked = ids(
-      rankPlaces(conSecundario, signals, { ...options, placeById: (id) => porId.get(id) }),
+      rankPlaces(conDos, signals, { ...options, placeById: (id) => porId.get(id) }),
     )
     expect(ranked.indexOf('pizza-c')).toBeLessThan(ranked.indexOf('pizza-a'))
   })

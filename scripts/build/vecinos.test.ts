@@ -12,7 +12,6 @@ interface Dato {
   id: string
   plazaId: string
   giros: string[]
-  secundarios: string[]
 }
 const leer = <T>(archivo: string): T =>
   JSON.parse(readFileSync(`data/commercial/${archivo}`, 'utf8')) as T
@@ -27,7 +26,7 @@ const locales: Local[] = places.map((place) => ({
   plazaId: place.plazaId,
   categorias: [
     ...new Set(
-      [...place.giros, ...place.secundarios].flatMap((giro) => {
+      place.giros.flatMap((giro) => {
         const categoria = deGiro.get(giro)
         return categoria ? [categoria] : []
       }),

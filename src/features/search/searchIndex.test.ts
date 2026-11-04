@@ -33,8 +33,7 @@ describe('createSearchIndex', () => {
           id: 'pan-con-tacos',
           plazaId: 'plaza-norte',
           name: 'Pan con Tacos',
-          giros: ['panaderia'],
-          secundarios: ['taqueria'],
+          giros: ['panaderia', 'taqueria'],
         }),
       ]),
     )

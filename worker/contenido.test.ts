@@ -356,79 +356,30 @@ describe('editar un negocio existente', () => {
     expect(preparado.place.giros).toEqual([...conVarios.giros].reverse())
   })
 
-  it('un secundario marcado se añade al final y deja de ser secundario', () => {
-    const conSecundario = dataset.places.find(
-      (fila) => fila.active && fila.giros.length < 3 && fila.secundarios.length > 0,
-    )
-    const promovido = conSecundario?.secundarios[0]
-    if (!conSecundario || !promovido) return
-    const preparado = prepararNegocio(
-      dataset,
-      crudo,
-      editar(conSecundario, { giros: [...conSecundario.giros, promovido], secundarios: [] }),
-      HOY,
-    )
-    if (!preparado.ok) throw new Error('no preparó')
-    expect(preparado.place.giros).toEqual([...conSecundario.giros, promovido])
-    expect(preparado.place.secundarios).not.toContain(promovido)
-  })
-
-  it('conserva los secundarios que manda el formulario, sin mezclarlos con los principales', () => {
-    const conSecundario = dataset.places.find(
-      (fila) => fila.active && fila.secundarios.length > 0 && fila.giros.length < 3,
-    )
-    if (!conSecundario) return
-    const preparado = prepararNegocio(
-      dataset,
-      crudo,
-      editar(conSecundario, {
-        giros: [...conSecundario.giros].reverse(),
-        secundarios: conSecundario.secundarios,
-      }),
-      HOY,
-    )
-    if (!preparado.ok) throw new Error('no preparó')
-    expect(preparado.place.giros).toEqual([...conSecundario.giros].reverse())
-    expect(preparado.place.secundarios).toEqual(conSecundario.secundarios)
-  })
-
-  it('rechaza un giro que va como principal y como secundario', () => {
-    const conSecundario = dataset.places.find(
-      (fila) => fila.active && fila.giros.length > 0 && fila.giros.length < 3,
-    )
-    if (!conSecundario) return
-    const preparado = prepararNegocio(
-      dataset,
-      crudo,
-      editar(conSecundario, {
-        giros: [conSecundario.giros[0]],
-        secundarios: [conSecundario.giros[0]],
-      }),
-      HOY,
-    )
-    expect(preparado.ok).toBe(false)
-    if (preparado.ok) return
-    expect(preparado.problemas.join(' ')).toContain('principal y secundario')
-  })
-
-  it('rechaza pasar de tres giros entre principales y secundarios', () => {
+  it('rechaza más de tres giros', () => {
     const disponibles = dataset.categories.flatMap((categoria) =>
       categoria.giros.map((giro) => giro.id),
     )
     const cuatro = [...new Set(disponibles)].slice(0, 4)
     if (cuatro.length < 4) return
+    const preparado = prepararNegocio(dataset, crudo, editar(existente, { giros: cuatro }), HOY)
+    expect(preparado.ok).toBe(false)
+    if (preparado.ok) return
+    expect(preparado.problemas.join(' ')).toContain('tres giros')
+  })
+
+  it('rechaza el mismo giro repetido', () => {
+    const repetido = existente.giros[0]
+    if (!repetido) return
     const preparado = prepararNegocio(
       dataset,
       crudo,
-      editar(existente, {
-        giros: cuatro.slice(0, 3),
-        secundarios: [cuatro[3]],
-      }),
+      editar(existente, { giros: [repetido, repetido] }),
       HOY,
     )
     expect(preparado.ok).toBe(false)
     if (preparado.ok) return
-    expect(preparado.problemas.join(' ')).toContain('tope son tres')
+    expect(preparado.problemas.join(' ')).toContain('repetido')
   })
 
   it('ocultar no convierte el local en cerrado', () => {

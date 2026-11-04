@@ -155,7 +155,6 @@ function genericPlace(
     ...base,
     ...demo,
     slug: demo.id,
-    secundarios: [],
     description: { es: t('onboarding.demo.description'), en: t('onboarding.demo.description') },
     location: null,
     googleMapsUri: null,

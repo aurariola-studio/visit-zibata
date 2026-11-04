@@ -42,7 +42,6 @@ const registro = (slug: string, extra: Record<string, unknown>): Place =>
     name: `Local ${slug}`,
     plazaId: 'plaza-prueba',
     giros: [giro],
-    secundarios: [],
     description: { es: 'Descripción del local.', en: 'Local description.' },
     cierre: undefined,
     ...extra,

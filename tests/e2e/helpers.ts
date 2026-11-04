@@ -15,7 +15,6 @@ interface DatasetPlace {
   plazaId: string
   name: string
   giros: string[]
-  secundarios: string[]
   googleMapsUri: string | null
 }
 
@@ -54,11 +53,9 @@ export const longestPlaces = (n: number) =>
 export const longestPlazas = (n: number) =>
   [...activePlazas()].sort((a, b) => b.name.length - a.name.length).slice(0, n)
 
-/** Las categorías en las que aparece un local: las de todos sus giros, de los dos niveles. */
+/** Las categorías en las que aparece un local: las de todos sus giros. */
 const categoriesOf = (place: DatasetPlace) =>
-  [...place.giros, ...place.secundarios]
-    .map((giro) => categoryOfGiro.get(giro))
-    .filter((id) => id !== undefined)
+  place.giros.map((giro) => categoryOfGiro.get(giro)).filter((id) => id !== undefined)
 
 /** Nº de lugares de una categoría (opcionalmente dentro de una plaza), leído del dataset. */
 export function placesInCategory(categoryId: string, plazaName?: string): number {
