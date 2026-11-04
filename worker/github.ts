@@ -40,9 +40,26 @@ export interface Publicacion {
 const API = 'https://api.github.com'
 const RAMA_POR_OMISION = 'panel-contenido'
 
-/** La rama donde se acumulan los cambios del panel. */
-export const ramaDe = (entorno: EntornoGitHub): string =>
-  entorno.GITHUB_RAMA?.trim() || RAMA_POR_OMISION
+/** Ramas que el panel nunca toca, ni siquiera si la configuración se las pide. */
+const RAMAS_PROTEGIDAS = new Set(['main', 'master', 'HEAD'])
+
+/**
+ * La rama donde se acumulan los cambios del panel.
+ *
+ * Con `GITHUB_RAMA=main` el reinicio de la rama (que va con `force`) reescribiría la historia de
+ * producción, así que una rama protegida o con forma de referencia rara es un error, no un valor.
+ */
+export const ramaDe = (entorno: EntornoGitHub): string => {
+  const rama = entorno.GITHUB_RAMA?.trim() || RAMA_POR_OMISION
+  if (
+    RAMAS_PROTEGIDAS.has(rama) ||
+    !/^[A-Za-z0-9][A-Za-z0-9._/-]{0,99}$/.test(rama) ||
+    rama.includes('..')
+  ) {
+    throw new Error(`GITHUB_RAMA no puede ser "${rama}": el panel solo escribe en su rama propia`)
+  }
+  return rama
+}
 
 const repoDe = (entorno: EntornoGitHub): { repo: string; dueno: string } => {
   const repo = entorno.GITHUB_REPO?.trim()
@@ -192,9 +209,11 @@ export async function publicar(
   })
 
   if (referencia) {
+    // Sin `force`: el commit nuevo cuelga de `cabeza`, así que es un avance simple. Si otro guardado
+    // movió la rama entretanto, GitHub lo rechaza (422) en vez de pisar su commit sin avisar.
     await pedir(entorno, `/git/refs/heads/${rama}`, {
       method: 'PATCH',
-      body: JSON.stringify({ sha: nuevo.sha, force: true }),
+      body: JSON.stringify({ sha: nuevo.sha }),
     })
   } else {
     await pedir(entorno, '/git/refs', {

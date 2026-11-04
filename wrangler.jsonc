@@ -19,6 +19,9 @@
    * cuentas. Es una puerta de atrás a todo lo que hay detrás de las dos.
    */
   "workers_dev": false,
+  // Tampoco URL de vista previa por versión (`<version>-visit-zibata.<cuenta>.workers.dev`): son otro
+  // nombre de host sin Access ni regla de límite de peticiones, igual que `workers.dev`.
+  "preview_urls": false,
   /*
    * Los dos identificadores de la aplicación de Cloudflare Access que protege el panel. No son
    * secretos (el dominio del equipo sale en la URL de inicio de sesión y la etiqueta AUD identifica

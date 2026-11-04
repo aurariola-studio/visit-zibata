@@ -75,11 +75,16 @@ INSERT INTO sugerencia (id, creada, quien, lugar, mensaje, contacto, sello)
 VALUES (?, ?, ?, ?, ?, ?, ?)
 `.trim()
 
-/** Las últimas para el panel. Sin paginar: con una guía de barrio no van a ser cientos. */
+/**
+ * Las que ve el panel: primero todas las pendientes (hasta el tope) y después las atendidas más
+ * recientes. Ordenar por `atendida` antes que por fecha evita que una racha de recados nuevos, o de
+ * basura, empuje fuera de la lista a una pendiente vieja: atender las visibles la deja salir, no
+ * esconderse. Sin paginar: con una guía de barrio no van a ser cientos.
+ */
 export const ULTIMAS = `
 SELECT id, creada, quien, lugar, mensaje, contacto, atendida
   FROM sugerencia
- ORDER BY creada DESC
+ ORDER BY atendida ASC, creada DESC
  LIMIT 50
 `.trim()
 
@@ -91,5 +96,9 @@ export const SIN_ATENDER = 'SELECT COUNT(*) AS total FROM sugerencia WHERE atend
  */
 export const ID_DE_SUGERENCIA = /^[A-Za-z0-9_-]{22}$/
 
-/** Marca una sugerencia como atendida. Atender dos veces la misma no cambia nada. */
-export const ATENDER = 'UPDATE sugerencia SET atendida = 1 WHERE id = ?'
+/**
+ * Marca una sugerencia como atendida y borra el contacto que dejó: ya se respondió o ya no hace
+ * falta, y guardar un correo o un teléfono más tiempo del necesario es lo único de esta tabla que
+ * apunta a una persona. Atender dos veces la misma no cambia nada.
+ */
+export const ATENDER = "UPDATE sugerencia SET atendida = 1, contacto = '' WHERE id = ?"

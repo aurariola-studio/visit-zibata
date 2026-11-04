@@ -288,7 +288,7 @@ export const en = {
   'about.privacy': 'Privacy',
   'about.privacyTitle': 'Privacy and terms',
   'about.privacyLead':
-    'This guide uses no accounts and no tracking cookies, and shares your data with no one. This page also covers the terms of use.',
+    'This guide never asks you to create an account and uses no tracking cookies, and shares your data with no one. This page also covers the terms of use.',
   'about.privacyCounts':
     'To understand what users are interested in, we count how many times each page and place is opened, which links are followed, which filters are used, whether a search found results, and what kind of site visitors arrive from. We do not store what you type, your IP, or any identifier, and we neither sell nor share them. If your browser asks not to be tracked, we only count the page visit.',
   'about.privacyBody':

@@ -1,5 +1,37 @@
 import { describe, expect, it } from 'vitest'
-import { metaTag } from './prerender.ts'
+import { literal, metaTag, setTag } from './prerender.ts'
+
+/*
+ * `String.replace` con una cadena interpreta `$&`, `$'`, `` $` `` y `$$` en el texto nuevo. Los datos del
+ * catálogo llegan a la plantilla sin que `escapeHtml` los toque (no escapa `$`), así que una
+ * descripción con `$'` habría pegado media plantilla dentro de la página.
+ */
+describe('insertar texto de los datos en la plantilla', () => {
+  const plantilla = '<head><title>x</title></head><body><div id="root"></div></body>'
+  const peligrosos = ["Cuesta $' y $` y $& y $$ y $1", '$$$$', "$'</head>"]
+
+  it.each(peligrosos)('literal() inserta %j tal cual', (texto) => {
+    expect(plantilla.replace('</head>', literal(texto))).toBe(
+      plantilla.replace('</head>', () => texto),
+    )
+    expect(plantilla.replace('</head>', literal(texto))).toContain(texto)
+  })
+
+  it.each(peligrosos.slice(0, 2))(
+    'setTag inserta %j sin expandirlo, añadiendo y reemplazando',
+    (texto) => {
+      const etiqueta = `<meta name="description" content="${texto}" />`
+      const nuevo = setTag(plantilla, metaTag('name', 'description'), etiqueta)
+      expect(nuevo).toContain(etiqueta)
+      // Un cierre de `</head>` de la plantilla, más los que el propio texto traiga.
+      const propios = etiqueta.match(/<\/head>/g)?.length ?? 0
+      expect(nuevo.match(/<\/head>/g)).toHaveLength(1 + propios)
+
+      const otra = setTag(nuevo, metaTag('name', 'description'), etiqueta)
+      expect(otra).toBe(nuevo)
+    },
+  )
+})
 
 /*
  * El `index.html` de origen está formateado, y las etiquetas largas llevan sus atributos en líneas

@@ -535,11 +535,19 @@ export const metaTag = (atributo: string, valor: string): RegExp =>
   new RegExp(`<meta\\s+${atributo}="${valor}"[^>]*/>`)
 
 /** Reemplaza una etiqueta existente en el HTML, o la añade antes de `</head>` si no estaba. */
-function setTag(html: string, pattern: RegExp, tag: string): string {
+export function setTag(html: string, pattern: RegExp, tag: string): string {
   return pattern.test(html)
-    ? html.replace(pattern, tag)
-    : html.replace('</head>', `  ${tag}\n  </head>`)
+    ? html.replace(pattern, literal(tag))
+    : html.replace('</head>', literal(`  ${tag}\n  </head>`))
 }
+
+/**
+ * Un reemplazo que se inserta tal cual. `String.replace` con una cadena interpreta `$&`, `$'`, `` $` `` y
+ * `$$` en el texto nuevo, y los datos del catálogo (nombres, descripciones) llegan hasta aquí sin que
+ * `escapeHtml` los toque: un `$'` en una descripción habría pegado media plantilla dentro de la
+ * página. Pasar una función evita toda esa sintaxis.
+ */
+export const literal = (texto: string) => () => texto
 
 /**
  * Ninguna de estas etiquetas puede salir dos veces. Es una comprobación barata sobre algo que ya
@@ -610,7 +618,7 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
 
           let html = template
             .replace('<html lang="es">', `<html lang="${locale}">`)
-            .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(page.title)}</title>`)
+            .replace(/<title>[^<]*<\/title>/, literal(`<title>${escapeHtml(page.title)}</title>`))
           html = setTag(
             html,
             metaTag('name', 'description'),
@@ -651,12 +659,18 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
             /<link\s+rel="canonical"[^>]*\/>/,
             `<link rel="canonical" href="${escapeHtml(absolute(page.href))}" />`,
           )
-          html = html.replace('</head>', `  ${alternates.filter(Boolean).join('\n  ')}\n  </head>`)
+          html = html.replace(
+            '</head>',
+            literal(`  ${alternates.filter(Boolean).join('\n  ')}\n  </head>`),
+          )
           if (page.jsonLd) {
-            html = html.replace('</head>', `  ${bloque(page.jsonLd)}\n  </head>`)
+            html = html.replace('</head>', literal(`  ${bloque(page.jsonLd)}\n  </head>`))
           }
           if (page.contenido) {
-            html = html.replace('<div id="root"></div>', `<div id="root">${page.contenido}</div>`)
+            html = html.replace(
+              '<div id="root"></div>',
+              literal(`<div id="root">${page.contenido}</div>`),
+            )
           }
           comprobarUnicas(html, page.href)
 

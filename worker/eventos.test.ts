@@ -4,6 +4,8 @@ import { atenderApi } from './api.ts'
 import type { Base, Sentencia } from './cuenta.ts'
 import {
   APUNTE_EVENTO,
+  APUNTE_EVENTO_VARIAS,
+  agruparEventos,
   envioDe,
   eventoDe,
   MAXIMO_BYTES,
@@ -213,8 +215,11 @@ describe('el apunte', () => {
     expect(APUNTE_EVENTO).toContain('cuenta = cuenta + 1')
   })
 
-  it('no guarda nada que identifique: solo estas columnas', () => {
-    const columnas = APUNTE_EVENTO.match(/INSERT INTO eventos \(([^)]+)\)/)?.[1]
+  it.each([
+    ['uno', APUNTE_EVENTO],
+    ['varios', APUNTE_EVENTO_VARIAS],
+  ])('no guarda nada que identifique (%s): solo estas columnas', (_nombre, sql) => {
+    const columnas = sql.match(/INSERT INTO eventos \(([^)]+)\)/)?.[1]
     expect(columnas?.split(',').map((columna) => columna.trim())).toEqual([
       'fecha',
       'tipo',
@@ -282,8 +287,35 @@ describe('POST /api/evento', () => {
       lugar,
       '',
       'es',
+      1,
     ])
-    expect(apuntes[1]?.slice(1)).toEqual(['salida', lugar, 'whatsapp', 'es'])
+    expect(apuntes[1]?.slice(1)).toEqual(['salida', lugar, 'whatsapp', 'es', 1])
+  })
+
+  it('junta los eventos idénticos de un envío sin cambiar el total del día', async () => {
+    const { base, apuntes } = baseFalsa()
+    const repetido = JSON.stringify({
+      idioma: 'es',
+      eventos: [
+        ...Array.from({ length: 19 }, () => ({ tipo: 'ficha', destino: lugar })),
+        { tipo: 'salida', destino: lugar, detalle: 'maps' },
+      ],
+    })
+    expect((await atenderApi(enviar(repetido), { ANALITICA: base }))?.status).toBe(204)
+    // Veinte eventos, dos escrituras; la cuenta de la primera suma diecinueve.
+    expect(apuntes).toHaveLength(2)
+    expect(apuntes[0]?.slice(1)).toEqual(['ficha', lugar, '', 'es', 19])
+    expect(apuntes[1]?.slice(1)).toEqual(['salida', lugar, 'maps', 'es', 1])
+  })
+
+  it('agruparEventos conserva el orden de aparición y suma las repeticiones', () => {
+    const a = { tipo: 'ficha', destino: lugar, detalle: '' } as const
+    const b = { tipo: 'salida', destino: lugar, detalle: 'web' } as const
+    expect(agruparEventos([a, b, a, a, b])).toEqual([
+      { evento: a, veces: 3 },
+      { evento: b, veces: 2 },
+    ])
+    expect(agruparEventos([])).toEqual([])
   })
 
   it('no mira quién lo manda: la credencial, el user agent y la IP no entran', async () => {
@@ -323,10 +355,43 @@ describe('POST /api/evento', () => {
     ).toBe(400)
   })
 
-  it('rechaza un cuerpo demasiado grande sin leerlo entero', async () => {
+  it('rechaza un cuerpo demasiado grande', async () => {
     const { base } = baseFalsa()
     const grande = JSON.stringify({ idioma: 'es', eventos: [], relleno: 'x'.repeat(MAXIMO_BYTES) })
     expect((await atenderApi(enviar(grande), { ANALITICA: base }))?.status).toBe(413)
+  })
+
+  it('corta un cuerpo en flujo y sin content-length antes de leerlo entero', async () => {
+    // Antes la única guarda previa era `content-length`, así que un cuerpo sin esa cabecera se bajaba
+    // entero. Aquí el flujo ofrece un gigabyte en trozos de un kilobyte y se cuenta cuántos se leen.
+    const { base } = baseFalsa()
+    let pedidos = 0
+    const flujo = new ReadableStream<Uint8Array>({
+      pull(controlador) {
+        pedidos++
+        if (pedidos > 1_000_000) controlador.close()
+        else controlador.enqueue(new Uint8Array(1024).fill(120))
+      },
+    })
+    const peticion = new Request('https://visitzibata.com/api/evento', {
+      method: 'POST',
+      body: flujo,
+      duplex: 'half',
+    } as RequestInit)
+    expect(peticion.headers.get('content-length')).toBeNull()
+
+    expect((await atenderApi(peticion, { ANALITICA: base }))?.status).toBe(413)
+    expect(pedidos).toBeLessThan(50)
+  })
+
+  it('el mismo tope vale para las demás escrituras públicas, antes de la prueba de trabajo', async () => {
+    const { base } = baseFalsa()
+    const grande = JSON.stringify({ mensaje: 'x'.repeat(20 * 1024), sello: 'a'.repeat(43) })
+    const peticion = new Request('https://visitzibata.com/api/sugerencia', {
+      method: 'POST',
+      body: grande,
+    })
+    expect((await atenderApi(peticion, { ANALITICA: base }))?.status).toBe(413)
   })
 
   it('solo acepta POST', async () => {

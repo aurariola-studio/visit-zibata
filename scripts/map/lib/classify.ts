@@ -61,7 +61,8 @@ export function classifyRoad(tags: OsmTags): RoadProperties | null {
   const highway = tags.highway
   if (!highway) return null
   const base = highway.replace(/_link$/, '')
-  const roadClass = ROAD_CLASS[base]
+  // `hasOwn`: una etiqueta `highway=constructor` de OSM no puede resolver a lo heredado de `Object`.
+  const roadClass = Object.hasOwn(ROAD_CLASS, base) ? ROAD_CLASS[base] : undefined
   if (!roadClass) return null
   if (tags.access === 'private' && roadClass === 'service') return null
   return {

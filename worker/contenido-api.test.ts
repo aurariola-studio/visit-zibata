@@ -10,7 +10,7 @@ import type { Base } from './cuenta.ts'
 const entorno = { PANEL_ABIERTO: 'si', ANALITICA: {} as Base } as EntornoApi
 
 const pedir = (ruta: string, init?: RequestInit) =>
-  atenderApi(new Request(`https://visitzibata.com${ruta}`, init), entorno)
+  atenderApi(new Request(`http://localhost:8787${ruta}`, init), entorno)
 
 const negocio = {
   nombre: 'Panadería de prueba',

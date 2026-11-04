@@ -1016,7 +1016,7 @@ function pintarFotosFormulario(): void {
   const lista = fotos
     .map(
       (foto, indice) => `<li class="foto-fila" data-foto="${indice}">
-        <img class="foto-mini" src="${assetUrl(foto.src)}" alt="" width="96" height="72" loading="lazy" />
+        <img class="foto-mini" src="${texto(assetUrl(foto.src))}" alt="" width="96" height="72" loading="lazy" />
         <div class="foto-datos">
           <label class="campo-form">
             <span>Texto alternativo</span>
