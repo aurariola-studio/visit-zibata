@@ -14,12 +14,16 @@
  * de alto con su margen) para que las dos se lean como un pie sin llegar a tocarse, y lejos de los
  * controles del mapa.
  */
+/*
+ * La franja llega hasta 48 rem: con las cuatro rutas, la leyenda entera y la firma, una fila mide
+ * unos 744 px, y con 44 rem (704) la leyenda ya no cabía y se partía en dos renglones.
+ */
 .guideBar {
   position: absolute;
   left: var(--space-4);
   bottom: 2.75rem;
   z-index: var(--z-map-ui);
-  max-width: min(44rem, calc(100% - var(--controls-right, 5rem) - 3rem));
+  max-width: min(48rem, calc(100% - var(--controls-right, 5rem) - 3rem));
 }
 
 .mapFallback {
