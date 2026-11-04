@@ -186,18 +186,15 @@ describe('PlaceDetail', () => {
     expect(screen.queryByRole('button', { name: /Ver foto ampliada/ })).not.toBeInTheDocument()
   })
 
-  it('la ficha es la única vista que enseña el dibujo de los secundarios', async () => {
+  it('enseña todos los giros con su dibujo, en orden', async () => {
     await setup(
       makePlace({
         id: 'pan-con-tacos',
         plazaId: plaza.id,
         name: 'Pan con Tacos',
-        giros: ['panaderia'],
-        secundarios: ['taqueria'],
+        giros: ['panaderia', 'taqueria'],
       }),
     )
-    // Un renglón por giro, cada uno con su dibujo y los dos pintados igual: en la ficha todos son
-    // lo que se vende ahí. Lo único que los separa es el orden, con los principales delante.
     const renglones = [...(screen.getByText('Panadería').parentElement?.children ?? [])]
     expect(renglones.map((fila) => fila.textContent)).toEqual(['Panadería', 'Taquería'])
     for (const fila of renglones) expect(fila.querySelectorAll('svg')).toHaveLength(1)

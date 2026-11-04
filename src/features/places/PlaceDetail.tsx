@@ -29,7 +29,7 @@ import { VisitButton } from '../visits/VisitButton.tsx'
 import { HoursTable } from './HoursTable.tsx'
 import styles from './PlaceDetail.module.css'
 import { PlacePicture } from './PlacePicture.tsx'
-import { girosOf, girosSecundariosOf } from './placeIcon.ts'
+import { girosOf } from './placeIcon.ts'
 import { ShareButton } from './ShareButton.tsx'
 
 /**
@@ -140,14 +140,11 @@ export function PlaceDetail({
   const headingRef = useRef<HTMLHeadingElement>(null)
   const directions = placeDirections(place, plaza)
   /**
-   * Los giros del local en una sola línea, en su orden y con el icono de cada uno: aquí hay sitio
-   * para todos, principales y secundarios, así que esta es la única vista que los enseña completos.
-   * El logo redondo, en cambio, lleva solo los principales.
+   * Los giros del local en una sola línea, en su orden y con el icono de cada uno. La ficha es la
+   * vista que los enseña completos; la tarjeta recorta por ancho y cuenta el resto.
    */
   const giros = girosOf(place, catalog)
-  const secundarios = girosSecundariosOf(place, catalog)
-  const todos = [...giros, ...secundarios]
-  const giroLabels = todos.map((giro) => localized(giro.label))
+  const giroLabels = giros.map((giro) => localized(giro.label))
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia el lugar mostrado.
   useEffect(() => {
@@ -320,13 +317,10 @@ export function PlaceDetail({
             </h2>
             {/*
              * Los giros van debajo del nombre, uno por renglón: son el detalle del lugar, no su
-             * antetítulo. Un renglón por giro y no uno por nivel, porque repartirlos dos y uno
-             * partía la lista por donde no hay junta. Los dos niveles se pintan igual: en la ficha
-             * todos son lo que se vende ahí, y el orden ya dice cuál manda. Es un párrafo y no una
-             * lista: la única lista de la ficha es la de contacto.
+             * antetítulo. Es un párrafo y no una lista: la única lista de la ficha es la de contacto.
              */}
             <p className={styles.giros} title={giroLabels.join(' · ')}>
-              {todos.map((giro) => (
+              {giros.map((giro) => (
                 <span key={giro.id}>
                   <CategoryIcon name={giro.icon} size={14} />
                   {localized(giro.label)}

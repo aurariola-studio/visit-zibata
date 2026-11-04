@@ -60,9 +60,10 @@ export const EntradaNegocioSchema = z.object({
     // El nombre va al título y al JSON-LD: sin saltos ni espacios dobles.
     .transform((valor) => valor.replace(/\s+/g, ' ')),
   plazaId: z.string().trim().min(1, 'Elige una plaza'),
-  giros: z.array(z.string().trim().min(1)).min(1, 'Elige al menos un giro').max(3),
-  /** Los secundarios van aparte y sin orden: la ficha solo los muestra como texto. */
-  secundarios: z.array(z.string().trim().min(1)).max(2).optional(),
+  giros: z
+    .array(z.string().trim().min(1))
+    .min(1, 'Elige al menos un giro')
+    .max(3, 'El tope son tres giros'),
   descripcionEs: z.string().trim().min(1, 'La descripción en español es obligatoria').max(2000),
   descripcionEn: z.string().trim().min(1, 'La descripción en inglés es obligatoria').max(2000),
   telefono: z.string().trim().max(40).optional().default(''),
@@ -448,27 +449,17 @@ function construir(
 ): { place?: Place; problemas?: string[] } {
   /*
    * El orden de `giros` no es decorativo: el primero decide el icono de la ficha y la prioridad en
-   * la búsqueda. Ahora el formulario manda la lista ya ordenada, con sus secundarios aparte, así que
-   * se respeta tal cual. Antes eran casillas sin orden y el servidor tenía que adivinarlo.
+   * la búsqueda. El formulario manda la lista ya ordenada y se respeta tal cual.
    */
   const problemasDeGiros: string[] = []
   const pedidos = [...new Set(entrada.giros)]
   if (pedidos.length !== entrada.giros.length) {
-    problemasDeGiros.push('Hay un giro repetido en la lista principal.')
+    problemasDeGiros.push('Hay un giro repetido.')
   }
-  const giros = pedidos
-  const secundariosPedidos = entrada.secundarios
-    ? [...new Set(entrada.secundarios)]
-    : (existente?.secundarios ?? [])
-  if (secundariosPedidos.some((giro) => giros.includes(giro))) {
-    problemasDeGiros.push('Un giro no puede ser principal y secundario a la vez.')
+  if (pedidos.length > 3) {
+    problemasDeGiros.push('El tope son tres giros.')
   }
-  if (giros.length + secundariosPedidos.length > 3) {
-    problemasDeGiros.push('Entre giros principales y secundarios el tope son tres.')
-  }
-  const secundarios = secundariosPedidos
-    .filter((giro) => !giros.includes(giro))
-    .slice(0, Math.max(0, 3 - giros.length))
+  const giros = pedidos.slice(0, 3)
   if (problemasDeGiros.length > 0) return { problemas: problemasDeGiros }
 
   if ((entrada.lat == null) !== (entrada.lng == null)) {
@@ -538,7 +529,6 @@ function construir(
     name: entrada.nombre,
     plazaId: entrada.plazaId,
     giros,
-    secundarios,
     description: { es: entrada.descripcionEs, en: entrada.descripcionEn },
     hours: horarioDe(entrada.horario),
     location:

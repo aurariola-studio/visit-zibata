@@ -131,77 +131,64 @@ export const VerificationSchema = z.strictObject({
 
 const googleMapsUrl = httpUrl.refine(isGoogleMapsUrl, 'Debe ser un enlace https de Google Maps')
 
-export const PlaceSchema = z
-  .strictObject({
-    id: slug,
-    slug: slug,
-    name: nonEmptyText,
-    plazaId: slug,
-    /**
-     * Los giros **principales**: lo que define al local (El Hornero: parrilla argentina y pizza). Van
-     * en orden y son los que llevan icono en la lista y en la ilustración redonda. La categoría no se
-     * escribe aquí: se deduce de los giros con el catálogo.
-     */
-    giros: z.array(slug).min(1).max(3),
-    /**
-     * Los giros **secundarios**: lo demás que se vende ahí. En la lista salen solo como texto y su
-     * dibujo aparece únicamente en la ficha. Filtran y se buscan igual que los principales, porque son
-     * igual de ciertos; lo que cambia es el peso visual, no si el local aparece.
-     */
-    secundarios: z.array(slug).max(2).default([]),
-    /**
-     * La descripción la escribe el propio negocio, en español. El inglés es una traducción
-     * generada: la ficha la marca como tal y deja ver el original. Sin `en`, se lee el original.
-     */
-    description: LocalizedTextSchema.nullable(),
-    hours: HoursSchema.nullable(),
-    location: LatLngSchema.nullable(),
-    /**
-     * Ubicación propia del local (`location`) y su enlace de Maps: solo cuando está verificada y es la
-     * actual. Si faltan, la ficha lleva a la plaza, que siempre es correcta.
-     */
-    googleMapsUri: googleMapsUrl.nullable(),
-    googlePlaceId: z
-      .string()
-      .regex(GOOGLE_PLACE_ID_PATTERN, 'Identificador de Google Place no válido')
-      .nullable(),
-    phone: e164Phone.nullable(),
-    photos: z.array(PhotoSchema),
-    links: LinksSchema,
-    active: z.boolean(),
-    /**
-     * Cerrado temporalmente: por obra, vacaciones o cambio de dueño.
-     *
-     * No es lo mismo que `active: false`, que es la baja definitiva y saca al local del catálogo.
-     * Aquí el local sigue existiendo, se busca y se encuentra; lo que cambia es que la guía avisa
-     * de que ir hoy es perder el viaje, y deja de contarlo como abierto.
-     *
-     * Tampoco es lo mismo que vaciarle el horario. Un local sin horario es uno del que la guía no
-     * sabe nada; este es uno del que sabe bastante, y callarlo mandaría gente a una puerta cerrada.
-     *
-     * El motivo sale de una lista cerrada para poder decirlo en los dos idiomas sin traducir texto
-     * libre. `desde` es la fecha en que empezó, y no hay fecha de reapertura: mientras el negocio no
-     * la dé, inventarla sería inventar un dato. La revisión por temporada es la que tiene que
-     * preguntar por los que llevan meses así, porque "cerrado temporalmente" desde hace dos años es
-     * un dato falso con otro nombre.
-     */
-    cierre: z
-      .strictObject({
-        motivo: z.enum(['remodelacion', 'vacaciones', 'traspaso']),
-        desde: z.iso.date(),
-      })
-      .optional(),
-    verification: VerificationSchema.optional(),
-  })
-  .superRefine((place, ctx) => {
-    // Tres giros como tope entre los dos niveles: un local que necesita más de tres no se está
-    // describiendo, se está enumerando.
-    if (place.giros.length + place.secundarios.length > 3)
-      ctx.addIssue({ code: 'custom', message: 'Entre giros y secundarios el tope son tres' })
-    const repetido = place.secundarios.find((giro) => place.giros.includes(giro))
-    if (repetido)
-      ctx.addIssue({ code: 'custom', message: `"${repetido}" no puede ser principal y secundario` })
-  })
+export const PlaceSchema = z.strictObject({
+  id: slug,
+  slug: slug,
+  name: nonEmptyText,
+  plazaId: slug,
+  /**
+   * Los giros del local, **en orden**: el primero es lo que lo define (El Hornero: parrilla
+   * argentina, pizza) y decide el icono, el de la ilustración redonda y la cocina del marcado. Los
+   * demás suman, sin jerarquía: la tarjeta nombra los que caben con su icono y resume el resto con
+   * "+N". La posición ya dice qué manda, así que no hay un segundo nivel que decidir.
+   *
+   * La categoría no se escribe aquí: se deduce de los giros con el catálogo.
+   */
+  giros: z.array(slug).min(1).max(3),
+  /**
+   * La descripción la escribe el propio negocio, en español. El inglés es una traducción
+   * generada: la ficha la marca como tal y deja ver el original. Sin `en`, se lee el original.
+   */
+  description: LocalizedTextSchema.nullable(),
+  hours: HoursSchema.nullable(),
+  location: LatLngSchema.nullable(),
+  /**
+   * Ubicación propia del local (`location`) y su enlace de Maps: solo cuando está verificada y es la
+   * actual. Si faltan, la ficha lleva a la plaza, que siempre es correcta.
+   */
+  googleMapsUri: googleMapsUrl.nullable(),
+  googlePlaceId: z
+    .string()
+    .regex(GOOGLE_PLACE_ID_PATTERN, 'Identificador de Google Place no válido')
+    .nullable(),
+  phone: e164Phone.nullable(),
+  photos: z.array(PhotoSchema),
+  links: LinksSchema,
+  active: z.boolean(),
+  /**
+   * Cerrado temporalmente: por obra, vacaciones o cambio de dueño.
+   *
+   * No es lo mismo que `active: false`, que es la baja definitiva y saca al local del catálogo.
+   * Aquí el local sigue existiendo, se busca y se encuentra; lo que cambia es que la guía avisa
+   * de que ir hoy es perder el viaje, y deja de contarlo como abierto.
+   *
+   * Tampoco es lo mismo que vaciarle el horario. Un local sin horario es uno del que la guía no
+   * sabe nada; este es uno del que sabe bastante, y callarlo mandaría gente a una puerta cerrada.
+   *
+   * El motivo sale de una lista cerrada para poder decirlo en los dos idiomas sin traducir texto
+   * libre. `desde` es la fecha en que empezó, y no hay fecha de reapertura: mientras el negocio no
+   * la dé, inventarla sería inventar un dato. La revisión por temporada es la que tiene que
+   * preguntar por los que llevan meses así, porque "cerrado temporalmente" desde hace dos años es
+   * un dato falso con otro nombre.
+   */
+  cierre: z
+    .strictObject({
+      motivo: z.enum(['remodelacion', 'vacaciones', 'traspaso']),
+      desde: z.iso.date(),
+    })
+    .optional(),
+  verification: VerificationSchema.optional(),
+})
 
 export const PlazaSchema = z.strictObject({
   id: slug,

@@ -390,7 +390,7 @@ export function prepararCategorias(
     (place) =>
       place.active &&
       plazasActivas.has(place.plazaId) &&
-      [...place.giros, ...place.secundarios].some((giro) => girosAfectados.has(giro)),
+      place.giros.some((giro) => girosAfectados.has(giro)),
   )
   const plazasAfectadas = new Set(locales.map((place) => place.plazaId))
 

@@ -95,7 +95,6 @@ export function makePlace(overrides: Partial<Place> & Pick<Place, 'id' | 'plazaI
     slug: overrides.id,
     name: overrides.id,
     giros: ['pizza'],
-    secundarios: [],
     description: null,
     hours: null,
     location: null,

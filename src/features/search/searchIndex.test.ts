@@ -23,9 +23,9 @@ describe('createSearchIndex', () => {
     expect(index.search('CAFÉ')).toContain('cafe-aurora')
   })
 
-  it('un giro secundario se busca igual que un principal', () => {
-    // El nivel es peso visual, no visibilidad: quien busca tacos tiene que encontrar la panadería
-    // que además los hace, aunque en la lista el dibujo sea el del pan.
+  it('cualquier giro se busca igual que el primero', () => {
+    // Quien busca tacos tiene que encontrar la panadería que además los hace, aunque en la lista el
+    // dibujo de delante sea el del pan.
     const propio = createSearchIndex(
       buildCatalog(categoriesFixture, plazasFixture, [
         ...placesFixture,
@@ -33,8 +33,7 @@ describe('createSearchIndex', () => {
           id: 'pan-con-tacos',
           plazaId: 'plaza-norte',
           name: 'Pan con Tacos',
-          giros: ['panaderia'],
-          secundarios: ['taqueria'],
+          giros: ['panaderia', 'taqueria'],
         }),
       ]),
     )

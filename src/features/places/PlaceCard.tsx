@@ -13,7 +13,7 @@ import { caracteresQueCaben } from './lineaDeGiros.ts'
 import { useZonedNow } from './OpenStatus.tsx'
 import styles from './PlaceCard.module.css'
 import { PlacePicture } from './PlacePicture.tsx'
-import { girosOf, girosSecundariosOf } from './placeIcon.ts'
+import { girosOf } from './placeIcon.ts'
 
 /** Lo que lee un lector de pantalla en lugar del punto, que no lleva texto a la vista. */
 const ETIQUETA = {
@@ -57,18 +57,16 @@ export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }:
   // Ancho real de la fila de giros: es lo que decide cuántas etiquetas caben. Cero hasta medir.
   const filaRef = useRef<HTMLSpanElement>(null)
   const anchoFila = useElementWidth(filaRef, 0)
-  // En la lista, el icono es de los principales; los secundarios solo se leen.
+  // Todos los giros llevan icono, en su orden: el primero es el que define al local.
   const giros = girosOf(place, catalog)
-  const secundarios = girosSecundariosOf(place, catalog)
   const iconos = giros.map((giro) => giro.icon)
-  const todos = [...giros, ...secundarios]
   /*
    * Aquí solo hay una línea: se nombran los giros que caben en ella, siempre al menos uno, y el
    * resto se cuenta ("Alitas · Hamburguesas +1"). Cuántos caben sale del ancho real de la fila, así
    * que en una hoja ancha se leen todas las etiquetas y en un teléfono se recortan con su cuenta.
    * Antes era un presupuesto fijo de 25 letras y por eso sobraba espacio y seguía saliendo "+1".
    */
-  const etiquetas = todos.map((giro) => localized(giro.label))
+  const etiquetas = giros.map((giro) => localized(giro.label))
   const largoTotal = etiquetas.reduce(
     (total, etiqueta, indice) => total + (indice > 0 ? 3 : 0) + etiqueta.length,
     0,

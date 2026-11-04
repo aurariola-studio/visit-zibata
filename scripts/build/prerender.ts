@@ -394,7 +394,7 @@ export function pagesFor(
       plazaId: place.plazaId,
       categorias: [
         ...new Set(
-          [...place.giros, ...(place.secundarios ?? [])].flatMap((giro) => {
+          [...place.giros].flatMap((giro) => {
             const categoria = categoryOfGiro.get(giro)
             return categoria ? [categoria.id] : []
           }),
@@ -434,7 +434,7 @@ export function pagesFor(
               copy['closure.noReturn'],
             ].join(' ')
           : undefined,
-        giros: [...place.giros, ...(place.secundarios ?? [])].map((id) => giroLabel.get(id) ?? id),
+        giros: [...place.giros].map((id) => giroLabel.get(id) ?? id),
         plaza: plaza?.active
           ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
           : undefined,

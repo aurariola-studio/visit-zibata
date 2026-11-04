@@ -1,7 +1,7 @@
 /*
  * Franja inferior del mapa (escritorio): se lee, no pesa, y deja libre la atribución y los controles.
- * Se ajusta a su contenido, así que en una pantalla normal la leyenda va en una sola fila; cuando no
- * cabe (panel abierto en pantallas pequeñas), el ancho disponible la parte en dos.
+ * Se ajusta a su contenido. La leyenda va siempre en una sola fila: si el ancho no da, se recorta
+ * con puntos suspensivos, que es menos malo que partir la franja en dos renglones.
  */
 .bar {
   display: flex;
@@ -27,6 +27,8 @@
   font-size: var(--text-2xs);
   line-height: 1.35;
   color: var(--color-text-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .links {

@@ -68,14 +68,36 @@
   background: var(--olive-600);
 }
 
+/*
+ * Lo que se desplaza va pegado al borde de la hoja y es la hoja la que recorta con su curva, igual
+ * que la hoja de Privacidad y términos. El texto se desvanece contra los dos bordes en vez de
+ * quedar cortado, y el hueco de la barra se reserva siempre para que el contenido no salte.
+ *
+ * Arriba hay 16 px y no 0: la cruz y el título no pueden nacer dentro de los 14 px que dura el
+ * desvanecido, o se leerían a medias.
+ */
 .content {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* Con 0 arriba, el botón redondo de cerrar queda a ras del borde que recorta y se ve cortado. */
-  padding: var(--space-1) var(--space-4) calc(var(--space-6) + var(--safe-bottom));
+  padding: var(--space-4) var(--space-4) calc(var(--space-6) + var(--safe-bottom));
+  scrollbar-gutter: stable;
   touch-action: pan-y;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent 100%
+  );
 }
 
 /*

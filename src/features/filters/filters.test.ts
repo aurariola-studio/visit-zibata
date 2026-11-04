@@ -76,14 +76,12 @@ describe('utilidades de filtros', () => {
     expect(hasActiveFilters({ ...EMPTY_FILTERS, categoryId: 'pizza' })).toBe(true)
   })
 
-  it('un giro secundario también lleva al local a su estante', () => {
-    // El nivel es peso visual, no visibilidad: si la panadería también hace tacos, sale al
-    // filtrar tacos aunque lo suyo sea el pan.
+  it('cualquier giro lleva al local a su estante', () => {
+    // Si la panadería también hace tacos, sale al filtrar tacos aunque lo suyo sea el pan.
     const pan = makePlace({
       id: 'pan-con-tacos',
       plazaId: 'plaza-sur',
-      giros: ['panaderia'],
-      secundarios: ['taqueria'],
+      giros: ['panaderia', 'taqueria'],
     })
     expect(categoriesOf(pan, catalog)).toEqual(['desayunos-y-cafe', 'tacos-y-antojitos'])
   })

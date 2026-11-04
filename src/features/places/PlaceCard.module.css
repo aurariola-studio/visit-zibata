@@ -165,8 +165,8 @@
 /*
  * El recorte va aquí y no en la fila: en un contenedor flex, `text-overflow` no alcanza al texto
  * suelto, así que la línea se cortaba a media palabra y sin puntos suspensivos. Hace falta para
- * cualquier local con giros de nombre largo, tenga secundarios o no: dieciséis de los ciento uno
- * pasan de treinta caracteres.
+ * cualquier local con giros de nombre largo: dieciséis de los ciento uno pasan de treinta
+ * caracteres.
  */
 .categoryText {
   min-width: 0;

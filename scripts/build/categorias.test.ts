@@ -31,9 +31,7 @@ describe('los giros que nombran una categoría', () => {
       const giros = girosDeCategoria(categoria, porCategoria.get(categoria.id) ?? [], 'es')
       for (const giro of giros) {
         const id = categoria.giros.find((g) => g.label.es.toLowerCase() === giro)?.id
-        const n = lugares.filter((p) =>
-          [...p.giros, ...(p.secundarios ?? [])].includes(id ?? ''),
-        ).length
+        const n = lugares.filter((p) => p.giros.includes(id ?? '')).length
         expect(n, `${categoria.id}: ${giro}`).toBeGreaterThanOrEqual(2)
       }
     }
@@ -46,11 +44,11 @@ describe('los giros que nombran una categoría', () => {
 })
 
 describe('la pertenencia a una categoría', () => {
-  it('un local con un giro secundario también está en esa categoría, sin repetirse', () => {
-    const conSecundario = lugares.find((p) =>
-      (p.secundarios ?? []).some((g) => deGiro.get(g)?.id !== deGiro.get(p.giros[0] ?? '')?.id),
+  it('un local con dos giros de categorías distintas está en las dos, sin repetirse', () => {
+    const conDos = lugares.find((p) =>
+      p.giros.some((g) => deGiro.get(g)?.id !== deGiro.get(p.giros[0] ?? '')?.id),
     ) as Place
-    const ids = categoriasDe(conSecundario, deGiro).map((c) => c.id)
+    const ids = categoriasDe(conDos, deGiro).map((c) => c.id)
     expect(new Set(ids).size).toBe(ids.length)
     expect(ids.length).toBeGreaterThan(1)
   })

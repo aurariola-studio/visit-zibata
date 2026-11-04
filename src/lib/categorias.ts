@@ -1,9 +1,9 @@
 /**
  * Las páginas de categoría, sin plataforma: qué locales entran en cada una y cómo se dicen.
  *
- * Una categoría reúne a los locales cuyo giro, principal o secundario, es suyo. Es la misma regla que
- * aplica el filtro de la aplicación (`categoriesOf` en features/filters/filters.ts), a propósito: la
- * página de una categoría tiene que listar lo mismo que se ve al elegir su cápsula.
+ * Una categoría reúne a los locales que tienen alguno de sus giros. Es la misma regla que aplica el
+ * filtro de la aplicación (`categoriesOf` en features/filters/filters.ts), a propósito: la página de
+ * una categoría tiene que listar lo mismo que se ve al elegir su cápsula.
  *
  * Todo sale de los datos. No hay "abierto ahora" (el HTML se genera una vez por despliegue) ni cifras
  * de los locales que el dato no trae.
@@ -22,7 +22,7 @@ export function categoriasDe(
 ): Category[] {
   const vistas = new Set<string>()
   const resultado: Category[] = []
-  for (const giro of [...place.giros, ...(place.secundarios ?? [])]) {
+  for (const giro of place.giros) {
     const categoria = categoryOfGiro.get(giro)
     if (categoria && !vistas.has(categoria.id)) {
       vistas.add(categoria.id)
@@ -178,7 +178,7 @@ export function girosDeCategoria(
   const etiqueta = sinAcentos(categoria.label[idioma] ?? categoria.label.es)
   const cuenta = new Map<string, number>()
   for (const place of places) {
-    for (const giro of new Set([...place.giros, ...(place.secundarios ?? [])])) {
+    for (const giro of new Set(place.giros)) {
       cuenta.set(giro, (cuenta.get(giro) ?? 0) + 1)
     }
   }

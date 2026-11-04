@@ -24,15 +24,34 @@
   opacity: 1;
 }
 
+/*
+ * Lo que se desplaza va pegado al borde del panel, sin margen propio, y es el panel el que recorta
+ * con su curva: así la barra no se dibuja recta un poco más adentro ni corta la esquina, y el texto
+ * se desvanece contra el borde en vez de quedar guillotinado. Es el mismo reparto que la hoja de
+ * Privacidad y términos, que es la que manda.
+ *
+ * El hueco de la barra se reserva siempre (`scrollbar-gutter`) para que el contenido no salte al
+ * aparecer y desaparecer, y el gesto se queda dentro al llegar al final, sin arrastrar el mapa.
+ */
 .scroll {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* La barra de desplazamiento vive dentro de este bloque: separado del borde redondeado del panel para
-     que no se recorte contra la esquina ni quede pegada al filo. El hueco se reserva siempre
-     (scrollbar-gutter) para que el contenido no salte al aparecer y desaparecer. El aspecto de la
-     barra lo pone global.css, igual para toda la guía. */
-  margin: var(--space-2);
-  padding: var(--space-4) var(--space-3) var(--space-8) var(--space-4);
+  padding: var(--space-6) var(--space-5) var(--space-8) var(--space-6);
   scrollbar-gutter: stable;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 14px),
+    transparent 100%
+  );
 }
