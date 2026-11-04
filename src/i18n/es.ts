@@ -86,7 +86,9 @@ export const es = {
   'place.missingInfo': 'Aún no tenemos más información de este lugar.',
 
   'hours.open': 'Abierto',
+  'hours.openNow': 'Abierto ahora',
   'hours.closed': 'Cerrado',
+  'hours.closedNow': 'Cerrado ahora',
   'hours.closedAllDay': 'Cerrado',
   'hours.today': 'Hoy',
   'hours.none': 'Sin horario publicado.',

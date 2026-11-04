@@ -82,7 +82,9 @@ export const en = {
   'place.missingInfo': 'We don’t have any more information about this place yet.',
 
   'hours.open': 'Open',
+  'hours.openNow': 'Open now',
   'hours.closed': 'Closed',
+  'hours.closedNow': 'Closed now',
   'hours.closedAllDay': 'Closed',
   'hours.today': 'Today',
   'hours.none': 'No opening hours published.',
