@@ -72,19 +72,26 @@ test.describe('Búsqueda y filtros', () => {
     ).toBeVisible()
   })
 
-  test('con una plaza abierta, la búsqueda mira en todo Zibatá', async ({ page }) => {
+  test('con una plaza abierta, la búsqueda mira dentro de la plaza y ofrece buscar en toda la guía', async ({
+    page,
+  }) => {
     await openApp(page, { path: 'zona/plaza-luna' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: 'Plaza Luna' })).toBeVisible()
 
-    await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('taco')
-    // Los resultados salen en una sola lista, con la zona en cada tarjeta y no solo la que estaba abierta.
+    await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('ramen')
+    // La zona acota la búsqueda: Castore está en Xentric Anáhuac, no en Plaza Luna.
     await expect(region.getByRole('heading', { name: 'Resultados' })).toBeVisible()
-    await expect(region.getByRole('link', { name: 'Ver detalles de Tacos el Pata' })).toBeVisible()
-    // La plaza sigue elegida y vuelve en cuanto se borra la búsqueda.
-    await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText('Plaza Luna')
-    await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('')
-    await expect(region.getByRole('heading', { level: 2, name: 'Plaza Luna' })).toBeVisible()
+    await expect(region.getByRole('link', { name: /^Ver detalles de Castore/ })).toHaveCount(0)
+    await expect(region.getByText('Sin resultados en Plaza Luna')).toBeVisible()
+
+    // La puerta del estado vacío suelta la zona y repite la búsqueda sin borrarla.
+    await region.getByRole('button', { name: 'Buscar en toda la guía' }).click()
+    await expect(region.getByRole('link', { name: /^Ver detalles de Castore/ })).toBeVisible()
+    await expect(page.getByRole('searchbox', { name: 'Buscar lugares' })).toHaveValue('ramen')
+    await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText(
+      'Todas las zonas',
+    )
   })
 
   test('muestra un estado vacío y permite limpiar la búsqueda', async ({ page }) => {

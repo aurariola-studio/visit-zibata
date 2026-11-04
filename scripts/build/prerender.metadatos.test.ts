@@ -24,6 +24,29 @@ const data: Dataset = {
 const plazasActivas = new Set(data.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
 const visibles = data.places.filter((place) => place.active && plazasActivas.has(place.plazaId))
 
+/*
+ * El filtro usa la etiqueta corta ("Italiana", "Saludable"); el título, la descripción y el h1 la
+ * dicen completa. Estas formas no salen de los datos y aquí quedan fijadas.
+ */
+const NOMBRE_LARGO: Record<Idioma, Record<string, string>> = {
+  es: {
+    mexicana: 'Comida Mexicana',
+    italiana: 'Comida Italiana',
+    asiatica: 'Comida Asiática',
+    saludable: 'Comida Saludable',
+    casera: 'Comida Casera',
+    internacional: 'Comida Internacional',
+  },
+  en: {
+    mexicana: 'Mexican food',
+    italiana: 'Italian food',
+    asiatica: 'Asian food',
+    saludable: 'Healthy food',
+    casera: 'Home cooking',
+    internacional: 'International food',
+  },
+}
+
 const absoluta = (href: string) => `https://visitzibata.com${href}`
 const paginas = {
   es: pagesFor('es', data, '/', absoluta),
@@ -232,6 +255,81 @@ describe('lo que se comprobó en las fichas concretas de la auditoría', () => {
   })
 })
 
+/*
+ * La etiqueta de un giro es corta a propósito: es lo que cabe en una cápsula y lo que se busca
+ * ("Italiana", "Saludable"). En la descripción de una ficha se dice completa ("Comida Italiana"),
+ * porque ahí no compite por el espacio y "Italiana" a secas no dice qué se vende. Estas diez frases
+ * fijan esa regla: si alguien añade un giro con esa forma y no lo mapea en `src/lib/categorias.ts`,
+ * o cambia el texto, la prueba lo dice.
+ */
+describe('los giros que el filtro dice cortos se leen completos en la descripción', () => {
+  const casos = [
+    [
+      'cocina-italiana',
+      'Comida Italiana en Plaza Prueba, Zibatá.',
+      'Italian food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'cocina-mexicana',
+      'Comida Mexicana en Plaza Prueba, Zibatá.',
+      'Mexican food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'cocina-asiatica',
+      'Comida Asiática en Plaza Prueba, Zibatá.',
+      'Asian food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'cocina-internacional',
+      'Comida Internacional en Plaza Prueba, Zibatá.',
+      'International food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'saludable',
+      'Comida Saludable en Plaza Prueba, Zibatá.',
+      'Healthy food at Plaza Prueba, Zibatá.',
+    ],
+  ] as const
+
+  const plaza = {
+    ...(data.plazas[0] as Plaza),
+    id: 'plaza-prueba',
+    slug: 'plaza-prueba',
+    name: 'Plaza Prueba',
+    active: true,
+  } as unknown as Plaza
+  const base = data.places[0] as Place
+
+  const descripcionDe = (giro: string, idioma: Idioma): string => {
+    const lugar = {
+      ...base,
+      id: 'local-prueba',
+      slug: 'local-prueba',
+      name: 'Local Prueba',
+      plazaId: 'plaza-prueba',
+      giros: [giro],
+      secundarios: [],
+      // Sin texto del negocio, la descripción es solo el contexto: el giro y la zona.
+      description: null,
+      cierre: undefined,
+    } as unknown as Place
+    const pagina = pagesFor(
+      idioma,
+      { ...data, plazas: [plaza], places: [lugar] },
+      '/',
+      absoluta,
+    ).find((candidata) => candidata.href.includes('local-prueba'))
+    return pagina?.description ?? ''
+  }
+
+  for (const [giro, es, en] of casos) {
+    it(`${giro}: ${es}`, () => {
+      expect(descripcionDe(giro, 'es')).toBe(es)
+      expect(descripcionDe(giro, 'en')).toBe(en)
+    })
+  }
+})
+
 describe('la portada', () => {
   it('presenta la guía local de Zibatá, sin abrir con la marca ni reducirla a restaurantes', () => {
     for (const idioma of idiomas) {
@@ -369,7 +467,8 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     expect(titulos.size).toBe(todas.length)
     for (const categoria of conLocales) {
       const pagina = de(idioma, ruta(categoria.slug[idioma]))
-      const etiqueta = categoria.label[idioma] ?? categoria.label.es
+      const etiqueta =
+        NOMBRE_LARGO[idioma][categoria.id] ?? categoria.label[idioma] ?? categoria.label.es
       expect(pagina.title).toContain(etiqueta)
       expect(pagina.description).toContain(etiqueta)
       expect(pagina.contenido).toContain(`<h1>${etiqueta.replace(/&/g, '&amp;')}`)

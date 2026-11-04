@@ -77,7 +77,10 @@ describe('PlaceDetail', () => {
   it('sin datos adicionales no muestra botones vacíos y lo indica', async () => {
     await setup(makePlace({ id: 'x', plazaId: plaza.id, name: 'Sin datos' }))
     expect(screen.queryByRole('region', { name: 'Contacto y redes' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('region', { name: 'Horario' })).not.toBeInTheDocument()
+    // Sin horario se dice, no se calla: el bloque existe con su aviso.
+    expect(screen.getByRole('region', { name: 'Horario' })).toHaveTextContent(
+      'Sin horario publicado.',
+    )
     expect(screen.getByText('Aún no tenemos más información de este lugar.')).toBeInTheDocument()
     // Sin fotografías no se dibuja un hueco con una ilustración genérica.
     expect(

@@ -74,8 +74,8 @@ test.describe('Información de la guía', () => {
     // Y desde que se recuerda por dispositivo, esta es la forma de volver a verlo.
     await about.getByRole('link', { name: 'Ver el tutorial' }).click()
     await expect(page.getByRole('button', { name: 'Saltar' })).toBeVisible()
-    // Por el id del título: la hoja de debajo también tiene un "Explora Zibatá".
-    await expect(page.locator('#onboarding-title')).toHaveText('Explora Zibatá')
+    // Por el id del título, que es el del diálogo del tutorial.
+    await expect(page.locator('#onboarding-title')).toHaveText('¿Cómo me muevo por el mapa?')
     // Tiene ruta propia, como las otras tres, y la hoja de debajo se cierra.
     await expect(page).toHaveURL(/\/es\/info\/tutorial$/)
     await expect(page.getByRole('dialog', { name: 'Acerca de esta guía' })).toHaveCount(0)

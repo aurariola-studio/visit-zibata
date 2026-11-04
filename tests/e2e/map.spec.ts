@@ -99,13 +99,23 @@ test.describe('Mapa @mapa', () => {
   }) => {
     await openApp(page, { onboarding: true })
     const dialog = page.getByRole('dialog')
-    await expect(dialog.getByRole('heading', { name: 'Explora Zibatá' })).toBeVisible()
+    await expect(dialog.getByRole('heading', { name: '¿Cómo me muevo por el mapa?' })).toBeVisible()
+    // Saltar sigue a la vista en los cinco pasos, no solo en el primero.
+    await expect(dialog.getByRole('button', { name: 'Saltar' })).toBeVisible()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
-    await expect(dialog.getByRole('heading', { name: 'Selecciona una zona' })).toBeVisible()
+    await expect(dialog.getByRole('heading', { name: '¿Cómo busco y filtro?' })).toBeVisible()
+    await expect(dialog.getByRole('button', { name: 'Saltar' })).toBeVisible()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
-    await expect(dialog.getByRole('heading', { name: 'Abre la ficha de un lugar' })).toBeVisible()
+    await expect(dialog.getByRole('heading', { name: '¿Qué encuentro en la ficha?' })).toBeVisible()
+    await expect(dialog.getByRole('button', { name: 'Saltar' })).toBeVisible()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
-    await expect(dialog.getByRole('heading', { name: 'Deja tu marca' })).toBeVisible()
+    await expect(
+      dialog.getByRole('heading', { name: '¿Qué pasa con lo que guardo?' }),
+    ).toBeVisible()
+    await expect(dialog.getByRole('button', { name: 'Saltar' })).toBeVisible()
+    await dialog.getByRole('button', { name: 'Siguiente' }).click()
+    await expect(dialog.getByRole('heading', { name: '¿Cómo sugiero un cambio?' })).toBeVisible()
+    await expect(dialog.getByRole('button', { name: 'Saltar' })).toBeVisible()
     await dialog.getByRole('button', { name: 'Empezar a explorar' }).click()
     await expect(dialog).toBeHidden()
 
@@ -114,10 +124,13 @@ test.describe('Mapa @mapa', () => {
     await expect(page.getByRole('dialog')).toBeHidden()
   })
 
-  test('el tutorial se puede saltar', async ({ page }) => {
+  test('el tutorial se puede saltar desde cualquier paso', async ({ page }) => {
     await openApp(page, { onboarding: true })
-    await page.getByRole('dialog').getByRole('button', { name: 'Saltar' }).click()
-    await expect(page.getByRole('dialog')).toBeHidden()
+    const dialog = page.getByRole('dialog')
+    await dialog.getByRole('button', { name: 'Siguiente' }).click()
+    await expect(dialog.getByRole('heading', { name: '¿Cómo busco y filtro?' })).toBeVisible()
+    await dialog.getByRole('button', { name: 'Saltar' }).click()
+    await expect(dialog).toBeHidden()
   })
 
   test('los controles del mapa orientan y restauran la vista', async ({ page }) => {
@@ -279,6 +292,7 @@ test.describe('Móvil en horizontal', () => {
     })
     await openApp(page, { onboarding: true })
     const dialog = page.getByRole('dialog')
+    await dialog.getByRole('button', { name: 'Siguiente' }).click()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()
     await dialog.getByRole('button', { name: 'Siguiente' }).click()

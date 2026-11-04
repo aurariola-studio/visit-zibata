@@ -23,7 +23,7 @@ describe('InfoDialog', () => {
     // Los términos viven en esta misma página desde la v4.18, y lo que fijan son cuatro cosas.
     expect(screen.getByRole('heading', { name: 'Términos de uso' })).toBeInTheDocument()
     expect(screen.getByText(/No tiene relación comercial/)).toBeInTheDocument()
-    expect(screen.getByText(/nadie paga por estar/)).toBeInTheDocument()
+    expect(screen.getByText(/Nadie paga por estar/)).toBeInTheDocument()
     expect(screen.getByText(/sin garantía de que cada dato sea exacto hoy/)).toBeInTheDocument()
     expect(screen.getByText(/prefieres no aparecer/)).toBeInTheDocument()
     // Las otras páginas no se amontonan aquí: son enlaces a su propia ruta.

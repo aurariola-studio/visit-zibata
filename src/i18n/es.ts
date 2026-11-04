@@ -26,7 +26,11 @@ export const es = {
   'explore.title': 'Explora Zibatá',
   'explore.summary': '{plazas} con {places} en el mapa',
   'explore.hint': 'Toca una zona en el mapa o elige una de la lista.',
-  'explore.andMore': '{list} y {count} más',
+  /*
+   * Cuenta categorías, no lugares: "25 tipos y 24 más" se leería como 24 sitios. Y al añadir tipos de
+   * negocio nuevos (servicios, tiendas) la frase sigue valiendo sin tocarla.
+   */
+  'explore.andMore': '{list} y {count} categorías más',
   'explore.list': 'Zonas',
   'explore.openList': 'Explora Zibatá',
   'explore.expand': 'Ver las zonas',
@@ -35,6 +39,10 @@ export const es = {
   'results.empty.title': 'Sin resultados',
   'results.empty.body':
     'No encontramos lugares con esos criterios. Prueba otra palabra o limpia los filtros.',
+  'results.empty.zone': 'Sin resultados en {plaza}',
+  'results.empty.zoneBody':
+    'No hay coincidencias en esta zona. Busca en toda la guía o limpia los filtros.',
+  'results.empty.wholeGuide': 'Buscar en toda la guía',
 
   'plaza.label': 'Zona',
   'plaza.places': 'Lugares en esta zona',
@@ -78,9 +86,13 @@ export const es = {
   'place.missingInfo': 'Aún no tenemos más información de este lugar.',
 
   'hours.open': 'Abierto',
+  'hours.openNow': 'Abierto ahora',
   'hours.closed': 'Cerrado',
+  'hours.closedNow': 'Cerrado ahora',
   'hours.closedAllDay': 'Cerrado',
   'hours.today': 'Hoy',
+  'hours.none': 'Sin horario publicado.',
+  'hours.reviewed': 'Horario revisado el {date}.',
 
   'day.mon': 'Lunes',
   'day.tue': 'Martes',
@@ -131,10 +143,10 @@ export const es = {
   // Nombre del grupo de interruptores para quien lo escucha; a la vista no lleva título.
   'filters.switches': 'Filtros rápidos',
   // Para el punto de la tarjeta, que no lleva texto a la vista. Lo lee un lector de pantalla.
-  'filters.openNowLabel': 'Abierto ahora: {name}',
-  'filters.closedNowLabel': 'Cerrado ahora: {name}',
-  'filters.unknownHoursLabel': 'Sin horario publicado: {name}',
-  'filters.temporarilyClosedLabel': 'Cerrado temporalmente: {name}',
+  'filters.openNowLabel': 'Abierto ahora, {name}',
+  'filters.closedNowLabel': 'Cerrado ahora, {name}',
+  'filters.unknownHoursLabel': 'Sin horario publicado, {name}',
+  'filters.temporarilyClosedLabel': 'Cerrado temporalmente, {name}',
 
   /*
    * El aviso de cierre temporal. Va en la ficha, antes del horario, porque es lo único que hay que
@@ -178,20 +190,49 @@ export const es = {
   // Las páginas de categoría: solo salen en el HTML servido y en los metadatos.
   'seo.categories': 'Categorías',
   'seo.category.name': '{label} en Zibatá',
-  // En singular y plural: con un solo local, "Conoce 1 lugar" y "cómo llegar" a secas, no "a cada uno".
+  /*
+   * La descripción dice qué se encuentra y cuántos lugares hay. La cantidad de zonas no entra: la
+   * página ya las enseña, y con un solo local la frase se alargaba para decir poco.
+   */
   'seo.category.description': {
-    one: '{label} es una de las categorías de Zibatá. Conoce {lugares} en {zonas} de la localidad. Horario, contacto y cómo llegar.',
+    one: 'Encuentra {hook} de Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte. Con horario, contacto y cómo llegar.',
     other:
-      '{label} es una de las categorías de Zibatá. Conoce {lugares} en {zonas} de la localidad. Horarios, contacto y cómo llegar a cada uno.',
+      'Encuentra {hook} de Zibatá. Conoce los {count} lugares que la comunidad tiene para ofrecerte. Con horarios, contacto y cómo llegar.',
   },
-  // Si ninguno de sus locales está en una zona activa no hay zonas que contar: "en 0 zonas" no se dice.
-  'seo.category.descriptionSinZona': {
-    one: '{label} es una de las categorías de Zibatá. Conoce {lugares} de la localidad. Horario, contacto y cómo llegar.',
-    other:
-      '{label} es una de las categorías de Zibatá. Conoce {lugares} de la localidad. Horarios, contacto y cómo llegar a cada uno.',
-  },
+  /*
+   * El filtro usa la etiqueta corta a propósito ("Italiana", "Saludable"); el título y la
+   * descripción la dicen completa. Solo hace falta en las que son un adjetivo suelto.
+   */
+  'seo.category.nombre.mexicana': 'Comida Mexicana',
+  'seo.category.nombre.italiana': 'Comida Italiana',
+  'seo.category.nombre.asiatica': 'Comida Asiática',
+  'seo.category.nombre.saludable': 'Comida Saludable',
+  'seo.category.nombre.casera': 'Comida Casera',
+  'seo.category.nombre.internacional': 'Comida Internacional',
+  /*
+   * Con qué arranca la descripción: el artículo y el "mejor" van con el género y el número de cada
+   * etiqueta. Las que no están aquí leen "lo mejor de", que sirve para cualquiera.
+   */
+  'seo.category.hook': 'lo mejor de {nombre}',
+  'seo.category.hook.desayunos-y-cafe': 'los mejores Desayunos y Café',
+  'seo.category.hook.tacos-y-antojitos': 'los mejores Tacos y Antojitos',
+  'seo.category.hook.mexicana': 'la mejor Comida Mexicana',
+  'seo.category.hook.carnes-y-parrilla': 'las mejores Carnes y Parrilla',
+  'seo.category.hook.mariscos': 'los mejores Mariscos',
+  'seo.category.hook.hamburguesas': 'la mejor Comida Rápida',
+  'seo.category.hook.italiana': 'la mejor Comida Italiana',
+  'seo.category.hook.asiatica': 'la mejor Comida Asiática',
+  'seo.category.hook.entre-panes': 'lo mejor Entre Panes',
+  'seo.category.hook.saludable': 'la mejor Comida Saludable',
+  'seo.category.hook.panaderia-y-reposteria': 'la mejor Panadería y Repostería',
+  'seo.category.hook.botanas': 'lo mejor Para Picar',
+  'seo.category.hook.postres-y-dulces': 'los mejores Postres y Dulces',
+  'seo.category.hook.bebidas': 'las mejores Bebidas',
+  'seo.category.hook.internacional': 'la mejor Comida Internacional',
+  'seo.category.hook.casera': 'la mejor Comida Casera',
+  'seo.category.hook.bar': 'el mejor Bar',
   // Con dos o más giros que la etiqueta no dice, el título los nombra: es lo que la gente busca.
-  'seo.category.title': '{label} en Zibatá: {giros}',
+  'seo.category.title': '{label} en Zibatá, {giros}',
   'seo.category.places': 'Lugares de esta categoría',
   'seo.category.zones': 'Dónde están',
   'seo.category.zoneCount': { one: '{count} zona', other: '{count} zonas' },
@@ -214,7 +255,7 @@ export const es = {
 
   'map.zoomIn': 'Acercar',
   'map.zoomOut': 'Alejar',
-  'map.rotate': 'Girar el mapa: arrastra, o pulsa para girar un octavo de vuelta',
+  'map.rotate': 'Girar el mapa. Arrastra, o pulsa para girar un octavo de vuelta',
   'map.resetNorth': 'Orientar al norte',
   'map.reset': 'Volver a la vista de Zibatá',
   'map.locate': 'Mostrar mi ubicación',
@@ -239,20 +280,31 @@ export const es = {
   'data.retry': 'Reintentar',
   'data.loading': 'Cargando lugares…',
 
-  'onboarding.step1.title': 'Explora Zibatá',
+  'onboarding.step1.title': '¿Cómo me muevo por el mapa?',
   'onboarding.step1.body':
-    'Arrastra para moverte, pellizca o usa la rueda para acercarte y gira con dos dedos o clic derecho.',
-  'onboarding.step2.title': 'Selecciona una zona',
+    'Arrastra para recorrer Zibatá, pellizca o usa la rueda para acercarte, y gira con dos dedos o con clic derecho. Toca una zona para ver qué hay, y usa los botones de la esquina para acercar, girar o volver a la vista general.',
+  'onboarding.step2.title': '¿Cómo busco y filtro?',
   'onboarding.step2.body':
-    'Las zonas con lugares están resaltadas en verde. Tócalas para ver qué hay.',
-  'onboarding.step3.title': 'Abre la ficha de un lugar',
+    'Escribe lo que buscas o elige una categoría. Arriba también puedes acotar por zona o dejar solo lo que está abierto ahora, y quitar cualquier filtro cuando quieras.',
+  'onboarding.step3.title': '¿Qué encuentro en la ficha?',
   'onboarding.step3.body':
-    'Filtra por categoría o busca lo que necesites, y toca una tarjeta para ver horario, contacto y cómo llegar.',
-  'onboarding.step4.title': 'Deja tu marca',
+    'Aquí encuentras el horario, el contacto y las redes, la dirección y cómo llegar. También puedes compartir la ficha con quien quieras.',
+  'onboarding.step4.title': '¿Qué pasa con lo que guardo?',
   'onboarding.step4.body':
-    'En la ficha puedes registrar tus visitas al lugar, guardarlo con el corazón y calificarlo con estrellas.',
+    'Toca el corazón para guardar el lugar, marca el día en que fuiste y califica con estrellas. También verás cuántas personas lo han guardado.',
+  'onboarding.step5.title': '¿Cómo sugiero un cambio?',
+  'onboarding.step5.body':
+    '¿Viste un horario equivocado, un teléfono que ya no funciona o un lugar que cerró? ¿Tienes un local en Zibatá que quieres promocionar o actualizar? Escríbenos desde "Sugiere un cambio o contáctanos". Nos encantará leerte.',
+  'onboarding.demo.place1': 'Café de la plaza',
+  'onboarding.demo.place2': 'Cafetería del parque',
+  'onboarding.demo.place3': 'Pizzería de la plaza',
+  'onboarding.demo.place4': 'Café de la Abuela',
+  'onboarding.demo.place5': 'Desayunos del Día',
+  'onboarding.demo.place6': 'Café de la Ciudad',
+  'onboarding.demo.query': 'café',
+  'onboarding.demo.description': 'Café de barrio con desayunos y pan del día.',
+  'onboarding.demo.message': 'Quiero corregir un horario',
   'onboarding.next': 'Siguiente',
-  'onboarding.back': 'Anterior',
   'onboarding.skip': 'Saltar',
   'onboarding.start': 'Empezar a explorar',
   'onboarding.close': 'Cerrar',
@@ -265,7 +317,7 @@ export const es = {
   'about.tutorial': 'Ver el tutorial',
   'about.tutorialTitle': 'Cómo usar la guía',
   'about.tutorialLead':
-    'Los cuatro pasos para moverte por el mapa, encontrar un lugar y guardarlo.',
+    'Cinco preguntas para moverte por el mapa, buscar, leer una ficha, guardar lo tuyo y sugerir un cambio.',
   'about.moreLabel': 'Más sobre la guía',
   'about.independent': 'Guía independiente de establecimientos y servicios de la zona.',
 
@@ -294,26 +346,26 @@ export const es = {
   'about.privacyCounts':
     'Para saber los intereses del usuario, contamos cuántas veces se abre cada página y cada lugar, a qué enlaces se sale, qué filtros se usan, si una búsqueda encontró resultados y desde qué tipo de sitio se llega. No guardamos lo que escribes, tu IP ni ningún identificador, y no los vendemos ni los compartimos. Si tu navegador pide no ser rastreado, solo contamos la visita a la página.',
   'about.privacyBody':
-    'Los lugares que abres y el idioma se guardan únicamente en este navegador. Tus favoritos, tus calificaciones y las visitas que marcas se guardan aquí y además se envían para que no se pierdan y para que el número de personas que guardaron cada lugar sea cierto: viajan atados a un identificador al azar, sin correo, sin nombre y sin nada que diga quién eres. Tus calificaciones no se publican nunca, ni siquiera como promedio; sirven para ordenar la guía y no salen del servidor. Ese identificador vive solo en este navegador, así que si borras los datos del sitio se pierde y empiezas de cero. Si escribes en "Sugiere un cambio o contáctanos", lo que escribas se guarda para poder atenderlo, junto con el contacto que dejes si decides dejarlo; eso no va atado a ningún identificador. El responsable de estos datos es Aurariola.com, en Querétaro, México. No recabamos datos sensibles. Usamos la información solo para que la guía funcione —idioma, favoritos, calificaciones, visitas guardadas y conteo anónimo de visitas— y para responderte si nos escribes. Si quieres saber qué datos tenemos, corregirlos, cancelarlos u oponerte a que los usemos, envíanos un mensaje por "Sugiere un cambio o contáctanos" indicando tu nombre, qué derecho ejerces y una descripción de los datos; también puedes borrar lo guardado en este navegador desde la configuración del mismo. Publicaremos cualquier cambio a este aviso en esta página con la fecha de actualización.',
+    'Los lugares que abres y el idioma se guardan únicamente en este navegador. Tus favoritos, tus calificaciones y las visitas que marcas se guardan aquí y además se envían para que no se pierdan y para que el número de personas que guardaron cada lugar sea cierto. Viajan atados a un identificador al azar, sin correo, sin nombre y sin nada que diga quién eres. Tus calificaciones no se publican nunca, ni siquiera como promedio; sirven para ordenar la guía y no salen del servidor. Ese identificador vive solo en este navegador, así que si borras los datos del sitio se pierde y empiezas de cero. Nada de esto necesita una cuenta y la guía funciona entera sin ella. El conteo de visitas no identifica a nadie. Si algún día creas una, lo que ya tenías pasará a estar en ella, podrás borrarlo desde tu perfil y el conteo seguirá siendo anónimo. Si escribes en "Sugiere un cambio o contáctanos", lo que escribas se guarda para poder atenderlo, junto con el contacto que dejes si decides dejarlo; eso no va atado a ningún identificador. El responsable de estos datos es Aurariola.com, en Querétaro, México. No recabamos datos sensibles. Usamos la información solo para que la guía funcione (idioma, favoritos, calificaciones, visitas guardadas y conteo anónimo de visitas) y para responderte si nos escribes. Si quieres saber qué datos tenemos, corregirlos, cancelarlos u oponerte a que los usemos, envíanos un mensaje por "Sugiere un cambio o contáctanos" indicando tu nombre, qué derecho ejerces y una descripción de los datos; también puedes borrar lo guardado en este navegador desde la configuración del mismo. Publicaremos cualquier cambio a este aviso en esta página con la fecha de actualización.',
   'about.privacyLocation':
     'Tu ubicación se utiliza solo al pulsar el botón para centrar el mapa y no se guarda ni se transmite. El mapa y las tipografías se sirven desde este mismo sitio, y guardar un lugar tampoco llama a nadie de fuera, de modo que usar la guía no genera ni una petición a terceros. Los enlaces a Google Maps, redes sociales o reparto abren sitios externos, cada uno con su propia política.',
 
   'about.termsTitle': 'Términos de uso',
   'about.termsWhat':
-    'Esta guía es un proyecto independiente. No tiene relación comercial con ninguno de los lugares que aparecen: nadie paga por estar, por salir más arriba ni por aparecer destacado, y no hay publicidad. Que un lugar esté aquí no es una recomendación ni un respaldo, solo que existe en la zona y hay datos suficientes para describirlo.',
+    'Esta guía es un proyecto independiente. No tiene relación comercial con ninguno de los lugares que aparecen. Nadie paga por estar, por salir más arriba ni por aparecer destacado, y no hay publicidad. Que un lugar esté aquí no es una recomendación ni un respaldo, solo que existe en la zona y hay datos suficientes para describirlo.',
   'about.termsData':
-    'La información se reúne de fuentes públicas y de lo que corrige cada negocio, y se revisa por temporada. Aun así puede estar desactualizada: los horarios cambian, un teléfono deja de servir y un local cierra sin avisar. La guía se ofrece tal como está, sin garantía de que cada dato sea exacto hoy. Para algo que importe (el horario antes de salir, un precio, una reserva), confírmalo directo con el lugar.',
+    'La información se reúne de fuentes públicas y de lo que corrige cada negocio, y se revisa por temporada. Aun así puede estar desactualizada. Los horarios cambian, un teléfono deja de servir y un local cierra sin avisar. La guía se ofrece tal como está, sin garantía de que cada dato sea exacto hoy. Para algo que importe (el horario antes de salir, un precio, una reserva), confírmalo directo con el lugar.',
   'about.termsFix':
-    'Si un dato de tu negocio está mal, o prefieres no aparecer, escribe por "Sugiere un cambio o contáctanos" y se corrige o se quita en la siguiente actualización. No hace falta explicar por qué: basta con pedirlo.',
+    'Si un dato de tu negocio está mal, o prefieres no aparecer, escribe por "Sugiere un cambio o contáctanos" y se corrige o se quita en la siguiente actualización. No hace falta explicar por qué. Basta con pedirlo.',
   'about.termsContent':
     'Los textos, el mapa y el código de la guía son de quien la mantiene. El nombre, el logotipo y la marca de cada negocio son de ese negocio, y aquí se usan solo para identificarlo. Los enlaces a Google Maps, redes sociales o reparto llevan a sitios de terceros, y lo que ocurra ahí se rige por sus propias reglas.',
 
   'about.contribute': 'Sugiere un cambio o contáctanos',
   'about.contributeLead': '¿Falta un lugar, hay un dato incorrecto o quieres escribirnos?',
   'about.contributeBody':
-    'Escribe quien sea, vecino, cliente o el propio negocio: toda corrección suma, sea un horario, un teléfono, las redes o la descripción. También puedes ejercer tus derechos ARCO o hacer cualquier consulta.',
+    'Escribe quien sea, vecino, cliente o el propio negocio. Toda corrección suma, sea un horario, un teléfono, las redes o la descripción. También puedes ejercer tus derechos ARCO o hacer cualquier consulta.',
   'about.contributeMeanwhile':
-    'Lo que escribas llega directo a quien mantiene la guía, sin pasar por ningún servicio de terceros. No hace falta cuenta ni correo: el contacto es opcional y solo sirve para responderte. La guía se revisa por temporada, y lo que pida corregir un negocio entra en la siguiente actualización.',
+    'Lo que escribas llega directo a quien mantiene la guía, sin pasar por ningún servicio de terceros. No hace falta cuenta ni correo. El contacto es opcional y solo sirve para responderte. La guía se revisa por temporada, y lo que pida corregir un negocio entra en la siguiente actualización.',
 
   'suggest.title': 'Cuéntanos qué cambia o escribe tu mensaje',
   'suggest.who': '¿Quién escribe?',
@@ -330,10 +382,12 @@ export const es = {
   'suggest.ok': 'Gracias. Lo revisamos y entra en la próxima actualización.',
   'suggest.error': 'No se pudo enviar. Inténtalo de nuevo en un rato.',
   'suggest.required': 'Escribe tu mensaje.',
+  'suggest.contactInvalid': 'Ese correo no parece un correo. Revísalo o déjalo en blanco.',
+  'suggest.again': 'Enviar otro mensaje',
   /* Etiqueta del campo trampa: solo la oyen los lectores de pantalla, y les dice que lo dejen. */
   'suggest.trap': 'No rellenes este campo',
   'suggest.note':
-    'Tu mensaje se guarda en el servidor de la guía para poder atenderlo. Nada más: ni cuenta, ni dirección.',
+    'Tu mensaje se guarda en el servidor de la guía para poder atenderlo. Nada más. Ni cuenta ni dirección.',
 
   'about.credits': 'Datos y créditos',
   'about.creditsBody':
@@ -349,7 +403,7 @@ export const es = {
     one: 'Has visitado {count} lugar de Zibatá, en {zones} de sus {total} zonas.',
     other: 'Has visitado {count} lugares de Zibatá, en {zones} de sus {total} zonas.',
   },
-  'profile.noVisits': 'Todo Zibatá por estrenar: {total} zonas y {places} lugares.',
+  'profile.noVisits': 'Todo Zibatá por estrenar. {total} zonas y {places} lugares.',
   'profile.zonesLabel': 'Zonas de Zibatá',
   'profile.zoneDone': 'visitada',
   'profile.podium': 'Tus tres de siempre',
@@ -358,7 +412,11 @@ export const es = {
   'profile.tasteCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.empty':
     'Registra una visita, guarda un lugar con el corazón o califícalo, y aquí verás tu paso por Zibatá.',
-  'profile.storage': 'Todo esto se queda en este navegador.',
+  /*
+   * No es solo local: la cuenta anónima del servidor guarda lo mismo para poder recuperarlo en otro
+   * aparato, sin nombre ni correo. La política lo detalla; aquí no puede decir menos.
+   */
+  'profile.storage': 'Se guarda en este navegador y se sincroniza con la guía, sin tu nombre.',
 
   'locale.label': 'Idioma',
   'locale.shortEs': 'ES',

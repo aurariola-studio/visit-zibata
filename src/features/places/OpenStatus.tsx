@@ -53,11 +53,14 @@ export function OpenStatus({
     return today ? <span className={styles.todayOnly}>{t('hours.today')}</span> : null
   }
 
-  const label = status.state === 'open' ? t('hours.open') : t('hours.closed')
+  const label =
+    status.state === 'open'
+      ? t(today ? 'hours.openNow' : 'hours.open')
+      : t(today ? 'hours.closedNow' : 'hours.closed')
   return (
     <span className={styles.status} data-state={status.state} data-today={today}>
       <span className={styles.dot} aria-hidden="true" />
-      <span className={styles.label}>{today ? `${t('hours.today')} · ${label}` : label}</span>
+      <span className={styles.label}>{label}</span>
     </span>
   )
 }

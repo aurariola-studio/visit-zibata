@@ -20,6 +20,12 @@ import { dirname, join } from 'node:path'
 import type { Plugin } from 'vite'
 import { en } from '../../src/i18n/en.ts'
 import { es } from '../../src/i18n/es.ts'
+import {
+  etiquetaDeCategoria,
+  etiquetaDeGiro,
+  ganchoDeCategoria,
+  type Traductor,
+} from '../../src/lib/categorias.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
@@ -144,14 +150,18 @@ export function pagesFor(
   absolute: (href: string) => string,
 ): Page[] {
   const copy = CATALOGS[locale]
+  const traducir: Traductor = (clave, vars) => fill(copy[clave], vars ?? {})
   // Una imagen social por idioma, igual en todas las páginas de ese idioma (public/og-image.png y og-image-en.png): lleva escrito el
   // texto de la marca en su idioma, así que una ficha en inglés no se comparte con una imagen en español.
   const image = `${base}${locale === 'en' ? 'og-image-en.png' : 'og-image.png'}`
   const giroLabel = new Map<string, string>()
+  // En prosa, un giro que es solo el adjetivo se lee completo ("Comida Italiana").
+  const giroLargo = new Map<string, string>()
   const categoryOfGiro = new Map<string, Category>()
   for (const category of data.categories) {
     for (const giro of category.giros) {
       giroLabel.set(giro.id, text(giro.label, locale))
+      giroLargo.set(giro.id, etiquetaDeGiro(giro, locale, traducir))
       categoryOfGiro.set(giro.id, category)
     }
   }
@@ -269,32 +279,22 @@ export function pagesFor(
    */
   for (const categoria of categoriasConPagina) {
     const lugares = porCategoria.get(categoria.id) ?? []
-    const etiqueta = text(categoria.label, locale)
+    const traducir: Traductor = (clave, vars) => fill(copy[clave], vars ?? {})
+    const etiqueta = etiquetaDeCategoria(categoria, locale, traducir)
     const name = fill(copy['seo.category.name'], { label: etiqueta })
     const zonas = activePlazas.filter((plaza) =>
       lugares.some((place) => place.plazaId === plaza.id),
     )
-    // En singular y plural, y sin "en 0 zonas" si ninguno de sus locales está en una zona activa.
-    const resumen = fill(
-      conCantidad(
-        copy[zonas.length === 0 ? 'seo.category.descriptionSinZona' : 'seo.category.description'],
-        lugares.length,
-        locale,
-      ),
-      {
-        label: etiqueta,
-        lugares: conCantidad(copy['places.count'], lugares.length, locale),
-        zonas: conCantidad(copy['seo.category.zoneCount'], zonas.length, locale),
-      },
-    )
+    // La descripción arranca con el gancho de la categoría y cuenta cuántos lugares hay.
+    const resumen = fill(conCantidad(copy['seo.category.description'], lugares.length, locale), {
+      hook: ganchoDeCategoria(categoria, locale, traducir),
+    })
     /*
      * El título nombra lo que la gente busca cuando la etiqueta es más general ("Comida Rápida" se
      * busca como "hamburguesas" o "alitas"): los dos giros con más locales que la etiqueta no dice.
      * Con menos de dos no se añade nada, porque un solo giro suelto sonaría a hueco.
      */
-    const titulo = tituloDeCategoria(categoria, lugares, locale, (clave, vars) =>
-      fill(copy[clave], vars ?? {}),
-    )
+    const titulo = tituloDeCategoria(categoria, lugares, locale, traducir)
     pages.push({
       href: route({ categorySlug: categoria.slug[locale] }),
       lastmod: masReciente(lugares),
@@ -360,7 +360,7 @@ export function pagesFor(
           ? `${copy['closure.title']}. ${copy[`closure.${place.cierre.motivo}`]}`
           : undefined,
         contexto: {
-          giros: giros.slice(0, 2),
+          giros: place.giros.slice(0, 2).map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           lugar: lugarDe(nombrePlaza),
           conGiros: copy['seo.place.context'],
           soloLugar: copy['seo.place.contextLugar'],

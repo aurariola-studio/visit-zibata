@@ -1,0 +1,575 @@
+/*
+ * Las miniaturas del tutorial.
+ *
+ * La búsqueda, la ficha y el contacto usan los componentes reales, con datos de ejemplo y sin
+ * interacción. El mapa y las marcas comparten la misma materia y la misma animación de un solo
+ * pase. Todo queda quieto y completo con movimiento reducido.
+ */
+.demo {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── Mapa ────────────────────────────────────────────────────────────────────────────────────── */
+
+.map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.mapImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.14);
+  transform-origin: 50% 50%;
+}
+
+.finger,
+.fingerA,
+.fingerB {
+  position: absolute;
+  z-index: 2;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: var(--radius-round);
+  background: rgb(31 36 25 / 0.5);
+  border: 2px solid rgb(252 250 246 / 0.95);
+  box-shadow: 0 1px 6px rgb(31 36 25 / 0.4);
+  pointer-events: none;
+}
+
+.finger {
+  left: 55%;
+  top: 55%;
+}
+
+/* El dedo de la ficha: sube mientras la ficha se desplaza. */
+.fichaFinger {
+  left: 50%;
+  top: 72%;
+}
+
+/* El dedo de las marcas se coloca con los puntos medidos dentro de la ficha. */
+.marksFinger {
+  left: 0;
+  top: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: -0.5rem 0 0 -0.5rem;
+  opacity: 0;
+}
+
+.fingerA,
+.fingerB {
+  opacity: 0;
+}
+
+/* ── Búsqueda, con las piezas reales de la barra y la lista ───────────────────────────────── */
+
+.search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.searchMap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.searchTop {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* La zona y el interruptor de abierto ahora, los filtros que acompañan a las categorías. */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zonePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 1.7rem;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  color: var(--ink-700);
+  background: var(--color-surface-solid);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-strong);
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+.zonePill[data-active] {
+  color: var(--sand-25);
+  background: var(--color-accent);
+  box-shadow: none;
+}
+
+.zonePin {
+  width: 0.6rem;
+  height: 0.6rem;
+  flex: none;
+  border-radius: var(--radius-round);
+  background: var(--olive-600);
+  box-shadow: 0 0 0 2px var(--sand-25);
+}
+
+.zonePill[data-active] .zonePin {
+  background: var(--sand-25);
+}
+
+.switchRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 1.7rem;
+  padding: 0 9px;
+  border-radius: var(--radius-pill);
+  color: var(--ink-700);
+  background: var(--color-surface-solid);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.switch {
+  position: relative;
+  width: 2rem;
+  height: 1.1rem;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+.switch[data-on] {
+  background: var(--color-accent);
+}
+
+.knob {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: var(--radius-round);
+  background: var(--sand-25);
+  box-shadow: 0 1px 2px rgb(31 36 25 / 0.2);
+  transition: translate var(--duration-base) var(--ease-out);
+}
+
+.switch[data-on] .knob {
+  translate: 0.9rem 0;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  height: var(--control-h);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-solid);
+  box-shadow:
+    0 1px 3px rgb(31 36 25 / 0.12),
+    inset 0 0 0 1px var(--color-border);
+}
+
+.searchResults {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  background: var(--sand-25);
+  box-shadow: 0 1px 6px rgb(31 36 25 / 0.1);
+}
+
+.searchCount {
+  padding: 0 4px 4px;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.searchList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── Ficha y marcas, con el componente real dentro de un marco ─────────────────────────────── */
+
+.fichaFrame,
+.contactFrame {
+  position: relative;
+  height: 100%;
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--sand-25);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55);
+}
+
+.fichaInner,
+.contactInner {
+  width: 111%;
+  transform: scale(0.9);
+  transform-origin: top left;
+}
+
+.fichaInner {
+  position: relative;
+}
+
+/* En las marcas la ficha se coloca en el bloque personal, donde están estrellas y visitas. */
+.fichaInner[data-marks] {
+  width: 122%;
+  transform: scale(0.82) translateY(var(--marks-scroll, -80px));
+}
+
+/*
+ * Movimiento. Todo empieza en el estado final y la animación lo trae desde un poco antes, para que
+ * quien pide movimiento reducido vea la miniatura completa y quieta.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .mapImage {
+    animation: mapCamera 8s var(--ease-out) infinite alternate;
+  }
+
+  .finger {
+    animation: dragFinger 8s var(--ease-out) infinite alternate;
+  }
+
+  /* El dedo acompaña al desplazamiento de la ficha, no a un reloj aparte. */
+  .fichaFrame[data-ready] .fichaFinger {
+    animation: fichaFinger 10s var(--ease-out) infinite;
+  }
+
+  .fichaFrame[data-ready] .marksFinger {
+    animation: marksFinger 10s var(--ease-out) infinite;
+  }
+
+  .fingerA {
+    animation: pinchStart 8s var(--ease-out) infinite alternate;
+  }
+
+  .fingerB {
+    animation: pinchEnd 8s var(--ease-out) infinite alternate;
+  }
+
+  /* La ficha real se desplaza de arriba abajo y vuelve de un salto, en el mismo compás que el dedo. */
+  .fichaInner[data-ready] {
+    animation: fichaScroll 10s linear infinite;
+  }
+
+  .fichaInner[data-marks][data-ready] {
+    animation: marksScroll 10s var(--ease-out) infinite alternate;
+  }
+
+  /* El formulario real se desplaza para enseñar los campos y el envío, y vuelve. */
+  .contactInner {
+    animation: contactScroll 9s var(--ease-out) infinite alternate;
+  }
+
+  /* El formulario real conserva su botón; aquí se añade un pulso de envío que se repite. */
+  .contactFrame :global(form[data-demo] button[type="submit"]) {
+    animation: press 2s var(--ease-out) infinite;
+  }
+
+  /*
+   * Primero un dedo arrastra el mapa; después dos dedos lo acercan. No hay rotación: el mapa real
+   * no gira para arrastrarlo y girar la imagen entera se veía de juguete.
+   */
+  @keyframes mapCamera {
+    0%,
+    10% {
+      transform: scale(1.14) translate(0, 0);
+    }
+    45%,
+    55% {
+      transform: scale(1.14) translate(-34px, -12px);
+    }
+    80%,
+    100% {
+      transform: scale(1.24) translate(-8px, -4px);
+    }
+  }
+
+  @keyframes dragFinger {
+    0%,
+    8% {
+      opacity: 0;
+      left: 55%;
+      top: 55%;
+    }
+    15% {
+      opacity: 1;
+    }
+    45% {
+      opacity: 1;
+      left: 47%;
+      top: 50%;
+    }
+    55%,
+    100% {
+      opacity: 0;
+      left: 47%;
+      top: 50%;
+    }
+  }
+
+  @keyframes pinchStart {
+    0%,
+    52% {
+      opacity: 0;
+      left: 49%;
+      top: 50%;
+    }
+    58% {
+      opacity: 1;
+    }
+    78% {
+      left: 42%;
+      top: 45%;
+    }
+    90%,
+    100% {
+      opacity: 0;
+      left: 42%;
+      top: 45%;
+    }
+  }
+
+  @keyframes pinchEnd {
+    0%,
+    52% {
+      opacity: 0;
+      left: 51%;
+      top: 50%;
+    }
+    58% {
+      opacity: 1;
+    }
+    78% {
+      left: 58%;
+      top: 55%;
+    }
+    90%,
+    100% {
+      opacity: 0;
+      left: 58%;
+      top: 55%;
+    }
+  }
+
+  @keyframes fichaScroll {
+    0%,
+    18% {
+      transform: scale(0.9) translateY(0);
+    }
+    82%,
+    90% {
+      transform: scale(0.9) translateY(var(--ficha-scroll, -260px));
+    }
+    100% {
+      transform: scale(0.9) translateY(0);
+    }
+  }
+
+  /*
+   * Tres gestos de arrastre mientras la ficha baja, en el mismo compás que el desplazamiento
+   * (18% a 82%), y uno hacia abajo cuando la ficha vuelve arriba (90% a 100%).
+   */
+  @keyframes fichaFinger {
+    0%,
+    18% {
+      opacity: 0;
+      left: 50%;
+      top: 66%;
+    }
+    21% {
+      opacity: 1;
+    }
+    37% {
+      opacity: 1;
+      top: 46%;
+    }
+    40% {
+      opacity: 0;
+      top: 44%;
+    }
+    42% {
+      opacity: 0;
+      top: 66%;
+    }
+    45% {
+      opacity: 1;
+      top: 64%;
+    }
+    59% {
+      opacity: 1;
+      top: 46%;
+    }
+    62% {
+      opacity: 0;
+      top: 44%;
+    }
+    64% {
+      opacity: 0;
+      top: 66%;
+    }
+    67% {
+      opacity: 1;
+      top: 64%;
+    }
+    80% {
+      opacity: 1;
+      top: 46%;
+    }
+    83% {
+      opacity: 0;
+      top: 44%;
+    }
+    88% {
+      opacity: 0;
+      top: 46%;
+    }
+    91% {
+      opacity: 1;
+      top: 50%;
+    }
+    98% {
+      opacity: 1;
+      top: 64%;
+    }
+    100% {
+      opacity: 0;
+      top: 66%;
+    }
+  }
+
+  @keyframes marksScroll {
+    0%,
+    20% {
+      transform: scale(0.82) translateY(0);
+    }
+    32%,
+    88% {
+      transform: scale(0.82) translateY(var(--marks-scroll, -80px));
+    }
+    98%,
+    100% {
+      transform: scale(0.82) translateY(0);
+    }
+  }
+
+  /*
+   * El dedo de las marcas toca el corazón arriba y, ya desplazada la ficha, las estrellas y la
+   * visita. Los puntos llegan medidos desde el componente, así que caen sobre cada control. Los
+   * toques caen a 1,4, 3,8 y 5,8 s, cuando el estado cambia.
+   */
+  @keyframes marksFinger {
+    0%,
+    8% {
+      opacity: 0;
+      translate: var(--tap-corazon, 83% 8%);
+      transform: scale(1);
+    }
+    10%,
+    22% {
+      opacity: 1;
+    }
+    14% {
+      transform: scale(0.72);
+    }
+    18% {
+      transform: scale(1);
+    }
+    26% {
+      opacity: 0;
+      translate: var(--tap-corazon, 83% 8%);
+    }
+    32% {
+      opacity: 0;
+      translate: var(--tap-estrellas, 35% 24%);
+    }
+    34%,
+    48% {
+      opacity: 1;
+    }
+    38% {
+      transform: scale(0.72);
+    }
+    42% {
+      transform: scale(1);
+    }
+    52% {
+      opacity: 0;
+      translate: var(--tap-estrellas, 35% 24%);
+    }
+    54% {
+      opacity: 0;
+      translate: var(--tap-visita, 23% 47%);
+    }
+    56%,
+    72% {
+      opacity: 1;
+    }
+    58% {
+      transform: scale(0.72);
+    }
+    62% {
+      transform: scale(1);
+    }
+    78%,
+    100% {
+      opacity: 0;
+      translate: var(--tap-visita, 23% 47%);
+    }
+  }
+
+  @keyframes contactScroll {
+    0%,
+    22% {
+      transform: scale(0.9) translateY(0);
+    }
+    78%,
+    100% {
+      transform: scale(0.9) translateY(-26%);
+    }
+  }
+
+  @keyframes press {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(0.96);
+    }
+  }
+}

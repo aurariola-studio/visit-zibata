@@ -66,12 +66,24 @@ function fechaLarga(fecha: string): string {
   )
 }
 
+export interface PlaceDetailDemo {
+  favorite?: boolean
+  favorites?: number | null
+  yours?: boolean
+  rating?: number | null
+  visitDate?: string | null
+}
+
 interface PlaceDetailProps {
   place: Place
   plaza: Plaza
   backLabel: string
   onBack: () => void
   onClose: () => void
+  /** En una miniatura de demostración el foco no debe saltar al título. */
+  focusOnMount?: boolean
+  /** Estado de las marcas para la demostración del tutorial, sin tocar los datos reales. */
+  demo?: PlaceDetailDemo
 }
 
 interface ContactLink {
@@ -115,7 +127,15 @@ function Description({ text }: { text: LocalizedText }) {
   )
 }
 
-export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceDetailProps) {
+export function PlaceDetail({
+  place,
+  plaza,
+  backLabel,
+  onBack,
+  onClose,
+  focusOnMount = true,
+  demo,
+}: PlaceDetailProps) {
   const catalog = useCatalog()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const directions = placeDirections(place, plaza)
@@ -131,8 +151,9 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia el lugar mostrado.
   useEffect(() => {
+    if (!focusOnMount) return
     focusPanelHeading(headingRef.current)
-  }, [place.id])
+  }, [place.id, focusOnMount])
 
   const brand = (name: BrandName) => <BrandIcon name={name} />
   /**
@@ -267,7 +288,7 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
            * leían como la misma clase de cosa. El favorito se queda: es de un toque y está también
            * en la tarjeta, así que su sitio es el mismo en los dos lados.
            */}
-          <FavoriteButton placeId={place.id} placeName={place.name} />
+          <FavoriteButton placeId={place.id} placeName={place.name} demoActive={demo?.favorite} />
           <button
             type="button"
             className={styles.iconButton}
@@ -383,7 +404,7 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
        * porque es lo último que se mira antes de decidir: primero a dónde voy, después cuánta gente
        * lo guardó, y al final lo mío (estrellas y visitas). Arriba competía con el nombre del local.
        */}
-      <SocialStats placeId={place.id} />
+      <SocialStats placeId={place.id} demoFavorites={demo?.favorites} demoYours={demo?.yours} />
 
       {/*
        * Y lo que no sale de aquí. Calificar y registrar una visita solo cambian tu relación con el
@@ -393,13 +414,22 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
        * sigue siendo "Solo para ti", pero no hace falta repetirlo a la vista.
        */}
       <section className={styles.personal} aria-label={t('place.onlyYou')} data-nosnippet="">
-        <RatingStars placeId={place.id} placeName={place.name} />
-        <VisitButton placeId={place.id} placeName={place.name} sinSuperficie />
+        <RatingStars placeId={place.id} placeName={place.name} demoValue={demo?.rating} />
+        <VisitButton
+          placeId={place.id}
+          placeName={place.name}
+          sinSuperficie
+          demoDate={demo?.visitDate}
+        />
       </section>
 
       {place.description && <Description text={place.description} />}
 
-      <HoursTable hours={place.hours} cerrado={place.cierre !== undefined} />
+      <HoursTable
+        hours={place.hours}
+        cerrado={place.cierre !== undefined}
+        revisado={place.verification?.lastVerifiedAt}
+      />
 
       {links.length > 0 && (
         <section className={styles.contact} aria-label={t('place.contact')} data-nosnippet="">

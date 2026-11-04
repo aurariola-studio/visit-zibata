@@ -17,9 +17,19 @@ interface ResultsPanelProps {
   places: readonly Place[]
   onOpenPlace: (place: Place) => void
   onClearFilters: () => void
+  /** La zona que acota la búsqueda, si hay una elegida. */
+  plazaName?: string
+  /** Suelta la zona y deja la búsqueda como estaba. */
+  onClearPlaza?: () => void
 }
 
-export function ResultsPanel({ places, onOpenPlace, onClearFilters }: ResultsPanelProps) {
+export function ResultsPanel({
+  places,
+  onOpenPlace,
+  onClearFilters,
+  plazaName,
+  onClearPlaza,
+}: ResultsPanelProps) {
   return (
     <section className={styles.panel} aria-labelledby="results-title">
       <header className={styles.header}>
@@ -45,14 +55,23 @@ export function ResultsPanel({ places, onOpenPlace, onClearFilters }: ResultsPan
       {places.length === 0 ? (
         <EmptyState
           icon={<SearchX />}
-          title={t('results.empty.title')}
+          title={
+            plazaName ? t('results.empty.zone', { plaza: plazaName }) : t('results.empty.title')
+          }
           action={
-            <button type="button" className={styles.textButton} onClick={onClearFilters}>
-              {t('filters.clear')}
-            </button>
+            <div className={styles.emptyActions}>
+              {plazaName && onClearPlaza && (
+                <button type="button" className={styles.textButton} onClick={onClearPlaza}>
+                  {t('results.empty.wholeGuide')}
+                </button>
+              )}
+              <button type="button" className={styles.textButton} onClick={onClearFilters}>
+                {t('filters.clear')}
+              </button>
+            </div>
           }
         >
-          {t('results.empty.body')}
+          {plazaName ? t('results.empty.zoneBody') : t('results.empty.body')}
         </EmptyState>
       ) : (
         <PlaceList places={places} onOpen={onOpenPlace} showPlaza label={t('results.title')} />

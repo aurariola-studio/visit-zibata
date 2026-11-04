@@ -34,7 +34,7 @@ test.describe('Abierto ahora', () => {
     expect(despues).toBeGreaterThan(0)
     expect(despues).toBeLessThanOrEqual(antes)
     // Cada tarjeta que queda tiene su marca de abierto, que es el texto que lee un lector de pantalla.
-    await expect(region.getByText(/^Abierto ahora: /)).toHaveCount(despues)
+    await expect(region.getByText(/^Abierto ahora, /)).toHaveCount(despues)
 
     // Y se puede quitar: la lista vuelve a lo que era.
     await interruptor.click()
@@ -50,7 +50,7 @@ test.describe('Abierto ahora', () => {
     const region = panel(page)
 
     const total = await region.locator('article').count()
-    const marcas = await region.getByText(/^Abierto ahora: /).count()
+    const marcas = await region.getByText(/^Abierto ahora, /).count()
     if (marcas === 0 || marcas === total) {
       test.skip(true, 'A esta hora están todos abiertos o todos cerrados')
       return
@@ -58,8 +58,8 @@ test.describe('Abierto ahora', () => {
 
     // Las primeras `marcas` tarjetas son exactamente las que llevan marca.
     const primeras = region.locator('article').nth(marcas - 1)
-    await expect(primeras.getByText(/^Abierto ahora: /)).toHaveCount(1)
+    await expect(primeras.getByText(/^Abierto ahora, /)).toHaveCount(1)
     const siguiente = region.locator('article').nth(marcas)
-    await expect(siguiente.getByText(/^Abierto ahora: /)).toHaveCount(0)
+    await expect(siguiente.getByText(/^Abierto ahora, /)).toHaveCount(0)
   })
 })

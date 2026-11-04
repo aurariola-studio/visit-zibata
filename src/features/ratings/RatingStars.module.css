@@ -56,8 +56,12 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 1.7rem;
+  /*
+   * 48 × 44 para que cada media estrella mida 24 × 44: el mínimo de 24 de WCAG 2.2 se cumple en las
+   * dos direcciones, y las cinco siguen entrando en una fila de móvil (240 px más separación).
+   */
+  width: 3rem;
+  height: 2.75rem;
   border-radius: var(--radius-pill);
   color: var(--sand-400);
 }
@@ -65,8 +69,8 @@
 .empty,
 .filled {
   grid-area: 1 / 1;
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.6rem;
+  height: 1.6rem;
   fill: none;
 }
 

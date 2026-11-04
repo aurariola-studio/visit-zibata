@@ -1,14 +1,7 @@
 .dialog {
-  width: min(24.5rem, calc(100vw - 2rem));
+  width: min(30rem, calc(100vw - 2rem));
   padding: 0;
   border: 0;
-
-  /*
-
-   * 367 px de lado corto.
-
-   */
-
   border-radius: var(--radius-xl);
   background: transparent;
   color: var(--color-text);
@@ -36,69 +29,77 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  /* En pantallas bajas (móvil en horizontal) el contenido se desplaza: las acciones siguen al alcance. */
-  max-height: calc(100dvh - 2.5rem);
+  /* Alto fijo: el tutorial no cambia de tamaño al cambiar de paso. */
+  height: 36rem;
+  max-height: calc(100dvh - 0.5rem);
   overflow-y: auto;
-  padding: var(--space-4) var(--space-5) var(--space-5);
+  padding: var(--space-5);
 
   /*
-
-   * 367 px de lado corto.
-
+   * Concentricidad: los 28 de la tarjeta menos sus 20 de relleno lateral.
+   * Es la única superficie de la guía que se apoya en la esquina de otra, así que es la única
+   * donde la resta se ve; el resto va lo bastante lejos del canto como para que mande el tamaño.
    */
-
   border-radius: var(--radius-xl);
   background: var(--sand-25);
   box-shadow: var(--shadow-lg);
 }
 
+/*
+ * La cabecera se queda pegada arriba cuando la tarjeta se desplaza en pantallas bajas: el paso,
+ * Saltar y Cerrar siguen al alcance aunque el contenido quede debajo.
+ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  background: var(--sand-25);
+}
+
 /* Cerrar ejecuta: cuadrado de icono con la esquina de la familia, no círculo. */
 .close {
   composes: base botonIcono conSuperficie from "../../styles/controls.module.css";
-  position: absolute;
-  /* Mismos márgenes que el contenido de la tarjeta: alineado con el título y con los de abajo. */
-  top: var(--space-4);
-  right: var(--space-5);
+  flex: none;
 }
 
-/* La ilustración vive en su propio panel: se lee como imagen y ordena la tarjeta. */
-.artBox {
-  display: grid;
-  place-items: center;
-  padding: var(--space-3) var(--space-4);
-  margin-bottom: var(--space-2);
+/*
+ * La miniatura ocupa el ancho de la tarjeta y el mismo alto en todos los pasos. El fondo es el
+ * mismo papel que el resto.
+ */
+.stage {
+  position: relative;
+  flex: none;
+  height: 14.5rem;
+  margin-bottom: var(--space-1);
+  overflow: hidden;
   border: 1px solid var(--color-border);
-
-  /*
-
-   * Concentricidad: los 28 de la tarjeta menos sus 20 de relleno lateral.
-
-   * Es la única superficie de la guía que se apoya en la esquina de otra, así que es la única
-
-   * donde la resta se ve; el resto va lo bastante lejos del canto como para que mande el tamaño.
-
-   */
-
   border-radius: var(--radius-sm);
   background: var(--sand-50);
-}
-
-.art {
-  width: 100%;
-  height: auto;
-}
-
-/* La ilustración es decorativa: sin altura suficiente se omite y el paso cabe completo. */
-@media (max-height: 480px) {
-  .artBox {
-    display: none;
-  }
 }
 
 .progress {
   font-size: var(--text-xs);
   font-weight: var(--weight-strong);
   color: var(--olive-600);
+  /* La caja está centrada; el ojo pide un pelo más abajo. */
+  translate: 0 1px;
+}
+
+/*
+ * El bloque de texto reserva el alto del paso más largo: el título y el cuerpo no empujan la
+ * tarjeta al cambiar de pregunta.
+ */
+.copy {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 9.5rem;
 }
 
 .title {
@@ -110,8 +111,9 @@
 }
 
 .body {
-  min-height: 4.4em;
   color: var(--ink-700);
+  font-size: var(--text-base);
+  line-height: 1.5;
 }
 
 .dots {
@@ -150,4 +152,44 @@
 
 .secondary {
   composes: base boton fantasma from "../../styles/controls.module.css";
+}
+
+/*
+ * En móvil la tarjeta ocupa el lugar de la hoja: ancha, pegada al borde inferior y con la esquina
+ * de arriba sola. El mapa queda a la vista por encima, como cuando se abre la hoja de la guía.
+ */
+@media (max-width: 639px) {
+  .dialog {
+    inset: auto 0 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .card {
+    height: min(36rem, calc(100dvh - 0.5rem));
+    padding-bottom: calc(var(--space-5) + var(--safe-bottom));
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .stage {
+    height: 14.5rem;
+  }
+
+  .copy {
+    height: 12rem;
+  }
+
+  /* En el teléfono el cuerpo baja un escalón para que el paso más largo quepa sin mover la tarjeta. */
+  .body {
+    font-size: var(--text-sm);
+  }
+}
+
+/* En pantallas bajas la miniatura se acorta, pero la tarjeta conserva su alto y se desplaza. */
+@media (max-height: 560px) {
+  .stage {
+    height: 12.5rem;
+  }
 }
