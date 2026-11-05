@@ -10,7 +10,7 @@ test.describe('Calificación en la ficha', () => {
       'La matriz se recorre una vez por motor, no por dispositivo',
     )
     /*
-     * La hoja se abre una vez y lo que cambia es la ventana, como en la matriz de Tu Zibatá: las
+     * La ficha se abre una vez y lo que cambia es la ventana, como en la matriz de Tu Zibatá: las
      * reglas que deciden la fila son de la ventana y el navegador las vuelve a aplicar al redimensionar.
      */
     await page.setViewportSize({ width: 320, height: 568 })
@@ -19,24 +19,16 @@ test.describe('Calificación en la ficha', () => {
     const ficha = panel(page)
     const rating = ficha.locator('[class*="_rating_"]')
     const nota = rating.locator('p')
-    const estrellas = rating.locator('fieldset')
-    const quinta = estrellas.locator('[class*="_star_"]').nth(4)
+    // El bloque de la nota se pinta con la ficha; se espera antes de medir.
+    await expect(rating.locator('fieldset')).toBeVisible()
+    await expect(nota).toContainText('Califica este lugar')
 
-    for (const [width, height] of [
-      [320, 568],
-      [360, 640],
-      [390, 844],
-      [768, 1024],
-      [1024, 768],
-      [1280, 900],
-      [1440, 900],
-      [1920, 1080],
-    ] as const) {
-      await page.setViewportSize({ width, height })
-      const medidas = await page.evaluate(() => {
-        const nota = document.querySelector('[class*="_rating_"] p')
-        const escala = document.querySelector('[class*="_rating_"] fieldset')
-        const estrella = escala?.querySelector('[class*="_star_"]')
+    /** Lo que hay que mirar, leído del propio bloque y no de todo el documento. */
+    const medir = () =>
+      rating.evaluate((bloque) => {
+        const nota = bloque.querySelector('p')
+        const escala = bloque.querySelector('fieldset')
+        const estrella = escala?.querySelector('span[class*="_star_"]')
         if (!nota || !escala || !estrella) return null
         const n = nota.getBoundingClientRect()
         const e = escala.getBoundingClientRect()
@@ -49,6 +41,33 @@ test.describe('Calificación en la ficha', () => {
           pagina: document.documentElement.scrollWidth - window.innerWidth,
         }
       })
+
+    /** El panel cambia de sitio al cruzar el punto de escritorio y anima su ancho: se espera a que se quede quieto. */
+    const anchoEstable = async () => {
+      let previo = -1
+      for (let intento = 0; intento < 30; intento++) {
+        const ancho = await rating.evaluate((bloque) =>
+          Math.round(bloque.getBoundingClientRect().width),
+        )
+        if (ancho > 0 && ancho === previo) return
+        previo = ancho
+        await page.waitForTimeout(100)
+      }
+    }
+
+    for (const [width, height] of [
+      [320, 568],
+      [360, 640],
+      [390, 844],
+      [768, 1024],
+      [1024, 768],
+      [1280, 900],
+      [1440, 900],
+      [1920, 1080],
+    ] as const) {
+      await page.setViewportSize({ width, height })
+      await anchoEstable()
+      const medidas = await medir()
       expect(medidas, `sin medidas en ${width}×${height}`).not.toBeNull()
       expect(medidas?.fila, `${width}×${height}: la nota baja a otra fila`).toBe(true)
       // Una línea de texto mide unos 17 px; dos serían bastante más.
@@ -57,29 +76,21 @@ test.describe('Calificación en la ficha', () => {
       expect(medidas?.textoDentro, `${width}×${height}: la nota se recorta`).toBe(true)
       expect(medidas?.pagina, `${width}×${height}: desborde horizontal`).toBeLessThanOrEqual(0)
 
-      // El texto cambia al pasar el puntero; ni la estrella ni la fila se deben mover.
-      await quinta.scrollIntoViewIfNeeded()
-      const caja = await quinta.boundingBox()
-      expect(caja).not.toBeNull()
-      if (!caja) continue
-      await quinta.hover({
-        position: { x: caja.width * 0.8, y: caja.height / 2 },
-        force: true,
-      })
+      /*
+       * El estado de la vista previa cambia el texto a su versión más larga ("Calificar con 5
+       * estrellas"). Se provoca con el foco en el radio, que es lo mismo que hace el teclado, sin
+       * depender de coordenadas: el puntero sobre un bloque que se repinta era la fuente de las
+       * intermitencias.
+       */
+      await ficha.getByRole('radio', { name: /con 5 estrellas$/ }).focus()
       await expect(nota).toContainText('Calificar con')
-      const despues = await page.evaluate(() => {
-        const nota = document.querySelector('[class*="_rating_"] p')
-        const estrella = document.querySelector('[class*="_rating_"] fieldset [class*="_star_"]')
-        if (!nota || !estrella) return null
-        return {
-          estrella: Math.round(estrella.getBoundingClientRect().width),
-          nota: Math.round(nota.getBoundingClientRect().left),
-        }
-      })
-      expect(despues?.estrella, `${width}×${height}: la estrella cambia al pasar el puntero`).toBe(
+      const conVista = await medir()
+      expect(conVista?.fila, `${width}×${height}: la vista previa baja a otra fila`).toBe(true)
+      expect(conVista?.estrella, `${width}×${height}: la estrella cambia al cambiar el texto`).toBe(
         medidas?.estrella,
       )
-      await page.mouse.move(0, 0)
+
+      await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
       await expect(nota).toContainText('Califica este lugar')
     }
   })
