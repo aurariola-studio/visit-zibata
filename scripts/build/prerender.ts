@@ -362,6 +362,7 @@ export function pagesFor(
         contexto: {
           giros: place.giros.slice(0, 2).map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           lugar: lugarDe(nombrePlaza),
+          idioma: locale,
           conGiros: copy['seo.place.context'],
           soloLugar: copy['seo.place.contextLugar'],
         },

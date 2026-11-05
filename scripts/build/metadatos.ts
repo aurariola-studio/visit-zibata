@@ -22,6 +22,7 @@
  * Que Google muestre esta descripción, o que respete su orden, no está garantizado: Google la usa
  * cuando le parece que describe mejor la página que el texto de la propia página.
  */
+import { lista } from '../../src/lib/categorias.ts'
 
 /**
  * Las expresiones con caracteres tipográficos se escriben con su código y no con el carácter, que es
@@ -171,6 +172,8 @@ export interface Contexto {
   giros: string[]
   /** "Plaza Loop Urban, Zibatá" (ver `lugarDe`). */
   lugar: string
+  /** El idioma de la ficha: decide cómo se unen los giros ("A y B" / "A and B"). */
+  idioma: 'es' | 'en'
   /** Plantilla con giros: "{giros} en {lugar}." */
   conGiros: string
   /** Plantilla sin giros, para cuando la descripción ya los dice: "En {lugar}." */
@@ -189,7 +192,10 @@ export function contextoDe(contexto: Contexto, base: string): string {
   const dicho = forma(base)
   const nuevos = contexto.giros.filter((giro) => !dicho.includes(forma(giro)))
   return nuevos.length > 0
-    ? llenar(contexto.conGiros, { giros: nuevos.join(', '), lugar: contexto.lugar })
+    ? llenar(contexto.conGiros, {
+        giros: lista(nuevos, contexto.idioma),
+        lugar: contexto.lugar,
+      })
     : llenar(contexto.soloLugar, { lugar: contexto.lugar })
 }
 

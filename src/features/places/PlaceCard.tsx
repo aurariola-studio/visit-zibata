@@ -5,6 +5,7 @@ import { DEFAULT_PLAZA_TONE, plazaTones, plazaVars } from '../../config/palette.
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { useElementWidth } from '../../hooks/useElementWidth.ts'
 import { localized, t, useLocale } from '../../i18n/index.ts'
+import { lista } from '../../lib/categorias.ts'
 import { estadoDe } from '../../lib/estado.ts'
 import { rutaDeLugar } from '../../lib/url-state.ts'
 import type { Place } from '../../types/domain.ts'
@@ -60,36 +61,33 @@ export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }:
   // Todos los giros llevan icono, en su orden: el primero es el que define al local.
   const giros = girosOf(place, catalog)
   const iconos = giros.map((giro) => giro.icon)
+  const idioma = useLocale()
   /*
    * Aquí solo hay una línea: se nombran los giros que caben en ella, siempre al menos uno, y el
-   * resto se cuenta ("Alitas · Hamburguesas +1"). Cuántos caben sale del ancho real de la fila, así
+   * resto se cuenta ("Alitas y Hamburguesas +1"). Cuántos caben sale del ancho real de la fila, así
    * que en una hoja ancha se leen todas las etiquetas y en un teléfono se recortan con su cuenta.
    * Antes era un presupuesto fijo de 25 letras y por eso sobraba espacio y seguía saliendo "+1".
+   *
+   * Los giros se unen como en una frase ("A, B y C"), y el largo se mide sobre el texto ya unido:
+   * el separador deja de ser siempre un punto medio, así que contarlo a mano mentiría.
    */
   const etiquetas = giros.map((giro) => localized(giro.label))
-  const largoTotal = etiquetas.reduce(
-    (total, etiqueta, indice) => total + (indice > 0 ? 3 : 0) + etiqueta.length,
-    0,
-  )
+  const largoTotal = lista(etiquetas, idioma).length
   const presupuesto = (conContador: boolean) =>
     anchoFila === 0 ? 25 : caracteresQueCaben(anchoFila, iconos.length, conContador)
   // Si todo cabe sin contar nada se nombra todo; si no, se recorta y se reserva el sitio del "+N".
   const ANCHO_LINEA = largoTotal <= presupuesto(false) ? largoTotal : presupuesto(true)
   const nombres: string[] = []
-  let largo = 0
   for (const nombre of etiquetas) {
-    const suma = nombres.length > 0 ? largo + 3 + nombre.length : nombre.length
-    if (nombres.length > 0 && suma > ANCHO_LINEA) break
+    if (nombres.length > 0 && lista([...nombres, nombre], idioma).length > ANCHO_LINEA) break
     nombres.push(nombre)
-    largo = suma
   }
-  const categoryLabel = nombres.join(' · ')
+  const categoryLabel = lista(nombres, idioma)
   const resto = etiquetas.length - nombres.length
-  const tituloCompleto = etiquetas.join(' · ')
+  const tituloCompleto = lista(etiquetas, idioma)
 
   // El número de local y el horario solo los publica una minoría: en la lista crearían filas desiguales
   // (unas con dato, la mayoría sin él). Se muestran en la ficha, donde el dato se entiende con su fuente.
-  const idioma = useLocale()
   // El tono de la zona, repartido igual que en el mapa (ver config/palette.ts). Solo se calcula cuando
   // la fila va a llevar zona: en el panel de una plaza sobra.
   const tone =

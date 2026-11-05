@@ -240,7 +240,7 @@ export const es = {
   'share.action': 'Compartir',
   'share.place': 'Compartir {name}',
   /* Etiqueta, no frase: lleva el nombre, los giros y la zona, que es lo que la guía ya publica. */
-  'share.text': '{name} · {giros} · {plaza}',
+  'share.text': '{name} · {giros} · {plaza}. Conoce más en',
   'share.copied': 'Copiado',
   'share.failed': 'No se pudo copiar el enlace',
 

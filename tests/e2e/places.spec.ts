@@ -129,6 +129,39 @@ test.describe('Plazas y lugares', () => {
     expect(copiado).not.toContain('#')
   })
 
+  test('compartir cuenta el lugar en una frase: giros completos, con comas y "y", y el enlace detrás', async ({
+    page,
+  }) => {
+    await openApp(page, { path: 'lugar/cosi-fan-tutte' })
+    const region = panel(page)
+    await expect(region.getByRole('heading', { level: 2, name: 'Cosi Fan Tutte' })).toBeVisible()
+
+    // La hoja del sistema no se puede manejar desde la prueba: se intercepta lo que se le entrega.
+    await page.evaluate(() => {
+      Object.defineProperty(navigator, 'share', {
+        configurable: true,
+        value: (datos: unknown) => {
+          ;(window as unknown as { compartido?: unknown }).compartido = datos
+          return Promise.resolve()
+        },
+      })
+    })
+    await region.getByRole('button', { name: 'Compartir Cosi Fan Tutte' }).click()
+
+    await expect
+      .poll(() =>
+        page.evaluate(() => Boolean((window as unknown as { compartido?: unknown }).compartido)),
+      )
+      .toBe(true)
+    const datos = await page.evaluate(
+      () => (window as unknown as { compartido?: { text?: string; url?: string } }).compartido,
+    )
+    // "Italiana" en el filtro, "Comida Italiana" en la frase; sin puntos medios entre giros.
+    expect(datos?.text).toMatch(/^Cosi Fan Tutte · Comida Italiana y Pizza · .+\. Conoce más en$/)
+    expect(datos?.text).not.toContain(' · Italiana')
+    expect(datos?.url).toMatch(/\/es\/lugar\/cosi-fan-tutte$/)
+  })
+
   test('"atrás" en el navegador cierra la plaza seleccionada', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)

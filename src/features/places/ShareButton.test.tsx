@@ -7,7 +7,7 @@ import { ShareButton } from './ShareButton.tsx'
 const LUGAR = {
   name: 'Tomassa',
   slug: 'tomassa',
-  giros: 'Pizzería · Italiana',
+  giros: 'Pizzería e Italiana',
   plazaName: 'Plaza Luna',
 }
 
@@ -30,7 +30,7 @@ describe('ShareButton', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Compartir Tomassa' }))
     const carga = hoja.mock.calls[0]?.[0]
-    expect(carga.text).toBe('Tomassa · Pizzería · Italiana · Plaza Luna')
+    expect(carga.text).toBe('Tomassa · Pizzería e Italiana · Plaza Luna. Conoce más en')
     expect(carga.url).toMatch(/\/lugar\/tomassa$/)
     expect(carga.url).not.toContain('#')
   })

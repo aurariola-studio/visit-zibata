@@ -198,7 +198,7 @@ export const en = {
 
   'share.action': 'Share',
   'share.place': 'Share {name}',
-  'share.text': '{name} · {giros} · {plaza}',
+  'share.text': '{name} · {giros} · {plaza}. Learn more at',
   'share.copied': 'Copied',
   'share.failed': 'Could not copy the link',
 

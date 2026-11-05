@@ -18,6 +18,7 @@ import { DEFAULT_PLAZA_TONE, plazaTones, plazaVars } from '../../config/palette.
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { locale, localized, t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
+import { etiquetaDeGiro, lista } from '../../lib/categorias.ts'
 import { registrar, salidaDe } from '../../lib/eventos.ts'
 import { focusPanelHeading } from '../../lib/focus.ts'
 import { placeDirections, telUrl, whatsappUrl } from '../../lib/maps-url.ts'
@@ -145,6 +146,16 @@ export function PlaceDetail({
    */
   const giros = girosOf(place, catalog)
   const giroLabels = giros.map((giro) => localized(giro.label))
+  /*
+   * Para compartir y para el `title` de la línea, los giros se leen como en una frase: completos
+   * ("Comida Italiana", no "Italiana") y unidos con comas y "y", no con puntos medios. El filtro
+   * sigue usando la etiqueta corta, que es la que cabe en una cápsula.
+   */
+  const girosEnProsa = lista(
+    giros.map((giro) => etiquetaDeGiro(giro, locale, t)),
+    locale,
+  )
+  const girosCortosEnProsa = lista(giroLabels, locale)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia el lugar mostrado.
   useEffect(() => {
@@ -319,7 +330,7 @@ export function PlaceDetail({
              * Los giros van debajo del nombre, uno por renglón: son el detalle del lugar, no su
              * antetítulo. Es un párrafo y no una lista: la única lista de la ficha es la de contacto.
              */}
-            <p className={styles.giros} title={giroLabels.join(' · ')}>
+            <p className={styles.giros} title={girosCortosEnProsa}>
               {giros.map((giro) => (
                 <span key={giro.id}>
                   <CategoryIcon name={giro.icon} size={14} />
@@ -387,7 +398,7 @@ export function PlaceDetail({
         <ShareButton
           name={place.name}
           slug={place.slug}
-          giros={giroLabels.join(' · ')}
+          giros={girosEnProsa}
           plazaName={plaza.name}
           conNombre
         />
