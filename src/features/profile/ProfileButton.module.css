@@ -68,20 +68,24 @@
   cursor: default;
 }
 
+/*
+ * La hoja no se desplaza: cabecera, pestañas y pie se quedan quietos y lo que cambia es el contenido
+ * de la hoja activa. El alto se calcula con lo que de verdad se ve (`dvh`) y descuenta el velo y la
+ * zona segura, para que el límite sea de la pantalla y no del contenido. El tope de 36 rem evita que
+ * en una pantalla grande crezca hasta parecer una página en blanco.
+ */
 .sheet {
   position: relative;
   width: min(27rem, 100%);
-  max-height: 90vh;
-  overflow-y: auto;
+  height: min(calc(100dvh - 2 * var(--space-4) - var(--safe-bottom)), 30rem);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-5) var(--space-5);
+  padding: var(--space-4) var(--space-5) var(--space-4);
 
   /*
-
    * 369 px de lado corto.
-
    */
 
   border-radius: var(--radius-xl);
@@ -94,6 +98,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-3);
+  flex: none;
 }
 
 /* Cabecera: avatar, nombre y de qué habla la hoja. */
@@ -139,33 +144,69 @@
 /* Cerrar ejecuta: cuadrado de icono con la esquina de la familia, no círculo. */
 .close {
   composes: base botonIcono conSuperficie from "../../styles/controls.module.css";
-}
-
-/* Cada bloque responde a una parte de la pregunta: cuánto llevas, qué guardaste, qué te gusta. */
-.block,
-.journey {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-/* El recorrido es la respuesta corta, así que va en tarjeta y el resto no. */
-.journey {
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--lime-50);
+  flex: none;
 }
 
 /*
- * Subtítulo de grupo, igual que en el panel de zona y en las páginas de información. Era el rótulo
- * compacto de 12 px que quedó del sistema anterior, y en una hoja que se lee entera no separaba
- * nada: encabezaba una tarjeta o una lista pesando menos que su propio contenido.
+ * Las tres hojas, como cápsulas del catálogo: es la familia de "elegir de un conjunto", la misma de
+ * las categorías. La elegida va rellena, sin inventar una forma nueva. Activación automática: al
+ * moverse con las flechas se abre la hoja, que es lo que se espera de tres opciones cortas.
+ */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  flex: none;
+}
+
+.tab {
+  composes: base pildora from "../../styles/controls.module.css";
+  justify-content: center;
+  height: var(--control-h-mini);
+  padding: 0 var(--space-2);
+}
+
+/*
+ * La hoja activa. `overflow: auto` es el respaldo, no el plan: el contenido de cada hoja está
+ * medido para caber en la pantalla más pequeña de la matriz, y una prueba lo comprueba a cada
+ * tamaño. Si algún día no cupiera en un teléfono que no está en la matriz, se desplaza antes que
+ * recortarse.
+ */
+.panel {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Encabezado de la hoja: el título y la cifra que resume esa hoja. */
+.sheetHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex: none;
+}
+
+/*
+ * Subtítulo de grupo, igual que en el panel de zona y en las páginas de información: 17 px, 600,
+ * tinta de texto. Encabeza la hoja, no la sección de una tarjeta.
  */
 .blockTitle {
   font-size: var(--text-md);
   font-weight: var(--weight-strong);
   line-height: 1.2;
   color: var(--ink-700);
+}
+
+.count {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .summary {
@@ -176,194 +217,217 @@
 }
 
 /*
- * Insignias de zona: llenas con el color que la plaza tiene en el mapa cuando ya la estrenaste, y de
- * contorno punteado mientras siga pendiente. Son un cuadro, no controles: aquí se mira lo que llevas,
- * y para ir a una zona está el mapa. Formato pequeño y nombre corto ("Plaza Luna" se lee "Luna").
+ * Sellos de zona: el cuadro lleva el color que la plaza tiene en el mapa cuando ya la estrenaste, y
+ * queda hueco y punteado mientras siga pendiente. El nombre va debajo, sobre el papel: dentro del
+ * cuadro el texto no llegaba a AA en todos los tonos. Cuatro columnas en el teléfono mínimo, cinco y
+ * seis cuando hay sitio, para que las once quepan sin desplazar. Son un cuadro, no controles.
  */
 .zones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) 0.35rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.25rem 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .zone {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  min-height: 1.6rem;
-  padding: 0 0.45rem;
-  border: 1.5px dashed var(--zone-accent, var(--olive-600));
-  border-radius: var(--radius-pill);
-  background: var(--zone-soft, white);
-  color: var(--zone-ink, var(--olive-700));
-  font-size: var(--text-2xs);
-  font-weight: var(--weight-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  text-align: center;
 }
 
-.zone[data-visited="true"] {
+.zoneStamp {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1.5px dashed var(--zone-accent, var(--olive-600));
+  border-radius: var(--radius-sm);
+  background: var(--zone-soft, white);
+  color: var(--zone-ink, var(--olive-700));
+}
+
+.zone[data-visited="true"] .zoneStamp {
   border-style: solid;
   background: var(--zone-accent, var(--olive-600));
   color: var(--zone-on-accent, white);
 }
 
 .zoneCheck {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* El nombre puede partirse en dos líneas y el completo queda en el `title` y en el nombre accesible. */
+.zoneName {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+  font-size: 0.65rem;
+  font-weight: var(--weight-strong);
+  line-height: 1.1;
+  color: var(--ink-800);
+}
+
+@media (min-width: 360px) {
+  .zones {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) {
+  .zones {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }
 
 /*
- * El podio. Cada escalón lleva el icono del giro en el color de su plaza, el nombre, el giro y un
- * bloque con el puesto y la plaza. El primero va al centro y más alto: el orden visual lo pone
- * `order`, mientras que el del documento sigue siendo 1, 2, 3, que es el que se lee y se tabula.
+ * El podio: tres renglones, no el escalón de antes. El escalón gastaba media hoja en dibujo y no
+ * dejaba sitio a lo que has hecho con cada lugar, que es lo que ahora se lee.
  */
-.podium {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: var(--space-2);
-  padding-top: var(--space-1);
-}
-
-.step {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 10rem;
-}
-
-.podium[data-steps="3"] .step[data-place="1"] {
-  order: 2;
-}
-
-.podium[data-steps="3"] .step[data-place="2"] {
-  order: 1;
-}
-
-.podium[data-steps="3"] .step[data-place="3"] {
-  order: 3;
-}
-
-/*
- * Una columna del podio: la pieza entera es el enlace a esa ficha. Era un botón, y lo único que
- * respondía al pasar por encima era un subrayado en el nombre, así que no se veía dónde pulsar.
- */
-.stepButton {
-  composes: zonaPulsable from "../../styles/controls.module.css";
+.rankList {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-  padding: var(--space-2) var(--space-1);
-  border-radius: var(--radius-control);
-  color: var(--ink-800);
-  text-align: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.stepIcon {
+.rank {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 4rem;
+}
+
+.position {
+  flex: none;
+  width: 1rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-heavy);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.rankLink {
+  composes: zonaPulsable from "../../styles/controls.module.css";
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1;
+  padding: 0.15rem 0.35rem;
+  border-radius: var(--radius-sm);
+}
+
+.rankLink:hover .rankName {
+  color: var(--olive-700);
+}
+
+.rankIcon {
+  flex: none;
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 0.05rem;
+  width: 2.2rem;
+  height: 2.2rem;
   border-radius: var(--radius-round);
   background: var(--zone-soft, var(--lime-50));
   color: var(--zone-ink, var(--olive-600));
 }
 
-/* El nombre cabe en dos líneas; el completo vive en el título y en el nombre accesible. */
-.stepName {
+.rankText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.rankName {
+  overflow: hidden;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-strong);
+  color: var(--ink-900);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rankMeta {
+  overflow: hidden;
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  overflow: hidden;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-strong);
-  line-height: 1.15;
 }
 
-.stepGiro {
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: var(--text-2xs);
-  color: var(--color-text-muted);
-}
-
-/*
- * El bloque del podio: solo el puesto, en grande. El alto lo declara cada escalón (4,25 / 3 / 2,1 rem)
- * en vez de salir del relleno, que es como el segundo acabó a la misma altura que el tercero.
- */
-.stepBlock {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 2.1rem;
-  margin-top: 0.3rem;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  background: var(--sand-300);
-  color: var(--ink-800);
-}
-
-.stepBlock[data-place="1"] {
-  height: 4.25rem;
-  background: var(--olive-600);
-  color: white;
-}
-
-.stepBlock[data-place="2"] {
-  height: 3rem;
-  background: var(--lime-300);
-  color: var(--olive-800);
-}
-
-.stepNumber {
-  font-family: var(--font-sans);
-  font-size: var(--text-lg);
-  font-weight: var(--weight-strong);
-  line-height: 1;
-}
-
-.stepBlock[data-place="1"] .stepNumber {
-  font-size: var(--text-xl);
-}
-
-/* Tus antojos: el giro, con su icono, y cuántos lugares tuyos caen en él, en pastillas. */
-.tastes {
+/* Los gustos: una fila por categoría, con la barra que dice cuánto pesa frente a la primera. */
+.tasteList {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) 0.35rem;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .taste {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 1rem minmax(0, 1fr) 3.5rem 1.5rem;
   align-items: center;
-  gap: 0.3rem;
-  min-height: 1.75rem;
-  padding: 0 0.55rem;
-  border-radius: var(--radius-pill);
-  background: var(--color-surface-muted);
-  color: var(--olive-700);
+  gap: var(--space-2);
+  min-height: 2.1rem;
 }
 
 .taste svg {
   flex-shrink: 0;
+  color: var(--olive-700);
 }
 
 .tasteName {
-  font-size: var(--text-xs);
-  font-weight: var(--weight-strong);
+  overflow: hidden;
+  font-size: var(--text-sm);
   color: var(--ink-800);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tasteBar {
+  height: 0.35rem;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.tasteBar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-accent);
 }
 
 .tasteCount {
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   color: var(--color-text-muted);
+  text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
+.more {
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+}
+
 .empty {
-  padding: var(--space-4);
+  padding: var(--space-3);
   border-radius: var(--radius-md);
   background: var(--lime-50);
   color: var(--ink-700);
@@ -371,46 +435,38 @@
 }
 
 .storage {
+  flex: none;
   font-size: var(--text-2xs);
   color: var(--color-text-muted);
 }
 
 .links {
+  flex: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--space-4);
-  padding-top: var(--space-2);
+  gap: 0 var(--space-3);
+  padding-top: var(--space-1);
   border-top: 1px solid var(--color-border);
 }
 
 .link {
   composes: enlace from "../../styles/controls.module.css";
-  padding: 0.35rem 0;
-  font: var(--weight-strong) var(--text-sm) / 1.4 var(--font-sans);
+  padding: 0.1rem 0;
+  font: var(--weight-strong) var(--text-2xs) / 1.4 var(--font-sans);
 }
 
 /*
- * Pantallas bajas (un teléfono pequeño, o cualquiera en horizontal): la hoja aprovecha casi todo el
- * alto y suelta lo prescindible. Con once zonas y tres bloques no siempre se evita el desplazamiento,
- * pero en un teléfono normal la hoja cabe entera.
+ * Pantallas bajas (un teléfono pequeño, o cualquiera en horizontal): se suelta lo prescindible y
+ * cambian las rejillas de sitio, para que las tres hojas sigan cabiendo sin desplazarse.
  */
-@media (max-height: 740px) {
+@media (max-height: 900px) {
   .sheet {
-    max-height: 95vh;
-    padding: var(--space-3) var(--space-4) var(--space-4);
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4) var(--space-3);
   }
 
   .subtitle {
     display: none;
-  }
-
-  .journey {
-    padding: var(--space-2) var(--space-3);
-  }
-
-  .block,
-  .journey {
-    gap: var(--space-1);
   }
 
   .bigAvatar {
@@ -418,7 +474,83 @@
     height: 2.5rem;
   }
 
-  .stepIcon {
+  .bigAvatar svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+/* En horizontal la altura manda: sellos en seis columnas, podio y gustos en fila. */
+@media (max-height: 430px) {
+  .sheet {
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .storage {
+    display: none;
+  }
+
+  .bigAvatar {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .bigAvatar svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .zones {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-1);
+  }
+
+  .zoneName {
+    font-size: var(--text-2xs);
+  }
+
+  .rankList {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .rank {
+    min-height: 0;
+    align-items: flex-start;
+  }
+
+  .position {
+    display: none;
+  }
+
+  .rankLink {
+    align-items: flex-start;
+  }
+
+  .rankMeta {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .tasteList {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .taste {
+    grid-template-columns: 1rem minmax(0, 1fr) 1.5rem;
+  }
+
+  .tasteBar {
     display: none;
   }
 }

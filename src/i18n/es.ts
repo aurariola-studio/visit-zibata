@@ -314,7 +314,9 @@ export const es = {
   'about.openShort': 'Acerca',
   'about.title': 'Acerca de esta guía',
   'about.fix': 'Sugiere o contacta',
+  'about.suggestShort': 'Sugiere',
   'about.tutorial': 'Ver el tutorial',
+  'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'Cómo usar la guía',
   'about.tutorialLead':
     'Cinco preguntas para moverte por el mapa, buscar, leer una ficha, guardar lo tuyo y sugerir un cambio.',
@@ -398,20 +400,29 @@ export const es = {
   'profile.open': 'Tu Zibatá',
   'profile.title': 'Tu Zibatá',
   'profile.subtitle': 'Tus visitas, tus favoritos y tus notas',
+  'profile.tabs': 'Hojas de Tu Zibatá',
+  'profile.tabZones': 'Zonas',
+  'profile.tabPodium': 'Podio',
+  'profile.tabTastes': 'Gustos',
   'profile.journey': 'Tu paso por Zibatá',
-  'profile.visitsSummary': {
-    one: 'Has visitado {count} lugar de Zibatá, en {zones} de sus {total} zonas.',
-    other: 'Has visitado {count} lugares de Zibatá, en {zones} de sus {total} zonas.',
-  },
+  'profile.zonesDone': '{done} de {total}',
+  'profile.zonePlaces': { one: '{count} lugar', other: '{count} lugares' },
   'profile.noVisits': 'Todo Zibatá por estrenar. {total} zonas y {places} lugares.',
   'profile.zonesLabel': 'Zonas de Zibatá',
   'profile.zoneDone': 'visitada',
   'profile.podium': 'Tus tres de siempre',
+  'profile.podiumCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.position': 'Puesto {position}',
-  'profile.tastes': 'Lo que más buscas',
-  'profile.tasteCount': { one: '{count} lugar', other: '{count} lugares' },
-  'profile.empty':
-    'Registra una visita, guarda un lugar con el corazón o califícalo, y aquí verás tu paso por Zibatá.',
+  'profile.visitCount': { one: '{count} visita', other: '{count} visitas' },
+  'profile.lastVisit': 'última el {date}',
+  'profile.saved': 'guardado',
+  'profile.podiumEmpty':
+    'Todavía no tienes tres de siempre. Guarda un lugar con el corazón, califícalo o registra una visita, y aparecerán aquí.',
+  'profile.tastes': 'Lo que más se te antoja',
+  'profile.tasteTotal': { one: '{count} tipo', other: '{count} tipos' },
+  'profile.moreTastes': 'y {count} más',
+  'profile.tastesEmpty':
+    'Marca lugares con el corazón, con estrellas o con una visita, y aquí verás lo que más se te antoja.',
   /*
    * No es solo local: la cuenta anónima del servidor guarda lo mismo para poder recuperarlo en otro
    * aparato, sin nombre ni correo. La política lo detalla; aquí no puede decir menos.
