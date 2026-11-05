@@ -42,14 +42,20 @@ test.describe('Calificación en la ficha', () => {
         }
       })
 
-    /** El panel cambia de sitio al cruzar el punto de escritorio y anima su ancho: se espera a que se quede quieto. */
+    /** El panel cambia de sitio al cruzar el punto de escritorio y anima su ancho: se espera a que se quede quieto tres lecturas seguidas. */
     const anchoEstable = async () => {
       let previo = -1
-      for (let intento = 0; intento < 30; intento++) {
+      let iguales = 0
+      for (let intento = 0; intento < 40; intento++) {
         const ancho = await rating.evaluate((bloque) =>
           Math.round(bloque.getBoundingClientRect().width),
         )
-        if (ancho > 0 && ancho === previo) return
+        if (ancho > 0 && ancho === previo) {
+          iguales += 1
+          if (iguales >= 3) return
+        } else {
+          iguales = 0
+        }
         previo = ancho
         await page.waitForTimeout(100)
       }
