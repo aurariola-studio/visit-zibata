@@ -86,14 +86,21 @@ test.describe('Tu Zibatá', () => {
     await conMarcas(page)
     const hoja = await abrirHoja(page)
 
-    // El mínimo razonable, dos teléfonos, una tableta en vertical, el escritorio y un teléfono de lado.
+    // El mínimo razonable, dos teléfonos, un teléfono grande, una tableta, un netbook, el
+    // escritorio y tres paisajes. Los que faltaban aquí fueron justo los que se desbordaban.
     for (const [width, height] of [
+      [320, 480],
       [320, 568],
-      [375, 667],
+      [360, 640],
       [390, 844],
+      [430, 932],
+      [600, 960],
       [768, 1024],
+      [1024, 600],
       [1280, 900],
+      [740, 360],
       [844, 390],
+      [568, 320],
     ] as const) {
       await page.setViewportSize({ width, height })
       for (const nombre of ['Zonas', 'Podio', 'Gustos']) {

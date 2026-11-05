@@ -71,14 +71,18 @@
 /*
  * La hoja no se desplaza: cabecera, pestañas y pie se quedan quietos y lo que cambia es el contenido
  * de la hoja activa. El alto se calcula con lo que de verdad se ve (`dvh`) y descuenta el velo y la
- * zona segura, para que el límite sea de la pantalla y no del contenido. El tope de 36 rem evita que
+ * zona segura, para que el límite sea de la pantalla y no del contenido. El tope de 30 rem evita que
  * en una pantalla grande crezca hasta parecer una página en blanco.
+ *
+ * `overflow: auto` no se usa en ningún tamaño de la matriz: es la última red, para un tamaño más
+ * pequeño que el mínimo o para el zoom de texto al 200 %, donde el pie dejaría de alcanzarse si la
+ * hoja recortara. Antes que perder contenido, se desplaza.
  */
 .sheet {
   position: relative;
   width: min(27rem, 100%);
   height: min(calc(100dvh - 2 * var(--space-4) - var(--safe-bottom)), 30rem);
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -171,10 +175,14 @@
  * medido para caber en la pantalla más pequeña de la matriz, y una prueba lo comprueba a cada
  * tamaño. Si algún día no cupiera en un teléfono que no está en la matriz, se desplaza antes que
  * recortarse.
+ *
+ * El mínimo de 8 rem es para que, cuando la hoja se queda corta de verdad (zoom de texto al 200 %
+ * en un teléfono de 320), este panel no se quede en cero: conserva una ventana que se puede
+ * recorrer mientras el resto de la hoja se desplaza por fuera.
  */
 .panel {
   flex: 1;
-  min-height: 0;
+  min-height: 8rem;
   overflow: auto;
   overscroll-behavior: contain;
   display: flex;
@@ -221,6 +229,10 @@
  * queda hueco y punteado mientras siga pendiente. El nombre va debajo, sobre el papel: dentro del
  * cuadro el texto no llegaba a AA en todos los tonos. Cuatro columnas en el teléfono mínimo, cinco y
  * seis cuando hay sitio, para que las once quepan sin desplazar. Son un cuadro, no controles.
+ *
+ * El sello tiene tope de ancho: sin él crecía con la columna, y con el ancho de la hoja (27 rem) una
+ * tableta o un teléfono ancho gastaban en tres filas más alto del que la hoja tiene. El nombre se
+ * queda con el ancho entero de la columna, que es lo que necesita para leerse.
  */
 .zones {
   display: grid;
@@ -243,6 +255,9 @@
   position: relative;
   display: grid;
   place-items: center;
+  width: 100%;
+  max-width: 3.25rem;
+  margin-inline: auto;
   aspect-ratio: 1;
   border: 1.5px dashed var(--zone-accent, var(--olive-600));
   border-radius: var(--radius-sm);
@@ -272,6 +287,13 @@
   font-weight: var(--weight-strong);
   line-height: 1.1;
   color: var(--ink-800);
+}
+
+/* En una pantalla muy baja el sello se encoge y el nombre se queda en una línea. */
+@media (max-height: 500px) {
+  .zones {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 360px) {
@@ -510,7 +532,12 @@
     gap: var(--space-1);
   }
 
+  .zoneStamp {
+    max-width: 2.75rem;
+  }
+
   .zoneName {
+    -webkit-line-clamp: 1;
     font-size: var(--text-2xs);
   }
 
