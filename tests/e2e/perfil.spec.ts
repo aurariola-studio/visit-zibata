@@ -77,7 +77,16 @@ test.describe('Tu Zibatá', () => {
       !['desktop', 'webkit-iphone'].includes(testInfo.project.name),
       'La matriz se recorre una vez por motor, no por dispositivo',
     )
-    // El mínimo razonable, dos teléfonos, una tableta en vertical y el escritorio.
+    /*
+     * La hoja se abre una vez y lo que cambia es la ventana. Volver a cargar en cada tamaño costaba
+     * cinco mapas más y no medía nada distinto: las reglas que deciden el alto son de la ventana, y
+     * el navegador las vuelve a aplicar igual al redimensionar.
+     */
+    await page.setViewportSize({ width: 320, height: 568 })
+    await conMarcas(page)
+    const hoja = await abrirHoja(page)
+
+    // El mínimo razonable, dos teléfonos, una tableta en vertical, el escritorio y un teléfono de lado.
     for (const [width, height] of [
       [320, 568],
       [375, 667],
@@ -87,8 +96,6 @@ test.describe('Tu Zibatá', () => {
       [844, 390],
     ] as const) {
       await page.setViewportSize({ width, height })
-      await conMarcas(page)
-      const hoja = await abrirHoja(page)
       for (const nombre of ['Zonas', 'Podio', 'Gustos']) {
         await hoja.getByRole('tab', { name: nombre }).click()
         const medidas = await page.evaluate(() => {
@@ -119,8 +126,6 @@ test.describe('Tu Zibatá', () => {
           1,
         )
       }
-      await page.keyboard.press('Escape')
-      await expect(page.getByRole('dialog')).toHaveCount(0)
     }
   })
 
