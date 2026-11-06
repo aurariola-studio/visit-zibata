@@ -266,6 +266,7 @@
 }
 
 .zoneStamp {
+  /* El mismo matasellos del panel de zona: dos aros y el nombre en mono, girado. */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -276,17 +277,23 @@
   margin-inline: auto;
   aspect-ratio: 1;
   padding: 0.3rem;
-  border: 1.5px dashed var(--zone-ink, var(--olive-700));
   border-radius: var(--radius-round);
-  /* Sin estrenar, el sello es solo contorno: el color aparece con la visita. */
+  box-shadow:
+    inset 0 0 0 1px var(--zone-ring),
+    inset 0 0 0 3px transparent,
+    inset 0 0 0 4px var(--zone-ring);
+  rotate: -12deg;
+  /* Sin estrenar, el sello es solo tinta: el relleno aparece con la visita. */
   background: transparent;
   color: var(--zone-ink, var(--olive-700));
+  --zone-ring: var(--zone-ink, var(--olive-700));
 }
 
 .zone[data-visited="true"] .zoneStamp {
-  border-style: solid;
   background: var(--zone-ink, var(--olive-700));
   color: var(--zone-on-accent, white);
+  /* Sobre el relleno, los aros se recortan en el color del papel. */
+  --zone-ring: var(--zone-on-accent, white);
 }
 
 .zoneCheck {
@@ -295,29 +302,32 @@
   height: 0.8rem;
 }
 
-/* El nombre se parte hasta en tres líneas; el completo queda en el `title`. */
+/* El nombre, como el matasellos: mono, versalitas y el bloque girado con el sello. */
 .zoneName {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow-wrap: anywhere;
-  font-size: var(--text-2xs);
-  font-weight: var(--weight-strong);
-  line-height: 1.1;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: inherit;
 }
 
 /*
- * Las que aún no abrieron: sello genérico con reloj y "Próximamente" debajo. El contorno apagado lo
+ * Las que aún no abrieron: sello genérico con reloj y "Próximamente" debajo. El aro apagado lo
  * separa de las que faltan por estrenar, que llevan el tono de su plaza. El sello es algo menor que
  * los demás para que el reloj y el rótulo quepan en la fila.
  */
 .zone[data-upcoming="true"] .zoneStamp {
   max-width: 3.5rem;
-  border-color: var(--color-border-strong);
-  background: transparent;
   color: var(--color-text-muted);
+  --zone-ring: var(--color-border-strong);
+  background: transparent;
 }
 
 .zoneSoon {
@@ -341,9 +351,9 @@
     max-width: 2.75rem;
   }
 
-  /* En la columna más estrecha, un punto menos en el nombre evita partir "Querétaro". */
+  /* En la columna más estrecha, un punto menos en el nombre evita partir "QUERÉTARO". */
   .zoneName {
-    font-size: 0.625rem;
+    font-size: 0.5rem;
   }
 
   .zoneSoon {
@@ -725,7 +735,8 @@
 
   .zoneName {
     -webkit-line-clamp: 3;
-    font-size: 0.5rem;
+    font-size: 0.4375rem;
+    letter-spacing: 0;
   }
 
   /* En horizontal no hay ancho para el rótulo: el reloj ya dice que llegan. */
