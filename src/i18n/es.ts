@@ -410,7 +410,7 @@ export const es = {
   'profile.noVisits': 'Todo Zibatá por estrenar. {total} zonas y {places} lugares.',
   'profile.zonesLabel': 'Zonas de Zibatá',
   'profile.zoneDone': 'visitada',
-  'profile.zoneSoon': 'próximamente',
+  'profile.zoneSoon': 'Próximamente',
   'profile.podium': 'Tus tres de siempre',
   'profile.podiumCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.position': 'Puesto {position}',

@@ -51,6 +51,8 @@ const TOP_GUSTOS = 6
 /** Los puestos y renglones fijos de cada hoja, para dibujar también los que faltan. */
 const PUESTOS = Array.from({ length: TOP }, (_, indice) => indice + 1)
 const RENGLONES = Array.from({ length: TOP_GUSTOS }, (_, indice) => indice + 1)
+/** Los sellos de relleno que completan la última fila de la rejilla de zonas. */
+const RELLENOS = [1, 2, 3] as const
 
 /** Una zona con su color del mapa, si ya la estrenaste, cuántos lugares llevas ahí y si aún no abrió. */
 interface Zone {
@@ -237,6 +239,13 @@ function loQueHiciste(entry: Ranked, idioma: string): string {
 function Zonas({ journey }: { journey: Journey }) {
   const catalog = useCatalog()
   const total = journey.zones.filter((zone) => !zone.upcoming).length
+  /*
+   * La última fila se completa con sellos genéricos de "Próximamente" cuando hay zonas por abrir:
+   * quince sellos dejan un hueco en la rejilla de cuatro columnas y el hueco se llena con uno más.
+   */
+  const relleno = journey.zones.some((zone) => zone.upcoming)
+    ? (4 - (journey.zones.length % 4)) % 4
+    : 0
   return (
     <>
       <div className={styles.sheetHead}>
@@ -258,9 +267,9 @@ function Zonas({ journey }: { journey: Journey }) {
             className={styles.zone}
             data-visited={zone.visited}
             data-upcoming={zone.upcoming}
-            title={zone.plaza.name}
+            title={zone.upcoming ? t('profile.zoneSoon') : zone.plaza.name}
           >
-            {/* La marca es el dibujo: el color de la plaza cuando ya la estrenaste, hueco cuando no. */}
+            {/* La marca es el dibujo: transparente sin estrenar, en color cuando ya fuiste. */}
             <span
               className={styles.zoneStamp}
               style={plazaVars(zone.tone, 'zone') as CSSProperties}
@@ -269,15 +278,32 @@ function Zonas({ journey }: { journey: Journey }) {
               {zone.visited && <Check className={styles.zoneCheck} />}
               {zone.upcoming && <Clock className={styles.zoneCheck} />}
             </span>
-            {/* El nombre va fuera del sello: sobre el color de la zona el texto no llega a AA. */}
-            <span className={styles.zoneName}>{shortZoneName(zone.plaza.name)}</span>
+            {/* Las próximas no llevan nombre: su sello genérico dice lo que son. */}
+            {zone.upcoming ? (
+              <span className={styles.zoneSoon}>{t('profile.zoneSoon')}</span>
+            ) : (
+              <span className={styles.zoneName}>{shortZoneName(zone.plaza.name)}</span>
+            )}
             <span className="visually-hidden">
-              {zone.upcoming
-                ? `, ${t('profile.zoneSoon')}`
-                : zone.visited
-                  ? `, ${t('profile.zoneDone')}, ${t('profile.zonePlaces', { count: zone.places })}`
-                  : ''}
+              {zone.visited
+                ? `, ${t('profile.zoneDone')}, ${t('profile.zonePlaces', { count: zone.places })}`
+                : ''}
             </span>
+          </li>
+        ))}
+        {/* El hueco de la última fila: otro sello genérico, sin nombre y fuera del lector. */}
+        {RELLENOS.slice(0, relleno).map((hueco) => (
+          <li
+            key={`relleno-${hueco}`}
+            className={styles.zone}
+            data-upcoming="true"
+            data-filler="true"
+            aria-hidden="true"
+          >
+            <span className={styles.zoneStamp} aria-hidden="true">
+              <Clock className={styles.zoneCheck} />
+            </span>
+            <span className={styles.zoneSoon}>{t('profile.zoneSoon')}</span>
           </li>
         ))}
       </ul>

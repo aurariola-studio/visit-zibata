@@ -356,7 +356,7 @@ export const en = {
   'profile.noVisits': 'All of Zibatá still to discover. {total} areas and {places} places.',
   'profile.zonesLabel': 'Areas of Zibatá',
   'profile.zoneDone': 'visited',
-  'profile.zoneSoon': 'coming soon',
+  'profile.zoneSoon': 'Coming soon',
   'profile.podium': 'Your usual three',
   'profile.podiumCount': { one: '{count} place', other: '{count} places' },
   'profile.position': 'Position {position}',

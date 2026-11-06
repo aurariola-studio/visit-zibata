@@ -81,7 +81,7 @@
 .sheet {
   position: relative;
   width: min(27rem, 100%);
-  height: min(calc(100dvh - 2 * var(--space-4) - var(--safe-bottom)), 32rem);
+  height: min(calc(100dvh - 2 * var(--space-4) - var(--safe-bottom)), 36rem);
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -238,7 +238,7 @@
  */
 .zones {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-1) 0.35rem;
   margin: 0;
   padding: 0;
@@ -258,12 +258,13 @@
   display: grid;
   place-items: center;
   width: 100%;
-  max-width: 3.6rem;
+  max-width: 4rem;
   margin-inline: auto;
   aspect-ratio: 1;
   border: 1.5px dashed var(--zone-accent, var(--olive-600));
   border-radius: var(--radius-sm);
-  background: var(--zone-soft, white);
+  /* Sin estrenar, el sello es solo contorno: el color aparece con la visita. */
+  background: transparent;
   color: var(--zone-ink, var(--olive-700));
 }
 
@@ -292,29 +293,46 @@
 }
 
 /*
- * Las que aún no abrieron: sello apagado y reloj, para que no se confundan con las que faltan por
- * estrenar, que llevan el color de su plaza.
+ * Las que aún no abrieron: un sello genérico, sin nombre, que solo dice que llegan. El reloj y el
+ * contorno apagado lo separan de las que faltan por estrenar, que llevan el color de su plaza.
  */
 .zone[data-upcoming="true"] .zoneStamp {
   border-color: var(--color-border-strong);
-  background: var(--color-surface-muted);
+  background: transparent;
   color: var(--color-text-muted);
 }
 
-.zone[data-upcoming="true"] .zoneName {
+.zoneSoon {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+  font-size: 0.6rem;
+  font-weight: var(--weight-strong);
+  line-height: 1.1;
   color: var(--color-text-muted);
+  text-align: center;
 }
 
-/* A partir del ancho en que la hoja llega a su tope, seis columnas: quince sellos en tres filas. */
-@media (min-width: 448px) {
-  .zones {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+/*
+ * La rejilla de 4 × 4: cuatro columnas para que los quince sellos ocupen cuatro filas y llenen la
+ * hoja. El sello se encoge con el ancho para que quepan las cuatro filas sin desplazarse; en el
+ * teléfono mínimo baja a 2.75 rem y el nombre se queda en dos líneas.
+ */
+@media (max-width: 439px) {
+  .zoneStamp {
+    max-width: 3.4rem;
   }
 }
 
-/* En una pantalla muy baja el sello se encoge y el nombre se queda en una línea. */
-/*
- * El podio: tres renglones, no el escalón de antes. El escalón gastaba media hoja en dibujo y no
+@media (max-width: 359px) {
+  .zoneStamp {
+    max-width: 2.75rem;
+  }
+}
+
+/* El podio: tres renglones, no el escalón de antes. El escalón gastaba media hoja en dibujo y no
  * dejaba sitio a lo que has hecho con cada lugar, que es lo que ahora se lee.
  */
 .rankList {
@@ -572,15 +590,12 @@
 }
 
 @media (max-height: 500px) {
-  .zones {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
   .zoneStamp {
     max-width: 2.75rem;
   }
 
-  .zoneName {
+  .zoneName,
+  .zoneSoon {
     -webkit-line-clamp: 1;
     font-size: var(--text-2xs);
   }

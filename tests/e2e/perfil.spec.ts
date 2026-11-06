@@ -97,12 +97,19 @@ test.describe('Tu Zibatá', () => {
     await expect(hoja.getByRole('tab')).toHaveText(['Zonas', 'Podio', 'Gustos'])
     await expect(hoja.getByRole('tab', { name: 'Zonas' })).toHaveAttribute('aria-selected', 'true')
 
-    // Zonas: una insignia por zona, llenas las que ya estrenaste y apagadas las que aún no abren.
+    // Zonas: una insignia por zona, en color las que ya estrenaste y transparentes las demás.
     const zonas = hoja.getByRole('list', { name: 'Zonas de Zibatá' })
     await expect(zonas.getByRole('listitem')).toHaveCount(
       activePlazas().length + inactivePlazas().length,
     )
-    await expect(zonas.locator('[data-upcoming="true"]')).toHaveCount(inactivePlazas().length)
+    // Las próximas no llevan nombre: sello genérico que solo dice "Próximamente".
+    await expect(zonas.locator('[data-upcoming="true"]:not([data-filler="true"])')).toHaveCount(
+      inactivePlazas().length,
+    )
+    await expect(zonas.getByText('Próximamente').first()).toBeVisible()
+    await expect(zonas).not.toContainText(inactivePlazas()[0]?.name.replace(/^Plaza\s+/, '') ?? '')
+    // Y un sello de relleno completa la última fila de la rejilla.
+    await expect(zonas.locator('[data-filler="true"]')).toHaveCount(1)
     const estrenadas = new Set(
       ['tomassa', 'cosi-fan-tutte', 'el-hornero'].map((id) => placeById(id).plazaId),
     )
