@@ -294,6 +294,22 @@
   .zones {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
+
+  /* La cifra del encabezado ya dice lo que llevas: el aviso de hoja vacía se calla para que las
+     once zonas sigan cabiendo. */
+  .summary {
+    display: none;
+  }
+}
+
+/*
+ * Con la hoja vacía el aviso ocupa dos líneas en el teléfono mínimo (320) y las zonas ya no caben:
+ * la rejilla pasa a cinco columnas, que es lo que gana ese hueco. Solo cuando el aviso está.
+ */
+@media (max-width: 359px) {
+  .panel:has(> .summary) .zones {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 360px) {

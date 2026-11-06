@@ -32,6 +32,49 @@ const abrirHoja = async (page: Page, nombre = 'Tu Zibatá') => {
   return hoja
 }
 
+/** El mínimo razonable, dos teléfonos, un teléfono grande, una tableta, un netbook, el escritorio y tres paisajes. */
+const TAMANOS = [
+  [320, 480],
+  [320, 568],
+  [360, 640],
+  [390, 844],
+  [430, 932],
+  [600, 960],
+  [768, 1024],
+  [1024, 600],
+  [1280, 900],
+  [740, 360],
+  [844, 390],
+  [568, 320],
+] as const
+
+/**
+ * Comprueba una hoja en una ventana: que ni el panel, ni el diálogo, ni la página se desplacen y que
+ * la hoja quepa entera. Se usa con marcas y sin ellas, porque el estado vacío ocupa más alto.
+ */
+async function comprobarHoja(page: Page, width: number, height: number, nombre: string) {
+  await page.getByRole('tab', { name: nombre }).click()
+  const medidas = await page.evaluate(() => {
+    const panel = document.querySelector('[role="tabpanel"]')
+    const dialogo = panel?.closest('[role="dialog"]')
+    if (!panel || !dialogo) return null
+    const caja = dialogo.getBoundingClientRect()
+    return {
+      desbordaPanel: panel.scrollHeight - panel.clientHeight,
+      desbordaHoja: dialogo.scrollHeight - dialogo.clientHeight,
+      arriba: caja.top,
+      abajo: caja.bottom - window.innerHeight,
+      pagina: document.documentElement.scrollHeight - window.innerHeight,
+    }
+  })
+  expect(medidas, `sin medidas en ${width}×${height} ${nombre}`).not.toBeNull()
+  expect(medidas?.desbordaPanel, `${width}×${height} ${nombre}: contenido`).toBeLessThanOrEqual(1)
+  expect(medidas?.desbordaHoja, `${width}×${height} ${nombre}: hoja`).toBeLessThanOrEqual(1)
+  expect(medidas?.pagina, `${width}×${height} ${nombre}: página`).toBeLessThanOrEqual(1)
+  expect(medidas?.arriba, `${width}×${height} ${nombre}: borde de arriba`).toBeGreaterThanOrEqual(0)
+  expect(medidas?.abajo, `${width}×${height} ${nombre}: borde de abajo`).toBeLessThanOrEqual(1)
+}
+
 test.describe('Tu Zibatá', () => {
   test('cuenta el paso por las zonas y ordena tus tres y tus gustos con lo marcado', async ({
     page,
@@ -84,54 +127,36 @@ test.describe('Tu Zibatá', () => {
      */
     await page.setViewportSize({ width: 320, height: 568 })
     await conMarcas(page)
-    const hoja = await abrirHoja(page)
+    await abrirHoja(page)
 
     // El mínimo razonable, dos teléfonos, un teléfono grande, una tableta, un netbook, el
     // escritorio y tres paisajes. Los que faltaban aquí fueron justo los que se desbordaban.
-    for (const [width, height] of [
-      [320, 480],
-      [320, 568],
-      [360, 640],
-      [390, 844],
-      [430, 932],
-      [600, 960],
-      [768, 1024],
-      [1024, 600],
-      [1280, 900],
-      [740, 360],
-      [844, 390],
-      [568, 320],
-    ] as const) {
+    for (const [width, height] of TAMANOS) {
       await page.setViewportSize({ width, height })
       for (const nombre of ['Zonas', 'Podio', 'Gustos']) {
-        await hoja.getByRole('tab', { name: nombre }).click()
-        const medidas = await page.evaluate(() => {
-          const panel = document.querySelector('[role="tabpanel"]')
-          const dialogo = panel?.closest('[role="dialog"]')
-          if (!panel || !dialogo) return null
-          const caja = dialogo.getBoundingClientRect()
-          return {
-            desbordaPanel: panel.scrollHeight - panel.clientHeight,
-            desbordaHoja: dialogo.scrollHeight - dialogo.clientHeight,
-            arriba: caja.top,
-            abajo: caja.bottom - window.innerHeight,
-            pagina: document.documentElement.scrollHeight - window.innerHeight,
-          }
-        })
-        expect(medidas, `sin medidas en ${width}×${height} ${nombre}`).not.toBeNull()
-        expect(
-          medidas?.desbordaPanel,
-          `${width}×${height} ${nombre}: contenido`,
-        ).toBeLessThanOrEqual(1)
-        expect(medidas?.desbordaHoja, `${width}×${height} ${nombre}: hoja`).toBeLessThanOrEqual(1)
-        expect(medidas?.pagina, `${width}×${height} ${nombre}: página`).toBeLessThanOrEqual(1)
-        expect(
-          medidas?.arriba,
-          `${width}×${height} ${nombre}: borde de arriba`,
-        ).toBeGreaterThanOrEqual(0)
-        expect(medidas?.abajo, `${width}×${height} ${nombre}: borde de abajo`).toBeLessThanOrEqual(
-          1,
-        )
+        await comprobarHoja(page, width, height, nombre)
+      }
+    }
+  })
+
+  test('sin nada marcado, las tres hojas tampoco se desplazan', async ({ page }, testInfo) => {
+    test.skip(
+      !['desktop', 'webkit-iphone'].includes(testInfo.project.name),
+      'La matriz se recorre una vez por motor, no por dispositivo',
+    )
+    /*
+     * El estado vacío ocupa más alto que el lleno: Zonas lleva el aviso de que todo está por
+     * estrenar y Podio y Gustos, sus propias invitaciones. Se mide igual, sin sembrar marcas.
+     */
+    await page.setViewportSize({ width: 320, height: 568 })
+    await openApp(page)
+    await waitForMap(page)
+    await abrirHoja(page)
+
+    for (const [width, height] of TAMANOS) {
+      await page.setViewportSize({ width, height })
+      for (const nombre of ['Zonas', 'Podio', 'Gustos']) {
+        await comprobarHoja(page, width, height, nombre)
       }
     }
   })
@@ -158,7 +183,7 @@ test.describe('Tu Zibatá', () => {
   test('en inglés las hojas cambian de idioma', async ({ page }) => {
     await conMarcas(page, 'en')
     const hoja = await abrirHoja(page, 'Your Zibatá')
-    await expect(hoja.getByRole('tab')).toHaveText(['Areas', 'Podium', 'Tastes'])
+    await expect(hoja.getByRole('tab')).toHaveText(['Areas', 'Podium', 'Cravings'])
   })
 
   test('sin violaciones graves de accesibilidad en ninguna de las tres hojas', async ({ page }) => {
