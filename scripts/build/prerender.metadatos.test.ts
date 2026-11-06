@@ -352,6 +352,16 @@ describe('la descripción enumera todas las categorías del local', () => {
     )
     expect(ficha('en', 'romani-pizzas').description).toMatch(/^Italian food at Plaza Condesa/)
   })
+
+  it('el cuerpo servido sin JavaScript usa las mismas etiquetas y la misma unión', () => {
+    // Lo que leen los rastreadores y quien no tiene JS no puede decir menos que la descripción.
+    expect(ficha('es', 'origenatural').contenido ?? '').toContain(
+      '<p>Comida Saludable, Desayunos y Jugos y Smoothies</p>',
+    )
+    expect(ficha('en', 'origenatural').contenido ?? '').toContain(
+      '<p>Healthy food, Breakfast, and Juices &amp; Smoothies</p>',
+    )
+  })
 })
 
 describe('la portada', () => {

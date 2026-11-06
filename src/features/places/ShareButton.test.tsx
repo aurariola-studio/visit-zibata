@@ -2,6 +2,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { setLocale } from '../../i18n/index.ts'
 import { ShareButton } from './ShareButton.tsx'
 
 const LUGAR = {
@@ -17,9 +18,11 @@ function conNavegador(parches: Record<string, unknown>) {
   }
 }
 
-afterEach(() => {
+afterEach(async () => {
   for (const clave of ['share', 'clipboard']) Reflect.deleteProperty(navigator, clave)
   vi.restoreAllMocks()
+  // El idioma es estado del módulo: se devuelve a español entre pruebas.
+  await setLocale('es')
 })
 
 describe('ShareButton', () => {
@@ -33,6 +36,18 @@ describe('ShareButton', () => {
     expect(carga.text).toBe('Tomassa · Pizzería e Italiana · Plaza Luna. Conoce más en')
     expect(carga.url).toMatch(/\/lugar\/tomassa$/)
     expect(carga.url).not.toContain('#')
+  })
+
+  it('en inglés el mensaje cierra con "Learn more at"', async () => {
+    await setLocale('en')
+    const hoja = vi.fn().mockResolvedValue(undefined)
+    conNavegador({ share: hoja })
+    render(<ShareButton {...LUGAR} />)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Share Tomassa' }))
+    expect(hoja.mock.calls[0]?.[0].text).toBe(
+      'Tomassa · Pizzería e Italiana · Plaza Luna. Learn more at',
+    )
   })
 
   it('sin hoja del sistema copia el enlace y lo acusa donde estaba el dedo', async () => {
