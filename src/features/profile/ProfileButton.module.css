@@ -171,6 +171,16 @@
 }
 
 /*
+ * Un poco más de aire a los dos lados de las pestañas, el mismo arriba que abajo. En horizontal,
+ * donde la altura va justa, se queda como está.
+ */
+@media (min-height: 431px) {
+  .tabs {
+    margin-block: var(--space-1);
+  }
+}
+
+/*
  * La hoja activa. `overflow: auto` es el respaldo, no el plan: el contenido de cada hoja está
  * medido para caber en la pantalla más pequeña de la matriz, y una prueba lo comprueba a cada
  * tamaño. Si algún día no cupiera en un teléfono que no está en la matriz, se desplaza antes que
@@ -601,7 +611,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0 var(--space-3);
-  padding-top: var(--space-1);
+  /* La línea y los enlaces quedan a la misma distancia por arriba que por abajo. */
+  padding: var(--space-2) 0 0;
   border-top: 1px solid var(--color-border);
 }
 
@@ -755,4 +766,12 @@
     min-height: 0;
     max-height: none;
   }
+}
+
+/*
+ * El pie cierra la hoja con el mismo aire arriba y abajo de los enlaces. Va después de los tamaños
+ * bajos a propósito: el borde inferior no cambia con la altura, solo el relleno del resto.
+ */
+.sheet {
+  padding-bottom: var(--space-2);
 }
