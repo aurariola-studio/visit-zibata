@@ -332,10 +332,7 @@ function Podio({
           const tone = tones.get(place.plazaId) ?? DEFAULT_PLAZA_TONE
           const plaza = catalog.plazaById.get(place.plazaId)
           return (
-            <li key={place.id} className={styles.rank} data-first={index === 0}>
-              <span className={styles.medal} aria-hidden="true">
-                {index + 1}
-              </span>
+            <li key={place.id} className={styles.rank} data-place={index + 1}>
               <a
                 className={styles.rankLink}
                 href={rutaDeLugar(place.slug, idioma, import.meta.env.BASE_URL)}
@@ -344,18 +341,21 @@ function Podio({
                   position: index + 1,
                 })}. ${t('place.openDetail', { name: place.name })}`}
               >
-                <span
-                  className={styles.rankIcon}
-                  style={plazaVars(tone, 'zone') as CSSProperties}
-                  aria-hidden="true"
-                >
-                  <CategoryIcon name={placeIconName(place, catalog)} size={18} />
-                </span>
-                <span className={styles.rankText}>
+                <span className={styles.rankBody}>
+                  <span
+                    className={styles.rankIcon}
+                    style={plazaVars(tone, 'zone') as CSSProperties}
+                    aria-hidden="true"
+                  >
+                    <CategoryIcon name={placeIconName(place, catalog)} size={18} />
+                  </span>
                   <span className={styles.rankName}>{place.name}</span>
                   <span className={styles.rankMeta}>
                     {[plaza?.name, loQueHiciste(entry, idioma)].filter(Boolean).join(' · ')}
                   </span>
+                </span>
+                <span className={styles.stepBlock} data-place={index + 1} aria-hidden="true">
+                  <span className={styles.stepNumber}>{index + 1}</span>
                 </span>
               </a>
             </li>
@@ -363,13 +363,20 @@ function Podio({
         })}
         {/* Los puestos que faltan, apagados: la hoja enseña su capacidad antes de tener datos. */}
         {PUESTOS.slice(journey.mine.length).map((puesto) => (
-          <li key={`hueco-${puesto}`} className={styles.rank} data-ghost="true" aria-hidden="true">
-            <span className={styles.medal}>{puesto}</span>
-            <span className={styles.ghostRow}>
-              <span className={styles.ghostIcon} />
-              <span className={styles.ghostText}>
+          <li
+            key={`hueco-${puesto}`}
+            className={styles.rank}
+            data-place={puesto}
+            aria-hidden="true"
+          >
+            <span className={styles.ghostStep}>
+              <span className={styles.rankBody}>
+                <span className={styles.ghostIcon} />
                 <span className={styles.ghostName} />
                 <span className={styles.ghostMeta} />
+              </span>
+              <span className={styles.stepBlock} data-place={puesto} data-ghost="true">
+                <span className={styles.stepNumber}>{puesto}</span>
               </span>
             </span>
           </li>

@@ -350,130 +350,164 @@
   }
 }
 
-/* El podio se lee como un podio: medalla, cara del lugar y, en el primer puesto, una banda teñida
- * que lo separa del resto. Nada de barras: eso es la hoja de Gustos.
+/* El podio, con su forma: tres columnas sobre escalones de distinta altura, el primero en medio.
+ * El orden del documento sigue siendo 1, 2 y 3; el visual lo pone el `order`.
  */
 .rankList {
   display: flex;
-  flex: 1;
-  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
   gap: var(--space-2);
-  margin: 0;
+  /* El podio se centra en el alto que queda: aire igual arriba que abajo. */
+  margin: auto 0;
   padding: 0;
   list-style: none;
 }
 
 .rank {
   display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 9rem;
+}
+
+.rank[data-place="1"] {
+  order: 2;
+}
+
+.rank[data-place="2"] {
+  order: 1;
+}
+
+.rank[data-place="3"] {
+  order: 3;
+}
+
+.rankLink,
+.ghostStep {
+  display: flex;
   flex: 1;
+  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  min-height: 4.5rem;
-  padding-inline: 0.5rem;
-  border-radius: var(--radius-md);
+  justify-content: flex-end;
+  gap: 0.1rem;
+  min-width: 0;
+  padding-top: var(--space-2);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  text-align: center;
 }
 
-.rank[data-first="true"] {
-  background: var(--lime-50);
-}
-
-/* Los otros dos puestos también son tarjetas, pero sin relleno: el primero es el único que se tiñe. */
-.rank:not([data-first="true"]):not([data-ghost="true"]) {
-  box-shadow: inset 0 0 0 1px var(--color-border);
-}
-
-/* La medalla: llena en el primer puesto, en contorno en los otros dos, y hueca donde falta gente. */
-.medal {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 1.9rem;
-  height: 1.9rem;
-  border: 1.5px solid var(--color-border-strong);
-  border-radius: var(--radius-round);
-  color: var(--ink-700);
-  font-family: var(--font-display);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-heavy);
-  font-variant-numeric: tabular-nums;
-}
-
-.rank[data-first="true"] .medal {
-  border-color: transparent;
-  background: var(--olive-600);
-  color: var(--sand-25);
-}
-
-/* El puesto que falta enseña su hueco con el mismo alto que un puesto lleno. */
-.rank[data-ghost="true"] {
-  border: 1.5px dashed var(--color-border-strong);
-}
-
-.rank[data-ghost="true"] .medal {
-  border-style: dashed;
-  color: var(--color-text-muted);
+/* La ficha del lugar, encima de su escalón. */
+.rankBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .rankLink {
   composes: zonaPulsable from "../../styles/controls.module.css";
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-width: 0;
-  flex: 1;
-  padding: 0.15rem 0.35rem;
-  border-radius: var(--radius-sm);
 }
 
 .rankLink:hover .rankName {
   color: var(--olive-700);
 }
 
-/* Sobre la banda del primer puesto el hover normal no se vería: se oscurece un escalón más. */
-.rank[data-first="true"] .rankLink:hover {
-  background: var(--lime-100);
-}
-
 .rankIcon {
   flex: none;
   display: grid;
   place-items: center;
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.15rem;
   border-radius: var(--radius-round);
   background: var(--zone-soft, var(--lime-50));
   color: var(--zone-ink, var(--olive-600));
 }
 
-.rank[data-first="true"] .rankIcon {
-  width: 2.7rem;
-  height: 2.7rem;
-}
-
-.rankText {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-
 .rankName {
+  display: -webkit-box;
   overflow: hidden;
-  font-size: var(--text-sm);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+  font-size: var(--text-xs);
   font-weight: var(--weight-strong);
+  line-height: 1.2;
   color: var(--ink-900);
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .rankMeta {
   overflow: hidden;
   font-size: var(--text-2xs);
+  line-height: 1.25;
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+/* El escalón: la barra que hace el podio. El primero es el más alto y el único con el verde lleno. */
+.stepBlock {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  margin-top: var(--space-2);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--color-surface-muted);
+  color: var(--ink-800);
+}
+
+.stepBlock[data-place="1"] {
+  height: 4.75rem;
+  background: var(--olive-600);
+  color: var(--sand-25);
+}
+
+.stepBlock[data-place="2"] {
+  height: 3.5rem;
+  background: var(--lime-300);
+  color: var(--olive-800);
+}
+
+.stepBlock[data-place="3"] {
+  height: 2.5rem;
+}
+
+.stepNumber {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-heavy);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stepBlock[data-place="1"] .stepNumber {
+  font-size: var(--text-xl);
+}
+
+/* Los puestos que faltan se dibujan con el mismo escalón, hueco y punteado. */
+.ghostStep {
+  color: var(--color-text-muted);
+}
+
+.ghostIcon {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.15rem;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-round);
+}
+
+.stepBlock[data-ghost="true"] {
+  border: 1.5px dashed var(--color-border-strong);
+  border-bottom: 0;
+  background: transparent;
+  color: var(--color-text-muted);
 }
 
 /* Los gustos no son renglones: son una gráfica. La etiqueta arriba y, debajo, la barra que dice
@@ -553,31 +587,6 @@
  * Los huecos de las listas: los mismos renglones que se llenarán, en gris. La hoja no queda en
  * blanco y enseña la forma de lo que va a aparecer.
  */
-.ghostRow {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  gap: var(--space-2);
-  min-width: 0;
-  padding: 0.15rem 0.35rem;
-}
-
-.ghostIcon {
-  flex: none;
-  width: 2.2rem;
-  height: 2.2rem;
-  border: 1.5px dashed var(--color-border-strong);
-  border-radius: var(--radius-round);
-}
-
-.ghostText {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
 .ghostDot {
   width: 1rem;
   height: 1rem;
@@ -670,10 +679,6 @@
     display: none;
   }
 
-  .rank {
-    min-height: 3.75rem;
-  }
-
   .taste {
     min-height: 2.125rem;
   }
@@ -720,40 +725,38 @@
     letter-spacing: 0;
   }
 
+  /* En horizontal la altura manda: el podio se queda en su forma, con los escalones más bajos y
+   * sin la línea de detalle, que no cabe. */
   .rankList {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-2);
+    gap: var(--space-1);
   }
 
-  .rank {
-    min-height: 0;
-    align-items: center;
+  .rankIcon {
+    width: 1.6rem;
+    height: 1.6rem;
   }
 
-  /* En tres columnas el ancho manda: la medalla deja su sitio al nombre. */
-  .medal {
-    display: none;
+  .rankIcon svg {
+    width: 0.9rem;
+    height: 0.9rem;
   }
 
-  .rankLink {
-    align-items: center;
-  }
-
-  /* En una columna de un tercio el nombre necesita dos líneas: mejor dos que "Tomas...". */
   .rankName {
-    display: -webkit-box;
-    overflow-wrap: anywhere;
-    -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    white-space: normal;
+    font-size: var(--text-2xs);
   }
 
   .rankMeta {
-    white-space: normal;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    display: none;
+  }
+
+  .rankList .stepBlock {
+    height: 2.25rem;
+    margin-top: var(--space-1);
+  }
+
+  .stepBlock[data-place="1"] .stepNumber {
+    font-size: var(--text-lg);
   }
 
   .tasteList {
