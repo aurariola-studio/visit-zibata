@@ -262,6 +262,8 @@
   justify-content: center;
   gap: 2px;
   min-width: 0;
+  /* El giro del sello deja las esquinas fuera de la fila: se recortan, que ahí no hay nada. */
+  overflow: hidden;
   text-align: center;
 }
 
@@ -292,8 +294,6 @@
 .zone[data-visited="true"] .zoneStamp {
   background: var(--zone-ink, var(--olive-700));
   color: var(--zone-on-accent, white);
-  /* Sobre el relleno, los aros se recortan en el color del papel. */
-  --zone-ring: var(--zone-on-accent, white);
 }
 
 .zoneCheck {
@@ -319,45 +319,27 @@
 }
 
 /*
- * Las que aún no abrieron: sello genérico con reloj y "Próximamente" debajo. El aro apagado lo
- * separa de las que faltan por estrenar, que llevan el tono de su plaza. El sello es algo menor que
- * los demás para que el reloj y el rótulo quepan en la fila.
+ * Las que aún no abrieron: el mismo sello, con el aro apagado, el reloj y "Pronto" dentro. Así
+ * miden lo mismo que las demás y la rejilla no cambia de ritmo.
  */
 .zone[data-upcoming="true"] .zoneStamp {
-  max-width: 3.5rem;
   color: var(--color-text-muted);
   --zone-ring: var(--color-border-strong);
   background: transparent;
 }
 
-.zoneSoon {
-  font-size: 0.6rem;
-  font-weight: var(--weight-strong);
-  line-height: 1.1;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
 /*
  * La rejilla de 4 × 4 llena la hoja: las filas se reparten el alto y el sello se queda en el centro.
- * En el teléfono mínimo el sello baja a 3.5 rem para que el nombre siga cabiendo dentro.
+ * En el teléfono mínimo el sello baja a 3.75 rem para que el nombre siga cabiendo dentro.
  */
 @media (max-width: 359px) {
   .zoneStamp {
     max-width: 3.75rem;
   }
 
-  .zone[data-upcoming="true"] .zoneStamp {
-    max-width: 2.75rem;
-  }
-
   /* En la columna más estrecha, un punto menos en el nombre evita partir "QUERÉTARO". */
   .zoneName {
     font-size: 0.5rem;
-  }
-
-  .zoneSoon {
-    font-size: 0.55rem;
   }
 }
 
@@ -669,11 +651,7 @@
 
 @media (max-height: 500px) {
   .zoneStamp {
-    max-width: 3.75rem;
-  }
-
-  .zone[data-upcoming="true"] .zoneStamp {
-    max-width: 2.75rem;
+    max-width: 3.5rem;
   }
 
   .zoneName {
@@ -729,19 +707,10 @@
     max-width: 3rem;
   }
 
-  .zone[data-upcoming="true"] .zoneStamp {
-    max-width: 3rem;
-  }
-
   .zoneName {
     -webkit-line-clamp: 3;
     font-size: 0.4375rem;
     letter-spacing: 0;
-  }
-
-  /* En horizontal no hay ancho para el rótulo: el reloj ya dice que llegan. */
-  .zoneSoon {
-    display: none;
   }
 
   .rankList {

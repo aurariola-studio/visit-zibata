@@ -102,11 +102,11 @@ test.describe('Tu Zibatá', () => {
     await expect(zonas.getByRole('listitem')).toHaveCount(
       activePlazas().length + inactivePlazas().length,
     )
-    // Las próximas no llevan nombre: sello genérico que solo dice "Próximamente".
+    // Las próximas no llevan nombre: sello genérico que solo dice "Pronto".
     await expect(zonas.locator('[data-upcoming="true"]:not([data-filler="true"])')).toHaveCount(
       inactivePlazas().length,
     )
-    await expect(zonas.getByText('Próximamente').first()).toBeVisible()
+    await expect(zonas.getByText('Pronto').first()).toBeVisible()
     await expect(zonas).not.toContainText(inactivePlazas()[0]?.name.replace(/^Plaza\s+/, '') ?? '')
     // Y un sello de relleno completa la última fila de la rejilla.
     await expect(zonas.locator('[data-filler="true"]')).toHaveCount(1)

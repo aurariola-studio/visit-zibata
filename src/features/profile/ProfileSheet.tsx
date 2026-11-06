@@ -275,13 +275,14 @@ function Zonas({ journey }: { journey: Journey }) {
               style={plazaVars(zone.tone, 'zone') as CSSProperties}
             >
               {zone.upcoming ? (
-                <Clock className={styles.zoneCheck} aria-hidden="true" />
+                <>
+                  <Clock className={styles.zoneCheck} aria-hidden="true" />
+                  <span className={styles.zoneName}>{t('profile.zoneSoonShort')}</span>
+                </>
               ) : (
                 <span className={styles.zoneName}>{shortZoneName(zone.plaza.name)}</span>
               )}
             </span>
-            {/* Las próximas no llevan nombre: su sello dice lo que son debajo. */}
-            {zone.upcoming && <span className={styles.zoneSoon}>{t('profile.zoneSoon')}</span>}
             <span className="visually-hidden">
               {zone.visited
                 ? `, ${t('profile.zoneDone')}, ${t('profile.zonePlaces', { count: zone.places })}`
@@ -300,8 +301,8 @@ function Zonas({ journey }: { journey: Journey }) {
           >
             <span className={styles.zoneStamp}>
               <Clock className={styles.zoneCheck} aria-hidden="true" />
+              <span className={styles.zoneName}>{t('profile.zoneSoonShort')}</span>
             </span>
-            <span className={styles.zoneSoon}>{t('profile.zoneSoon')}</span>
           </li>
         ))}
       </ul>

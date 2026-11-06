@@ -411,6 +411,7 @@ export const es = {
   'profile.zonesLabel': 'Zonas de Zibatá',
   'profile.zoneDone': 'visitada',
   'profile.zoneSoon': 'Próximamente',
+  'profile.zoneSoonShort': 'Pronto',
   'profile.podium': 'Tus tres de siempre',
   'profile.podiumCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.position': 'Puesto {position}',
