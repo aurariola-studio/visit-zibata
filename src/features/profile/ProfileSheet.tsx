@@ -11,7 +11,7 @@
  *
  * Vive aparte del botón porque casi nunca se abre: así no viaja en el arranque de la guía.
  */
-import { Check, Clock, X } from 'lucide-react'
+import { Clock, X } from 'lucide-react'
 import { type CSSProperties, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
@@ -269,21 +269,19 @@ function Zonas({ journey }: { journey: Journey }) {
             data-upcoming={zone.upcoming}
             title={zone.upcoming ? t('profile.zoneSoon') : zone.plaza.name}
           >
-            {/* La marca es el dibujo: transparente sin estrenar, en color cuando ya fuiste. */}
+            {/* El sello: transparente sin estrenar, relleno con el tono de la plaza cuando ya fuiste. */}
             <span
               className={styles.zoneStamp}
               style={plazaVars(zone.tone, 'zone') as CSSProperties}
-              aria-hidden="true"
             >
-              {zone.visited && <Check className={styles.zoneCheck} />}
-              {zone.upcoming && <Clock className={styles.zoneCheck} />}
+              {zone.upcoming ? (
+                <Clock className={styles.zoneCheck} aria-hidden="true" />
+              ) : (
+                <span className={styles.zoneName}>{shortZoneName(zone.plaza.name)}</span>
+              )}
             </span>
-            {/* Las próximas no llevan nombre: su sello genérico dice lo que son. */}
-            {zone.upcoming ? (
-              <span className={styles.zoneSoon}>{t('profile.zoneSoon')}</span>
-            ) : (
-              <span className={styles.zoneName}>{shortZoneName(zone.plaza.name)}</span>
-            )}
+            {/* Las próximas no llevan nombre: su sello dice lo que son debajo. */}
+            {zone.upcoming && <span className={styles.zoneSoon}>{t('profile.zoneSoon')}</span>}
             <span className="visually-hidden">
               {zone.visited
                 ? `, ${t('profile.zoneDone')}, ${t('profile.zonePlaces', { count: zone.places })}`
@@ -300,8 +298,8 @@ function Zonas({ journey }: { journey: Journey }) {
             data-filler="true"
             aria-hidden="true"
           >
-            <span className={styles.zoneStamp} aria-hidden="true">
-              <Clock className={styles.zoneCheck} />
+            <span className={styles.zoneStamp}>
+              <Clock className={styles.zoneCheck} aria-hidden="true" />
             </span>
             <span className={styles.zoneSoon}>{t('profile.zoneSoon')}</span>
           </li>

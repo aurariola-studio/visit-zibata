@@ -238,18 +238,17 @@
 }
 
 /*
- * Sellos de zona: el cuadro lleva el color que la plaza tiene en el mapa cuando ya la estrenaste, y
- * queda hueco y punteado mientras siga pendiente. El nombre va debajo, sobre el papel: dentro del
- * cuadro el texto no llegaba a AA en todos los tonos. Cuatro columnas en el teléfono mínimo, cinco y
- * seis cuando hay sitio, para que las once quepan sin desplazar. Son un cuadro, no controles.
- *
- * El sello tiene tope de ancho: sin él crecía con la columna, y con el ancho de la hoja (27 rem) una
- * tableta o un teléfono ancho gastaban en tres filas más alto del que la hoja tiene. El nombre se
- * queda con el ancho entero de la columna, que es lo que necesita para leerse.
+ * Sellos de zona: círculos con el nombre de la plaza dentro, como un sello de pasaporte. El sello se
+ * rellena con el tono de la plaza cuando ya la estrenaste y queda transparente, con el contorno
+ * punteado, mientras siga pendiente. El relleno va en la tinta del tono, no en su color de mapa: es
+ * el paso que ya está oscurecido hasta leerse sobre papel, y así el nombre en arena también se lee.
+ * Cuatro columnas: las quince plazas y el relleno ocupan la rejilla de 4 × 4 entera.
  */
 .zones {
   display: grid;
+  flex: 1;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
   gap: var(--space-1) 0.35rem;
   margin: 0;
   padding: 0;
@@ -259,21 +258,26 @@
 .zone {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   min-width: 0;
   text-align: center;
 }
 
 .zoneStamp {
-  position: relative;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
   width: 100%;
-  max-width: 4rem;
+  max-width: 4.5rem;
   margin-inline: auto;
   aspect-ratio: 1;
-  border: 1.5px dashed var(--zone-accent, var(--olive-600));
-  border-radius: var(--radius-sm);
+  padding: 0.3rem;
+  border: 1.5px dashed var(--zone-ink, var(--olive-700));
+  border-radius: var(--radius-round);
   /* Sin estrenar, el sello es solo contorno: el color aparece con la visita. */
   background: transparent;
   color: var(--zone-ink, var(--olive-700));
@@ -281,65 +285,69 @@
 
 .zone[data-visited="true"] .zoneStamp {
   border-style: solid;
-  background: var(--zone-accent, var(--olive-600));
+  background: var(--zone-ink, var(--olive-700));
   color: var(--zone-on-accent, white);
 }
 
 .zoneCheck {
-  width: 1.1rem;
-  height: 1.1rem;
+  flex: none;
+  width: 0.8rem;
+  height: 0.8rem;
 }
 
-/* El nombre puede partirse en dos líneas y el completo queda en el `title` y en el nombre accesible. */
+/* El nombre se parte hasta en tres líneas; el completo queda en el `title`. */
 .zoneName {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   overflow-wrap: anywhere;
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-weight: var(--weight-strong);
   line-height: 1.1;
-  color: var(--ink-800);
+  color: inherit;
 }
 
 /*
- * Las que aún no abrieron: un sello genérico, sin nombre, que solo dice que llegan. El reloj y el
- * contorno apagado lo separan de las que faltan por estrenar, que llevan el color de su plaza.
+ * Las que aún no abrieron: sello genérico con reloj y "Próximamente" debajo. El contorno apagado lo
+ * separa de las que faltan por estrenar, que llevan el tono de su plaza. El sello es algo menor que
+ * los demás para que el reloj y el rótulo quepan en la fila.
  */
 .zone[data-upcoming="true"] .zoneStamp {
+  max-width: 3.5rem;
   border-color: var(--color-border-strong);
   background: transparent;
   color: var(--color-text-muted);
 }
 
 .zoneSoon {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow-wrap: anywhere;
   font-size: 0.6rem;
   font-weight: var(--weight-strong);
   line-height: 1.1;
   color: var(--color-text-muted);
-  text-align: center;
+  white-space: nowrap;
 }
 
 /*
- * La rejilla de 4 × 4: cuatro columnas para que los quince sellos ocupen cuatro filas y llenen la
- * hoja. El sello se encoge con el ancho para que quepan las cuatro filas sin desplazarse; en el
- * teléfono mínimo baja a 2.75 rem y el nombre se queda en dos líneas.
+ * La rejilla de 4 × 4 llena la hoja: las filas se reparten el alto y el sello se queda en el centro.
+ * En el teléfono mínimo el sello baja a 3.5 rem para que el nombre siga cabiendo dentro.
  */
-@media (max-width: 439px) {
-  .zoneStamp {
-    max-width: 3.4rem;
-  }
-}
-
 @media (max-width: 359px) {
   .zoneStamp {
+    max-width: 3.75rem;
+  }
+
+  .zone[data-upcoming="true"] .zoneStamp {
     max-width: 2.75rem;
+  }
+
+  /* En la columna más estrecha, un punto menos en el nombre evita partir "Querétaro". */
+  .zoneName {
+    font-size: 0.625rem;
+  }
+
+  .zoneSoon {
+    font-size: 0.55rem;
   }
 }
 
@@ -647,23 +655,19 @@
   }
 }
 
-/* En horizontal la altura manda: sellos en seis columnas, podio y gustos en fila. */
-/* En el teléfono mínimo, un nombre de dos palabras largas ("FoodTrucks Pickleball") pide tres líneas. */
-@media (max-width: 359px) {
-  .zoneName {
-    -webkit-line-clamp: 3;
-  }
-}
+/* En horizontal la altura manda: sellos en ocho columnas, podio y gustos en fila. */
 
 @media (max-height: 500px) {
   .zoneStamp {
+    max-width: 3.75rem;
+  }
+
+  .zone[data-upcoming="true"] .zoneStamp {
     max-width: 2.75rem;
   }
 
-  .zoneName,
-  .zoneSoon {
-    -webkit-line-clamp: 1;
-    font-size: var(--text-2xs);
+  .zoneName {
+    -webkit-line-clamp: 3;
   }
 
   /* La cifra del encabezado ya dice lo que llevas: el aviso de hoja vacía se calla. */
@@ -712,12 +716,21 @@
   }
 
   .zoneStamp {
-    max-width: 2.75rem;
+    max-width: 3rem;
+  }
+
+  .zone[data-upcoming="true"] .zoneStamp {
+    max-width: 3rem;
   }
 
   .zoneName {
-    -webkit-line-clamp: 1;
-    font-size: var(--text-2xs);
+    -webkit-line-clamp: 3;
+    font-size: 0.5rem;
+  }
+
+  /* En horizontal no hay ancho para el rótulo: el reloj ya dice que llegan. */
+  .zoneSoon {
+    display: none;
   }
 
   .rankList {
