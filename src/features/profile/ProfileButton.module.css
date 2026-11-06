@@ -187,7 +187,9 @@
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  /* Aire entre las pestañas y el título, y el título pegado a su contenido. */
+  padding-top: var(--space-3);
+  gap: var(--space-2);
 }
 
 /* Encabezado de la hoja: el título y la cifra que resume esa hoja. */
@@ -413,7 +415,9 @@
   grid-template-columns: 1rem minmax(0, 1fr) 3.5rem 1.5rem;
   align-items: center;
   gap: var(--space-2);
-  min-height: 2.5rem;
+  min-height: 2.125rem;
+  /* El renglón no crece más de esto: seis filas densas, no una lista estirada. */
+  max-height: 2.75rem;
 }
 
 .taste svg {
@@ -519,13 +523,6 @@
   justify-self: end;
 }
 
-/* La explicación del estado vacío, sin caja: los renglones ya son el dibujo. */
-.note {
-  font-size: var(--text-xs);
-  line-height: 1.4;
-  color: var(--color-text-muted);
-}
-
 .storage {
   flex: none;
   font-size: var(--text-2xs);
@@ -595,8 +592,7 @@
   }
 
   /* La cifra del encabezado ya dice lo que llevas: el aviso de hoja vacía se calla. */
-  .summary,
-  .note {
+  .summary {
     display: none;
   }
 

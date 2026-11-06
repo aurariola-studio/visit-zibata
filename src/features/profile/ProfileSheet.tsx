@@ -47,7 +47,7 @@ const LINKS = [
 
 /** Cuántos lugares caben en el podio y cuántos gustos se enseñan. */
 const TOP = 3
-const TOP_GUSTOS = 5
+const TOP_GUSTOS = 6
 /** Los puestos y renglones fijos de cada hoja, para dibujar también los que faltan. */
 const PUESTOS = Array.from({ length: TOP }, (_, indice) => indice + 1)
 const RENGLONES = Array.from({ length: TOP_GUSTOS }, (_, indice) => indice + 1)
@@ -350,7 +350,6 @@ function Podio({
           </li>
         ))}
       </ol>
-      {journey.mine.length === 0 && <p className={styles.note}>{t('profile.podiumEmpty')}</p>}
     </>
   )
 }
@@ -391,7 +390,6 @@ function Gustos({ journey }: { journey: Journey }) {
       {journey.tastesRest > 0 && (
         <p className={styles.more}>{t('profile.moreTastes', { count: journey.tastesRest })}</p>
       )}
-      {journey.tastes.length === 0 && <p className={styles.note}>{t('profile.tastesEmpty')}</p>}
     </>
   )
 }

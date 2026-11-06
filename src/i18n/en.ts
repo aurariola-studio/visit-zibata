@@ -363,11 +363,9 @@ export const en = {
   'profile.visitCount': { one: '{count} visit', other: '{count} visits' },
   'profile.lastVisit': 'last on {date}',
   'profile.saved': 'saved',
-  'profile.podiumEmpty': 'Save, rate or visit a place and it will show up here.',
   'profile.tastes': 'What you crave most',
   'profile.tasteTotal': { one: '{count} type', other: '{count} types' },
   'profile.moreTastes': 'and {count} more',
-  'profile.tastesEmpty': 'Mark places and what you crave most will show up here.',
   'profile.storage': 'Saved in this browser and synced with the guide, without your name.',
 
   'locale.label': 'Language',

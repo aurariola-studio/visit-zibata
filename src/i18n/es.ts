@@ -417,11 +417,9 @@ export const es = {
   'profile.visitCount': { one: '{count} visita', other: '{count} visitas' },
   'profile.lastVisit': 'última el {date}',
   'profile.saved': 'guardado',
-  'profile.podiumEmpty': 'Guarda, califica o visita un lugar y aparecerá aquí.',
   'profile.tastes': 'Lo que más se te antoja',
   'profile.tasteTotal': { one: '{count} tipo', other: '{count} tipos' },
   'profile.moreTastes': 'y {count} más',
-  'profile.tastesEmpty': 'Marca lugares y aquí verás lo que más se te antoja.',
   /*
    * No es solo local: la cuenta anónima del servidor guarda lo mismo para poder recuperarlo en otro
    * aparato, sin nombre ni correo. La política lo detalla; aquí no puede decir menos.
