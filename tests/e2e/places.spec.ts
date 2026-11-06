@@ -189,6 +189,25 @@ test.describe('Plazas y lugares', () => {
     await expect(page.getByRole('switch', { name: 'Favoritos, 1' })).toBeVisible()
   })
 
+  test('el calendario de visitas se queda dentro de una pantalla corta', async ({ page }) => {
+    // Pantalla dividida: 720×420 deja el calendario sin sitio ni encima ni debajo del botón, y
+    // 720×300 ni siquiera le da alto para caber entero.
+    for (const alto of [420, 300]) {
+      await page.setViewportSize({ width: 720, height: alto })
+      await openApp(page, { path: 'lugar/tomassa' })
+      const boton = page.getByRole('button', { name: /^Registrar visita a / })
+      await boton.scrollIntoViewIfNeeded()
+      await boton.click()
+
+      const calendario = page.locator('[class*="_calendario_"]')
+      await expect(calendario).toBeVisible()
+      const caja = await calendario.boundingBox()
+      if (!caja) throw new Error('el calendario no tiene caja')
+      expect(caja.y, `alto ${alto}`).toBeGreaterThanOrEqual(0)
+      expect(caja.y + caja.height, `alto ${alto}`).toBeLessThanOrEqual(alto)
+    }
+  })
+
   test('en móvil la hoja inferior se expande y se reduce sin tapar todo el mapa', async ({
     page,
   }) => {

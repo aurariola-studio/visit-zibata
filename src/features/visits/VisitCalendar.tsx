@@ -66,7 +66,12 @@ export function VisitCalendar({
       const margen = 16
       const abajo = window.innerHeight - marco.bottom - margen
       const arriba = marco.top - margen
-      const top = abajo >= alto || abajo >= arriba ? marco.bottom + 8 : marco.top - alto - 8
+      const preferido = abajo >= alto || abajo >= arriba ? marco.bottom + 8 : marco.top - alto - 8
+      // Ni por arriba ni por abajo cabe en una pantalla corta: se pega al borde en vez de salirse.
+      const top = Math.min(
+        Math.max(margen, preferido),
+        Math.max(margen, window.innerHeight - alto - margen),
+      )
       const izquierda = Math.min(
         Math.max(margen, marco.left),
         Math.max(margen, window.innerWidth - ancho - margen),
