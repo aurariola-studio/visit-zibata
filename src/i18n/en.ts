@@ -366,7 +366,6 @@ export const en = {
   'profile.tastes': 'What you crave most',
   'profile.tasteTotal': { one: '{count} type', other: '{count} types' },
   'profile.moreTastes': 'and {count} more',
-  'profile.storage': 'Saved in this browser and synced with the guide, without your name.',
 
   'locale.label': 'Language',
   'locale.shortEs': 'ES',

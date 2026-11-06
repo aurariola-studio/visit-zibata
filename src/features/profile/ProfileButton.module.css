@@ -86,7 +86,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-5) var(--space-4);
+  padding: var(--space-5);
 
   /*
    * 369 px de lado corto.
@@ -258,7 +258,7 @@
   display: grid;
   place-items: center;
   width: 100%;
-  max-width: 3.3rem;
+  max-width: 3.6rem;
   margin-inline: auto;
   aspect-ratio: 1;
   border: 1.5px dashed var(--zone-accent, var(--olive-600));
@@ -523,12 +523,6 @@
   justify-self: end;
 }
 
-.storage {
-  flex: none;
-  font-size: var(--text-2xs);
-  color: var(--color-text-muted);
-}
-
 .links {
   flex: none;
   display: flex;
@@ -551,7 +545,7 @@
 @media (max-height: 900px) {
   .sheet {
     gap: var(--space-2);
-    padding: var(--space-3) var(--space-4) var(--space-3);
+    padding: var(--space-4);
   }
 
   .subtitle {
@@ -615,10 +609,6 @@
   .sheet {
     gap: var(--space-1);
     padding: var(--space-2) var(--space-3);
-  }
-
-  .storage {
-    display: none;
   }
 
   .bigAvatar {

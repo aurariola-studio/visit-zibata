@@ -506,8 +506,6 @@ export function ProfileSheet({ onClose, onOpenInfo, onOpenPlace }: SheetProps) {
           {hoja === 'gustos' && <Gustos journey={journey} />}
         </div>
 
-        <p className={styles.storage}>{t('profile.storage')}</p>
-
         <nav className={styles.links} aria-label={t('about.moreLabel')}>
           {LINKS.map((link) => (
             <a

@@ -420,11 +420,6 @@ export const es = {
   'profile.tastes': 'Lo que más se te antoja',
   'profile.tasteTotal': { one: '{count} tipo', other: '{count} tipos' },
   'profile.moreTastes': 'y {count} más',
-  /*
-   * No es solo local: la cuenta anónima del servidor guarda lo mismo para poder recuperarlo en otro
-   * aparato, sin nombre ni correo. La política lo detalla; aquí no puede decir menos.
-   */
-  'profile.storage': 'Se guarda en este navegador y se sincroniza con la guía, sin tu nombre.',
 
   'locale.label': 'Idioma',
   'locale.shortEs': 'ES',
