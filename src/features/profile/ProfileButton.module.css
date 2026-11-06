@@ -68,20 +68,28 @@
   cursor: default;
 }
 
+/*
+ * La hoja no se desplaza: cabecera, pestañas y pie se quedan quietos y lo que cambia es el contenido
+ * de la hoja activa. El alto se calcula con lo que de verdad se ve (`dvh`) y descuenta el velo y la
+ * zona segura, para que el límite sea de la pantalla y no del contenido. El tope de 30 rem evita que
+ * en una pantalla grande crezca hasta parecer una página en blanco.
+ *
+ * `overflow: auto` no se usa en ningún tamaño de la matriz: es la última red, para un tamaño más
+ * pequeño que el mínimo o para el zoom de texto al 200 %, donde el pie dejaría de alcanzarse si la
+ * hoja recortara. Antes que perder contenido, se desplaza.
+ */
 .sheet {
   position: relative;
   width: min(27rem, 100%);
-  max-height: 90vh;
-  overflow-y: auto;
+  height: min(calc(100dvh - 2 * var(--space-4) - var(--safe-bottom)), 36rem);
+  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-5) var(--space-5);
+  padding: var(--space-5);
 
   /*
-
    * 369 px de lado corto.
-
    */
 
   border-radius: var(--radius-xl);
@@ -94,6 +102,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-3);
+  flex: none;
 }
 
 /* Cabecera: avatar, nombre y de qué habla la hoja. */
@@ -139,33 +148,86 @@
 /* Cerrar ejecuta: cuadrado de icono con la esquina de la familia, no círculo. */
 .close {
   composes: base botonIcono conSuperficie from "../../styles/controls.module.css";
-}
-
-/* Cada bloque responde a una parte de la pregunta: cuánto llevas, qué guardaste, qué te gusta. */
-.block,
-.journey {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-/* El recorrido es la respuesta corta, así que va en tarjeta y el resto no. */
-.journey {
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--lime-50);
+  flex: none;
 }
 
 /*
- * Subtítulo de grupo, igual que en el panel de zona y en las páginas de información. Era el rótulo
- * compacto de 12 px que quedó del sistema anterior, y en una hoja que se lee entera no separaba
- * nada: encabezaba una tarjeta o una lista pesando menos que su propio contenido.
+ * Las tres hojas, como cápsulas del catálogo: es la familia de "elegir de un conjunto", la misma de
+ * las categorías. La elegida va rellena, sin inventar una forma nueva. Activación automática: al
+ * moverse con las flechas se abre la hoja, que es lo que se espera de tres opciones cortas.
+ */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  flex: none;
+}
+
+.tab {
+  composes: base pildora from "../../styles/controls.module.css";
+  justify-content: center;
+  height: var(--control-h-mini);
+  padding: 0 var(--space-2);
+}
+
+/*
+ * Un poco más de aire a los dos lados de las pestañas, el mismo arriba que abajo. En horizontal,
+ * donde la altura va justa, se queda como está.
+ */
+@media (min-height: 431px) {
+  .tabs {
+    margin-block: var(--space-1);
+  }
+}
+
+/*
+ * La hoja activa. `overflow: auto` es el respaldo, no el plan: el contenido de cada hoja está
+ * medido para caber en la pantalla más pequeña de la matriz, y una prueba lo comprueba a cada
+ * tamaño. Si algún día no cupiera en un teléfono que no está en la matriz, se desplaza antes que
+ * recortarse.
+ *
+ * El mínimo de 8 rem es para que, cuando la hoja se queda corta de verdad (zoom de texto al 200 %
+ * en un teléfono de 320), este panel no se quede en cero: conserva una ventana que se puede
+ * recorrer mientras el resto de la hoja se desplaza por fuera.
+ */
+.panel {
+  flex: 1;
+  min-height: 8rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  /* Sin relleno arriba: el aire entre las pestañas y el título es el mismo que hay entre el título y
+   * las pestañas, el del hueco de la hoja. */
+  padding-top: 0;
+  gap: var(--space-2);
+}
+
+/* Encabezado de la hoja: el título y la cifra que resume esa hoja. */
+.sheetHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex: none;
+}
+
+/*
+ * Subtítulo de grupo, igual que en el panel de zona y en las páginas de información: 17 px, 600,
+ * tinta de texto. Encabeza la hoja, no la sección de una tarjeta.
  */
 .blockTitle {
   font-size: var(--text-md);
   font-weight: var(--weight-strong);
   line-height: 1.2;
   color: var(--ink-700);
+}
+
+.count {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .summary {
@@ -176,241 +238,418 @@
 }
 
 /*
- * Insignias de zona: llenas con el color que la plaza tiene en el mapa cuando ya la estrenaste, y de
- * contorno punteado mientras siga pendiente. Son un cuadro, no controles: aquí se mira lo que llevas,
- * y para ir a una zona está el mapa. Formato pequeño y nombre corto ("Plaza Luna" se lee "Luna").
+ * Sellos de zona: círculos con el nombre de la plaza dentro, como un sello de pasaporte. El sello se
+ * rellena con el tono de la plaza cuando ya la estrenaste y queda transparente, con el contorno
+ * punteado, mientras siga pendiente. El relleno va en la tinta del tono, no en su color de mapa: es
+ * el paso que ya está oscurecido hasta leerse sobre papel, y así el nombre en arena también se lee.
+ * Cuatro columnas: las quince plazas y el relleno ocupan la rejilla de 4 × 4 entera.
  */
 .zones {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
   gap: var(--space-1) 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .zone {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-  min-height: 1.6rem;
-  padding: 0 0.45rem;
-  border: 1.5px dashed var(--zone-accent, var(--olive-600));
-  border-radius: var(--radius-pill);
-  background: var(--zone-soft, white);
-  color: var(--zone-ink, var(--olive-700));
-  font-size: var(--text-2xs);
-  font-weight: var(--weight-strong);
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  /* El giro del sello deja las esquinas fuera de la fila: se recortan, que ahí no hay nada. */
+  overflow: hidden;
+  text-align: center;
 }
 
-.zone[data-visited="true"] {
-  border-style: solid;
-  background: var(--zone-accent, var(--olive-600));
+.zoneStamp {
+  /* El mismo matasellos del panel de zona: dos aros y el nombre en mono, girado. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  width: 100%;
+  max-width: 4.5rem;
+  margin-inline: auto;
+  aspect-ratio: 1;
+  padding: 0.3rem;
+  border-radius: var(--radius-round);
+  box-shadow:
+    inset 0 0 0 1px var(--zone-ring),
+    inset 0 0 0 3px transparent,
+    inset 0 0 0 4px var(--zone-ring);
+  rotate: -12deg;
+  /* Sin estrenar, el sello es solo tinta: el relleno aparece con la visita. */
+  background: transparent;
+  color: var(--zone-ink, var(--olive-700));
+  --zone-ring: var(--zone-ink, var(--olive-700));
+}
+
+.zone[data-visited="true"] .zoneStamp {
+  background: var(--zone-ink, var(--olive-700));
   color: var(--zone-on-accent, white);
 }
 
 .zoneCheck {
-  width: 0.75rem;
-  height: 0.75rem;
+  flex: none;
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+/* El nombre, como el matasellos: mono, versalitas y el bloque girado con el sello. */
+.zoneName {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: inherit;
 }
 
 /*
- * El podio. Cada escalón lleva el icono del giro en el color de su plaza, el nombre, el giro y un
- * bloque con el puesto y la plaza. El primero va al centro y más alto: el orden visual lo pone
- * `order`, mientras que el del documento sigue siendo 1, 2, 3, que es el que se lee y se tabula.
+ * Las que aún no abrieron: el mismo sello, con el aro apagado, el reloj y "Pronto" dentro. Así
+ * miden lo mismo que las demás y la rejilla no cambia de ritmo.
  */
-.podium {
+.zone[data-upcoming="true"] .zoneStamp {
+  color: var(--color-text-muted);
+  --zone-ring: var(--color-border);
+  background: transparent;
+  /* Aún no existen: el sello se queda por detrás de las plazas que sí puedes visitar, sin bajar el
+   * nombre del contraste mínimo. */
+  opacity: 0.9;
+}
+
+.zone[data-upcoming="true"] .zoneCheck {
+  opacity: 0.55;
+}
+
+/*
+ * La rejilla de 4 × 4 llena la hoja: las filas se reparten el alto y el sello se queda en el centro.
+ * En el teléfono mínimo el sello baja a 3.75 rem para que el nombre siga cabiendo dentro.
+ */
+@media (max-width: 359px) {
+  .zoneStamp {
+    max-width: 3.75rem;
+  }
+
+  /* En la columna más estrecha, un punto menos en el nombre evita partir "QUERÉTARO". */
+  .zoneName {
+    font-size: 0.5rem;
+  }
+}
+
+/* El podio, con su forma: tres columnas sobre escalones de distinta altura, el primero en medio.
+ * El orden del documento sigue siendo 1, 2 y 3; el visual lo pone el `order`.
+ */
+.rankList {
   display: flex;
   align-items: flex-end;
   justify-content: center;
   gap: var(--space-2);
-  padding-top: var(--space-1);
+  /* El podio se centra en el alto que queda: aire igual arriba que abajo. */
+  margin: auto 0;
+  padding: 0;
+  list-style: none;
 }
 
-.step {
+.rank {
+  display: flex;
   flex: 1 1 0;
   min-width: 0;
-  max-width: 10rem;
+  max-width: 9rem;
 }
 
-.podium[data-steps="3"] .step[data-place="1"] {
+.rank[data-place="1"] {
   order: 2;
 }
 
-.podium[data-steps="3"] .step[data-place="2"] {
+.rank[data-place="2"] {
   order: 1;
 }
 
-.podium[data-steps="3"] .step[data-place="3"] {
+.rank[data-place="3"] {
   order: 3;
 }
 
-/*
- * Una columna del podio: la pieza entera es el enlace a esa ficha. Era un botón, y lo único que
- * respondía al pasar por encima era un subrayado en el nombre, así que no se veía dónde pulsar.
- */
-.stepButton {
-  composes: zonaPulsable from "../../styles/controls.module.css";
+.rankLink,
+.ghostStep {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
-  padding: var(--space-2) var(--space-1);
-  border-radius: var(--radius-control);
-  color: var(--ink-800);
+  justify-content: flex-end;
+  gap: 0.1rem;
+  min-width: 0;
+  padding-top: var(--space-2);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
   text-align: center;
 }
 
-.stepIcon {
+/* La ficha del lugar, encima de su escalón. */
+.rankBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.rankLink {
+  composes: zonaPulsable from "../../styles/controls.module.css";
+}
+
+.rankLink:hover .rankName {
+  color: var(--olive-700);
+}
+
+.rankIcon {
+  flex: none;
   display: grid;
   place-items: center;
   width: 2rem;
   height: 2rem;
-  margin-bottom: 0.05rem;
+  margin-bottom: 0.15rem;
   border-radius: var(--radius-round);
   background: var(--zone-soft, var(--lime-50));
   color: var(--zone-ink, var(--olive-600));
 }
 
-/* El nombre cabe en dos líneas; el completo vive en el título y en el nombre accesible. */
-.stepName {
+.rankName {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-strong);
+  line-height: 1.2;
+  color: var(--ink-900);
+}
+
+.rankMeta {
+  overflow: hidden;
+  font-size: var(--text-2xs);
+  line-height: 1.25;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  overflow: hidden;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-strong);
-  line-height: 1.15;
 }
 
-.stepGiro {
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: var(--text-2xs);
-  color: var(--color-text-muted);
-}
-
-/*
- * El bloque del podio: solo el puesto, en grande. El alto lo declara cada escalón (4,25 / 3 / 2,1 rem)
- * en vez de salir del relleno, que es como el segundo acabó a la misma altura que el tercero.
- */
+/* El escalón: la barra que hace el podio. El primero es el más alto y el único con el verde lleno. */
 .stepBlock {
   display: grid;
   place-items: center;
   width: 100%;
-  height: 2.1rem;
-  margin-top: 0.3rem;
+  margin-top: var(--space-2);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
-  background: var(--sand-300);
+  background: var(--color-surface-muted);
   color: var(--ink-800);
 }
 
 .stepBlock[data-place="1"] {
-  height: 4.25rem;
+  height: 4.75rem;
   background: var(--olive-600);
-  color: white;
+  color: var(--sand-25);
 }
 
 .stepBlock[data-place="2"] {
-  height: 3rem;
+  height: 3.5rem;
   background: var(--lime-300);
   color: var(--olive-800);
 }
 
+.stepBlock[data-place="3"] {
+  height: 2.5rem;
+}
+
 .stepNumber {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
-  font-weight: var(--weight-strong);
+  font-weight: var(--weight-heavy);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .stepBlock[data-place="1"] .stepNumber {
   font-size: var(--text-xl);
 }
 
-/* Tus antojos: el giro, con su icono, y cuántos lugares tuyos caen en él, en pastillas. */
-.tastes {
+/* Los puestos que faltan se dibujan con el mismo escalón, hueco y punteado. */
+.ghostStep {
+  color: var(--color-text-muted);
+}
+
+.ghostIcon {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.15rem;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-round);
+}
+
+.stepBlock[data-ghost="true"] {
+  border: 1.5px dashed var(--color-border-strong);
+  border-bottom: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+/* Los gustos no son renglones: son una gráfica. La etiqueta arriba y, debajo, la barra que dice
+ * cuánto pesa cada tipo frente al primero.
+ */
+.tasteList {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) 0.35rem;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .taste {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
   gap: 0.3rem;
-  min-height: 1.75rem;
-  padding: 0 0.55rem;
-  border-radius: var(--radius-pill);
-  background: var(--color-surface-muted);
-  color: var(--olive-700);
+  min-height: 2.125rem;
+  /* El renglón no crece más de esto: seis filas densas, no una lista estirada. */
+  max-height: 3.25rem;
+}
+
+.tasteHead {
+  display: grid;
+  grid-template-columns: 1.1rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .taste svg {
   flex-shrink: 0;
+  color: var(--olive-700);
 }
 
 .tasteName {
-  font-size: var(--text-xs);
-  font-weight: var(--weight-strong);
+  overflow: hidden;
+  font-size: var(--text-sm);
   color: var(--ink-800);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* La cifra es la del eje: en la letra de titulares, para que se lea como dato y no como frase. */
 .tasteCount {
-  font-size: var(--text-2xs);
-  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-heavy);
+  color: var(--ink-800);
   font-variant-numeric: tabular-nums;
 }
 
-.empty {
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--lime-50);
-  color: var(--ink-700);
-  font-size: var(--text-sm);
+.tasteBar {
+  height: 0.45rem;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
 }
 
-.storage {
+.tasteBar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-accent);
+}
+
+.more {
   font-size: var(--text-2xs);
   color: var(--color-text-muted);
 }
 
+/*
+ * Los huecos de las listas: los mismos renglones que se llenarán, en gris. La hoja no queda en
+ * blanco y enseña la forma de lo que va a aparecer.
+ */
+.ghostDot {
+  width: 1rem;
+  height: 1rem;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-round);
+}
+
+.ghostName,
+.ghostMeta,
+.ghostCount {
+  display: block;
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.ghostName {
+  width: 58%;
+}
+
+.ghostMeta {
+  width: 36%;
+}
+
+.ghostBar {
+  height: 0.45rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.ghostCount {
+  width: 1rem;
+  justify-self: end;
+}
+
 .links {
+  flex: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--space-4);
-  padding-top: var(--space-2);
+  gap: 0 var(--space-3);
+  /* La línea y los enlaces quedan a la misma distancia por arriba que por abajo. */
+  padding: var(--space-3) 0 0;
   border-top: 1px solid var(--color-border);
 }
 
 .link {
   composes: enlace from "../../styles/controls.module.css";
-  padding: 0.35rem 0;
-  font: var(--weight-strong) var(--text-sm) / 1.4 var(--font-sans);
+  padding: 0.1rem 0;
+  font: var(--weight-strong) var(--text-2xs) / 1.4 var(--font-sans);
 }
 
 /*
- * Pantallas bajas (un teléfono pequeño, o cualquiera en horizontal): la hoja aprovecha casi todo el
- * alto y suelta lo prescindible. Con once zonas y tres bloques no siempre se evita el desplazamiento,
- * pero en un teléfono normal la hoja cabe entera.
+ * Pantallas bajas (un teléfono pequeño, o cualquiera en horizontal): se suelta lo prescindible y
+ * cambian las rejillas de sitio, para que las tres hojas sigan cabiendo sin desplazarse.
  */
-@media (max-height: 740px) {
+@media (max-height: 900px) {
   .sheet {
-    max-height: 95vh;
-    padding: var(--space-3) var(--space-4) var(--space-4);
+    gap: var(--space-2);
+    padding: var(--space-4);
   }
 
   .subtitle {
     display: none;
-  }
-
-  .journey {
-    padding: var(--space-2) var(--space-3);
-  }
-
-  .block,
-  .journey {
-    gap: var(--space-1);
   }
 
   .bigAvatar {
@@ -418,7 +657,135 @@
     height: 2.5rem;
   }
 
-  .stepIcon {
+  .bigAvatar svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+/* En horizontal la altura manda: sellos en ocho columnas, podio y gustos en fila. */
+
+@media (max-height: 500px) {
+  .zoneStamp {
+    max-width: 3.5rem;
+  }
+
+  .zoneName {
+    -webkit-line-clamp: 3;
+  }
+
+  /* La cifra del encabezado ya dice lo que llevas: el aviso de hoja vacía se calla. */
+  .summary {
     display: none;
+  }
+
+  .taste {
+    min-height: 2.125rem;
+  }
+
+  /* Menos aire entre renglones: en una pantalla baja cada píxel lo necesita la fila. */
+  .rankList,
+  .tasteList {
+    gap: var(--space-1);
+  }
+}
+
+@media (max-height: 430px) {
+  .sheet {
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .bigAvatar {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .bigAvatar svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .zones {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: var(--space-1);
+  }
+
+  .zoneStamp {
+    max-width: 3rem;
+  }
+
+  .zoneName {
+    -webkit-line-clamp: 3;
+    font-size: 0.4375rem;
+    letter-spacing: 0;
+  }
+
+  /* En horizontal la altura manda: el podio se queda en su forma, con los escalones más bajos y
+   * sin la línea de detalle, que no cabe. */
+  .rankList {
+    gap: var(--space-1);
+  }
+
+  .rankIcon {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .rankIcon svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .rankName {
+    -webkit-line-clamp: 2;
+    font-size: var(--text-2xs);
+  }
+
+  .rankMeta {
+    display: none;
+  }
+
+  .rankList .stepBlock {
+    height: 2.25rem;
+    margin-top: var(--space-1);
+  }
+
+  .stepBlock[data-place="1"] .stepNumber {
+    font-size: var(--text-lg);
+  }
+
+  .tasteList {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .taste {
+    min-height: 0;
+    max-height: none;
+  }
+}
+
+/*
+ * El pie cierra la hoja con el mismo aire arriba y abajo de los enlaces. Va después de los tamaños
+ * bajos a propósito: el borde inferior no cambia con la altura, solo el relleno del resto.
+ */
+.sheet {
+  padding-bottom: var(--space-3);
+}
+
+/* Con altura de sobra, el pie respira un escalón más: sigue igual arriba que abajo. */
+@media (min-height: 501px) {
+  .links {
+    padding-top: var(--space-4);
+  }
+
+  .sheet {
+    padding-bottom: var(--space-4);
   }
 }

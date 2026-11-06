@@ -273,6 +273,7 @@
   --z-map-ui: 10;
   --z-panel: 20;
   --z-sheet: 30;
+  --z-popover: 35;
   --z-toast: 40;
   --z-modal: 50;
 }

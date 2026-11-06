@@ -240,7 +240,7 @@ export const es = {
   'share.action': 'Compartir',
   'share.place': 'Compartir {name}',
   /* Etiqueta, no frase: lleva el nombre, los giros y la zona, que es lo que la guía ya publica. */
-  'share.text': '{name} · {giros} · {plaza}',
+  'share.text': '{name} · {giros} · {plaza}. Conoce más en',
   'share.copied': 'Copiado',
   'share.failed': 'No se pudo copiar el enlace',
 
@@ -314,7 +314,9 @@ export const es = {
   'about.openShort': 'Acerca',
   'about.title': 'Acerca de esta guía',
   'about.fix': 'Sugiere o contacta',
+  'about.suggestShort': 'Sugiere',
   'about.tutorial': 'Ver el tutorial',
+  'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'Cómo usar la guía',
   'about.tutorialLead':
     'Cinco preguntas para moverte por el mapa, buscar, leer una ficha, guardar lo tuyo y sugerir un cambio.',
@@ -398,25 +400,27 @@ export const es = {
   'profile.open': 'Tu Zibatá',
   'profile.title': 'Tu Zibatá',
   'profile.subtitle': 'Tus visitas, tus favoritos y tus notas',
+  'profile.tabs': 'Hojas de Tu Zibatá',
+  'profile.tabZones': 'Zonas',
+  'profile.tabPodium': 'Podio',
+  'profile.tabTastes': 'Gustos',
   'profile.journey': 'Tu paso por Zibatá',
-  'profile.visitsSummary': {
-    one: 'Has visitado {count} lugar de Zibatá, en {zones} de sus {total} zonas.',
-    other: 'Has visitado {count} lugares de Zibatá, en {zones} de sus {total} zonas.',
-  },
+  'profile.zonesDone': '{done} de {total}',
+  'profile.zonePlaces': { one: '{count} lugar', other: '{count} lugares' },
   'profile.noVisits': 'Todo Zibatá por estrenar. {total} zonas y {places} lugares.',
   'profile.zonesLabel': 'Zonas de Zibatá',
   'profile.zoneDone': 'visitada',
+  'profile.zoneSoon': 'Próximamente',
+  'profile.zoneSoonShort': 'Pronto',
   'profile.podium': 'Tus tres de siempre',
+  'profile.podiumCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.position': 'Puesto {position}',
-  'profile.tastes': 'Lo que más buscas',
-  'profile.tasteCount': { one: '{count} lugar', other: '{count} lugares' },
-  'profile.empty':
-    'Registra una visita, guarda un lugar con el corazón o califícalo, y aquí verás tu paso por Zibatá.',
-  /*
-   * No es solo local: la cuenta anónima del servidor guarda lo mismo para poder recuperarlo en otro
-   * aparato, sin nombre ni correo. La política lo detalla; aquí no puede decir menos.
-   */
-  'profile.storage': 'Se guarda en este navegador y se sincroniza con la guía, sin tu nombre.',
+  'profile.visitCount': { one: '{count} visita', other: '{count} visitas' },
+  'profile.lastVisit': 'última el {date}',
+  'profile.saved': 'guardado',
+  'profile.tastes': 'Lo que más se te antoja',
+  'profile.tasteTotal': { one: '{count} tipo', other: '{count} tipos' },
+  'profile.moreTastes': 'y {count} más',
 
   'locale.label': 'Idioma',
   'locale.shortEs': 'ES',

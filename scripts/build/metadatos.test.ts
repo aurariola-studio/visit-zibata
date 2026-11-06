@@ -20,6 +20,7 @@ import {
 const contexto = (giros: string[], lugar: string): Contexto => ({
   giros,
   lugar,
+  idioma: 'es',
   conGiros: '{giros} en {lugar}.',
   soloLugar: 'En {lugar}.',
 })
@@ -145,8 +146,18 @@ describe('recortar sin dejar el texto a media frase', () => {
 describe('el contexto de una descripción corta', () => {
   it('añade los giros y la zona del propio local', () => {
     expect(contextoDe(contexto(['Poke', 'Sushi'], 'Centro Zibatá'), 'Bowl Revolution.')).toBe(
-      'Poke, Sushi en Centro Zibatá.',
+      'Poke y Sushi en Centro Zibatá.',
     )
+  })
+
+  it('une los giros como en una frase, en el idioma de la ficha', () => {
+    const conIdioma = (idioma: 'es' | 'en'): Contexto => ({
+      ...contexto(['Poke', 'Sushi', 'Ramen'], 'Centro Zibatá'),
+      idioma,
+      conGiros: '{giros}',
+    })
+    expect(contextoDe(conIdioma('es'), 'Bowl.')).toBe('Poke, Sushi y Ramen')
+    expect(contextoDe(conIdioma('en'), 'Bowl.')).toBe('Poke, Sushi, and Ramen')
   })
 
   it('no repite un giro que la descripción ya dice', () => {
@@ -195,13 +206,13 @@ describe('la descripción de una ficha', () => {
 
   it('completa una corta con los giros y la zona, sin tocar lo que dice el negocio', () => {
     expect(descripcionDeFicha({ ...base, descripcion: 'Bowl Revolution.' })).toBe(
-      'Açaí, Jugos en Centro Zibatá. Bowl Revolution.',
+      'Açaí y Jugos en Centro Zibatá. Bowl Revolution.',
     )
   })
 
   it('pone el contexto primero si la descripción no lo traía', () => {
     expect(descripcionDeFicha({ ...base, descripcion: 'Compartiendo tus mejores momentos' })).toBe(
-      'Açaí, Jugos en Centro Zibatá. Compartiendo tus mejores momentos.',
+      'Açaí y Jugos en Centro Zibatá. Compartiendo tus mejores momentos.',
     )
   })
 
@@ -245,7 +256,7 @@ describe('la descripción de una ficha', () => {
   })
 
   it('si el dato no trae descripción, dice al menos qué es y dónde está', () => {
-    expect(descripcionDeFicha({ ...base, descripcion: '' })).toBe('Açaí, Jugos en Centro Zibatá.')
+    expect(descripcionDeFicha({ ...base, descripcion: '' })).toBe('Açaí y Jugos en Centro Zibatá.')
   })
 })
 
