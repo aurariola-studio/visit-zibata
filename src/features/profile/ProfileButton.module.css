@@ -187,8 +187,9 @@
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  /* Aire entre las pestañas y el título, y el título pegado a su contenido. */
-  padding-top: var(--space-3);
+  /* Sin relleno arriba: el aire entre las pestañas y el título es el mismo que hay entre el título y
+   * las pestañas, el del hueco de la hoja. */
+  padding-top: 0;
   gap: var(--space-2);
 }
 
