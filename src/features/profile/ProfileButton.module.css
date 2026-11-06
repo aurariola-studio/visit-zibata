@@ -332,8 +332,8 @@
   }
 }
 
-/* El podio: tres renglones, no el escalón de antes. El escalón gastaba media hoja en dibujo y no
- * dejaba sitio a lo que has hecho con cada lugar, que es lo que ahora se lee.
+/* El podio se lee como un podio: medalla, cara del lugar y, en el primer puesto, una banda teñida
+ * que lo separa del resto. Nada de barras: eso es la hoja de Gustos.
  */
 .rankList {
   display: flex;
@@ -349,19 +349,51 @@
   display: flex;
   flex: 1;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0.6rem;
   min-height: 4.5rem;
+  padding-inline: 0.5rem;
+  border-radius: var(--radius-md);
 }
 
-.position {
+.rank[data-first="true"] {
+  background: var(--lime-50);
+}
+
+/* Los otros dos puestos también son tarjetas, pero sin relleno: el primero es el único que se tiñe. */
+.rank:not([data-first="true"]):not([data-ghost="true"]) {
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+/* La medalla: llena en el primer puesto, en contorno en los otros dos, y hueca donde falta gente. */
+.medal {
   flex: none;
-  width: 1rem;
-  color: var(--color-text-muted);
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--radius-round);
+  color: var(--ink-700);
   font-family: var(--font-display);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   font-weight: var(--weight-heavy);
-  text-align: center;
   font-variant-numeric: tabular-nums;
+}
+
+.rank[data-first="true"] .medal {
+  border-color: transparent;
+  background: var(--olive-600);
+  color: var(--sand-25);
+}
+
+/* El puesto que falta enseña su hueco con el mismo alto que un puesto lleno. */
+.rank[data-ghost="true"] {
+  border: 1.5px dashed var(--color-border-strong);
+}
+
+.rank[data-ghost="true"] .medal {
+  border-style: dashed;
+  color: var(--color-text-muted);
 }
 
 .rankLink {
@@ -379,6 +411,11 @@
   color: var(--olive-700);
 }
 
+/* Sobre la banda del primer puesto el hover normal no se vería: se oscurece un escalón más. */
+.rank[data-first="true"] .rankLink:hover {
+  background: var(--lime-100);
+}
+
 .rankIcon {
   flex: none;
   display: grid;
@@ -388,6 +425,11 @@
   border-radius: var(--radius-round);
   background: var(--zone-soft, var(--lime-50));
   color: var(--zone-ink, var(--olive-600));
+}
+
+.rank[data-first="true"] .rankIcon {
+  width: 2.7rem;
+  height: 2.7rem;
 }
 
 .rankText {
@@ -416,7 +458,9 @@
   -webkit-line-clamp: 2;
 }
 
-/* Los gustos: una fila por categoría, con la barra que dice cuánto pesa frente a la primera. */
+/* Los gustos no son renglones: son una gráfica. La etiqueta arriba y, debajo, la barra que dice
+ * cuánto pesa cada tipo frente al primero.
+ */
 .tasteList {
   display: flex;
   flex: 1;
@@ -428,14 +472,22 @@
 }
 
 .taste {
-  display: grid;
+  display: flex;
   flex: 1;
-  grid-template-columns: 1rem minmax(0, 1fr) 3.5rem 1.5rem;
-  align-items: center;
-  gap: var(--space-2);
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3rem;
   min-height: 2.125rem;
   /* El renglón no crece más de esto: seis filas densas, no una lista estirada. */
-  max-height: 2.75rem;
+  max-height: 3.25rem;
+}
+
+.tasteHead {
+  display: grid;
+  grid-template-columns: 1.1rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .taste svg {
@@ -451,8 +503,17 @@
   white-space: nowrap;
 }
 
+/* La cifra es la del eje: en la letra de titulares, para que se lea como dato y no como frase. */
+.tasteCount {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-heavy);
+  color: var(--ink-800);
+  font-variant-numeric: tabular-nums;
+}
+
 .tasteBar {
-  height: 0.35rem;
+  height: 0.45rem;
   overflow: hidden;
   border-radius: var(--radius-pill);
   background: var(--color-surface-muted);
@@ -463,13 +524,6 @@
   height: 100%;
   border-radius: inherit;
   background: var(--color-accent);
-}
-
-.tasteCount {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  text-align: right;
-  font-variant-numeric: tabular-nums;
 }
 
 .more {
@@ -531,7 +585,7 @@
 }
 
 .ghostBar {
-  height: 0.35rem;
+  height: 0.45rem;
   border-radius: var(--radius-pill);
   background: var(--color-surface-muted);
 }
@@ -662,15 +716,25 @@
 
   .rank {
     min-height: 0;
-    align-items: flex-start;
+    align-items: center;
   }
 
-  .position {
+  /* En tres columnas el ancho manda: la medalla deja su sitio al nombre. */
+  .medal {
     display: none;
   }
 
   .rankLink {
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  /* En una columna de un tercio el nombre necesita dos líneas: mejor dos que "Tomas...". */
+  .rankName {
+    display: -webkit-box;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
   }
 
   .rankMeta {
@@ -687,10 +751,7 @@
   }
 
   .taste {
-    grid-template-columns: 1rem minmax(0, 1fr) 1.5rem;
-  }
-
-  .tasteBar {
-    display: none;
+    min-height: 0;
+    max-height: none;
   }
 }

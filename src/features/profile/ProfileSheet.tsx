@@ -333,8 +333,8 @@ function Podio({
           const tone = tones.get(place.plazaId) ?? DEFAULT_PLAZA_TONE
           const plaza = catalog.plazaById.get(place.plazaId)
           return (
-            <li key={place.id} className={styles.rank}>
-              <span className={styles.position} aria-hidden="true">
+            <li key={place.id} className={styles.rank} data-first={index === 0}>
+              <span className={styles.medal} aria-hidden="true">
                 {index + 1}
               </span>
               <a
@@ -364,8 +364,8 @@ function Podio({
         })}
         {/* Los puestos que faltan, apagados: la hoja enseña su capacidad antes de tener datos. */}
         {PUESTOS.slice(journey.mine.length).map((puesto) => (
-          <li key={`hueco-${puesto}`} className={styles.rank} aria-hidden="true">
-            <span className={styles.position}>{puesto}</span>
+          <li key={`hueco-${puesto}`} className={styles.rank} data-ghost="true" aria-hidden="true">
+            <span className={styles.medal}>{puesto}</span>
             <span className={styles.ghostRow}>
               <span className={styles.ghostIcon} />
               <span className={styles.ghostText}>
@@ -395,21 +395,25 @@ function Gustos({ journey }: { journey: Journey }) {
       <ul className={styles.tasteList}>
         {journey.tastes.map((taste) => (
           <li key={taste.category.id} className={styles.taste}>
-            <CategoryIcon name={taste.category.icon} size={16} strokeWidth={2} />
-            <span className={styles.tasteName}>{localized(taste.category.label)}</span>
+            <span className={styles.tasteHead}>
+              <CategoryIcon name={taste.category.icon} size={16} strokeWidth={2} />
+              <span className={styles.tasteName}>{localized(taste.category.label)}</span>
+              <span className={styles.tasteCount}>{formatNumber(taste.count)}</span>
+            </span>
             <span className={styles.tasteBar} aria-hidden="true">
               <span style={{ width: `${Math.round((taste.count / max) * 100)}%` }} />
             </span>
-            <span className={styles.tasteCount}>{formatNumber(taste.count)}</span>
           </li>
         ))}
         {/* Los renglones que faltan, apagados: los mismos que se llenarán con tus marcas. */}
         {RENGLONES.slice(journey.tastes.length).map((renglon) => (
           <li key={`hueco-${renglon}`} className={styles.taste} aria-hidden="true">
-            <span className={styles.ghostDot} />
-            <span className={styles.ghostName} />
+            <span className={styles.tasteHead}>
+              <span className={styles.ghostDot} />
+              <span className={styles.ghostName} />
+              <span className={styles.ghostCount} />
+            </span>
             <span className={styles.ghostBar} />
-            <span className={styles.ghostCount} />
           </li>
         ))}
       </ul>
