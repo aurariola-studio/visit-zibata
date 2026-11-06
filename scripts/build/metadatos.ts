@@ -224,7 +224,11 @@ export function descripcionDeFicha(opciones: OpcionesDescripcion): string {
   const contexto = contextoDe(opciones.contexto, base)
   if (!base) return recortar(`${delante}${contexto}`, max)
   if (!corta && !conContexto) return `${delante}${recortar(base, max - delante.length)}`
-  const cabida = max - delante.length - contexto.length - 1
+  /*
+   * Dos de holgura y no uno: el espacio que separa el contexto del texto y el punto que `terminado`
+   * añade al final. Con uno solo, una descripción que llega justa salía de 161.
+   */
+  const cabida = max - delante.length - contexto.length - 2
   return `${delante}${contexto} ${terminado(recortar(base, cabida))}`
 }
 

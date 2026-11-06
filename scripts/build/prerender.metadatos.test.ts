@@ -329,6 +329,31 @@ describe('los giros que el filtro dice cortos se leen completos en la descripci�
   }
 })
 
+describe('la descripción enumera todas las categorías del local', () => {
+  it('no se queda con las dos primeras: el tercer giro también se dice', () => {
+    /*
+     * origenatural tiene tres giros (saludable, desayunos, jugos) y su texto no nombra ninguno, así
+     * que la descripción los dice los tres. Antes se cortaba en dos y "Jugos y Smoothies" no
+     * aparecía nunca.
+     */
+    expect(ficha('es', 'origenatural').description).toMatch(
+      /^Comida Saludable, Desayunos y Jugos y Smoothies en Xentric Anáhuac, Zibatá\./,
+    )
+    // En inglés la lista usa la convención inglesa: coma de Oxford y "and".
+    expect(ficha('en', 'origenatural').description).toMatch(
+      /^Healthy food, Breakfast, and Juices & Smoothies at Xentric Anáhuac, Zibatá\./,
+    )
+  })
+
+  it('los giros que el texto del negocio ya nombra no se repiten aunque se ofrezcan todos', () => {
+    // El texto de romani-pizzas ya dice ensaladas y crepas: la descripción solo añade la cocina.
+    expect(ficha('es', 'romani-pizzas').description).toMatch(
+      /^Comida Italiana en Plaza Condesa, Zibatá\./,
+    )
+    expect(ficha('en', 'romani-pizzas').description).toMatch(/^Italian food at Plaza Condesa/)
+  })
+})
+
 describe('la portada', () => {
   it('presenta la guía local de Zibatá, sin abrir con la marca ni reducirla a restaurantes', () => {
     for (const idioma of idiomas) {
