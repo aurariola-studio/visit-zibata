@@ -13,7 +13,8 @@
  * por la rejilla como en cualquier tabla, y el mes se anuncia al cambiar.
  */
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { type RefObject, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { locale, t } from '../../i18n/index.ts'
 import { today } from './useVisits.ts'
 import styles from './VisitCalendar.module.css'
@@ -26,10 +27,12 @@ const clave = (year: number, month: number, day: number) =>
 const PRIMER_DIA = 1
 
 export function VisitCalendar({
+  ancla,
   fechas,
   onToggle,
   onClose,
 }: {
+  ancla: RefObject<HTMLElement | null>
   fechas: readonly string[]
   onToggle: (fecha: string) => void
   onClose: () => void
@@ -49,18 +52,18 @@ export function VisitCalendar({
   /*
    * El calendario flota fijo sobre la página, colocado a mano a partir del botón que lo abre.
    *
-   * Flotando dentro de la ficha quedaba recortado: el panel y la hoja del móvil tienen el borde
-   * redondeado y `overflow: hidden`, así que la parte que sobresalía desaparecía. Y abierto hacia
-   * abajo con el botón cerca del final, se salía por el borde de la pantalla. Fijo, se coloca donde
-   * hay sitio: debajo del botón si cabe con su margen, y si no arriba, y nunca a menos de 16 px del
-   * borde. Se recoloca al desplazar, porque el botón se mueve y el calendario no.
+   * Va en un portal al `body`, no dentro de la ficha: la hoja del móvil tiene la muesca de la barra
+   * de desplazamiento y `overflow: hidden`, y las dos recortaban el calendario por arriba. Fijo y
+   * fuera de la hoja, se coloca donde hay sitio: debajo del botón si cabe con su margen, y si no
+   * arriba, y nunca a menos de 16 px de ningún borde. Se recoloca al desplazar, porque el botón se
+   * mueve y el calendario no.
    */
   useLayoutEffect(() => {
     const elemento = caja.current
-    const ancla = elemento?.parentElement
-    if (!elemento || !ancla) return
+    if (!elemento) return
     const colocar = () => {
-      const marco = ancla.getBoundingClientRect()
+      const marco = ancla.current?.getBoundingClientRect()
+      if (!marco) return
       const alto = elemento.offsetHeight
       const ancho = elemento.offsetWidth
       const margen = 16
@@ -86,7 +89,7 @@ export function VisitCalendar({
       window.removeEventListener('scroll', colocar, true)
       window.removeEventListener('resize', colocar)
     }
-  }, [])
+  }, [ancla])
 
   const nombreDelMes = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(
     new Date(year, month, 1),
@@ -139,7 +142,7 @@ export function VisitCalendar({
     siguiente.focus()
   }
 
-  return (
+  return createPortal(
     <div className={styles.calendario} role="dialog" aria-labelledby={tituloId} ref={caja}>
       <div className={styles.cabecera}>
         <button
@@ -230,6 +233,7 @@ export function VisitCalendar({
           </span>
         ))}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

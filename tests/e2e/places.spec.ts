@@ -205,6 +205,17 @@ test.describe('Plazas y lugares', () => {
       if (!caja) throw new Error('el calendario no tiene caja')
       expect(caja.y, `alto ${alto}`).toBeGreaterThanOrEqual(0)
       expect(caja.y + caja.height, `alto ${alto}`).toBeLessThanOrEqual(alto)
+
+      // Y no basta con estar dentro: la cabecera del mes no puede quedar tapada por la hoja.
+      const tapada = await page.evaluate(() => {
+        const c = document.querySelector('[class*="_calendario_"]')
+        const titulo = c?.querySelector('h3')
+        if (!titulo) return true
+        const r = titulo.getBoundingClientRect()
+        const encima = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
+        return !encima || !titulo.contains(encima)
+      })
+      expect(tapada, `cabecera tapada a ${alto}`).toBe(false)
     }
   })
 
