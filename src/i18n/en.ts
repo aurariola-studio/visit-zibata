@@ -356,19 +356,18 @@ export const en = {
   'profile.noVisits': 'All of Zibatá still to discover. {total} areas and {places} places.',
   'profile.zonesLabel': 'Areas of Zibatá',
   'profile.zoneDone': 'visited',
+  'profile.zoneSoon': 'coming soon',
   'profile.podium': 'Your usual three',
   'profile.podiumCount': { one: '{count} place', other: '{count} places' },
   'profile.position': 'Position {position}',
   'profile.visitCount': { one: '{count} visit', other: '{count} visits' },
   'profile.lastVisit': 'last on {date}',
   'profile.saved': 'saved',
-  'profile.podiumEmpty':
-    "You don't have your usual three yet. Save a place with the heart, rate it or log a visit, and it will show up here.",
+  'profile.podiumEmpty': 'Save, rate or visit a place and it will show up here.',
   'profile.tastes': 'What you crave most',
   'profile.tasteTotal': { one: '{count} type', other: '{count} types' },
   'profile.moreTastes': 'and {count} more',
-  'profile.tastesEmpty':
-    'Save a place with the heart, rate it with stars or log a visit, and what you crave most will show up here.',
+  'profile.tastesEmpty': 'Mark places and what you crave most will show up here.',
   'profile.storage': 'Saved in this browser and synced with the guide, without your name.',
 
   'locale.label': 'Language',

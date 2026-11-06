@@ -410,19 +410,18 @@ export const es = {
   'profile.noVisits': 'Todo Zibatá por estrenar. {total} zonas y {places} lugares.',
   'profile.zonesLabel': 'Zonas de Zibatá',
   'profile.zoneDone': 'visitada',
+  'profile.zoneSoon': 'próximamente',
   'profile.podium': 'Tus tres de siempre',
   'profile.podiumCount': { one: '{count} lugar', other: '{count} lugares' },
   'profile.position': 'Puesto {position}',
   'profile.visitCount': { one: '{count} visita', other: '{count} visitas' },
   'profile.lastVisit': 'última el {date}',
   'profile.saved': 'guardado',
-  'profile.podiumEmpty':
-    'Todavía no tienes tres de siempre. Guarda un lugar con el corazón, califícalo o registra una visita, y aparecerán aquí.',
+  'profile.podiumEmpty': 'Guarda, califica o visita un lugar y aparecerá aquí.',
   'profile.tastes': 'Lo que más se te antoja',
   'profile.tasteTotal': { one: '{count} tipo', other: '{count} tipos' },
   'profile.moreTastes': 'y {count} más',
-  'profile.tastesEmpty':
-    'Marca lugares con el corazón, con estrellas o con una visita, y aquí verás lo que más se te antoja.',
+  'profile.tastesEmpty': 'Marca lugares y aquí verás lo que más se te antoja.',
   /*
    * No es solo local: la cuenta anónima del servidor guarda lo mismo para poder recuperarlo en otro
    * aparato, sin nombre ni correo. La política lo detalla; aquí no puede decir menos.

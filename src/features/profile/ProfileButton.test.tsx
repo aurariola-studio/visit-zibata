@@ -37,10 +37,14 @@ describe('ProfileButton', () => {
     expect(within(sheet).getByText('0 de 2')).toBeInTheDocument()
 
     await userEvent.click(within(sheet).getByRole('tab', { name: 'Podio' }))
-    expect(within(sheet).getByText(/Todavía no tienes tres de siempre/)).toBeInTheDocument()
+    expect(within(sheet).getByText(/Guarda, califica o visita un lugar/)).toBeInTheDocument()
+    // Los tres puestos se enseñan apagados, para que la hoja no quede en blanco.
+    expect(sheet.querySelectorAll('li[aria-hidden="true"]')).toHaveLength(3)
 
     await userEvent.click(within(sheet).getByRole('tab', { name: 'Gustos' }))
-    expect(within(sheet).getByText(/Marca lugares con el corazón/)).toBeInTheDocument()
+    expect(within(sheet).getByText(/Marca lugares y aquí verás/)).toBeInTheDocument()
+    // Y los cinco renglones que se llenarán con las marcas.
+    expect(sheet.querySelectorAll('li[aria-hidden="true"]')).toHaveLength(5)
   })
 
   it('marca las zonas visitadas, sin convertirlas en botones', async () => {

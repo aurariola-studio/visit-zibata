@@ -1,6 +1,6 @@
 import { AxeBuilder } from '@axe-core/playwright'
 import { expect, type Page, test } from '@playwright/test'
-import { activePlazas, openApp, placeById, waitForMap } from './helpers.ts'
+import { activePlazas, inactivePlazas, openApp, placeById, waitForMap } from './helpers.ts'
 
 /** Lo que una persona lleva marcado en este dispositivo, escrito antes de que arranque la app. */
 async function conMarcas(page: Page, idioma: 'es' | 'en' = 'es') {
@@ -86,9 +86,12 @@ test.describe('Tu Zibatá', () => {
     await expect(hoja.getByRole('tab')).toHaveText(['Zonas', 'Podio', 'Gustos'])
     await expect(hoja.getByRole('tab', { name: 'Zonas' })).toHaveAttribute('aria-selected', 'true')
 
-    // Zonas: una insignia por zona activa, llenas las que ya estrenaste.
+    // Zonas: una insignia por zona, llenas las que ya estrenaste y apagadas las que aún no abren.
     const zonas = hoja.getByRole('list', { name: 'Zonas de Zibatá' })
-    await expect(zonas.getByRole('listitem')).toHaveCount(activePlazas().length)
+    await expect(zonas.getByRole('listitem')).toHaveCount(
+      activePlazas().length + inactivePlazas().length,
+    )
+    await expect(zonas.locator('[data-upcoming="true"]')).toHaveCount(inactivePlazas().length)
     const estrenadas = new Set(
       ['tomassa', 'cosi-fan-tutte', 'el-hornero'].map((id) => placeById(id).plazaId),
     )

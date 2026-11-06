@@ -81,7 +81,7 @@
 .sheet {
   position: relative;
   width: min(27rem, 100%);
-  height: min(calc(100dvh - 2 * var(--space-4) - var(--safe-bottom)), 30rem);
+  height: min(calc(100dvh - 2 * var(--space-4) - var(--safe-bottom)), 32rem);
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -187,7 +187,7 @@
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 /* Encabezado de la hoja: el título y la cifra que resume esa hoja. */
@@ -236,8 +236,8 @@
  */
 .zones {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.25rem 0.35rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-1) 0.35rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -256,7 +256,7 @@
   display: grid;
   place-items: center;
   width: 100%;
-  max-width: 3.25rem;
+  max-width: 3.3rem;
   margin-inline: auto;
   aspect-ratio: 1;
   border: 1.5px dashed var(--zone-accent, var(--olive-600));
@@ -289,49 +289,37 @@
   color: var(--ink-800);
 }
 
-/* En una pantalla muy baja el sello se encoge y el nombre se queda en una línea. */
-@media (max-height: 500px) {
-  .zones {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
-  /* La cifra del encabezado ya dice lo que llevas: el aviso de hoja vacía se calla para que las
-     once zonas sigan cabiendo. */
-  .summary {
-    display: none;
-  }
-}
-
 /*
- * Con la hoja vacía el aviso ocupa dos líneas en el teléfono mínimo (320) y las zonas ya no caben:
- * la rejilla pasa a cinco columnas, que es lo que gana ese hueco. Solo cuando el aviso está.
+ * Las que aún no abrieron: sello apagado y reloj, para que no se confundan con las que faltan por
+ * estrenar, que llevan el color de su plaza.
  */
-@media (max-width: 359px) {
-  .panel:has(> .summary) .zones {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
+.zone[data-upcoming="true"] .zoneStamp {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
 }
 
-@media (min-width: 360px) {
-  .zones {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
+.zone[data-upcoming="true"] .zoneName {
+  color: var(--color-text-muted);
 }
 
-@media (min-width: 640px) {
+/* A partir del ancho en que la hoja llega a su tope, seis columnas: quince sellos en tres filas. */
+@media (min-width: 448px) {
   .zones {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 
+/* En una pantalla muy baja el sello se encoge y el nombre se queda en una línea. */
 /*
  * El podio: tres renglones, no el escalón de antes. El escalón gastaba media hoja en dibujo y no
  * dejaba sitio a lo que has hecho con cada lugar, que es lo que ahora se lee.
  */
 .rankList {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -339,9 +327,10 @@
 
 .rank {
   display: flex;
+  flex: 1;
   align-items: center;
   gap: var(--space-2);
-  min-height: 4rem;
+  min-height: 4.5rem;
 }
 
 .position {
@@ -410,8 +399,9 @@
 /* Los gustos: una fila por categoría, con la barra que dice cuánto pesa frente a la primera. */
 .tasteList {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -419,10 +409,11 @@
 
 .taste {
   display: grid;
+  flex: 1;
   grid-template-columns: 1rem minmax(0, 1fr) 3.5rem 1.5rem;
   align-items: center;
   gap: var(--space-2);
-  min-height: 2.1rem;
+  min-height: 2.5rem;
 }
 
 .taste svg {
@@ -464,12 +455,75 @@
   color: var(--color-text-muted);
 }
 
-.empty {
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--lime-50);
-  color: var(--ink-700);
-  font-size: var(--text-sm);
+/*
+ * Los huecos de las listas: los mismos renglones que se llenarán, en gris. La hoja no queda en
+ * blanco y enseña la forma de lo que va a aparecer.
+ */
+.ghostRow {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 0.15rem 0.35rem;
+}
+
+.ghostIcon {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-round);
+}
+
+.ghostText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ghostDot {
+  width: 1rem;
+  height: 1rem;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-round);
+}
+
+.ghostName,
+.ghostMeta,
+.ghostCount {
+  display: block;
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.ghostName {
+  width: 58%;
+}
+
+.ghostMeta {
+  width: 36%;
+}
+
+.ghostBar {
+  height: 0.35rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-muted);
+}
+
+.ghostCount {
+  width: 1rem;
+  justify-self: end;
+}
+
+/* La explicación del estado vacío, sin caja: los renglones ya son el dibujo. */
+.note {
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--color-text-muted);
 }
 
 .storage {
@@ -519,6 +573,48 @@
 }
 
 /* En horizontal la altura manda: sellos en seis columnas, podio y gustos en fila. */
+/* En el teléfono mínimo, un nombre de dos palabras largas ("FoodTrucks Pickleball") pide tres líneas. */
+@media (max-width: 359px) {
+  .zoneName {
+    -webkit-line-clamp: 3;
+  }
+}
+
+@media (max-height: 500px) {
+  .zones {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .zoneStamp {
+    max-width: 2.75rem;
+  }
+
+  .zoneName {
+    -webkit-line-clamp: 1;
+    font-size: var(--text-2xs);
+  }
+
+  /* La cifra del encabezado ya dice lo que llevas: el aviso de hoja vacía se calla. */
+  .summary,
+  .note {
+    display: none;
+  }
+
+  .rank {
+    min-height: 3.75rem;
+  }
+
+  .taste {
+    min-height: 2.125rem;
+  }
+
+  /* Menos aire entre renglones: en una pantalla baja cada píxel lo necesita la fila. */
+  .rankList,
+  .tasteList {
+    gap: var(--space-1);
+  }
+}
+
 @media (max-height: 430px) {
   .sheet {
     gap: var(--space-1);
@@ -544,7 +640,7 @@
   }
 
   .zones {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: var(--space-1);
   }
 
