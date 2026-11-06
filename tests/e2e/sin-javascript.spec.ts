@@ -53,7 +53,9 @@ test.describe('Sin JavaScript', () => {
     // Una política que solo existe si se ejecuta JavaScript no se puede citar ni archivar.
     await page.goto(new URL('es/info/privacidad', baseURL).href)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Privacidad/)
-    await expect(page.getByText(/no usa cuentas ni cookies de rastreo/)).toBeVisible()
+    await expect(
+      page.getByText(/no te pide crear una cuenta ni usa cookies de rastreo/),
+    ).toBeVisible()
   })
 
   test('el árbol inglés también, con sus propias rutas', async ({ page, baseURL }) => {

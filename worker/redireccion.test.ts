@@ -3,6 +3,32 @@ import { redireccionDe } from './redireccion.ts'
 
 const aDonde = (direccion: string) => redireccionDe(new URL(direccion))
 
+describe('nunca redirige a otro sitio', () => {
+  it('una ruta que empieza con varias barras no produce un Location relativo al protocolo', () => {
+    for (const ruta of [
+      '//evil.example/x',
+      '///evil.example/x/',
+      '//evil.example',
+      '//',
+      '/\\evil.example/x',
+      '//es/lugar/tomassa',
+      '//en/',
+    ]) {
+      const destino = aDonde(`https://visitzibata.com${ruta}`)
+      if (destino !== null) {
+        expect(destino.startsWith('//')).toBe(false)
+        expect(destino.startsWith('/')).toBe(true)
+      }
+    }
+  })
+
+  it('las barras iniciales colapsan en la ruta que quería', () => {
+    expect(aDonde('https://visitzibata.com//es/lugar/tomassa')).toBe('/es/lugar/tomassa')
+    expect(aDonde('https://visitzibata.com//lugar/tomassa')).toBe('/es/lugar/tomassa')
+    expect(aDonde('https://visitzibata.com//')).toBe('/es')
+  })
+})
+
 describe('las direcciones del español sin prefijo', () => {
   it('pasan a /es en un solo salto, con la consulta intacta', () => {
     expect(aDonde('https://visitzibata.com/')).toBe('/es')

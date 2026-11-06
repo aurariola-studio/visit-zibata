@@ -20,7 +20,7 @@ test.describe('Información de la guía', () => {
 
     const privacy = page.getByRole('dialog', { name: 'Privacidad y términos' })
     await expect(privacy).toBeVisible()
-    await expect(privacy).toContainText('no usa cuentas ni cookies de rastreo')
+    await expect(privacy).toContainText('no te pide crear una cuenta ni usa cookies de rastreo')
     // Lo que sí se hace también se dice, y en la página que la gente abre, no solo en el repositorio.
     await expect(privacy).toContainText('cuántas veces se abre cada página y cada lugar')
     await expect(privacy).toContainText('se envían para que no se pierdan')

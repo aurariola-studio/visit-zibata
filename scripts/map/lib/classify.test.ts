@@ -1,6 +1,18 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
-import { classifyLabel, displayName } from './classify.ts'
+import { classifyLabel, classifyRoad, displayName } from './classify.ts'
+
+describe('classifyRoad', () => {
+  it('clasifica una vía conocida', () => {
+    expect(classifyRoad({ highway: 'residential' })?.class).toBeDefined()
+  })
+
+  it('una etiqueta con nombre heredado de Object no es una clase de vía', () => {
+    for (const highway of ['constructor', 'toString', '__proto__', 'hasOwnProperty_link']) {
+      expect(classifyRoad({ highway }), highway).toBeNull()
+    }
+  })
+})
 
 describe('displayName', () => {
   it('pasa a capital inicial los nombres que OSM guarda en mayúsculas', () => {

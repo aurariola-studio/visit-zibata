@@ -170,8 +170,28 @@ describe('publicar', () => {
     )
     expect(parches).toHaveLength(2)
     expect(parches[0]?.cuerpo).toEqual({ sha: 'main-sha', force: true })
-    expect(parches[1]?.cuerpo).toEqual({ sha: 'commit-nuevo', force: true })
+    // Solo el reinicio desde main lleva `force`; el avance con el commit nuevo no pisa nada.
+    expect(parches[1]?.cuerpo).toEqual({ sha: 'commit-nuevo' })
   })
+
+  it('el avance de una PR abierta no usa force', async () => {
+    const { llamadas } = montar({ rama: true, pr: true })
+    await publicar(entorno, [{ ruta: 'a.json', contenido: '{}' }], 'Panel: editar')
+    const parches = llamadas.filter((llamada) => llamada.metodo === 'PATCH')
+    expect(parches).toHaveLength(1)
+    expect(parches[0]?.cuerpo).toEqual({ sha: 'commit-nuevo' })
+  })
+
+  it.each(['main', 'master', 'HEAD', ' main ', '../x', 'a b', '-x', ''.padEnd(120, 'a')])(
+    'rechaza GITHUB_RAMA=%j antes de llamar a GitHub',
+    async (rama) => {
+      const { llamadas } = montar({ rama: true, pr: false })
+      await expect(
+        publicar({ ...entorno, GITHUB_RAMA: rama }, [{ ruta: 'a.json', contenido: '{}' }], 'x'),
+      ).rejects.toThrow(/GITHUB_RAMA/)
+      expect(llamadas).toHaveLength(0)
+    },
+  )
 })
 
 describe('leer el contenido', () => {

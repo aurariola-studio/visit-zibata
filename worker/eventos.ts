@@ -22,8 +22,8 @@
  * se pulsó, no que se llamó, se escribió o se llegó.
  */
 import categorias from '../data/commercial/categories.json' with { type: 'json' }
-import lugares from '../data/commercial/places.json' with { type: 'json' }
 import zonas from '../data/commercial/plazas.json' with { type: 'json' }
+import { LUGARES } from './catalogo.ts'
 
 export const TIPOS = [
   'ficha',
@@ -75,7 +75,6 @@ export interface Envio {
 const idsDe = (lista: readonly { id: string }[]): Set<string> =>
   new Set(lista.map((elemento) => elemento.id))
 
-const LUGARES = idsDe(lugares.places)
 const ZONAS = idsDe(zonas.plazas)
 const CATEGORIAS = idsDe(categorias.categories)
 
@@ -130,6 +129,27 @@ export const APUNTE_EVENTO = `
 INSERT INTO eventos (fecha, tipo, destino, detalle, idioma, cuenta) VALUES (?, ?, ?, ?, ?, 1)
 ON CONFLICT(fecha, tipo, destino, detalle, idioma) DO UPDATE SET cuenta = cuenta + 1
 `.trim()
+
+/** Lo mismo con las veces que se repitió dentro de un envío: un solo `UPSERT` por evento distinto. */
+export const APUNTE_EVENTO_VARIAS = `
+INSERT INTO eventos (fecha, tipo, destino, detalle, idioma, cuenta) VALUES (?, ?, ?, ?, ?, ?)
+ON CONFLICT(fecha, tipo, destino, detalle, idioma) DO UPDATE SET cuenta = cuenta + excluded.cuenta
+`.trim()
+
+/**
+ * Junta los eventos idénticos de un envío en uno con su cuenta. Veinte copias del mismo clic escribían
+ * veinte veces la misma fila; ahora es una escritura que suma veinte, y el total del día no cambia.
+ */
+export function agruparEventos(eventos: readonly Evento[]): { evento: Evento; veces: number }[] {
+  const grupos = new Map<string, { evento: Evento; veces: number }>()
+  for (const evento of eventos) {
+    const clave = `${evento.tipo}\u0000${evento.destino}\u0000${evento.detalle}`
+    const grupo = grupos.get(clave)
+    if (grupo) grupo.veces++
+    else grupos.set(clave, { evento, veces: 1 })
+  }
+  return [...grupos.values()]
+}
 
 /**
  * De dónde llegó una entrada, en cinco clases. **Solo la clase se guarda**: el `Referer` se lee, se

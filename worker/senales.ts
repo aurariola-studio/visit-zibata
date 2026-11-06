@@ -89,7 +89,8 @@ export function senalesDe(corazones: FilaCorazones[], notas: FilaNotas[]): Recor
       : 0
   const { desviacion } = dispersion(notas.map((fila) => fila.media))
 
-  const senales: Record<string, Senal> = {}
+  // Sin prototipo: un lugar llamado `constructor` o `__proto__` no puede leer ni pisar lo heredado.
+  const senales: Record<string, Senal> = Object.create(null)
   const deLugar = (lugar: string): Senal => {
     const previa = senales[lugar]
     if (previa) return previa

@@ -12,6 +12,7 @@
  *  - **Las visitas** no alimentan ninguna señal pública. Se inflan recargando y repiten con más
  *    ruido lo que ya dice el corazón. Están para que el historial propio no se pierda.
  */
+import { LUGARES } from './catalogo.ts'
 
 /** La misma forma que tienen los slugs del catálogo. Lo que no encaje no llega al SQL. */
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -25,6 +26,32 @@ const ESTRELLAS_VALIDAS = (valor: unknown): valor is number =>
   valor * 2 === Math.round(valor * 2)
 
 const FECHA = /^\d{4}-\d{2}-\d{2}$/
+
+/** Antes de esto la guía no existía: una visita más vieja no es de nadie. */
+const PRIMER_ANO = 2024
+
+const DIA_MS = 24 * 60 * 60 * 1000
+
+/**
+ * ¿Es un día de calendario que puede haberse visitado? Se descartan las fechas con forma pero sin
+ * día (`9999-99-99`, `2026-02-31`), las anteriores a la guía y las del futuro (con un día de margen
+ * por los husos horarios).
+ */
+export function esFechaVisitable(fecha: string, ahora = new Date()): boolean {
+  if (!FECHA.test(fecha)) return false
+  const [ano, mes, dia] = fecha.split('-').map(Number) as [number, number, number]
+  if (ano < PRIMER_ANO) return false
+  const momento = Date.UTC(ano, mes - 1, dia)
+  const vuelta = new Date(momento)
+  if (
+    vuelta.getUTCFullYear() !== ano ||
+    vuelta.getUTCMonth() !== mes - 1 ||
+    vuelta.getUTCDate() !== dia
+  ) {
+    return false
+  }
+  return momento <= ahora.getTime() + DIA_MS
+}
 
 /** Tope por petición, igual que en los favoritos: un gesto manda uno, la subida inicial manda todo. */
 export const MAXIMO_POR_PETICION = 100
@@ -54,8 +81,9 @@ export function calificacionesDe(cuerpo: unknown): Calificaciones | null {
     // Se filtra en vez de rechazar entero: un identificador raro entre veinte buenos no debe
     // costarle la sincronización a nadie.
     if (!SLUG.test(lugar)) continue
+    // Borrar una nota acepta cualquier slug con forma de tal; ponerla, solo un lugar que existe.
     if (valor === null) notas[lugar] = null
-    else if (ESTRELLAS_VALIDAS(valor)) notas[lugar] = valor
+    else if (ESTRELLAS_VALIDAS(valor) && LUGARES.has(lugar)) notas[lugar] = valor
     else continue
     cuantas++
   }
@@ -64,7 +92,7 @@ export function calificacionesDe(cuerpo: unknown): Calificaciones | null {
 }
 
 /** Lee y limpia unas visitas, o `null` si el cuerpo no lo es. */
-export function visitasDe(cuerpo: unknown): Visitas | null {
+export function visitasDe(cuerpo: unknown, ahora = new Date()): Visitas | null {
   if (typeof cuerpo !== 'object' || cuerpo === null) return null
   const crudo = (cuerpo as { fechas?: unknown }).fechas
   if (typeof crudo !== 'object' || crudo === null) return null
@@ -72,9 +100,11 @@ export function visitasDe(cuerpo: unknown): Visitas | null {
   const fechas: Record<string, string[]> = {}
   let lugares = 0
   for (const [lugar, valor] of Object.entries(crudo as Record<string, unknown>)) {
-    if (!SLUG.test(lugar) || !Array.isArray(valor)) continue
+    if (!SLUG.test(lugar) || !LUGARES.has(lugar) || !Array.isArray(valor)) continue
     const limpias = [
-      ...new Set(valor.filter((f): f is string => typeof f === 'string' && FECHA.test(f))),
+      ...new Set(
+        valor.filter((f): f is string => typeof f === 'string' && esFechaVisitable(f, ahora)),
+      ),
     ].slice(-MAXIMO_FECHAS)
     if (limpias.length === 0) continue
     fechas[lugar] = limpias

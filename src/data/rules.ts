@@ -67,8 +67,15 @@ export function isHttpUrl(value: string): boolean {
   }
 }
 
-const GOOGLE_MAPS_HOST =
-  /^(www\.)?(google\.[a-z.]+|maps\.google\.[a-z.]+|maps\.app\.goo\.gl|goo\.gl)$/i
+/*
+ * `google.com`, `google.com.mx`, `google.co.uk`, `google.es`… pero no `google.evil.example`: el sufijo
+ * es un dominio de país o `com` con país, no cualquier cadena de letras y puntos.
+ */
+const GOOGLE_TLD = '(com(\\.[a-z]{2})?|co\\.[a-z]{2}|[a-z]{2,3})'
+const GOOGLE_MAPS_HOST = new RegExp(
+  `^(www\\.)?(google\\.${GOOGLE_TLD}|maps\\.google\\.${GOOGLE_TLD}|maps\\.app\\.goo\\.gl|goo\\.gl)$`,
+  'i',
+)
 
 export function isGoogleMapsUrl(value: string): boolean {
   try {
@@ -82,5 +89,8 @@ export function isGoogleMapsUrl(value: string): boolean {
 /** Ruta relativa a `public/` (sin "/" inicial ni esquema) o URL https de un almacenamiento propio. */
 export function isSafePhotoSrc(value: string): boolean {
   const trimmed = value.trim()
+  // Sin comillas, ángulos, barras invertidas ni espacios: la ruta va dentro de un atributo HTML en el
+  // panel y en el prerender, y con una comilla cerraría el atributo y abriría otro.
+  if (/["'<>\\\s`]/.test(trimmed)) return false
   return trimmed.length > 0 && (/^https:\/\//.test(trimmed) || !/^([a-z]+:|\/)/i.test(trimmed))
 }

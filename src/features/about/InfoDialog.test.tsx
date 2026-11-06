@@ -10,7 +10,9 @@ describe('InfoDialog', () => {
     render(<InfoDialog topic="privacidad" onClose={vi.fn()} onGoTo={onGoTo} />)
 
     expect(screen.getByRole('dialog', { name: 'Privacidad y términos' })).toBeInTheDocument()
-    expect(screen.getByText(/no usa cuentas ni cookies de rastreo/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/no te pide crear una cuenta ni usa cookies de rastreo/),
+    ).toBeInTheDocument()
     expect(screen.getByText(/únicamente en este navegador/)).toBeInTheDocument()
     // Que los favoritos salgan del dispositivo se dice, no se calla.
     expect(screen.getByText(/se envían para que no se pierdan/)).toBeInTheDocument()

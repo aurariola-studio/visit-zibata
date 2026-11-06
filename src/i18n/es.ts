@@ -337,7 +337,7 @@ export const es = {
   'about.privacy': 'Privacidad',
   'about.privacyTitle': 'Privacidad y términos',
   'about.privacyLead':
-    'Esta guía no usa cuentas ni cookies de rastreo, y no comparte tus datos con nadie. Esta página también reúne los términos de uso.',
+    'Esta guía no te pide crear una cuenta ni usa cookies de rastreo, y no comparte tus datos con nadie. Esta página también reúne los términos de uso.',
   /*
    * Desde la v4.8.0 la guía sí cuenta visitas, así que el aviso lo dice. El texto es deliberadamente
    * concreto: una promesa vaga ("respetamos tu privacidad") no se puede comprobar, y esta sí, porque

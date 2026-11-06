@@ -462,6 +462,8 @@ export function hasCategoryIcon(name: string): boolean {
 }
 
 export function CategoryIcon({ name, ...props }: { name: string } & LucideProps) {
-  const Icon = ICONS[name] ?? UtensilsCrossed
+  // `hasOwn` y no `ICONS[name]` a secas: con un nombre como `constructor` el índice devolvería lo
+  // heredado de `Object` y React intentaría pintarlo como componente.
+  const Icon = Object.hasOwn(ICONS, name) ? (ICONS[name] ?? UtensilsCrossed) : UtensilsCrossed
   return <Icon aria-hidden="true" focusable="false" {...props} />
 }

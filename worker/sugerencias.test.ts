@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { GUARDAR, MAXIMO_MENSAJE, SIN_ATENDER, sugerenciaDe, ULTIMAS } from './sugerencias.ts'
+import {
+  ATENDER,
+  GUARDAR,
+  MAXIMO_MENSAJE,
+  SIN_ATENDER,
+  sugerenciaDe,
+  ULTIMAS,
+} from './sugerencias.ts'
 
 const SELLO = 'sello-de-prueba-que-no-vale-nada-aaaaaaaaaa'
 const buena = { quien: 'negocio', lugar: 'Tomassa', mensaje: 'Cambió el horario', sello: SELLO }
@@ -56,8 +63,16 @@ describe('lo que se guarda y lo que no', () => {
     }
   })
 
-  it('el panel lee las últimas y no la tabla entera', () => {
+  it('el panel lee un tope de filas y no la tabla entera', () => {
     expect(ULTIMAS).toContain('LIMIT')
-    expect(ULTIMAS).toContain('ORDER BY creada DESC')
+  })
+
+  it('las pendientes van primero, así que una racha de recados nuevos no las esconde', () => {
+    expect(ULTIMAS).toContain('ORDER BY atendida ASC, creada DESC')
+  })
+
+  it('atender borra el contacto que la persona dejó', () => {
+    expect(ATENDER).toContain("contacto = ''")
+    expect(ATENDER).toContain('atendida = 1')
   })
 })

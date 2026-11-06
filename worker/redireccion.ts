@@ -43,7 +43,10 @@ function redireccionDeCategoria(url: URL, idioma: 'es' | 'en'): string | null {
 
 /** La dirección a la que mandar esta petición, o `null` si no hay que redirigirla. */
 export function redireccionDe(url: URL): string | null {
-  const ruta = url.pathname.replace(/\/+$/, '') || '/'
+  // Varias barras al principio (`//otro.example/x`) colapsan en una: un `Location` que empieza por `//`
+  // es una dirección relativa al protocolo, es decir, otro sitio. Nunca sale de aquí uno así.
+  const sinInicio = url.pathname.replace(/^\/{2,}/, '/')
+  const ruta = sinInicio.replace(/\/+$/, '') || '/'
   // La barra final no añade nada: cada ruta es un archivo, no una carpeta.
   const sinBarra = ruta !== url.pathname ? `${ruta}${url.search}` : null
 

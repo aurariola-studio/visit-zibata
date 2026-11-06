@@ -19,6 +19,9 @@ data/commercial/photos-src/
 .env
 .env.*
 !.env.example
+# Secretos de `wrangler dev` (GITHUB_TOKEN para probar commits reales). Nunca se versionan.
+.dev.vars
+.dev.vars.*
 .DS_Store
 Thumbs.db
 .vscode/*
