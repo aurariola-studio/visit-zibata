@@ -53,7 +53,18 @@ const TAMANOS = [
  * la hoja quepa entera. Se usa con marcas y sin ellas, porque el estado vacío ocupa más alto.
  */
 async function comprobarHoja(page: Page, width: number, height: number, nombre: string) {
-  await page.getByRole('tab', { name: nombre }).click()
+  /*
+   * Cambiar de hoja no es lo que se mide aquí (eso lo cubre la prueba de teclado): se pulsa desde el
+   * DOM para que la matriz no dependa del tiempo de espera de Playwright en cada clic. Con doce
+   * tamaños por tres hojas, en un runner cargado ese tiempo agotaba la prueba.
+   */
+  await page.evaluate((hoja) => {
+    const tab = [...document.querySelectorAll('[role="tab"]')].find(
+      (el) => el.textContent?.trim() === hoja,
+    )
+    if (tab instanceof HTMLElement) tab.click()
+  }, nombre)
+  await page.waitForTimeout(60)
   const medidas = await page.evaluate(() => {
     const panel = document.querySelector('[role="tabpanel"]')
     const dialogo = panel?.closest('[role="dialog"]')
@@ -123,6 +134,8 @@ test.describe('Tu Zibatá', () => {
       !['desktop', 'webkit-iphone'].includes(testInfo.project.name),
       'La matriz se recorre una vez por motor, no por dispositivo',
     )
+    // Doce tamaños por tres hojas: en un runner cargado, los 90 s de la suite se quedan cortos.
+    test.setTimeout(180_000)
     /*
      * La hoja se abre una vez y lo que cambia es la ventana. Volver a cargar en cada tamaño costaba
      * cinco mapas más y no medía nada distinto: las reglas que deciden el alto son de la ventana, y
@@ -147,6 +160,8 @@ test.describe('Tu Zibatá', () => {
       !['desktop', 'webkit-iphone'].includes(testInfo.project.name),
       'La matriz se recorre una vez por motor, no por dispositivo',
     )
+    // La misma holgura que la matriz con marcas.
+    test.setTimeout(180_000)
     /*
      * El estado vacío ocupa más alto que el lleno: Zonas lleva el aviso de que todo está por
      * estrenar y Podio y Gustos, sus propias invitaciones. Se mide igual, sin sembrar marcas.
