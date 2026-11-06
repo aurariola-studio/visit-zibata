@@ -324,8 +324,15 @@
  */
 .zone[data-upcoming="true"] .zoneStamp {
   color: var(--color-text-muted);
-  --zone-ring: var(--color-border-strong);
+  --zone-ring: var(--color-border);
   background: transparent;
+  /* Aún no existen: el sello se queda por detrás de las plazas que sí puedes visitar, sin bajar el
+   * nombre del contraste mínimo. */
+  opacity: 0.9;
+}
+
+.zone[data-upcoming="true"] .zoneCheck {
+  opacity: 0.55;
 }
 
 /*
