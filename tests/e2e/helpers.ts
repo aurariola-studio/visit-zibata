@@ -45,6 +45,9 @@ export function placesInPlaza(name: string): number {
 
 export const activePlazas = () => dataset.plazas.filter((plaza) => plaza.active)
 
+/** Las que aún no abrieron: en la hoja van detrás, apagadas. */
+export const inactivePlazas = () => dataset.plazas.filter((plaza) => !plaza.active)
+
 /** Los `n` locales de nombre más largo: el peor caso para un título que debe caber en su columna. */
 export const longestPlaces = (n: number) =>
   [...dataset.places].sort((a, b) => b.name.length - a.name.length).slice(0, n)

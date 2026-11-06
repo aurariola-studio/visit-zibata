@@ -13,7 +13,7 @@
  * en el de la guía. Ver lo que ya marcaste es justo lo que esta función tiene que dar.
  */
 import { CalendarPlus, X } from 'lucide-react'
-import { lazy, Suspense, useId, useState } from 'react'
+import { lazy, Suspense, useId, useRef, useState } from 'react'
 import { t } from '../../i18n/index.ts'
 import { formatVisitDate, formatVisitDateLong, useVisits } from './useVisits.ts'
 import styles from './VisitButton.module.css'
@@ -49,12 +49,13 @@ export function VisitButton({
   const ultima = fechas.at(-1)
   const [abierto, setAbierto] = useState(false)
   const [calendarioAbierto, setCalendarioAbierto] = useState(false)
+  const ancla = useRef<HTMLSpanElement>(null)
   const listaId = useId()
 
   return (
     <div className={styles.visit} data-plano={sinSuperficie}>
       <div className={styles.line}>
-        <span className={styles.control}>
+        <span className={styles.control} ref={ancla}>
           <button
             type="button"
             className={styles.button}
@@ -68,6 +69,7 @@ export function VisitButton({
           {calendarioAbierto && (
             <Suspense fallback={null}>
               <VisitCalendar
+                ancla={ancla}
                 fechas={fechas}
                 onToggle={(fecha: string) => {
                   if (demoDate !== undefined) return

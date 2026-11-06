@@ -41,7 +41,7 @@ describe('PlaceCard', () => {
       giros: ['panaderia', 'cafeteria'],
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} showPlaza />)
-    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
+    expect(screen.getByText('Panadería y Cafetería')).toBeInTheDocument()
     expect(screen.getByText(/Plaza Sur/)).toBeInTheDocument()
   })
 
@@ -53,12 +53,12 @@ describe('PlaceCard', () => {
       giros: ['panaderia', 'cafeteria'],
     })
     const { container } = await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
+    expect(screen.getByText('Panadería y Cafetería')).toBeInTheDocument()
     expect(container.querySelectorAll('[class*="category"] svg')).toHaveLength(2)
   })
 
   it('nombra los giros que caben en la línea y cuenta el resto', async () => {
-    // "Panadería · Cafetería · Taquería" son treinta y dos letras y no entran en una línea de
+    // "Panadería, Cafetería y Taquería" son treinta y seis letras y no entran en una línea de
     // teléfono: se nombran las dos que caben y la tercera se cuenta. El title las lleva todas.
     const place = makePlace({
       id: 'trigo',
@@ -67,9 +67,9 @@ describe('PlaceCard', () => {
       giros: ['panaderia', 'cafeteria', 'taqueria'],
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
+    expect(screen.getByText('Panadería y Cafetería')).toBeInTheDocument()
     expect(screen.getByText('+1')).toBeInTheDocument()
-    expect(screen.getByTitle('Panadería · Cafetería · Taquería')).toBeInTheDocument()
+    expect(screen.getByTitle('Panadería, Cafetería y Taquería')).toBeInTheDocument()
   })
 
   it('no muestra el estado de horario en la lista, ni con horario ni sin él', async () => {

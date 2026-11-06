@@ -3,7 +3,7 @@ import { contenidoDeLista, contenidoDeLugar, escaparHtml } from './contenido.ts'
 
 const lugar = {
   nombre: 'Tomassa',
-  giros: ['Pasta', 'Italiana'],
+  giros: 'Pasta y Comida Italiana',
   plaza: { texto: 'Paseo Zibatá', href: '/zona/paseo-zibata' },
   direccion: 'Av. Paseo de las Pitahayas 501',
   descripcion: 'Pasta fresca todos los días.',
@@ -23,7 +23,7 @@ describe('la ficha escrita', () => {
   it('trae el nombre como encabezado y el texto de verdad', () => {
     const html = contenidoDeLugar(lugar)
     expect(html).toContain('<h1>Tomassa</h1>')
-    expect(html).toContain('Pasta · Italiana')
+    expect(html).toContain('Pasta y Comida Italiana')
     expect(html).toContain('Pasta fresca todos los días.')
   })
 

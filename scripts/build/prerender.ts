@@ -24,6 +24,7 @@ import {
   etiquetaDeCategoria,
   etiquetaDeGiro,
   ganchoDeCategoria,
+  lista,
   type Traductor,
 } from '../../src/lib/categorias.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
@@ -360,8 +361,15 @@ export function pagesFor(
           ? `${copy['closure.title']}. ${copy[`closure.${place.cierre.motivo}`]}`
           : undefined,
         contexto: {
-          giros: place.giros.slice(0, 2).map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
+          /*
+           * Todos los giros, no los dos primeros: la descripción enumera lo que el local es, y un
+           * tercero ("Crepas" en un italiano) es tan suyo como el primero. El texto del negocio
+           * filtra los que ya nombra y la frase se recorta a 160 caracteres, así que la lista no se
+           * desborda: el contexto más largo del catálogo mide 47.
+           */
+          giros: place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           lugar: lugarDe(nombrePlaza),
+          idioma: locale,
           conGiros: copy['seo.place.context'],
           soloLugar: copy['seo.place.contextLugar'],
         },
@@ -434,7 +442,15 @@ export function pagesFor(
               copy['closure.noReturn'],
             ].join(' ')
           : undefined,
-        giros: [...place.giros].map((id) => giroLabel.get(id) ?? id),
+        /*
+         * El cuerpo servido sin JavaScript también lee los giros completos y unidos como una lista
+         * ("Comida Italiana y Pizza"): es la primera línea que ve un rastreador y no puede decir menos
+         * que la descripción.
+         */
+        giros: lista(
+          place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
+          locale,
+        ),
         plaza: plaza?.active
           ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
           : undefined,

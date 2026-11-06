@@ -14,11 +14,18 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--z-panel);
+  z-index: var(--z-popover);
   display: grid;
   gap: var(--space-2);
   /* Ancho fijo: el título del mes no lo estira ni lo encoge. */
   width: min(19rem, calc(100vw - 2 * var(--space-4)));
+  /*
+   * En una pantalla corta, el calendario no cabe entero: se queda dentro del borde y se desplaza
+   * por dentro, en vez de salirse por arriba o por abajo.
+   */
+  max-height: calc(100dvh - 2 * var(--space-4));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-3);
 
   /*

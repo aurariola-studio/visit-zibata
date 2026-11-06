@@ -11,7 +11,7 @@ const ACUSE_MS = 2400
 interface ShareButtonProps {
   name: string
   slug: string
-  /** Los giros del lugar ya traducidos y unidos: van en el texto que se comparte. */
+  /** Los giros del lugar, completos y unidos en prosa ("Comida Italiana y Pizza"): van en el texto. */
   giros: string
   plazaName: string
   size?: 'sm' | 'md'

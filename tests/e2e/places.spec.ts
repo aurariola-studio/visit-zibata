@@ -129,6 +129,39 @@ test.describe('Plazas y lugares', () => {
     expect(copiado).not.toContain('#')
   })
 
+  test('compartir cuenta el lugar en una frase: giros completos, con comas y "y", y el enlace detrás', async ({
+    page,
+  }) => {
+    await openApp(page, { path: 'lugar/cosi-fan-tutte' })
+    const region = panel(page)
+    await expect(region.getByRole('heading', { level: 2, name: 'Cosi Fan Tutte' })).toBeVisible()
+
+    // La hoja del sistema no se puede manejar desde la prueba: se intercepta lo que se le entrega.
+    await page.evaluate(() => {
+      Object.defineProperty(navigator, 'share', {
+        configurable: true,
+        value: (datos: unknown) => {
+          ;(window as unknown as { compartido?: unknown }).compartido = datos
+          return Promise.resolve()
+        },
+      })
+    })
+    await region.getByRole('button', { name: 'Compartir Cosi Fan Tutte' }).click()
+
+    await expect
+      .poll(() =>
+        page.evaluate(() => Boolean((window as unknown as { compartido?: unknown }).compartido)),
+      )
+      .toBe(true)
+    const datos = await page.evaluate(
+      () => (window as unknown as { compartido?: { text?: string; url?: string } }).compartido,
+    )
+    // "Italiana" en el filtro, "Comida Italiana" en la frase; sin puntos medios entre giros.
+    expect(datos?.text).toMatch(/^Cosi Fan Tutte · Comida Italiana y Pizza · .+\. Conoce más en$/)
+    expect(datos?.text).not.toContain(' · Italiana')
+    expect(datos?.url).toMatch(/\/es\/lugar\/cosi-fan-tutte$/)
+  })
+
   test('"atrás" en el navegador cierra la plaza seleccionada', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)
@@ -154,6 +187,36 @@ test.describe('Plazas y lugares', () => {
     await page.reload()
     // La cuenta va en el nombre del control, no dentro de el.
     await expect(page.getByRole('switch', { name: 'Favoritos, 1' })).toBeVisible()
+  })
+
+  test('el calendario de visitas se queda dentro de una pantalla corta', async ({ page }) => {
+    // Pantalla dividida: 720×420 deja el calendario sin sitio ni encima ni debajo del botón, y
+    // 720×300 ni siquiera le da alto para caber entero.
+    for (const alto of [420, 300]) {
+      await page.setViewportSize({ width: 720, height: alto })
+      await openApp(page, { path: 'lugar/tomassa' })
+      const boton = page.getByRole('button', { name: /^Registrar visita a / })
+      await boton.scrollIntoViewIfNeeded()
+      await boton.click()
+
+      const calendario = page.locator('[class*="_calendario_"]')
+      await expect(calendario).toBeVisible()
+      const caja = await calendario.boundingBox()
+      if (!caja) throw new Error('el calendario no tiene caja')
+      expect(caja.y, `alto ${alto}`).toBeGreaterThanOrEqual(0)
+      expect(caja.y + caja.height, `alto ${alto}`).toBeLessThanOrEqual(alto)
+
+      // Y no basta con estar dentro: la cabecera del mes no puede quedar tapada por la hoja.
+      const tapada = await page.evaluate(() => {
+        const c = document.querySelector('[class*="_calendario_"]')
+        const titulo = c?.querySelector('h3')
+        if (!titulo) return true
+        const r = titulo.getBoundingClientRect()
+        const encima = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
+        return !encima || !titulo.contains(encima)
+      })
+      expect(tapada, `cabecera tapada a ${alto}`).toBe(false)
+    }
   })
 
   test('en móvil la hoja inferior se expande y se reduce sin tapar todo el mapa', async ({

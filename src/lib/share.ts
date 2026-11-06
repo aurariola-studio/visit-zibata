@@ -14,6 +14,11 @@ import { SITE_URL } from '../config/site.ts'
 
 export interface SharePayload {
   title: string
+  /**
+   * Termina en "Conoce más en" y deja el enlace al campo `url`: las hojas del sistema y las apps de
+   * mensajería los juntan. Repetir la URL aquí la mostraría dos veces en WhatsApp, que ya pinta el
+   * enlace del campo `url` debajo del texto.
+   */
   text: string
   url: string
 }
