@@ -24,6 +24,7 @@ import {
   etiquetaDeCategoria,
   etiquetaDeGiro,
   ganchoDeCategoria,
+  lista,
   type Traductor,
 } from '../../src/lib/categorias.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
@@ -441,7 +442,15 @@ export function pagesFor(
               copy['closure.noReturn'],
             ].join(' ')
           : undefined,
-        giros: [...place.giros].map((id) => giroLabel.get(id) ?? id),
+        /*
+         * El cuerpo servido sin JavaScript también lee los giros completos y unidos como una lista
+         * ("Comida Italiana y Pizza"): es la primera línea que ve un rastreador y no puede decir menos
+         * que la descripción.
+         */
+        giros: lista(
+          place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
+          locale,
+        ),
         plaza: plaza?.active
           ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
           : undefined,
