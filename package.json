@@ -82,6 +82,6 @@
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vitest": "^5.0.5",
-    "wrangler": "4.147.0"
+    "wrangler": "4.157.0"
   }
 }
