@@ -1,5 +1,9 @@
 import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
+
+const huella = (css: string) =>
+  `'sha256-${createHash('sha256').update(css, 'utf8').digest('base64')}'`
 
 /**
  * La primera pantalla: el cargador viene en el HTML, con su estilo en línea, y tapa el artículo del
@@ -18,23 +22,47 @@ test.describe('Carga inicial', () => {
     expect(html).toContain('class="cargador"')
     expect(html).toContain('Preparando Zibatá')
     expect(html).toContain('class="estatico"')
-    expect(html).toContain('<noscript><style>.cargador{display:none}</style></noscript>')
 
-    const estilo = html.match(/<style>([^<]*\.cargador[^<]*)<\/style>/)?.[1]
+    const estilo = html.match(/<style>([^<]*\.cargador[^<]*)<\/style>/)?.[1] ?? ''
     expect(estilo, 'el bloque de estilo del cargador').toBeTruthy()
-    const huella = createHash('sha256')
-      .update(estilo ?? '', 'utf8')
-      .digest('base64')
-    expect(html, 'la CSP permite el bloque en línea').toContain(`'sha256-${huella}'`)
+    expect(html, 'la CSP permite el bloque en línea').toContain(huella(estilo))
+
+    const sinJs = html.match(/<noscript><style>([^<]*)<\/style>/)?.[1] ?? ''
+    expect(sinJs, 'el bloque sin JavaScript').toContain('.cargador{display:none}')
+    expect(html, 'la CSP permite el bloque sin JavaScript').toContain(huella(sinJs))
+
+    // La cabecera de producción sale de la misma política que el <meta>.
+    const cabeceras = readFileSync('dist/_headers', 'utf8')
+    expect(cabeceras).toContain(huella(estilo))
+    expect(cabeceras).toContain(huella(sinJs))
   })
 
-  test('sin JavaScript se ve el artículo y el cargador queda escondido', async ({ browser }) => {
+  test('el cargador está en todas las páginas y en su idioma', async ({ request }) => {
+    expect(await (await request.get('/en')).text()).toContain('Preparing Zibatá')
+    expect(await (await request.get('/es/lugar/tomassa')).text()).toContain('Preparando Zibatá')
+    expect(await (await request.get('/es/zona/condesa')).text()).toContain('Preparando Zibatá')
+  })
+
+  test('sin JavaScript se ve el artículo, el cargador se esconde y la página se desplaza', async ({
+    browser,
+  }) => {
     const contexto = await browser.newContext({ javaScriptEnabled: false })
     const pagina = await contexto.newPage()
     await pagina.goto('/es')
 
     await expect(pagina.locator('.cargador')).toBeHidden()
     await expect(pagina.locator('.estatico')).toBeVisible()
+
+    // El cuerpo de la app vive con `overflow: hidden`; el bloque sin JS lo devuelve a `auto`.
+    const desplazable = await pagina.evaluate(() => {
+      window.scrollTo(0, 400)
+      return {
+        sobra: document.documentElement.scrollHeight > window.innerHeight,
+        movido: window.scrollY > 0,
+      }
+    })
+    expect(desplazable.sobra, 'el artículo es más alto que la ventana').toBe(true)
+    expect(desplazable.movido, 'el artículo se puede desplazar').toBe(true)
     await contexto.close()
   })
 

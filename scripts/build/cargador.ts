@@ -23,6 +23,7 @@ import { es } from '../../src/i18n/es.ts'
 const CATALOGOS = { es, en } as const
 
 export const CSS_CARGADOR = [
+  'body{margin:0;height:100%;overflow:hidden}',
   '.cargador{',
   'position:fixed;inset:0;z-index:10;',
   'display:grid;justify-items:center;align-content:center;gap:1rem;padding:1.5rem;',
@@ -34,8 +35,9 @@ export const CSS_CARGADOR = [
   '.cargador .oculto{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}',
 ].join('')
 
-/** Sin JavaScript el cargador no tiene a quién esperar: se esconde y queda el artículo. */
-export const CSS_SIN_JS = '.cargador{display:none}'
+/** Sin JavaScript el cargador no tiene a quién esperar: se esconde y queda el artículo, que además
+ * tiene que poder desplazarse (el cuerpo de la app vive con `overflow: hidden`). */
+export const CSS_SIN_JS = '.cargador{display:none}body{overflow:auto}'
 
 const huella = (css: string): string =>
   `'sha256-${createHash('sha256').update(css, 'utf8').digest('base64')}'`
@@ -43,19 +45,24 @@ const huella = (css: string): string =>
 export const HUELLA_CARGADOR = huella(CSS_CARGADOR)
 export const HUELLA_SIN_JS = huella(CSS_SIN_JS)
 
+/** El símbolo se lee una vez y se repite en las 234 páginas del build. */
+let simbolo: string | undefined
+
 /**
  * El símbolo sin la etiqueta que lo envuelve ni su `<title>`, para meterlo en el HTML. Se lee al
  * generar, no al cargar el módulo: así la configuración de Vite puede importar las huellas sin tocar
  * el disco.
  */
 function leerSimbolo(): string {
+  if (simbolo) return simbolo
   const svg = readFileSync(resolve(process.cwd(), 'public/simbolo.svg'), 'utf8')
   const abre = svg.indexOf('<svg')
   const cierra = svg.lastIndexOf('</svg>')
-  return svg
+  simbolo = svg
     .slice(svg.indexOf('>', abre) + 1, cierra)
     .replace(/<title>[\s\S]*?<\/title>/, '')
     .trim()
+  return simbolo
 }
 
 /** El cargador, en el idioma de la página: el prerender sabe cuál es antes de escribir el HTML. */
