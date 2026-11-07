@@ -173,10 +173,22 @@ function MapDemo() {
   return (
     <div className={styles.map}>
       {/* Recorte del mapa real que ya usa la tarjeta social, sin la marca encima. */}
-      <img className={styles.mapImage} src={assetUrl('tutorial/mapa.webp')} alt="" />
-      <span className={styles.finger} />
-      <span className={styles.fingerA} />
-      <span className={styles.fingerB} />
+      <img
+        className={styles.mapImage}
+        src={assetUrl('tutorial/mapa.webp')}
+        alt=""
+        // Es el LCP de la primera visita y compite con el trozo del mapa por el ancho de banda.
+        fetchPriority="high"
+      />
+      <span className={`${styles.capa} ${styles.arrastre}`}>
+        <span className={styles.punto} />
+      </span>
+      <span className={`${styles.capa} ${styles.pinzaA}`}>
+        <span className={styles.punto} />
+      </span>
+      <span className={`${styles.capa} ${styles.pinzaB}`}>
+        <span className={styles.punto} />
+      </span>
     </div>
   )
 }
