@@ -15,7 +15,7 @@ test.describe('Carga inicial', () => {
   test('el HTML servido trae el cargador con su estilo permitido por la CSP', async ({
     request,
   }) => {
-    const respuesta = await request.get('/es')
+    const respuesta = await request.get('./es')
     expect(respuesta.ok()).toBe(true)
     const html = await respuesta.text()
 
@@ -38,9 +38,9 @@ test.describe('Carga inicial', () => {
   })
 
   test('el cargador está en todas las páginas y en su idioma', async ({ request }) => {
-    expect(await (await request.get('/en')).text()).toContain('Preparing Zibatá')
-    expect(await (await request.get('/es/lugar/tomassa')).text()).toContain('Preparando Zibatá')
-    expect(await (await request.get('/es/zona/condesa')).text()).toContain('Preparando Zibatá')
+    expect(await (await request.get('./en')).text()).toContain('Preparing Zibatá')
+    expect(await (await request.get('./es/lugar/tomassa')).text()).toContain('Preparando Zibatá')
+    expect(await (await request.get('./es/zona/condesa')).text()).toContain('Preparando Zibatá')
   })
 
   test('sin JavaScript se ve el artículo, el cargador se esconde y la página se desplaza', async ({
@@ -48,7 +48,7 @@ test.describe('Carga inicial', () => {
   }) => {
     const contexto = await browser.newContext({ javaScriptEnabled: false })
     const pagina = await contexto.newPage()
-    await pagina.goto('/es')
+    await pagina.goto('./es')
 
     await expect(pagina.locator('.cargador')).toBeHidden()
     await expect(pagina.locator('.estatico')).toBeVisible()
@@ -68,7 +68,7 @@ test.describe('Carga inicial', () => {
 
   test('mientras la app no arranca, el cargador cubre el artículo', async ({ page }) => {
     await page.route('**/assets/index-*.js', (ruta) => ruta.abort())
-    await page.goto('/es')
+    await page.goto('./es')
 
     const cargador = page.locator('.cargador')
     await expect(cargador).toBeVisible()
