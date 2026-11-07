@@ -95,6 +95,14 @@ export function MapLoader({
     return () => window.clearInterval(id)
   }, [visible])
 
+  // La primera frase ya viene pintada en el HTML: animarla haría parpadear el relevo. A partir del
+  // primer cambio, sí.
+  const [animarFrase, setAnimarFrase] = useState(false)
+  useEffect(() => {
+    const id = window.setTimeout(() => setAnimarFrase(true), RITMO_DE_FRASE)
+    return () => window.clearTimeout(id)
+  }, [])
+
   useEffect(() => {
     const id = window.setInterval(() => setFase((n) => (n + 1) % FASES.length), RITMO_DE_FRASE)
     return () => window.clearInterval(id)
@@ -120,7 +128,7 @@ export function MapLoader({
        * La frase cambia cada 2,6 s, así que no se anuncia: sería un lector de pantalla hablando solo.
        * Lo que se anuncia una vez es el estado, que va debajo y no cambia.
        */}
-      <p className={styles.frase} aria-hidden="true" key={fase}>
+      <p className={styles.frase} data-animar={animarFrase} aria-hidden="true" key={fase}>
         {t(FASES[fase] as (typeof FASES)[number])}
       </p>
       <span className="visually-hidden">{t('map.loading')}</span>

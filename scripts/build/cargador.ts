@@ -30,7 +30,11 @@ export const CSS_CARGADOR = [
   'background:radial-gradient(90% 60% at 50% 40%,#fcfaf6,transparent),#f1ebe0;',
   'font-family:"Special Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;',
   '}',
-  '.cargador svg{width:6rem;height:6rem;filter:grayscale(1);opacity:.45}',
+  '.cargador .marca{position:relative;display:block;width:6rem;height:6rem}',
+  '.cargador .marca svg{position:absolute;inset:0;width:100%;height:100%}',
+  '.cargador .gris{filter:grayscale(1);opacity:.45}',
+  /* El agua empieza a subir: la misma franja del 4 % con la que arranca `MapLoader`. */
+  '.cargador .color{-webkit-mask-image:linear-gradient(to top,#000 4%,transparent 4%);mask-image:linear-gradient(to top,#000 4%,transparent 4%)}',
   '.cargador p{margin:0;font-size:.875rem;line-height:1.5;color:#62655a}',
   '.cargador .oculto{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}',
 ].join('')
@@ -68,9 +72,13 @@ function leerSimbolo(): string {
 /** El cargador, en el idioma de la página: el prerender sabe cuál es antes de escribir el HTML. */
 export function htmlCargador(locale: 'es' | 'en'): string {
   const copy = CATALOGOS[locale]
+  const simbolo = leerSimbolo()
   return (
     '<div class="cargador" role="status">' +
-    `<svg viewBox="0 0 256 256" aria-hidden="true">${leerSimbolo()}</svg>` +
+    '<span class="marca" aria-hidden="true">' +
+    `<svg class="gris" viewBox="0 0 256 256">${simbolo}</svg>` +
+    `<svg class="color" viewBox="0 0 256 256">${simbolo}</svg>` +
+    '</span>' +
     `<p aria-hidden="true">${copy['map.loading.preparing']}</p>` +
     `<span class="oculto">${copy['map.loading']}</span>` +
     '</div>'
