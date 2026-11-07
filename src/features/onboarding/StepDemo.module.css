@@ -30,8 +30,7 @@
 }
 
 .finger,
-.fingerA,
-.fingerB {
+.punto {
   position: absolute;
   z-index: 2;
   width: 1.1rem;
@@ -43,9 +42,29 @@
   pointer-events: none;
 }
 
-.finger {
-  left: 55%;
-  top: 55%;
+/*
+ * Los dedos del mapa son una capa del tamaño del mapa con el punto en su esquina. Se mueven con
+ * `translate` y no con `left`/`top`: corre en el compositor y sigue fluido aunque el mapa real, al
+ * arrancar, ocupe el hilo principal. Los porcentajes de `translate` son los de la capa, o sea los del
+ * mapa, los mismos que daban `left`/`top`.
+ */
+.capa {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.capa > .punto {
+  left: 0;
+  top: 0;
+}
+
+/* Con movimiento reducido el único dedo visible se queda quieto donde empieza. */
+.arrastre {
+  opacity: 1;
+  translate: 55% 55%;
 }
 
 /* El dedo de la ficha: sube mientras la ficha se desplaza. */
@@ -61,11 +80,6 @@
   width: 1rem;
   height: 1rem;
   margin: -0.5rem 0 0 -0.5rem;
-  opacity: 0;
-}
-
-.fingerA,
-.fingerB {
   opacity: 0;
 }
 
@@ -260,7 +274,7 @@
     animation: mapCamera 8s var(--ease-out) infinite alternate;
   }
 
-  .finger {
+  .arrastre {
     animation: dragFinger 8s var(--ease-out) infinite alternate;
   }
 
@@ -273,11 +287,11 @@
     animation: marksFinger 10s var(--ease-out) infinite;
   }
 
-  .fingerA {
+  .pinzaA {
     animation: pinchStart 8s var(--ease-out) infinite alternate;
   }
 
-  .fingerB {
+  .pinzaB {
     animation: pinchEnd 8s var(--ease-out) infinite alternate;
   }
 
@@ -323,22 +337,19 @@
     0%,
     8% {
       opacity: 0;
-      left: 55%;
-      top: 55%;
+      translate: 55% 55%;
     }
     15% {
       opacity: 1;
     }
     45% {
       opacity: 1;
-      left: 47%;
-      top: 50%;
+      translate: 47% 50%;
     }
     55%,
     100% {
       opacity: 0;
-      left: 47%;
-      top: 50%;
+      translate: 47% 50%;
     }
   }
 
@@ -346,21 +357,18 @@
     0%,
     52% {
       opacity: 0;
-      left: 49%;
-      top: 50%;
+      translate: 49% 50%;
     }
     58% {
       opacity: 1;
     }
     78% {
-      left: 42%;
-      top: 45%;
+      translate: 42% 45%;
     }
     90%,
     100% {
       opacity: 0;
-      left: 42%;
-      top: 45%;
+      translate: 42% 45%;
     }
   }
 
@@ -368,21 +376,18 @@
     0%,
     52% {
       opacity: 0;
-      left: 51%;
-      top: 50%;
+      translate: 51% 50%;
     }
     58% {
       opacity: 1;
     }
     78% {
-      left: 58%;
-      top: 55%;
+      translate: 58% 55%;
     }
     90%,
     100% {
       opacity: 0;
-      left: 58%;
-      top: 55%;
+      translate: 58% 55%;
     }
   }
 
