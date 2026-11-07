@@ -11,7 +11,7 @@
  *
  * Vive aparte del botón porque casi nunca se abre: así no viaja en el arranque de la guía.
  */
-import { Clock, X } from 'lucide-react'
+import { Clock, Heart, X } from 'lucide-react'
 import { type CSSProperties, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
@@ -224,13 +224,16 @@ function fechaCorta(iso: string, idioma: string): string {
     .replace(/\.$/, '')
 }
 
-/** Lo que has hecho con ese lugar, en una línea y solo con lo que exista. */
+/**
+ * Lo que has hecho con ese lugar, en una línea y solo con lo que exista. Lo de guardado no va aquí:
+ * lo dice el corazón sobre el icono, que se entiende de un vistazo y no gasta una palabra que se
+ * corta en la columna.
+ */
 function loQueHiciste(entry: Ranked, idioma: string): string {
   return [
     entry.visits > 0 ? t('profile.visitCount', { count: entry.visits }) : null,
     entry.last ? t('profile.lastVisit', { date: fechaCorta(entry.last, idioma) }) : null,
     entry.rating > 0 ? `${formatNumber(entry.rating)} ★` : null,
-    entry.favorite ? t('profile.saved') : null,
   ]
     .filter(Boolean)
     .join(' · ')
@@ -332,14 +335,21 @@ function Podio({
           const tone = tones.get(place.plazaId) ?? DEFAULT_PLAZA_TONE
           const plaza = catalog.plazaById.get(place.plazaId)
           return (
-            <li key={place.id} className={styles.rank} data-place={index + 1}>
+            <li
+              key={place.id}
+              className={styles.rank}
+              data-place={index + 1}
+              data-saved={entry.favorite}
+            >
               <a
                 className={styles.rankLink}
                 href={rutaDeLugar(place.slug, idioma, import.meta.env.BASE_URL)}
                 onClick={alPulsarEnlace(() => onOpenPlace(place))}
                 aria-label={`${t('profile.position', {
                   position: index + 1,
-                })}. ${t('place.openDetail', { name: place.name })}`}
+                })}${entry.favorite ? `, ${t('profile.saved')}` : ''}. ${t('place.openDetail', {
+                  name: place.name,
+                })}`}
               >
                 <span className={styles.rankBody}>
                   <span
@@ -348,6 +358,9 @@ function Podio({
                     aria-hidden="true"
                   >
                     <CategoryIcon name={placeIconName(place, catalog)} size={18} />
+                    {entry.favorite && (
+                      <Heart className={styles.rankHeart} fill="currentColor" aria-hidden="true" />
+                    )}
                   </span>
                   <span className={styles.rankName}>{place.name}</span>
                   <span className={styles.rankMeta}>

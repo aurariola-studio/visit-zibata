@@ -199,7 +199,7 @@
   flex-direction: column;
   /* Sin relleno arriba: el aire entre las pestañas y el título es el mismo que hay entre el título y
    * las pestañas, el del hueco de la hoja. */
-  padding-top: 0;
+  padding-top: var(--space-1);
   gap: var(--space-2);
 }
 
@@ -419,6 +419,7 @@
 }
 
 .rankIcon {
+  position: relative;
   flex: none;
   display: grid;
   place-items: center;
@@ -428,6 +429,19 @@
   border-radius: var(--radius-round);
   background: var(--zone-soft, var(--lime-50));
   color: var(--zone-ink, var(--olive-600));
+}
+
+/* El corazón de guardado, como un sello sobre el icono: dice el estado sin gastar una palabra. */
+.rankHeart {
+  position: absolute;
+  top: -0.12rem;
+  right: -0.18rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  padding: 1px;
+  border-radius: var(--radius-round);
+  background: var(--color-surface-solid);
+  color: var(--heart-600);
 }
 
 .rankName {
@@ -459,7 +473,8 @@
   display: grid;
   place-items: center;
   width: 100%;
-  height: 10rem;
+  /* Crece con la pantalla: en un tel?fono corto no cabe un escal?n de 12 rem. */
+  height: clamp(7rem, 29dvh, 12rem);
   margin-top: var(--space-2);
   border-radius: var(--radius-md) var(--radius-md) 0 0;
   background: var(--color-surface-muted);
@@ -472,13 +487,13 @@
 }
 
 .stepBlock[data-place="2"] {
-  height: 8rem;
+  height: clamp(5.5rem, 23dvh, 9.5rem);
   background: var(--lime-300);
   color: var(--olive-800);
 }
 
 .stepBlock[data-place="3"] {
-  height: 6.5rem;
+  height: clamp(4rem, 18dvh, 7.5rem);
 }
 
 .stepNumber {
@@ -695,15 +710,15 @@
 
   /* Los escalones bajan con la pantalla, pero siguen bajando uno respecto al anterior. */
   .rankList .stepBlock {
-    height: 6.5rem;
+    height: 7rem;
   }
 
   .rankList .stepBlock[data-place="2"] {
-    height: 5rem;
+    height: 5.5rem;
   }
 
   .rankList .stepBlock[data-place="3"] {
-    height: 3.75rem;
+    height: 4rem;
   }
 }
 

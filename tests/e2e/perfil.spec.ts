@@ -118,14 +118,15 @@ test.describe('Tu Zibatá', () => {
 
     // Podio: los tres que más marcaste, con lo que has hecho con ellos.
     await hoja.getByRole('tab', { name: 'Podio' }).click()
-    const filas = hoja.getByRole('link', { name: /^Puesto \d\./ })
+    const filas = hoja.getByRole('link', { name: /^Puesto \d[,.]/ })
     await expect(filas).toHaveCount(3)
     await expect(filas.first()).toHaveAttribute(
       'aria-label',
-      `Puesto 1. Ver detalles de ${placeById('tomassa').name}`,
+      `Puesto 1, guardado. Ver detalles de ${placeById('tomassa').name}`,
     )
     await expect(filas.first()).toContainText('2 visitas')
-    await expect(filas.first()).toContainText('guardado')
+    // Lo guardado ya no es una palabra: es el corazón sobre el icono.
+    await expect(hoja.locator('ol > li').first()).toHaveAttribute('data-saved', 'true')
 
     // Gustos: el tipo de lugar, con cuántos de los tuyos caen en él.
     await hoja.getByRole('tab', { name: 'Gustos' }).click()
