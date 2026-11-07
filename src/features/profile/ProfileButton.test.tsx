@@ -130,7 +130,9 @@ describe('ProfileButton', () => {
 
     await userEvent.click(within(sheet).getByRole('tab', { name: 'Podio' }))
     await userEvent.click(
-      within(sheet).getByRole('link', { name: 'Puesto 1. Ver detalles de Café Aurora' }),
+      within(sheet).getByRole('link', {
+        name: /^Puesto 1(, guardado)?\. Ver detalles de Café Aurora$/,
+      }),
     )
     expect(onOpenPlace).toHaveBeenCalledWith(expect.objectContaining({ id: 'cafe-aurora' }))
 
