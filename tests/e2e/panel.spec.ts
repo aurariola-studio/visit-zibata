@@ -319,6 +319,7 @@ test.describe('Panel', () => {
           { desde: '/en/place/cafe-de-prueba', hacia: '/en/area/plaza-uno' },
         ],
         categoriasSinPagina: ['Servicios de prueba'],
+        destinoEsPortada: false,
         fotos: 2,
         avisos: ['Sale de las listas, del buscador y del sitemap.'],
       }

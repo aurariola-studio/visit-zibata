@@ -40,6 +40,8 @@ export interface Impacto {
   redirecciones: { desde: string; hacia: string }[]
   /** Categorías que se quedan sin ningún local visible, y por tanto sin página. */
   categoriasSinPagina: string[]
+  /** `true` si la plaza no tiene página y la dirección antigua va a la portada. */
+  destinoEsPortada: boolean
   fotos: number
   avisos: string[]
 }
@@ -141,10 +143,17 @@ export function prepararBorrado(
   const impacto: Impacto = {
     negocio: { id: place.id, nombre: place.name },
     plaza: plaza.name,
-    redirecciones: [
-      { desde: `/es/lugar/${place.slug}`, hacia: `/es/zona/${plaza.slug}` },
-      { desde: `/en/place/${place.slug}`, hacia: `/en/area/${plaza.slug}` },
-    ],
+    // Solo las plazas activas tienen página: si no, el Worker manda la dirección a la portada.
+    redirecciones: plaza.active
+      ? [
+          { desde: `/es/lugar/${place.slug}`, hacia: `/es/zona/${plaza.slug}` },
+          { desde: `/en/place/${place.slug}`, hacia: `/en/area/${plaza.slug}` },
+        ]
+      : [
+          { desde: `/es/lugar/${place.slug}`, hacia: '/es' },
+          { desde: `/en/place/${place.slug}`, hacia: '/en' },
+        ],
+    destinoEsPortada: !plaza.active,
     categoriasSinPagina,
     fotos: place.photos.length,
     avisos,

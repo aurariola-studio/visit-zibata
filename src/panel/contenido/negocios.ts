@@ -742,6 +742,7 @@ interface Impacto {
   plaza: string
   redirecciones: { desde: string; hacia: string }[]
   categoriasSinPagina: string[]
+  destinoEsPortada: boolean
   fotos: number
   avisos: string[]
 }
@@ -812,7 +813,7 @@ async function pedirImpactoBorrado(formulario: HTMLFormElement): Promise<void> {
   zona.innerHTML = `<section class="editor-seccion impacto-borrado" aria-labelledby="titulo-borrado" tabindex="-1">
       <h3 id="titulo-borrado">Si borras ${texto(impacto.negocio.nombre)}</h3>
       <ul class="impacto-lista">${direcciones}</ul>
-      <p class="impacto-contenido">Su ficha deja de existir y quien llegue por la dirección antigua verá ${texto(impacto.plaza)}.</p>
+      <p class="impacto-contenido">Su ficha deja de existir y quien llegue por la dirección antigua verá ${impacto.destinoEsPortada ? `la portada, porque ${texto(impacto.plaza)} no está activa` : texto(impacto.plaza)}.</p>
       ${categorias}
       <ul class="impacto-lista">${impacto.avisos.map((aviso) => `<li>${texto(aviso)}</li>`).join('')}</ul>
       <div class="acciones">

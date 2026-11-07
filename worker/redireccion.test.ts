@@ -122,6 +122,23 @@ describe('un local borrado desde el panel', () => {
     expect(aDondeBorrado('/')).toBeNull()
   })
 
+  it('si su plaza no tiene página, la dirección antigua va a la portada y no a un 404', () => {
+    const sinPagina = new Map<string, string | null>([['cafe-viejo', null]])
+    expect(redireccionDeLugarBorrado('/es/lugar/cafe-viejo', sinPagina)).toBe('/es')
+    expect(redireccionDeLugarBorrado('/en/place/cafe-viejo', sinPagina)).toBe('/en')
+    expect(redireccionDeLugarBorrado('/lugar/cafe-viejo', sinPagina)).toBe('/es')
+  })
+
+  it('el punto de entrada real lo resuelve, también con barra final y con la consulta', () => {
+    const real = (direccion: string) => redireccionDe(new URL(direccion), borrados)
+    expect(real('https://visitzibata.com/es/lugar/cafe-viejo')).toBe('/es/zona/plaza-uno')
+    expect(real('https://visitzibata.com/es/lugar/cafe-viejo/')).toBe('/es/zona/plaza-uno')
+    expect(real('https://visitzibata.com//lugar/cafe-viejo?x=1')).toBe('/es/zona/plaza-uno')
+    expect(real('https://visitzibata.com/en/place/cafe-viejo/')).toBe('/en/area/plaza-uno')
+    // La dirección en minúsculas es lo que el Worker vuelve a preguntar tras corregir las mayúsculas.
+    expect(real('https://visitzibata.com/es/lugar/otro')).toBeNull()
+  })
+
   it('sin locales borrados no hace nada', () => {
     expect(redireccionDeLugarBorrado('/es/lugar/cafe-viejo', new Map())).toBeNull()
   })

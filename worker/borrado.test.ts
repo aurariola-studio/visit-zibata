@@ -47,6 +47,20 @@ describe('la vista de impacto', () => {
     expect(preparado.impacto.avisos.join(' ')).toMatch(/sitemap/)
   })
 
+  it('si la plaza no está activa, la dirección antigua va a la portada y el impacto lo dice', () => {
+    const inactiva: CommercialDataset = {
+      ...dataset,
+      plazas: dataset.plazas.map((fila) =>
+        fila.id === objetivo.plazaId ? { ...fila, active: false } : fila,
+      ),
+    }
+    const preparado = prepararBorrado(inactiva, crudo, { id: objetivo.id }, HOY)
+    expect(preparado.ok).toBe(true)
+    if (!preparado.ok) return
+    expect(preparado.impacto.destinoEsPortada).toBe(true)
+    expect(preparado.impacto.redirecciones.map((fila) => fila.hacia)).toEqual(['/es', '/en'])
+  })
+
   it('una categoría que se queda sin ningún local visible pierde su página, y se avisa', () => {
     // Un dataset de un solo local: borrarlo deja vacías todas sus categorías.
     const solo: CommercialDataset = { ...dataset, places: [objetivo] }

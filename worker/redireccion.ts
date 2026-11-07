@@ -33,18 +33,22 @@ const SLUGS = {
   en: new Set(categorias.categories.map((categoria) => categoria.slug.en)),
 }
 
-/** El slug de la plaza a la que va cada local borrado. */
-const PLAZA_DE_BORRADO = new Map(
-  borrados.redirects.map(({ slug, plazaId }) => [
-    slug,
-    plazas.plazas.find((plaza) => plaza.id === plazaId)?.slug ?? plazaId,
-  ]),
+/**
+ * La plaza a la que va cada local borrado, o `null` si esa plaza no tiene página (solo las activas la
+ * tienen): entonces la dirección antigua va a la portada en vez de a un 404. Se decide al desplegar,
+ * así que una plaza que se desactive después también queda cubierta.
+ */
+const PLAZA_DE_BORRADO = new Map<string, string | null>(
+  borrados.redirects.map(({ slug, plazaId }) => {
+    const plaza = plazas.plazas.find((fila) => fila.id === plazaId)
+    return [slug, plaza?.active ? plaza.slug : null]
+  }),
 )
 
 /** La plaza de un local borrado, si la ruta es la de su ficha (con o sin prefijo de idioma). */
 export function redireccionDeLugarBorrado(
   ruta: string,
-  mapa: ReadonlyMap<string, string> = PLAZA_DE_BORRADO,
+  mapa: ReadonlyMap<string, string | null> = PLAZA_DE_BORRADO,
 ): string | null {
   if (mapa.size === 0) return null
   const partes = ruta.split('/').filter(Boolean)
@@ -52,10 +56,10 @@ export function redireccionDeLugarBorrado(
   const [segmento, slug] = idioma ? partes.slice(1) : partes
   if (!slug || segmento !== SEGMENTS[idioma ?? 'es'].place) return null
   if (partes.length !== (idioma ? 3 : 2)) return null
+  if (!mapa.has(slug)) return null
   const plaza = mapa.get(slug)
-  if (!plaza) return null
   const destino = idioma ?? 'es'
-  return `/${PREFIX[destino]}/${SEGMENTS[destino].plaza}/${plaza}`
+  return plaza ? `/${PREFIX[destino]}/${SEGMENTS[destino].plaza}/${plaza}` : `/${PREFIX[destino]}`
 }
 
 /** Los segmentos con los que empezaban las rutas del español sin prefijo. */
@@ -73,7 +77,10 @@ function redireccionDeCategoria(url: URL, idioma: 'es' | 'en'): string | null {
 }
 
 /** La dirección a la que mandar esta petición, o `null` si no hay que redirigirla. */
-export function redireccionDe(url: URL): string | null {
+export function redireccionDe(
+  url: URL,
+  borrados: ReadonlyMap<string, string | null> = PLAZA_DE_BORRADO,
+): string | null {
   // Varias barras al principio (`//otro.example/x`) colapsan en una: un `Location` que empieza por `//`
   // es una dirección relativa al protocolo, es decir, otro sitio. Nunca sale de aquí uno así.
   const sinInicio = url.pathname.replace(/^\/{2,}/, '/')
@@ -81,7 +88,7 @@ export function redireccionDe(url: URL): string | null {
   // La barra final no añade nada: cada ruta es un archivo, no una carpeta.
   const sinBarra = ruta !== url.pathname ? `${ruta}${url.search}` : null
 
-  const borrado = redireccionDeLugarBorrado(ruta)
+  const borrado = redireccionDeLugarBorrado(ruta, borrados)
   if (borrado) return borrado
 
   if (ruta === '/en') return redireccionDeCategoria(url, 'en') ?? sinBarra
