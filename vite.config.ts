@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
 import pkg from './package.json' with { type: 'json' }
+import { HUELLA_CARGADOR, HUELLA_SIN_JS } from './scripts/build/cargador.ts'
 import { mapTiles } from './scripts/build/map-tiles.ts'
 import { HUELLA_ESTILO_404, html404 } from './scripts/build/pagina-404.ts'
 import { prerender } from './scripts/build/prerender.ts'
@@ -54,14 +55,15 @@ export const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
   "script-src 'self'",
   /*
-   * La huella del estilo en línea de la página 404, y nada más. No es `'unsafe-inline'`: permite
-   * exactamente ese bloque y ningún otro.
+   * Las huellas de los bloques en línea: el estilo de la página 404, el del cargador que se sirve
+   * antes de que arranque la app, y el que lo esconde sin JavaScript. No es `'unsafe-inline'`:
+   * permite exactamente esos bloques y ningún otro.
    *
-   * Tiene que estar aquí, en la política del sitio, aunque la página lleve la suya: cuando hay dos
+   * Tienen que estar aquí, en la política del sitio, aunque la 404 lleve la suya: cuando hay dos
    * políticas el navegador aplica las dos, y con `style-src 'self'` a secas la 404 salía publicada
    * sin una sola regla aplicada (ver scripts/build/pagina-404.ts).
    */
-  `style-src 'self' ${HUELLA_ESTILO_404}`,
+  `style-src 'self' ${HUELLA_ESTILO_404} ${HUELLA_CARGADOR} ${HUELLA_SIN_JS}`,
   "img-src 'self' data: blob:",
   "font-src 'self'",
   /*

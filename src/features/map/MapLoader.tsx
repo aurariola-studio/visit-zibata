@@ -30,7 +30,9 @@ import styles from './MapLoader.module.css'
  * ## Por qué espera 400 ms para aparecer
  *
  * Un indicador que entra y sale en menos de un segundo se lee como un parpadeo y hace pensar que algo
- * falló (Nielsen). Si el mapa llega antes, no se enseña nada.
+ * falló (Nielsen). Si el mapa llega antes, no se enseña nada. La variante `pantalla` es la excepción:
+ * ahí no hay mapa detrás y el cargador viene servido en el HTML, así que tiene que aparecer en el
+ * mismo fotograma para que el relevo no se note.
  */
 
 /** Las frases describen lo que está pasando de verdad, en ambos lados de la espera. */
@@ -49,20 +51,21 @@ export function MapLoader({
   /** `mapa` cubre el mapa con su velo; `pantalla` ocupa la página entera antes de que haya mapa. */
   variant?: 'mapa' | 'pantalla'
 }) {
-  const [aparece, setAparece] = useState(false)
+  const [aparece, setAparece] = useState(variant === 'pantalla')
   const [dentro, setDentro] = useState(true)
   const [nivel, setNivel] = useState(0.04)
   const [fase, setFase] = useState(0)
   const inicio = useRef(0)
 
-  // Espera antes de enseñarse: si el mapa llega antes, esto no llega a verse.
+  // Espera antes de enseñarse, salvo en la pantalla completa, que ya viene pintada en el HTML.
   useEffect(() => {
+    if (variant === 'pantalla') return
     const id = window.setTimeout(() => {
       inicio.current = performance.now()
       setAparece(true)
     }, ESPERA_ANTES_DE_APARECER)
     return () => window.clearTimeout(id)
-  }, [])
+  }, [variant])
 
   // Salida: se deja el fundido y después se retira del árbol.
   useEffect(() => {
@@ -78,6 +81,8 @@ export function MapLoader({
       setNivel(1)
       return
     }
+    // En la variante de pantalla no pasó por el temporizador: el reloj del nivel empieza aquí.
+    if (!inicio.current) inicio.current = performance.now()
     // Sin movimiento, el agua se queda a media altura: no hay animación que enseñar.
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
       setNivel(0.6)

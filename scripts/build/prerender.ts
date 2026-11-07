@@ -31,6 +31,7 @@ import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
 import type { Category, Place, Plaza } from '../../src/types/domain.ts'
+import { CSS_CARGADOR, CSS_SIN_JS, htmlCargador } from './cargador.ts'
 import { categoriasDe, conCantidad, lugaresPorCategoria } from './categorias.ts'
 import { contenidoDeLista, contenidoDeLugar } from './contenido.ts'
 import { descripcionDeFicha, lugarDe, repetidos } from './metadatos.ts'
@@ -682,12 +683,20 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
           if (page.jsonLd) {
             html = html.replace('</head>', literal(`  ${bloque(page.jsonLd)}\n  </head>`))
           }
-          if (page.contenido) {
-            html = html.replace(
-              '<div id="root"></div>',
-              literal(`<div id="root">${page.contenido}</div>`),
-            )
-          }
+          /*
+           * El cargador va con su CSS en línea y antes del artículo. Sin JavaScript, se esconde y
+           * queda el artículo; con JavaScript, lo cubre hasta que React monta y vacía `#root`.
+           */
+          html = html.replace(
+            '</head>',
+            literal(
+              `  <style>${CSS_CARGADOR}</style>\n  <noscript><style>${CSS_SIN_JS}</style></noscript>\n  </head>`,
+            ),
+          )
+          html = html.replace(
+            '<div id="root"></div>',
+            literal(`<div id="root">${htmlCargador(locale)}${page.contenido ?? ''}</div>`),
+          )
           comprobarUnicas(html, page.href)
 
           // Archivos planos (`es/lugar/tomassa.html`) y no carpetas con índice: así `/es/lugar/tomassa`

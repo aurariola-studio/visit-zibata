@@ -28,6 +28,11 @@ describe('MapLoader', () => {
     expect(estado.textContent).toContain('Cargando Zibatá')
   })
 
+  it('la variante de pantalla aparece en el mismo fotograma', () => {
+    render(<MapLoader visible variant="pantalla" />)
+    expect(screen.getByRole('status').textContent).toContain('Cargando Zibatá')
+  })
+
   it('la frase que cambia no se anuncia', () => {
     const { container } = render(<MapLoader visible />)
     act(() => {
