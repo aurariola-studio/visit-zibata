@@ -1,5 +1,5 @@
 import { AxeBuilder } from '@axe-core/playwright'
-import { expect, type Page, test } from '@playwright/test'
+import { expect, type Locator, type Page, test } from '@playwright/test'
 
 /**
  * El panel privado, con el Worker simulado.
@@ -74,6 +74,12 @@ const contenido = {
           general: true,
           synonyms: [],
         },
+        {
+          id: 'servicios-taller',
+          label: { es: 'Taller de prueba', en: 'Test workshop' },
+          icon: 'wrench',
+          synonyms: [],
+        },
       ],
     },
   ],
@@ -94,7 +100,10 @@ const contenido = {
       googleMapsUri: null,
       phone: null,
       links: {},
-      photos: [],
+      photos: [
+        { src: '/prueba/fachada.webp', alt: 'Fachada' },
+        { src: '/prueba/interior.webp', alt: 'Interior' },
+      ],
       active: true,
     },
     {
@@ -147,6 +156,11 @@ async function irA(page: Page, vista: string, titulo: string): Promise<void> {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(titulo)
 }
 
+/** Un nombre de variable colado en un texto, o una codificación rota, no lo atrapa ningún tipo. */
+async function sinTextoRoto(dialogo: Locator): Promise<void> {
+  await expect(dialogo).not.toContainText(/vista\.|Ã|�/)
+}
+
 test.describe('Panel', () => {
   test('el resumen pinta sus cifras y no se desplaza de lado', async ({ page }) => {
     await abrirPanel(page)
@@ -188,6 +202,7 @@ test.describe('Panel', () => {
     const dialogo = page.locator('#editor')
     await expect(dialogo).toBeVisible()
     await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
 
     // Un nombre vacío no se manda: el aviso va en el campo y el campo queda marcado.
     const nombre = dialogo.locator('input[name="nombre"]')
@@ -204,6 +219,91 @@ test.describe('Panel', () => {
     await dialogo.getByRole('button', { name: 'Cerrar' }).click()
     await expect(dialogo).toBeHidden()
     expect(pidioConfirmar).toBe(true)
+  })
+
+  test('los giros del negocio se añaden, se reordenan y se quitan', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const elegidos = dialogo.locator('.giro-elegido')
+    await expect(elegidos).toHaveCount(1)
+
+    await dialogo.locator('[data-anadir-giro-id="servicios-taller"]').click()
+    await expect(elegidos).toHaveCount(2)
+    await expect(elegidos.nth(1)).toContainText('Taller de prueba')
+
+    await dialogo.getByRole('button', { name: 'Subir Taller de prueba' }).click()
+    await expect(elegidos.first()).toContainText('Taller de prueba')
+
+    await dialogo.locator('[data-giro-quitar="servicios-taller"]').click()
+    await expect(elegidos).toHaveCount(1)
+    await expect(elegidos.first()).toContainText('Servicios')
+  })
+
+  test('las fotos de un negocio cambian de portada y se quitan', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const alts = dialogo.locator('[data-alt-foto]')
+    await expect(alts).toHaveCount(2)
+    await expect(alts.first()).toHaveValue('Fachada')
+
+    await dialogo.locator('[data-foto-portada="1"]').click()
+    await expect(alts.first()).toHaveValue('Interior')
+
+    await dialogo.locator('[data-foto-quitar="0"]').click()
+    await expect(alts).toHaveCount(1)
+    await expect(alts.first()).toHaveValue('Fachada')
+  })
+
+  test('el horario del lunes se copia a los demás días', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const lunes = dialogo.locator('.horario-fila[data-dia="mon"]')
+    await lunes.locator('select[data-estado]').selectOption('abierto')
+    await lunes.locator('[data-rangos]').fill('10:00-20:00')
+
+    await dialogo.getByRole('button', { name: 'Copiar el lunes a todos' }).click()
+    const martes = dialogo.locator('.horario-fila[data-dia="tue"]')
+    await expect(martes.locator('select[data-estado]')).toHaveValue('abierto')
+    await expect(martes.locator('[data-rangos]')).toHaveValue('10:00-20:00')
+    await expect(martes.locator('[data-rangos]')).toBeEnabled()
+  })
+
+  test('el formulario de una categoría previsualiza el tono, añade giros y sigue el icono', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo.locator('form[data-editor="categoria"]')).toBeVisible()
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+
+    const tono = dialogo.locator('[data-tono-preview]')
+    const fondo = () => tono.evaluate((el) => (el as HTMLElement).style.background)
+    await dialogo.locator('[data-campo="hue"]').fill('120')
+    const verde = await fondo()
+    await dialogo.locator('[data-campo="hue"]').fill('300')
+    expect(await fondo()).not.toBe(verde)
+
+    const filas = dialogo.locator('[data-giro]')
+    const antes = await filas.count()
+    await dialogo.getByRole('button', { name: 'Añadir giro' }).click()
+    await expect(filas).toHaveCount(antes + 1)
+
+    // El giro general comparte el icono con su categoría: al cambiar uno, el otro lo sigue.
+    const icono = dialogo.locator('select[data-campo="icon"]')
+    await icono.selectOption({ index: 2 })
+    const elegido = await icono.inputValue()
+    await expect(
+      dialogo.locator('[data-giro][data-general="true"] [data-campo="giroIcon"]'),
+    ).toHaveValue(elegido)
   })
 
   test('sin permiso el panel lo dice con palabras', async ({ page }) => {
