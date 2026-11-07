@@ -20,6 +20,7 @@ import { z } from 'zod'
 import categoriasJson from '../data/commercial/categories.json' with { type: 'json' }
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
 import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
+import redirectsJson from '../data/commercial/redirects.json' with { type: 'json' }
 import extent from '../data/geographic/extent.json' with { type: 'json' }
 import {
   type CommercialDataset,
@@ -331,7 +332,8 @@ export interface Cargado {
   ref: string
   seco: boolean
   pr: Publicacion | null
-  crudo: { categories: Crudo; plazas: Crudo; places: Crudo }
+  /** `redirects` falta en una rama que se abrió antes de que existiera el archivo. */
+  crudo: { categories: Crudo; plazas: Crudo; places: Crudo; redirects?: Crudo }
   dataset: CommercialDataset
 }
 
@@ -346,6 +348,12 @@ const ENLACES_VACIOS = {
   didiFood: null,
 }
 
+/** Los slugs de locales ya borrados: una ficha nueva no puede volver a usarlos. */
+export const slugsRedirigidos = (crudo: Cargado['crudo']): string[] =>
+  ((crudo.redirects?.redirects as { slug?: unknown }[] | undefined) ?? []).flatMap((fila) =>
+    typeof fila.slug === 'string' ? [fila.slug] : [],
+  )
+
 const [oeste, sur, este, norte] = extent.areaBbox as [number, number, number, number]
 export const LIMITES = { west: oeste, south: sur, east: este, north: norte }
 
@@ -353,6 +361,7 @@ const local = (): Cargado['crudo'] => ({
   categories: categoriasJson as unknown as Crudo,
   plazas: plazasJson as unknown as Crudo,
   places: lugaresJson as unknown as Crudo,
+  redirects: redirectsJson as unknown as Crudo,
 })
 
 function datasetDe(crudo: Cargado['crudo']): CommercialDataset {
@@ -378,10 +387,11 @@ export async function cargar(
 
   const pr = await prAbierta(entorno)
   const ref = pr ? ramaDe(entorno) : 'main'
-  const [categorias, plazas, lugares] = await Promise.all([
+  const [categorias, plazas, lugares, redirecciones] = await Promise.all([
     leerArchivo(entorno, 'data/commercial/categories.json', ref),
     leerArchivo(entorno, 'data/commercial/plazas.json', ref),
     leerArchivo(entorno, 'data/commercial/places.json', ref),
+    leerArchivo(entorno, 'data/commercial/redirects.json', ref),
   ])
   if (!categorias || !plazas || !lugares) {
     throw new Error(`faltan los archivos de contenido en ${ref}`)
@@ -390,6 +400,7 @@ export async function cargar(
     categories: JSON.parse(categorias) as Crudo,
     plazas: JSON.parse(plazas) as Crudo,
     places: JSON.parse(lugares) as Crudo,
+    ...(redirecciones ? { redirects: JSON.parse(redirecciones) as Crudo } : {}),
   }
   return { ref, seco: false, pr, crudo, dataset: datasetDe(crudo) }
 }
@@ -606,7 +617,10 @@ export function prepararNegocio(
   }
 
   // También los slugs: un id nuevo no debe chocar con la URL de un local existente.
-  const ids = new Set(dataset.places.flatMap((place) => [place.id, place.slug]))
+  const ids = new Set([
+    ...dataset.places.flatMap((place) => [place.id, place.slug]),
+    ...slugsRedirigidos(crudo),
+  ])
   const construido = construir(entrada.data, existente, ids, hoy)
   if (!construido.place) {
     return { ok: false, problemas: construido.problemas ?? ['No se pudo armar el negocio'] }

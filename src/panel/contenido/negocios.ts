@@ -237,12 +237,15 @@ export function pintarFormulario(negocio: Negocio | null): void {
         <div class="horario" data-grupo="horario">${DIAS.map(([dia, nombre]) => filaDeHorario(dia, nombre, negocio)).join('')}</div>
       </section>
 
+      ${negocio ? '<div data-borrado></div>' : ''}
+
       <footer class="editor-pie">
         <p class="aviso-contenido" data-guardado role="status" hidden></p>
         <div class="problemas" data-problemas role="alert"></div>
         <div class="acciones">
           <button type="submit" class="${controls.base} ${controls.boton} ${controls.principal}">${negocio ? 'Guardar cambios' : 'Crear negocio'}</button>
           <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar>Cancelar</button>
+          ${negocio ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-borrar-negocio>Borrar negocio</button>` : ''}
         </div>
       </footer>
     </form>`,
@@ -644,7 +647,7 @@ function copiarLunes(): void {
 }
 
 /** Clics dentro del diálogo que son del negocio: giros y horario. Devuelve si lo atendió. */
-export function alPulsarNegocio(objetivo: HTMLElement): boolean {
+export function alPulsarNegocio(objetivo: HTMLElement, recargar: () => Promise<void>): boolean {
   const anadir = objetivo.closest<HTMLElement>('[data-anadir-giro-id]')
   if (anadir?.dataset.anadirGiroId) {
     anadirGiro(anadir.dataset.anadirGiroId)
@@ -667,6 +670,21 @@ export function alPulsarNegocio(objetivo: HTMLElement): boolean {
   }
   if (objetivo.closest('[data-copiar-horario]')) {
     copiarLunes()
+    return true
+  }
+  const formulario = objetivo.closest<HTMLFormElement>('form[data-editor="negocio"]')
+  if (formulario && objetivo.closest('[data-borrar-negocio]')) {
+    void pedirImpactoBorrado(formulario)
+    return true
+  }
+  if (formulario && objetivo.closest('[data-confirmar-borrado]')) {
+    void confirmarBorrado(formulario, recargar)
+    return true
+  }
+  if (formulario && objetivo.closest('[data-cancelar-borrado]')) {
+    const zona = formulario.querySelector<HTMLElement>('[data-borrado]')
+    if (zona) zona.innerHTML = ''
+    formulario.querySelector<HTMLElement>('[data-borrar-negocio]')?.focus()
     return true
   }
   return false
@@ -715,4 +733,118 @@ export function alCambiarNegocio(objetivo: HTMLElement): boolean {
     return true
   }
   return false
+}
+
+/* ------------------------------------------------------------------ borrar */
+
+interface Impacto {
+  negocio: { id: string; nombre: string }
+  plaza: string
+  redirecciones: { desde: string; hacia: string }[]
+  categoriasSinPagina: string[]
+  fotos: number
+  avisos: string[]
+}
+
+interface RespuestaBorrado {
+  ok?: boolean
+  confirmado?: boolean
+  seco?: boolean
+  pr?: { url: string; numero: number; creada: boolean } | null
+  mensaje?: string
+  problemas?: string[]
+  impacto?: Impacto
+}
+
+/** Habla con el Worker. Los errores salen en el formulario y devuelven `null`. */
+async function llamarBorrado(
+  formulario: HTMLFormElement,
+  cuerpo: { id: string; confirmar?: boolean },
+): Promise<RespuestaBorrado | null> {
+  try {
+    const respuesta = await fetch('/api/panel/contenido/negocio/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(cuerpo),
+    })
+    const resultado = (await respuesta.json().catch(() => null)) as RespuestaBorrado | null
+    if (respuesta.status === 403) {
+      mostrarProblemas(formulario, ['Sin permiso. Revisa la regla de Access.'])
+      return null
+    }
+    if (respuesta.status === 503) {
+      mostrarProblemas(formulario, ['Falta GITHUB_TOKEN en el Worker.'])
+      return null
+    }
+    if (!respuesta.ok || !resultado?.ok) {
+      mostrarProblemas(
+        formulario,
+        resultado?.problemas?.length ? resultado.problemas : ['No se pudo borrar.'],
+      )
+      return null
+    }
+    return resultado
+  } catch {
+    mostrarProblemas(formulario, ['No se pudo hablar con el servidor.'])
+    return null
+  }
+}
+
+/** Primer paso: enseña qué cambiaría, sin guardar nada. */
+async function pedirImpactoBorrado(formulario: HTMLFormElement): Promise<void> {
+  const id = formulario.dataset.id
+  const zona = formulario.querySelector<HTMLElement>('[data-borrado]')
+  if (!id || !zona || vista.guardando) return
+  mostrarProblemas(formulario, [])
+  const resultado = await llamarBorrado(formulario, { id })
+  if (!resultado?.impacto) return
+  const { impacto } = resultado
+
+  const direcciones = impacto.redirecciones
+    .map(
+      (fila) =>
+        `<li><code>${texto(fila.desde)}</code> pasa a <code>${texto(fila.hacia)}</code> (redirección permanente)</li>`,
+    )
+    .join('')
+  const categorias = impacto.categoriasSinPagina.length
+    ? `<p class="aviso-contenido">Se queda sin página: ${impacto.categoriasSinPagina.map(texto).join(', ')}. No tiene ningún otro local visible.</p>`
+    : ''
+  zona.innerHTML = `<section class="editor-seccion impacto-borrado" aria-labelledby="titulo-borrado" tabindex="-1">
+      <h3 id="titulo-borrado">Si borras ${texto(impacto.negocio.nombre)}</h3>
+      <ul class="impacto-lista">${direcciones}</ul>
+      <p class="impacto-contenido">Su ficha deja de existir y quien llegue por la dirección antigua verá ${texto(impacto.plaza)}.</p>
+      ${categorias}
+      <ul class="impacto-lista">${impacto.avisos.map((aviso) => `<li>${texto(aviso)}</li>`).join('')}</ul>
+      <div class="acciones">
+        <button type="button" class="${controls.base} ${controls.boton} ${controls.principal}" data-confirmar-borrado>Borrar este negocio</button>
+        <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar-borrado>Mejor no</button>
+      </div>
+    </section>`
+  zona.querySelector<HTMLElement>('section')?.focus()
+}
+
+/** Segundo paso: el borrado va a la PR del panel. */
+async function confirmarBorrado(
+  formulario: HTMLFormElement,
+  recargar: () => Promise<void>,
+): Promise<void> {
+  const id = formulario.dataset.id
+  if (!id || vista.guardando) return
+  mostrarProblemas(formulario, [])
+  const botones = formulario.querySelectorAll<HTMLButtonElement>('[data-borrado] button')
+  for (const boton of botones) boton.disabled = true
+  vista.guardando = true
+  try {
+    const resultado = await llamarBorrado(formulario, { id, confirmar: true })
+    if (!resultado) return
+    vista.aviso = resultado.pr
+      ? `${resultado.mensaje ?? 'Borrado.'} ${resultado.pr.creada ? 'PR abierta' : 'Añadido a la PR'} #${resultado.pr.numero}.`
+      : (resultado.mensaje ?? 'Validado en desarrollo. No se commitea.')
+    if (vista.formularioActual) vista.formularioActual.sucio = false
+    cerrarEditor(true)
+    await recargar()
+  } finally {
+    vista.guardando = false
+    for (const boton of botones) boton.disabled = false
+  }
 }

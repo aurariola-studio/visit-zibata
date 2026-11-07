@@ -261,3 +261,17 @@ export const CategoriesFileSchema = z.strictObject({
 })
 export const PlazasFileSchema = z.strictObject({ ...datasetMeta, plazas: z.array(PlazaSchema) })
 export const PlacesFileSchema = z.strictObject({ ...datasetMeta, places: z.array(PlaceSchema) })
+
+/**
+ * Un local que se borró desde el panel. Su dirección antigua deja de ser un 404 y pasa, con un 301, a
+ * la página de la plaza donde estaba (ver `worker/redireccion.ts`).
+ */
+export const RedirectSchema = z.strictObject({
+  kind: z.literal('place'),
+  slug,
+  plazaId: slug,
+})
+export const RedirectsFileSchema = z.strictObject({
+  ...datasetMeta,
+  redirects: z.array(RedirectSchema),
+})

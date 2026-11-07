@@ -7,7 +7,7 @@ import type { Category, LatLng, Place, Plaza } from '../types/domain.ts'
 import { PUBLISHABLE_STATUS } from './rules.ts'
 
 export type IssueLevel = 'error' | 'warning'
-export type DatasetName = 'categories' | 'plazas' | 'places'
+export type DatasetName = 'categories' | 'plazas' | 'places' | 'redirects'
 
 export interface DataIssue {
   level: IssueLevel
@@ -275,5 +275,43 @@ export function validateTranslations(dataset: CommercialDataset): DataIssue[] {
     }
   }
 
+  return issues
+}
+
+/**
+ * Las redirecciones de locales borrados. Un slug que vuelve a existir competiría con su propia
+ * redirección (el 301 ganaría y la ficha nunca se vería), y una plaza que ya no existe deja el
+ * destino en un 404.
+ */
+export function validateRedirects(
+  redirects: readonly { slug: string; plazaId: string }[],
+  dataset: CommercialDataset,
+): DataIssue[] {
+  const issues: DataIssue[] = []
+  const vivos = new Set(dataset.places.flatMap((place) => [place.id, place.slug]))
+  const plazas = new Set(dataset.plazas.map((plaza) => plaza.id))
+  const vistos = new Set<string>()
+  for (const { slug, plazaId } of redirects) {
+    if (vistos.has(slug)) {
+      issues.push({ level: 'error', dataset: 'redirects', id: slug, message: 'Slug repetido' })
+    }
+    vistos.add(slug)
+    if (vivos.has(slug)) {
+      issues.push({
+        level: 'error',
+        dataset: 'redirects',
+        id: slug,
+        message: 'Hay un local con ese slug: su dirección no puede ser también una redirección',
+      })
+    }
+    if (!plazas.has(plazaId)) {
+      issues.push({
+        level: 'error',
+        dataset: 'redirects',
+        id: slug,
+        message: `La plaza "${plazaId}" ya no existe; la redirección apuntaría a un 404`,
+      })
+    }
+  }
   return issues
 }

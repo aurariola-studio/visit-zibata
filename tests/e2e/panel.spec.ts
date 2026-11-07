@@ -306,6 +306,83 @@ test.describe('Panel', () => {
     ).toHaveValue(elegido)
   })
 
+  test('borrar un negocio enseña el impacto primero y pide confirmación', async ({ page }) => {
+    const cuerpos: { id: string; confirmar?: boolean }[] = []
+    await page.route(/\/api\/panel\/contenido\/negocio\/borrar$/, async (ruta) => {
+      const cuerpo = ruta.request().postDataJSON() as { id: string; confirmar?: boolean }
+      cuerpos.push(cuerpo)
+      const impacto = {
+        negocio: { id: 'cafe-de-prueba', nombre: 'Café de Prueba' },
+        plaza: 'Plaza Uno',
+        redirecciones: [
+          { desde: '/es/lugar/cafe-de-prueba', hacia: '/es/zona/plaza-uno' },
+          { desde: '/en/place/cafe-de-prueba', hacia: '/en/area/plaza-uno' },
+        ],
+        categoriasSinPagina: ['Servicios de prueba'],
+        fotos: 2,
+        avisos: ['Sale de las listas, del buscador y del sitemap.'],
+      }
+      await ruta.fulfill({
+        json: cuerpo.confirmar
+          ? {
+              ok: true,
+              confirmado: true,
+              seco: false,
+              pr: { url: 'https://example.test/pr/9', numero: 9, creada: true },
+              mensaje: 'Borrado enviado a la PR.',
+              impacto,
+            }
+          : {
+              ok: true,
+              confirmado: false,
+              seco: false,
+              pr: null,
+              mensaje: 'Esto es lo que cambiaría.',
+              impacto,
+            },
+      })
+    })
+
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+
+    // Primer paso: solo el impacto. No se ha mandado ninguna confirmación.
+    await dialogo.getByRole('button', { name: 'Borrar negocio' }).click()
+    const impacto = dialogo.locator('.impacto-borrado')
+    await expect(impacto).toContainText('/es/lugar/cafe-de-prueba')
+    await expect(impacto).toContainText('/es/zona/plaza-uno')
+    await expect(impacto).toContainText('Servicios de prueba')
+    expect(cuerpos).toEqual([{ id: 'cafe-de-prueba' }])
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // "Mejor no" lo deja todo como estaba.
+    await impacto.getByRole('button', { name: 'Mejor no' }).click()
+    await expect(impacto).toBeHidden()
+    expect(cuerpos).toHaveLength(1)
+
+    // Segundo paso: confirmar. El diálogo se cierra y la lista avisa de la PR.
+    await dialogo.getByRole('button', { name: 'Borrar negocio' }).click()
+    await dialogo.getByRole('button', { name: 'Borrar este negocio' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
+    expect(cuerpos.at(-1)).toEqual({ id: 'cafe-de-prueba', confirmar: true })
+  })
+
+  test('un negocio nuevo no ofrece borrar', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Nuevo negocio' }).click()
+    await expect(page.locator('#editor')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Borrar negocio' })).toHaveCount(0)
+  })
+
   test('sin permiso el panel lo dice con palabras', async ({ page }) => {
     await abrirPanel(page, { contenidoStatus: 403 })
     await page.locator('[data-vista="negocios"]').click()

@@ -6,6 +6,7 @@ import {
   CategoriesFileSchema,
   PlacesFileSchema,
   PlazasFileSchema,
+  RedirectsFileSchema,
 } from '../../../src/data/schemas.ts'
 
 export const ROOT = fileURLToPath(new URL('../../../', import.meta.url))
@@ -14,6 +15,7 @@ export const dataPaths = {
   categories: `${ROOT}data/commercial/categories.json`,
   plazas: `${ROOT}data/commercial/plazas.json`,
   places: `${ROOT}data/commercial/places.json`,
+  redirects: `${ROOT}data/commercial/redirects.json`,
   schemasDir: `${ROOT}data/commercial/schemas`,
   extent: `${ROOT}data/geographic/extent.json`,
   public: `${ROOT}public`,
@@ -22,6 +24,7 @@ export const dataPaths = {
 export type CategoriesFile = z.infer<typeof CategoriesFileSchema>
 export type PlazasFile = z.infer<typeof PlazasFileSchema>
 export type PlacesFile = z.infer<typeof PlacesFileSchema>
+export type RedirectsFile = z.infer<typeof RedirectsFileSchema>
 
 export class DatasetError extends Error {}
 
@@ -49,6 +52,12 @@ export function loadPlazasFile(): PlazasFile {
 
 export function loadPlacesFile(): PlacesFile | null {
   return existsSync(dataPaths.places) ? parseFile(dataPaths.places, PlacesFileSchema) : null
+}
+
+export function loadRedirectsFile(): RedirectsFile | null {
+  return existsSync(dataPaths.redirects)
+    ? parseFile(dataPaths.redirects, RedirectsFileSchema)
+    : null
 }
 
 /** Área válida para coordenadas: la extensión del mapa generada por el pipeline GIS. */

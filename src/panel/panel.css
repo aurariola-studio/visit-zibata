@@ -858,6 +858,24 @@ td.tenue {
   background: var(--color-surface-solid);
 }
 
+.impacto-lista {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-5);
+  color: var(--ink-700);
+  font-size: var(--text-sm);
+}
+
+.impacto-lista li + li {
+  margin-top: var(--space-1);
+}
+
+.impacto-borrado {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
 .problemas:empty {
   display: none;
 }
