@@ -1,4 +1,5 @@
 import controls from '../../styles/controls.module.css'
+import { contornoListo, seccionContorno } from './contorno.ts'
 import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import type { PlazaResumen } from './tipos.ts'
@@ -91,7 +92,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
             <input class="${controls.campo}" type="url" name="googleMapsUri" value="${texto(plaza.googleMapsUri ?? '')}" placeholder="https://maps.app.goo.gl/…" />
           </label>
         </div>
-        <p class="ayuda">El contorno del mapa no se edita aquí. La dirección web de la zona tiene su propia sección, más abajo.</p>
+        <p class="ayuda">El contorno del mapa tiene su propia sección, más abajo. Lo mismo la dirección web de la zona.</p>
       </section>
 
       <section class="editor-seccion">
@@ -117,6 +118,8 @@ export function pintarPlaza(plaza: PlazaResumen): void {
         </div>
         <p class="ayuda">Es el punto donde se dibuja el nombre de la plaza en el mapa.</p>
       </section>
+
+      ${seccionContorno(plaza)}
 
       <section class="editor-seccion">
         <h3>Estado en la guía</h3>
@@ -147,6 +150,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
       </footer>
     </form>`,
   )
+  contornoListo()
 }
 
 /* ------------------------------------------------------------------ leer y guardar */

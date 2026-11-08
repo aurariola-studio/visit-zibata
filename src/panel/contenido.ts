@@ -33,6 +33,12 @@ import {
   pintarZonaCategorias,
 } from './contenido/categorias.ts'
 import {
+  alEscribirContorno,
+  alPulsarContorno,
+  alTeclearContorno,
+  olvidarContorno,
+} from './contenido/contorno.ts'
+import {
   alCambiarDireccion,
   alEscribirDireccion,
   alPulsarDireccion,
@@ -85,6 +91,7 @@ export function montarContenido(
   editor.addEventListener('click', alPulsarEditor)
   editor.addEventListener('input', alEscribirEditor)
   editor.addEventListener('keydown', alTeclearDireccion)
+  editor.addEventListener('keydown', alTeclearContorno)
   editor.addEventListener('change', alCambiarEditor)
   // Escape con cambios sin guardar: primero se pregunta. Se frena la tecla y no el evento `cancel`,
   // porque el navegador deja de permitir cancelarlo si no hubo un clic o una tecla de activación entre
@@ -103,6 +110,7 @@ export function montarContenido(
   // Al cerrar, el foco vuelve a la vista y el formulario deja de existir.
   editor.addEventListener('close', () => {
     vista.formularioActual = null
+    olvidarContorno()
     contenedor.focus({ preventScroll: true })
   })
 
@@ -285,6 +293,7 @@ function alPulsarEditor(evento: Event): void {
   if (alPulsarDireccion(objetivo, cargar)) return
   if (alPulsarBorrarGiro(objetivo, cargar)) return
   if (!vista.formularioActual) return
+  if (alPulsarContorno(objetivo, cargar)) return
   if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return
   alPulsarFoto(objetivo)
@@ -295,6 +304,7 @@ function alEscribirEditor(evento: Event): void {
   if (!objetivo) return
 
   if (alEscribirDireccion(objetivo)) return
+  if (alEscribirContorno(objetivo)) return
   if (alEscribirNegocio(objetivo)) return
   if (alEscribirCategoria(objetivo)) return
   if (alEscribirFoto(objetivo)) return
