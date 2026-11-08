@@ -48,7 +48,11 @@ export function pintarZonaCategorias(): void {
     .sort((a, b) => a.order - b.order || a.label.es.localeCompare(b.label.es, 'es'))
 
   if (filas.length === 0) {
-    zona.innerHTML = '<p class="vacio">Ninguna categoría coincide.</p>'
+    zona.innerHTML = `<div class="vacio"><p>Ninguna categoría coincide.</p>${
+      buscado
+        ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-quitar-filtros>Quitar la búsqueda</button>`
+        : ''
+    }</div>`
     return
   }
 
