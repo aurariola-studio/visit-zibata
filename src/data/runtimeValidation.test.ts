@@ -273,4 +273,15 @@ describe('lo que ya no se muestra sigue enseñando gustos', () => {
     expect(valid).toEqual([{ id: 'a', giros: ['pizza'], plazaId: 'p' }])
     expect(issues).toEqual([])
   })
+
+  it('un cambio de dirección de un local vivo no lo convierte en borrado', () => {
+    // Si contara, el local vivo se trataría como retirado y sus gustos sumarían dos veces.
+    const { valid, issues } = validateRetired([
+      { kind: 'place-slug', id: 'vivo', slug: 'nombre-antiguo' },
+      { kind: 'plaza-slug', id: 'p', slug: 'zona-antigua' },
+      { kind: 'place', id: 'a', slug: 'a', giros: ['pizza'], plazaId: 'p' },
+    ])
+    expect(valid).toEqual([{ id: 'a', giros: ['pizza'], plazaId: 'p' }])
+    expect(issues).toEqual([])
+  })
 })

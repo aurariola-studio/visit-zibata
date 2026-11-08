@@ -1,4 +1,5 @@
 import controls from '../../styles/controls.module.css'
+import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import type { PlazaResumen } from './tipos.ts'
 import { numero, texto } from './tipos.ts'
@@ -89,7 +90,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
             <input class="${controls.campo}" type="url" name="googleMapsUri" value="${texto(plaza.googleMapsUri ?? '')}" placeholder="https://maps.app.goo.gl/…" />
           </label>
         </div>
-        <p class="ayuda">La dirección web de la zona (<code>${texto(plaza.slug)}</code>) y el contorno del mapa no se editan aquí.</p>
+        <p class="ayuda">El contorno del mapa no se edita aquí. La dirección web de la zona tiene su propia sección, más abajo.</p>
       </section>
 
       <section class="editor-seccion">
@@ -133,6 +134,9 @@ export function pintarPlaza(plaza: PlazaResumen): void {
       </section>
 
       <div data-impacto-plaza></div>
+
+      ${seccionDireccion('plaza', plaza.slug)}
+
       <div data-borrado-plaza></div>
 
       <footer class="editor-pie">

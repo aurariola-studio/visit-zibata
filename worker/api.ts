@@ -14,6 +14,7 @@ import { fechaLocal } from './analitica.ts'
 import { borrarNegocio } from './borrado.ts'
 import { borrarCategoria } from './borrado-categoria.ts'
 import { borrarPlaza } from './borrado-plaza.ts'
+import { cambiarSlug } from './cambio-slug.ts'
 import { LUGARES } from './catalogo.ts'
 import { guardarCategorias } from './categorias.ts'
 import { contenido, guardarFoto, guardarNegocio, TOPE_FOTO } from './contenido.ts'
@@ -103,8 +104,10 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/visitas': 1_300_000,
   '/api/panel/contenido/negocio': 128 * 1024,
   '/api/panel/contenido/negocio/borrar': 4 * 1024,
+  '/api/panel/contenido/negocio/slug': 4 * 1024,
   '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
+  '/api/panel/contenido/plaza/slug': 4 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
   '/api/panel/contenido/categoria/borrar': 4 * 1024,
   '/api/panel/contenido/foto': Math.ceil(TOPE_FOTO * 1.5),
@@ -372,6 +375,23 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)
+    }
+  }
+
+  // Cambiar la dirección de un negocio o de una plaza, en dos pasos; ver worker/cambio-slug.ts.
+  for (const [rutaCambio, tipo] of [
+    ['/api/panel/contenido/negocio/slug', 'place'],
+    ['/api/panel/contenido/plaza/slug', 'plaza'],
+  ] as const) {
+    if (ruta === rutaCambio && peticion.method === 'POST') {
+      if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+      if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+      try {
+        const resultado = await cambiarSlug(entorno, tipo, cuerpoDe(texto))
+        return json(resultado, resultado.ok ? 200 : 400)
+      } catch (error) {
+        return falloDeContenido(error)
+      }
     }
   }
 

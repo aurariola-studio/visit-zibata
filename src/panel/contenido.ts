@@ -31,6 +31,12 @@ import {
   pintarCategorias,
   pintarZonaCategorias,
 } from './contenido/categorias.ts'
+import {
+  alCambiarDireccion,
+  alEscribirDireccion,
+  alPulsarDireccion,
+  alTeclearDireccion,
+} from './contenido/direccion.ts'
 import { cerrarEditor, limpiarErrorDe, puedeCerrar } from './contenido/editor.ts'
 import { alCambiarFoto, alEscribirFoto, alPulsarFoto } from './contenido/fotos.ts'
 import {
@@ -76,6 +82,7 @@ export function montarContenido(
   editor.addEventListener('submit', alEnviar)
   editor.addEventListener('click', alPulsarEditor)
   editor.addEventListener('input', alEscribirEditor)
+  editor.addEventListener('keydown', alTeclearDireccion)
   editor.addEventListener('change', alCambiarEditor)
   editor.addEventListener('cancel', (evento) => {
     if (!puedeCerrar()) evento.preventDefault()
@@ -235,6 +242,7 @@ function alPulsarEditor(evento: Event): void {
   }
   if (alPulsarCategoria(objetivo, cargar)) return
   if (!vista.formularioActual) return
+  if (alPulsarDireccion(objetivo, cargar)) return
   if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return
   alPulsarFoto(objetivo)
@@ -244,6 +252,7 @@ function alEscribirEditor(evento: Event): void {
   const objetivo = evento.target as HTMLElement | null
   if (!objetivo) return
 
+  if (alEscribirDireccion(objetivo)) return
   if (alEscribirNegocio(objetivo)) return
   if (alEscribirCategoria(objetivo)) return
   if (alEscribirFoto(objetivo)) return
@@ -258,6 +267,7 @@ function alCambiarEditor(evento: Event): void {
   const objetivo = evento.target as HTMLElement | null
   if (!objetivo) return
 
+  if (alCambiarDireccion(objetivo)) return
   if (alCambiarFoto(objetivo)) return
   if (alCambiarCategoria(objetivo)) return
   if (alCambiarPlaza(objetivo)) return

@@ -306,6 +306,72 @@ describe('borrar una categoría', () => {
   })
 })
 
+describe.each([
+  ['negocio', 'places'],
+  ['plaza', 'plazas'],
+] as const)('cambiar la dirección de un %s', (tipo, clave) => {
+  const ruta = `/api/panel/contenido/${tipo}/slug`
+  const cambiar = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir(ruta, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+
+  /** El primero de la guía: la prueba no nombra ninguno. */
+  const primero = async (): Promise<{ id: string; slug: string }> => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as Record<
+      string,
+      { id: string; slug: string }[]
+    >
+    const fila = datos[clave]?.[0]
+    if (!fila) throw new Error('sin datos')
+    return fila
+  }
+
+  it('sin confirmar responde con el impacto y no guarda', async () => {
+    const { id } = await primero()
+    const respuesta = await cambiar({ id, slug: 'direccion-nueva-de-prueba' })
+    expect(respuesta?.status).toBe(200)
+    const datos = (await respuesta?.json()) as {
+      ok: boolean
+      confirmado: boolean
+      impacto: { despues: string }
+    }
+    expect(datos.ok).toBe(true)
+    expect(datos.confirmado).toBe(false)
+    expect(datos.impacto.despues).toBe('direccion-nueva-de-prueba')
+  })
+
+  it('la misma dirección es un 400 que dice que no hay nada que cambiar', async () => {
+    const { id, slug } = await primero()
+    const respuesta = await cambiar({ id, slug, confirmar: true })
+    expect(respuesta?.status).toBe(400)
+    const datos = (await respuesta?.json()) as { problemas: string[] }
+    expect(datos.problemas.join(' ')).toMatch(/nada que cambiar/)
+  })
+
+  it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {
+    const { id } = await primero()
+    const respuesta = await cambiar({ id, slug: 'direccion-nueva', confirmar: true }, 'cross-site')
+    expect(respuesta?.status).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee', async () => {
+    const respuesta = await cambiar({ id: 'x'.repeat(6000), slug: 'a' })
+    expect(respuesta?.status).toBe(413)
+  })
+
+  it('un JSON roto es un 400 y no una caída', async () => {
+    const respuesta = await pedir(ruta, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': 'same-origin' },
+      body: '{no es json',
+    })
+    expect(respuesta?.status).toBe(400)
+  })
+})
+
 describe('editar una plaza', () => {
   const editar = (cuerpo: unknown, sitio = 'same-origin') =>
     pedir('/api/panel/contenido/plaza', {

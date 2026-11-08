@@ -4,7 +4,8 @@
  * Se edita lo que se puede cambiar sin tocar el mapa: nombre, descripciones, dirección, el punto del
  * marcador, el enlace de Google Maps y si está activa o es un "próximamente". Quedan fuera, a propósito:
  *
- *  - **`id` y `slug`.** Son la dirección de la zona y de las fichas; cambiarlos pide una redirección.
+ *  - **`id` y `slug`.** El id no cambia. El slug es la dirección de la zona y cambiarlo pide una
+ *    redirección: tiene su propio paso en `cambio-slug.ts`, no va en este guardado.
  *  - **`geometry`.** El contorno alimenta el mapa y los edificios; se edita con su propio editor.
  *  - **`placeIds` y `categories`.** Se derivan de los locales y no se escriben a mano.
  *

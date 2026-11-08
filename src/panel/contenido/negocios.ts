@@ -1,4 +1,5 @@
 import controls from '../../styles/controls.module.css'
+import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import { pintarFotosFormulario } from './fotos.ts'
 import type { Cierre, Negocio } from './tipos.ts'
@@ -236,6 +237,8 @@ export function pintarFormulario(negocio: Negocio | null): void {
         </div>
         <div class="horario" data-grupo="horario">${DIAS.map(([dia, nombre]) => filaDeHorario(dia, nombre, negocio)).join('')}</div>
       </section>
+
+      ${negocio ? seccionDireccion('negocio', negocio.slug) : ''}
 
       ${negocio ? '<div data-borrado></div>' : ''}
 

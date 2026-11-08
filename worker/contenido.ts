@@ -7,8 +7,9 @@
  *
  * Las decisiones que no son obvias:
  *
- *  - **`id` y `slug` no se editan.** Cambiarlos rompería la URL de la ficha y no hay redirección
- *    por slug. En un local nuevo se derivan del nombre y se comprueba que no choquen.
+ *  - **`id` y `slug` no se editan aquí.** El id nunca cambia. El slug es la URL de la ficha y cambiarlo
+ *    pide una redirección: tiene su propio paso en `cambio-slug.ts`. En un local nuevo se derivan del
+ *    nombre y se comprueba que no choquen.
  *  - **Los campos derivados de la plaza se recalculan.** `placeIds` y `categories` no se escriben
  *    a mano: se sincronizan con los locales, igual que hace `data:validate --fix`.
  *  - **La verificación se actualiza al guardar.** Quien edita está afirmando que el dato es de hoy;
@@ -354,8 +355,8 @@ const ENLACES_VACIOS = {
 }
 
 /**
- * Los slugs e ids ya borrados de un tipo (locales o plazas): uno nuevo no puede heredar sus marcas ni
- * competir con su redirección. Cada tipo tiene su propio espacio de nombres.
+ * Los slugs e ids ya borrados o abandonados de un tipo (locales o plazas): uno nuevo no puede heredar
+ * sus marcas ni competir con su redirección. Cada tipo tiene su propio espacio de nombres.
  */
 export const slugsRedirigidos = (
   crudo: Cargado['crudo'],
@@ -366,7 +367,7 @@ export const slugsRedirigidos = (
       | { kind?: unknown; id?: unknown; slug?: unknown }[]
       | undefined) ?? []
   )
-    .filter((fila) => fila.kind === tipo)
+    .filter((fila) => fila.kind === tipo || fila.kind === `${tipo}-slug`)
     .flatMap((fila) =>
       [fila.slug, fila.id].filter((valor): valor is string => typeof valor === 'string'),
     )

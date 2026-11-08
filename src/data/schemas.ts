@@ -285,11 +285,29 @@ const RedirectPlazaSchema = z.strictObject({
   id: slug,
   slug,
 })
+/**
+ * Una dirección que cambió desde el panel. El `slug` es el ANTIGUO y el destino no se guarda: se resuelve
+ * por `id` al cargar (el slug actual de esa entidad, o su borrado si se borró después). Así una cadena
+ * A a B a C lleva de A y de B directo a C, sin saltos intermedios y sin filas que reescribir.
+ */
+const RedirectPlaceSlugSchema = z.strictObject({
+  kind: z.literal('place-slug'),
+  id: slug,
+  slug,
+})
+const RedirectPlazaSlugSchema = z.strictObject({
+  kind: z.literal('plaza-slug'),
+  id: slug,
+  slug,
+})
 export const RedirectSchema = z.discriminatedUnion('kind', [
   RedirectPlaceSchema,
   RedirectPlazaSchema,
+  RedirectPlaceSlugSchema,
+  RedirectPlazaSlugSchema,
 ])
 export type Redirect = z.infer<typeof RedirectSchema>
+
 export const RedirectsFileSchema = z.strictObject({
   ...datasetMeta,
   redirects: z.array(RedirectSchema),

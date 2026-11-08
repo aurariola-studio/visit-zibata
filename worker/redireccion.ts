@@ -1,7 +1,7 @@
 /**
  * Las direcciones antiguas.
  *
- * Tres redirecciones, todas con un 301 en el servidor: así un buscador ve el traslado y no tiene que
+ * Las redirecciones, todas con un 301 en el servidor: así un buscador ve el traslado y no tiene que
  * adivinarlo ejecutando JavaScript.
  *
  *  - **El español ahora lleva `/es`.** Hasta el 28 de octubre de 2026 era el idioma sin prefijo
@@ -20,12 +20,17 @@
  *    (buscadores, mensajes, el índice del buscador). Pasa a la página de la plaza donde estaba, en el
  *    mismo idioma, y las direcciones sin prefijo llegan en un solo salto. Las anota
  *    `data/commercial/redirects.json` y `data:validate` impide que un slug vivo esté ahí.
+ *  - **Una ficha o una zona con otra dirección.** Cambiar el slug desde el panel deja una fila con el
+ *    slug antiguo y el id; el destino es el slug de HOY de esa entidad, resuelto al cargar. Una cadena
+ *    (A a B a C) lleva de A y de B directo a C. Si la entidad se oculta o se borra después, baja un
+ *    escalón (ficha, zona, portada) en vez de acabar en un 404.
  *
  * Nunca según el idioma del navegador: un rastreador pide inglés y sería reenviado a un árbol que no es
  * el que se quiere indexar (ver `resolveLocale` en src/i18n/index.ts).
  */
 import categorias from '../data/commercial/categories.json' with { type: 'json' }
-import plazas from '../data/commercial/plazas.json' with { type: 'json' }
+import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
+import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
 import borradosJson from '../data/commercial/redirects.json' with { type: 'json' }
 import type { Redirect } from '../src/data/schemas.ts'
 import { PREFIX, SEGMENTS } from '../src/lib/url-state.ts'
@@ -39,55 +44,111 @@ const SLUGS = {
   en: new Set(categorias.categories.map((categoria) => categoria.slug.en)),
 }
 
+/** A dónde lleva una dirección antigua: una ficha, una zona, o `null` para la portada. */
+export type Destino = { tipo: 'lugar' | 'zona'; slug: string } | null
+
+export interface Direcciones {
+  /** `/lugar/<slug>` antiguos. */
+  lugares: ReadonlyMap<string, Destino>
+  /** `/zona/<slug>` antiguos. */
+  zonas: ReadonlyMap<string, Destino>
+}
+
 /**
- * La plaza a la que va cada local borrado, o `null` si esa plaza no tiene página (solo las activas la
- * tienen): entonces la dirección antigua va a la portada en vez de a un 404. Se decide al desplegar,
- * así que una plaza que se desactive después también queda cubierta.
+ * Resuelve cada dirección antigua a su destino de hoy. Se decide al desplegar y siempre por id, así que
+ * una cadena (A a B a C), una entidad que se oculta o se borra después, o una plaza que se desactiva
+ * quedan cubiertas sin tocar las filas viejas.
+ *
+ * Solo las fichas y zonas ACTIVAS tienen página: si el destino no la tiene, la dirección antigua baja un
+ * escalón (de la ficha a su zona, de la zona a la portada) en vez de acabar en un 404.
  */
-const PLAZA_DE_BORRADO = new Map<string, string | null>(
-  borrados.redirects.flatMap((fila) => {
-    if (fila.kind !== 'place') return []
-    // Una plaza borrada después ya no está en `plazas`: tampoco tiene página, así que va a la portada.
-    const plaza = plazas.plazas.find((otra) => otra.id === fila.plazaId)
-    return [[fila.slug, plaza?.active ? plaza.slug : null] as const]
-  }),
-)
+export function resolverDirecciones(
+  filas: readonly Redirect[],
+  plazas: readonly { id: string; slug: string; active: boolean }[],
+  lugares: readonly { id: string; slug: string; active: boolean; plazaId: string }[],
+): Direcciones {
+  const plazaViva = new Map(plazas.map((plaza) => [plaza.id, plaza]))
+  const lugarVivo = new Map(lugares.map((lugar) => [lugar.id, lugar]))
+  const zonaDe = (plazaId: string): Destino => {
+    const plaza = plazaViva.get(plazaId)
+    // Una plaza borrada después ya no está en `plazas`: tampoco tiene página y va a la portada.
+    return plaza?.active ? { tipo: 'zona', slug: plaza.slug } : null
+  }
+  const fichaDe = (id: string): Destino | undefined => {
+    const lugar = lugarVivo.get(id)
+    if (!lugar) return undefined
+    return lugar.active && plazaViva.get(lugar.plazaId)?.active
+      ? { tipo: 'lugar', slug: lugar.slug }
+      : zonaDe(lugar.plazaId)
+  }
+  // Un local borrado va a la zona donde estaba; con eso se resuelven también sus nombres anteriores.
+  const lugarBorrado = new Map<string, Destino>(
+    filas.flatMap((fila) =>
+      fila.kind === 'place' ? [[fila.id, zonaDe(fila.plazaId)] as const] : [],
+    ),
+  )
 
-/** Las plazas borradas desde el panel: su página (`/es/zona/x`) ya no existe y va a la portada. */
-const ZONAS_BORRADAS: ReadonlySet<string> = new Set(
-  borrados.redirects.flatMap((fila) => (fila.kind === 'plaza' ? [fila.slug] : [])),
-)
+  const lugaresAntiguos = new Map<string, Destino>()
+  const zonasAntiguas = new Map<string, Destino>()
+  for (const fila of filas) {
+    if (fila.kind === 'place') lugaresAntiguos.set(fila.slug, lugarBorrado.get(fila.id) ?? null)
+    else if (fila.kind === 'place-slug') {
+      lugaresAntiguos.set(fila.slug, fichaDe(fila.id) ?? lugarBorrado.get(fila.id) ?? null)
+    } else if (fila.kind === 'plaza') zonasAntiguas.set(fila.slug, null)
+    else if (fila.kind === 'plaza-slug') {
+      // Una plaza borrada ya no está en `plazas`, así que `zonaDe` da la portada.
+      zonasAntiguas.set(fila.slug, zonaDe(fila.id))
+    }
+  }
+  return { lugares: lugaresAntiguos, zonas: zonasAntiguas }
+}
 
-/** La plaza de un local borrado, si la ruta es la de su ficha (con o sin prefijo de idioma). */
-export function redireccionDeLugarBorrado(
+const DIRECCIONES = resolverDirecciones(borrados.redirects, plazasJson.plazas, lugaresJson.places)
+
+const rutaDe = (destino: Destino, idioma: 'es' | 'en'): string =>
+  destino
+    ? `/${PREFIX[idioma]}/${SEGMENTS[idioma][destino.tipo === 'lugar' ? 'place' : 'plaza']}/${destino.slug}`
+    : `/${PREFIX[idioma]}`
+
+/**
+ * El destino de una ruta `/<segmento>/<slug>` con o sin prefijo de idioma, si ese slug figura en `mapa`.
+ * `segmento` es el de la familia que se busca (ficha o zona).
+ *
+ * La consulta (`?categoria=bebidas`) viaja solo si el destino es la misma clase de página que el origen
+ * (ficha a ficha, zona a zona): el filtro de una zona o de una ficha compartida sigue significando algo
+ * allí. Si la dirección baja a una zona o a la portada, la consulta ya no describe esa página y se suelta.
+ */
+function redireccionDeFamilia(
   ruta: string,
-  mapa: ReadonlyMap<string, string | null> = PLAZA_DE_BORRADO,
+  familia: 'place' | 'plaza',
+  mapa: ReadonlyMap<string, Destino>,
+  consulta = '',
 ): string | null {
   if (mapa.size === 0) return null
   const partes = ruta.split('/').filter(Boolean)
   const idioma = partes[0] === 'en' ? 'en' : partes[0] === 'es' ? 'es' : null
   const [segmento, slug] = idioma ? partes.slice(1) : partes
-  if (!slug || segmento !== SEGMENTS[idioma ?? 'es'].place) return null
+  if (!slug || segmento !== SEGMENTS[idioma ?? 'es'][familia]) return null
   if (partes.length !== (idioma ? 3 : 2)) return null
   if (!mapa.has(slug)) return null
-  const plaza = mapa.get(slug)
-  const destino = idioma ?? 'es'
-  return plaza ? `/${PREFIX[destino]}/${SEGMENTS[destino].plaza}/${plaza}` : `/${PREFIX[destino]}`
+  const destino = mapa.get(slug) ?? null
+  const mismaClase = destino?.tipo === (familia === 'place' ? 'lugar' : 'zona')
+  return rutaDe(destino, idioma ?? 'es') + (mismaClase ? consulta : '')
 }
 
-/** La portada, si la ruta es la página de una plaza borrada (con o sin prefijo de idioma). */
-export function redireccionDeZonaBorrada(
+/** La ficha o la zona a la que pasa una ficha borrada o con otro nombre (con o sin prefijo de idioma). */
+export const redireccionDeLugar = (
   ruta: string,
-  zonas: ReadonlySet<string> = ZONAS_BORRADAS,
-): string | null {
-  if (zonas.size === 0) return null
-  const partes = ruta.split('/').filter(Boolean)
-  const idioma = partes[0] === 'en' ? 'en' : partes[0] === 'es' ? 'es' : null
-  const [segmento, slug] = idioma ? partes.slice(1) : partes
-  if (!slug || segmento !== SEGMENTS[idioma ?? 'es'].plaza) return null
-  if (partes.length !== (idioma ? 3 : 2)) return null
-  return zonas.has(slug) ? `/${PREFIX[idioma ?? 'es']}` : null
-}
+  mapa: ReadonlyMap<string, Destino> = DIRECCIONES.lugares,
+  consulta = '',
+): string | null => redireccionDeFamilia(ruta, 'place', mapa, consulta)
+
+/** La zona o la portada a la que pasa una zona borrada o con otro nombre. */
+export const redireccionDeZona = (
+  ruta: string,
+  mapa: ReadonlyMap<string, Destino> = DIRECCIONES.zonas,
+  consulta = '',
+): string | null => redireccionDeFamilia(ruta, 'plaza', mapa, consulta)
 
 /** Los segmentos con los que empezaban las rutas del español sin prefijo. */
 const SEGMENTOS_ANTIGUOS: ReadonlySet<string> = new Set(Object.values(SEGMENTS.es))
@@ -104,11 +165,7 @@ function redireccionDeCategoria(url: URL, idioma: 'es' | 'en'): string | null {
 }
 
 /** La dirección a la que mandar esta petición, o `null` si no hay que redirigirla. */
-export function redireccionDe(
-  url: URL,
-  borrados: ReadonlyMap<string, string | null> = PLAZA_DE_BORRADO,
-  zonas: ReadonlySet<string> = ZONAS_BORRADAS,
-): string | null {
+export function redireccionDe(url: URL, direcciones: Direcciones = DIRECCIONES): string | null {
   // Varias barras al principio (`//otro.example/x`) colapsan en una: un `Location` que empieza por `//`
   // es una dirección relativa al protocolo, es decir, otro sitio. Nunca sale de aquí uno así.
   const sinInicio = url.pathname.replace(/^\/{2,}/, '/')
@@ -116,8 +173,10 @@ export function redireccionDe(
   // La barra final no añade nada: cada ruta es un archivo, no una carpeta.
   const sinBarra = ruta !== url.pathname ? `${ruta}${url.search}` : null
 
-  const borrado = redireccionDeLugarBorrado(ruta, borrados) ?? redireccionDeZonaBorrada(ruta, zonas)
-  if (borrado) return borrado
+  const antigua =
+    redireccionDeLugar(ruta, direcciones.lugares, url.search) ??
+    redireccionDeZona(ruta, direcciones.zonas, url.search)
+  if (antigua) return antigua
 
   if (ruta === '/en') return redireccionDeCategoria(url, 'en') ?? sinBarra
   if (ruta === '/es') return redireccionDeCategoria(url, 'es') ?? sinBarra

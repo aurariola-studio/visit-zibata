@@ -280,9 +280,25 @@ export function validateTranslations(dataset: CommercialDataset): DataIssue[] {
 }
 
 /**
- * Las redirecciones de lo que se borró. Un slug que vuelve a existir competiría con su propia
- * redirección (el 301 ganaría y la ficha nunca se vería). Un local cuya plaza se borró después sigue
- * siendo válido: su dirección va a la portada, no a un 404, y lo dice la redirección de la plaza.
+ * El espacio de direcciones de una fila: `/lugar/x` o `/zona/x`. Una fila de borrado y una de cambio de
+ * slug del mismo espacio no pueden compartir slug, así que se comparan por familia y no por `kind`.
+ */
+// Viven aquí y no en schemas.ts: este archivo lo carga la app, y un import de valor desde schemas.ts
+// arrastraría Zod al paquete inicial (presupuesto `initialJs`).
+export const familiaDeRedireccion = (fila: Pick<Redirect, 'kind'>): 'place' | 'plaza' =>
+  fila.kind === 'place' || fila.kind === 'place-slug' ? 'place' : 'plaza'
+
+/** `true` si la fila es el borrado de una entidad; `false` si es un cambio de dirección. */
+export const esBorrado = (fila: Pick<Redirect, 'kind'>): boolean =>
+  fila.kind === 'place' || fila.kind === 'plaza'
+/**
+ * Las redirecciones de lo que se borró o cambió de dirección. Un slug que vuelve a existir competiría con
+ * su propia redirección (el 301 ganaría y la ficha nunca se vería). Un local cuya plaza se borró después
+ * sigue siendo válido: su dirección va a la portada, no a un 404, y lo dice la redirección de la plaza.
+ *
+ * Las filas de cambio de slug (`place-slug`, `plaza-slug`) guardan el slug antiguo: ese no puede ser el
+ * actual de nadie, pero sí puede ser el id de la propia entidad (los ids no cambian), así que ahí solo se
+ * compara con los slugs vivos. Su `id` tiene que existir, vivo o borrado desde el panel.
  */
 export function validateRedirects(
   redirects: readonly Redirect[],
@@ -291,33 +307,55 @@ export function validateRedirects(
   const issues: DataIssue[] = []
   const error = (id: string, message: string) =>
     issues.push({ level: 'error', dataset: 'redirects', id, message })
-  const vivos = {
-    place: new Set(dataset.places.flatMap((place) => [place.id, place.slug])),
-    plaza: new Set(dataset.plazas.flatMap((plaza) => [plaza.id, plaza.slug])),
+  const slugsVivos = {
+    place: new Set(dataset.places.map((place) => place.slug)),
+    plaza: new Set(dataset.plazas.map((plaza) => plaza.slug)),
   }
-  const plazasBorradas = new Set(
-    redirects.filter((fila) => fila.kind === 'plaza').map((fila) => fila.id),
-  )
-  const plazasVivas = new Set(dataset.plazas.map((plaza) => plaza.id))
+  const idsVivos = {
+    place: new Set(dataset.places.map((place) => place.id)),
+    plaza: new Set(dataset.plazas.map((plaza) => plaza.id)),
+  }
+  const idsBorrados = {
+    place: new Set(redirects.filter((fila) => fila.kind === 'place').map((fila) => fila.id)),
+    plaza: new Set(redirects.filter((fila) => fila.kind === 'plaza').map((fila) => fila.id)),
+  }
   const vistos = new Set<string>()
   for (const fila of redirects) {
-    const clave = `${fila.kind}:${fila.slug}`
+    const familia = familiaDeRedireccion(fila)
+    const clave = `${familia}:${fila.slug}`
     if (vistos.has(clave)) error(fila.slug, 'Slug repetido')
     vistos.add(clave)
-    if (vivos[fila.kind].has(fila.slug) || vivos[fila.kind].has(fila.id)) {
+
+    const nombre = familia === 'place' ? 'un local' : 'una plaza'
+    if (!esBorrado(fila) && slugsVivos[familia].has(fila.slug)) {
       error(
         fila.slug,
-        fila.kind === 'place'
-          ? 'Hay un local con ese slug o id: su dirección no puede ser también una redirección, y heredaría los favoritos y las notas del que se borró'
-          : 'Hay una plaza con ese slug o id: su dirección no puede ser también una redirección',
+        `Hay ${nombre} con ese slug: su dirección no puede ser también una redirección, y el 301 taparía la ficha`,
       )
     }
-    if (
-      fila.kind === 'place' &&
-      !plazasVivas.has(fila.plazaId) &&
-      !plazasBorradas.has(fila.plazaId)
-    ) {
-      error(fila.slug, `La plaza "${fila.plazaId}" no existe ni se borró desde el panel`)
+    if (esBorrado(fila)) {
+      // Una fila de borrado es más estricta: ni su slug ni su id pueden ser el slug o el id de uno vivo.
+      const vivo = (valor: string) => idsVivos[familia].has(valor) || slugsVivos[familia].has(valor)
+      if (vivo(fila.slug) || vivo(fila.id)) {
+        error(
+          fila.slug,
+          familia === 'place'
+            ? 'Hay un local con ese slug o id: su dirección no puede ser también una redirección, y heredaría los favoritos y las notas del que se borró'
+            : 'Hay una plaza con ese slug o id: su dirección no puede ser también una redirección',
+        )
+      }
+      if (
+        fila.kind === 'place' &&
+        !idsVivos.plaza.has(fila.plazaId) &&
+        !idsBorrados.plaza.has(fila.plazaId)
+      ) {
+        error(fila.slug, `La plaza "${fila.plazaId}" no existe ni se borró desde el panel`)
+      }
+    } else if (!idsVivos[familia].has(fila.id) && !idsBorrados[familia].has(fila.id)) {
+      error(
+        fila.slug,
+        `${familia === 'place' ? 'El local' : 'La plaza'} "${fila.id}" no existe ni se borró desde el panel: no hay a dónde llevar la dirección antigua`,
+      )
     }
   }
   return issues
