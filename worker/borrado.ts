@@ -86,10 +86,22 @@ export function prepararBorrado(
   const despues: CommercialDataset = { ...dataset, places, plazas }
 
   const previas =
-    (crudo.redirects?.redirects as { kind: 'place'; slug: string; plazaId: string }[]) ?? []
+    (crudo.redirects?.redirects as {
+      kind: 'place'
+      id: string
+      slug: string
+      plazaId: string
+      giros: string[]
+    }[]) ?? []
   const redirecciones = [
     ...previas,
-    { kind: 'place' as const, slug: place.slug, plazaId: plaza.id },
+    {
+      kind: 'place' as const,
+      id: place.id,
+      slug: place.slug,
+      plazaId: plaza.id,
+      giros: place.giros,
+    },
   ]
   const problemas = validateRedirects(redirecciones, despues)
     .filter((asunto) => asunto.level === 'error')
@@ -134,7 +146,7 @@ export function prepararBorrado(
     avisos.push('Ya estaba oculto o en una plaza inactiva: no cambia nada de lo que se ve hoy.')
   }
   avisos.push(
-    'Las fotos se quedan en el repositorio. Los corazones y las notas que tenga se ignoran, no se borran.',
+    'Las fotos se quedan en el repositorio. Lo que la gente marcó en este local no se borra: sigue contando para sugerirle cosas parecidas, pero el local ya no se muestra.',
   )
   avisos.push(
     'Se revierte con git, no con un botón. Si hay pruebas que nombran este local, fallarán en la PR.',

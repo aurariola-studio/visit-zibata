@@ -284,24 +284,25 @@ export function validateTranslations(dataset: CommercialDataset): DataIssue[] {
  * destino en un 404.
  */
 export function validateRedirects(
-  redirects: readonly { slug: string; plazaId: string }[],
+  redirects: readonly { id?: string; slug: string; plazaId: string }[],
   dataset: CommercialDataset,
 ): DataIssue[] {
   const issues: DataIssue[] = []
   const vivos = new Set(dataset.places.flatMap((place) => [place.id, place.slug]))
   const plazas = new Set(dataset.plazas.map((plaza) => plaza.id))
   const vistos = new Set<string>()
-  for (const { slug, plazaId } of redirects) {
+  for (const { id, slug, plazaId } of redirects) {
     if (vistos.has(slug)) {
       issues.push({ level: 'error', dataset: 'redirects', id: slug, message: 'Slug repetido' })
     }
     vistos.add(slug)
-    if (vivos.has(slug)) {
+    if (vivos.has(slug) || (id !== undefined && vivos.has(id))) {
       issues.push({
         level: 'error',
         dataset: 'redirects',
         id: slug,
-        message: 'Hay un local con ese slug: su dirección no puede ser también una redirección',
+        message:
+          'Hay un local con ese slug o id: su dirección no puede ser también una redirección, y heredaría los favoritos y las notas del que se borró',
       })
     }
     if (!plazas.has(plazaId)) {

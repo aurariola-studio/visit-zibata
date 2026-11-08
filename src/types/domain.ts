@@ -38,6 +38,11 @@ export interface Catalog {
   plazaById: ReadonlyMap<string, Plaza>
   plazaBySlug: ReadonlyMap<string, Plaza>
   placeById: ReadonlyMap<string, Place>
+  /**
+   * Los giros y la plaza de lo que ya no se muestra: un local oculto, en una plaza inactiva o borrado
+   * desde el panel. Lo que alguien marcó ahí sigue diciendo qué le gusta aunque el local no esté.
+   */
+  retiredById: ReadonlyMap<string, Pick<Place, 'giros' | 'plazaId'>>
   placeBySlug: ReadonlyMap<string, Place>
   /** Locales activos agrupados por plaza. */
   placesByPlaza: ReadonlyMap<string, Place[]>

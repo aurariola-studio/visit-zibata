@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { markedPlace } from '../../data/catalog.ts'
 import type { Catalog, Place } from '../../types/domain.ts'
 import { placeSocialStats } from '../favorites/socialStats.ts'
 import { preferences } from './preferences.ts'
@@ -20,7 +21,7 @@ export function usePersonalOrder(
     () =>
       rankPlaces(places, signals, {
         now: Date.now(),
-        placeById: (id) => catalog.placeById.get(id),
+        placeById: (id) => markedPlace(catalog, id),
         categoryOfGiro: (giro) => catalog.categoryOfGiro.get(giro)?.id,
         community: placeSocialStats,
       }),

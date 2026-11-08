@@ -268,8 +268,15 @@ export const PlacesFileSchema = z.strictObject({ ...datasetMeta, places: z.array
  */
 export const RedirectSchema = z.strictObject({
   kind: z.literal('place'),
+  /** El id con el que cada dispositivo lo guardó (favoritos, visitas, notas). */
+  id: slug,
   slug,
   plazaId: slug,
+  /**
+   * Los giros que tenía. Quien lo marcó sigue teniendo ese gusto aunque el local ya no exista, y el
+   * algoritmo lo usa para recomendar cosas parecidas (ver `girosOfRetired` en el catálogo).
+   */
+  giros: z.array(slug).min(1).max(3),
 })
 export const RedirectsFileSchema = z.strictObject({
   ...datasetMeta,

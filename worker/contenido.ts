@@ -348,10 +348,10 @@ const ENLACES_VACIOS = {
   didiFood: null,
 }
 
-/** Los slugs de locales ya borrados: una ficha nueva no puede volver a usarlos. */
+/** Los slugs e ids de locales ya borrados: una ficha nueva no puede heredar sus marcas. */
 export const slugsRedirigidos = (crudo: Cargado['crudo']): string[] =>
-  ((crudo.redirects?.redirects as { slug?: unknown }[] | undefined) ?? []).flatMap((fila) =>
-    typeof fila.slug === 'string' ? [fila.slug] : [],
+  ((crudo.redirects?.redirects as { id?: unknown; slug?: unknown }[] | undefined) ?? []).flatMap(
+    (fila) => [fila.slug, fila.id].filter((valor): valor is string => typeof valor === 'string'),
   )
 
 const [oeste, sur, este, norte] = extent.areaBbox as [number, number, number, number]

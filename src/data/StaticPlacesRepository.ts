@@ -3,13 +3,14 @@
  * (import dinámico, con hash para caché inmutable). El build los valida con Zod; aquí se validan registro a
  * registro sin Zod (`runtimeValidation.ts`): un registro inválido se omite con un aviso en consola.
  */
-import { DataLoadError, type PlacesRepository } from './PlacesRepository.ts'
+import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
 import {
   type RecordIssue,
   readCollection,
   validateCategories,
   validatePlaces,
   validatePlazas,
+  validateRetired,
 } from './runtimeValidation.ts'
 
 async function load<T>(
@@ -39,6 +40,7 @@ export class StaticPlacesRepository implements PlacesRepository {
   private categories?: ReturnType<PlacesRepository['getCategories']>
   private plazas?: ReturnType<PlacesRepository['getPlazas']>
   private places?: ReturnType<PlacesRepository['getPlaces']>
+  private retired?: Promise<RetiredPlace[]>
 
   getCategories() {
     this.categories ??= load(
@@ -58,6 +60,16 @@ export class StaticPlacesRepository implements PlacesRepository {
       validatePlazas,
     )
     return this.plazas
+  }
+
+  getRetired() {
+    this.retired ??= load(
+      'redirects.json',
+      'redirects',
+      () => import('../../data/commercial/redirects.json'),
+      validateRetired,
+    )
+    return this.retired
   }
 
   getPlaces() {

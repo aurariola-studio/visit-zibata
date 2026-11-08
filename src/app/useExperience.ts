@@ -1,5 +1,6 @@
 /** Datos derivados del estado: resultados, conteos por plaza y qué muestra el panel. */
 import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
+import { markedPlace } from '../data/catalog.ts'
 import { useFavorites } from '../features/favorites/useFavorites.ts'
 import {
   applyFilters,
@@ -154,7 +155,7 @@ export function useExperience(catalog: Catalog) {
     const visible = catalog.categories.filter((category) => used.has(category.id))
     const affinity = categoryAffinity(
       preferences.read(),
-      (id) => catalog.placeById.get(id),
+      (id) => markedPlace(catalog, id),
       Date.now(),
       (giro) => catalog.categoryOfGiro.get(giro)?.id,
     )

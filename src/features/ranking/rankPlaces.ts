@@ -57,8 +57,11 @@ export interface CommunitySignal {
 export interface RankOptions {
   /** Epoch ms: fija el decaimiento y la rotación diaria (determinista en pruebas). */
   now: number
-  /** Busca un lugar por id (las señales pueden venir de lugares fuera de la lista actual). */
-  placeById: (id: string) => Place | undefined
+  /**
+   * Busca un lugar por id (las señales pueden venir de lugares fuera de la lista actual, u ocultos o
+   * borrados: de esos basta con los giros).
+   */
+  placeById: (id: string) => Pick<Place, 'giros' | 'plazaId'> | undefined
   /** La categoría de un giro: la afinidad se aprende por giro y se agrega por categoría. */
   categoryOfGiro: (giroId: string) => string | undefined
   /** Cada cuántas posiciones entra un lugar sin explorar. */
@@ -164,7 +167,7 @@ export function hasSignals(signals: PreferenceSignals): boolean {
  */
 export function categoryAffinity(
   signals: PreferenceSignals,
-  placeById: (id: string) => Place | undefined,
+  placeById: (id: string) => Pick<Place, 'giros' | 'plazaId'> | undefined,
   now: number,
   categoryOfGiro: (giroId: string) => string | undefined,
 ): Map<string, number> {

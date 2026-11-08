@@ -106,8 +106,15 @@ describe('borrar', () => {
     const plazas = preparado.plazas.plazas as { id: string; placeIds: string[] }[]
     expect(plazas.find((fila) => fila.id === objetivo.plazaId)?.placeIds).not.toContain(objetivo.id)
 
+    // Guarda su id y sus giros: quien lo marcó sigue teniendo ese gusto aunque el local ya no esté.
     expect(preparado.redirects.redirects).toEqual([
-      { kind: 'place', slug: objetivo.slug, plazaId: objetivo.plazaId },
+      {
+        kind: 'place',
+        id: objetivo.id,
+        slug: objetivo.slug,
+        plazaId: objetivo.plazaId,
+        giros: objetivo.giros,
+      },
     ])
     expect(preparado.redirects.updatedAt).toBe(HOY)
   })
@@ -140,7 +147,15 @@ describe('un slug borrado no vuelve', () => {
       ...crudo,
       redirects: {
         version: 1,
-        redirects: [{ kind: 'place', slug: 'panaderia-vieja', plazaId: objetivo.plazaId }],
+        redirects: [
+          {
+            kind: 'place',
+            id: 'panaderia-vieja',
+            slug: 'panaderia-vieja',
+            plazaId: objetivo.plazaId,
+            giros: ['x'],
+          },
+        ],
       },
     }
     const preparado = prepararNegocio(
@@ -159,6 +174,40 @@ describe('un slug borrado no vuelve', () => {
     expect(preparado.ok).toBe(true)
     if (!preparado.ok) return
     expect(preparado.place.slug).not.toBe('panaderia-vieja')
+  })
+
+  it('tampoco vuelve su id: heredaría los favoritos y las notas del que se borró', () => {
+    const conRedireccion = {
+      ...crudo,
+      redirects: {
+        version: 1,
+        redirects: [
+          {
+            kind: 'place',
+            id: 'panaderia-con-id',
+            slug: 'otro-slug',
+            plazaId: objetivo.plazaId,
+            giros: ['x'],
+          },
+        ],
+      },
+    }
+    const preparado = prepararNegocio(
+      dataset,
+      conRedireccion,
+      {
+        nombre: 'Panadería Con Id',
+        plazaId: objetivo.plazaId,
+        giros: objetivo.giros.slice(0, 1),
+        descripcionEs: 'Una panadería de prueba.',
+        descripcionEn: 'A test bakery.',
+        activo: true,
+      },
+      HOY,
+    )
+    expect(preparado.ok).toBe(true)
+    if (!preparado.ok) return
+    expect(preparado.place.id).not.toBe('panaderia-con-id')
   })
 
   it('la validación rechaza un slug vivo, un slug repetido y una plaza que no existe', () => {
