@@ -113,11 +113,16 @@ const rutaDe = (destino: Destino, idioma: 'es' | 'en'): string =>
 /**
  * El destino de una ruta `/<segmento>/<slug>` con o sin prefijo de idioma, si ese slug figura en `mapa`.
  * `segmento` es el de la familia que se busca (ficha o zona).
+ *
+ * La consulta (`?categoria=bebidas`) viaja solo si el destino es la misma clase de página que el origen
+ * (ficha a ficha, zona a zona): el filtro de una zona o de una ficha compartida sigue significando algo
+ * allí. Si la dirección baja a una zona o a la portada, la consulta ya no describe esa página y se suelta.
  */
 function redireccionDeFamilia(
   ruta: string,
   familia: 'place' | 'plaza',
   mapa: ReadonlyMap<string, Destino>,
+  consulta = '',
 ): string | null {
   if (mapa.size === 0) return null
   const partes = ruta.split('/').filter(Boolean)
@@ -126,20 +131,24 @@ function redireccionDeFamilia(
   if (!slug || segmento !== SEGMENTS[idioma ?? 'es'][familia]) return null
   if (partes.length !== (idioma ? 3 : 2)) return null
   if (!mapa.has(slug)) return null
-  return rutaDe(mapa.get(slug) ?? null, idioma ?? 'es')
+  const destino = mapa.get(slug) ?? null
+  const mismaClase = destino?.tipo === (familia === 'place' ? 'lugar' : 'zona')
+  return rutaDe(destino, idioma ?? 'es') + (mismaClase ? consulta : '')
 }
 
 /** La ficha o la zona a la que pasa una ficha borrada o con otro nombre (con o sin prefijo de idioma). */
 export const redireccionDeLugar = (
   ruta: string,
   mapa: ReadonlyMap<string, Destino> = DIRECCIONES.lugares,
-): string | null => redireccionDeFamilia(ruta, 'place', mapa)
+  consulta = '',
+): string | null => redireccionDeFamilia(ruta, 'place', mapa, consulta)
 
 /** La zona o la portada a la que pasa una zona borrada o con otro nombre. */
 export const redireccionDeZona = (
   ruta: string,
   mapa: ReadonlyMap<string, Destino> = DIRECCIONES.zonas,
-): string | null => redireccionDeFamilia(ruta, 'plaza', mapa)
+  consulta = '',
+): string | null => redireccionDeFamilia(ruta, 'plaza', mapa, consulta)
 
 /** Los segmentos con los que empezaban las rutas del español sin prefijo. */
 const SEGMENTOS_ANTIGUOS: ReadonlySet<string> = new Set(Object.values(SEGMENTS.es))
@@ -165,7 +174,8 @@ export function redireccionDe(url: URL, direcciones: Direcciones = DIRECCIONES):
   const sinBarra = ruta !== url.pathname ? `${ruta}${url.search}` : null
 
   const antigua =
-    redireccionDeLugar(ruta, direcciones.lugares) ?? redireccionDeZona(ruta, direcciones.zonas)
+    redireccionDeLugar(ruta, direcciones.lugares, url.search) ??
+    redireccionDeZona(ruta, direcciones.zonas, url.search)
   if (antigua) return antigua
 
   if (ruta === '/en') return redireccionDeCategoria(url, 'en') ?? sinBarra

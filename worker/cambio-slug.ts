@@ -178,6 +178,7 @@ export function prepararCambioSlug(
     avisos.push(
       'La dirección antigua pasa, con un 301, a la nueva: los enlaces compartidos y los buscadores siguen llegando.',
       'El sitemap, la dirección canónica y el índice del buscador pasan a la nueva.',
+      'Las visitas ya contadas se quedan con la dirección antigua en el resumen; las nuevas, con la nueva.',
     )
   } else {
     avisos.push(

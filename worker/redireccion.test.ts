@@ -272,6 +272,21 @@ describe('un local con otra dirección', () => {
     const d = resolver([renombre('compartido')])
     expect(aDondeZona(d, '/es/zona/compartido')).toBeNull()
   })
+
+  it('la consulta viaja de ficha a ficha (un enlace compartido con su categoría), no si baja a la zona', () => {
+    const d = resolver([renombre('cafe-antiguo'), renombre('oculto-antes', 'l-oculto')])
+    const real = (direccion: string) => redireccionDe(new URL(direccion), d)
+    expect(real('https://visitzibata.com/es/lugar/cafe-antiguo?categoria=pizza')).toBe(
+      '/es/lugar/cafe-nuevo?categoria=pizza',
+    )
+    expect(real('https://visitzibata.com/lugar/cafe-antiguo?categoria=pizza')).toBe(
+      '/es/lugar/cafe-nuevo?categoria=pizza',
+    )
+    // Baja de la ficha a la zona: el filtro de una ficha no significa nada en una zona.
+    expect(real('https://visitzibata.com/es/lugar/oculto-antes?categoria=pizza')).toBe(
+      '/es/zona/plaza-uno',
+    )
+  })
 })
 
 describe('una plaza con otra dirección', () => {
@@ -303,5 +318,26 @@ describe('una plaza con otra dirección', () => {
   it('no toca las fichas: cada familia tiene su propio espacio de direcciones', () => {
     const d = resolver([renombre('compartido')])
     expect(aDondeLugar(d, '/es/lugar/compartido')).toBeNull()
+  })
+
+  it('la consulta viaja de zona a zona, con y sin prefijo, y se suelta al ir a la portada', () => {
+    const d = resolver([renombre('zona-antigua'), renombre('inactiva-antes', 'p-dos')])
+    const real = (direccion: string) => redireccionDe(new URL(direccion), d)
+    expect(real('https://visitzibata.com/es/zona/zona-antigua?categoria=bebidas')).toBe(
+      '/es/zona/plaza-uno?categoria=bebidas',
+    )
+    expect(real('https://visitzibata.com/en/area/zona-antigua?category=drinks')).toBe(
+      '/en/area/plaza-uno?category=drinks',
+    )
+    // Sin prefijo: un solo salto, con la consulta.
+    expect(real('https://visitzibata.com/zona/zona-antigua?categoria=bebidas')).toBe(
+      '/es/zona/plaza-uno?categoria=bebidas',
+    )
+    // Con barra final también.
+    expect(real('https://visitzibata.com/es/zona/zona-antigua/?categoria=bebidas')).toBe(
+      '/es/zona/plaza-uno?categoria=bebidas',
+    )
+    // La zona se desactivó: va a la portada, donde ese filtro no existe.
+    expect(real('https://visitzibata.com/es/zona/inactiva-antes?categoria=bebidas')).toBe('/es')
   })
 })
