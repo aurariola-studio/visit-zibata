@@ -81,7 +81,10 @@ jobs:
       fail-fast: false
       matrix:
         # La subruta se sigue probando: detecta rutas absolutas mal escritas antes de publicar, y
-        # mantiene el proyecto portable a otro hosting.
+        # mantiene el proyecto portable a otro hosting. Solo en escritorio: una ruta absoluta mal
+        # escrita se rompe igual en cualquier navegador, y los otros tres proyectos ya corren en `/`.
+        # Eso baja la matriz de unas 1 784 ejecuciones a unas 1 115. DORA y Fowler piden que lo que
+        # bloquea una fusión dure unos diez minutos; este es el primer paso, no el final.
         #
         # Dos grupos por base. "mapa" son los archivos cuyas pruebas llevan `@mapa` en el título
         # (mapa, capas, responsive, medición, táctil y errores) y "contenido" es todo lo demás. En CI
@@ -97,10 +100,10 @@ jobs:
             args: '--grep-invert=@mapa'
           - base: '/visit-zibata/'
             grupo: 'mapa'
-            args: '--grep=@mapa'
+            args: '--grep=@mapa --project=desktop'
           - base: '/visit-zibata/'
             grupo: 'contenido'
-            args: '--grep-invert=@mapa'
+            args: '--grep-invert=@mapa --project=desktop'
     env:
       BASE_PATH: ${{ matrix.base }}
     steps:
