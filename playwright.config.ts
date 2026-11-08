@@ -26,9 +26,9 @@ export default defineConfig({
    * (https://playwright.dev/docs/ci): sin él, si algo se cuelga, el trabajo se queda esperando hasta que
    * GitHub lo cancela y no deja informe. Con él, Playwright se detiene antes, escribe el informe y la
    * ejecución falla con un motivo. Tiene que ser menor que el límite del paso y del trabajo en
-   * .github/workflows/ci.yml (50 y 60 minutos), para que sea Playwright quien corte primero.
+   * .github/workflows/ci.yml (60 y 70 minutos), para que sea Playwright quien corte primero.
    */
-  globalTimeout: process.env.CI ? 45 * 60_000 : undefined,
+  globalTimeout: process.env.CI ? 55 * 60_000 : undefined,
   reporter: process.env.CI
     ? [
         ['github'],
