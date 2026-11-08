@@ -293,18 +293,38 @@ export const plazaDe = (place: DatasetPlace): DatasetPlaza =>
     `la zona de ${place.id}`,
   )
 
-/** La categoría con más locales activos: la que nunca debe quedarse sin página. */
-export const CATEGORIA_GRANDE: { id: string; slug: string; label: string } = (() => {
+interface CategoriaDeEjemplo {
+  id: string
+  slug: string
+  slugEn: string
+  label: string
+}
+
+/** Las categorías por número de locales activos, de más a menos (a igualdad, por id). */
+const categoriasPorTamano = (): CategoriaDeEjemplo[] => {
   const conteo = (id: string) =>
     dataset.places.filter((place) => place.active && categoriesOf(place).includes(id)).length
-  const categoria = unico(
-    [...dataset.categories].sort(
-      (a, b) => conteo(b.id) - conteo(a.id) || a.id.localeCompare(b.id),
-    )[0],
-    'ninguna categoría',
-  )
-  return { id: categoria.id, slug: categoria.slug.es, label: categoria.label.es }
-})()
+  return [...dataset.categories]
+    .sort((a, b) => conteo(b.id) - conteo(a.id) || a.id.localeCompare(b.id))
+    .map((categoria) => ({
+      id: categoria.id,
+      slug: categoria.slug.es,
+      slugEn: categoria.slug.en,
+      label: categoria.label.es,
+    }))
+}
+
+/** La categoría con más locales activos: la que nunca debe quedarse sin página. */
+export const CATEGORIA_GRANDE: CategoriaDeEjemplo = unico(
+  categoriasPorTamano()[0],
+  'ninguna categoría',
+)
+
+/** La segunda categoría por tamaño: para las pruebas que pasan de una categoría a otra. */
+export const CATEGORIA_B: CategoriaDeEjemplo = unico(
+  categoriasPorTamano()[1],
+  'una segunda categoría',
+)
 
 /** Texto literal dentro de una expresión regular. */
 export const esc = (texto: string): string => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

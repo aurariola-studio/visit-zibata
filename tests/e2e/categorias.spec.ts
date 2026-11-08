@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test'
 import {
+  CATEGORIA_B,
   CATEGORIA_EN_ZONA,
+  CATEGORIA_GRANDE,
   esc,
   openApp,
   panel,
@@ -23,16 +25,17 @@ test.describe('Páginas de categoría', () => {
   test('abrir la dirección de una categoría muestra sus locales con su cápsula elegida', async ({
     page,
   }) => {
-    await openApp(page, { path: 'categoria/italiana' })
+    await openApp(page, { path: `categoria/${CATEGORIA_GRANDE.slug}` })
     const region = panel(page)
     await expect(region.getByRole('heading', { name: 'Resultados' })).toBeVisible()
-    await expect(page).toHaveURL(/\/es\/categoria\/italiana$/)
-    await expect(cápsulas(page).getByRole('link', { name: /^Italiana/ })).toHaveAttribute(
-      'aria-current',
-      'true',
-    )
+    await expect(page).toHaveURL(new RegExp(`/es/categoria/${CATEGORIA_GRANDE.slug}$`))
+    await expect(
+      cápsulas(page).getByRole('link', { name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`) }),
+    ).toHaveAttribute('aria-current', 'true')
     // Los locales que se ven son los de la categoría, no un recorte.
-    await expect(page.getByText(`${placesInCategory('italiana')} resultados`).first()).toBeVisible()
+    await expect(
+      page.getByText(`${placesInCategory(CATEGORIA_GRANDE.id)} resultados`).first(),
+    ).toBeVisible()
   })
 
   test('la cápsula es un enlace con la dirección de su página, y elegirla filtra sin recargar', async ({
@@ -40,23 +43,25 @@ test.describe('Páginas de categoría', () => {
   }) => {
     await openApp(page)
     await waitForMap(page)
-    const italiana = cápsulas(page).getByRole('link', { name: /^Italiana/ })
-    await expect(italiana).toHaveAttribute('href', /\/categoria\/italiana$/)
+    const grande = cápsulas(page).getByRole('link', {
+      name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`),
+    })
+    await expect(grande).toHaveAttribute('href', new RegExp(`/categoria/${CATEGORIA_GRANDE.slug}$`))
 
     await page.evaluate(() => {
       ;(window as unknown as { __marca: string }).__marca = 'misma-carga'
     })
-    await italiana.click()
-    await expect(page).toHaveURL(/\/es\/categoria\/italiana$/)
+    await grande.click()
+    await expect(page).toHaveURL(new RegExp(`/es/categoria/${CATEGORIA_GRANDE.slug}$`))
     // Sin recarga: la marca puesta en la página sigue ahí.
     expect(await page.evaluate(() => (window as unknown as { __marca?: string }).__marca)).toBe(
       'misma-carga',
     )
-    await expect(italiana).toHaveAttribute('aria-current', 'true')
+    await expect(grande).toHaveAttribute('aria-current', 'true')
 
     // Volver a pulsarla la quita, y la cápsula elegida apunta a la vista sin categoría.
-    await expect(italiana).toHaveAttribute('href', /\/es$/)
-    await italiana.click()
+    await expect(grande).toHaveAttribute('href', /\/es$/)
+    await grande.click()
     await expect(page).toHaveURL(/\/es$/)
     await expect(cápsulas(page).getByRole('link', { name: /^Todo/ })).toHaveAttribute(
       'aria-current',
@@ -70,28 +75,29 @@ test.describe('Páginas de categoría', () => {
     await openApp(page)
     const antes = await page.evaluate(() => window.history.length)
     await cápsulas(page)
-      .getByRole('link', { name: /^Italiana/ })
+      .getByRole('link', { name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`) })
       .click()
-    await expect(page).toHaveURL(/\/es\/categoria\/italiana$/)
-    await cápsulas(page).getByRole('link', { name: /^Bar / }).click()
-    await expect(page).toHaveURL(/\/es\/categoria\/bar$/)
+    await expect(page).toHaveURL(new RegExp(`/es/categoria/${CATEGORIA_GRANDE.slug}$`))
+    await cápsulas(page)
+      .getByRole('link', { name: new RegExp(`^${esc(CATEGORIA_B.label)} `) })
+      .click()
+    await expect(page).toHaveURL(new RegExp(`/es/categoria/${CATEGORIA_B.slug}$`))
     expect(await page.evaluate(() => window.history.length)).toBe(antes)
   })
 
   test('un enlace antiguo con parámetro se lleva a la dirección de la categoría', async ({
     page,
   }) => {
-    await openApp(page, { path: '?categoria=italiana' })
-    await expect(page).toHaveURL(/\/es\/categoria\/italiana$/)
-    await expect(cápsulas(page).getByRole('link', { name: /^Italiana/ })).toHaveAttribute(
-      'aria-current',
-      'true',
-    )
+    await openApp(page, { path: `?categoria=${CATEGORIA_GRANDE.slug}` })
+    await expect(page).toHaveURL(new RegExp(`/es/categoria/${CATEGORIA_GRANDE.slug}$`))
+    await expect(
+      cápsulas(page).getByRole('link', { name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`) }),
+    ).toHaveAttribute('aria-current', 'true')
   })
 
   test('en inglés tiene su propia ruta y sus propios nombres', async ({ page }) => {
-    await openApp(page, { path: 'en/category/italian' })
-    await expect(page).toHaveURL(/\/en\/category\/italian$/)
+    await openApp(page, { path: `en/category/${CATEGORIA_GRANDE.slugEn}` })
+    await expect(page).toHaveURL(new RegExp(`/en/category/${CATEGORIA_GRANDE.slugEn}$`))
     await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible()
   })
 
@@ -112,9 +118,11 @@ test.describe('Páginas de categoría', () => {
 
   test('con Ctrl el enlace no se intercepta: apunta a una página que existe', async ({ page }) => {
     await openApp(page)
-    const italiana = cápsulas(page).getByRole('link', { name: /^Italiana/ })
-    const href = await italiana.getAttribute('href')
-    expect(href).toMatch(/\/categoria\/italiana$/)
+    const grande = cápsulas(page).getByRole('link', {
+      name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`),
+    })
+    const href = await grande.getAttribute('href')
+    expect(href).toMatch(new RegExp(`/categoria/${CATEGORIA_GRANDE.slug}$`))
     // Lo que importa es que la app no cancele el clic (el navegador abre la pestaña) y que el destino
     // exista. No se espera a la pestaña nueva: en CI a veces se queda en about:blank y la prueba dependía
     // de eso (falló en el despliegue de #59, en escritorio y tableta).
@@ -123,7 +131,7 @@ test.describe('Páginas de categoría', () => {
         window.addEventListener('click', (event) => resolve(event.defaultPrevented), { once: true })
       })
     })
-    await italiana.click({ modifiers: ['Control'] })
+    await grande.click({ modifiers: ['Control'] })
     const cancelado = await page.evaluate(
       () => (window as unknown as { __clic: Promise<boolean> }).__clic,
     )
