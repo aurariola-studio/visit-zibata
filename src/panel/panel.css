@@ -1387,21 +1387,24 @@ td.tenue {
 /* ------------------------------------------------------------------ pantallas estrechas */
 
 /*
- * Los puntos de ruptura del panel y para qué sirve cada uno. Son cinco a propósito: cada uno marca
- * un momento distinto, y juntarlos en menos rompía el que quedaba con otra anchura útil.
+ * Los puntos de ruptura del panel. Son cuatro anchos, y el de 60 rem se usa en las dos direcciones.
  *
  *   44 rem (704 px)   el diálogo del formulario pasa a pantalla completa y el horario y las barras de
  *                     búsqueda se apilan. Es el teléfono (y el teléfono apaisado).
- *   48 rem (768 px)   el Resumen pone las cifras en dos columnas (viewport, antes de la barra lateral).
- *   52 rem (832 px)   la tabla de negocios quita las columnas de plaza y giros, que pasan a una línea bajo
- *                     el nombre: con la barra lateral ya no cabrían (el contenido mide 15 rem menos).
- *   60 rem (960 px)   la barra lateral deja de ser lateral y pasa arriba (≤) o aparece a la izquierda
- *                     (>), y los bloques del Resumen se ponen de dos en dos. Al aparecer la barra el
- *                     contenido pierde 15 rem de golpe: es el único salto, medido de 28 a 20 rem por bloque.
+ *   48 rem (768 px)   el Resumen pone las cifras en dos columnas.
+ *   52 rem (832 px)   por debajo, la tabla de negocios quita las columnas de plaza y giros y los pone en
+ *                     una línea bajo el nombre. Es una consulta al ancho de la ventana: entre 52 y 60 rem
+ *                     el contenido mide todo el ancho, y desde 60 rem aparece la barra lateral y mide 15
+ *                     rem menos, así que esas columnas conviven con unos 46 rem. Caben porque sus celdas
+ *                     pueden partir línea (`.celda-nombre`).
+ *   60 rem (960 px)   la barra lateral pasa arriba (hasta 60 rem) o a la izquierda (desde 60 rem), y los
+ *                     bloques del Resumen se ponen de dos en dos. Al aparecer la barra el contenido pierde
+ *                     15 rem de golpe: es el único salto, medido de 28 a 20 rem por bloque.
  *
- * `tests/e2e/panel.spec.ts` ("a cualquier ancho…") mide cada sección de 320 a 1440 px, con nombres
- * desmesurados sin espacios, y falla si la página o una tabla se desplazan. Cualquier celda de una
- * tabla que lleve un nombre libre usa `.celda-nombre`, que puede partir línea.
+ * No se unificaron: se midió y ningún punto de ruptura causaba un defecto por sí mismo. Lo que se
+ * desbordaba eran celdas que no podían partir línea. `tests/e2e/panel.spec.ts` ("a cualquier ancho…")
+ * mide cada sección de 320 a 1440 px con nombres, plazas y giros desmesurados sin espacios, y falla si la
+ * página o una tabla se desplazan. Toda celda de una tabla con texto libre usa `.celda-nombre`.
  */
 
 @media (max-width: 52rem) {

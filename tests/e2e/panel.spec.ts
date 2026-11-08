@@ -192,6 +192,13 @@ const conEstados = {
       id: 'categoria-larga',
       slug: { es: 'categoria-larga', en: 'long-category' },
       label: { es: nombreLargo, en: nombreLargo },
+      giros: [
+        {
+          ...(categoriaUno.giros[0] as (typeof categoriaUno.giros)[number]),
+          id: 'giro-largo',
+          label: { es: nombreLargo, en: nombreLargo },
+        },
+      ],
     },
   ],
   plazas: [
@@ -221,6 +228,17 @@ const conEstados = {
       slug: 'panaderia-de-prueba',
       name: 'Panadería de Prueba',
       plazaId: 'plaza-cuatro',
+      photos: [],
+    },
+    {
+      // En la plaza de nombre largo y con tres giros, uno de ellos de nombre largo: el peor caso de las
+      // columnas de plaza y giros, que no pueden quedarse sin partir línea.
+      ...cafe,
+      id: 'lugar-con-giros-largos',
+      slug: 'lugar-con-giros-largos',
+      name: 'Lugar con giros largos',
+      plazaId: 'plaza-larga',
+      giros: ['servicios-general', 'servicios-taller', 'giro-largo'],
       photos: [],
     },
     {
@@ -432,7 +450,10 @@ test.describe('Panel', () => {
   }) => {
     await abrirPanel(page, { datos: conEstados })
     await irA(page, 'negocios', 'Negocios')
-    const fila = page.locator('tbody tr', { hasText: nombreLargo })
+    // Por el nombre del local: el texto largo también sale en la plaza y el giro de otra fila.
+    const fila = page.locator('tbody tr', {
+      has: page.locator('.negocio-nombre', { hasText: nombreLargo }),
+    })
     await expect(fila).toBeVisible()
     await sinDesplazamientoLateral(page)
     const boton = fila.getByRole('button', { name: `Editar ${nombreLargo}` })
