@@ -12,7 +12,7 @@
     "predev": "npm run map:prepare",
     "dev": "vite",
     "worker:dev": "wrangler dev --var PANEL_ABIERTO:si",
-    "build": "npm run data:validate && npm run map:prepare && tsc -b && vite build",
+    "build": "npm run data:validate && npm run map:prepare && tsc -b && vite build && node scripts/images/derive-variants.ts",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "biome check .",

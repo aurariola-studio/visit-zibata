@@ -1,5 +1,16 @@
 import { expect, type Page, test } from '@playwright/test'
-import { elegirZona, openApp, panel, placesInPlaza, plazaMarker, waitForMap } from './helpers.ts'
+import {
+  cercanaA,
+  elegirZona,
+  esc,
+  openApp,
+  panel,
+  placesInPlaza,
+  plazaMarker,
+  waitForMap,
+  ZONA_B,
+  ZONA_GRANDE,
+} from './helpers.ts'
 
 /**
  * Plazas representadas en pantalla: marcadores visibles dentro de la vista, ya lleven nombre, solo la
@@ -86,8 +97,8 @@ test.describe('Mapa @mapa', () => {
     await waitForMap(page)
     // Qué zonas llevan marcador propio depende del tamaño de pantalla; alguna siempre lo tiene.
     await expect(page.getByRole('button', { name: /^.+, \d+ lugar(es)?$/ }).first()).toBeVisible()
-    await expect((await plazaMarker(page, 'Xentric Anáhuac')).first()).toHaveAccessibleName(
-      `Xentric Anáhuac, ${placesInPlaza('Xentric Anáhuac')} lugares`,
+    await expect((await plazaMarker(page, ZONA_GRANDE.name)).first()).toHaveAccessibleName(
+      `${ZONA_GRANDE.name}, ${placesInPlaza(ZONA_GRANDE.name)} lugares`,
     )
     await expect(
       page.locator('.maplibregl-ctrl-attrib a', { hasText: 'OpenStreetMap' }),
@@ -169,7 +180,9 @@ test.describe('Mapa @mapa', () => {
       .toBe(45)
 
     await page.getByRole('button', { name: 'Volver a la vista de Zibatá' }).click()
-    await expect(page.getByRole('button', { name: /^Xentric Anáhuac/ })).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: new RegExp(`^${esc(ZONA_GRANDE.name)}`) }),
+    ).toBeVisible()
   })
 
   test('la vista inicial representa todas las plazas activas y la atribución es visible', async ({
@@ -179,8 +192,10 @@ test.describe('Mapa @mapa', () => {
     await waitForMap(page)
     await expect.poll(() => plazasMissingInBand(page)).toEqual([])
     await expect.poll(() => representedPlazas(page)).toBe(await activePlazaCount(page))
-    // Paseo Zibatá, la plaza con más locales, nunca debe desaparecer del mapa.
-    await expect(page.getByRole('button', { name: /^Paseo Zibatá/ })).toBeVisible()
+    // La zona con más locales nunca debe desaparecer del mapa.
+    await expect(
+      page.getByRole('button', { name: new RegExp(`^${esc(ZONA_GRANDE.name)}`) }),
+    ).toBeVisible()
     const attribution = page.locator('.maplibregl-ctrl-attrib')
     await expect(attribution).toBeInViewport()
     // La atribución de OpenStreetMap no puede quedar debajo de la hoja inferior (solo existe en móvil).
@@ -205,7 +220,7 @@ test.describe('Mapa @mapa', () => {
     await expect
       .poll(() => page.locator('button[data-mode]:not([data-mode="hidden"])').count())
       .toBe(total)
-    // …y solo la que comparte esquina con otra (Plaza Loop y Plaza Condesa están a 200 m) se reduce a
+    // …y solo la que comparte esquina con otra (dos zonas pueden estar a unos 200 m) se reduce a
     // un punto: el resto conserva su etiqueta con el nombre o la cifra.
     await expect.poll(() => page.locator('button[data-mode="dot"]').count()).toBeLessThanOrEqual(1)
   })
@@ -228,23 +243,24 @@ test.describe('Mapa @mapa', () => {
   test('"Volver a la vista de Zibatá" funciona también con una plaza abierta', async ({ page }) => {
     // Sin animaciones, la cámara salta a su destino y la medición es determinista.
     await page.emulateMedia({ reducedMotion: 'reduce' })
-    await openApp(page, { path: 'zona/condesa' })
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
     await waitForMap(page)
-    await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Plaza Condesa' }),
-    ).toBeVisible()
+    await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
     // Distancia en pantalla entre dos plazas: se reduce cuando la cámara vuelve a la vista general.
     const spread = () =>
-      page.evaluate(() => {
-        const anchor = (name: string) => {
-          const marker = document.querySelector(`button[data-mode][aria-label^="${name}, "]`)
-          const box = marker?.getBoundingClientRect()
-          return box ? { x: box.left + box.width / 2, y: box.bottom } : { x: 0, y: 0 }
-        }
-        const a = anchor('Plaza Condesa')
-        const b = anchor('Plaza Zielo')
-        return Math.hypot(a.x - b.x, a.y - b.y)
-      })
+      page.evaluate(
+        ([nombreA, nombreB]) => {
+          const anchor = (name: string) => {
+            const marker = document.querySelector(`button[data-mode][aria-label^="${name}, "]`)
+            const box = marker?.getBoundingClientRect()
+            return box ? { x: box.left + box.width / 2, y: box.bottom } : { x: 0, y: 0 }
+          }
+          const a = anchor(nombreA ?? '')
+          const b = anchor(nombreB ?? '')
+          return Math.hypot(a.x - b.x, a.y - b.y)
+        },
+        [ZONA_B.name, cercanaA(ZONA_B).name],
+      )
     await page.waitForTimeout(1000)
     const focused = await spread()
     await page.getByRole('button', { name: 'Volver a la vista de Zibatá' }).click()
@@ -252,28 +268,28 @@ test.describe('Mapa @mapa', () => {
     // Con el panel abierto la franja de mapa es demasiado corta para etiquetar todas las plazas; lo que
     // se comprueba aquí es que la cámara vuelve a la vista general sin cerrar la plaza. La garantía de
     // que ninguna plaza desaparece se verifica en la vista inicial (arriba).
-    await expect(page.getByRole('button', { name: /^Plaza Condesa/ })).toBeVisible()
     await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Plaza Condesa' }),
+      page.getByRole('button', { name: new RegExp(`^${esc(ZONA_B.name)}`) }),
     ).toBeVisible()
+    await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
   })
 
   test('seleccionar una plaza en el mapa abre su panel y actualiza la URL', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)
-    const marker = await plazaMarker(page, 'Xentric Anáhuac')
+    const marker = await plazaMarker(page, ZONA_GRANDE.name)
     await marker.click()
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Xentric Anáhuac' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeVisible()
     await expect(
-      region.getByText(`Zona · ${placesInPlaza('Xentric Anáhuac')} lugares`),
+      region.getByText(`Zona · ${placesInPlaza(ZONA_GRANDE.name)} lugares`),
     ).toBeVisible()
     // El índice va repartido en grupos por horario, así que se cuentan las tarjetas y no los
     // elementos de una lista: lo que se fija es que estén todos los lugares de la zona.
     await expect(region.getByRole('link', { name: /^Ver detalles de/ })).toHaveCount(
-      placesInPlaza('Xentric Anáhuac'),
+      placesInPlaza(ZONA_GRANDE.name),
     )
-    await expect(page).toHaveURL(/\/es\/zona\/xentric-anahuac$/)
+    await expect(page).toHaveURL(new RegExp(`/es/zona/${ZONA_GRANDE.slug}$`))
     await expect(marker).toHaveAttribute('aria-pressed', 'true')
   })
 })
@@ -304,9 +320,13 @@ test.describe('Móvil en horizontal', () => {
     // reducidos a un punto. Lo que sí se exige aquí es que ninguno quede debajo de la hoja, que la plaza
     // con más lugares siga marcada y que el resto se alcance por el selector (se usa justo después).
     await expect.poll(() => coveredBySheet(page)).toEqual([])
-    await expect(page.getByRole('button', { name: /^Xentric Anáhuac/ })).toBeVisible()
-    await elegirZona(page, 'Paseo Zibatá')
-    await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: new RegExp(`^${esc(ZONA_GRANDE.name)}`) }),
+    ).toBeVisible()
+    await elegirZona(page, ZONA_GRANDE.name)
+    await expect(
+      panel(page).getByRole('heading', { level: 2, name: ZONA_GRANDE.name }),
+    ).toBeVisible()
     const header = await page
       .locator('header', { has: page.getByRole('searchbox', { name: 'Buscar lugares' }) })
       .boundingBox()

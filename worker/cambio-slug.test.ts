@@ -10,7 +10,7 @@ import {
   type Redirect,
 } from '../src/data/schemas.ts'
 import { prepararBorrado } from './borrado.ts'
-import { cambiarSlug, prepararCambioSlug, type TipoDireccion } from './cambio-slug.ts'
+import { cambiarSlug, prepararCambioSlug } from './cambio-slug.ts'
 import { resolverDirecciones } from './redireccion.ts'
 
 /*
@@ -58,7 +58,7 @@ const ENTIDADES = {
   },
 } as const
 
-describe.each(['place', 'plaza'] as TipoDireccion[])('cambiar la dirección de %s', (tipo) => {
+describe.each(['place', 'plaza'] as ('place' | 'plaza')[])('cambiar la dirección de %s', (tipo) => {
   const e = ENTIDADES[tipo]
   const kind: Redirect['kind'] = tipo === 'place' ? 'place-slug' : 'plaza-slug'
   const preparar = (cuerpo: unknown, crudo = crudoBase, dataset = completo) =>
@@ -251,6 +251,122 @@ describe.each(['place', 'plaza'] as TipoDireccion[])('cambiar la dirección de %
     expect(preparar({ id: 'no-existe-nada', slug: 'otra' }).ok).toBe(false)
     expect(preparar({ id: e.id, slug: 'otra', nombre: 'x' }).ok).toBe(false)
     expect(preparar({ slug: 'otra' }).ok).toBe(false)
+  })
+})
+
+describe.each(['es', 'en'] as const)('cambiar el slug de una categoría en %s', (lang) => {
+  const categoria = completo.categories[0]
+  const otra = completo.categories[1]
+  if (!categoria || !otra) throw new Error('el dataset necesita dos categorías')
+  const otroIdioma = lang === 'es' ? 'en' : 'es'
+  const kind = 'category-slug'
+  const preparar = (cuerpo: unknown, crudo = crudoBase, dataset = completo) =>
+    prepararCambioSlug('category', dataset, crudo, cuerpo, HOY)
+
+  it('pide el idioma, y solo una categoría lo admite', () => {
+    expect(preparar({ id: categoria.id, slug: 'nueva-direccion' }).ok).toBe(false)
+    expect(
+      prepararCambioSlug('place', completo, crudoBase, { id: lugar.id, slug: 'x-nuevo', lang }, HOY)
+        .ok,
+    ).toBe(false)
+  })
+
+  it('cambia el slug de ese idioma y deja el otro, el id y el nombre como estaban', () => {
+    const p = preparar({ id: categoria.id, slug: 'nueva-direccion', lang })
+    expect(p.ok).toBe(true)
+    if (!p.ok) return
+    const fila = (p.archivo.categories as { id: string; slug: Record<string, string> }[]).find(
+      (c) => c.id === categoria.id,
+    )
+    expect(fila?.slug[lang]).toBe('nueva-direccion')
+    expect(fila?.slug[otroIdioma]).toBe(categoria.slug[otroIdioma])
+    expect(p.redirects.redirects).toEqual([
+      { kind, id: categoria.id, lang, slug: categoria.slug[lang] },
+    ])
+    expect(p.impacto.lang).toBe(lang)
+    const seg = lang === 'es' ? 'categoria' : 'category'
+    expect(p.impacto.redirecciones).toEqual([
+      {
+        desde: `/${lang}/${seg}/${categoria.slug[lang]}`,
+        hacia: `/${lang}/${seg}/nueva-direccion`,
+      },
+    ])
+    expect(p.impacto.avisos.join(' ')).toMatch(/filtro/)
+  })
+
+  it('rechaza el slug de otra categoría en ese idioma, pero no el del otro idioma', () => {
+    expect(preparar({ id: categoria.id, slug: otra.slug[lang], lang }).ok).toBe(false)
+    expect(preparar({ id: categoria.id, slug: otra.id, lang }).ok).toBe(false)
+    // El slug de otra categoría en el otro idioma es otro espacio de direcciones.
+    const sinChoque = `solo-${otroIdioma}-${otra.id}`
+    expect(preparar({ id: categoria.id, slug: sinChoque, lang }).ok).toBe(true)
+  })
+
+  it('rechaza un slug que ya figura como cambio abandonado por otra categoría', () => {
+    const ajena: Redirect = { kind, id: otra.id, lang, slug: 'abandonada' }
+    expect(preparar({ id: categoria.id, slug: 'abandonada', lang }, conRedirects([ajena])).ok).toBe(
+      false,
+    )
+    // La misma dirección en el otro idioma es otro espacio.
+    const delOtro: Redirect = { kind, id: otra.id, lang: otroIdioma, slug: 'abandonada' }
+    expect(
+      preparar({ id: categoria.id, slug: 'abandonada', lang }, conRedirects([delOtro])).ok,
+    ).toBe(true)
+  })
+
+  it('volver a un slug anterior quita su fila', () => {
+    const cambiado: CommercialDataset = {
+      ...completo,
+      categories: completo.categories.map((c) =>
+        c.id === categoria.id ? { ...c, slug: { ...c.slug, [lang]: 'segundo-slug' } } : c,
+      ),
+    }
+    const crudo = conRedirects([{ kind, id: categoria.id, lang, slug: categoria.slug[lang] }])
+    const p = preparar({ id: categoria.id, slug: categoria.slug[lang], lang }, crudo, cambiado)
+    expect(p.ok).toBe(true)
+    if (!p.ok) return
+    expect(p.impacto.vuelveAUnaAnterior).toBe(true)
+    expect(p.redirects.redirects).toEqual([{ kind, id: categoria.id, lang, slug: 'segundo-slug' }])
+  })
+
+  it('el resultado pasa la validación de redirecciones sobre el dataset que queda', () => {
+    const p = preparar({ id: categoria.id, slug: 'nueva-direccion', lang })
+    expect(p.ok).toBe(true)
+    if (!p.ok) return
+    const despues: CommercialDataset = {
+      ...completo,
+      categories: completo.categories.map((c) =>
+        c.id === categoria.id ? { ...c, slug: { ...c.slug, [lang]: 'nueva-direccion' } } : c,
+      ),
+    }
+    expect(
+      validateRedirects(p.redirects.redirects as Redirect[], despues).filter(
+        (asunto) => asunto.level === 'error',
+      ),
+    ).toEqual([])
+  })
+
+  it('el Worker lo resuelve por id y por idioma: el slug antiguo llega al de hoy', () => {
+    const p = preparar({ id: categoria.id, slug: 'nueva-direccion', lang })
+    if (!p.ok) throw new Error('el cambio debía valer')
+    const finales = completo.categories.map((c) =>
+      c.id === categoria.id ? { ...c, slug: { ...c.slug, [lang]: 'nueva-direccion' } } : c,
+    )
+    const d = resolverDirecciones(
+      p.redirects.redirects as Redirect[],
+      completo.plazas,
+      completo.places,
+      finales,
+    )
+    const destino = d.categorias[lang].get(categoria.slug[lang])
+    // Con algún local visible va a su página; sin ninguno, a la portada.
+    const zonasActivas = new Set(completo.plazas.filter((z) => z.active).map((z) => z.id))
+    const giros = new Set(categoria.giros.map((g) => g.id))
+    const conPagina = completo.places.some(
+      (l) => l.active && zonasActivas.has(l.plazaId) && l.giros.some((g) => giros.has(g)),
+    )
+    expect(destino).toEqual(conPagina ? { tipo: 'categoria', slug: 'nueva-direccion' } : null)
+    expect(d.categorias[otroIdioma].size).toBe(0)
   })
 })
 

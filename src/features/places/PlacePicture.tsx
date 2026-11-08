@@ -6,7 +6,7 @@
 import { useState } from 'react'
 import { localized, t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
-import { variantPath } from '../../lib/image-variants.ts'
+import { variantesDe, variantPath } from '../../lib/image-variants.ts'
 import type { Category, Photo } from '../../types/domain.ts'
 import { CategoryIllustration } from './CategoryIllustration.tsx'
 import styles from './PlacePicture.module.css'
@@ -55,7 +55,9 @@ export function PlacePicture({
   }
 
   const src = assetUrl(photo.src)
-  const variants = photo.variants ?? []
+  // Una foto subida desde el panel no lista sus variantes: se deducen del ancho, y el build genera esos
+  // archivos. En `vite dev` no se generan, y un `<source>` sin archivo no cae a la imagen de abajo.
+  const variants = photo.variants ?? (import.meta.env.DEV ? [] : variantesDe(photo.width))
   // Variantes reducidas + la imagen principal (si se conoce su ancho) en cada formato.
   const srcSet = (format: 'webp' | 'avif') =>
     [

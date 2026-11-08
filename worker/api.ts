@@ -13,6 +13,7 @@ import { type EntornoAcceso, puedeVerElPanel } from './acceso.ts'
 import { fechaLocal } from './analitica.ts'
 import { borrarNegocio } from './borrado.ts'
 import { borrarCategoria } from './borrado-categoria.ts'
+import { borrarGiro } from './borrado-giro.ts'
 import { borrarPlaza } from './borrado-plaza.ts'
 import { cambiarSlug } from './cambio-slug.ts'
 import { LUGARES } from './catalogo.ts'
@@ -108,8 +109,10 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
   '/api/panel/contenido/plaza/slug': 4 * 1024,
+  '/api/panel/contenido/categoria/slug': 4 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
   '/api/panel/contenido/categoria/borrar': 4 * 1024,
+  '/api/panel/contenido/giro/borrar': 4 * 1024,
   '/api/panel/contenido/foto': Math.ceil(TOPE_FOTO * 1.5),
 }
 
@@ -382,6 +385,7 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
   for (const [rutaCambio, tipo] of [
     ['/api/panel/contenido/negocio/slug', 'place'],
     ['/api/panel/contenido/plaza/slug', 'plaza'],
+    ['/api/panel/contenido/categoria/slug', 'category'],
   ] as const) {
     if (ruta === rutaCambio && peticion.method === 'POST') {
       if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
@@ -413,6 +417,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await borrarCategoria(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Lo mismo para un giro suelto que ningún local usa; ver worker/borrado-giro.ts.
+  if (ruta === '/api/panel/contenido/giro/borrar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await borrarGiro(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)

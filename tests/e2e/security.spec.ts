@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, waitForMap } from './helpers.ts'
+import { LOCAL_B, openApp, panel, waitForMap, ZONA_B } from './helpers.ts'
 
 test.describe('Seguridad', () => {
   test('la CSP está activa y el recorrido completo no produce violaciones ni peticiones externas', async ({
@@ -24,15 +24,15 @@ test.describe('Seguridad', () => {
       if (/^https?:/.test(url) && !url.startsWith(origin)) external.push(url)
     })
 
-    await openApp(page, { path: 'zona/condesa' })
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
     await expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).toHaveAttribute(
       'content',
       /script-src 'self'; /,
     )
     await waitForMap(page)
     const region = panel(page)
-    await region.getByRole('link', { name: 'Ver detalles de Bendito Bocado' }).click()
-    await expect(region.getByRole('heading', { level: 2, name: 'Bendito Bocado' })).toBeVisible()
+    await region.getByRole('link', { name: `Ver detalles de ${LOCAL_B.name}` }).click()
+    await expect(region.getByRole('heading', { level: 2, name: LOCAL_B.name })).toBeVisible()
     await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('tacos')
     // Tiempo para que el mapa pida teselas, fuentes e imágenes tras los movimientos de cámara.
     await page.waitForTimeout(2500)
@@ -46,7 +46,7 @@ test.describe('Seguridad', () => {
   test('los enlaces externos abren en otra pestaña sin acceso a la página (noopener)', async ({
     page,
   }) => {
-    await openApp(page, { path: 'lugar/bendito-bocado' })
+    await openApp(page, { path: `lugar/${LOCAL_B.slug}` })
     const links = panel(page).locator('a[target="_blank"]')
     await expect(links.first()).toBeVisible()
     for (const link of await links.all()) {

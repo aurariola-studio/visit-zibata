@@ -1,5 +1,14 @@
 import { type APIRequestContext, expect, test } from '@playwright/test'
-import { rutaConIdioma } from './helpers.ts'
+import {
+  CADENA,
+  CON_ESPECIALES,
+  LOCAL,
+  LOCAL_CON_WHATSAPP,
+  LOCAL_UNICO,
+  plazaDe,
+  rutaConIdioma,
+  ZONA_B,
+} from './helpers.ts'
 
 /**
  * Los metadatos tal como salen en el HTML que se publica (`dist/`), no como los calcula el
@@ -56,11 +65,11 @@ test.describe('Metadatos del HTML publicado', () => {
     for (const ruta of [
       '',
       'en',
-      'zona/condesa',
-      'lugar/cafele',
-      'lugar/agave-grill',
-      'lugar/sinforosa',
-      'en/place/luka-anahuac',
+      `zona/${ZONA_B.slug}`,
+      `lugar/${LOCAL_UNICO.slug}`,
+      `lugar/${LOCAL.slug}`,
+      `lugar/${CADENA[0].slug}`,
+      `en/place/${CADENA[1].slug}`,
       'info/acerca',
     ]) {
       const c = await cabecera(request, ruta)
@@ -93,41 +102,44 @@ test.describe('Metadatos del HTML publicado', () => {
     request,
   }) => {
     const [a, b] = await Promise.all([
-      cabecera(request, 'lugar/sinforosa'),
-      cabecera(request, 'lugar/sinforosa-anahuac'),
+      cabecera(request, `lugar/${CADENA[0].slug}`),
+      cabecera(request, `lugar/${CADENA[1].slug}`),
     ])
-    expect(a.title[0]).toBe('Sinforosa Café en Paseo Zibatá · Visit Zibatá')
-    expect(b.title[0]).toBe('Sinforosa Café en Anáhuac Querétaro · Visit Zibatá')
+    expect(a.title[0]).toBe(`${CADENA[0].name} en ${plazaDe(CADENA[0]).name} · Visit Zibatá`)
+    expect(b.title[0]).toBe(`${CADENA[1].name} en ${plazaDe(CADENA[1]).name} · Visit Zibatá`)
     expect(a.description[0]).not.toBe(b.description[0])
     // Y un local cuyo nombre no se repite conserva su título de siempre.
-    expect((await cabecera(request, 'lugar/cafele')).title[0]).toBe('Cafele · Visit Zibatá')
+    expect((await cabecera(request, `lugar/${LOCAL_UNICO.slug}`)).title[0]).toBe(
+      `${LOCAL_UNICO.name} · Visit Zibatá`,
+    )
   })
 
   test('una ficha reabierta ya no muestra el aviso de cierre', async ({ request }) => {
-    const agave = await cabecera(request, 'lugar/agave-grill')
+    const agave = await cabecera(request, `lugar/${LOCAL.slug}`)
     expect(agave.description[0]).not.toMatch(/^Cerrado temporalmente/)
     const sitemap = await (await request.get('sitemap.xml')).text()
-    const entrada = /<loc>[^<]*\/es\/lugar\/agave-grill<\/loc><lastmod>([^<]*)<\/lastmod>/.exec(
-      sitemap,
-    )
+    const entrada = new RegExp(
+      `<loc>[^<]*/es/lugar/${LOCAL.slug}</loc><lastmod>([^<]*)</lastmod>`,
+    ).exec(sitemap)
     expect(entrada?.[1]).toBeDefined()
   })
 
   test('el enlace de WhatsApp del HTML servido apunta a wa.me y no a una ruta relativa', async ({
     request,
   }) => {
-    const { html } = await cabecera(request, 'lugar/masaru')
-    expect(html).toContain('href="https://wa.me/524426028627"')
+    const { html } = await cabecera(request, `lugar/${LOCAL_CON_WHATSAPP.place.slug}`)
+    expect(html).toContain(`href="https://wa.me/${LOCAL_CON_WHATSAPP.numero}"`)
     expect(html).not.toContain('href="+')
   })
 
   test('los caracteres especiales llegan enteros al HTML', async ({ request }) => {
-    for (const [ruta, esperado] of [
-      ['lugar/nam-nam', 'Ñam Ñam Sushi'],
-      ['lugar/mykona-frozen-yogurt', 'Myköna Frozen Yogurt'],
-      ['lugar/birria-jauregui', 'Birria Jáuregui'],
-      ['lugar/burger-fries', 'Burger & Fries Forever'],
-    ] as const) {
+    expect(
+      CON_ESPECIALES.length,
+      'la guía tiene nombres con caracteres especiales',
+    ).toBeGreaterThan(0)
+    for (const [ruta, esperado] of CON_ESPECIALES.map(
+      (place) => [`lugar/${place.slug}`, place.name] as const,
+    )) {
       const c = await cabecera(request, ruta)
       expect(c.title[0], ruta).toContain(esperado)
       // El `&` va escapado en el HTML y se lee como `&`, no como `&amp;` ni doblemente escapado.

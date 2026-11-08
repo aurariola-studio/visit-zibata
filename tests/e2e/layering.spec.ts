@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test'
-import { isMobile, openApp, panel, waitForMap } from './helpers.ts'
+import { isMobile, openApp, panel, waitForMap, ZONA_GRANDE } from './helpers.ts'
 
 test.describe('capas y alineación @mapa', () => {
   test('las etiquetas de las zonas quedan por debajo del panel lateral', async ({ page }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     await waitForMap(page)
     test.skip(isMobile(page), 'El panel lateral es de escritorio; en móvil es la hoja inferior.')
     await expect(panel(page)).toBeVisible()
@@ -141,7 +141,7 @@ test.describe('capas y alineación @mapa', () => {
     // Lo que se fija es el espacio vertical que calcula el navegador, no dónde cae el salto de línea (que
     // depende del ancho de cada pantalla): el renglón de la dirección separa sus líneas igual que la
     // cabecera separa sus bloques.
-    await openApp(page, { path: 'zona/xentric-anahuac' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     const region = panel(page)
     await expect(region.getByRole('link', { name: /Cómo llegar a la zona/ })).toBeVisible()
     const [entreBloques, entreLineas] = await region.evaluate((el) => {
@@ -156,7 +156,7 @@ test.describe('capas y alineación @mapa', () => {
   test('las pastillas de categoría del panel arrancan alineadas con el resto del contenido', async ({
     page,
   }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     await waitForMap(page)
     const region = panel(page)
     const heading = region.getByRole('heading', { level: 2 }).first()

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { openApp, waitForMap } from './helpers.ts'
+import { openApp, waitForMap, ZONA_GRANDE } from './helpers.ts'
 
 type Box = { x: number; y: number; width: number; height: number }
 const overlaps = (a: Box | null, b: Box | null) =>
@@ -48,7 +48,7 @@ for (const size of SIZES) {
       page,
     }, testInfo) => {
       test.skip(!size.project.includes(testInfo.project.name), 'Tamaño de otro tipo de dispositivo')
-      for (const path of ['', 'zona/paseo-zibata']) {
+      for (const path of ['', `zona/${ZONA_GRANDE.slug}`]) {
         await openApp(page, { path })
         await waitForMap(page)
         await page.waitForTimeout(900)

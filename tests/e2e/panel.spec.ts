@@ -498,27 +498,35 @@ test.describe('Panel', () => {
   /** Simula `/negocio/slug` o `/plaza/slug`: sin confirmar el impacto, con confirmar la PR. */
   async function simularCambioDeDireccion(
     page: Page,
-    tipo: 'negocio' | 'plaza',
+    tipo: 'negocio' | 'plaza' | 'categoria',
     numeroDePr: number,
-  ): Promise<{ id: string; slug: string; confirmar?: boolean }[]> {
-    const cuerpos: { id: string; slug: string; confirmar?: boolean }[] = []
-    const [es, en] = tipo === 'negocio' ? ['lugar', 'place'] : ['zona', 'area']
+  ): Promise<{ id: string; slug: string; lang?: string; confirmar?: boolean }[]> {
+    const cuerpos: { id: string; slug: string; lang?: string; confirmar?: boolean }[] = []
+    const [es, en] =
+      tipo === 'negocio'
+        ? ['lugar', 'place']
+        : tipo === 'plaza'
+          ? ['zona', 'area']
+          : ['categoria', 'category']
     await page.route(new RegExp(`/api/panel/contenido/${tipo}/slug$`), async (ruta) => {
       const cuerpo = ruta.request().postDataJSON() as {
         id: string
         slug: string
+        lang?: string
         confirmar?: boolean
       }
       cuerpos.push(cuerpo)
+      const idiomas = cuerpo.lang ? [cuerpo.lang] : ['es', 'en']
       const impacto = {
-        tipo: tipo === 'negocio' ? 'place' : 'plaza',
+        tipo: tipo === 'negocio' ? 'place' : tipo === 'plaza' ? 'plaza' : 'category',
+        lang: cuerpo.lang ?? null,
         entidad: { id: cuerpo.id, nombre: 'Nombre de prueba' },
         antes: 'direccion-de-antes',
         despues: cuerpo.slug,
-        redirecciones: [
-          { desde: `/es/${es}/direccion-de-antes`, hacia: `/es/${es}/${cuerpo.slug}` },
-          { desde: `/en/${en}/direccion-de-antes`, hacia: `/en/${en}/${cuerpo.slug}` },
-        ],
+        redirecciones: idiomas.map((i) => {
+          const seg = i === 'es' ? es : en
+          return { desde: `/${i}/${seg}/direccion-de-antes`, hacia: `/${i}/${seg}/${cuerpo.slug}` }
+        }),
         anterioresQueSeguiran: 0,
         vuelveAUnaAnterior: false,
         tienePagina: true,
@@ -674,6 +682,164 @@ test.describe('Panel', () => {
     await dialogo.getByRole('button', { name: 'Ver el impacto' }).click()
     await expect(dialogo.locator('[data-problemas]')).toContainText('ya es la dirección de otro')
     await expect(dialogo.locator('.impacto-borrado')).toHaveCount(0)
+  })
+
+  test('una categoría tiene un slug por idioma: cada sección pide y confirma el suyo', async ({
+    page,
+  }) => {
+    const cuerpos = await simularCambioDeDireccion(page, 'categoria', 18)
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const enEspanol = dialogo.locator('section[data-direccion][data-lang="es"]')
+    const enIngles = dialogo.locator('section[data-direccion][data-lang="en"]')
+    await expect(enEspanol).toContainText('/es/categoria/servicios')
+    await expect(enIngles).toContainText('/en/category/services')
+
+    // Solo el inglés: la petición lleva SU valor y su idioma, no el primer campo del formulario.
+    await enIngles.locator('[data-slug-nuevo]').fill('test-services-renamed')
+    await enIngles.getByRole('button', { name: /Ver el impacto/ }).click()
+    await expect(enIngles.locator('.impacto-borrado')).toContainText(
+      '/en/category/test-services-renamed',
+    )
+    await expect(enEspanol.locator('.impacto-borrado')).toHaveCount(0)
+    expect(cuerpos).toEqual([{ id: 'servicios', slug: 'test-services-renamed', lang: 'en' }])
+    await sinDesplazamientoLateral(page)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // Intro en el campo español pide el impacto del español, sin enviar el formulario ni tocar el inglés.
+    await enEspanol.locator('[data-slug-nuevo]').fill('servicios-renombrados')
+    await enEspanol.locator('[data-slug-nuevo]').press('Enter')
+    await expect(enEspanol.locator('.impacto-borrado')).toContainText(
+      '/es/categoria/servicios-renombrados',
+    )
+    expect(cuerpos.at(-1)).toEqual({ id: 'servicios', slug: 'servicios-renombrados', lang: 'es' })
+    // Escribir en un campo solo descarta SU impacto.
+    await enIngles.locator('[data-slug-nuevo]').fill('otro-ingles')
+    await expect(enIngles.locator('.impacto-borrado')).toBeHidden()
+    await expect(enEspanol.locator('.impacto-borrado')).toBeVisible()
+
+    // Confirmar en la sección española manda el español, no lo que haya en el campo inglés.
+    await enEspanol.getByRole('button', { name: 'Cambiar la dirección' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #18' })).toBeVisible()
+    expect(cuerpos.at(-1)).toEqual({
+      id: 'servicios',
+      slug: 'servicios-renombrados',
+      lang: 'es',
+      confirmar: true,
+    })
+  })
+
+  test('una categoría con cambios sin guardar tampoco cambia la dirección', async ({ page }) => {
+    const cuerpos = await simularCambioDeDireccion(page, 'categoria', 19)
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    await dialogo.locator('input[data-campo="labelEs"]').fill('Otro nombre')
+    await dialogo.locator('section[data-lang="es"] [data-slug-nuevo]').fill('direccion-nueva')
+    await dialogo
+      .locator('section[data-lang="es"]')
+      .getByRole('button', { name: /Ver el impacto/ })
+      .click()
+    await expect(dialogo.locator('[data-problemas]')).toContainText('cambios sin guardar')
+    expect(cuerpos).toEqual([])
+  })
+
+  test('un giro sin locales se borra en dos pasos; el general no ofrece borrarse', async ({
+    page,
+  }) => {
+    const cuerpos: { id: string; confirmar?: boolean }[] = []
+    await page.route(/\/api\/panel\/contenido\/giro\/borrar$/, async (ruta) => {
+      const cuerpo = ruta.request().postDataJSON() as { id: string; confirmar?: boolean }
+      cuerpos.push(cuerpo)
+      const impacto = {
+        giro: { id: cuerpo.id, nombre: 'Taller de prueba' },
+        categoria: { id: 'servicios', nombre: 'Servicios de prueba' },
+        gustosDeLocalesBorrados: 0,
+        avisos: ['Ninguna página cambia.'],
+      }
+      await ruta.fulfill({
+        json: cuerpo.confirmar
+          ? {
+              ok: true,
+              confirmado: true,
+              seco: false,
+              pr: { url: 'https://example.test/pr/20', numero: 20, creada: true },
+              mensaje: 'Borrado enviado a la PR.',
+              impacto,
+            }
+          : {
+              ok: true,
+              confirmado: false,
+              seco: false,
+              pr: null,
+              mensaje: 'Esto es lo que cambiaría.',
+              impacto,
+            },
+      })
+    })
+
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const general = dialogo.locator('[data-giro][data-id="servicios-general"]')
+    const taller = dialogo.locator('[data-giro][data-id="servicios-taller"]')
+    await expect(general).toContainText('No se borra')
+    await expect(general.getByRole('button', { name: 'Borrar giro' })).toHaveCount(0)
+
+    // Primer paso: solo el impacto, sin confirmación mandada.
+    await taller.getByRole('button', { name: 'Borrar giro' }).click()
+    const impacto = taller.locator('.impacto-borrado')
+    await expect(impacto).toContainText('Si borras Taller de prueba')
+    await expect(impacto).toContainText('Ninguna página cambia')
+    expect(cuerpos).toEqual([{ id: 'servicios-taller' }])
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // "Mejor no" lo deja todo como estaba y devuelve el foco al botón.
+    await impacto.getByRole('button', { name: 'Mejor no' }).click()
+    await expect(impacto).toBeHidden()
+    await expect(taller.getByRole('button', { name: 'Borrar giro' })).toBeFocused()
+    expect(cuerpos).toHaveLength(1)
+
+    // Segundo paso: confirmar. El diálogo se cierra y la lista avisa de la PR.
+    await taller.getByRole('button', { name: 'Borrar giro' }).click()
+    await taller.getByRole('button', { name: 'Borrar este giro' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #20' })).toBeVisible()
+    expect(cuerpos.at(-1)).toEqual({ id: 'servicios-taller', confirmar: true })
+  })
+
+  test('con cambios sin guardar no se borra un giro: al terminar se cierra el formulario', async ({
+    page,
+  }) => {
+    const cuerpos: unknown[] = []
+    await page.route(/\/api\/panel\/contenido\/giro\/borrar$/, async (ruta) => {
+      cuerpos.push(ruta.request().postDataJSON())
+      await ruta.fulfill({ status: 500, json: { ok: false, problemas: ['no debía llamarse'] } })
+    })
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    await dialogo.locator('input[data-campo="labelEs"]').fill('Otro nombre sin guardar')
+    await dialogo
+      .locator('[data-giro][data-id="servicios-taller"]')
+      .getByRole('button', { name: 'Borrar giro' })
+      .click()
+    await expect(dialogo.locator('[data-problemas]')).toContainText('cambios sin guardar')
+    expect(cuerpos).toEqual([])
   })
 
   test('un negocio nuevo no ofrece cambiar la dirección', async ({ page }) => {

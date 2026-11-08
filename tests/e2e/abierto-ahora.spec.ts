@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, waitForMap } from './helpers.ts'
+import { openApp, panel, waitForMap, ZONA_GRANDE } from './helpers.ts'
 
 /**
  * El filtro y el orden por "abierto ahora".
@@ -10,7 +10,7 @@ import { openApp, panel, waitForMap } from './helpers.ts'
  */
 test.describe('Abierto ahora', () => {
   test('el filtro deja solo lo abierto, y todo lo que queda lleva su marca', async ({ page }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     await waitForMap(page)
     const region = panel(page)
 
@@ -45,7 +45,7 @@ test.describe('Abierto ahora', () => {
   test('los abiertos salen arriba sin haber marcado nada', async ({ page }) => {
     // Navegador limpio: sin favoritos ni calificaciones, el orden sigue siendo el curado de la guía
     // salvo por esto. Estar abierto no es una señal personal, es una propiedad del mundo.
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     await waitForMap(page)
     const region = panel(page)
 

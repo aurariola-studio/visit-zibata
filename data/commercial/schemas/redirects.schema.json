@@ -124,6 +124,37 @@
               "slug"
             ],
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "category-slug"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "lang": {
+                "type": "string",
+                "enum": [
+                  "es",
+                  "en"
+                ]
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "lang",
+              "slug"
+            ],
+            "additionalProperties": false
           }
         ]
       }

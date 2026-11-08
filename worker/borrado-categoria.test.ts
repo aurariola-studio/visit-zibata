@@ -67,6 +67,41 @@ describe('la vista de impacto', () => {
   })
 })
 
+describe('los cambios de dirección de la categoría', () => {
+  const otra = completo.categories.find((c) => c.id !== categoria.id && c.id !== CATEGORIA_FIJA)
+  if (!otra) throw new Error('el dataset necesita otra categoría')
+  const conCambios = (extra: Record<string, unknown>[] = []) => ({
+    ...crudo,
+    redirects: {
+      version: 1,
+      updatedAt: HOY,
+      redirects: [
+        { kind: 'category-slug', id: categoria.id, lang: 'es', slug: 'antiguo-es' },
+        { kind: 'category-slug', id: categoria.id, lang: 'en', slug: 'antiguo-en' },
+        { kind: 'category-slug', id: otra.id, lang: 'es', slug: 'otro-antiguo' },
+        ...extra,
+      ],
+    } as Record<string, unknown>,
+  })
+
+  it('al borrarla se quitan los suyos, en el mismo commit, y los de otra categoría se quedan', () => {
+    const preparado = prepararBorradoCategoria(vacia, conCambios(), { id: categoria.id }, HOY)
+    expect(preparado.ok).toBe(true)
+    if (!preparado.ok) return
+    expect(preparado.impacto.cambiosDeDireccion).toBe(2)
+    expect(preparado.impacto.avisos.join(' ')).toMatch(/2 direcciones antiguas/)
+    expect(preparado.redirects?.redirects).toEqual([
+      { kind: 'category-slug', id: otra.id, lang: 'es', slug: 'otro-antiguo' },
+    ])
+  })
+
+  it('sin cambios de dirección no toca redirects.json', () => {
+    const preparado = prepararBorradoCategoria(vacia, crudo, { id: categoria.id }, HOY)
+    expect(preparado.ok && preparado.redirects).toBeNull()
+    expect(preparado.ok && preparado.impacto.cambiosDeDireccion).toBe(0)
+  })
+})
+
 describe('borrar', () => {
   it('quita la fila cruda de la categoría y deja el resto intacto y en su orden', () => {
     const preparado = prepararBorradoCategoria(vacia, crudo, { id: categoria.id }, HOY)
