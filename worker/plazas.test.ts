@@ -140,14 +140,14 @@ describe('editar una plaza', () => {
 describe('los títulos no se repiten', () => {
   it('no admite el nombre de otra plaza', () => {
     const otra = dataset.plazas.find((fila) => fila.id !== plaza.id && fila.active)
-    if (!otra) return
+    if (!otra) throw new Error('el dataset necesita otra plaza activa')
     const preparada = prepararPlaza(dataset, crudo, igual({ nombre: otra.name }), HOY)
     expect(preparada.ok).toBe(false)
   })
 
   it('no admite el nombre de un local que se ve', () => {
     const local = dataset.places.find((place) => place.active && place.plazaId !== plaza.id)
-    if (!local) return
+    if (!local) throw new Error('el dataset necesita un local visible en otra plaza')
     const preparada = prepararPlaza(dataset, crudo, igual({ nombre: local.name }), HOY)
     expect(preparada.ok).toBe(false)
   })
@@ -161,7 +161,7 @@ describe('los títulos no se repiten', () => {
     const otra = dataset.plazas.find(
       (fila) => fila.id !== plaza.id && fila.active && fila.description,
     )
-    if (!otra?.description) return
+    if (!otra?.description) throw new Error('el dataset necesita otra plaza con descripción')
     const preparada = prepararPlaza(
       dataset,
       crudo,
@@ -205,28 +205,31 @@ describe('desactivar o activar una plaza', () => {
     expect(preparada.impacto.categoriasSinPagina.length).toBeGreaterThan(0)
   })
 
-  it('activar una inactiva también pide confirmación', () => {
-    const inactiva = dataset.plazas.find((fila) => !fila.active && !fila.comingSoon)
-    if (!inactiva) return
+  it('activar una inactiva pide confirmación y dice qué empieza a verse', () => {
+    // Un dataset con una sola plaza, apagada: encenderla da vista a sus locales y página a sus categorías.
+    const filaCruda = (plazasJson.plazas as Record<string, unknown>[]).find(
+      (otra) => otra.id === plaza.id,
+    ) as Record<string, unknown>
+    const apagada: CommercialDataset = {
+      ...dataset,
+      plazas: [{ ...plaza, active: false }],
+      places: dataset.places.filter((place) => place.plazaId === plaza.id),
+    }
     const preparada = prepararPlaza(
-      dataset,
-      crudo,
-      {
-        id: inactiva.id,
-        nombre: inactiva.name,
-        descripcionEs: inactiva.description?.es ?? '',
-        descripcionEn: inactiva.description?.en ?? '',
-        direccion: inactiva.address ?? '',
-        lat: inactiva.coordinates.lat,
-        lng: inactiva.coordinates.lng,
-        googleMapsUri: inactiva.googleMapsUri ?? '',
-        activa: true,
-        proximamente: false,
-      },
+      apagada,
+      { ...crudo, plazas: { ...crudo.plazas, plazas: [{ ...filaCruda, active: false }] } },
+      igual({ activa: true }),
       HOY,
     )
-    // Puede fallar por un nombre repetido real; si valida, tiene que pedir confirmación.
-    if (preparada.ok) expect(preparada.requiereConfirmacion).toBe(true)
+    expect(preparada.ok).toBe(true)
+    if (!preparada.ok) return
+    expect(preparada.requiereConfirmacion).toBe(true)
+    expect(preparada.impacto.activaAntes).toBe(false)
+    expect(preparada.impacto.activaDespues).toBe(true)
+    expect(preparada.impacto.localesAntes).toBe(0)
+    expect(preparada.impacto.localesDespues).toBeGreaterThan(0)
+    expect(preparada.impacto.categoriasNuevas.length).toBeGreaterThan(0)
+    expect(preparada.impacto.avisos.join(' ')).toMatch(/se publica la página/i)
   })
 })
 
