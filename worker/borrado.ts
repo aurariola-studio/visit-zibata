@@ -60,8 +60,8 @@ const visible = (dataset: CommercialDataset, plazaId: string, activo: boolean): 
   activo && dataset.plazas.find((plaza) => plaza.id === plazaId)?.active === true
 
 /**
- * Suma redirecciones a `redirects.json` y las valida contra el dataset que queda. Es lo que comparten
- * borrar un local y borrar una plaza: las dos dejan una huella con la que `data:validate` comprueba que
+ * Suma (y, si hace falta, quita) redirecciones de `redirects.json` y las valida contra el dataset que queda. Es lo que comparten
+ * borrar un local, borrar una plaza y cambiar una dirección: todas dejan una huella con la que `data:validate` comprueba que
  * ningún slug vivo compite con ella.
  */
 export function anotarRedirecciones(
@@ -69,9 +69,11 @@ export function anotarRedirecciones(
   nuevas: Redirect[],
   despues: CommercialDataset,
   hoy: string,
+  /** Filas previas que dejan de valer (volver a una dirección anterior quita su redirección). */
+  quitar: (fila: Redirect) => boolean = () => false,
 ): { ok: true; redirects: Record<string, unknown> } | { ok: false; problemas: string[] } {
   const previas = (crudo.redirects?.redirects as Redirect[] | undefined) ?? []
-  const todas = [...previas, ...nuevas]
+  const todas = [...previas.filter((fila) => !quitar(fila)), ...nuevas]
   const problemas = validateRedirects(todas, despues)
     .filter((asunto) => asunto.level === 'error')
     .map((asunto) => asunto.message)

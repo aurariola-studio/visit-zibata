@@ -260,8 +260,9 @@ export function validateRetired(records: unknown[]): {
   const issues: RecordIssue[] = []
   for (const record of records) {
     const fila = record as { kind?: unknown; id?: unknown; giros?: unknown; plazaId?: unknown }
-    // Las plazas borradas están en el mismo archivo, pero no son locales: no aportan gustos.
-    if (fila?.kind === 'plaza') continue
+    // El archivo mezcla locales borrados, plazas borradas y direcciones antiguas. Solo un local borrado
+    // aporta gustos; cualquier otra clase (y las que vengan) se salta, nunca se cuenta como local.
+    if (fila?.kind !== undefined && fila.kind !== 'place') continue
     if (
       typeof fila?.id === 'string' &&
       typeof fila.plazaId === 'string' &&

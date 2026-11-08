@@ -113,7 +113,7 @@ const contenido = {
     },
     {
       id: 'plaza-dos',
-      slug: 'plaza-dos',
+      slug: 'zona-dos',
       name: 'Plaza Dos',
       description: null,
       address: null,
@@ -152,7 +152,7 @@ const contenido = {
     },
     {
       id: 'taller-de-prueba',
-      slug: 'taller-de-prueba',
+      slug: 'taller-nuevo-nombre',
       name: 'Taller de Prueba',
       plazaId: 'plaza-dos',
       giros: ['servicios-general'],
@@ -493,6 +493,194 @@ test.describe('Panel', () => {
     await expect(dialogo).toBeHidden()
     await expect(page.getByRole('status').filter({ hasText: 'PR abierta #14' })).toBeVisible()
     expect(cuerpos.at(-1)).toEqual({ id: 'vacia', confirmar: true })
+  })
+
+  /** Simula `/negocio/slug` o `/plaza/slug`: sin confirmar el impacto, con confirmar la PR. */
+  async function simularCambioDeDireccion(
+    page: Page,
+    tipo: 'negocio' | 'plaza',
+    numeroDePr: number,
+  ): Promise<{ id: string; slug: string; confirmar?: boolean }[]> {
+    const cuerpos: { id: string; slug: string; confirmar?: boolean }[] = []
+    const [es, en] = tipo === 'negocio' ? ['lugar', 'place'] : ['zona', 'area']
+    await page.route(new RegExp(`/api/panel/contenido/${tipo}/slug$`), async (ruta) => {
+      const cuerpo = ruta.request().postDataJSON() as {
+        id: string
+        slug: string
+        confirmar?: boolean
+      }
+      cuerpos.push(cuerpo)
+      const impacto = {
+        tipo: tipo === 'negocio' ? 'place' : 'plaza',
+        entidad: { id: cuerpo.id, nombre: 'Nombre de prueba' },
+        antes: 'direccion-de-antes',
+        despues: cuerpo.slug,
+        redirecciones: [
+          { desde: `/es/${es}/direccion-de-antes`, hacia: `/es/${es}/${cuerpo.slug}` },
+          { desde: `/en/${en}/direccion-de-antes`, hacia: `/en/${en}/${cuerpo.slug}` },
+        ],
+        anterioresQueSeguiran: 0,
+        vuelveAUnaAnterior: false,
+        tienePagina: true,
+        avisos: ['La dirección antigua pasa, con un 301, a la nueva.'],
+      }
+      await ruta.fulfill({
+        json: cuerpo.confirmar
+          ? {
+              ok: true,
+              confirmado: true,
+              seco: false,
+              pr: {
+                url: `https://example.test/pr/${numeroDePr}`,
+                numero: numeroDePr,
+                creada: true,
+              },
+              mensaje: 'Cambio enviado a la PR.',
+              impacto,
+            }
+          : {
+              ok: true,
+              confirmado: false,
+              seco: false,
+              pr: null,
+              mensaje: 'Esto es lo que cambiaría.',
+              impacto,
+            },
+      })
+    })
+    return cuerpos
+  }
+
+  test('cambiar la dirección de un negocio enseña el impacto primero y pide confirmación', async ({
+    page,
+  }) => {
+    const cuerpos = await simularCambioDeDireccion(page, 'negocio', 15)
+    // Intro en el campo no puede enviar el formulario entero: eso guardaría el negocio.
+    const guardados: unknown[] = []
+    await page.route(/\/api\/panel\/contenido\/negocio$/, async (ruta) => {
+      guardados.push(ruta.request().postDataJSON())
+      await ruta.fulfill({ status: 500, json: { ok: false, problemas: ['no debía guardarse'] } })
+    })
+
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const campo = dialogo.locator('[data-slug-nuevo]')
+    // El id y la dirección son distintos a propósito: la petición lleva el id.
+    await expect(dialogo).toContainText('/es/lugar/taller-nuevo-nombre')
+    await expect(campo).toHaveValue('taller-nuevo-nombre')
+
+    // Primer paso: solo el impacto, sin confirmación mandada.
+    await campo.fill('taller-con-otro-nombre')
+    await dialogo.getByRole('button', { name: 'Ver el impacto' }).click()
+    const impacto = dialogo.locator('.impacto-borrado')
+    await expect(impacto).toContainText('/es/lugar/direccion-de-antes')
+    await expect(impacto).toContainText('/es/lugar/taller-con-otro-nombre')
+    await expect(impacto).toContainText('301')
+    expect(cuerpos).toEqual([{ id: 'taller-de-prueba', slug: 'taller-con-otro-nombre' }])
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // Escribir otra cosa descarta el impacto: describía otra dirección.
+    await campo.fill('taller-con-otra-mas')
+    await expect(impacto).toBeHidden()
+
+    // Intro pide el impacto y no guarda el negocio.
+    await campo.press('Enter')
+    await expect(impacto).toContainText('/es/lugar/taller-con-otra-mas')
+    expect(guardados).toEqual([])
+    expect(cuerpos).toHaveLength(2)
+
+    // "Mejor no" lo deja todo como estaba y devuelve el foco al campo.
+    await impacto.getByRole('button', { name: 'Mejor no' }).click()
+    await expect(impacto).toBeHidden()
+    await expect(campo).toBeFocused()
+    expect(cuerpos).toHaveLength(2)
+
+    // Segundo paso: confirma lo que se vio, no lo que haya en el campo. El diálogo se cierra y avisa.
+    await dialogo.getByRole('button', { name: 'Ver el impacto' }).click()
+    await campo.evaluate((el) => {
+      ;(el as HTMLInputElement).value = 'otra-distinta-que-no-se-vio'
+    })
+    await dialogo.getByRole('button', { name: 'Cambiar la dirección' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #15' })).toBeVisible()
+    expect(cuerpos.at(-1)).toEqual({
+      id: 'taller-de-prueba',
+      slug: 'taller-con-otra-mas',
+      confirmar: true,
+    })
+    expect(guardados).toEqual([])
+  })
+
+  test('con cambios sin guardar no se cambia la dirección: el cambio solo guardaría la dirección', async ({
+    page,
+  }) => {
+    const cuerpos = await simularCambioDeDireccion(page, 'negocio', 16)
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    await dialogo.locator('input[name="nombre"]').fill('Otro nombre sin guardar')
+    await dialogo.locator('[data-slug-nuevo]').fill('direccion-nueva')
+    await dialogo.getByRole('button', { name: 'Ver el impacto' }).click()
+    await expect(dialogo.locator('[data-problemas]')).toContainText('cambios sin guardar')
+    await expect(dialogo.locator('.impacto-borrado')).toHaveCount(0)
+    expect(cuerpos).toEqual([])
+  })
+
+  test('cambiar la dirección de una plaza usa su propia ruta y su propio prefijo', async ({
+    page,
+  }) => {
+    const cuerpos = await simularCambioDeDireccion(page, 'plaza', 17)
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Dos' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo).toContainText('/es/zona/zona-dos')
+    await dialogo.locator('[data-slug-nuevo]').fill('zona-segunda')
+    await dialogo.getByRole('button', { name: 'Ver el impacto' }).click()
+    const impacto = dialogo.locator('.impacto-borrado')
+    await expect(impacto).toContainText('/es/zona/zona-segunda')
+    await sinDesplazamientoLateral(page)
+    await impacto.getByRole('button', { name: 'Cambiar la dirección' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #17' })).toBeVisible()
+    expect(cuerpos).toEqual([
+      { id: 'plaza-dos', slug: 'zona-segunda' },
+      { id: 'plaza-dos', slug: 'zona-segunda', confirmar: true },
+    ])
+  })
+
+  test('un error del Worker sale en el formulario y no deja un impacto a medias', async ({
+    page,
+  }) => {
+    await page.route(/\/api\/panel\/contenido\/negocio\/slug$/, (ruta) =>
+      ruta.fulfill({
+        status: 400,
+        json: { ok: false, problemas: ['"otro" ya es la dirección de otro.'] },
+      }),
+    )
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    await dialogo.locator('[data-slug-nuevo]').fill('otro')
+    await dialogo.getByRole('button', { name: 'Ver el impacto' }).click()
+    await expect(dialogo.locator('[data-problemas]')).toContainText('ya es la dirección de otro')
+    await expect(dialogo.locator('.impacto-borrado')).toHaveCount(0)
+  })
+
+  test('un negocio nuevo no ofrece cambiar la dirección', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Nuevo negocio' }).click()
+    await expect(page.locator('#editor').locator('[data-slug-nuevo]')).toHaveCount(0)
   })
 
   test('un negocio nuevo no ofrece borrar', async ({ page }) => {

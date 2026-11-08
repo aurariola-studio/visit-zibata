@@ -285,11 +285,39 @@ const RedirectPlazaSchema = z.strictObject({
   id: slug,
   slug,
 })
+/**
+ * Una dirección que cambió desde el panel. El `slug` es el ANTIGUO y el destino no se guarda: se resuelve
+ * por `id` al cargar (el slug actual de esa entidad, o su borrado si se borró después). Así una cadena
+ * A a B a C lleva de A y de B directo a C, sin saltos intermedios y sin filas que reescribir.
+ */
+const RedirectPlaceSlugSchema = z.strictObject({
+  kind: z.literal('place-slug'),
+  id: slug,
+  slug,
+})
+const RedirectPlazaSlugSchema = z.strictObject({
+  kind: z.literal('plaza-slug'),
+  id: slug,
+  slug,
+})
 export const RedirectSchema = z.discriminatedUnion('kind', [
   RedirectPlaceSchema,
   RedirectPlazaSchema,
+  RedirectPlaceSlugSchema,
+  RedirectPlazaSlugSchema,
 ])
 export type Redirect = z.infer<typeof RedirectSchema>
+
+/**
+ * El espacio de direcciones de una fila: `/lugar/x` o `/zona/x`. Una fila de borrado y una de cambio de
+ * slug del mismo espacio no pueden compartir slug, así que se comparan por familia y no por `kind`.
+ */
+export const familiaDeRedireccion = (fila: Pick<Redirect, 'kind'>): 'place' | 'plaza' =>
+  fila.kind === 'place' || fila.kind === 'place-slug' ? 'place' : 'plaza'
+
+/** `true` si la fila es el borrado de una entidad; `false` si es un cambio de dirección. */
+export const esBorrado = (fila: Pick<Redirect, 'kind'>): boolean =>
+  fila.kind === 'place' || fila.kind === 'plaza'
 export const RedirectsFileSchema = z.strictObject({
   ...datasetMeta,
   redirects: z.array(RedirectSchema),
