@@ -1,5 +1,6 @@
 import { ICONOS } from '../../data/iconos.ts'
 import controls from '../../styles/controls.module.css'
+import { accionesDeGiro } from './borrar-giro.ts'
 import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import type { Categoria, Giro } from './tipos.ts'
@@ -227,6 +228,7 @@ function filaDeGiroFormulario(
           : `<label class="campo-form"><span>Categoría</span><select class="campo-select" data-campo="destino"${general ? ' disabled' : ''}>${opcionesDeCategorias(destino)}</select></label>`
       }
     </div>
+    ${esNueva ? '' : accionesDeGiro(giro)}
   </div>`
 }
 

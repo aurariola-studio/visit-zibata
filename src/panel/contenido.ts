@@ -22,6 +22,7 @@
  * antes de guardar.
  */
 import controls from '../styles/controls.module.css'
+import { alPulsarBorrarGiro } from './contenido/borrar-giro.ts'
 import {
   alCambiarCategoria,
   alEscribirCategoria,
@@ -243,6 +244,7 @@ function alPulsarEditor(evento: Event): void {
   if (alPulsarCategoria(objetivo, cargar)) return
   // Antes de la guarda de abajo: el formulario de una categoría no tiene `formularioActual`.
   if (alPulsarDireccion(objetivo, cargar)) return
+  if (alPulsarBorrarGiro(objetivo, cargar)) return
   if (!vista.formularioActual) return
   if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return

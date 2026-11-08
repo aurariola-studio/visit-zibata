@@ -140,7 +140,7 @@ async function llamar(
  * categoría no tiene ese seguimiento, así que se mira el propio formulario: un control cuyo valor ya no es
  * el que traía. Los campos de dirección no cuentan (son este mismo paso).
  */
-function hayCambiosSinGuardar(formulario: HTMLFormElement): boolean {
+export function hayCambiosSinGuardar(formulario: HTMLFormElement): boolean {
   if (vista.formularioActual?.sucio) return true
   if (formulario.dataset.editor !== 'categoria') return false
   for (const control of formulario.elements) {
