@@ -1,0 +1,15 @@
+{
+	"source": "Overture Maps Foundation: theme=buildings",
+	"release": "2026-10-21.0",
+	"license": "ODbL-1.0",
+	"attribution": "© OpenStreetMap contributors, Overture Maps Foundation",
+	"upstream": [
+		"OpenStreetMap",
+		"Microsoft ML Buildings",
+		"Google Open Buildings"
+	],
+	"bbox": [-100.37, 20.65, -100.29, 20.712],
+	"crs": "EPSG:4326",
+	"fetchedAt": "2026-10-27T21:53:29.241Z",
+	"features": 16467
+}
