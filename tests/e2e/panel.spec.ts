@@ -82,6 +82,24 @@ const contenido = {
         },
       ],
     },
+    {
+      id: 'vacia',
+      slug: { es: 'vacia', en: 'empty' },
+      label: { es: 'Categoría vacía', en: 'Empty category' },
+      icon: 'utensils-crossed',
+      hue: 20,
+      order: 2,
+      synonyms: [],
+      giros: [
+        {
+          id: 'vacia-general',
+          label: { es: 'Vacía', en: 'Empty' },
+          icon: 'utensils-crossed',
+          general: true,
+          synonyms: [],
+        },
+      ],
+    },
   ],
   plazas: [
     {
@@ -400,6 +418,81 @@ test.describe('Panel', () => {
     await expect(dialogo).toBeHidden()
     await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
     expect(cuerpos.at(-1)).toEqual({ id: 'cafe-de-prueba', confirmar: true })
+  })
+
+  test('una categoría con locales no ofrece borrarse y dice por qué', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo.locator('form[data-editor="categoria"]')).toBeVisible()
+    await expect(dialogo.getByRole('button', { name: 'Borrar categoría' })).toHaveCount(0)
+    await expect(dialogo).toContainText('primero cambia el giro de sus')
+  })
+
+  test('borrar una categoría vacía enseña el impacto primero y pide confirmación', async ({
+    page,
+  }) => {
+    const cuerpos: { id: string; confirmar?: boolean }[] = []
+    await page.route(/\/api\/panel\/contenido\/categoria\/borrar$/, async (ruta) => {
+      const cuerpo = ruta.request().postDataJSON() as { id: string; confirmar?: boolean }
+      cuerpos.push(cuerpo)
+      const impacto = {
+        categoria: { id: 'vacia', nombre: 'Categoría vacía' },
+        giros: ['Vacía'],
+        gustosDeLocalesBorrados: 0,
+        avisos: ['No se pierde ninguna dirección.'],
+      }
+      await ruta.fulfill({
+        json: cuerpo.confirmar
+          ? {
+              ok: true,
+              confirmado: true,
+              seco: false,
+              pr: { url: 'https://example.test/pr/14', numero: 14, creada: true },
+              mensaje: 'Borrado enviado a la PR.',
+              impacto,
+            }
+          : {
+              ok: true,
+              confirmado: false,
+              seco: false,
+              pr: null,
+              mensaje: 'Esto es lo que cambiaría.',
+              impacto,
+            },
+      })
+    })
+
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Categoría vacía' }).click()
+    const dialogo = page.locator('#editor')
+
+    // Primer paso: solo el impacto, sin confirmación mandada.
+    await dialogo.getByRole('button', { name: 'Borrar categoría' }).click()
+    const impacto = dialogo.locator('.impacto-borrado')
+    await expect(impacto).toContainText('Si borras Categoría vacía')
+    await expect(impacto).toContainText('No se pierde ninguna dirección')
+    expect(cuerpos).toEqual([{ id: 'vacia' }])
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // "Mejor no" lo deja todo como estaba.
+    await impacto.getByRole('button', { name: 'Mejor no' }).click()
+    await expect(impacto).toBeHidden()
+    expect(cuerpos).toHaveLength(1)
+
+    // Segundo paso: confirmar. El diálogo se cierra y la lista avisa de la PR.
+    await dialogo.getByRole('button', { name: 'Borrar categoría' }).click()
+    await dialogo.getByRole('button', { name: 'Borrar esta categoría' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #14' })).toBeVisible()
+    expect(cuerpos.at(-1)).toEqual({ id: 'vacia', confirmar: true })
   })
 
   test('un negocio nuevo no ofrece borrar', async ({ page }) => {

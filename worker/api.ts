@@ -12,6 +12,7 @@ import { base64url, cumpleLaPrueba, digestDe } from '../src/lib/prueba-de-trabaj
 import { type EntornoAcceso, puedeVerElPanel } from './acceso.ts'
 import { fechaLocal } from './analitica.ts'
 import { borrarNegocio } from './borrado.ts'
+import { borrarCategoria } from './borrado-categoria.ts'
 import { borrarPlaza } from './borrado-plaza.ts'
 import { LUGARES } from './catalogo.ts'
 import { guardarCategorias } from './categorias.ts'
@@ -105,6 +106,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
+  '/api/panel/contenido/categoria/borrar': 4 * 1024,
   '/api/panel/contenido/foto': Math.ceil(TOPE_FOTO * 1.5),
 }
 
@@ -379,6 +381,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await borrarPlaza(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Lo mismo para una categoría sin locales; ver worker/borrado-categoria.ts.
+  if (ruta === '/api/panel/contenido/categoria/borrar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await borrarCategoria(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)

@@ -233,7 +233,7 @@ function alPulsarEditor(evento: Event): void {
     cerrarEditor()
     return
   }
-  if (alPulsarCategoria(objetivo)) return
+  if (alPulsarCategoria(objetivo, cargar)) return
   if (!vista.formularioActual) return
   if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return
