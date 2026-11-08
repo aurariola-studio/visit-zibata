@@ -37,10 +37,12 @@ import {
   PlazasFileSchema,
 } from '../src/data/schemas.ts'
 import { TITULOS_RESERVADOS } from '../src/data/titulos-reservados.ts'
+import { ANCHOS_DE_VARIANTE } from '../src/lib/image-variants.ts'
 import type { Category, Photo, Place } from '../src/types/domain.ts'
 import { fechaLocal } from './analitica.ts'
 import {
   type EntornoGitHub,
+  existeArchivo,
   leerArchivo,
   type Publicacion,
   prAbierta,
@@ -172,6 +174,26 @@ export interface NegocioGuardado {
   id: string
   nombre: string
   nuevo: boolean
+}
+
+/**
+ * Los archivos que puede tener una foto de un local, relativos a la raíz del repositorio. Son candidatos:
+ * quien los borra comprueba antes cuáles existen. Solo cuenta una foto que cuelga de la carpeta del propio
+ * local (`images/places/<id>/`); cualquier otra ruta no se toca, porque no es nuestra.
+ */
+export function archivosDeFoto(placeId: string, foto: { src: string }): string[] {
+  const carpeta = `images/places/${placeId}/`
+  if (!foto.src.startsWith(carpeta) || foto.src.slice(carpeta.length).includes('/')) return []
+  const sinExtension = foto.src.replace(/\.[a-z0-9]+$/i, '')
+  const nombre = foto.src.slice(carpeta.length)
+  return [
+    `public/${foto.src}`,
+    `data/commercial/photos-src/${placeId}/${nombre}`,
+    ...(['webp', 'avif'] as const).flatMap((formato) => [
+      `public/${sinExtension}.${formato}`,
+      ...ANCHOS_DE_VARIANTE.map((ancho) => `public/${sinExtension}-${ancho}.${formato}`),
+    ]),
+  ].filter((ruta, i, todas) => todas.indexOf(ruta) === i)
 }
 
 export type PreparadoFoto =
@@ -621,6 +643,8 @@ export type Preparado =
       lugares: Record<string, unknown>
       plazas: Record<string, unknown>
       avisos: string[]
+      /** Fotos que estaban en la galería y ya no: al guardar se borran también sus archivos. */
+      fotosQuitadas: Photo[]
     }
   | { ok: false; problemas: string[] }
 
@@ -795,6 +819,9 @@ export function prepararNegocio(
     lugares: { ...crudo.places, updatedAt: hoy, places: placesNuevos },
     plazas: { ...crudo.plazas, updatedAt: hoy, plazas: plazasNuevas },
     avisos,
+    fotosQuitadas: (existente?.photos ?? []).filter(
+      (previa) => !place.photos.some((foto) => foto.src === previa.src),
+    ),
   }
 }
 
@@ -828,6 +855,24 @@ export async function guardarNegocio(
     }
   }
 
+  // Quitar una foto de la galería borra también sus archivos, en el mismo commit. Solo los que existen:
+  // un borrado de una ruta que no está en el árbol lo rechazaría GitHub. Siguen en el historial de git.
+  const candidatos = preparado.fotosQuitadas.flatMap((foto) => archivosDeFoto(negocio.id, foto))
+  const existentes = (
+    await Promise.all(
+      candidatos.map(async (ruta) =>
+        (await existeArchivo(entorno, ruta, cargado.ref)) ? ruta : null,
+      ),
+    )
+  ).filter((ruta): ruta is string => ruta !== null)
+  const avisos =
+    existentes.length > 0
+      ? [
+          ...preparado.avisos,
+          `Se borraron ${existentes.length} ${existentes.length === 1 ? 'archivo' : 'archivos'} de fotos que se quitaron de la galería. Siguen en el historial de git.`,
+        ]
+      : preparado.avisos
+
   const pr = await publicar(
     entorno,
     [
@@ -839,6 +884,7 @@ export async function guardarNegocio(
         ruta: 'data/commercial/plazas.json',
         contenido: `${JSON.stringify(preparado.plazas, null, 2)}\n`,
       },
+      ...existentes.map((ruta) => ({ ruta, borrar: true as const })),
     ],
     `Panel: ${negocio.nuevo ? 'nuevo' : 'editar'} negocio "${negocio.nombre}"`,
   )
@@ -849,6 +895,6 @@ export async function guardarNegocio(
     pr,
     mensaje: negocio.nuevo ? 'Negocio enviado a la PR.' : 'Cambio enviado a la PR.',
     negocio,
-    avisos: preparado.avisos,
+    avisos,
   }
 }

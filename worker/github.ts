@@ -23,12 +23,16 @@ export interface EntornoGitHub {
   GITHUB_RAMA?: string
 }
 
-export interface Archivo {
-  ruta: string
-  contenido: string
-  /** Los JSON viajan como texto; las fotos, en base64. */
-  codificacion?: 'utf-8' | 'base64'
-}
+export type Archivo =
+  | {
+      ruta: string
+      contenido: string
+      /** Los JSON viajan como texto; las fotos, en base64. */
+      codificacion?: 'utf-8' | 'base64'
+      borrar?: undefined
+    }
+  /** Quita el archivo del árbol en el mismo commit. Tiene que existir: ver `existeArchivo`. */
+  | { ruta: string; borrar: true }
 
 export interface Publicacion {
   url: string
@@ -137,6 +141,19 @@ export async function leerArchivo(
   return new TextDecoder().decode(bytes)
 }
 
+/** Si un archivo existe en una rama, sin descargar su contenido más de lo que GitHub ya manda. */
+export async function existeArchivo(
+  entorno: EntornoGitHub,
+  ruta: string,
+  ref: string,
+): Promise<boolean> {
+  const datos = await pedirOpcional<unknown>(
+    entorno,
+    `/contents/${ruta}?ref=${encodeURIComponent(ref)}`,
+  )
+  return datos !== null
+}
+
 /** La PR abierta de la rama del panel, si la hay. */
 export async function prAbierta(entorno: EntornoGitHub): Promise<Publicacion | null> {
   if (faltaToken(entorno)) return null
@@ -187,6 +204,8 @@ export async function publicar(
 
   const blobs = await Promise.all(
     archivos.map(async (archivo) => {
+      // Un `sha` nulo en el árbol borra la ruta: no hay blob que crear.
+      if (archivo.borrar) return { path: archivo.ruta, mode: '100644', type: 'blob', sha: null }
       const blob = await pedir<{ sha: string }>(entorno, '/git/blobs', {
         method: 'POST',
         body: JSON.stringify({
