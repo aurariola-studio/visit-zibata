@@ -254,6 +254,38 @@ export const cercanaA = (zona: DatasetPlaza): DatasetPlaza => {
   )
 }
 
+/**
+ * La categoría con más locales dentro de la zona grande (al menos dos, para que el recuento sea plural) y
+ * uno de esos locales: lo que hace falta para filtrar una zona por una categoría que sí tiene.
+ */
+export const CATEGORIA_EN_ZONA: {
+  id: string
+  slug: string
+  label: string
+  local: DatasetPlace
+} = (() => {
+  const locales = localesDe(ZONA_GRANDE)
+  const cuenta = new Map<string, number>()
+  for (const place of locales) {
+    for (const id of new Set(categoriesOf(place))) cuenta.set(id, (cuenta.get(id) ?? 0) + 1)
+  }
+  const [id] = unico(
+    [...cuenta.entries()]
+      .filter(([, n]) => n >= 2)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0],
+    'una categoría con dos locales en la zona grande',
+  )
+  const categoria = unico(
+    dataset.categories.find((candidata) => candidata.id === id),
+    `la categoría ${id}`,
+  )
+  const local = unico(
+    locales.find((place) => categoriesOf(place).includes(id)),
+    `un local de ${id}`,
+  )
+  return { id, slug: categoria.slug.es, label: categoria.label.es, local }
+})()
+
 /** La zona de un local. */
 export const plazaDe = (place: DatasetPlace): DatasetPlaza =>
   unico(

@@ -1,8 +1,7 @@
 import { expect, test } from '@playwright/test'
 import {
-  categoriaDe,
+  CATEGORIA_EN_ZONA,
   esc,
-  LOCAL,
   openApp,
   panel,
   placesInCategory,
@@ -99,7 +98,7 @@ test.describe('Páginas de categoría', () => {
   test('dentro de una zona la categoría sigue siendo un filtro de esa zona', async ({ page }) => {
     await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     // Una categoría que esa zona tiene de verdad: la de uno de sus locales.
-    const categoria = categoriaDe(LOCAL)
+    const categoria = CATEGORIA_EN_ZONA
     const enlace = cápsulas(page).getByRole('link', { name: new RegExp(esc(categoria.label)) })
     await expect(enlace).toHaveAttribute(
       'href',

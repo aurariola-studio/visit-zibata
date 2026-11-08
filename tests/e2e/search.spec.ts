@@ -1,10 +1,9 @@
 import { expect, test } from '@playwright/test'
 import {
+  CATEGORIA_EN_ZONA,
   CATEGORIA_GRANDE,
-  categoriaDe,
   elegirZona,
   esc,
-  LOCAL,
   LOCAL_BUSCABLE,
   openApp,
   panel,
@@ -130,7 +129,7 @@ test.describe('Búsqueda y filtros', () => {
     await openApp(page)
     await elegirZona(page, ZONA_GRANDE.name)
     const topCategories = page.getByRole('list', { name: 'Categorías' }).first()
-    const categoria = categoriaDe(LOCAL)
+    const categoria = CATEGORIA_EN_ZONA
     await topCategories.getByRole('link', { name: new RegExp(esc(categoria.label)) }).click()
 
     const region = panel(page)
@@ -138,7 +137,9 @@ test.describe('Búsqueda y filtros', () => {
     const cards = region.getByRole('link', { name: /^Ver detalles de/ })
     const desayunos = placesInCategory(categoria.id, ZONA_GRANDE.name)
     await expect(cards).toHaveCount(desayunos)
-    await expect(region.getByRole('link', { name: `Ver detalles de ${LOCAL.name}` })).toBeVisible()
+    await expect(
+      region.getByRole('link', { name: `Ver detalles de ${categoria.local.name}` }),
+    ).toBeVisible()
     await expect(page.getByText(`${desayunos} resultados`, { exact: true }).first()).toBeVisible()
     /*
      * Las cápsulas **anuncian** los mismos conteos que la plaza seleccionada, y anuncian es la
