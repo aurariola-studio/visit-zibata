@@ -138,3 +138,49 @@ describe('un cambio de dirección', () => {
     expect(mensajes([borrado('x', 'libre')])).toBe('')
   })
 })
+
+describe('un cambio de dirección de una categoría', () => {
+  const categoria = real.categories[0]
+  if (!categoria) throw new Error('el dataset necesita una categoría')
+  // Una categoría que ya cambió el slug en inglés: id distinto de los slugs, y un slug por idioma.
+  const cambiada: CommercialDataset = {
+    ...real,
+    categories: real.categories.map((fila) =>
+      fila.id === categoria.id
+        ? { ...fila, slug: { ...fila.slug, en: 'nuevo-slug-en-ingles' } }
+        : fila,
+    ),
+  }
+  const fila = (lang: 'es' | 'en', slug: string, id = categoria.id): Redirect => ({
+    kind: 'category-slug',
+    id,
+    lang,
+    slug,
+  })
+
+  it('el slug antiguo es válido en el idioma en que cambió', () => {
+    expect(mensajes([fila('en', categoria.slug.en)], cambiada)).toBe('')
+  })
+
+  it('no puede ser el slug de hoy de ninguna categoría en ese idioma', () => {
+    expect(mensajes([fila('en', 'nuevo-slug-en-ingles')], cambiada)).toMatch(
+      /Hay una categoría con ese slug/,
+    )
+    expect(mensajes([fila('es', categoria.slug.es)], cambiada)).toMatch(
+      /Hay una categoría con ese slug/,
+    )
+  })
+
+  it('el slug de un idioma no choca con el mismo texto en el otro', () => {
+    expect(mensajes([fila('es', 'solo-en-ingles'), fila('en', 'solo-en-ingles')], cambiada)).toBe(
+      '',
+    )
+    expect(mensajes([fila('es', 'repetido'), fila('es', 'repetido')], cambiada)).toMatch(/repetido/)
+  })
+
+  it('la categoría tiene que existir: al borrarla, sus cambios se quitan', () => {
+    expect(mensajes([fila('es', 'antiguo', 'categoria-borrada')], cambiada)).toMatch(
+      /no existe ni se borró/,
+    )
+  })
+})

@@ -285,8 +285,11 @@ export function validateTranslations(dataset: CommercialDataset): DataIssue[] {
  */
 // Viven aquí y no en schemas.ts: este archivo lo carga la app, y un import de valor desde schemas.ts
 // arrastraría Zod al paquete inicial (presupuesto `initialJs`).
-export const familiaDeRedireccion = (fila: Pick<Redirect, 'kind'>): 'place' | 'plaza' =>
-  fila.kind === 'place' || fila.kind === 'place-slug' ? 'place' : 'plaza'
+export type FamiliaDeRedireccion = 'place' | 'plaza' | 'category-es' | 'category-en'
+export const familiaDeRedireccion = (fila: Redirect): FamiliaDeRedireccion => {
+  if (fila.kind === 'category-slug') return `category-${fila.lang}`
+  return fila.kind === 'place' || fila.kind === 'place-slug' ? 'place' : 'plaza'
+}
 
 /** `true` si la fila es el borrado de una entidad; `false` si es un cambio de dirección. */
 export const esBorrado = (fila: Pick<Redirect, 'kind'>): boolean =>
@@ -307,17 +310,26 @@ export function validateRedirects(
   const issues: DataIssue[] = []
   const error = (id: string, message: string) =>
     issues.push({ level: 'error', dataset: 'redirects', id, message })
-  const slugsVivos = {
+  const slugsVivos: Record<FamiliaDeRedireccion, Set<string>> = {
     place: new Set(dataset.places.map((place) => place.slug)),
     plaza: new Set(dataset.plazas.map((plaza) => plaza.slug)),
+    'category-es': new Set(dataset.categories.map((categoria) => categoria.slug.es)),
+    'category-en': new Set(dataset.categories.map((categoria) => categoria.slug.en)),
   }
-  const idsVivos = {
+  const idsDeCategorias = new Set(dataset.categories.map((categoria) => categoria.id))
+  const idsVivos: Record<FamiliaDeRedireccion, Set<string>> = {
     place: new Set(dataset.places.map((place) => place.id)),
     plaza: new Set(dataset.plazas.map((plaza) => plaza.id)),
+    'category-es': idsDeCategorias,
+    'category-en': idsDeCategorias,
   }
-  const idsBorrados = {
+  // Las categorías no dejan fila de borrado (una categoría vacía no tiene página): al borrar una, el
+  // panel quita sus cambios de dirección, así que aquí un id de categoría ausente es un error.
+  const idsBorrados: Record<FamiliaDeRedireccion, Set<string>> = {
     place: new Set(redirects.filter((fila) => fila.kind === 'place').map((fila) => fila.id)),
     plaza: new Set(redirects.filter((fila) => fila.kind === 'plaza').map((fila) => fila.id)),
+    'category-es': new Set(),
+    'category-en': new Set(),
   }
   const vistos = new Set<string>()
   for (const fila of redirects) {
@@ -326,7 +338,8 @@ export function validateRedirects(
     if (vistos.has(clave)) error(fila.slug, 'Slug repetido')
     vistos.add(clave)
 
-    const nombre = familia === 'place' ? 'un local' : 'una plaza'
+    const nombre =
+      familia === 'place' ? 'un local' : familia === 'plaza' ? 'una plaza' : 'una categoría'
     if (!esBorrado(fila) && slugsVivos[familia].has(fila.slug)) {
       error(
         fila.slug,
@@ -354,7 +367,7 @@ export function validateRedirects(
     } else if (!idsVivos[familia].has(fila.id) && !idsBorrados[familia].has(fila.id)) {
       error(
         fila.slug,
-        `${familia === 'place' ? 'El local' : 'La plaza'} "${fila.id}" no existe ni se borró desde el panel: no hay a dónde llevar la dirección antigua`,
+        `${familia === 'place' ? 'El local' : familia === 'plaza' ? 'La plaza' : 'La categoría'} "${fila.id}" no existe ni se borró desde el panel: no hay a dónde llevar la dirección antigua`,
       )
     }
   }

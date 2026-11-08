@@ -17,6 +17,7 @@ import { z } from 'zod'
 import { type CommercialDataset, validateRelations } from '../src/data/relations.ts'
 import type { Redirect } from '../src/data/schemas.ts'
 import { fechaLocal } from './analitica.ts'
+import { anotarRedirecciones } from './borrado.ts'
 import { type Cargado, cargar, LIMITES } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
 
@@ -34,6 +35,8 @@ export interface ImpactoBorradoCategoria {
   giros: string[]
   /** Locales ya borrados que guardaban uno de sus giros. Ese gusto deja de sumar a esta categoría. */
   gustosDeLocalesBorrados: number
+  /** Cambios de dirección de la categoría que se quitan de `redirects.json`. */
+  cambiosDeDireccion: number
   avisos: string[]
 }
 
@@ -42,6 +45,8 @@ export type PreparadoBorradoCategoria =
       ok: true
       impacto: ImpactoBorradoCategoria
       categorias: Record<string, unknown>
+      /** Solo si la categoría tenía cambios de dirección: se van con ella, en el mismo commit. */
+      redirects: Record<string, unknown> | null
     }
   | { ok: false; problemas: string[] }
 
@@ -94,12 +99,33 @@ export function prepararBorradoCategoria(
     (fila) => fila.kind === 'place' && fila.giros.some((giro) => giros.has(giro)),
   ).length
 
+  const suyosCambios = previas.filter(
+    (fila) => fila.kind === 'category-slug' && fila.id === categoria.id,
+  )
+  let redirects: Record<string, unknown> | null = null
+  if (suyosCambios.length > 0) {
+    const anotado = anotarRedirecciones(
+      crudo,
+      [],
+      { ...dataset, categories: categorias },
+      hoy,
+      (fila) => fila.kind === 'category-slug' && fila.id === categoria.id,
+    )
+    if (!anotado.ok) return anotado
+    redirects = anotado.redirects
+  }
+
   const avisos = [
     'Deja de salir en los filtros, en el buscador y en las páginas de categorías. Como no tenía locales, no tenía página propia: no se pierde ninguna dirección.',
   ]
   if (gustosDeLocalesBorrados > 0) {
     avisos.push(
       `${gustosDeLocalesBorrados} ${gustosDeLocalesBorrados === 1 ? 'local ya borrado guardaba' : 'locales ya borrados guardaban'} uno de sus giros: ese gusto deja de sumar a esta categoría, y nada más.`,
+    )
+  }
+  if (suyosCambios.length > 0) {
+    avisos.push(
+      `${suyosCambios.length} ${suyosCambios.length === 1 ? 'dirección antigua' : 'direcciones antiguas'} de esta categoría dejan de redirigir: la categoría ya no existe.`,
     )
   }
   avisos.push(
@@ -113,6 +139,7 @@ export function prepararBorradoCategoria(
       categoria: { id: categoria.id, nombre: categoria.label.es },
       giros: categoria.giros.map((giro) => giro.label.es),
       gustosDeLocalesBorrados,
+      cambiosDeDireccion: suyosCambios.length,
       avisos,
     },
     categorias: {
@@ -120,6 +147,7 @@ export function prepararBorradoCategoria(
       updatedAt: hoy,
       categories: filas.filter((fila) => String(fila.id) !== categoria.id),
     },
+    redirects,
   }
 }
 
@@ -173,6 +201,14 @@ export async function borrarCategoria(
         ruta: 'data/commercial/categories.json',
         contenido: `${JSON.stringify(preparado.categorias, null, 2)}\n`,
       },
+      ...(preparado.redirects
+        ? [
+            {
+              ruta: 'data/commercial/redirects.json',
+              contenido: `${JSON.stringify(preparado.redirects, null, 2)}\n`,
+            },
+          ]
+        : []),
     ],
     `Panel: borrar categoría "${preparado.impacto.categoria.nombre}"`,
   )

@@ -147,6 +147,14 @@ export function prepararCategorias(
   const idsGiros = new Set(giroBasePorId.keys())
   const slugsEs = new Set(dataset.categories.map((categoria) => categoria.slug.es))
   const slugsEn = new Set(dataset.categories.map((categoria) => categoria.slug.en))
+  // Un slug que una categoría abandonó sigue siendo una redirección: una nueva no puede tomarlo.
+  const cambiosDeDireccion =
+    (crudo.redirects?.redirects as { kind?: string; lang?: string; slug?: string }[] | undefined) ??
+    []
+  for (const fila of cambiosDeDireccion) {
+    if (fila.kind !== 'category-slug' || !fila.slug) continue
+    ;(fila.lang === 'es' ? slugsEs : slugsEn).add(fila.slug)
+  }
   const idsEnLaEntrada = new Set<string>()
   const girosEnLaEntrada = new Set<string>()
 

@@ -1,5 +1,6 @@
 import { ICONOS } from '../../data/iconos.ts'
 import controls from '../../styles/controls.module.css'
+import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import type { Categoria, Giro } from './tipos.ts'
 import { normalizar, numero, sinonimosDe, texto } from './tipos.ts'
@@ -179,6 +180,8 @@ export function pintarCategoria(categoria: Categoria | null): void {
         </div>
         <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-anadir-giro>Añadir giro</button>
       </section>
+
+      ${categoria ? seccionDireccion('categoria', categoria.slug) : ''}
 
       <p class="impacto-contenido" data-impacto>${texto(impacto)}${notaBorrar ? ` ${texto(notaBorrar)}` : ''}</p>
       <div data-borrado-categoria></div>
