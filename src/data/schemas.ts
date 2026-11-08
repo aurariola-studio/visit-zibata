@@ -308,16 +308,6 @@ export const RedirectSchema = z.discriminatedUnion('kind', [
 ])
 export type Redirect = z.infer<typeof RedirectSchema>
 
-/**
- * El espacio de direcciones de una fila: `/lugar/x` o `/zona/x`. Una fila de borrado y una de cambio de
- * slug del mismo espacio no pueden compartir slug, así que se comparan por familia y no por `kind`.
- */
-export const familiaDeRedireccion = (fila: Pick<Redirect, 'kind'>): 'place' | 'plaza' =>
-  fila.kind === 'place' || fila.kind === 'place-slug' ? 'place' : 'plaza'
-
-/** `true` si la fila es el borrado de una entidad; `false` si es un cambio de dirección. */
-export const esBorrado = (fila: Pick<Redirect, 'kind'>): boolean =>
-  fila.kind === 'place' || fila.kind === 'plaza'
 export const RedirectsFileSchema = z.strictObject({
   ...datasetMeta,
   redirects: z.array(RedirectSchema),

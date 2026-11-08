@@ -5,7 +5,7 @@
  */
 import type { Category, LatLng, Place, Plaza } from '../types/domain.ts'
 import { PUBLISHABLE_STATUS } from './rules.ts'
-import { esBorrado, familiaDeRedireccion, type Redirect } from './schemas.ts'
+import type { Redirect } from './schemas.ts'
 
 export type IssueLevel = 'error' | 'warning'
 export type DatasetName = 'categories' | 'plazas' | 'places' | 'redirects'
@@ -279,6 +279,18 @@ export function validateTranslations(dataset: CommercialDataset): DataIssue[] {
   return issues
 }
 
+/**
+ * El espacio de direcciones de una fila: `/lugar/x` o `/zona/x`. Una fila de borrado y una de cambio de
+ * slug del mismo espacio no pueden compartir slug, así que se comparan por familia y no por `kind`.
+ */
+// Viven aquí y no en schemas.ts: este archivo lo carga la app, y un import de valor desde schemas.ts
+// arrastraría Zod al paquete inicial (presupuesto `initialJs`).
+export const familiaDeRedireccion = (fila: Pick<Redirect, 'kind'>): 'place' | 'plaza' =>
+  fila.kind === 'place' || fila.kind === 'place-slug' ? 'place' : 'plaza'
+
+/** `true` si la fila es el borrado de una entidad; `false` si es un cambio de dirección. */
+export const esBorrado = (fila: Pick<Redirect, 'kind'>): boolean =>
+  fila.kind === 'place' || fila.kind === 'plaza'
 /**
  * Las redirecciones de lo que se borró o cambió de dirección. Un slug que vuelve a existir competiría con
  * su propia redirección (el 301 ganaría y la ficha nunca se vería). Un local cuya plaza se borró después

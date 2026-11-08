@@ -19,9 +19,15 @@
  * vivos de la portada), ni toca el mapa: el contorno y los edificios se enlazan por id.
  */
 import { z } from 'zod'
-import { type CommercialDataset, type DataIssue, validateRelations } from '../src/data/relations.ts'
+import {
+  type CommercialDataset,
+  type DataIssue,
+  esBorrado,
+  familiaDeRedireccion,
+  validateRelations,
+} from '../src/data/relations.ts'
 import { SLUG_PATTERN } from '../src/data/rules.ts'
-import { esBorrado, familiaDeRedireccion, type Redirect } from '../src/data/schemas.ts'
+import type { Redirect } from '../src/data/schemas.ts'
 import { fechaLocal } from './analitica.ts'
 import { anotarRedirecciones } from './borrado.ts'
 import { type Cargado, cargar, LIMITES } from './contenido.ts'
