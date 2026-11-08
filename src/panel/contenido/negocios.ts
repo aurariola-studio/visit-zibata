@@ -3,16 +3,32 @@ import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import { pintarFotosFormulario } from './fotos.ts'
 import type { Cierre, Negocio } from './tipos.ts'
-import { DIAS, hoy, MOTIVOS, normalizar, numero, POR_PAGINA, texto } from './tipos.ts'
+import { DIAS, hoy, MOTIVOS, normalizar, numero, POR_PAGINA, plural, texto } from './tipos.ts'
 import { categoriaDeGiro, mapaDeGiros, mapaDePlazas, paginacion, vista } from './vista.ts'
 import { zonaDelicada } from './zona-delicada.ts'
 
+/** Las marcas de estado, en el orden en que se ofrecen como filtro. */
+const ESTADOS: [string, string][] = [
+  ['si', 'Visibles'],
+  ['no', 'Ocultos'],
+  ['cierre', 'Cerrados temporalmente'],
+  ['plaza', 'En una plaza inactiva'],
+]
+
+/**
+ * La única regla de estado: la marca de la fila, el filtro y el recuento salen de aquí, así que no
+ * pueden contradecirse. "Visible" es lo que de verdad sale en la guía: el local activo en una plaza
+ * activa y sin cierre.
+ */
 function estadoDelNegocio(negocio: Negocio): {
   rotulo: string
   marca: string
   nota: string
 } {
   if (!negocio.active) return { rotulo: 'Oculto', marca: 'no', nota: 'No se publica' }
+  if (vista.datos?.plazas.find((plaza) => plaza.id === negocio.plazaId)?.active === false) {
+    return { rotulo: 'Plaza inactiva', marca: 'plaza', nota: 'Su plaza no se publica' }
+  }
   if (negocio.cierre) {
     const motivo = MOTIVOS.find(([clave]) => clave === negocio.cierre?.motivo)?.[1] ?? ''
     return {
@@ -26,14 +42,32 @@ function estadoDelNegocio(negocio: Negocio): {
 
 export function pintarNegocios(): void {
   if (!vista.raiz || !vista.datos) return
-  const ocultos = vista.datos.places.filter((negocio) => !negocio.active).length
-  const cerrados = vista.datos.places.filter((negocio) => negocio.active && negocio.cierre).length
+  const cuantos = (marca: string) =>
+    vista.datos?.places.filter((negocio) => estadoDelNegocio(negocio).marca === marca).length ?? 0
+  const enPlazaInactiva = cuantos('plaza')
   vista.raiz.innerHTML = `
     <div class="barra-contenido">
       <input class="${controls.campo} buscar" type="search" placeholder="Buscar por nombre, plaza o giro" aria-label="Buscar negocio" value="${texto(vista.consulta)}" data-buscar />
       <button type="button" class="${controls.base} ${controls.boton} ${controls.principal}" data-nuevo>Nuevo negocio</button>
     </div>
-    <p class="meta-contenido">${numero(vista.datos.places.length)} negocios · ${numero(ocultos)} ocultos · ${numero(cerrados)} cerrados temporalmente</p>
+    <div class="barra-filtros">
+      <select class="${controls.campo}" aria-label="Filtrar por estado" data-filtro="estado">
+        <option value="">Todos los estados</option>
+        ${ESTADOS.map(([marca, rotulo]) => `<option value="${marca}"${vista.filtroEstado === marca ? ' selected' : ''}>${rotulo} (${numero(cuantos(marca))})</option>`).join('')}
+      </select>
+      <select class="${controls.campo}" aria-label="Filtrar por plaza" data-filtro="plaza">
+        <option value="">Todas las plazas</option>
+        ${[...vista.datos.plazas]
+          .sort((a, b) => a.name.localeCompare(b.name, 'es'))
+          .map(
+            (plaza) =>
+              `<option value="${texto(plaza.id)}"${vista.filtroPlaza === plaza.id ? ' selected' : ''}>${texto(plaza.name)}</option>`,
+          )
+          .join('')}
+      </select>
+    </div>
+    <p class="meta-contenido">${numero(vista.datos.places.length)} negocios · ${numero(cuantos('no'))} ocultos · ${numero(cuantos('cierre'))} cerrados temporalmente${enPlazaInactiva > 0 ? ` · ${numero(enPlazaInactiva)} en plazas inactivas` : ''}</p>
+    <p class="meta-contenido meta-resultados" role="status" aria-live="polite" data-resultados></p>
     ${vista.aviso ? `<p class="aviso-contenido" role="status">${texto(vista.aviso)}</p>` : ''}
     <div data-zona-tabla></div>
   `
@@ -47,6 +81,10 @@ export function pintarZonaNegocios(): void {
   const giros = mapaDeGiros()
   const buscado = normalizar(vista.consulta)
   const filas = vista.datos.places
+    .filter(
+      (negocio) => !vista.filtroEstado || estadoDelNegocio(negocio).marca === vista.filtroEstado,
+    )
+    .filter((negocio) => !vista.filtroPlaza || negocio.plazaId === vista.filtroPlaza)
     .filter((negocio) => {
       if (!buscado) return true
       return normalizar(
@@ -59,8 +97,23 @@ export function pintarZonaNegocios(): void {
     })
     .sort((a, b) => a.name.localeCompare(b.name, 'es'))
 
+  // La región en vivo está fuera de la zona: esta se reconstruye entera en cada pulsación y un aviso
+  // que se recrea no se anuncia.
+  const filtrando = Boolean(buscado || vista.filtroEstado || vista.filtroPlaza)
+  const resultados = vista.raiz?.querySelector<HTMLElement>('[data-resultados]')
+  if (resultados) {
+    const total = vista.datos.places.length
+    resultados.textContent = filtrando
+      ? `${numero(filas.length)} de ${plural(total, 'negocio', 'negocios')}`
+      : ''
+  }
+
   if (filas.length === 0) {
-    zona.innerHTML = '<p class="vacio">Ningún negocio coincide.</p>'
+    zona.innerHTML = `<div class="vacio"><p>Ningún negocio coincide.</p>${
+      filtrando
+        ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-quitar-filtros>Quitar filtros</button>`
+        : ''
+    }</div>`
     return
   }
 
@@ -74,7 +127,7 @@ export function pintarZonaNegocios(): void {
       const que = negocio.giros.map((giro) => giros.get(giro) ?? giro).join(', ')
       const estado = estadoDelNegocio(negocio)
       return `<tr>
-        <td><span class="negocio-nombre">${texto(negocio.name)}</span></td>
+        <td class="celda-nombre"><span class="negocio-nombre">${texto(negocio.name)}</span><span class="negocio-detalle">${texto([donde, que].filter(Boolean).join(' · '))}</span></td>
         <td class="tenue col-plaza">${texto(donde)}</td>
         <td class="tenue col-giros">${texto(que)}</td>
         <td><span class="marca-estado" data-activo="${estado.marca}" title="${texto(estado.nota)}">${texto(estado.rotulo)}</span></td>

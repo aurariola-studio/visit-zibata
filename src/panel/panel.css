@@ -447,9 +447,17 @@ td.tenue {
   font-size: var(--text-sm);
 }
 
+/* La única celda que puede romper línea: un nombre largo no debe ensanchar la tabla. */
+.celda-nombre {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .negocio-nombre {
   font-weight: var(--weight-strong);
   color: var(--ink-900);
+  overflow-wrap: anywhere;
 }
 
 .marca-estado {
@@ -462,6 +470,7 @@ td.tenue {
   color: var(--color-text-muted);
 }
 
+.marca-estado[data-activo="plaza"],
 .marca-estado[data-activo="cierre"] {
   color: var(--amber-700);
 }
@@ -558,6 +567,39 @@ td.tenue {
 
 .buscar {
   flex: 1 1 16rem;
+}
+
+.barra-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.barra-filtros select {
+  flex: 0 1 16rem;
+  min-width: 0;
+}
+
+.meta-resultados:empty {
+  display: none;
+}
+
+.vacio p {
+  margin: 0;
+}
+
+.vacio button {
+  margin-top: var(--space-2);
+}
+
+/* Debajo del nombre: la plaza y los giros, que las pantallas estrechas no tienen en columna. */
+.negocio-detalle {
+  display: none;
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
 }
 
 .meta-contenido {
@@ -1220,6 +1262,10 @@ td.tenue {
 /* ------------------------------------------------------------------ pantallas estrechas */
 
 @media (max-width: 52rem) {
+  .negocio-detalle {
+    display: block;
+  }
+
   .col-plaza,
   .col-giros,
   .col-orden {
@@ -1339,6 +1385,10 @@ td.tenue {
   }
 
   .buscar {
+    flex: 1 1 100%;
+  }
+
+  .barra-filtros select {
     flex: 1 1 100%;
   }
 

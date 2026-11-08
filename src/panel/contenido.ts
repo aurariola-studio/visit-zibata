@@ -80,6 +80,7 @@ export function montarContenido(
 
   contenedor.addEventListener('click', alPulsar)
   contenedor.addEventListener('input', alEscribir)
+  contenedor.addEventListener('change', alFiltrar)
   editor.addEventListener('submit', alEnviar)
   editor.addEventListener('click', alPulsarEditor)
   editor.addEventListener('input', alEscribirEditor)
@@ -103,6 +104,8 @@ export function mostrarContenido(cual: ModoContenido): void {
   if (vista.modo !== cual) {
     vista.modo = cual
     vista.consulta = ''
+    vista.filtroEstado = ''
+    vista.filtroPlaza = ''
     vista.pagina = 0
     vista.aviso = null
   }
@@ -183,6 +186,17 @@ function alPulsar(evento: Event): void {
   const objetivo = evento.target as HTMLElement | null
   if (!objetivo) return
 
+  if (objetivo.closest('[data-quitar-filtros]')) {
+    vista.consulta = ''
+    vista.filtroEstado = ''
+    vista.filtroPlaza = ''
+    vista.pagina = 0
+    pintarLista()
+    // El botón que se pulsó desaparece al repintar: el foco vuelve al buscador, no a la página.
+    vista.raiz?.querySelector<HTMLInputElement>('[data-buscar]')?.focus()
+    return
+  }
+
   const nuevaPagina = objetivo.closest<HTMLButtonElement>('[data-pagina]')
   if (nuevaPagina?.dataset.pagina) {
     vista.pagina += nuevaPagina.dataset.pagina === 'siguiente' ? 1 : -1
@@ -227,6 +241,15 @@ function alEscribir(evento: Event): void {
   vista.pagina = 0
   if (vista.modo === 'categorias') pintarZonaCategorias()
   else pintarZonaNegocios()
+}
+
+function alFiltrar(evento: Event): void {
+  const filtro = (evento.target as HTMLElement | null)?.closest<HTMLSelectElement>('[data-filtro]')
+  if (!filtro) return
+  if (filtro.dataset.filtro === 'estado') vista.filtroEstado = filtro.value
+  else vista.filtroPlaza = filtro.value
+  vista.pagina = 0
+  pintarZonaNegocios()
 }
 
 function alPulsarEditor(evento: Event): void {
