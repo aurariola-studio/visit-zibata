@@ -4,7 +4,8 @@ import { defineConfig, devices } from '@playwright/test'
  * E2E contra el build de producción (`npm run build` antes). Se sirve con `vite preview` respetando
  * BASE_PATH, igual que en GitHub Pages. WebGL2 por software (SwiftShader) para CI sin GPU.
  */
-const PORT = 4173
+// PW_PORT permite correr las pruebas con otro proyecto ocupando el 4173.
+const PORT = Number(process.env.PW_PORT) || 4173
 const BASE_PATH = process.env.BASE_PATH ?? '/'
 const baseURL = `http://localhost:${PORT}${BASE_PATH}`
 /** WebGL2 por software para Chromium en CI sin GPU. */
@@ -68,7 +69,11 @@ export default defineConfig({
   ],
   webServer: {
     command: `npm run preview -- --port ${PORT} --strictPort`,
-    url: baseURL,
+    // Una página de este build, no la raíz: un servidor ajeno en el puerto contesta a la raíz pero no a
+    // `panel.html`, así que Playwright no lo reutiliza. Antes se probaba contra el sitio equivocado y
+    // salía un 404 sin explicación. Con el puerto ocupado por otro proyecto ahora falla por tiempo (dos
+    // minutos): se libera el puerto o se usa `PW_PORT=4399`.
+    url: `${baseURL}panel.html`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
