@@ -628,6 +628,61 @@ td.tenue {
   padding: var(--space-5) var(--space-6);
 }
 
+.editor-indice {
+  position: sticky;
+  top: calc(-1 * var(--space-5));
+  z-index: 2;
+  display: flex;
+  gap: var(--space-4);
+  margin: calc(-1 * var(--space-5)) calc(-1 * var(--space-6)) var(--space-5);
+  padding: var(--space-3) var(--space-6);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-solid);
+  font-size: var(--text-sm);
+}
+
+.editor-indice a {
+  white-space: nowrap;
+}
+
+/* El título al que salta el índice recibe el foco por código: no necesita anillo, solo avisar al lector. */
+.editor-seccion h3:focus {
+  outline: none;
+}
+
+/* Las acciones que dejan una redirección o no se deshacen con un botón, juntas y al final. */
+.zona-delicada {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.zona-delicada > h3 {
+  color: var(--danger-600);
+}
+
+/* Los títulos de dentro de la zona (cada dirección) cuelgan del título de la zona: un peldaño menos. */
+.zona-delicada h4 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+  font-weight: var(--weight-strong);
+}
+
+.zona-delicada > .ayuda {
+  margin: 0 0 var(--space-4);
+}
+
+.zona-delicada .editor-seccion {
+  margin-top: var(--space-4);
+}
+
+.zona-borrar {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
 .editor-seccion + .editor-seccion {
   padding-top: var(--space-5);
   margin-top: var(--space-5);

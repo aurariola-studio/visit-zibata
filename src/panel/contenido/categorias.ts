@@ -4,7 +4,7 @@ import { accionesDeGiro } from './borrar-giro.ts'
 import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import type { Categoria, Giro } from './tipos.ts'
-import { normalizar, numero, sinonimosDe, texto } from './tipos.ts'
+import { normalizar, numero, plural, sinonimosDe, texto } from './tipos.ts'
 import {
   iconosUsados,
   localesVisibles,
@@ -12,6 +12,7 @@ import {
   opcionesDeIconos,
   vista,
 } from './vista.ts'
+import { zonaDelicada } from './zona-delicada.ts'
 
 export function pintarCategorias(): void {
   if (!vista.raiz || !vista.datos) return
@@ -130,12 +131,12 @@ export function pintarCategoria(categoria: Categoria | null): void {
     : categoria.id === CATEGORIA_FIJA
       ? 'Esta categoría no se borra: es a donde va todo local que se importa sin giro.'
       : usada.length > 0
-        ? `Para borrarla, primero cambia el giro de sus ${numero(usada.length)} locales.`
+        ? `Para borrarla, primero cambia el giro de sus ${plural(usada.length, 'local', 'locales')}.`
         : ''
   const impacto =
     locales.length === 0
       ? 'Esta categoría no tiene locales; su página no se publica hasta que tenga alguno.'
-      : `${numero(locales.length)} locales en ${numero(plazas.size)} plazas están en esta categoría. Al guardar se actualizan los filtros, el buscador y las páginas; si mueves un giro, cambian solo los locales de ese giro.`
+      : `${plural(locales.length, 'local', 'locales')} en ${plural(plazas.size, 'plaza', 'plazas')} ${locales.length === 1 ? 'está' : 'están'} en esta categoría. Al guardar se actualizan los filtros, el buscador y las páginas; si mueves un giro, cambian solo los locales de ese giro.`
 
   abrirEditor(
     'Taxonomía',
@@ -182,17 +183,14 @@ export function pintarCategoria(categoria: Categoria | null): void {
         <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-anadir-giro>Añadir giro</button>
       </section>
 
-      ${categoria ? seccionDireccion('categoria', categoria.slug) : ''}
-
       <p class="impacto-contenido" data-impacto>${texto(impacto)}${notaBorrar ? ` ${texto(notaBorrar)}` : ''}</p>
-      <div data-borrado-categoria></div>
+      ${categoria ? zonaDelicada({ direcciones: seccionDireccion('categoria', categoria.slug), borrado: sePuedeBorrar ? { atributo: 'data-borrar-categoria', rotulo: 'Borrar categoría', zona: '<div data-borrado-categoria></div>' } : undefined }) : ''}
 
       <footer class="editor-pie">
         <div class="problemas" data-problemas role="alert"></div>
         <div class="acciones">
           <button type="submit" class="${controls.base} ${controls.boton} ${controls.principal}">${esNueva ? 'Crear categoría' : 'Guardar cambios'}</button>
           <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar>Cancelar</button>
-          ${sePuedeBorrar ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-borrar-categoria>Borrar categoría</button>` : ''}
         </div>
       </footer>
     </form>`,
@@ -215,7 +213,7 @@ function filaDeGiroFormulario(
     <div class="giro-cabecera">
       <h4>Giro ${indice + 1}</h4>
       ${general ? '<span class="marca-general">General</span>' : ''}
-      <span class="meta">${numero(locales)} locales</span>
+      <span class="meta">${plural(locales, 'local', 'locales')}</span>
     </div>
     <div class="giro-campos">
       <label class="campo-form"><span>Nombre en español</span><input class="${controls.campo}" type="text" data-campo="giroLabelEs" value="${texto(giro.label.es)}" maxlength="80" /></label>
@@ -449,7 +447,7 @@ export async function enviarCategoria(
     }
 
     const alcance = resultado.afectados
-      ? ` Afecta a ${numero(resultado.afectados.locales)} locales en ${numero(resultado.afectados.plazas)} plazas.`
+      ? ` Afecta a ${plural(resultado.afectados.locales, 'local', 'locales')} en ${plural(resultado.afectados.plazas, 'plaza', 'plazas')}.`
       : ''
     vista.aviso = resultado.pr
       ? `${resultado.mensaje ?? 'Guardado.'} ${resultado.pr.creada ? 'PR abierta' : 'Añadido a la PR'} #${resultado.pr.numero}.${alcance}`

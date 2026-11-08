@@ -121,6 +121,10 @@ export const texto = (valor: unknown): string =>
 
 export const numero = (valor: number): string => new Intl.NumberFormat('es-MX').format(valor)
 
+/** "1 local" y "2 locales": el número con su palabra en singular o plural. */
+export const plural = (valor: number, singular: string, plurales: string): string =>
+  `${numero(valor)} ${valor === 1 ? singular : plurales}`
+
 export const normalizar = (valor: string): string =>
   valor
     .normalize('NFD')

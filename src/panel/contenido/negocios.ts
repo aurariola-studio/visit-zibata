@@ -5,6 +5,7 @@ import { pintarFotosFormulario } from './fotos.ts'
 import type { Cierre, Negocio } from './tipos.ts'
 import { DIAS, hoy, MOTIVOS, normalizar, numero, POR_PAGINA, texto } from './tipos.ts'
 import { categoriaDeGiro, mapaDeGiros, mapaDePlazas, paginacion, vista } from './vista.ts'
+import { zonaDelicada } from './zona-delicada.ts'
 
 function estadoDelNegocio(negocio: Negocio): {
   rotulo: string
@@ -238,9 +239,7 @@ export function pintarFormulario(negocio: Negocio | null): void {
         <div class="horario" data-grupo="horario">${DIAS.map(([dia, nombre]) => filaDeHorario(dia, nombre, negocio)).join('')}</div>
       </section>
 
-      ${negocio ? seccionDireccion('negocio', negocio.slug) : ''}
-
-      ${negocio ? '<div data-borrado></div>' : ''}
+      ${negocio ? zonaDelicada({ direcciones: seccionDireccion('negocio', negocio.slug), borrado: { atributo: 'data-borrar-negocio', rotulo: 'Borrar negocio', zona: '<div data-borrado></div>' } }) : ''}
 
       <footer class="editor-pie">
         <p class="aviso-contenido" data-guardado role="status" hidden></p>
@@ -248,7 +247,6 @@ export function pintarFormulario(negocio: Negocio | null): void {
         <div class="acciones">
           <button type="submit" class="${controls.base} ${controls.boton} ${controls.principal}">${negocio ? 'Guardar cambios' : 'Crear negocio'}</button>
           <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar>Cancelar</button>
-          ${negocio ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-borrar-negocio>Borrar negocio</button>` : ''}
         </div>
       </footer>
     </form>`,
