@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { expect, test } from '@playwright/test'
 import { bloquea } from '../../scripts/build/robots.ts'
+import { LOCAL_B, ZONA_B } from './helpers.ts'
 
 /**
  * Regresión SEO sobre lo que el build **realmente escribió** en `dist/`: el sitemap, el HTML de cada
@@ -286,8 +287,8 @@ test.describe('Sitemap', () => {
       .map((linea) => linea.slice('Disallow: '.length))
     const bloqueada = (ruta: string) => reglas.some((regla) => bloquea(regla, ruta))
     // El filtro dentro de una zona, que las cápsulas enlazan, es lo que no se debe rastrear.
-    expect(bloqueada(`${BASE}es/zona/condesa?categoria=italiana`)).toBe(true)
-    expect(bloqueada(`${BASE}en/area/condesa?category=italian`)).toBe(true)
+    expect(bloqueada(`${BASE}es/zona/${ZONA_B.slug}?categoria=italiana`)).toBe(true)
+    expect(bloqueada(`${BASE}en/area/${ZONA_B.slug}?category=italian`)).toBe(true)
     // Y ninguna dirección del sitemap, ni la portada con el parámetro antiguo, queda bloqueada.
     expect(locs.length).toBeGreaterThan(0)
     for (const loc of locs)
@@ -579,8 +580,8 @@ test.describe('Lo que no existe y debe seguir sin existir (o avisar)', () => {
     // que `vite preview` no tiene: se prueba aparte, con sus pruebas unitarias.
     const canonico = (html: string) =>
       etiqueta(html, /<link\s+rel="canonical"\s+href="([^"]*)"/g)[0]
-    const filtrada = await request.get(`${BASE}es/zona/condesa?categoria=italiana`)
-    const zonaSola = await request.get(`${BASE}es/zona/condesa`)
+    const filtrada = await request.get(`${BASE}es/zona/${ZONA_B.slug}?categoria=italiana`)
+    const zonaSola = await request.get(`${BASE}es/zona/${ZONA_B.slug}`)
     expect(filtrada.status()).toBe(200)
     expect(canonico(await filtrada.text())).toBe(canonico(await zonaSola.text()))
     expect(
@@ -608,17 +609,17 @@ test.describe('Estructura ya renderizada', () => {
   const rutas = [
     'es',
     'en',
-    'es/zona/condesa',
-    'en/area/condesa',
-    'es/lugar/bendito-bocado',
-    'en/place/bendito-bocado',
+    `es/zona/${ZONA_B.slug}`,
+    `en/area/${ZONA_B.slug}`,
+    `es/lugar/${LOCAL_B.slug}`,
+    `en/place/${LOCAL_B.slug}`,
     'es/categoria/italiana',
     'en/category/italian',
     'es/categoria/botanas',
     'es/info/privacidad',
     'en/info/privacy',
     // Un filtro dentro de una zona sigue siendo la zona.
-    'es/zona/condesa?categoria=italiana',
+    `es/zona/${ZONA_B.slug}?categoria=italiana`,
   ]
   for (const ruta of rutas) {
     test(`/${ruta}: un solo h1, y es el mismo que sirve el archivo`, async ({ page }) => {

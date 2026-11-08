@@ -1,5 +1,19 @@
 import { expect, test } from '@playwright/test'
-import { elegirZona, openApp, panel, placesInCategory, placesInPlaza } from './helpers.ts'
+import {
+  CATEGORIA_GRANDE,
+  categoriaDe,
+  elegirZona,
+  esc,
+  LOCAL,
+  LOCAL_BUSCABLE,
+  openApp,
+  panel,
+  placesInCategory,
+  placesInPlaza,
+  queDicen,
+  ZONA_B,
+  ZONA_GRANDE,
+} from './helpers.ts'
 
 test.describe('Búsqueda y filtros', () => {
   test('encuentra lugares ignorando acentos, con sinónimos y con errores menores', async ({
@@ -41,9 +55,14 @@ test.describe('Búsqueda y filtros', () => {
     await expect(region.getByRole('link', { name: /^Ver detalles de/ })).toHaveCount(
       placesInCategory('italiana'),
     )
+    // El primero sirve pasta de verdad: lo dice su nombre o su descripción en el dato.
+    const sirven = queDicen('italiana', 'pasta')
+    expect(sirven.length).toBeGreaterThan(0)
     await expect(
       region.getByRole('link', { name: /^Ver detalles de/ }).first(),
-    ).toHaveAccessibleName('Ver detalles de Tomassa Almacén de Pastas')
+    ).toHaveAccessibleName(
+      new RegExp(`^Ver detalles de (${sirven.map((place) => esc(place.name)).join('|')})`),
+    )
     // Todos llevan "bar" literal en su nombre, categoría o descripción: ninguno entra por parecido.
     await search.fill('bar')
     // Entra lo que lleva "bar" en el nombre, en la categoría o en la descripción…
@@ -60,15 +79,16 @@ test.describe('Búsqueda y filtros', () => {
   })
 
   test('escribir con una ficha abierta no quita el foco del buscador', async ({ page }) => {
-    await openApp(page, { path: 'lugar/el-hornero' })
+    await openApp(page, { path: `lugar/${LOCAL_BUSCABLE.slug}` })
     const search = page.getByRole('searchbox', { name: 'Buscar lugares' })
     await search.click()
     // La primera letra cierra la ficha y monta otro panel detrás: el foco se queda donde se escribe.
-    await search.pressSequentially('hor', { delay: 120 })
+    const letras = LOCAL_BUSCABLE.name.slice(0, 3).toLowerCase()
+    await search.pressSequentially(letras, { delay: 120 })
     await expect(search).toBeFocused()
-    await expect(search).toHaveValue('hor')
+    await expect(search).toHaveValue(letras)
     await expect(
-      panel(page).getByRole('link', { name: 'Ver detalles de El Hornero' }),
+      panel(page).getByRole('link', { name: `Ver detalles de ${LOCAL_BUSCABLE.name}` }),
     ).toBeVisible()
   })
 
@@ -108,18 +128,17 @@ test.describe('Búsqueda y filtros', () => {
     page,
   }) => {
     await openApp(page)
-    await elegirZona(page, 'Paseo Zibatá')
+    await elegirZona(page, ZONA_GRANDE.name)
     const topCategories = page.getByRole('list', { name: 'Categorías' }).first()
-    await topCategories.getByRole('link', { name: /Desayunos y Café/ }).click()
+    const categoria = categoriaDe(LOCAL)
+    await topCategories.getByRole('link', { name: new RegExp(esc(categoria.label)) }).click()
 
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeVisible()
     const cards = region.getByRole('link', { name: /^Ver detalles de/ })
-    const desayunos = placesInCategory('desayunos-y-cafe', 'Paseo Zibatá')
+    const desayunos = placesInCategory(categoria.id, ZONA_GRANDE.name)
     await expect(cards).toHaveCount(desayunos)
-    await expect(
-      region.getByRole('link', { name: 'Ver detalles de D’Lu Coffee & Bakery' }),
-    ).toBeVisible()
+    await expect(region.getByRole('link', { name: `Ver detalles de ${LOCAL.name}` })).toBeVisible()
     await expect(page.getByText(`${desayunos} resultados`, { exact: true }).first()).toBeVisible()
     /*
      * Las cápsulas **anuncian** los mismos conteos que la plaza seleccionada, y anuncian es la
@@ -129,12 +148,14 @@ test.describe('Búsqueda y filtros', () => {
      * necesita, porque no puede mirar cuál está llena.
      */
     await expect(
-      topCategories.getByRole('link', { name: /Desayunos y Café/ }),
-    ).toHaveAccessibleName(`Desayunos y Café ${desayunos}`)
+      topCategories.getByRole('link', { name: new RegExp(esc(categoria.label)) }),
+    ).toHaveAccessibleName(`${categoria.label} ${desayunos}`)
     await expect(topCategories.getByRole('link', { name: /^Todo/ })).toHaveAccessibleName(
-      `Todo ${placesInPlaza('Paseo Zibatá')}`,
+      `Todo ${placesInPlaza(ZONA_GRANDE.name)}`,
     )
-    await expect(page).toHaveURL(/\/es\/zona\/paseo-zibata\?categoria=desayunos-y-cafe$/)
+    await expect(page).toHaveURL(
+      new RegExp(`/es/zona/${ZONA_GRANDE.slug}\\?categoria=${categoria.slug}$`),
+    )
 
     await page.getByRole('button', { name: 'Limpiar filtros' }).first().click()
     await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText(
@@ -153,20 +174,22 @@ test.describe('Búsqueda y filtros', () => {
     await page
       .getByRole('list', { name: 'Categorías' })
       .first()
-      .getByRole('link', { name: /^Bar / })
+      .getByRole('link', { name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)} `) })
       .click()
     // Una categoría sola es su propia página: la barra de direcciones lo dice.
-    await expect(page).toHaveURL(/\/es\/categoria\/bar$/)
+    await expect(page).toHaveURL(new RegExp(`/es/categoria/${CATEGORIA_GRANDE.slug}$`))
     const region = panel(page)
     await expect(region.getByRole('heading', { name: 'Resultados' })).toBeVisible()
     // Una lista, no una sección por plaza: ya no hay cabecera de zona que enlazar.
-    await expect(region.getByRole('link', { name: /^(Xentric Anáhuac|Paseo Zibatá)/ })).toHaveCount(
-      0,
-    )
+    await expect(
+      region.getByRole('link', {
+        name: new RegExp(`^(${esc(ZONA_GRANDE.name)}|${esc(ZONA_B.name)})`),
+      }),
+    ).toHaveCount(0)
     await expect(region.getByRole('link', { name: /^Ver detalles de/ })).toHaveCount(
-      placesInCategory('bar'),
+      placesInCategory(CATEGORIA_GRANDE.id),
     )
     // La zona sigue a la vista, ahora como fila de la tarjeta.
-    await expect(region.getByText('Xentric Anáhuac').first()).toBeVisible()
+    await expect(region.getByText(ZONA_GRANDE.name).first()).toBeVisible()
   })
 })

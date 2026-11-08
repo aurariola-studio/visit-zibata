@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { openApp, panel } from './helpers.ts'
+import { LOCAL_COMPLETO, openApp, panel, plazaDe, ZONA_B } from './helpers.ts'
 
 /**
  * Lo que Google puede usar como fragmento (SNP-01 de la auditoría).
@@ -61,9 +61,9 @@ test.describe('Fragmentos de búsqueda', () => {
   test('en una ficha, el texto de interfaz va excluido y lo que dice el local no', async ({
     page,
   }) => {
-    await openApp(page, { path: 'lugar/birria-jauregui' })
+    await openApp(page, { path: `lugar/${LOCAL_COMPLETO.slug}` })
     await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Birria Jáuregui' }),
+      panel(page).getByRole('heading', { level: 2, name: LOCAL_COMPLETO.name }),
     ).toBeVisible()
 
     const interfaz = await medir(page, FICHA, [
@@ -85,12 +85,18 @@ test.describe('Fragmentos de búsqueda', () => {
       expect(medida.sinAtributo, `"${medida.cadena}" debería ir excluido`).toBe(0)
     }
 
-    const contenido = await medir(page, FICHA, [
-      'Birria Jáuregui',
-      'Paseo Zibatá',
-      'Av. Paseo de las Pitahayas 501, Zibatá',
-      '¡Llegó la mejor Birria a Querétaro',
-    ])
+    // Lo que dice el local y su zona, tal como está en el dato.
+    const zonaDelLocal = plazaDe(LOCAL_COMPLETO)
+    const contenido = await medir(
+      page,
+      FICHA,
+      [
+        LOCAL_COMPLETO.name,
+        zonaDelLocal.name,
+        zonaDelLocal.address,
+        LOCAL_COMPLETO.description?.es.slice(0, 25),
+      ].filter((texto): texto is string => Boolean(texto)),
+    )
     for (const medida of contenido) {
       expect(medida.encontradas, `"${medida.cadena}" debería estar en la ficha`).toBeGreaterThan(0)
       expect(medida.conAtributo, `"${medida.cadena}" no debería ir excluido`).toBe(0)
@@ -102,19 +108,20 @@ test.describe('Fragmentos de búsqueda', () => {
   test('en una zona, "Cómo llegar a la zona" y el estado oculto de las tarjetas van excluidos', async ({
     page,
   }) => {
-    await openApp(page, { path: 'zona/condesa' })
-    await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Plaza Condesa' }),
-    ).toBeVisible()
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
+    await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
 
     const interfaz = await medir(page, ZONA, ['Cómo llegar a la zona'])
     expect(interfaz[0]?.encontradas).toBeGreaterThan(0)
     expect(interfaz[0]?.sinAtributo).toBe(0)
 
-    const contenido = await medir(page, ZONA, [
-      'Zona comercial del desarrollo Riscos Condesa I',
-      'Av. Paseo de las Pitahayas 9-B, Zibatá',
-    ])
+    const contenido = await medir(
+      page,
+      ZONA,
+      [ZONA_B.description?.es.slice(0, 25), ZONA_B.address].filter((texto): texto is string =>
+        Boolean(texto),
+      ),
+    )
     for (const medida of contenido) {
       expect(medida.encontradas, `"${medida.cadena}" debería estar en la zona`).toBeGreaterThan(0)
       expect(medida.conAtributo, `"${medida.cadena}" no debería ir excluido`).toBe(0)
@@ -149,15 +156,15 @@ test.describe('Fragmentos de búsqueda', () => {
   })
 
   test('la ficha en inglés lleva el mismo número de exclusiones', async ({ page }) => {
-    await openApp(page, { path: 'lugar/birria-jauregui' })
+    await openApp(page, { path: `lugar/${LOCAL_COMPLETO.slug}` })
     await expect(
-      page.locator(FICHA).getByRole('heading', { level: 2, name: 'Birria Jáuregui' }),
+      page.locator(FICHA).getByRole('heading', { level: 2, name: LOCAL_COMPLETO.name }),
     ).toBeVisible()
     const enEspanol = await page.locator(`${FICHA} [data-nosnippet]`).count()
 
-    await openApp(page, { path: 'en/place/birria-jauregui' })
+    await openApp(page, { path: `en/place/${LOCAL_COMPLETO.slug}` })
     await expect(
-      page.locator(FICHA).getByRole('heading', { level: 2, name: 'Birria Jáuregui' }),
+      page.locator(FICHA).getByRole('heading', { level: 2, name: LOCAL_COMPLETO.name }),
     ).toBeVisible()
     const enIngles = await page.locator(`${FICHA} [data-nosnippet]`).count()
 

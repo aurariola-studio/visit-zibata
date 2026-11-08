@@ -1,13 +1,20 @@
 import { expect, test } from '@playwright/test'
 import {
+  categoriaDe,
   elegirZona,
+  esc,
   isMobile,
+  LOCAL,
+  LOCAL_B,
+  LOCAL_COMPLETO,
+  LOCAL_DOS_GIROS,
   openApp,
   panel,
-  placeById,
   placesInPlaza,
   waitForMap,
   waitForSheet,
+  ZONA_B,
+  ZONA_GRANDE,
 } from './helpers.ts'
 
 test.describe('Plazas y lugares', () => {
@@ -24,27 +31,23 @@ test.describe('Plazas y lugares', () => {
         body: '<title>Google Maps (simulado)</title>',
       }),
     )
-    await openApp(page, { path: 'zona/condesa' })
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Plaza Condesa' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
 
-    await region.getByRole('link', { name: 'Ver detalles de Bendito Bocado' }).click()
-    await expect(region.getByRole('heading', { level: 2, name: 'Bendito Bocado' })).toBeVisible()
-    await expect(page).toHaveURL(/\/es\/lugar\/bendito-bocado$/)
-    // Enlace oficial verificado en la investigación (research/business-audit.json).
-    await expect(region.getByRole('link', { name: /Facebook/ })).toHaveAttribute(
-      'href',
-      'https://www.facebook.com/p/Bendito-Bocado-Zibat%C3%A1-61552620264859/',
-    )
+    await region.getByRole('link', { name: `Ver detalles de ${LOCAL_B.name}` }).click()
+    await expect(region.getByRole('heading', { level: 2, name: LOCAL_B.name })).toBeVisible()
+    await expect(page).toHaveURL(new RegExp(`/es/lugar/${LOCAL_B.slug}$`))
+    // El enlace de Facebook es el del dato; si el local no tiene, no se inventa uno.
+    const facebook = region.getByRole('link', { name: /Facebook/ })
+    if (LOCAL_B.links.facebook)
+      await expect(facebook).toHaveAttribute('href', LOCAL_B.links.facebook)
+    else await expect(facebook).toHaveCount(0)
 
-    // Con ubicación propia verificada, la ruta lleva a la puerta del local; sin ella, a la plaza por
-    // nombre y dirección (nunca a unas coordenadas que Google rotularía con el negocio más cercano).
+    // Con enlace propio de Maps, la ruta lleva a la puerta del local (nunca a unas coordenadas que
+    // Google rotularía con el negocio más cercano). `LOCAL_B` se elige con ese enlace.
     const directions = region.getByRole('link', { name: /Cómo llegar/ })
-    await expect(directions).toHaveAttribute(
-      'href',
-      placeById('bendito-bocado').googleMapsUri ??
-        'https://www.google.com/maps/dir/?api=1&destination=Plaza+Condesa%2C+Av.+Paseo+de+las+Pitahayas+9-B%2C+Zibat%C3%A1',
-    )
+    await expect(directions).toHaveAttribute('href', LOCAL_B.googleMapsUri ?? '')
     await expect(directions).toHaveAttribute('target', '_blank')
     const popupPromise = page.waitForEvent('popup')
     await directions.click()
@@ -53,29 +56,29 @@ test.describe('Plazas y lugares', () => {
     await expect(popup).toHaveURL(/^https:\/\/(www\.google\.com\/maps|maps\.app\.goo\.gl)/)
     await popup.close()
 
-    await region.getByRole('button', { name: 'Volver a Plaza Condesa' }).click()
-    await expect(region.getByRole('heading', { level: 2, name: 'Plaza Condesa' })).toBeVisible()
+    await region.getByRole('button', { name: `Volver a ${ZONA_B.name}` }).click()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
   })
 
   test('un enlace directo a un lugar abre su ficha', async ({ page }) => {
-    await openApp(page, { path: 'lugar/tomassa' })
-    await expect(panel(page).getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
-    await expect(panel(page).getByRole('article', { name: 'Tomassa' })).toContainText(
-      'Paseo Zibatá',
+    await openApp(page, { path: `lugar/${LOCAL.slug}` })
+    await expect(panel(page).getByRole('heading', { level: 2, name: LOCAL.name })).toBeVisible()
+    await expect(panel(page).getByRole('article', { name: LOCAL.name })).toContainText(
+      ZONA_GRANDE.name,
     )
   })
 
   test('la ficha servida lleva sus datos estructurados, sin horario ni medias', async ({
     page,
   }) => {
-    await openApp(page, { path: 'lugar/tomassa' })
+    await openApp(page, { path: `lugar/${LOCAL.slug}` })
     const bloque = page.locator('script[type="application/ld+json"]')
     await expect(bloque).toHaveCount(1)
     const datos = JSON.parse((await bloque.textContent()) ?? '{}')
 
     expect(datos['@context']).toBe('https://schema.org')
     expect(datos['@type']).toBe('Restaurant')
-    expect(datos.name).toBe('Tomassa Almacén de Pastas')
+    expect(datos.name).toBe(LOCAL.name)
     expect(datos.address.addressCountry).toBe('MX')
     // Lo que la guía no publica no se publica tampoco aquí: el horario se pudre y una media
     // inventada es justo lo que este proyecto no hace.
@@ -88,12 +91,12 @@ test.describe('Plazas y lugares', () => {
   }) => {
     // Se entra con una categoría activa a propósito: la ruta de la vista la arrastra y la URL que
     // se comparte no debe llevarla, o el mismo lugar generaría una URL distinta por cada filtro.
-    await openApp(page, { path: 'lugar/tomassa?categoria=italiana' })
+    await openApp(page, { path: `lugar/${LOCAL.slug}?categoria=${categoriaDe(LOCAL).slug}` })
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
-    await expect(page).toHaveURL(/categoria=italiana/)
+    await expect(region.getByRole('heading', { level: 2, name: LOCAL.name })).toBeVisible()
+    await expect(page).toHaveURL(new RegExp(`categoria=${categoriaDe(LOCAL).slug}`))
 
-    const compartir = region.getByRole('button', { name: 'Compartir Tomassa' })
+    const compartir = region.getByRole('button', { name: `Compartir ${LOCAL.name}` })
     await expect(compartir).toBeVisible()
     // La hoja del sistema abriría un diálogo nativo que Playwright no puede cerrar: se fuerza la
     // rama del portapapeles, que es la que se puede comprobar.
@@ -121,7 +124,7 @@ test.describe('Plazas y lugares', () => {
      */
     await expect
       .poll(() => page.evaluate(() => (window as unknown as { copiado?: string }).copiado))
-      .toMatch(/\/lugar\/tomassa$/)
+      .toMatch(new RegExp(`/lugar/${LOCAL.slug}$`))
 
     const copiado = await page.evaluate(() => (window as unknown as { copiado?: string }).copiado)
     expect(copiado).not.toContain('categoria')
@@ -132,9 +135,11 @@ test.describe('Plazas y lugares', () => {
   test('compartir cuenta el lugar en una frase: giros completos, con comas y "y", y el enlace detrás', async ({
     page,
   }) => {
-    await openApp(page, { path: 'lugar/cosi-fan-tutte' })
+    await openApp(page, { path: `lugar/${LOCAL_DOS_GIROS.slug}` })
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Cosi Fan Tutte' })).toBeVisible()
+    await expect(
+      region.getByRole('heading', { level: 2, name: LOCAL_DOS_GIROS.name }),
+    ).toBeVisible()
 
     // La hoja del sistema no se puede manejar desde la prueba: se intercepta lo que se le entrega.
     await page.evaluate(() => {
@@ -146,7 +151,7 @@ test.describe('Plazas y lugares', () => {
         },
       })
     })
-    await region.getByRole('button', { name: 'Compartir Cosi Fan Tutte' }).click()
+    await region.getByRole('button', { name: `Compartir ${LOCAL_DOS_GIROS.name}` }).click()
 
     await expect
       .poll(() =>
@@ -156,29 +161,30 @@ test.describe('Plazas y lugares', () => {
     const datos = await page.evaluate(
       () => (window as unknown as { compartido?: { text?: string; url?: string } }).compartido,
     )
-    // "Italiana" en el filtro, "Comida Italiana" en la frase; sin puntos medios entre giros.
-    expect(datos?.text).toMatch(/^Cosi Fan Tutte · Comida Italiana y Pizza · .+\. Conoce más en$/)
-    expect(datos?.text).not.toContain(' · Italiana')
-    expect(datos?.url).toMatch(/\/es\/lugar\/cosi-fan-tutte$/)
+    // Los dos giros van unidos con "y", no con puntos medios, y luego el enlace.
+    expect(datos?.text).toMatch(
+      new RegExp(`^${esc(LOCAL_DOS_GIROS.name)} · [^·]+ y [^·]+ · .+\\. Conoce más en$`),
+    )
+    expect(datos?.url).toMatch(new RegExp(`/es/lugar/${LOCAL_DOS_GIROS.slug}$`))
   })
 
   test('"atrás" en el navegador cierra la plaza seleccionada', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)
-    await elegirZona(page, 'Plaza Zielo')
-    await expect(page).toHaveURL(/\/es\/zona\/plaza-zielo$/)
-    await expect(panel(page).getByRole('heading', { level: 2, name: 'Plaza Zielo' })).toBeVisible()
+    await elegirZona(page, ZONA_B.name)
+    await expect(page).toHaveURL(new RegExp(`/es/zona/${ZONA_B.slug}$`))
+    await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
     await page.goBack()
-    await expect(page).not.toHaveURL(/plaza-zielo/)
-    await expect(panel(page).getByRole('heading', { level: 2, name: 'Plaza Zielo' })).toBeHidden()
+    await expect(page).not.toHaveURL(new RegExp(ZONA_B.slug))
+    await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_B.name })).toBeHidden()
   })
 
   test('se pueden guardar favoritos y filtrar por ellos', async ({ page }) => {
-    await openApp(page, { path: 'zona/plaza-zielo' })
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
     const region = panel(page)
-    await region.getByRole('button', { name: 'Guardar en favoritos: Escarola' }).click()
+    await region.getByRole('button', { name: `Guardar en favoritos: ${LOCAL_B.name}` }).click()
     await expect(
-      region.getByRole('button', { name: 'Quitar de favoritos: Escarola' }),
+      region.getByRole('button', { name: `Quitar de favoritos: ${LOCAL_B.name}` }),
     ).toHaveAttribute('aria-pressed', 'true')
     await region.getByRole('button', { name: 'Cerrar panel' }).click()
     await page.getByRole('switch', { name: /Favoritos/ }).click()
@@ -194,7 +200,7 @@ test.describe('Plazas y lugares', () => {
     // 720×300 ni siquiera le da alto para caber entero.
     for (const alto of [420, 300]) {
       await page.setViewportSize({ width: 720, height: alto })
-      await openApp(page, { path: 'lugar/tomassa' })
+      await openApp(page, { path: `lugar/${LOCAL.slug}` })
       const boton = page.getByRole('button', { name: /^Registrar visita a / })
       await boton.scrollIntoViewIfNeeded()
       await boton.click()
@@ -232,7 +238,7 @@ test.describe('Plazas y lugares', () => {
     await expect(
       // El renglon del indice de zonas es un enlace: la zona tiene direccion propia.
       page.getByRole('link', {
-        name: new RegExp(`^Xentric Anáhuac, ${placesInPlaza('Xentric Anáhuac')} lugares`),
+        name: new RegExp(`^${esc(ZONA_GRANDE.name)}, ${placesInPlaza(ZONA_GRANDE.name)} lugares`),
       }),
     ).toBeVisible()
     const box = await panel(page).boundingBox()
@@ -250,7 +256,7 @@ test.describe('Plazas y lugares', () => {
     // Lo que se vigila no son los números, es la uniformidad: cada relación repite siempre el mismo
     // paso. Se rompe en cuanto alguien añade un bloque con margen propio, que es como se desordenó
     // antes. La escala está escrita en PlaceDetail.module.css.
-    await openApp(page, { path: 'lugar/al-grano' })
+    await openApp(page, { path: `lugar/${LOCAL_COMPLETO.slug}` })
     await waitForMap(page)
     const huecos = await page.evaluate(() => {
       const entre = (padre: Element | null) => {

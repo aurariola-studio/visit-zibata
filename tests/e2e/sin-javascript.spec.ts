@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { esc, LOCAL, LOCAL_COMPLETO, plazaDe, ZONA_GRANDE } from './helpers.ts'
 
 /**
  * La guía sin JavaScript.
@@ -26,23 +27,30 @@ test.describe('Sin JavaScript', () => {
     baseURL,
   }) => {
     const base = baseDe(baseURL)
-    await page.goto(new URL('es/lugar/tomassa', baseURL).href)
+    const place = LOCAL_COMPLETO
+    await page.goto(new URL(`es/lugar/${place.slug}`, baseURL).href)
 
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Tomassa/)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(new RegExp(esc(place.name)))
     await expect(page.getByRole('heading', { name: 'Horario' })).toBeVisible()
-    await expect(page.getByText('14:00-21:00').first()).toBeVisible()
+    // El horario que dice el dato: el primer tramo de cualquier día.
+    const tramo = Object.values((place.hours ?? {}) as Record<string, string[]>).flat()[0]
+    if (tramo) await expect(page.getByText(tramo).first()).toBeVisible()
 
     // Los enlaces son lo que de verdad importa: sin ellos el sitio no tiene grafo que rastrear.
-    await expect(page.getByRole('link', { name: 'Paseo Zibatá' })).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Instagram' })).toBeVisible()
+    await expect(page.getByRole('link', { name: plazaDe(place).name })).toBeVisible()
+    if (place.links.instagram) {
+      await expect(page.getByRole('link', { name: 'Instagram' })).toBeVisible()
+    }
     const internos = page.locator(`a[href^="${base}es/lugar/"], a[href^="${base}es/zona/"]`)
     expect(await internos.count()).toBeGreaterThan(3)
   })
 
   test('una zona lista sus locales, y la portada sus zonas', async ({ page, baseURL }) => {
     const base = baseDe(baseURL)
-    await page.goto(new URL('es/zona/paseo-zibata', baseURL).href)
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Paseo Zibatá/)
+    await page.goto(new URL(`es/zona/${ZONA_GRANDE.slug}`, baseURL).href)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      new RegExp(esc(ZONA_GRANDE.name)),
+    )
     expect(await page.locator(`a[href^="${base}es/lugar/"]`).count()).toBeGreaterThan(3)
 
     await page.goto(new URL('es', baseURL).href)
@@ -60,8 +68,8 @@ test.describe('Sin JavaScript', () => {
 
   test('el árbol inglés también, con sus propias rutas', async ({ page, baseURL }) => {
     const base = baseDe(baseURL)
-    await page.goto(new URL('en/place/tomassa', baseURL).href)
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Tomassa/)
+    await page.goto(new URL(`en/place/${LOCAL.slug}`, baseURL).href)
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(new RegExp(esc(LOCAL.name)))
     const internos = page.locator(`a[href^="${base}en/place/"], a[href^="${base}en/area/"]`)
     expect(await internos.count()).toBeGreaterThan(3)
   })

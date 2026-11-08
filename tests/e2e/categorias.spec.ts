@@ -1,5 +1,14 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, placesInCategory, waitForMap } from './helpers.ts'
+import {
+  categoriaDe,
+  esc,
+  LOCAL,
+  openApp,
+  panel,
+  placesInCategory,
+  waitForMap,
+  ZONA_GRANDE,
+} from './helpers.ts'
 
 /*
  * Cada categoría es una página con su propia dirección (`/categoria/x`, `/en/category/x`), y sus
@@ -88,14 +97,18 @@ test.describe('Páginas de categoría', () => {
   })
 
   test('dentro de una zona la categoría sigue siendo un filtro de esa zona', async ({ page }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
-    const enlace = cápsulas(page).getByRole('link', { name: /Desayunos y Café/ })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
+    // Una categoría que esa zona tiene de verdad: la de uno de sus locales.
+    const categoria = categoriaDe(LOCAL)
+    const enlace = cápsulas(page).getByRole('link', { name: new RegExp(esc(categoria.label)) })
     await expect(enlace).toHaveAttribute(
       'href',
-      /\/zona\/paseo-zibata\?categoria=desayunos-y-cafe$/,
+      new RegExp(`/zona/${ZONA_GRANDE.slug}\\?categoria=${categoria.slug}$`),
     )
     await enlace.click()
-    await expect(page).toHaveURL(/\/es\/zona\/paseo-zibata\?categoria=desayunos-y-cafe$/)
+    await expect(page).toHaveURL(
+      new RegExp(`/es/zona/${ZONA_GRANDE.slug}\\?categoria=${categoria.slug}$`),
+    )
   })
 
   test('con Ctrl el enlace no se intercepta: apunta a una página que existe', async ({ page }) => {

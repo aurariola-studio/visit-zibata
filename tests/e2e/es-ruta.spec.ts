@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { openApp } from './helpers.ts'
+import { LOCAL, openApp, ZONA_GRANDE } from './helpers.ts'
 
 /*
  * El español lleva `/es`, como el inglés lleva `/en`. Aquí se fija lo que el resto de la suite da por
@@ -39,7 +39,7 @@ test.describe('El español con /es', () => {
   })
 
   test('una ficha y una zona viven en /es/… y su canónico también', async ({ page }) => {
-    for (const ruta of ['lugar/tomassa', 'zona/paseo-zibata', 'info/privacidad']) {
+    for (const ruta of [`lugar/${LOCAL.slug}`, `zona/${ZONA_GRANDE.slug}`, 'info/privacidad']) {
       await openApp(page, { path: ruta })
       expect(new URL(page.url()).pathname, ruta).toContain(`/es/${ruta}`)
       const canonico = await page.locator('link[rel="canonical"]').getAttribute('href')
@@ -50,7 +50,7 @@ test.describe('El español con /es', () => {
   test('los enlaces de la interfaz llevan /es, y el cambio de idioma va a /en y vuelve', async ({
     page,
   }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     // Las cápsulas de categoría se ven en todas las pantallas: "Todo" apunta a la portada y las demás, a su
     // página o al filtro de la zona.
     const cápsulas = page.getByRole('list', { name: 'Categorías' }).first().getByRole('link')
@@ -65,9 +65,9 @@ test.describe('El español con /es', () => {
       )
 
     await page.getByRole('link', { name: /View the guide in English/ }).click()
-    await expect(page).toHaveURL(/\/en\/area\/paseo-zibata$/)
+    await expect(page).toHaveURL(new RegExp(`/en/area/${ZONA_GRANDE.slug}$`))
     await page.getByRole('link', { name: /Ver la guía en Español/ }).click()
-    await expect(page).toHaveURL(/\/es\/zona\/paseo-zibata$/)
+    await expect(page).toHaveURL(new RegExp(`/es/zona/${ZONA_GRANDE.slug}$`))
   })
 
   test('la dirección de antes, sin prefijo, acaba en /es sin perder la página', async ({
@@ -75,8 +75,8 @@ test.describe('El español con /es', () => {
   }) => {
     // Con hash (el formato más viejo) y la raíz: lo único sin prefijo que existe en la vista previa.
     await page.addInitScript(() => window.localStorage.setItem('zibata:onboarding-visto', '1'))
-    await page.goto('./#/lugar/tomassa')
-    await expect(page).toHaveURL(/\/es\/lugar\/tomassa$/)
+    await page.goto(`./#/lugar/${LOCAL.slug}`)
+    await expect(page).toHaveURL(new RegExp(`/es/lugar/${LOCAL.slug}$`))
     await page.goto('./')
     await expect(page).toHaveURL(/\/es$/)
   })

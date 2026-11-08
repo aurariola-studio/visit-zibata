@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
+import { LOCAL, ZONA_B } from './helpers.ts'
 
 const huella = (css: string) =>
   `'sha256-${createHash('sha256').update(css, 'utf8').digest('base64')}'`
@@ -39,8 +40,12 @@ test.describe('Carga inicial', () => {
 
   test('el cargador está en todas las páginas y en su idioma', async ({ request }) => {
     expect(await (await request.get('./en')).text()).toContain('Preparing Zibatá')
-    expect(await (await request.get('./es/lugar/tomassa')).text()).toContain('Preparando Zibatá')
-    expect(await (await request.get('./es/zona/condesa')).text()).toContain('Preparando Zibatá')
+    expect(await (await request.get(`./es/lugar/${LOCAL.slug}`)).text()).toContain(
+      'Preparando Zibatá',
+    )
+    expect(await (await request.get(`./es/zona/${ZONA_B.slug}`)).text()).toContain(
+      'Preparando Zibatá',
+    )
   })
 
   test('sin JavaScript se ve el artículo, el cargador se esconde y la página se desplaza', async ({
