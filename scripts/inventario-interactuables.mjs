@@ -99,6 +99,73 @@ for (const ruta of archivos(RAIZ)) {
   }
 }
 
+/*
+ * El panel (`src/panel`, plantillas de texto en `.ts`, y `panel.html`) no usa JSX ni módulos CSS por
+ * componente: arma el HTML con plantillas y compone la familia con `controls.<familia>` dentro del
+ * atributo `class`. Aquí se lee eso en crudo. Un elemento del panel entra en una familia si su `class`
+ * nombra alguna `controls.*`; si no lleva `class`, vale lo mismo que arriba (lo pone el contenedor,
+ * salvo `button` y `a`). Los de `panel.html` reciben su clase en tiempo de ejecución: cuentan si su
+ * atributo `data-*` aparece en un `.ts` del panel que importa `controls`.
+ */
+const RAIZ_PANEL = join(RAIZ, 'panel')
+/** Lo del panel que vive fuera del catálogo a propósito, por su clase y con el motivo. */
+const FUERA_PANEL = new Map([
+  ['visualmente', 'campo de archivo oculto: lo pulsa su etiqueta, que es la pieza visible'],
+  ['salto', 'enlace de salto: solo aparece al enfocarlo con el teclado'],
+])
+const archivosPanel = (dir) =>
+  readdirSync(dir).flatMap((nombre) => {
+    const ruta = join(dir, nombre)
+    if (statSync(ruta).isDirectory()) return archivosPanel(ruta)
+    return ruta.endsWith('.ts') && !ruta.includes('.test.') ? [ruta] : []
+  })
+
+const fuentesPanel = archivosPanel(RAIZ_PANEL).map((ruta) => [ruta, readFileSync(ruta, 'utf8')])
+const clasesDelPanel = (fuente) =>
+  [...(fuente.match(/class="([^"]*)"/s)?.[1] ?? '').matchAll(/controls\.(\w+)/g)].map((m) => m[1])
+const claseCrudaDe = (atributos) => atributos.match(/class="([^"]*)"/s)?.[1]
+const dataDe = (atributos) => atributos.match(/\sdata-[\w-]+/)?.[0].trim()
+
+/** Una clase propia si la tiene (sin las `controls.*`, que ya salen como familia), si no su `data-*`. */
+const pistaPanel = (cruda, atributos) => {
+  const propia = (cruda ?? '')
+    .replace(/\$\{[^}]*\}/g, '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+  return propia.length > 0 ? `.${propia.join('/')}` : (dataDe(atributos) ?? '(sin pista)')
+}
+
+const objetivosPanel = [
+  ...fuentesPanel.map(([ruta, fuente]) => ({ ruta, fuente, enHtml: false })),
+  { ruta: 'panel.html', fuente: readFileSync('panel.html', 'utf8'), enHtml: true },
+]
+for (const { ruta, fuente, enHtml } of objetivosPanel) {
+  for (const [, etiqueta, atributos = ''] of fuente.matchAll(INTERACTIVOS)) {
+    if (etiqueta === 'a' && !/^\s/.test(atributos)) continue
+    const compuestas = clasesDelPanel(atributos)
+    const cruda = claseCrudaDe(atributos)
+    let familia = compuestas.length > 0 ? compuestas.join(' / ') : undefined
+    if (!familia && enHtml) {
+      const dato = dataDe(atributos)
+      const asigna =
+        dato &&
+        fuentesPanel.some(
+          ([, f]) =>
+            f.includes(`[${dato}]`) && /import controls from/.test(f) && f.includes('controls.'),
+        )
+      if (asigna) familia = 'asignada en el código'
+    }
+    const lista = porArchivo.get(ruta) ?? []
+    lista.push(`${etiqueta.padEnd(8)} ${pistaPanel(cruda, atributos).padEnd(38)}${familia ?? ''}`)
+    porArchivo.set(ruta, lista)
+    const laPoneElPadre = !cruda && etiqueta !== 'button' && etiqueta !== 'a'
+    if (!familia && !laPoneElPadre && !FUERA_PANEL.has(cruda ?? '')) {
+      sinFamilia.push(`${ruta.replace(/\\/g, '/')}  ${cruda ?? dataDe(atributos) ?? etiqueta}`)
+    }
+  }
+}
+
 let total = 0
 for (const [ruta, lista] of [...porArchivo].sort()) {
   console.log(`\n${ruta.replace(/\\/g, '/')}  (${lista.length})`)
