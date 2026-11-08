@@ -12,6 +12,11 @@ import { LOCAL, openApp, ZONA_GRANDE } from './helpers.ts'
 const rutaDe = (direccion: string | null | undefined): string =>
   new URL(direccion ?? '', 'http://localhost').pathname
 
+// EXPERIMENTO, no fusionar: una prueba rota a proposito para ver que CI (resultado) se pone en rojo.
+test('experimento: falla a proposito', () => {
+  expect(1).toBe(2)
+})
+
 test.describe('El español con /es', () => {
   test('la portada es /es, con su canónico y sus hreflang apuntando a /es y /en', async ({
     page,
