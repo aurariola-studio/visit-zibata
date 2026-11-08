@@ -148,7 +148,12 @@ export function bytesDeBase64(datos: string): Uint8Array | null {
 
 export interface PlazaResumen {
   id: string
+  slug: string
   name: string
+  description: { es: string; en?: string } | null
+  address: string | null
+  coordinates: { lat: number; lng: number }
+  googleMapsUri?: string
   active: boolean
   comingSoon?: boolean
 }
@@ -415,12 +420,29 @@ export async function contenido(
     seco: cargado.seco,
     pr: cargado.pr,
     categories: cargado.dataset.categories,
-    plazas: cargado.dataset.plazas.map(({ id, name, active, comingSoon }) => ({
-      id,
-      name,
-      active,
-      comingSoon,
-    })),
+    plazas: cargado.dataset.plazas.map(
+      ({
+        id,
+        slug,
+        name,
+        description,
+        address,
+        coordinates,
+        googleMapsUri,
+        active,
+        comingSoon,
+      }) => ({
+        id,
+        slug,
+        name,
+        description,
+        address,
+        coordinates,
+        googleMapsUri,
+        active,
+        comingSoon,
+      }),
+    ),
     places: cargado.dataset.places,
   }
 }

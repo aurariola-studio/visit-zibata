@@ -217,3 +217,81 @@ describe('borrar un negocio', () => {
     expect(respuesta?.status).toBe(400)
   })
 })
+
+describe('editar una plaza', () => {
+  const editar = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir('/api/panel/contenido/plaza', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+
+  /** Los datos de la primera plaza de la guía, tal como los manda el formulario. */
+  const formulario = async () => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      plazas: {
+        id: string
+        name: string
+        description: { es: string; en: string } | null
+        address: string | null
+        coordinates: { lat: number; lng: number }
+        googleMapsUri?: string
+        active: boolean
+        comingSoon?: boolean
+      }[]
+    }
+    const plaza = datos.plazas[0]
+    if (!plaza) throw new Error('sin plazas')
+    return {
+      id: plaza.id,
+      nombre: plaza.name,
+      descripcionEs: plaza.description?.es ?? '',
+      descripcionEn: plaza.description?.en ?? '',
+      direccion: plaza.address ?? '',
+      lat: plaza.coordinates.lat,
+      lng: plaza.coordinates.lng,
+      googleMapsUri: plaza.googleMapsUri ?? '',
+      activa: plaza.active,
+      proximamente: plaza.comingSoon ?? false,
+    }
+  }
+
+  it('el catálogo trae lo que el formulario necesita', async () => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      plazas: { slug?: string; coordinates?: unknown }[]
+    }
+    expect(datos.plazas[0]?.slug).toBeTruthy()
+    expect(datos.plazas[0]?.coordinates).toBeTruthy()
+  })
+
+  it('un cambio sin consecuencias queda en seco en desarrollo', async () => {
+    const respuesta = await editar({ ...(await formulario()), direccion: 'Calle de prueba 1' })
+    expect(respuesta?.status).toBe(200)
+    const datos = (await respuesta?.json()) as { ok: boolean; confirmado: boolean; seco: boolean }
+    expect(datos).toMatchObject({ ok: true, confirmado: true, seco: true })
+  })
+
+  it('desactivarla pide confirmación', async () => {
+    const respuesta = await editar({ ...(await formulario()), activa: false })
+    const datos = (await respuesta?.json()) as {
+      confirmado: boolean
+      requiereConfirmacion: boolean
+    }
+    expect(datos).toMatchObject({ confirmado: false, requiereConfirmacion: true })
+  })
+
+  it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {
+    const respuesta = await editar(await formulario(), 'cross-site')
+    expect(respuesta?.status).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee', async () => {
+    const respuesta = await editar({ ...(await formulario()), direccion: 'x'.repeat(20_000) })
+    expect(respuesta?.status).toBe(413)
+  })
+
+  it('un campo que no se edita se rechaza', async () => {
+    const respuesta = await editar({ ...(await formulario()), slug: 'otro' })
+    expect(respuesta?.status).toBe(400)
+  })
+})

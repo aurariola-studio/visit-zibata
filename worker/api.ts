@@ -50,6 +50,7 @@ import {
   POR_PAGINA,
   RESUMEN,
 } from './panel.ts'
+import { guardarPlaza } from './plazas.ts'
 import {
   CONTEO_CORAZONES,
   CONTEO_NOTAS,
@@ -100,6 +101,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/visitas': 1_300_000,
   '/api/panel/contenido/negocio': 128 * 1024,
   '/api/panel/contenido/negocio/borrar': 4 * 1024,
+  '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
   '/api/panel/contenido/foto': Math.ceil(TOPE_FOTO * 1.5),
 }
@@ -339,6 +341,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await guardarNegocio(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Editar una plaza: si cambia lo que se ve, primero responde con el impacto (ver worker/plazas.ts).
+  if (ruta === '/api/panel/contenido/plaza' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await guardarPlaza(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)
