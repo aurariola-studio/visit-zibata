@@ -182,10 +182,21 @@ interface LugarDePrueba {
 }
 const cafe = contenido.places[0] as (typeof contenido.places)[number]
 const plazaUno = contenido.plazas[0] as (typeof contenido.plazas)[number]
+const categoriaUno = contenido.categories[0] as (typeof contenido.categories)[number]
 const conEstados = {
   ...contenido,
+  categories: [
+    ...contenido.categories,
+    {
+      ...categoriaUno,
+      id: 'categoria-larga',
+      slug: { es: 'categoria-larga', en: 'long-category' },
+      label: { es: nombreLargo, en: nombreLargo },
+    },
+  ],
   plazas: [
     ...contenido.plazas,
+    { ...plazaUno, id: 'plaza-larga', slug: 'plaza-larga', name: nombreLargo },
     {
       ...contenido.plazas[0],
       id: 'plaza-cuatro',
@@ -371,6 +382,49 @@ test.describe('Panel', () => {
     } else {
       await expect(detalle).toBeHidden()
     }
+  })
+
+  test('a cualquier ancho cada sección cabe en el espacio que tiene, sin desplazarse', async ({
+    page,
+  }) => {
+    // Del teléfono más estrecho a una pantalla grande, con los saltos del diseño (la barra lateral
+    // aparece en 60 rem, las columnas de la tabla se quitan en 52 y el diálogo pasa a pantalla
+    // completa en 44) a un píxel de cada lado. A 320 px la tabla de negocios se desplazaba por dentro:
+    // con el nombre, "Cerrado temporalmente" y el botón en una sola línea cada uno no cabía.
+    const anchos = [
+      320, 375, 414, 640, 703, 704, 768, 831, 832, 833, 900, 959, 960, 961, 1000, 1024, 1100, 1280,
+      1440,
+    ]
+    const secciones = [
+      ['resumen', 'Resumen'],
+      ['sugerencias', 'Sugerencias'],
+      ['negocios', 'Negocios'],
+      ['categorias', 'Categorías y giros'],
+      ['plazas', 'Plazas'],
+    ] as const
+    await abrirPanel(page, { datos: conEstados })
+
+    const fallos: string[] = []
+    for (const ancho of anchos) {
+      await page.setViewportSize({ width: ancho, height: 900 })
+      for (const [vista, titulo] of secciones) {
+        await irA(page, vista, titulo)
+        const sobra = await page.evaluate(() => {
+          const raiz = document.documentElement
+          const tabla = document.querySelector('.tabla')
+          return {
+            pagina: raiz.scrollWidth - raiz.clientWidth,
+            // Lo que no cabe en la tabla y se esconde tras una barra de desplazamiento propia.
+            tabla: tabla ? tabla.scrollWidth - tabla.clientWidth : 0,
+          }
+        })
+        if (sobra.pagina > 0)
+          fallos.push(`${ancho}px ${vista}: la página se desplaza ${sobra.pagina}px`)
+        if (sobra.tabla > 1)
+          fallos.push(`${ancho}px ${vista}: la tabla se desplaza ${sobra.tabla}px por dentro`)
+      }
+    }
+    expect(fallos).toEqual([])
   })
 
   test('negocios: un nombre desmesurado no desplaza la página ni tapa el botón', async ({

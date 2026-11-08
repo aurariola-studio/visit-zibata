@@ -61,7 +61,7 @@ export function pintarZonaCategorias(): void {
       const locales = localesVisibles(categoria.giros.map((giro) => giro.id)).length
       return `<tr>
         <td><span class="tono" data-tono="${categoria.hue ?? ''}" aria-hidden="true"></span></td>
-        <td>
+        <td class="celda-nombre">
           <span class="negocio-nombre">${texto(categoria.label.es)}</span>
           ${locales === 0 ? '<span class="nota-tabla">sin página</span>' : ''}
         </td>
