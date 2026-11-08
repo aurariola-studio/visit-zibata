@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { redireccionDe, redireccionDeLugarBorrado } from './redireccion.ts'
+import {
+  redireccionDe,
+  redireccionDeLugarBorrado,
+  redireccionDeZonaBorrada,
+} from './redireccion.ts'
 
 const aDonde = (direccion: string) => redireccionDe(new URL(direccion))
 
@@ -147,5 +151,44 @@ describe('un local borrado desde el panel', () => {
     const destino = aDondeBorrado('/es/lugar/cafe-viejo') ?? ''
     expect(destino.startsWith('/')).toBe(true)
     expect(destino.startsWith('//')).toBe(false)
+  })
+})
+
+describe('una plaza borrada desde el panel', () => {
+  const zonas: ReadonlySet<string> = new Set(['plaza-vieja'])
+  const aDondeZona = (ruta: string) => redireccionDeZonaBorrada(ruta, zonas)
+
+  it('su página va a la portada del mismo idioma, con o sin prefijo', () => {
+    expect(aDondeZona('/es/zona/plaza-vieja')).toBe('/es')
+    expect(aDondeZona('/en/area/plaza-vieja')).toBe('/en')
+    expect(aDondeZona('/zona/plaza-vieja')).toBe('/es')
+  })
+
+  it('no toca otras plazas, otras familias de ruta ni un segmento de otro idioma', () => {
+    expect(aDondeZona('/es/zona/otra')).toBeNull()
+    expect(aDondeZona('/es/lugar/plaza-vieja')).toBeNull()
+    expect(aDondeZona('/en/zona/plaza-vieja')).toBeNull()
+    expect(aDondeZona('/es/zona/plaza-vieja/mas')).toBeNull()
+    expect(aDondeZona('/es/zona')).toBeNull()
+  })
+
+  it('el punto de entrada real lo resuelve en un salto, con barra final y con la consulta', () => {
+    const real = (direccion: string) => redireccionDe(new URL(direccion), new Map(), zonas)
+    expect(real('https://visitzibata.com/es/zona/plaza-vieja')).toBe('/es')
+    expect(real('https://visitzibata.com/es/zona/plaza-vieja/')).toBe('/es')
+    expect(real('https://visitzibata.com/zona/plaza-vieja?categoria=bebidas')).toBe('/es')
+    expect(real('https://visitzibata.com/en/area/plaza-vieja')).toBe('/en')
+    expect(real('https://visitzibata.com/es/zona/otra')).toBeNull()
+  })
+
+  it('un local borrado cuya plaza también se borró va a la portada', () => {
+    const sinPlaza = new Map<string, string | null>([['cafe-viejo', null]])
+    expect(redireccionDe(new URL('https://visitzibata.com/es/lugar/cafe-viejo'), sinPlaza)).toBe(
+      '/es',
+    )
+  })
+
+  it('sin plazas borradas no hace nada', () => {
+    expect(redireccionDeZonaBorrada('/es/zona/plaza-vieja', new Set())).toBeNull()
   })
 })

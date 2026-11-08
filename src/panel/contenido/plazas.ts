@@ -122,7 +122,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
           <div class="campo-form">
             <span>Visibilidad</span>
             <label class="casilla"><input type="checkbox" name="activa"${plaza.active ? ' checked' : ''} /><span>Activa en la guía</span></label>
-            <span class="ayuda">${numero(locales.length)} locales están en esta plaza. Al desactivarla dejan de verse y su página da 404; te mostraré el efecto antes de guardar.</span>
+            <span class="ayuda">${numero(locales.length)} locales están en esta plaza. Al desactivarla dejan de verse y su página da 404; te mostraré el efecto antes de guardar.${locales.length > 0 ? ' Para borrarla, primero hay que borrar sus locales.' : ''}</span>
           </div>
           <div class="campo-form">
             <span>Próximamente</span>
@@ -133,12 +133,14 @@ export function pintarPlaza(plaza: PlazaResumen): void {
       </section>
 
       <div data-impacto-plaza></div>
+      <div data-borrado-plaza></div>
 
       <footer class="editor-pie">
         <div class="problemas" data-problemas role="alert"></div>
         <div class="acciones">
           <button type="submit" class="${controls.base} ${controls.boton} ${controls.principal}">Guardar cambios</button>
           <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar>Cancelar</button>
+          ${locales.length === 0 ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-borrar-plaza>Borrar plaza</button>` : ''}
         </div>
       </footer>
     </form>`,
@@ -323,6 +325,20 @@ export function alPulsarPlaza(objetivo: HTMLElement, recargar: () => Promise<voi
     formulario.querySelector<HTMLElement>('button[type="submit"]')?.focus()
     return true
   }
+  if (objetivo.closest('[data-borrar-plaza]')) {
+    void pedirImpactoBorrado(formulario)
+    return true
+  }
+  if (objetivo.closest('[data-confirmar-borrado-plaza]')) {
+    void confirmarBorrado(formulario, recargar)
+    return true
+  }
+  if (objetivo.closest('[data-cancelar-borrado-plaza]')) {
+    const zona = formulario.querySelector<HTMLElement>('[data-borrado-plaza]')
+    if (zona) zona.innerHTML = ''
+    formulario.querySelector<HTMLElement>('[data-borrar-plaza]')?.focus()
+    return true
+  }
   return false
 }
 
@@ -343,4 +359,111 @@ export function alCambiarPlaza(objetivo: HTMLElement): boolean {
     if (pronto) pronto.checked = false
   }
   return true
+}
+
+/* ------------------------------------------------------------------ borrar */
+
+interface ImpactoBorradoPlaza {
+  plaza: { id: string; nombre: string }
+  redirecciones: { desde: string; hacia: string }[]
+  teniaPagina: boolean
+  redireccionesDeLocales: number
+  avisos: string[]
+}
+
+interface RespuestaBorradoPlaza {
+  ok?: boolean
+  pr?: { url: string; numero: number; creada: boolean } | null
+  mensaje?: string
+  problemas?: string[]
+  impacto?: ImpactoBorradoPlaza
+}
+
+/** Habla con el Worker. Los errores salen en el formulario y devuelven `null`. */
+async function llamarBorrado(
+  formulario: HTMLFormElement,
+  cuerpo: { id: string; confirmar?: boolean },
+): Promise<RespuestaBorradoPlaza | null> {
+  try {
+    const respuesta = await fetch('/api/panel/contenido/plaza/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(cuerpo),
+    })
+    const resultado = (await respuesta.json().catch(() => null)) as RespuestaBorradoPlaza | null
+    if (respuesta.status === 403) {
+      mostrarProblemas(formulario, ['Sin permiso. Revisa la regla de Access.'])
+      return null
+    }
+    if (respuesta.status === 503) {
+      mostrarProblemas(formulario, ['Falta GITHUB_TOKEN en el Worker.'])
+      return null
+    }
+    if (!respuesta.ok || !resultado?.ok) {
+      mostrarProblemas(
+        formulario,
+        resultado?.problemas?.length ? resultado.problemas : ['No se pudo borrar.'],
+      )
+      return null
+    }
+    return resultado
+  } catch {
+    mostrarProblemas(formulario, ['No se pudo hablar con el servidor.'])
+    return null
+  }
+}
+
+/** Primer paso: enseña qué cambiaría, sin guardar nada. */
+async function pedirImpactoBorrado(formulario: HTMLFormElement): Promise<void> {
+  const id = formulario.dataset.id
+  const zona = formulario.querySelector<HTMLElement>('[data-borrado-plaza]')
+  if (!id || !zona || vista.guardando) return
+  mostrarProblemas(formulario, [])
+  const resultado = await llamarBorrado(formulario, { id })
+  if (!resultado?.impacto) return
+  const { impacto } = resultado
+
+  const direcciones = impacto.redirecciones
+    .map(
+      (fila) =>
+        `<li><code>${texto(fila.desde)}</code> pasa a <code>${texto(fila.hacia)}</code> (redirección permanente)</li>`,
+    )
+    .join('')
+  zona.innerHTML = `<section class="editor-seccion impacto-borrado" aria-labelledby="titulo-borrado-plaza" tabindex="-1">
+      <h3 id="titulo-borrado-plaza">Si borras ${texto(impacto.plaza.nombre)}</h3>
+      <ul class="impacto-lista">${direcciones}</ul>
+      <ul class="impacto-lista">${impacto.avisos.map((aviso) => `<li>${texto(aviso)}</li>`).join('')}</ul>
+      <div class="acciones">
+        <button type="button" class="${controls.base} ${controls.boton} ${controls.principal}" data-confirmar-borrado-plaza>Borrar esta plaza</button>
+        <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar-borrado-plaza>Mejor no</button>
+      </div>
+    </section>`
+  zona.querySelector<HTMLElement>('section')?.focus()
+}
+
+/** Segundo paso: el borrado va a la PR del panel. */
+async function confirmarBorrado(
+  formulario: HTMLFormElement,
+  recargar: () => Promise<void>,
+): Promise<void> {
+  const id = formulario.dataset.id
+  if (!id || vista.guardando) return
+  mostrarProblemas(formulario, [])
+  const botones = formulario.querySelectorAll<HTMLButtonElement>('[data-borrado-plaza] button')
+  for (const boton of botones) boton.disabled = true
+  vista.guardando = true
+  try {
+    const resultado = await llamarBorrado(formulario, { id, confirmar: true })
+    if (!resultado) return
+    vista.aviso = resultado.pr
+      ? `${resultado.mensaje ?? 'Borrado.'} ${resultado.pr.creada ? 'PR abierta' : 'Añadido a la PR'} #${resultado.pr.numero}.`
+      : (resultado.mensaje ?? 'Validado en desarrollo. No se commitea.')
+    if (vista.formularioActual) vista.formularioActual.sucio = false
+    vista.modo = 'plazas'
+    cerrarEditor(true)
+    await recargar()
+  } finally {
+    vista.guardando = false
+    for (const boton of botones) boton.disabled = false
+  }
 }

@@ -218,6 +218,49 @@ describe('borrar un negocio', () => {
   })
 })
 
+describe('borrar una plaza', () => {
+  const borrar = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir('/api/panel/contenido/plaza/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+
+  /** Una plaza con locales: la prueba no nombra ninguna. */
+  const conLocales = async (): Promise<string> => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      places: { plazaId: string }[]
+    }
+    return datos.places[0]?.plazaId ?? ''
+  }
+
+  it('una plaza con locales es un 400 que dice por qué, aunque se confirme', async () => {
+    const respuesta = await borrar({ id: await conLocales(), confirmar: true })
+    expect(respuesta?.status).toBe(400)
+    const datos = (await respuesta?.json()) as { problemas: string[] }
+    expect(datos.problemas.join(' ')).toMatch(/solo se borra vacía/)
+  })
+
+  it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {
+    const respuesta = await borrar({ id: await conLocales(), confirmar: true }, 'cross-site')
+    expect(respuesta?.status).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee', async () => {
+    const respuesta = await borrar({ id: 'x'.repeat(6000) })
+    expect(respuesta?.status).toBe(413)
+  })
+
+  it('un JSON roto es un 400 y no una caída', async () => {
+    const respuesta = await pedir('/api/panel/contenido/plaza/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': 'same-origin' },
+      body: '{no es json',
+    })
+    expect(respuesta?.status).toBe(400)
+  })
+})
+
 describe('editar una plaza', () => {
   const editar = (cuerpo: unknown, sitio = 'same-origin') =>
     pedir('/api/panel/contenido/plaza', {

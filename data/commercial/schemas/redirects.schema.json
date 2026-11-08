@@ -17,42 +17,69 @@
     "redirects": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "kind": {
-            "type": "string",
-            "const": "place"
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "place"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "plazaId": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "giros": {
+                "minItems": 1,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "slug",
+              "plazaId",
+              "giros"
+            ],
+            "additionalProperties": false
           },
-          "id": {
-            "type": "string",
-            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-          },
-          "slug": {
-            "type": "string",
-            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-          },
-          "plazaId": {
-            "type": "string",
-            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-          },
-          "giros": {
-            "minItems": 1,
-            "maxItems": 3,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-            }
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "plaza"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "slug"
+            ],
+            "additionalProperties": false
           }
-        },
-        "required": [
-          "kind",
-          "id",
-          "slug",
-          "plazaId",
-          "giros"
-        ],
-        "additionalProperties": false
+        ]
       }
     }
   },
