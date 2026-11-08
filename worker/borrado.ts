@@ -22,7 +22,7 @@ import {
   syncPlazaDerivedFields,
   validateRedirects,
 } from '../src/data/relations.ts'
-import { RedirectsFileSchema } from '../src/data/schemas.ts'
+import { type Redirect, RedirectsFileSchema } from '../src/data/schemas.ts'
 import { fechaLocal } from './analitica.ts'
 import { type Cargado, type Crudo, cargar } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
@@ -59,6 +59,41 @@ export type PreparadoBorrado =
 const visible = (dataset: CommercialDataset, plazaId: string, activo: boolean): boolean =>
   activo && dataset.plazas.find((plaza) => plaza.id === plazaId)?.active === true
 
+/**
+ * Suma redirecciones a `redirects.json` y las valida contra el dataset que queda. Es lo que comparten
+ * borrar un local y borrar una plaza: las dos dejan una huella con la que `data:validate` comprueba que
+ * ningún slug vivo compite con ella.
+ */
+export function anotarRedirecciones(
+  crudo: Cargado['crudo'],
+  nuevas: Redirect[],
+  despues: CommercialDataset,
+  hoy: string,
+): { ok: true; redirects: Record<string, unknown> } | { ok: false; problemas: string[] } {
+  const previas = (crudo.redirects?.redirects as Redirect[] | undefined) ?? []
+  const todas = [...previas, ...nuevas]
+  const problemas = validateRedirects(todas, despues)
+    .filter((asunto) => asunto.level === 'error')
+    .map((asunto) => asunto.message)
+  if (problemas.length > 0) return { ok: false, problemas }
+
+  const base = (crudo.redirects ?? {
+    $schema: './schemas/redirects.schema.json',
+    version: 1,
+  }) as Crudo
+  const redirects = { ...base, updatedAt: hoy, redirects: todas }
+  const revisado = RedirectsFileSchema.safeParse(redirects)
+  if (!revisado.success) {
+    return {
+      ok: false,
+      problemas: revisado.error.issues.map(
+        (problema) => `${problema.path.join('.') || 'datos'}: ${problema.message}`,
+      ),
+    }
+  }
+  return { ok: true, redirects }
+}
+
 /** La parte pura: valida, calcula el impacto y deja los tres archivos listos. */
 export function prepararBorrado(
   dataset: CommercialDataset,
@@ -85,43 +120,22 @@ export function prepararBorrado(
   const plazas = syncPlazaDerivedFields({ ...dataset, places })
   const despues: CommercialDataset = { ...dataset, places, plazas }
 
-  const previas =
-    (crudo.redirects?.redirects as {
-      kind: 'place'
-      id: string
-      slug: string
-      plazaId: string
-      giros: string[]
-    }[]) ?? []
-  const redirecciones = [
-    ...previas,
-    {
-      kind: 'place' as const,
-      id: place.id,
-      slug: place.slug,
-      plazaId: plaza.id,
-      giros: place.giros,
-    },
-  ]
-  const problemas = validateRedirects(redirecciones, despues)
-    .filter((asunto) => asunto.level === 'error')
-    .map((asunto) => asunto.message)
-  if (problemas.length > 0) return { ok: false, problemas }
-
-  const base = (crudo.redirects ?? {
-    $schema: './schemas/redirects.schema.json',
-    version: 1,
-  }) as Crudo
-  const redirects = { ...base, updatedAt: hoy, redirects: redirecciones }
-  const revisado = RedirectsFileSchema.safeParse(redirects)
-  if (!revisado.success) {
-    return {
-      ok: false,
-      problemas: revisado.error.issues.map(
-        (problema) => `${problema.path.join('.') || 'datos'}: ${problema.message}`,
-      ),
-    }
-  }
+  const anotado = anotarRedirecciones(
+    crudo,
+    [
+      {
+        kind: 'place',
+        id: place.id,
+        slug: place.slug,
+        plazaId: plaza.id,
+        giros: place.giros,
+      },
+    ],
+    despues,
+    hoy,
+  )
+  if (!anotado.ok) return anotado
+  const { redirects } = anotado
 
   // Una categoría solo publica página si tiene algún local visible: se cuenta antes y después.
   const girosDe = (categoria: CommercialDataset['categories'][number]) =>

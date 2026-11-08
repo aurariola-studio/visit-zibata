@@ -353,11 +353,23 @@ const ENLACES_VACIOS = {
   didiFood: null,
 }
 
-/** Los slugs e ids de locales ya borrados: una ficha nueva no puede heredar sus marcas. */
-export const slugsRedirigidos = (crudo: Cargado['crudo']): string[] =>
-  ((crudo.redirects?.redirects as { id?: unknown; slug?: unknown }[] | undefined) ?? []).flatMap(
-    (fila) => [fila.slug, fila.id].filter((valor): valor is string => typeof valor === 'string'),
+/**
+ * Los slugs e ids ya borrados de un tipo (locales o plazas): uno nuevo no puede heredar sus marcas ni
+ * competir con su redirección. Cada tipo tiene su propio espacio de nombres.
+ */
+export const slugsRedirigidos = (
+  crudo: Cargado['crudo'],
+  tipo: 'place' | 'plaza' = 'place',
+): string[] =>
+  (
+    (crudo.redirects?.redirects as
+      | { kind?: unknown; id?: unknown; slug?: unknown }[]
+      | undefined) ?? []
   )
+    .filter((fila) => fila.kind === tipo)
+    .flatMap((fila) =>
+      [fila.slug, fila.id].filter((valor): valor is string => typeof valor === 'string'),
+    )
 
 const [oeste, sur, este, norte] = extent.areaBbox as [number, number, number, number]
 export const LIMITES = { west: oeste, south: sur, east: este, north: norte }

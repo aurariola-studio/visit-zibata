@@ -5,6 +5,7 @@
  */
 import type { Category, LatLng, Place, Plaza } from '../types/domain.ts'
 import { PUBLISHABLE_STATUS } from './rules.ts'
+import type { Redirect } from './schemas.ts'
 
 export type IssueLevel = 'error' | 'warning'
 export type DatasetName = 'categories' | 'plazas' | 'places' | 'redirects'
@@ -279,39 +280,44 @@ export function validateTranslations(dataset: CommercialDataset): DataIssue[] {
 }
 
 /**
- * Las redirecciones de locales borrados. Un slug que vuelve a existir competiría con su propia
- * redirección (el 301 ganaría y la ficha nunca se vería), y una plaza que ya no existe deja el
- * destino en un 404.
+ * Las redirecciones de lo que se borró. Un slug que vuelve a existir competiría con su propia
+ * redirección (el 301 ganaría y la ficha nunca se vería). Un local cuya plaza se borró después sigue
+ * siendo válido: su dirección va a la portada, no a un 404, y lo dice la redirección de la plaza.
  */
 export function validateRedirects(
-  redirects: readonly { id?: string; slug: string; plazaId: string }[],
+  redirects: readonly Redirect[],
   dataset: CommercialDataset,
 ): DataIssue[] {
   const issues: DataIssue[] = []
-  const vivos = new Set(dataset.places.flatMap((place) => [place.id, place.slug]))
-  const plazas = new Set(dataset.plazas.map((plaza) => plaza.id))
+  const error = (id: string, message: string) =>
+    issues.push({ level: 'error', dataset: 'redirects', id, message })
+  const vivos = {
+    place: new Set(dataset.places.flatMap((place) => [place.id, place.slug])),
+    plaza: new Set(dataset.plazas.flatMap((plaza) => [plaza.id, plaza.slug])),
+  }
+  const plazasBorradas = new Set(
+    redirects.filter((fila) => fila.kind === 'plaza').map((fila) => fila.id),
+  )
+  const plazasVivas = new Set(dataset.plazas.map((plaza) => plaza.id))
   const vistos = new Set<string>()
-  for (const { id, slug, plazaId } of redirects) {
-    if (vistos.has(slug)) {
-      issues.push({ level: 'error', dataset: 'redirects', id: slug, message: 'Slug repetido' })
+  for (const fila of redirects) {
+    const clave = `${fila.kind}:${fila.slug}`
+    if (vistos.has(clave)) error(fila.slug, 'Slug repetido')
+    vistos.add(clave)
+    if (vivos[fila.kind].has(fila.slug) || vivos[fila.kind].has(fila.id)) {
+      error(
+        fila.slug,
+        fila.kind === 'place'
+          ? 'Hay un local con ese slug o id: su dirección no puede ser también una redirección, y heredaría los favoritos y las notas del que se borró'
+          : 'Hay una plaza con ese slug o id: su dirección no puede ser también una redirección',
+      )
     }
-    vistos.add(slug)
-    if (vivos.has(slug) || (id !== undefined && vivos.has(id))) {
-      issues.push({
-        level: 'error',
-        dataset: 'redirects',
-        id: slug,
-        message:
-          'Hay un local con ese slug o id: su dirección no puede ser también una redirección, y heredaría los favoritos y las notas del que se borró',
-      })
-    }
-    if (!plazas.has(plazaId)) {
-      issues.push({
-        level: 'error',
-        dataset: 'redirects',
-        id: slug,
-        message: `La plaza "${plazaId}" ya no existe; la redirección apuntaría a un 404`,
-      })
+    if (
+      fila.kind === 'place' &&
+      !plazasVivas.has(fila.plazaId) &&
+      !plazasBorradas.has(fila.plazaId)
+    ) {
+      error(fila.slug, `La plaza "${fila.plazaId}" no existe ni se borró desde el panel`)
     }
   }
   return issues

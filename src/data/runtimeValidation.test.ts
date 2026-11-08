@@ -264,4 +264,13 @@ describe('lo que ya no se muestra sigue enseñando gustos', () => {
     expect(valid).toEqual([{ id: 'a', giros: ['pizza'], plazaId: 'p' }])
     expect(issues).toHaveLength(3)
   })
+
+  it('una plaza borrada comparte el archivo, pero no es un local: ni cuenta ni se queja', () => {
+    const { valid, issues } = validateRetired([
+      { kind: 'place', id: 'a', slug: 'a', giros: ['pizza'], plazaId: 'p' },
+      { kind: 'plaza', id: 'p', slug: 'p' },
+    ])
+    expect(valid).toEqual([{ id: 'a', giros: ['pizza'], plazaId: 'p' }])
+    expect(issues).toEqual([])
+  })
 })

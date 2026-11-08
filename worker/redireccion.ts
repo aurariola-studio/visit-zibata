@@ -14,6 +14,8 @@
  *    dentro de una zona. Solo la portada, y solo si el parámetro es el único y nombra una categoría que
  *    existe: la zona con su filtro no se toca, y un parámetro inventado no produce una redirección a una
  *    página que no existe.
+ *  - **Una plaza borrada desde el panel** (solo vacía) va a la portada del mismo idioma: ya no hay
+ *    página de zona a la que mandar a nadie.
  *  - **Un local borrado desde el panel.** Su ficha deja de existir, pero su dirección sigue circulando
  *    (buscadores, mensajes, el índice del buscador). Pasa a la página de la plaza donde estaba, en el
  *    mismo idioma, y las direcciones sin prefijo llegan en un solo salto. Las anota
@@ -24,8 +26,12 @@
  */
 import categorias from '../data/commercial/categories.json' with { type: 'json' }
 import plazas from '../data/commercial/plazas.json' with { type: 'json' }
-import borrados from '../data/commercial/redirects.json' with { type: 'json' }
+import borradosJson from '../data/commercial/redirects.json' with { type: 'json' }
+import type { Redirect } from '../src/data/schemas.ts'
 import { PREFIX, SEGMENTS } from '../src/lib/url-state.ts'
+
+// El archivo puede estar vacío y entonces el JSON infiere `never[]`: se tipa con el esquema.
+const borrados = borradosJson as { redirects: Redirect[] }
 
 /** El slug de cada categoría, por idioma. */
 const SLUGS = {
@@ -39,10 +45,17 @@ const SLUGS = {
  * así que una plaza que se desactive después también queda cubierta.
  */
 const PLAZA_DE_BORRADO = new Map<string, string | null>(
-  borrados.redirects.map(({ slug, plazaId }) => {
-    const plaza = plazas.plazas.find((fila) => fila.id === plazaId)
-    return [slug, plaza?.active ? plaza.slug : null]
+  borrados.redirects.flatMap((fila) => {
+    if (fila.kind !== 'place') return []
+    // Una plaza borrada después ya no está en `plazas`: tampoco tiene página, así que va a la portada.
+    const plaza = plazas.plazas.find((otra) => otra.id === fila.plazaId)
+    return [[fila.slug, plaza?.active ? plaza.slug : null] as const]
   }),
+)
+
+/** Las plazas borradas desde el panel: su página (`/es/zona/x`) ya no existe y va a la portada. */
+const ZONAS_BORRADAS: ReadonlySet<string> = new Set(
+  borrados.redirects.flatMap((fila) => (fila.kind === 'plaza' ? [fila.slug] : [])),
 )
 
 /** La plaza de un local borrado, si la ruta es la de su ficha (con o sin prefijo de idioma). */
@@ -60,6 +73,20 @@ export function redireccionDeLugarBorrado(
   const plaza = mapa.get(slug)
   const destino = idioma ?? 'es'
   return plaza ? `/${PREFIX[destino]}/${SEGMENTS[destino].plaza}/${plaza}` : `/${PREFIX[destino]}`
+}
+
+/** La portada, si la ruta es la página de una plaza borrada (con o sin prefijo de idioma). */
+export function redireccionDeZonaBorrada(
+  ruta: string,
+  zonas: ReadonlySet<string> = ZONAS_BORRADAS,
+): string | null {
+  if (zonas.size === 0) return null
+  const partes = ruta.split('/').filter(Boolean)
+  const idioma = partes[0] === 'en' ? 'en' : partes[0] === 'es' ? 'es' : null
+  const [segmento, slug] = idioma ? partes.slice(1) : partes
+  if (!slug || segmento !== SEGMENTS[idioma ?? 'es'].plaza) return null
+  if (partes.length !== (idioma ? 3 : 2)) return null
+  return zonas.has(slug) ? `/${PREFIX[idioma ?? 'es']}` : null
 }
 
 /** Los segmentos con los que empezaban las rutas del español sin prefijo. */
@@ -80,6 +107,7 @@ function redireccionDeCategoria(url: URL, idioma: 'es' | 'en'): string | null {
 export function redireccionDe(
   url: URL,
   borrados: ReadonlyMap<string, string | null> = PLAZA_DE_BORRADO,
+  zonas: ReadonlySet<string> = ZONAS_BORRADAS,
 ): string | null {
   // Varias barras al principio (`//otro.example/x`) colapsan en una: un `Location` que empieza por `//`
   // es una dirección relativa al protocolo, es decir, otro sitio. Nunca sale de aquí uno así.
@@ -88,7 +116,7 @@ export function redireccionDe(
   // La barra final no añade nada: cada ruta es un archivo, no una carpeta.
   const sinBarra = ruta !== url.pathname ? `${ruta}${url.search}` : null
 
-  const borrado = redireccionDeLugarBorrado(ruta, borrados)
+  const borrado = redireccionDeLugarBorrado(ruta, borrados) ?? redireccionDeZonaBorrada(ruta, zonas)
   if (borrado) return borrado
 
   if (ruta === '/en') return redireccionDeCategoria(url, 'en') ?? sinBarra

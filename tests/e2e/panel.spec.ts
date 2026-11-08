@@ -530,6 +530,83 @@ test.describe('Panel', () => {
     expect(cuerpos.at(-1)?.confirmar).toBe(true)
   })
 
+  test('una plaza con locales no ofrece borrarse y dice por qué', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo.locator('input[name="nombre"]')).toHaveValue('Plaza Uno')
+    await expect(dialogo.getByRole('button', { name: 'Borrar plaza' })).toHaveCount(0)
+    await expect(dialogo).toContainText('primero hay que borrar sus locales')
+  })
+
+  test('borrar una plaza vacía enseña el impacto primero y pide confirmación', async ({ page }) => {
+    const cuerpos: { id: string; confirmar?: boolean }[] = []
+    await page.route(/\/api\/panel\/contenido\/plaza\/borrar$/, async (ruta) => {
+      const cuerpo = ruta.request().postDataJSON() as { id: string; confirmar?: boolean }
+      cuerpos.push(cuerpo)
+      const impacto = {
+        plaza: { id: 'plaza-tres', nombre: 'Plaza Tres' },
+        redirecciones: [
+          { desde: '/es/zona/plaza-tres', hacia: '/es' },
+          { desde: '/en/area/plaza-tres', hacia: '/en' },
+        ],
+        teniaPagina: false,
+        redireccionesDeLocales: 0,
+        avisos: ['Sus edificios en el mapa se quedan dibujados, en gris.'],
+      }
+      await ruta.fulfill({
+        json: cuerpo.confirmar
+          ? {
+              ok: true,
+              confirmado: true,
+              seco: false,
+              pr: { url: 'https://example.test/pr/12', numero: 12, creada: true },
+              mensaje: 'Borrado enviado a la PR.',
+              impacto,
+            }
+          : {
+              ok: true,
+              confirmado: false,
+              seco: false,
+              pr: null,
+              mensaje: 'Esto es lo que cambiaría.',
+              impacto,
+            },
+      })
+    })
+
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Tres' }).click()
+    const dialogo = page.locator('#editor')
+
+    // Primer paso: solo el impacto, sin confirmación mandada.
+    await dialogo.getByRole('button', { name: 'Borrar plaza' }).click()
+    const impacto = dialogo.locator('.impacto-borrado')
+    await expect(impacto).toContainText('/es/zona/plaza-tres')
+    await expect(impacto).toContainText('en gris')
+    expect(cuerpos).toEqual([{ id: 'plaza-tres' }])
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // "Mejor no" lo deja todo como estaba.
+    await impacto.getByRole('button', { name: 'Mejor no' }).click()
+    await expect(impacto).toBeHidden()
+    expect(cuerpos).toHaveLength(1)
+
+    // Segundo paso: confirmar. El diálogo se cierra y la lista avisa de la PR.
+    await dialogo.getByRole('button', { name: 'Borrar plaza' }).click()
+    await dialogo.getByRole('button', { name: 'Borrar esta plaza' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #12' })).toBeVisible()
+    expect(cuerpos.at(-1)).toEqual({ id: 'plaza-tres', confirmar: true })
+  })
+
   test('activa y próximamente no van juntas y los errores salen en el campo', async ({ page }) => {
     await abrirPanel(page)
     await irA(page, 'plazas', 'Plazas')

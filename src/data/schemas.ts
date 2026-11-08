@@ -263,14 +263,16 @@ export const PlazasFileSchema = z.strictObject({ ...datasetMeta, plazas: z.array
 export const PlacesFileSchema = z.strictObject({ ...datasetMeta, places: z.array(PlaceSchema) })
 
 /**
- * Un local que se borró desde el panel. Su dirección antigua deja de ser un 404 y pasa, con un 301, a
- * la página de la plaza donde estaba (ver `worker/redireccion.ts`).
+ * Lo que se borró desde el panel. Su dirección antigua deja de ser un 404 y se reencamina con un 301
+ * (ver `worker/redireccion.ts`). Cada tipo tiene su propio espacio de nombres: el slug de un local
+ * borrado y el de una plaza borrada no compiten entre sí.
  */
-export const RedirectSchema = z.strictObject({
+const RedirectPlaceSchema = z.strictObject({
   kind: z.literal('place'),
   /** El id con el que cada dispositivo lo guardó (favoritos, visitas, notas). */
   id: slug,
   slug,
+  /** La plaza donde estaba. Puede haberse borrado después: entonces la dirección va a la portada. */
   plazaId: slug,
   /**
    * Los giros que tenía. Quien lo marcó sigue teniendo ese gusto aunque el local ya no exista, y el
@@ -278,6 +280,16 @@ export const RedirectSchema = z.strictObject({
    */
   giros: z.array(slug).min(1).max(3),
 })
+const RedirectPlazaSchema = z.strictObject({
+  kind: z.literal('plaza'),
+  id: slug,
+  slug,
+})
+export const RedirectSchema = z.discriminatedUnion('kind', [
+  RedirectPlaceSchema,
+  RedirectPlazaSchema,
+])
+export type Redirect = z.infer<typeof RedirectSchema>
 export const RedirectsFileSchema = z.strictObject({
   ...datasetMeta,
   redirects: z.array(RedirectSchema),

@@ -259,7 +259,9 @@ export function validateRetired(records: unknown[]): {
   const valid: { id: string; giros: string[]; plazaId: string }[] = []
   const issues: RecordIssue[] = []
   for (const record of records) {
-    const fila = record as { id?: unknown; giros?: unknown; plazaId?: unknown }
+    const fila = record as { kind?: unknown; id?: unknown; giros?: unknown; plazaId?: unknown }
+    // Las plazas borradas están en el mismo archivo, pero no son locales: no aportan gustos.
+    if (fila?.kind === 'plaza') continue
     if (
       typeof fila?.id === 'string' &&
       typeof fila.plazaId === 'string' &&

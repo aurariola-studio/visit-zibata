@@ -213,15 +213,15 @@ describe('un slug borrado no vuelve', () => {
   it('la validación rechaza un slug vivo, un slug repetido y una plaza que no existe', () => {
     const asuntos = validateRedirects(
       [
-        { slug: objetivo.slug, plazaId: objetivo.plazaId },
-        { slug: 'otro', plazaId: 'plaza-inexistente' },
-        { slug: 'otro', plazaId: objetivo.plazaId },
+        { kind: 'place', id: 'x', slug: objetivo.slug, plazaId: objetivo.plazaId, giros: ['g'] },
+        { kind: 'place', id: 'y', slug: 'otro', plazaId: 'plaza-inexistente', giros: ['g'] },
+        { kind: 'place', id: 'z', slug: 'otro', plazaId: objetivo.plazaId, giros: ['g'] },
       ],
       dataset,
     )
     const mensajes = asuntos.map((asunto) => asunto.message).join(' | ')
     expect(mensajes).toMatch(/Hay un local con ese slug/)
-    expect(mensajes).toMatch(/ya no existe/)
+    expect(mensajes).toMatch(/no existe ni se borró/)
     expect(mensajes).toMatch(/repetido/)
   })
 
