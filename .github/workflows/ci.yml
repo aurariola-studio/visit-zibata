@@ -142,13 +142,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      # Se usa el binario y no gitleaks-action: esa acción exige clave de licencia cuando el
-      # repositorio vive en una organización, y desde el traslado a aurariola-studio vive en una.
-      # El binario es el mismo escáner, MIT y sin clave. La versión va fijada, igual que las
-      # acciones van fijadas por SHA.
+      # El binario y no gitleaks-action (exige clave de licencia en organizaciones), verificado por hash y con
+      # caché. Todo vive en .github/actions/gitleaks y scripts/ci/gitleaks.sh.
       - name: Escanear con Gitleaks
-        env:
-          GITLEAKS_VERSION: 8.30.1
-        run: |
-          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz gitleaks
-          ./gitleaks git --no-banner --redact --exit-code 1
+        uses: ./.github/actions/gitleaks

@@ -1,0 +1,16 @@
+name: Gitleaks
+description: Instala Gitleaks, verificado por SHA-256, y escanea la historia del repositorio.
+# Hace falta `fetch-depth: 0` en el checkout: Gitleaks escanea la historia, no solo el árbol de trabajo.
+runs:
+  using: composite
+  steps:
+    # El archivo ya verificado se guarda entre ejecuciones: así una caída de las descargas de GitHub
+    # (el 8 de noviembre de 2026 hubo 13 minutos de 504) no pone en rojo ni un PR ni un Deploy. La clave
+    # lleva el hash del script, que es donde viven la versión y su SHA-256: subir de versión renueva la
+    # caché sola.
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ runner.temp }}/gitleaks
+        key: gitleaks-${{ runner.os }}-${{ hashFiles('scripts/ci/gitleaks.sh') }}
+    - shell: bash
+      run: bash scripts/ci/gitleaks.sh
