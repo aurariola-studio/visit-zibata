@@ -191,7 +191,7 @@ export function pintarFormulario(negocio: Negocio | null): void {
 
       <section class="editor-seccion">
         <h3>Fotos <span class="nota">la primera es la portada</span></h3>
-        <p class="ayuda">Se reducen a 1600 px y se les quitan los datos de la cámara antes de subirlas. Solo fotos propias o con licencia.</p>
+        <p class="ayuda">Se reducen a 1600 px y se les quitan los datos de la cámara antes de subirlas. Solo fotos propias o con licencia. Una foto que quites se borra de verdad al guardar el negocio (sigue en el historial de git).</p>
         <div data-fotos-zona data-grupo="fotos"></div>
       </section>
 
