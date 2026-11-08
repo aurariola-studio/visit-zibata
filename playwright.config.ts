@@ -19,7 +19,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : 3,
+  // PW_WORKERS lo fija el CI por grupo: "contenido" no pinta WebGL y aguanta más trabajadores que "mapa".
+  workers: Number(process.env.PW_WORKERS) || (process.env.CI ? 2 : 3),
   /*
    * Tope de toda la ejecución, solo en CI. Playwright pide ponerlo siempre ahí
    * (https://playwright.dev/docs/ci): sin él, si algo se cuelga, el trabajo se queda esperando hasta que

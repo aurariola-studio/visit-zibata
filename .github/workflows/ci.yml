@@ -97,15 +97,18 @@ jobs:
             args: '--grep=@mapa'
           - base: '/'
             grupo: 'contenido'
+            workers: '4'
             args: '--grep-invert=@mapa'
           - base: '/visit-zibata/'
             grupo: 'mapa'
             args: '--grep=@mapa --project=desktop'
           - base: '/visit-zibata/'
             grupo: 'contenido'
+            workers: '4'
             args: '--grep-invert=@mapa --project=desktop'
     env:
       BASE_PATH: ${{ matrix.base }}
+      PW_WORKERS: ${{ matrix.workers }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
