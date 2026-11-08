@@ -2,7 +2,7 @@
  * Los grupos de pruebas E2E: cada uno corre en su propio trabajo del CI, en paralelo con los demás.
  *
  * Son por tema y no por reparto automático (`--shard=1/4`): si un trabajo falla, su nombre ya dice
- * qué se rompió ("Mapa: medición y táctil") sin abrir el registro. A cambio hay que mantenerlos
+ * qué se rompió ("mapa: medición, táctil y errores") sin abrir el registro. A cambio hay que mantenerlos
  * repartidos a mano, y para eso está el resumen de tiempos por archivo que cada trabajo escribe al
  * terminar (`scripts/ci/resumen-tiempos.ts`): si un grupo pasa de unos 20 minutos, se mueve un
  * archivo a otro grupo, editando solo este archivo.

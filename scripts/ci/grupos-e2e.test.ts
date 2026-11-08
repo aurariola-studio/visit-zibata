@@ -47,6 +47,15 @@ describe('grupos de pruebas E2E', () => {
     }
   })
 
+  it('la raíz corre los cuatro proyectos: ninguna de sus entradas restringe proyectos', () => {
+    const flujo = readFileSync('.github/workflows/ci.yml', 'utf8')
+    const entradas = flujo.split(/\n\s*- id:\s*/).slice(1)
+    const raiz = entradas.filter((entrada) => /base:\s*'\/'/.test(entrada))
+    expect(raiz.length).toBe(Object.keys(GRUPOS).length)
+    // Un `--project=...` suelto en la raíz quitaría cobertura sin que nada se pusiera en rojo.
+    for (const entrada of raiz) expect(entrada).not.toMatch(/\bargs:/)
+  })
+
   it('el script entrega las rutas de los archivos de un grupo', () => {
     const salida = execFileSync('node', ['scripts/ci/archivos-del-grupo.ts', 'fichas'], {
       encoding: 'utf8',

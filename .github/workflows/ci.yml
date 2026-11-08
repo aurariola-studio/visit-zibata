@@ -141,14 +141,29 @@ jobs:
         run: npm run build
         timeout-minutes: 10
       - name: Pruebas E2E
-        run: npx playwright test $(node scripts/ci/archivos-del-grupo.ts ${{ matrix.grupos }}) ${{ matrix.args }}
+        # La lista se calcula aparte: dentro de `$(...)` un fallo del script daria una lista vacía y
+        # Playwright correría TODAS las pruebas en este trabajo sin avisar. Así el paso aborta.
+        run: |
+          archivos="$(node scripts/ci/archivos-del-grupo.ts ${{ matrix.grupos }})"
+          test -n "$archivos"
+          npx playwright test $archivos ${{ matrix.args }}
         timeout-minutes: 60
       - name: Tiempo de prueba por archivo
         if: ${{ !cancelled() }}
         run: node scripts/ci/resumen-tiempos.ts >> "$GITHUB_STEP_SUMMARY"
-      # También en los pasados: sin un informe completo no se puede medir qué pruebas pesan.
-      - name: Informe de Playwright
+      # Los tiempos de cada prueba se guardan siempre (es un JSON de unos cientos de KB): sin ellos
+      # no se puede repartir bien los grupos. El informe HTML, con sus trazas, pesa unos 4 MB y solo
+      # se guarda si el trabajo falla, para no gastar los 500 MB de artefactos del plan gratuito.
+      - name: Tiempos de las pruebas
         if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: tiempos-${{ matrix.id }}
+          path: test-results/informe.json
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Informe de Playwright
+        if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: informe-${{ matrix.id }}
@@ -169,9 +184,14 @@ jobs:
         uses: ./.github/actions/gitleaks
 
   # La única comprobación que la regla de la rama `main` exige para las pruebas E2E. Espera a todo
-  # lo demás y falla si algo no terminó en verde, también si se saltó (por ejemplo, porque `checks`
-  # falló y los E2E ni empezaron). `if: always()` hace que corra aunque lo anterior falle: sin él,
-  # un trabajo omitido contaría como ni verde ni rojo y la regla se quedaría esperando.
+  # lo demás y falla si algo no terminó en verde.
+  #
+  # `if: always()` es lo que lo hace seguro, y no es un detalle: un trabajo cuyos `needs` fallaron se
+  # OMITE, y GitHub da por buena (éxito) una comprobación omitida, aunque sea obligatoria
+  # (https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-jobs-with-conditions).
+  # Sin `always()`, un E2E en rojo dejaría este trabajo omitido y la fusión se permitiría con un
+  # verde falso. Por eso tampoco debe cambiarse a `!cancelled()`, y por eso el script de abajo
+  # cuenta como fallo cualquier resultado que no sea `success`, también `skipped`.
   resultado:
     name: CI (resultado)
     if: ${{ always() }}
