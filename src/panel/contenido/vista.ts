@@ -17,6 +17,9 @@ interface Vista {
   datos: Datos | null
   modo: ModoContenido
   consulta: string
+  /** Filtros de la lista de negocios; vacío es "todos". */
+  filtroEstado: string
+  filtroPlaza: string
   pagina: number
   aviso: string | null
   error: string | null
@@ -34,6 +37,8 @@ export const vista: Vista = {
   datos: null,
   modo: 'negocios',
   consulta: '',
+  filtroEstado: '',
+  filtroPlaza: '',
   pagina: 0,
   aviso: null,
   error: null,

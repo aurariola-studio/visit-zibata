@@ -1,0 +1,11 @@
+{
+	"source": "Overture Maps Foundation: theme=base, type=land_cover, subtype=forest",
+	"release": "2026-10-21.0",
+	"upstream": ["ESA WorldCover 10 m"],
+	"license": "CC-BY-4.0",
+	"attribution": "© ESA WorldCover, Overture Maps Foundation",
+	"bbox": [-100.37, 20.65, -100.29, 20.712],
+	"crs": "EPSG:4326",
+	"fetchedAt": "2026-10-27T21:53:46.861Z",
+	"features": 20
+}

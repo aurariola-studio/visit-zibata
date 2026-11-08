@@ -168,17 +168,86 @@ const contenido = {
   ],
 }
 
+/**
+ * Los datos de la lista con un caso de cada estado: oculto, cerrado temporalmente, en una plaza
+ * inactiva y, a propósito, un local de nombre y giros desmesurados (el peor caso de la fila).
+ */
+const nombreLargo = `Restaurante${'Interminable'.repeat(9)}`
+interface LugarDePrueba {
+  id: string
+  name: string
+  plazaId: string
+  active: boolean
+  cierre?: { motivo: string; desde: string }
+}
+const cafe = contenido.places[0] as (typeof contenido.places)[number]
+const plazaUno = contenido.plazas[0] as (typeof contenido.plazas)[number]
+const conEstados = {
+  ...contenido,
+  plazas: [
+    ...contenido.plazas,
+    {
+      ...contenido.plazas[0],
+      id: 'plaza-cuatro',
+      slug: 'plaza-cuatro',
+      name: 'Plaza Cuatro',
+      active: false,
+    },
+  ],
+  places: [
+    ...contenido.places,
+    {
+      ...cafe,
+      id: 'libreria-de-prueba',
+      slug: 'libreria-de-prueba',
+      name: 'Librería de Prueba',
+      photos: [],
+      cierre: { motivo: 'vacaciones', desde: hoy },
+    },
+    {
+      ...cafe,
+      id: 'panaderia-de-prueba',
+      slug: 'panaderia-de-prueba',
+      name: 'Panadería de Prueba',
+      plazaId: 'plaza-cuatro',
+      photos: [],
+    },
+    {
+      ...cafe,
+      id: 'nombre-largo',
+      slug: 'nombre-largo',
+      name: nombreLargo,
+      photos: [],
+    },
+  ],
+}
+
+/** El estado de un local según la regla de la guía: lo que el filtro tiene que repetir sin leerla de la interfaz. */
+const marcaDe = (lugar: LugarDePrueba): string => {
+  if (!lugar.active) return 'no'
+  if (conEstados.plazas.find((plaza) => plaza.id === lugar.plazaId)?.active === false)
+    return 'plaza'
+  return lugar.cierre ? 'cierre' : 'si'
+}
+const nombresCon = (marca: string): string[] =>
+  conEstados.places.filter((lugar) => marcaDe(lugar) === marca).map((lugar) => lugar.name)
+
 interface Opciones {
   /** El estado con el que responde `/api/panel/contenido`: 200 por defecto, 403 si no hay Access. */
   contenidoStatus?: number
+  /** Los datos con los que responde: por defecto `contenido`. */
+  datos?: object
 }
 
 /** Abre el panel con las rutas de lectura simuladas. */
-async function abrirPanel(page: Page, { contenidoStatus = 200 }: Opciones = {}): Promise<void> {
+async function abrirPanel(
+  page: Page,
+  { contenidoStatus = 200, datos = contenido }: Opciones = {},
+): Promise<void> {
   await page.route(/\/api\/panel\?dias=\d+$/, (ruta) => ruta.fulfill({ json: estadisticas }))
   await page.route(/\/api\/panel\/contenido$/, (ruta) =>
     contenidoStatus === 200
-      ? ruta.fulfill({ json: contenido })
+      ? ruta.fulfill({ json: datos })
       : ruta.fulfill({ status: contenidoStatus, json: { error: 'no' } }),
   )
   await page.goto('./panel.html')
@@ -227,6 +296,107 @@ test.describe('Panel', () => {
 
     await page.getByRole('searchbox', { name: 'Buscar negocio' }).fill('zzz')
     await expect(page.getByText('Ningún negocio coincide.')).toBeVisible()
+  })
+
+  test('negocios: filtrar por estado y por plaza, con recuento y salida del vacío', async ({
+    page,
+  }) => {
+    await abrirPanel(page, { datos: conEstados })
+    await irA(page, 'negocios', 'Negocios')
+    const filas = page.locator('tbody tr .negocio-nombre')
+    const nombresVisibles = async () => (await filas.allTextContents()).sort()
+    const resultados = page.locator('[data-resultados]')
+    const total = conEstados.places.length
+
+    // Sin filtros no hay recuento aparte: el de arriba ya dice el total.
+    await expect(resultados).toHaveText('')
+
+    // Cada estado devuelve exactamente los locales que la regla de la guía les da.
+    for (const [marca, rotulo] of [
+      ['si', 'Visibles'],
+      ['no', 'Ocultos'],
+      ['cierre', 'Cerrados temporalmente'],
+      ['plaza', 'En una plaza inactiva'],
+    ] as const) {
+      const esperados = nombresCon(marca).sort()
+      expect(esperados.length, marca).toBeGreaterThan(0)
+      await page
+        .getByRole('combobox', { name: 'Filtrar por estado' })
+        .selectOption({ label: `${rotulo} (${esperados.length})` })
+      expect(await nombresVisibles(), marca).toEqual(esperados)
+      await expect(resultados).toHaveText(`${esperados.length} de ${total} negocios`)
+    }
+
+    // Los estados reparten todos los locales: ninguno queda sin estado ni con dos.
+    expect(
+      ['si', 'no', 'cierre', 'plaza'].reduce((suma, marca) => suma + nombresCon(marca).length, 0),
+    ).toBe(total)
+
+    // Estado y plaza se combinan.
+    await page.getByRole('combobox', { name: 'Filtrar por estado' }).selectOption('')
+    const plazaFiltro = plazaUno
+    await page.getByRole('combobox', { name: 'Filtrar por plaza' }).selectOption(plazaFiltro.id)
+    const enPlaza = conEstados.places
+      .filter((lugar) => lugar.plazaId === plazaFiltro.id)
+      .map((lugar) => lugar.name)
+      .sort()
+    expect(await nombresVisibles()).toEqual(enPlaza)
+
+    // Un filtro sin resultados ofrece quitarlos, y el foco vuelve al buscador (el botón desaparece).
+    await page.getByRole('combobox', { name: 'Filtrar por estado' }).selectOption({ index: 4 })
+    await page.getByRole('searchbox', { name: 'Buscar negocio' }).fill('zzz')
+    await expect(page.getByText('Ningún negocio coincide.')).toBeVisible()
+    await expect(resultados).toHaveText(`0 de ${total} negocios`)
+    await page.getByRole('button', { name: 'Quitar filtros' }).click()
+    await expect(filas).toHaveCount(total)
+    await expect(resultados).toHaveText('')
+    await expect(page.getByRole('combobox', { name: 'Filtrar por estado' })).toHaveValue('')
+    await expect(page.getByRole('combobox', { name: 'Filtrar por plaza' })).toHaveValue('')
+    await expect(page.getByRole('searchbox', { name: 'Buscar negocio' })).toBeFocused()
+  })
+
+  test('negocios: la plaza y los giros se ven bajo el nombre solo cuando no hay columnas', async ({
+    page,
+  }) => {
+    await abrirPanel(page, { datos: conEstados })
+    await irA(page, 'negocios', 'Negocios')
+    const ancho = page.viewportSize()?.width ?? 0
+    const detalle = page
+      .locator('tbody tr', { hasText: 'Café de Prueba' })
+      .locator('.negocio-detalle')
+    // 52 rem es el punto de ruptura de las columnas de la tabla.
+    if (ancho <= 52 * 16) {
+      await expect(detalle).toBeVisible()
+      await expect(detalle).toContainText('Plaza Uno')
+    } else {
+      await expect(detalle).toBeHidden()
+    }
+  })
+
+  test('negocios: un nombre desmesurado no desplaza la página ni tapa el botón', async ({
+    page,
+  }) => {
+    await abrirPanel(page, { datos: conEstados })
+    await irA(page, 'negocios', 'Negocios')
+    const fila = page.locator('tbody tr', { hasText: nombreLargo })
+    await expect(fila).toBeVisible()
+    await sinDesplazamientoLateral(page)
+    const boton = fila.getByRole('button', { name: `Editar ${nombreLargo}` })
+    await boton.scrollIntoViewIfNeeded()
+    const caja = await boton.boundingBox()
+    const ventana = page.viewportSize()?.width ?? 0
+    expect(caja?.height ?? 0).toBeGreaterThanOrEqual(40)
+    expect((caja?.x ?? 0) + (caja?.width ?? 0)).toBeLessThanOrEqual(ventana)
+  })
+
+  test('categorías: una búsqueda sin resultados ofrece quitarla', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('searchbox', { name: 'Buscar categoría' }).fill('zzz')
+    await expect(page.getByText('Ninguna categoría coincide.')).toBeVisible()
+    await page.getByRole('button', { name: 'Quitar la búsqueda' }).click()
+    await expect(page.getByText('Servicios de prueba')).toBeVisible()
+    await expect(page.getByRole('searchbox', { name: 'Buscar categoría' })).toBeFocused()
   })
 
   test('categorías: lista con su tono y sus recuentos', async ({ page }) => {
@@ -840,6 +1010,95 @@ test.describe('Panel', () => {
       .click()
     await expect(dialogo.locator('[data-problemas]')).toContainText('cambios sin guardar')
     expect(cuerpos).toEqual([])
+  })
+
+  test('un formulario largo tiene un índice fijo que lleva a cada sección y mueve el foco', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const indice = dialogo.getByRole('navigation', { name: 'Ir a una sección del formulario' })
+    await expect(indice).toBeVisible()
+    const nombres = await indice.getByRole('link').allInnerTexts()
+    expect(nombres).toEqual(
+      expect.arrayContaining(['Identidad', 'Fotos', 'Contacto', 'Zona delicada']),
+    )
+    // Un enlace por sección, sin la aclaración de su título ("la primera es la portada").
+    expect(nombres.every((nombre) => !nombre.includes('portada'))).toBe(true)
+
+    // Llevar a "Zona delicada" desde arriba: la sección entra en la vista y su título recibe el foco.
+    await indice.getByRole('link', { name: 'Zona delicada' }).click()
+    const titulo = dialogo.getByRole('heading', { name: 'Zona delicada' })
+    await expect(titulo).toBeFocused()
+    await expect(titulo).toBeInViewport()
+    // El índice sigue a la vista al bajar: es lo que lo hace útil en una pantalla pequeña.
+    await expect(indice).toBeInViewport()
+    await sinDesplazamientoLateral(page)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+  })
+
+  test('lo que deja una redirección o no se deshace va en su zona, no junto a Guardar', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const zona = dialogo.locator('section.zona-delicada')
+    await expect(zona.getByRole('button', { name: 'Borrar negocio' })).toBeVisible()
+    await expect(zona.getByRole('button', { name: /Ver el impacto/ })).toBeVisible()
+    // El pie queda con lo normal: guardar o cancelar. Nada de borrar al lado de "Guardar cambios".
+    const pie = dialogo.locator('.editor-pie')
+    await expect(pie.getByRole('button', { name: 'Guardar cambios' })).toBeVisible()
+    await expect(pie.getByRole('button', { name: 'Cancelar' })).toBeVisible()
+    await expect(pie.getByRole('button', { name: /Borrar/ })).toHaveCount(0)
+
+    // Lo mismo en una plaza sin locales y en una categoría vacía.
+    await dialogo.getByRole('button', { name: 'Cancelar' }).click()
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Tres' }).click()
+    await expect(
+      dialogo.locator('section.zona-delicada').getByRole('button', { name: 'Borrar plaza' }),
+    ).toBeVisible()
+    await expect(
+      dialogo.locator('.editor-pie').getByRole('button', { name: /Borrar/ }),
+    ).toHaveCount(0)
+    await dialogo.getByRole('button', { name: 'Cancelar' }).click()
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Categoría vacía' }).click()
+    await expect(
+      dialogo.locator('section.zona-delicada').getByRole('button', { name: 'Borrar categoría' }),
+    ).toBeVisible()
+    await expect(
+      dialogo.locator('.editor-pie').getByRole('button', { name: /Borrar/ }),
+    ).toHaveCount(0)
+  })
+
+  test('una plaza con locales no ofrece borrarse, pero su dirección sigue en la zona delicada', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    const zona = page.locator('#editor section.zona-delicada')
+    await expect(zona.getByRole('button', { name: /Ver el impacto/ })).toBeVisible()
+    await expect(zona.getByRole('button', { name: 'Borrar plaza' })).toHaveCount(0)
+  })
+
+  test('los textos concuerdan en número: "1 local", no "1 locales"', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Categoría vacía' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo).not.toContainText(/\b1 locales\b|\b1 plazas\b/)
+    await dialogo.getByRole('button', { name: 'Cancelar' }).click()
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    await expect(dialogo).not.toContainText(/\b1 locales\b|\b1 plazas\b/)
   })
 
   test('un negocio nuevo no ofrece cambiar la dirección', async ({ page }) => {

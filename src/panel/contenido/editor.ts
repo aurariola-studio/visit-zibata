@@ -1,3 +1,4 @@
+import controls from '../../styles/controls.module.css'
 import { texto } from './tipos.ts'
 import { vista } from './vista.ts'
 
@@ -10,9 +11,67 @@ export function abrirEditor(antetitulo: string, titulo: string, html: string): v
   if (campoAntetitulo) campoAntetitulo.textContent = antetitulo
   if (campoTitulo) campoTitulo.textContent = titulo
   cuerpo.innerHTML = html
+  montarIndice(cuerpo)
   vista.aviso = null
   if (!vista.dialogo.open) vista.dialogo.showModal()
   cuerpo.querySelector<HTMLElement>('input, select, textarea')?.focus()
+}
+
+/** Con menos secciones que esto un formulario cabe en la vista y un índice sobra. */
+const SECCIONES_PARA_INDICE = 4
+
+/** Lo que se deja entre el índice fijo y el título de la sección a la que se salta. */
+const HOLGURA_DEL_INDICE = 8
+
+/**
+ * Un índice fijo arriba del formulario: un negocio tiene nueve secciones y en un teléfono hay que bajar
+ * mucho para llegar a "Dirección". Son enlaces a anclas (la familia "Navegar" del catálogo) y mover el
+ * foco al título de la sección es lo que hace que un lector de pantalla también llegue.
+ */
+function montarIndice(cuerpo: HTMLElement): void {
+  const formulario = cuerpo.querySelector<HTMLFormElement>('form[data-editor]')
+  if (!formulario) return
+  const secciones = [...formulario.querySelectorAll<HTMLElement>(':scope > section.editor-seccion')]
+  if (secciones.length < SECCIONES_PARA_INDICE) return
+  const enlaces: string[] = []
+  secciones.forEach((seccion, posicion) => {
+    const titulo = seccion.querySelector<HTMLElement>(':scope > h3')
+    // Solo el texto del título: `<span class="nota">` es una aclaración, no parte del nombre.
+    const nombre = [...(titulo?.childNodes ?? [])]
+      .filter((nodo) => nodo.nodeType === Node.TEXT_NODE)
+      .map((nodo) => nodo.textContent ?? '')
+      .join('')
+      .trim()
+    if (!titulo || !nombre) return
+    const id = `seccion-${posicion}`
+    seccion.id = id
+    titulo.tabIndex = -1
+    enlaces.push(`<a class="${controls.enlace}" href="#${id}">${texto(nombre)}</a>`)
+  })
+  if (enlaces.length < SECCIONES_PARA_INDICE) return
+  const indice = document.createElement('nav')
+  indice.className = 'editor-indice'
+  indice.setAttribute('aria-label', 'Ir a una sección del formulario')
+  indice.innerHTML = enlaces.join('')
+  indice.addEventListener('click', (evento) => {
+    const enlace = (evento.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#seccion-"]')
+    if (!enlace) return
+    evento.preventDefault()
+    const seccion = formulario.querySelector<HTMLElement>(enlace.getAttribute('href') ?? '')
+    if (!seccion) return
+    // Se desplaza solo el cuerpo del formulario. `scrollIntoView` movía también la caja del diálogo (un
+    // contenedor con `overflow: hidden` se puede desplazar por código) y lo sacaba de la pantalla.
+    const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const distancia =
+      seccion.getBoundingClientRect().top -
+      cuerpo.getBoundingClientRect().top +
+      cuerpo.scrollTop -
+      indice.offsetHeight -
+      HOLGURA_DEL_INDICE
+    cuerpo.scrollTo({ top: Math.max(0, distancia), behavior: sinMovimiento ? 'auto' : 'smooth' })
+    seccion.querySelector<HTMLElement>(':scope > h3')?.focus({ preventScroll: true })
+  })
+  formulario.prepend(indice)
 }
 
 /** Cierra el diálogo. Con cambios sin guardar pide confirmación salvo que se fuerce. */

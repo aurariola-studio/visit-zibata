@@ -71,7 +71,7 @@ function unaSeccion(tipo: Tipo, slug: string, idioma: Idioma | null): string {
     : 'Dirección en la web'
   const enIdioma = idioma ? ` (${IDIOMA_EN_TEXTO[idioma]})` : ''
   return `<section class="editor-seccion" data-direccion${idioma ? ` data-lang="${idioma}"` : ''}>
-      <h3>${titulo}</h3>
+      <h4>${titulo}</h4>
       <p class="ayuda">Hoy es <code>${texto(prefijo + slug)}</code>. Si la cambias, la antigua pasa a la nueva con una redirección permanente. Solo minúsculas, números y guiones.</p>
       <div class="editor-rejilla">
         <label class="campo-form campo-ancho">
