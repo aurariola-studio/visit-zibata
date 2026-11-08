@@ -1,0 +1,11 @@
+{
+	"source": "OpenStreetMap",
+	"license": "ODbL-1.0",
+	"attribution": "© OpenStreetMap contributors",
+	"endpoint": "https://overpass-api.de/api/interpreter",
+	"bbox": [-100.37, 20.65, -100.29, 20.705],
+	"crs": "EPSG:4326",
+	"fetchedAt": "2026-09-14T02:41:40.547Z",
+	"osmBaseTimestamp": "2026-09-14T02:40:01Z",
+	"elements": 4272
+}
