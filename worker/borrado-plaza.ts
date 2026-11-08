@@ -6,9 +6,9 @@
  * por accidente. Como el borrado de un negocio, va en dos pasos (impacto y confirmación) y se anota en
  * `data/commercial/redirects.json`: la dirección de la zona pasa, con un 301, a la portada.
  *
- * Lo que NO hace: no toca el mapa. El contorno sale del catálogo al instante, pero los edificios de la
- * plaza están horneados en `public/map/plaza-buildings.geojson` y se quedan dibujados, en gris y sin
- * interacción (como una plaza inactiva), hasta que alguien reconstruya el mapa.
+ * Lo que NO hace: no toca el mapa. Desde la Fase 3a los edificios y las mallas de las plazas se derivan de
+ * `plazas.json` en cada build, así que al fusionar la PR el despliegue los reconstruye sin esta plaza; no hace
+ * falta `npm run map:build` a mano.
  */
 import { z } from 'zod'
 import {
@@ -117,7 +117,7 @@ export function prepararBorradoPlaza(
     )
   }
   avisos.push(
-    'Sus edificios en el mapa se quedan dibujados, en gris y sin interacción, hasta que se reconstruya el mapa (`npm run map:build`).',
+    'El mapa se reconstruye solo al desplegar (se deriva de `plazas.json` en cada build): no hace falta `npm run map:build` a mano.',
     'Se revierte con git, no con un botón. Si algún E2E abre esta zona por su dirección, fallará en la PR.',
   )
 

@@ -60,7 +60,7 @@ describe('la vista de impacto', () => {
     ])
     expect(preparado.impacto.teniaPagina).toBe(true)
     expect(preparado.impacto.avisos.join(' ')).toMatch(/sitemap/)
-    expect(preparado.impacto.avisos.join(' ')).toMatch(/map:build/)
+    expect(preparado.impacto.avisos.join(' ')).toMatch(/al desplegar/)
   })
 
   it('una plaza inactiva no tenía página y el impacto lo dice', () => {
