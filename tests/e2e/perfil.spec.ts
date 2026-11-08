@@ -1,25 +1,31 @@
 import { AxeBuilder } from '@axe-core/playwright'
 import { expect, type Page, test } from '@playwright/test'
-import { activePlazas, inactivePlazas, openApp, placeById, waitForMap } from './helpers.ts'
+import {
+  activePlazas,
+  inactivePlazas,
+  LOCAL,
+  openApp,
+  TRES_LOCALES,
+  waitForMap,
+} from './helpers.ts'
 
 /** Lo que una persona lleva marcado en este dispositivo, escrito antes de que arranque la app. */
 async function conMarcas(page: Page, idioma: 'es' | 'en' = 'es') {
-  const favoritos = ['tomassa', 'cosi-fan-tutte', 'el-hornero']
+  const [primero, segundo, tercero] = TRES_LOCALES
+  const favoritos = [primero.id, segundo.id, tercero.id]
   const visitas = {
-    tomassa: ['2026-10-01', '2026-10-20'],
-    'cosi-fan-tutte': ['2026-10-11'],
-    'el-hornero': ['2026-10-02'],
+    [primero.id]: ['2026-10-01', '2026-10-20'],
+    [segundo.id]: ['2026-10-11'],
+    [tercero.id]: ['2026-10-02'],
   }
+  const calificaciones = { [primero.id]: 4.5, [tercero.id]: 4 }
   await page.addInitScript(
-    ([favoritos, visitas]) => {
+    ([favoritos, visitas, calificaciones]) => {
       window.localStorage.setItem('zibata:favoritos', JSON.stringify(favoritos))
       window.localStorage.setItem('zibata:visitas', JSON.stringify(visitas))
-      window.localStorage.setItem(
-        'zibata:calificaciones',
-        JSON.stringify({ tomassa: 4.5, 'el-hornero': 4 }),
-      )
+      window.localStorage.setItem('zibata:calificaciones', JSON.stringify(calificaciones))
     },
-    [favoritos, visitas] as const,
+    [favoritos, visitas, calificaciones] as const,
   )
   await openApp(page, { path: idioma === 'en' ? 'en' : '' })
   await waitForMap(page)
@@ -110,9 +116,7 @@ test.describe('Tu Zibatá', () => {
     await expect(zonas).not.toContainText(inactivePlazas()[0]?.name.replace(/^Plaza\s+/, '') ?? '')
     // Y un sello de relleno completa la última fila de la rejilla.
     await expect(zonas.locator('[data-filler="true"]')).toHaveCount(1)
-    const estrenadas = new Set(
-      ['tomassa', 'cosi-fan-tutte', 'el-hornero'].map((id) => placeById(id).plazaId),
-    )
+    const estrenadas = new Set(TRES_LOCALES.map((place) => place.plazaId))
     await expect(zonas.locator('[data-visited="true"]')).toHaveCount(estrenadas.size)
     await expect(hoja.getByText(`${estrenadas.size} de ${activePlazas().length}`)).toBeVisible()
 
@@ -122,7 +126,7 @@ test.describe('Tu Zibatá', () => {
     await expect(filas).toHaveCount(3)
     await expect(filas.first()).toHaveAttribute(
       'aria-label',
-      `Puesto 1, guardado. Ver detalles de ${placeById('tomassa').name}`,
+      `Puesto 1, guardado. Ver detalles de ${LOCAL.name}`,
     )
     await expect(filas.first()).toContainText('2 visitas')
     // Lo guardado ya no es una palabra: es el corazón sobre el icono.

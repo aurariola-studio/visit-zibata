@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, waitForSheet } from './helpers.ts'
+import { LOCAL, openApp, panel, waitForSheet } from './helpers.ts'
 
 test.describe('Calificación en la ficha', () => {
   test('las estrellas y su texto caben en una fila en todos los anchos', async ({
@@ -14,7 +14,7 @@ test.describe('Calificación en la ficha', () => {
      * reglas que deciden la fila son de la ventana y el navegador las vuelve a aplicar al redimensionar.
      */
     await page.setViewportSize({ width: 320, height: 568 })
-    await openApp(page, { path: 'lugar/tomassa' })
+    await openApp(page, { path: `lugar/${LOCAL.slug}` })
     await waitForSheet(page)
     const ficha = panel(page)
     const rating = ficha.locator('[class*="_rating_"]')

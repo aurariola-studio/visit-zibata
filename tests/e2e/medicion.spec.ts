@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
-import { openApp, panel, waitForMap } from './helpers.ts'
+import { LOCAL_B, openApp, panel, waitForMap, ZONA_B } from './helpers.ts'
 
 /*
  * La medición propia (worker/eventos.ts y lib/eventos.ts), vista desde el navegador: qué sale, con
@@ -43,10 +43,10 @@ test.describe('Medición de uso @mapa', () => {
       route.fulfill({ status: 200, contentType: 'text/html', body: '<title>Maps</title>' }),
     )
     const envios = await capturar(page)
-    await openApp(page, { path: 'zona/condesa' })
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
     const region = panel(page)
-    await region.getByRole('link', { name: 'Ver detalles de Bendito Bocado' }).click()
-    await expect(region.getByRole('heading', { level: 2, name: 'Bendito Bocado' })).toBeVisible()
+    await region.getByRole('link', { name: `Ver detalles de ${LOCAL_B.name}` }).click()
+    await expect(region.getByRole('heading', { level: 2, name: LOCAL_B.name })).toBeVisible()
 
     const popup = page.waitForEvent('popup')
     await region.getByRole('link', { name: /Cómo llegar/ }).click()
@@ -57,8 +57,8 @@ test.describe('Medición de uso @mapa', () => {
 
     expect(todos(envios)).toEqual(
       expect.arrayContaining([
-        { tipo: 'ficha', destino: 'bendito-bocado' },
-        { tipo: 'salida', destino: 'bendito-bocado', detalle: 'maps' },
+        { tipo: 'ficha', destino: LOCAL_B.id },
+        { tipo: 'salida', destino: LOCAL_B.id, detalle: 'maps' },
       ]),
     )
     // Solo el idioma y los eventos: nada que identifique ni texto libre.
@@ -70,10 +70,8 @@ test.describe('Medición de uso @mapa', () => {
     page,
   }) => {
     const envios = await capturar(page)
-    await openApp(page, { path: 'lugar/bendito-bocado' })
-    await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Bendito Bocado' }),
-    ).toBeVisible()
+    await openApp(page, { path: `lugar/${LOCAL_B.slug}` })
+    await expect(panel(page).getByRole('heading', { level: 2, name: LOCAL_B.name })).toBeVisible()
     await ocultarPestana(page)
     // Si no hubo ningún evento, no hay envío en absoluto.
     await page.waitForTimeout(300)
@@ -110,8 +108,10 @@ test.describe('Medición de uso @mapa', () => {
       Object.defineProperty(navigator, 'globalPrivacyControl', { value: true }),
     )
     const envios = await capturar(page)
-    await openApp(page, { path: 'zona/condesa' })
-    await panel(page).getByRole('link', { name: 'Ver detalles de Bendito Bocado' }).click()
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
+    await panel(page)
+      .getByRole('link', { name: `Ver detalles de ${LOCAL_B.name}` })
+      .click()
     await ocultarPestana(page)
     await page.waitForTimeout(500)
     expect(envios).toHaveLength(0)
@@ -119,9 +119,11 @@ test.describe('Medición de uso @mapa', () => {
 
   test('no deja cookies ni almacenamiento nuevo', async ({ page, context }) => {
     await capturar(page)
-    await openApp(page, { path: 'zona/condesa' })
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
     const antes = await page.evaluate(() => Object.keys(window.localStorage).sort())
-    await panel(page).getByRole('link', { name: 'Ver detalles de Bendito Bocado' }).click()
+    await panel(page)
+      .getByRole('link', { name: `Ver detalles de ${LOCAL_B.name}` })
+      .click()
     await ocultarPestana(page)
     await page.waitForTimeout(300)
     expect(await context.cookies()).toEqual([])

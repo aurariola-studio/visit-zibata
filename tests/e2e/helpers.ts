@@ -12,20 +12,39 @@ const read = <T>(file: string): T => JSON.parse(readFileSync(dataPath(file), 'ut
 
 interface DatasetPlace {
   id: string
+  slug: string
   plazaId: string
   name: string
   giros: string[]
   googleMapsUri: string | null
+  active: boolean
+  description: { es: string } | null
+  links: Record<string, string | null | undefined>
+  hours: unknown
+  phone: string | null
+  location: unknown
+}
+
+interface DatasetPlaza {
+  id: string
+  slug: string
+  name: string
+  active: boolean
+  coordinates: { lat: number; lng: number }
+  address: string | null
+  description: { es: string } | null
 }
 
 interface DatasetCategory {
   id: string
+  slug: { es: string; en: string }
+  label: { es: string }
   giros: { id: string }[]
 }
 
 const dataset = {
   places: read<{ places: DatasetPlace[] }>('places.json').places,
-  plazas: read<{ plazas: { id: string; name: string; active: boolean }[] }>('plazas.json').plazas,
+  plazas: read<{ plazas: DatasetPlaza[] }>('plazas.json').plazas,
   categories: read<{ categories: DatasetCategory[] }>('categories.json').categories,
 }
 
@@ -48,6 +67,268 @@ export const activePlazas = () => dataset.plazas.filter((plaza) => plaza.active)
 /** Las que aún no abrieron: en la hoja van detrás, apagadas. */
 export const inactivePlazas = () => dataset.plazas.filter((plaza) => !plaza.active)
 
+/*
+ * Los ejemplares. Las pruebas no nombran un local ni una zona de la guía: borrar o cambiar la dirección de
+ * uno desde el panel no puede poner en rojo la PR que abre el propio panel. Cada ejemplar sale de una
+ * regla sobre el dataset, y a igualdad manda el id para que la elección sea estable entre ejecuciones.
+ */
+const deMenorId = <T extends { id: string }>(filas: T[]): T[] =>
+  [...filas].sort((a, b) => a.id.localeCompare(b.id))
+const conteoDeLocales = (plaza: DatasetPlaza) =>
+  dataset.places.filter((place) => place.plazaId === plaza.id && place.active).length
+const unico = <T>(valor: T | undefined, que: string): T => {
+  if (valor === undefined) throw new Error(`El dataset no tiene ${que}`)
+  return valor
+}
+
+/** La zona activa con más locales: la que nunca debe desaparecer del mapa ni de las listas. */
+export const ZONA_GRANDE: DatasetPlaza = unico(
+  deMenorId(dataset.plazas.filter((plaza) => plaza.active)).sort(
+    (a, b) => conteoDeLocales(b) - conteoDeLocales(a),
+  )[0],
+  'ninguna zona activa',
+)
+
+/** Otra zona activa con locales, distinta de la grande: la que se abre cuando hace falta una segunda. */
+export const ZONA_B: DatasetPlaza = unico(
+  deMenorId(
+    dataset.plazas.filter(
+      (plaza) => plaza.active && plaza.id !== ZONA_GRANDE.id && conteoDeLocales(plaza) > 0,
+    ),
+  ).sort((a, b) => conteoDeLocales(b) - conteoDeLocales(a))[0],
+  'una segunda zona activa con locales',
+)
+
+/** La tercera zona activa por número de locales. */
+export const ZONA_C: DatasetPlaza = unico(
+  deMenorId(
+    dataset.plazas.filter(
+      (plaza) =>
+        plaza.active &&
+        plaza.id !== ZONA_GRANDE.id &&
+        plaza.id !== ZONA_B.id &&
+        conteoDeLocales(plaza) > 0,
+    ),
+  ).sort((a, b) => conteoDeLocales(b) - conteoDeLocales(a))[0],
+  'una tercera zona activa con locales',
+)
+
+/** Los locales activos de una zona, por id. */
+export const localesDe = (zona: DatasetPlaza): DatasetPlace[] =>
+  deMenorId(dataset.places.filter((place) => place.active && place.plazaId === zona.id))
+
+/** Un local activo de la zona grande. */
+export const LOCAL: DatasetPlace = unico(
+  deMenorId(dataset.places.filter((place) => place.active && place.plazaId === ZONA_GRANDE.id))[0],
+  'ningún local activo en la zona grande',
+)
+
+/** Un local activo de la segunda zona, con enlace de Google Maps (las pruebas abren "Cómo llegar"). */
+export const LOCAL_B: DatasetPlace = unico(
+  deMenorId(
+    dataset.places.filter(
+      (place) => place.active && place.plazaId === ZONA_B.id && place.googleMapsUri,
+    ),
+  )[0],
+  'ningún local activo con enlace de Maps en la segunda zona',
+)
+
+/** El slug en español de la primera categoría de un local, para `?categoria=`. */
+export const categoriaDe = (place: DatasetPlace): { id: string; slug: string; label: string } => {
+  const id = unico(categoriesOf(place)[0], `categoría para ${place.id}`)
+  const categoria = unico(
+    dataset.categories.find((candidata) => candidata.id === id),
+    `la categoría ${id}`,
+  )
+  return { id, slug: categoria.slug.es, label: categoria.label.es }
+}
+
+/**
+ * Los locales de una categoría que dicen `palabra` en su nombre o su descripción: lo que una búsqueda de esa
+ * palabra debe poner primero. La relevancia se prueba contra el dato, no contra un nombre fijo.
+ */
+export const queDicen = (categoriaId: string, palabra: string): DatasetPlace[] =>
+  dataset.places.filter(
+    (place) =>
+      place.active &&
+      categoriesOf(place).includes(categoriaId) &&
+      new RegExp(palabra, 'i').test(`${place.name} ${place.description?.es ?? ''}`),
+  )
+
+/** Un local activo con exactamente dos giros: la frase de compartir los une con "y". */
+export const LOCAL_DOS_GIROS: DatasetPlace = unico(
+  deMenorId(dataset.places.filter((place) => place.active && place.giros.length === 2))[0],
+  'ningún local activo con dos giros',
+)
+
+/** El local activo con más datos rellenos: el que enseña todos los bloques de la ficha. */
+export const LOCAL_COMPLETO: DatasetPlace = (() => {
+  const puntos = (place: DatasetPlace) =>
+    [
+      place.description,
+      place.hours,
+      place.phone,
+      place.googleMapsUri,
+      place.location,
+      ...Object.values(place.links ?? {}),
+    ].filter(Boolean).length
+  return unico(
+    deMenorId(dataset.places.filter((place) => place.active)).sort(
+      (a, b) => puntos(b) - puntos(a),
+    )[0],
+    'ningún local activo',
+  )
+})()
+
+/** Tres locales activos en tres zonas distintas: lo que hace falta para "has estrenado tres zonas". */
+export const TRES_LOCALES: [DatasetPlace, DatasetPlace, DatasetPlace] = [
+  LOCAL,
+  unico(localesDe(ZONA_B)[0], 'un local en la segunda zona'),
+  unico(localesDe(ZONA_C)[0], 'un local en la tercera zona'),
+]
+
+/** Un local activo con enlace de WhatsApp, y el número en la forma de `wa.me` (solo dígitos). */
+export const LOCAL_CON_WHATSAPP: { place: DatasetPlace; numero: string } = (() => {
+  const place = unico(
+    deMenorId(
+      dataset.places.filter((candidato) => candidato.active && candidato.links?.whatsapp),
+    )[0],
+    'ningún local activo con WhatsApp',
+  )
+  return { place, numero: (place.links.whatsapp ?? '').replace(/\D/g, '') }
+})()
+
+/**
+ * Locales cuyo nombre lleva un carácter especial (eñe, diéresis, tilde, `&`): para comprobar que llegan
+ * enteros al HTML. Uno por clase, de las que haya en la guía.
+ */
+export const CON_ESPECIALES: DatasetPlace[] = (() => {
+  const clases = [/ñ/i, /[äëïöü]/i, /[áéíóú]/i, /&/]
+  const activos = deMenorId(dataset.places.filter((place) => place.active))
+  return clases.flatMap((clase) => {
+    const place = activos.find((candidato) => clase.test(candidato.name))
+    return place ? [place] : []
+  })
+})()
+
+/** Dos locales activos con el mismo nombre en zonas distintas (una cadena): sus títulos llevan la zona. */
+export const CADENA: [DatasetPlace, DatasetPlace] = (() => {
+  const activos = deMenorId(dataset.places.filter((place) => place.active))
+  for (const place of activos) {
+    const otro = activos.find(
+      (candidato) =>
+        candidato.id !== place.id &&
+        candidato.name === place.name &&
+        candidato.plazaId !== place.plazaId,
+    )
+    if (otro) return [place, otro]
+  }
+  throw new Error('El dataset no tiene dos locales con el mismo nombre en zonas distintas')
+})()
+
+/** Un local activo cuyo nombre no se repite en toda la guía: su título es solo `{nombre} · Visit Zibatá`. */
+export const LOCAL_UNICO: DatasetPlace = unico(
+  deMenorId(dataset.places.filter((place) => place.active)).find(
+    (place) => dataset.places.filter((otro) => otro.name === place.name).length === 1,
+  ),
+  'ningún local con nombre único',
+)
+
+/** Un local activo para buscar por sus tres primeras letras (nombre que empieza por letras sin símbolos). */
+export const LOCAL_BUSCABLE: DatasetPlace = unico(
+  deMenorId(dataset.places.filter((place) => place.active)).find((place) =>
+    /^[a-z]{3}/i.test(place.name),
+  ),
+  'ningún local activo con nombre que empiece por tres letras',
+)
+
+/** La zona activa más cercana a otra: dos marcadores que se acercan o se alejan con la cámara. */
+export const cercanaA = (zona: DatasetPlaza): DatasetPlaza => {
+  const distancia = (a: DatasetPlaza, b: DatasetPlaza) =>
+    Math.hypot(a.coordinates.lat - b.coordinates.lat, a.coordinates.lng - b.coordinates.lng)
+  return unico(
+    deMenorId(dataset.plazas.filter((plaza) => plaza.active && plaza.id !== zona.id)).sort(
+      (a, b) => distancia(a, zona) - distancia(b, zona),
+    )[0],
+    'otra zona activa',
+  )
+}
+
+/**
+ * La categoría con más locales dentro de la zona grande (al menos dos, para que el recuento sea plural) y
+ * uno de esos locales: lo que hace falta para filtrar una zona por una categoría que sí tiene.
+ */
+export const CATEGORIA_EN_ZONA: {
+  id: string
+  slug: string
+  label: string
+  local: DatasetPlace
+} = (() => {
+  const locales = localesDe(ZONA_GRANDE)
+  const cuenta = new Map<string, number>()
+  for (const place of locales) {
+    for (const id of new Set(categoriesOf(place))) cuenta.set(id, (cuenta.get(id) ?? 0) + 1)
+  }
+  const [id] = unico(
+    [...cuenta.entries()]
+      .filter(([, n]) => n >= 2)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0],
+    'una categoría con dos locales en la zona grande',
+  )
+  const categoria = unico(
+    dataset.categories.find((candidata) => candidata.id === id),
+    `la categoría ${id}`,
+  )
+  const local = unico(
+    locales.find((place) => categoriesOf(place).includes(id)),
+    `un local de ${id}`,
+  )
+  return { id, slug: categoria.slug.es, label: categoria.label.es, local }
+})()
+
+/** La zona de un local. */
+export const plazaDe = (place: DatasetPlace): DatasetPlaza =>
+  unico(
+    dataset.plazas.find((plaza) => plaza.id === place.plazaId),
+    `la zona de ${place.id}`,
+  )
+
+interface CategoriaDeEjemplo {
+  id: string
+  slug: string
+  slugEn: string
+  label: string
+}
+
+/** Las categorías por número de locales activos, de más a menos (a igualdad, por id). */
+const categoriasPorTamano = (): CategoriaDeEjemplo[] => {
+  const conteo = (id: string) =>
+    dataset.places.filter((place) => place.active && categoriesOf(place).includes(id)).length
+  return [...dataset.categories]
+    .sort((a, b) => conteo(b.id) - conteo(a.id) || a.id.localeCompare(b.id))
+    .map((categoria) => ({
+      id: categoria.id,
+      slug: categoria.slug.es,
+      slugEn: categoria.slug.en,
+      label: categoria.label.es,
+    }))
+}
+
+/** La categoría con más locales activos: la que nunca debe quedarse sin página. */
+export const CATEGORIA_GRANDE: CategoriaDeEjemplo = unico(
+  categoriasPorTamano()[0],
+  'ninguna categoría',
+)
+
+/** La segunda categoría por tamaño: para las pruebas que pasan de una categoría a otra. */
+export const CATEGORIA_B: CategoriaDeEjemplo = unico(
+  categoriasPorTamano()[1],
+  'una segunda categoría',
+)
+
+/** Texto literal dentro de una expresión regular. */
+export const esc = (texto: string): string => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 /** Los `n` locales de nombre más largo: el peor caso para un título que debe caber en su columna. */
 export const longestPlaces = (n: number) =>
   [...dataset.places].sort((a, b) => b.name.length - a.name.length).slice(0, n)
@@ -57,8 +338,9 @@ export const longestPlazas = (n: number) =>
   [...activePlazas()].sort((a, b) => b.name.length - a.name.length).slice(0, n)
 
 /** Las categorías en las que aparece un local: las de todos sus giros. */
-const categoriesOf = (place: DatasetPlace) =>
-  place.giros.map((giro) => categoryOfGiro.get(giro)).filter((id) => id !== undefined)
+function categoriesOf(place: DatasetPlace): string[] {
+  return place.giros.map((giro) => categoryOfGiro.get(giro)).filter((id) => id !== undefined)
+}
 
 /** Nº de lugares de una categoría (opcionalmente dentro de una plaza), leído del dataset. */
 export function placesInCategory(categoryId: string, plazaName?: string): number {
