@@ -70,6 +70,15 @@ export function loadBounds(): Bounds | undefined {
   return { west, south, east, north }
 }
 
+/** El anillo exterior del contorno de Zibatá (`extent.json`), para validar el contorno de las plazas. */
+export function loadContorno(): number[][] | undefined {
+  if (!existsSync(dataPaths.extent)) return undefined
+  const extent = JSON.parse(readFileSync(dataPaths.extent, 'utf8')) as {
+    boundary?: { coordinates?: number[][][] }
+  }
+  return extent.boundary?.coordinates?.[0]
+}
+
 export function writeDataFile(file: string, value: unknown): void {
   writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`)
 }
