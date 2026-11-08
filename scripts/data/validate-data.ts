@@ -10,6 +10,7 @@
 import { existsSync, mkdirSync } from 'node:fs'
 import { parseArgs } from 'node:util'
 import { z } from 'zod'
+import { validarContornoDePlaza } from '../../src/data/geometria.ts'
 import {
   type DataIssue,
   syncPlazaDerivedFields,
@@ -29,6 +30,7 @@ import {
   dataPaths,
   loadBounds,
   loadCategoriesFile,
+  loadContorno,
   loadPlacesFile,
   loadPlazasFile,
   loadRedirectsFile,
@@ -79,6 +81,23 @@ try {
     ...validateTranslations(dataset),
     ...validateRedirects(loadRedirectsFile()?.redirects ?? [], dataset),
   ]
+
+  // El contorno de cada plaza, con las mismas reglas que aplica el Worker cuando el panel lo guarda.
+  const contorno = loadContorno()
+  for (const plaza of dataset.plazas) {
+    const otras = dataset.plazas.flatMap((otra) =>
+      otra.id !== plaza.id && otra.geometry.type === 'Polygon'
+        ? [{ id: otra.id, anillo: otra.geometry.coordinates[0] ?? [] }]
+        : [],
+    )
+    for (const problema of validarContornoDePlaza(plaza.geometry, {
+      contorno,
+      marcador: plaza.coordinates,
+      otras,
+    })) {
+      issues.push({ level: 'error', dataset: 'plazas', id: plaza.id, message: problema.mensaje })
+    }
+  }
 
   for (const place of dataset.places) {
     for (const photo of place.photos) {
