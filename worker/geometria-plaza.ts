@@ -12,7 +12,12 @@
  * `plazas.json` en cada build, así que al fusionar la PR el despliegue dibuja el contorno nuevo.
  */
 import { z } from 'zod'
-import { areaM2, normalizarContorno, validarContornoDePlaza } from '../src/data/geometria.ts'
+import {
+  areaM2,
+  mismoContorno,
+  normalizarContorno,
+  validarContornoDePlaza,
+} from '../src/data/geometria.ts'
 import {
   type CommercialDataset,
   isInsidePlazaGeometry,
@@ -102,7 +107,9 @@ export function prepararContorno(
     coordinates: [nuevoAnillo],
   } as unknown as PlazaGeometry
   const anillaAntes = anilloDe(plaza.geometry)
-  if (JSON.stringify(geometry) === JSON.stringify(plaza.geometry)) {
+  // Un editor que carga un contorno y lo guarda sin tocarlo no debe producir un commit que solo le da la
+  // vuelta al anillo o cambia su vértice de inicio.
+  if (mismoContorno(anillaAntes, nuevoAnillo)) {
     return {
       ok: false,
       problemas: ['El contorno es el mismo que ya tiene la plaza: no hay nada que guardar.'],
@@ -144,7 +151,7 @@ export function prepararContorno(
   avisos.push(
     plaza.active
       ? 'Los edificios y las mallas de la plaza se recalculan al construir: al fusionar la PR el despliegue dibuja el contorno nuevo.'
-      : 'La plaza está inactiva: el contorno nuevo se guarda pero no se ve en la guía hasta activarla.',
+      : 'La plaza está inactiva: no tiene página ni marcador, pero sus edificios se dibujan en gris y sin interacción, y cambiarán con el contorno nuevo.',
     'Se revierte con git, no con un botón.',
   )
 

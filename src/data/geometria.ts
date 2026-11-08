@@ -348,6 +348,28 @@ export function normalizarContorno(anillo: Anillo): number[][] {
   return [...antihorario, [primero[0] ?? 0, primero[1] ?? 0]]
 }
 
+/**
+ * ¿Son el mismo contorno? No depende del sentido ni de por qué vértice empieza el anillo: dos anillos
+ * con los mismos vértices en el mismo orden cíclico son el mismo polígono. Sirve para decidir "no hay
+ * nada que guardar" sin que girar o dar la vuelta al anillo cuente como un cambio.
+ */
+export function mismoContorno(a: Anillo, b: Anillo): boolean {
+  const canonico = (anillo: Anillo): string => {
+    const abierto = normalizarContorno(anillo).slice(0, -1)
+    if (abierto.length === 0) return ''
+    // Empieza por el vértice menor (longitud y luego latitud): el recorrido ya es antihorario.
+    let inicio = 0
+    abierto.forEach((p, i) => {
+      const m = abierto[inicio] ?? p
+      if ((p[0] ?? 0) < (m[0] ?? 0) || ((p[0] ?? 0) === (m[0] ?? 0) && (p[1] ?? 0) < (m[1] ?? 0))) {
+        inicio = i
+      }
+    })
+    return JSON.stringify([...abierto.slice(inicio), ...abierto.slice(0, inicio)])
+  }
+  return canonico(a) === canonico(b)
+}
+
 /** ¿Está el punto (lat, lng) dentro del anillo? Para el impacto: qué locales quedan fuera. */
 export function puntoEnContorno(punto: { lat: number; lng: number }, anillo: Anillo): boolean {
   const lat0 = latMedia(anillo)

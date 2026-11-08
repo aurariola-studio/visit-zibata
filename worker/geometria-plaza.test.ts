@@ -186,6 +186,35 @@ describe('lo que se guarda', () => {
   })
 })
 
+describe('guardar sin tocar', () => {
+  // 8 de las 15 plazas reales se guardaron en sentido horario (rectángulos dibujados a mano) y el build las
+  // reorienta. Un editor que carga un contorno y lo vuelve a guardar sin cambiarlo no puede producir un
+  // commit que solo le da la vuelta al anillo: tiene que ser "nada que guardar", en cualquier plaza.
+  for (const real of completo.plazas) {
+    it(`${real.id}: el mismo contorno es "nada que guardar"`, () => {
+      const preparado = prepararContorno(
+        completo,
+        crudo,
+        { id: real.id, geometria: real.geometry },
+        HOY,
+      )
+      expect(preparado.ok).toBe(false)
+      if (!preparado.ok) expect(preparado.problemas.join(' ')).toMatch(/nada que guardar/)
+    })
+  }
+
+  it('el mismo contorno en el otro sentido tampoco es un cambio', () => {
+    const invertido = [...anilloDe(plaza)].reverse()
+    const preparado = prepararContorno(
+      completo,
+      crudo,
+      { id: plaza.id, geometria: poligono(invertido) },
+      HOY,
+    )
+    expect(preparado.ok).toBe(false)
+  })
+})
+
 describe('lo que se rechaza', () => {
   const rechaza = (geometria: unknown, dataset = completo) =>
     prepararContorno(dataset, crudo, { id: plaza.id, geometria }, HOY)

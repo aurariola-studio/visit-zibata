@@ -3,6 +3,7 @@ import {
   areaM2,
   MAX_VERTICES,
   MIN_AREA_M2,
+  mismoContorno,
   normalizarContorno,
   puntoEnContorno,
   validarContornoDePlaza,
@@ -229,5 +230,26 @@ describe('puntoEnContorno', () => {
     const anillo = anilloDe(cuadrado(-100.3, 20.69))
     expect(puntoEnContorno({ lat: 20.6905, lng: -100.2995 }, anillo)).toBe(true)
     expect(puntoEnContorno({ lat: 20.7, lng: -100.2 }, anillo)).toBe(false)
+  })
+})
+
+describe('mismoContorno', () => {
+  const base = anilloDe(cuadrado(-100.3, 20.69)).map((p) => p.map((n) => Number(n.toFixed(6))))
+
+  it('no distingue el sentido ni el vértice por el que empieza', () => {
+    const abierto = base.slice(0, -1)
+    const cerrar = (puntos: number[][]) => [...puntos, puntos[0] ?? []]
+    const invertido = cerrar([...abierto].reverse())
+    const rotado = cerrar([...abierto.slice(2), ...abierto.slice(0, 2)])
+    const rotadoEInvertido = cerrar([...abierto.slice(1), ...abierto.slice(0, 1)].reverse())
+    expect(mismoContorno(base, invertido)).toBe(true)
+    expect(mismoContorno(base, rotado)).toBe(true)
+    expect(mismoContorno(base, rotadoEInvertido)).toBe(true)
+  })
+
+  it('distingue un vértice movido', () => {
+    const movido = base.map((p) => [...p])
+    movido[2] = [(movido[2]?.[0] ?? 0) + 0.0001, movido[2]?.[1] ?? 0]
+    expect(mismoContorno(base, movido)).toBe(false)
   })
 })
