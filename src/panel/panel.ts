@@ -15,6 +15,7 @@ import {
   montarContenido,
   mostrarContenido,
   ocultarContenido,
+  precargarContenido,
 } from './contenido.ts'
 import './panel.css'
 
@@ -247,7 +248,32 @@ function actualizarCuentaSugerencias(): void {
   cuentaSugerencias.hidden = pendientes === 0
 }
 
-function actualizarEstado(estado: EstadoContenido | null): void {
+/** Lo último que se supo de la rama de contenido, para el bloque del resumen. */
+let estadoContenido: EstadoContenido | null = null
+/** Por qué no se pudo cargar el contenido, si no se pudo. */
+let errorContenido: string | null = null
+
+/** El bloque de "contenido pendiente" del resumen: lo que espera revisión, dicho en una frase. */
+function bloquePendiente(): string {
+  const estado = estadoContenido
+  if (errorContenido) {
+    return `<p>No se pudo consultar el estado de los cambios. ${texto(errorContenido)}</p>`
+  }
+  if (!estado) return '<p>Cargando el estado de los cambios…</p>'
+  if (estado.seco)
+    return '<p>Desarrollo: los cambios no se commitean, así que no hay nada pendiente.</p>'
+  if (estado.pr) {
+    return `<p>Hay cambios esperando revisión.</p>
+      <a class="${controls.enlace ?? ''}" href="${texto(estado.pr.url)}" target="_blank" rel="noopener noreferrer">Revisar la PR #${estado.pr.numero}</a>`
+  }
+  return '<p>No hay cambios pendientes: lo que se ve en la guía es lo publicado.</p>'
+}
+
+function actualizarEstado(estado: EstadoContenido | null, error: string | null = null): void {
+  estadoContenido = estado
+  errorContenido = error
+  const pendiente = document.querySelector<HTMLElement>('[data-pendiente]')
+  if (pendiente) pendiente.innerHTML = bloquePendiente()
   if (!estadoRama || !enlacePr) return
   enlacePr.hidden = true
   if (!estado) {
@@ -332,6 +358,7 @@ function pintarResumen(): void {
   )
   vistaEl.innerHTML = `
     <section class="resumen">
+      <div class="pendiente" data-pendiente>${bloquePendiente()}</div>
       <div class="cifras">
         <div class="cifra-grande">
           <p class="rotulo">Visitas</p>
@@ -555,4 +582,5 @@ if (vistaEl && dialogo) {
   montarContenido(vistaEl, dialogo, actualizarEstado)
 }
 actualizarEstado(null)
+precargarContenido()
 void cargar(30)

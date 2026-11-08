@@ -74,19 +74,37 @@ function montarIndice(cuerpo: HTMLElement): void {
   formulario.prepend(indice)
 }
 
-/** Cierra el diálogo. Con cambios sin guardar pide confirmación salvo que se fuerce. */
-export function cerrarEditor(forzar = false): void {
-  if (!vista.dialogo?.open) return
-  if (!forzar && vista.formularioActual?.sucio) {
-    if (!confirm('Hay cambios sin guardar. ¿Cerrar de todas formas?')) return
-  }
-  vista.dialogo.close()
+/**
+ * Pregunta si se descartan los cambios, con un diálogo propio en vez del `confirm()` del navegador:
+ * este se ve igual en todos lados, se puede leer sin salir del panel y su botón por omisión es el
+ * seguro ("Seguir editando"). Escape o cualquier otra salida cuenta como seguir.
+ */
+function confirmarDescarte(): Promise<boolean> {
+  const dialogo = document.querySelector<HTMLDialogElement>('#confirmar')
+  if (!dialogo) return Promise.resolve(false)
+  const descartar = dialogo.querySelector<HTMLElement>('[data-descartar]')
+  const seguir = dialogo.querySelector<HTMLElement>('[data-seguir]')
+  if (descartar) descartar.className = `${controls.base} ${controls.boton} ${controls.secundario}`
+  if (seguir) seguir.className = `${controls.base} ${controls.boton} ${controls.principal}`
+  dialogo.returnValue = ''
+  return new Promise((resolver) => {
+    dialogo.addEventListener('close', () => resolver(dialogo.returnValue === 'descartar'), {
+      once: true,
+    })
+    dialogo.showModal()
+  })
 }
 
-export function puedeCerrar(): boolean {
-  return (
-    !vista.formularioActual?.sucio || confirm('Hay cambios sin guardar. ¿Cerrar de todas formas?')
-  )
+/** Cierra el diálogo. Con cambios sin guardar pregunta antes, salvo que se fuerce. */
+export function cerrarEditor(forzar = false): void {
+  if (!vista.dialogo?.open) return
+  if (forzar || !vista.formularioActual?.sucio) {
+    vista.dialogo.close()
+    return
+  }
+  void confirmarDescarte().then((descartar) => {
+    if (descartar) vista.dialogo?.close()
+  })
 }
 
 function limpiarProblemas(formEl: HTMLFormElement): void {

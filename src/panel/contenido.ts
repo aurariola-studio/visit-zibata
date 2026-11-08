@@ -38,7 +38,7 @@ import {
   alPulsarDireccion,
   alTeclearDireccion,
 } from './contenido/direccion.ts'
-import { cerrarEditor, limpiarErrorDe, puedeCerrar } from './contenido/editor.ts'
+import { cerrarEditor, limpiarErrorDe } from './contenido/editor.ts'
 import { alCambiarFoto, alEscribirFoto, alPulsarFoto } from './contenido/fotos.ts'
 import {
   actualizarContadores,
@@ -67,7 +67,7 @@ export type { EstadoContenido, ModoContenido }
 export function montarContenido(
   contenedor: HTMLElement,
   editor: HTMLDialogElement,
-  alCambiarEstado: (estado: EstadoContenido | null) => void,
+  alCambiarEstado: (estado: EstadoContenido | null, error?: string | null) => void,
 ): void {
   vista.raiz = contenedor
   vista.dialogo = editor
@@ -86,8 +86,19 @@ export function montarContenido(
   editor.addEventListener('input', alEscribirEditor)
   editor.addEventListener('keydown', alTeclearDireccion)
   editor.addEventListener('change', alCambiarEditor)
+  // Escape con cambios sin guardar: primero se pregunta. Se frena la tecla y no el evento `cancel`,
+  // porque el navegador deja de permitir cancelarlo si no hubo un clic o una tecla de activación entre
+  // dos Escape seguidos, y el formulario se cerraría sin avisar. `cancel` queda como red para otras
+  // salidas (el botón atrás de Android).
+  editor.addEventListener('keydown', (evento) => {
+    if (evento.key !== 'Escape' || !vista.formularioActual?.sucio) return
+    evento.preventDefault()
+    cerrarEditor()
+  })
   editor.addEventListener('cancel', (evento) => {
-    if (!puedeCerrar()) evento.preventDefault()
+    if (!vista.formularioActual?.sucio) return
+    evento.preventDefault()
+    cerrarEditor()
   })
   // Al cerrar, el foco vuelve a la vista y el formulario deja de existir.
   editor.addEventListener('close', () => {
@@ -110,6 +121,11 @@ export function mostrarContenido(cual: ModoContenido): void {
     vista.aviso = null
   }
   pintarLista()
+  if (!vista.datos && !vista.cargando) void cargar()
+}
+
+/** Carga el contenido sin pintarlo: el resumen necesita saber si hay una PR esperando revisión. */
+export function precargarContenido(): void {
   if (!vista.datos && !vista.cargando) void cargar()
 }
 
@@ -140,7 +156,7 @@ async function cargar(): Promise<void> {
     vista.avisarEstado?.(estadoDeLaRama())
   } catch (causa) {
     vista.error = causa instanceof Error ? causa.message : 'No se pudo cargar el contenido.'
-    vista.avisarEstado?.(null)
+    vista.avisarEstado?.(null, vista.error)
   } finally {
     vista.cargando = false
     if (vista.visible) pintarLista()
