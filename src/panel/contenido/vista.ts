@@ -13,7 +13,7 @@ import { numero, POR_PAGINA, texto } from './tipos.ts'
 interface Vista {
   raiz: HTMLElement | null
   dialogo: HTMLDialogElement | null
-  avisarEstado: ((estado: EstadoContenido | null) => void) | null
+  avisarEstado: ((estado: EstadoContenido | null, error?: string | null) => void) | null
   datos: Datos | null
   modo: ModoContenido
   consulta: string
