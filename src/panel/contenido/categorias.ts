@@ -1,6 +1,6 @@
 import { ICONOS } from '../../data/iconos.ts'
 import controls from '../../styles/controls.module.css'
-import { abrirEditor, mostrarProblemas } from './editor.ts'
+import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import type { Categoria, Giro } from './tipos.ts'
 import { normalizar, numero, sinonimosDe, texto } from './tipos.ts'
 import {
@@ -115,6 +115,21 @@ export function pintarCategoria(categoria: Categoria | null): void {
   ]
   const locales = localesVisibles(giros.map((giro) => giro.id))
   const plazas = new Set(locales.map((negocio) => negocio.plazaId))
+  // Borrar exige cero locales de cualquier estado, no solo visibles; `otros` no se borra nunca.
+  const girosDeLaCategoria = new Set(giros.map((giro) => giro.id))
+  const usada = categoria
+    ? vista.datos.places.filter((negocio) =>
+        negocio.giros.some((giro) => girosDeLaCategoria.has(giro)),
+      )
+    : []
+  const sePuedeBorrar = Boolean(categoria) && categoria?.id !== CATEGORIA_FIJA && usada.length === 0
+  const notaBorrar = !categoria
+    ? ''
+    : categoria.id === CATEGORIA_FIJA
+      ? 'Esta categoría no se borra: es a donde va todo local que se importa sin giro.'
+      : usada.length > 0
+        ? `Para borrarla, primero cambia el giro de sus ${numero(usada.length)} locales.`
+        : ''
   const impacto =
     locales.length === 0
       ? 'Esta categoría no tiene locales; su página no se publica hasta que tenga alguno.'
@@ -165,13 +180,15 @@ export function pintarCategoria(categoria: Categoria | null): void {
         <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-anadir-giro>Añadir giro</button>
       </section>
 
-      <p class="impacto-contenido" data-impacto>${texto(impacto)}</p>
+      <p class="impacto-contenido" data-impacto>${texto(impacto)}${notaBorrar ? ` ${texto(notaBorrar)}` : ''}</p>
+      <div data-borrado-categoria></div>
 
       <footer class="editor-pie">
         <div class="problemas" data-problemas role="alert"></div>
         <div class="acciones">
           <button type="submit" class="${controls.base} ${controls.boton} ${controls.principal}">${esNueva ? 'Crear categoría' : 'Guardar cambios'}</button>
           <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar>Cancelar</button>
+          ${sePuedeBorrar ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-borrar-categoria>Borrar categoría</button>` : ''}
         </div>
       </footer>
     </form>`,
@@ -442,11 +459,29 @@ export async function enviarCategoria(
   }
 }
 
-/** El botón de añadir giro de una categoría. Devuelve si lo atendió. */
-export function alPulsarCategoria(objetivo: HTMLElement): boolean {
-  if (!objetivo.closest('[data-anadir-giro]')) return false
-  anadirGiroDeCategoria()
-  return true
+/** Los botones de añadir giro y de borrar una categoría. Devuelve si lo atendió. */
+export function alPulsarCategoria(objetivo: HTMLElement, recargar: () => Promise<void>): boolean {
+  if (objetivo.closest('[data-anadir-giro]')) {
+    anadirGiroDeCategoria()
+    return true
+  }
+  const formulario = objetivo.closest<HTMLFormElement>('form[data-editor="categoria"]')
+  if (!formulario) return false
+  if (objetivo.closest('[data-borrar-categoria]')) {
+    void pedirImpactoBorrado(formulario)
+    return true
+  }
+  if (objetivo.closest('[data-confirmar-borrado-categoria]')) {
+    void confirmarBorrado(formulario, recargar)
+    return true
+  }
+  if (objetivo.closest('[data-cancelar-borrado-categoria]')) {
+    const zona = formulario.querySelector<HTMLElement>('[data-borrado-categoria]')
+    if (zona) zona.innerHTML = ''
+    formulario.querySelector<HTMLElement>('[data-borrar-categoria]')?.focus()
+    return true
+  }
+  return false
 }
 
 /** El tono se previsualiza al escribirlo. Devuelve si lo atendió. */
@@ -466,4 +501,106 @@ export function alCambiarCategoria(objetivo: HTMLElement): boolean {
   )
   if (general) general.value = icono.value
   return true
+}
+
+/* ------------------------------------------------------------------ borrar */
+
+/** Debe coincidir con `CATEGORIA_FIJA` de `worker/borrado-categoria.ts`: el Worker es quien manda. */
+const CATEGORIA_FIJA = 'otros'
+
+interface ImpactoBorradoCategoria {
+  categoria: { id: string; nombre: string }
+  giros: string[]
+  gustosDeLocalesBorrados: number
+  avisos: string[]
+}
+
+interface RespuestaBorradoCategoria {
+  ok?: boolean
+  pr?: { url: string; numero: number; creada: boolean } | null
+  mensaje?: string
+  problemas?: string[]
+  impacto?: ImpactoBorradoCategoria
+}
+
+/** Habla con el Worker. Los errores salen en el formulario y devuelven `null`. */
+async function llamarBorrado(
+  formulario: HTMLFormElement,
+  cuerpo: { id: string; confirmar?: boolean },
+): Promise<RespuestaBorradoCategoria | null> {
+  try {
+    const respuesta = await fetch('/api/panel/contenido/categoria/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(cuerpo),
+    })
+    const resultado = (await respuesta.json().catch(() => null)) as RespuestaBorradoCategoria | null
+    if (respuesta.status === 403) {
+      mostrarProblemas(formulario, ['Sin permiso. Revisa la regla de Access.'])
+      return null
+    }
+    if (respuesta.status === 503) {
+      mostrarProblemas(formulario, ['Falta GITHUB_TOKEN en el Worker.'])
+      return null
+    }
+    if (!respuesta.ok || !resultado?.ok) {
+      mostrarProblemas(
+        formulario,
+        resultado?.problemas?.length ? resultado.problemas : ['No se pudo borrar.'],
+      )
+      return null
+    }
+    return resultado
+  } catch {
+    mostrarProblemas(formulario, ['No se pudo hablar con el servidor.'])
+    return null
+  }
+}
+
+/** Primer paso: enseña qué cambiaría, sin guardar nada. */
+async function pedirImpactoBorrado(formulario: HTMLFormElement): Promise<void> {
+  const id = formulario.dataset.id
+  const zona = formulario.querySelector<HTMLElement>('[data-borrado-categoria]')
+  if (!id || !zona || vista.guardando) return
+  mostrarProblemas(formulario, [])
+  const resultado = await llamarBorrado(formulario, { id })
+  if (!resultado?.impacto) return
+  const { impacto } = resultado
+
+  zona.innerHTML = `<section class="editor-seccion impacto-borrado" aria-labelledby="titulo-borrado-categoria" tabindex="-1">
+      <h3 id="titulo-borrado-categoria">Si borras ${texto(impacto.categoria.nombre)}</h3>
+      <p class="impacto-contenido">Se van también sus ${numero(impacto.giros.length)} ${impacto.giros.length === 1 ? 'giro' : 'giros'}: ${impacto.giros.map(texto).join(', ')}.</p>
+      <ul class="impacto-lista">${impacto.avisos.map((aviso) => `<li>${texto(aviso)}</li>`).join('')}</ul>
+      <div class="acciones">
+        <button type="button" class="${controls.base} ${controls.boton} ${controls.principal}" data-confirmar-borrado-categoria>Borrar esta categoría</button>
+        <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar-borrado-categoria>Mejor no</button>
+      </div>
+    </section>`
+  zona.querySelector<HTMLElement>('section')?.focus()
+}
+
+/** Segundo paso: el borrado va a la PR del panel. */
+async function confirmarBorrado(
+  formulario: HTMLFormElement,
+  recargar: () => Promise<void>,
+): Promise<void> {
+  const id = formulario.dataset.id
+  if (!id || vista.guardando) return
+  mostrarProblemas(formulario, [])
+  const botones = formulario.querySelectorAll<HTMLButtonElement>('[data-borrado-categoria] button')
+  for (const boton of botones) boton.disabled = true
+  vista.guardando = true
+  try {
+    const resultado = await llamarBorrado(formulario, { id, confirmar: true })
+    if (!resultado) return
+    vista.aviso = resultado.pr
+      ? `${resultado.mensaje ?? 'Borrado.'} ${resultado.pr.creada ? 'PR abierta' : 'Añadido a la PR'} #${resultado.pr.numero}.`
+      : (resultado.mensaje ?? 'Validado en desarrollo. No se commitea.')
+    vista.modo = 'categorias'
+    cerrarEditor(true)
+    await recargar()
+  } finally {
+    vista.guardando = false
+    for (const boton of botones) boton.disabled = false
+  }
 }
