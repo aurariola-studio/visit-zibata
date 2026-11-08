@@ -415,6 +415,44 @@ describe('cambiar el slug de una categoría', () => {
   })
 })
 
+describe('borrar un giro', () => {
+  const borrar = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir('/api/panel/contenido/giro/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+  const idDelGeneral = async (): Promise<string> => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      categories: { giros: { id: string; general?: boolean }[] }[]
+    }
+    return datos.categories.flatMap((c) => c.giros).find((g) => g.general)?.id ?? ''
+  }
+
+  it('el giro general es un 400 que dice por qué, aunque se confirme', async () => {
+    const respuesta = await borrar({ id: await idDelGeneral(), confirmar: true })
+    expect(respuesta?.status).toBe(400)
+    const datos = (await respuesta?.json()) as { problemas: string[] }
+    expect(datos.problemas.join(' ')).toMatch(/giro general/)
+  })
+
+  it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {
+    expect(
+      (await borrar({ id: await idDelGeneral(), confirmar: true }, 'cross-site'))?.status,
+    ).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee, y un JSON roto es un 400', async () => {
+    expect((await borrar({ id: 'x'.repeat(6000) }))?.status).toBe(413)
+    const roto = await pedir('/api/panel/contenido/giro/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': 'same-origin' },
+      body: '{no es json',
+    })
+    expect(roto?.status).toBe(400)
+  })
+})
+
 describe('editar una plaza', () => {
   const editar = (cuerpo: unknown, sitio = 'same-origin') =>
     pedir('/api/panel/contenido/plaza', {

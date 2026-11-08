@@ -751,6 +751,97 @@ test.describe('Panel', () => {
     expect(cuerpos).toEqual([])
   })
 
+  test('un giro sin locales se borra en dos pasos; el general no ofrece borrarse', async ({
+    page,
+  }) => {
+    const cuerpos: { id: string; confirmar?: boolean }[] = []
+    await page.route(/\/api\/panel\/contenido\/giro\/borrar$/, async (ruta) => {
+      const cuerpo = ruta.request().postDataJSON() as { id: string; confirmar?: boolean }
+      cuerpos.push(cuerpo)
+      const impacto = {
+        giro: { id: cuerpo.id, nombre: 'Taller de prueba' },
+        categoria: { id: 'servicios', nombre: 'Servicios de prueba' },
+        gustosDeLocalesBorrados: 0,
+        avisos: ['Ninguna página cambia.'],
+      }
+      await ruta.fulfill({
+        json: cuerpo.confirmar
+          ? {
+              ok: true,
+              confirmado: true,
+              seco: false,
+              pr: { url: 'https://example.test/pr/20', numero: 20, creada: true },
+              mensaje: 'Borrado enviado a la PR.',
+              impacto,
+            }
+          : {
+              ok: true,
+              confirmado: false,
+              seco: false,
+              pr: null,
+              mensaje: 'Esto es lo que cambiaría.',
+              impacto,
+            },
+      })
+    })
+
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const general = dialogo.locator('[data-giro][data-id="servicios-general"]')
+    const taller = dialogo.locator('[data-giro][data-id="servicios-taller"]')
+    await expect(general).toContainText('No se borra')
+    await expect(general.getByRole('button', { name: 'Borrar giro' })).toHaveCount(0)
+
+    // Primer paso: solo el impacto, sin confirmación mandada.
+    await taller.getByRole('button', { name: 'Borrar giro' }).click()
+    const impacto = taller.locator('.impacto-borrado')
+    await expect(impacto).toContainText('Si borras Taller de prueba')
+    await expect(impacto).toContainText('Ninguna página cambia')
+    expect(cuerpos).toEqual([{ id: 'servicios-taller' }])
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // "Mejor no" lo deja todo como estaba y devuelve el foco al botón.
+    await impacto.getByRole('button', { name: 'Mejor no' }).click()
+    await expect(impacto).toBeHidden()
+    await expect(taller.getByRole('button', { name: 'Borrar giro' })).toBeFocused()
+    expect(cuerpos).toHaveLength(1)
+
+    // Segundo paso: confirmar. El diálogo se cierra y la lista avisa de la PR.
+    await taller.getByRole('button', { name: 'Borrar giro' }).click()
+    await taller.getByRole('button', { name: 'Borrar este giro' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #20' })).toBeVisible()
+    expect(cuerpos.at(-1)).toEqual({ id: 'servicios-taller', confirmar: true })
+  })
+
+  test('con cambios sin guardar no se borra un giro: al terminar se cierra el formulario', async ({
+    page,
+  }) => {
+    const cuerpos: unknown[] = []
+    await page.route(/\/api\/panel\/contenido\/giro\/borrar$/, async (ruta) => {
+      cuerpos.push(ruta.request().postDataJSON())
+      await ruta.fulfill({ status: 500, json: { ok: false, problemas: ['no debía llamarse'] } })
+    })
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    await dialogo.locator('input[data-campo="labelEs"]').fill('Otro nombre sin guardar')
+    await dialogo
+      .locator('[data-giro][data-id="servicios-taller"]')
+      .getByRole('button', { name: 'Borrar giro' })
+      .click()
+    await expect(dialogo.locator('[data-problemas]')).toContainText('cambios sin guardar')
+    expect(cuerpos).toEqual([])
+  })
+
   test('un negocio nuevo no ofrece cambiar la dirección', async ({ page }) => {
     await abrirPanel(page)
     await irA(page, 'negocios', 'Negocios')
