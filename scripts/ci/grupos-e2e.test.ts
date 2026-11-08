@@ -56,6 +56,25 @@ describe('grupos de pruebas E2E', () => {
     for (const entrada of raiz) expect(entrada).not.toMatch(/\bargs:/)
   })
 
+  it('el trabajo de resultado espera a todos los demás, corre siempre y no admite nada que no sea éxito', () => {
+    const flujo = readFileSync('.github/workflows/ci.yml', 'utf8')
+    const trabajos = [
+      ...flujo.slice(flujo.indexOf('\njobs:')).matchAll(/^ {2}([a-z][\w-]*):\s*$/gm),
+    ]
+      .map((m) => m[1] ?? '')
+      .filter((id) => id !== 'resultado')
+    const resultado = flujo.slice(flujo.indexOf('\n  resultado:\n'))
+    const espera = (resultado.match(/needs:\s*\[([^\]]*)\]/)?.[1] ?? '')
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean)
+    // Si se añade un trabajo y no entra aquí, la regla de la rama deja de exigirlo sin que nada avise.
+    expect([...espera].sort()).toEqual([...trabajos].sort())
+    // Un trabajo omitido cuenta como éxito en GitHub: sin `always()` un E2E en rojo daría verde.
+    expect(resultado).toMatch(/if:\s*\$\{\{\s*always\(\)\s*\}\}/)
+    expect(resultado).toContain('trabajo.result !== "success"')
+  })
+
   it('el script entrega las rutas de los archivos de un grupo', () => {
     const salida = execFileSync('node', ['scripts/ci/archivos-del-grupo.ts', 'fichas'], {
       encoding: 'utf8',
@@ -65,9 +84,8 @@ describe('grupos de pruebas E2E', () => {
     )
   })
 
-  it('el script rechaza un grupo que no existe', () => {
+  it('el script rechaza un grupo que no existe', () =>
     expect(() =>
       execFileSync('node', ['scripts/ci/archivos-del-grupo.ts', 'no-existe'], { stdio: 'pipe' }),
-    ).toThrow()
-  })
+    ).toThrow())
 })
