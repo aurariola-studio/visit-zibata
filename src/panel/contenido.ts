@@ -43,6 +43,13 @@ import {
   pintarNegocios,
   pintarZonaNegocios,
 } from './contenido/negocios.ts'
+import {
+  alCambiarPlaza,
+  alPulsarPlaza,
+  enviarPlaza,
+  pintarPlaza,
+  pintarPlazas,
+} from './contenido/plazas.ts'
 import type { Datos, EstadoContenido, ModoContenido } from './contenido/tipos.ts'
 import { texto } from './contenido/tipos.ts'
 import { vista } from './contenido/vista.ts'
@@ -143,6 +150,7 @@ function pintarLista(): void {
   }
   vista.raiz.setAttribute('aria-busy', 'false')
   if (vista.modo === 'categorias') pintarCategorias()
+  else if (vista.modo === 'plazas') pintarPlazas()
   else pintarNegocios()
 }
 
@@ -154,6 +162,10 @@ async function alEnviar(evento: Event): Promise<void> {
   evento.preventDefault()
   if (formulario.dataset.editor === 'categoria') {
     await enviarCategoria(formulario, cargar)
+    return
+  }
+  if (formulario.dataset.editor === 'plaza') {
+    await enviarPlaza(formulario, cargar)
     return
   }
   await enviarNegocio(formulario, cargar)
@@ -181,6 +193,13 @@ function alPulsar(evento: Event): void {
       (fila) => fila.id === editarCategoria.dataset.editarCategoria,
     )
     if (categoria) pintarCategoria(categoria)
+    return
+  }
+
+  const editarPlaza = objetivo.closest<HTMLElement>('[data-editar-plaza]')
+  if (editarPlaza && vista.datos) {
+    const plaza = vista.datos.plazas.find((fila) => fila.id === editarPlaza.dataset.editarPlaza)
+    if (plaza) pintarPlaza(plaza)
     return
   }
 
@@ -216,6 +235,7 @@ function alPulsarEditor(evento: Event): void {
   }
   if (alPulsarCategoria(objetivo)) return
   if (!vista.formularioActual) return
+  if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return
   alPulsarFoto(objetivo)
 }
@@ -240,5 +260,6 @@ function alCambiarEditor(evento: Event): void {
 
   if (alCambiarFoto(objetivo)) return
   if (alCambiarCategoria(objetivo)) return
+  if (alCambiarPlaza(objetivo)) return
   alCambiarNegocio(objetivo)
 }

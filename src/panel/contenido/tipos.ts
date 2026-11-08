@@ -17,9 +17,14 @@ export interface Categoria {
   giros: Giro[]
 }
 
-interface PlazaResumen {
+export interface PlazaResumen {
   id: string
+  slug: string
   name: string
+  description: { es: string; en?: string } | null
+  address: string | null
+  coordinates: { lat: number; lng: number }
+  googleMapsUri?: string
   active: boolean
   comingSoon?: boolean
 }
@@ -71,7 +76,7 @@ export interface EstadoContenido {
   pr: { url: string; numero: number } | null
 }
 
-export type ModoContenido = 'negocios' | 'categorias'
+export type ModoContenido = 'negocios' | 'categorias' | 'plazas'
 
 export interface FormularioAbierto {
   id: string

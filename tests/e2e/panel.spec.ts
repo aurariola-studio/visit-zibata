@@ -84,8 +84,34 @@ const contenido = {
     },
   ],
   plazas: [
-    { id: 'plaza-uno', name: 'Plaza Uno', active: true },
-    { id: 'plaza-dos', name: 'Plaza Dos', active: true },
+    {
+      id: 'plaza-uno',
+      slug: 'plaza-uno',
+      name: 'Plaza Uno',
+      description: { es: 'Una plaza inventada.', en: 'An invented plaza.' },
+      address: 'Calle Inventada 1',
+      coordinates: { lat: 20.68, lng: -100.31 },
+      active: true,
+    },
+    {
+      id: 'plaza-dos',
+      slug: 'plaza-dos',
+      name: 'Plaza Dos',
+      description: null,
+      address: null,
+      coordinates: { lat: 20.69, lng: -100.32 },
+      active: true,
+    },
+    {
+      id: 'plaza-tres',
+      slug: 'plaza-tres',
+      name: 'Plaza Tres',
+      description: null,
+      address: null,
+      coordinates: { lat: 20.67, lng: -100.3 },
+      active: false,
+      comingSoon: true,
+    },
   ],
   places: [
     {
@@ -382,6 +408,145 @@ test.describe('Panel', () => {
     await page.getByRole('button', { name: 'Nuevo negocio' }).click()
     await expect(page.locator('#editor')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Borrar negocio' })).toHaveCount(0)
+  })
+
+  test('plazas: lista con su estado y sus locales', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await expect(page.getByText('Plaza Uno', { exact: true })).toBeVisible()
+    await expect(page.getByText('Próximamente', { exact: true })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Editar Plaza Dos' })).toBeVisible()
+    await sinDesplazamientoLateral(page)
+  })
+
+  test('editar una plaza sin cambiar lo que se ve se guarda directo', async ({ page }) => {
+    const cuerpos: Record<string, unknown>[] = []
+    await page.route(/\/api\/panel\/contenido\/plaza$/, async (ruta) => {
+      cuerpos.push(ruta.request().postDataJSON() as Record<string, unknown>)
+      await ruta.fulfill({
+        json: {
+          ok: true,
+          confirmado: true,
+          requiereConfirmacion: false,
+          seco: false,
+          pr: { url: 'https://example.test/pr/3', numero: 3, creada: false },
+          mensaje: 'Cambio enviado a la PR.',
+          impacto: {},
+        },
+      })
+    })
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo.locator('input[name="nombre"]')).toHaveValue('Plaza Uno')
+    await sinTextoRoto(dialogo)
+    await sinDesplazamientoLateral(page)
+
+    await dialogo.locator('input[name="direccion"]').fill('Calle Nueva 9')
+    await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'Añadido a la PR #3' })).toBeVisible()
+    expect(cuerpos).toHaveLength(1)
+    expect(cuerpos[0]).toMatchObject({
+      id: 'plaza-uno',
+      nombre: 'Plaza Uno',
+      direccion: 'Calle Nueva 9',
+      activa: true,
+      proximamente: false,
+    })
+    // El formulario nunca manda lo que no se edita.
+    expect(Object.keys(cuerpos[0] ?? {})).not.toContain('slug')
+    expect(Object.keys(cuerpos[0] ?? {})).not.toContain('geometry')
+  })
+
+  test('desactivar una plaza enseña el impacto y no guarda hasta confirmar', async ({ page }) => {
+    const cuerpos: Record<string, unknown>[] = []
+    await page.route(/\/api\/panel\/contenido\/plaza$/, async (ruta) => {
+      const cuerpo = ruta.request().postDataJSON() as Record<string, unknown>
+      cuerpos.push(cuerpo)
+      const impacto = {
+        plaza: { id: 'plaza-uno', nombre: 'Plaza Uno' },
+        cambiaActiva: true,
+        activaAntes: true,
+        activaDespues: false,
+        localesAntes: 1,
+        localesDespues: 0,
+        categoriasSinPagina: ['Servicios de prueba'],
+        categoriasNuevas: [],
+        avisos: ['La página de la zona deja de existir y su dirección da 404.'],
+      }
+      await ruta.fulfill({
+        json: cuerpo.confirmar
+          ? {
+              ok: true,
+              confirmado: true,
+              requiereConfirmacion: true,
+              seco: false,
+              pr: { url: 'https://example.test/pr/4', numero: 4, creada: true },
+              mensaje: 'Cambio enviado a la PR.',
+              impacto,
+            }
+          : {
+              ok: true,
+              confirmado: false,
+              requiereConfirmacion: true,
+              seco: false,
+              pr: null,
+              mensaje: 'Esto es lo que cambiaría.',
+              impacto,
+            },
+      })
+    })
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    const dialogo = page.locator('#editor')
+    await dialogo.getByLabel('Activa en la guía').uncheck()
+    await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+
+    const impacto = dialogo.locator('.impacto-borrado')
+    await expect(impacto).toContainText('pasa de activa a inactiva')
+    await expect(impacto).toContainText('Servicios de prueba')
+    await expect(impacto).toContainText('da 404')
+    expect(cuerpos).toHaveLength(1)
+    expect(cuerpos[0]?.confirmar).toBeUndefined()
+    await sinDesplazamientoLateral(page)
+    await sinTextoRoto(dialogo)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+
+    // "Mejor no" lo deja todo como estaba, y cambiar una casilla invalida el impacto mostrado.
+    await impacto.getByRole('button', { name: 'Mejor no' }).click()
+    await expect(impacto).toBeHidden()
+    expect(cuerpos).toHaveLength(1)
+
+    await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+    await dialogo.getByRole('button', { name: 'Guardar este cambio' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #4' })).toBeVisible()
+    expect(cuerpos.at(-1)?.confirmar).toBe(true)
+  })
+
+  test('activa y próximamente no van juntas y los errores salen en el campo', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Tres' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo.getByLabel('Plaza confirmada y en construcción')).toBeChecked()
+
+    await dialogo.getByLabel('Activa en la guía').check()
+    await expect(dialogo.getByLabel('Plaza confirmada y en construcción')).not.toBeChecked()
+
+    // Descripción a medias: el aviso va en el campo que falta.
+    await dialogo.locator('textarea[name="descripcionEs"]').fill('Solo en español')
+    await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+    await expect(dialogo.locator('textarea[name="descripcionEn"]')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    )
   })
 
   test('sin permiso el panel lo dice con palabras', async ({ page }) => {
