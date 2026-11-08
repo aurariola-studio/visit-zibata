@@ -11,6 +11,7 @@
 import { base64url, cumpleLaPrueba, digestDe } from '../src/lib/prueba-de-trabajo.ts'
 import { type EntornoAcceso, puedeVerElPanel } from './acceso.ts'
 import { fechaLocal } from './analitica.ts'
+import { borrarNegocio } from './borrado.ts'
 import { LUGARES } from './catalogo.ts'
 import { guardarCategorias } from './categorias.ts'
 import { contenido, guardarFoto, guardarNegocio, TOPE_FOTO } from './contenido.ts'
@@ -98,6 +99,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/evento': MAXIMO_BYTES,
   '/api/visitas': 1_300_000,
   '/api/panel/contenido/negocio': 128 * 1024,
+  '/api/panel/contenido/negocio/borrar': 4 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
   '/api/panel/contenido/foto': Math.ceil(TOPE_FOTO * 1.5),
 }
@@ -337,6 +339,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await guardarNegocio(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Borrar va en dos pasos (impacto y confirmación) por la misma ruta; ver worker/borrado.ts.
+  if (ruta === '/api/panel/contenido/negocio/borrar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await borrarNegocio(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)

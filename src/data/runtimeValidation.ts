@@ -21,7 +21,7 @@ import {
 } from './rules.ts'
 
 export interface RecordIssue {
-  dataset: 'categories' | 'plazas' | 'places'
+  dataset: 'categories' | 'plazas' | 'places' | 'redirects'
   id: string
   message: string
 }
@@ -250,3 +250,30 @@ export const validatePlazas = (records: unknown[]) =>
   keepValid<Plaza>(records, 'plazas', checkPlaza)
 export const validatePlaces = (records: unknown[]) =>
   keepValid<Place>(records, 'places', checkPlace)
+
+/** Un local borrado: solo hace falta su id, sus giros y su plaza; lo mal formado se omite. */
+export function validateRetired(records: unknown[]): {
+  valid: { id: string; giros: string[]; plazaId: string }[]
+  issues: RecordIssue[]
+} {
+  const valid: { id: string; giros: string[]; plazaId: string }[] = []
+  const issues: RecordIssue[] = []
+  for (const record of records) {
+    const fila = record as { id?: unknown; giros?: unknown; plazaId?: unknown }
+    if (
+      typeof fila?.id === 'string' &&
+      typeof fila.plazaId === 'string' &&
+      Array.isArray(fila.giros) &&
+      fila.giros.every((giro) => typeof giro === 'string')
+    ) {
+      valid.push({ id: fila.id, giros: fila.giros as string[], plazaId: fila.plazaId })
+    } else {
+      issues.push({
+        dataset: 'redirects',
+        id: String(fila?.id ?? '?'),
+        message: 'local borrado mal formado',
+      })
+    }
+  }
+  return { valid, issues }
+}

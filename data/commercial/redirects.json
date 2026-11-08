@@ -1,0 +1,6 @@
+{
+  "$schema": "./schemas/redirects.schema.json",
+  "version": 1,
+  "updatedAt": "2026-11-07",
+  "redirects": []
+}

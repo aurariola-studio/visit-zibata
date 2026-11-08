@@ -14,7 +14,7 @@ export function girosOf(place: Place, catalog: Catalog): Giro[] {
 }
 
 /** Los giros del local tal como los guarda el dato: lo que filtra, busca y ordena. */
-export function allGiroIds(place: Place): string[] {
+export function allGiroIds(place: Pick<Place, 'giros'>): string[] {
   return [...place.giros]
 }
 

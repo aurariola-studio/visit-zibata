@@ -18,6 +18,7 @@ import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
 import { ProfileIcon } from '../../components/icons/ProfileIcon.tsx'
 import { DEFAULT_PLAZA_TONE, type PlazaTone, plazaTones, plazaVars } from '../../config/palette.ts'
 import { useCatalog } from '../../data/CatalogContext.tsx'
+import { markedPlace } from '../../data/catalog.ts'
 import { formatNumber, localized, t, useLocale } from '../../i18n/index.ts'
 import { alPulsarEnlace } from '../../lib/navegacion.ts'
 import { type InfoTopic, rutaDeInfo, rutaDeLugar } from '../../lib/url-state.ts'
@@ -178,7 +179,8 @@ function useJourney(marks: Marks): Journey {
         interactions: new Map(),
         visits: marks.visits,
       },
-      find,
+      // Un local que ya no se muestra sigue diciendo qué te gusta.
+      (id) => markedPlace(catalog, id),
       Date.now(),
       (giro) => catalog.categoryOfGiro.get(giro)?.id,
     )

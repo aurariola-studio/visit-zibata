@@ -9,9 +9,14 @@ import {
   placesFixture,
   plazasFixture,
 } from '../test/fixtures.ts'
-import { loadCatalog, sanitizeDataset } from './catalog.ts'
+import { loadCatalog, markedPlace, sanitizeDataset } from './catalog.ts'
 import type { PlacesRepository } from './PlacesRepository.ts'
-import { validateCategories, validatePlaces, validatePlazas } from './runtimeValidation.ts'
+import {
+  validateCategories,
+  validatePlaces,
+  validatePlazas,
+  validateRetired,
+} from './runtimeValidation.ts'
 import { CategorySchema, PlaceSchema, PlazaSchema } from './schemas.ts'
 
 const bounds = { west: -100.37, south: 20.65, east: -100.29, north: 20.705 }
@@ -197,5 +202,66 @@ describe('sanitizeDataset y loadCatalog', () => {
     }
     await expect(loadCatalog(repository)).rejects.toThrow('No hay datos comerciales válidos')
     warn.mockRestore()
+  })
+})
+
+describe('lo que ya no se muestra sigue enseñando gustos', () => {
+  const base = {
+    getCategories: async () => categoriesFixture,
+    getPlazas: async () => plazasFixture,
+  }
+  const oculto = makePlace({
+    id: 'oculto',
+    plazaId: 'plaza-norte',
+    giros: ['pizza'],
+    active: false,
+  })
+
+  it('un local oculto conserva sus giros y su plaza; uno visible, no', async () => {
+    const catalog = await loadCatalog({
+      ...base,
+      getPlaces: async () => [...placesFixture, oculto],
+    })
+    expect(catalog.placeById.has('oculto')).toBe(false)
+    expect(markedPlace(catalog, 'oculto')).toEqual({ giros: ['pizza'], plazaId: 'plaza-norte' })
+    const visible = placesFixture.find((fila) => fila.active)
+    expect(visible && catalog.retiredById.has(visible.id)).toBe(false)
+    expect(visible && markedPlace(catalog, visible.id)).toBe(
+      catalog.placeById.get(visible?.id ?? ''),
+    )
+  })
+
+  it('un local borrado entra por su huella en redirects.json', async () => {
+    const catalog = await loadCatalog({
+      ...base,
+      getPlaces: async () => placesFixture,
+      getRetired: async () => [{ id: 'borrado', giros: ['sushi'], plazaId: 'plaza-norte' }],
+    })
+    expect(catalog.placeById.has('borrado')).toBe(false)
+    expect(markedPlace(catalog, 'borrado')).toEqual({ giros: ['sushi'], plazaId: 'plaza-norte' })
+    expect(markedPlace(catalog, 'nunca-existio')).toBeUndefined()
+  })
+
+  it('si el archivo de borrados falla, la guía carga igual', async () => {
+    const catalog = await loadCatalog({
+      ...base,
+      getPlaces: async () => placesFixture,
+      getRetired: async () => {
+        throw new Error('sin red')
+      },
+    })
+    expect(catalog.places.length).toBeGreaterThan(0)
+    expect(markedPlace(catalog, 'borrado')).toBeUndefined()
+  })
+
+  it('lo mal formado se omite y lo válido pasa', () => {
+    const { valid, issues } = validateRetired([
+      { id: 'a', giros: ['pizza'], plazaId: 'p' },
+      { id: 'b', giros: 'pizza', plazaId: 'p' },
+      { giros: ['pizza'], plazaId: 'p' },
+      null,
+    ])
+    expect(valid).toEqual([{ id: 'a', giros: ['pizza'], plazaId: 'p' }])
+    expect(issues).toHaveLength(3)
   })
 })

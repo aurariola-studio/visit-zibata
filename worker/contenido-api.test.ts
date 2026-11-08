@@ -163,3 +163,57 @@ describe('la API de fotos', () => {
     expect(respuesta?.status).toBe(403)
   })
 })
+
+describe('borrar un negocio', () => {
+  const borrar = (cuerpo: unknown, sitio = 'same-origin', extra: Record<string, string> = {}) =>
+    pedir('/api/panel/contenido/negocio/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio, ...extra },
+      body: JSON.stringify(cuerpo),
+    })
+
+  /** Un id cualquiera de la guía: la prueba no nombra ningún local. */
+  const unId = async (): Promise<string> => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      places: { id: string }[]
+    }
+    return datos.places[0]?.id ?? ''
+  }
+
+  it('sin confirmar responde con el impacto y no guarda', async () => {
+    const respuesta = await borrar({ id: await unId() })
+    expect(respuesta?.status).toBe(200)
+    const datos = (await respuesta?.json()) as {
+      ok: boolean
+      confirmado: boolean
+      impacto: { redirecciones: unknown[] }
+    }
+    expect(datos.ok).toBe(true)
+    expect(datos.confirmado).toBe(false)
+    expect(datos.impacto.redirecciones).toHaveLength(2)
+  })
+
+  it('un id que no existe es un 400 con el problema', async () => {
+    const respuesta = await borrar({ id: 'no-existe-este-local' })
+    expect(respuesta?.status).toBe(400)
+  })
+
+  it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {
+    const respuesta = await borrar({ id: await unId(), confirmar: true }, 'cross-site')
+    expect(respuesta?.status).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee', async () => {
+    const respuesta = await borrar({ id: 'x'.repeat(6000) })
+    expect(respuesta?.status).toBe(413)
+  })
+
+  it('un JSON roto es un 400 y no una caída', async () => {
+    const respuesta = await pedir('/api/panel/contenido/negocio/borrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': 'same-origin' },
+      body: '{no es json',
+    })
+    expect(respuesta?.status).toBe(400)
+  })
+})

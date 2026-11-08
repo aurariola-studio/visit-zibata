@@ -216,7 +216,7 @@ function alPulsarEditor(evento: Event): void {
   }
   if (alPulsarCategoria(objetivo)) return
   if (!vista.formularioActual) return
-  if (alPulsarNegocio(objetivo)) return
+  if (alPulsarNegocio(objetivo, cargar)) return
   alPulsarFoto(objetivo)
 }
 
