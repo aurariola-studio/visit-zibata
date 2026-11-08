@@ -31,6 +31,7 @@ import {
   MIOS,
   QUITAR,
 } from './favoritos.ts'
+import { guardarContorno } from './geometria-plaza.ts'
 import type { EntornoGitHub } from './github.ts'
 import {
   calificacionesDe,
@@ -108,6 +109,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/negocio/slug': 4 * 1024,
   '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
+  '/api/panel/contenido/plaza/contorno': 16 * 1024,
   '/api/panel/contenido/plaza/slug': 4 * 1024,
   '/api/panel/contenido/categoria/slug': 4 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
@@ -405,6 +407,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await borrarPlaza(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // El contorno de una plaza, con vista de impacto; ver worker/geometria-plaza.ts.
+  if (ruta === '/api/panel/contenido/plaza/contorno' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await guardarContorno(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)

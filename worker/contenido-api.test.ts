@@ -261,6 +261,68 @@ describe('borrar una plaza', () => {
   })
 })
 
+describe('el contorno de una plaza', () => {
+  const guardar = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir('/api/panel/contenido/plaza/contorno', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+
+  /** Una plaza cualquiera del dataset: la prueba no nombra ninguna. */
+  const unaPlaza = async () => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      plazas: { id: string; geometry: unknown }[]
+    }
+    return datos.plazas[0] ?? { id: '', geometry: null }
+  }
+
+  it('un contorno que no cumple las reglas es un 400 que dice cuáles, aunque se confirme', async () => {
+    const plaza = await unaPlaza()
+    const respuesta = await guardar({
+      id: plaza.id,
+      geometria: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 0],
+          ],
+        ],
+      },
+      confirmar: true,
+    })
+    expect(respuesta?.status).toBe(400)
+    const datos = (await respuesta?.json()) as { problemas: string[] }
+    expect(datos.problemas.length).toBeGreaterThan(0)
+  })
+
+  it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {
+    const plaza = await unaPlaza()
+    const respuesta = await guardar(
+      { id: plaza.id, geometria: plaza.geometry, confirmar: true },
+      'cross-site',
+    )
+    expect(respuesta?.status).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee', async () => {
+    const respuesta = await guardar({ id: 'x'.repeat(20_000), geometria: null })
+    expect(respuesta?.status).toBe(413)
+  })
+
+  it('un JSON roto es un 400 y no una caída', async () => {
+    const respuesta = await pedir('/api/panel/contenido/plaza/contorno', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': 'same-origin' },
+      body: '{no es json',
+    })
+    expect(respuesta?.status).toBe(400)
+  })
+})
+
 describe('borrar una categoría', () => {
   const borrar = (cuerpo: unknown, sitio = 'same-origin') =>
     pedir('/api/panel/contenido/categoria/borrar', {

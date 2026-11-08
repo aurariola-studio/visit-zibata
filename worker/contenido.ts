@@ -396,6 +396,9 @@ export const slugsRedirigidos = (
 
 const [oeste, sur, este, norte] = extent.areaBbox as [number, number, number, number]
 export const LIMITES = { west: oeste, south: sur, east: este, north: norte }
+/** El anillo exterior del contorno de Zibatá: dentro de él tiene que caer el contorno de una plaza. */
+export const CONTORNO_DE_ZIBATA: number[][] =
+  (extent.boundary as { coordinates: number[][][] }).coordinates[0] ?? []
 
 const local = (): Cargado['crudo'] => ({
   categories: categoriasJson as unknown as Crudo,
