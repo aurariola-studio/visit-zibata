@@ -39,6 +39,7 @@
           </button>
           <button type="button" data-vista="negocios">Negocios</button>
           <button type="button" data-vista="categorias">Categorías</button>
+          <button type="button" data-vista="plazas">Plazas</button>
         </nav>
 
         <div class="rail-pie">
@@ -73,6 +74,17 @@
         </header>
         <div class="editor-cuerpo" data-editor-cuerpo></div>
       </div>
+    </dialog>
+
+    <dialog id="confirmar" class="confirmar" aria-labelledby="confirmar-titulo" aria-describedby="confirmar-texto">
+      <form method="dialog" class="confirmar-caja">
+        <h2 id="confirmar-titulo">¿Descartar los cambios?</h2>
+        <p id="confirmar-texto">Lo que cambiaste en este formulario no se ha guardado y se perdería.</p>
+        <div class="confirmar-acciones">
+          <button type="submit" value="descartar" data-descartar>Descartar cambios</button>
+          <button type="submit" value="seguir" data-seguir autofocus>Seguir editando</button>
+        </div>
+      </form>
     </dialog>
 
     <script type="module" src="/src/panel/panel.ts"></script>

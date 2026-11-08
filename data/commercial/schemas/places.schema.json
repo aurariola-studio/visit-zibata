@@ -44,15 +44,6 @@
               "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
             }
           },
-          "secundarios": {
-            "default": [],
-            "maxItems": 2,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-            }
-          },
           "description": {
             "anyOf": [
               {
@@ -422,7 +413,6 @@
           "name",
           "plazaId",
           "giros",
-          "secundarios",
           "description",
           "hours",
           "location",

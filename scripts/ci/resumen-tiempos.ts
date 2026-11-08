@@ -13,10 +13,14 @@ interface Resultado {
   duration: number
 }
 interface Prueba {
+  projectName?: string
+  /** `flaky`: falló y pasó al reintentarla. */
+  status?: string
   results?: Resultado[]
 }
 interface Especificacion {
   file: string
+  title?: string
   tests?: Prueba[]
 }
 interface Suite {
@@ -34,6 +38,8 @@ const informe = JSON.parse(readFileSync(ruta, 'utf8')) as Suite
 
 const msPorArchivo = new Map<string, number>()
 const pruebasPorArchivo = new Map<string, number>()
+const msPorProyecto = new Map<string, number>()
+const intermitentes: string[] = []
 
 function recorrer(suite: Suite): void {
   for (const especificacion of suite.specs ?? []) {
@@ -41,6 +47,11 @@ function recorrer(suite: Suite): void {
       // Con reintentos hay varios resultados: el tiempo gastado es la suma de todos.
       const ms = (prueba.results ?? []).reduce((total, resultado) => total + resultado.duration, 0)
       msPorArchivo.set(especificacion.file, (msPorArchivo.get(especificacion.file) ?? 0) + ms)
+      const proyecto = prueba.projectName ?? '?'
+      msPorProyecto.set(proyecto, (msPorProyecto.get(proyecto) ?? 0) + ms)
+      if (prueba.status === 'flaky') {
+        intermitentes.push(`${especificacion.file} (${proyecto}): ${especificacion.title ?? '?'}`)
+      }
       pruebasPorArchivo.set(
         especificacion.file,
         (pruebasPorArchivo.get(especificacion.file) ?? 0) + 1,
@@ -69,3 +80,23 @@ for (const [archivo, ms] of filas) {
 console.log(
   `| **Total** | **${[...pruebasPorArchivo.values()].reduce((a, b) => a + b, 0)}** | **${minutos(total)}** |`,
 )
+
+console.log('')
+console.log('### Tiempo de prueba por proyecto')
+console.log('')
+console.log('| Proyecto | Minutos |')
+console.log('| --- | ---: |')
+for (const [proyecto, ms] of [...msPorProyecto].sort((a, b) => b[1] - a[1])) {
+  console.log(`| ${proyecto} | ${minutos(ms)} |`)
+}
+
+// Una prueba que pasa al reintentar no pone el CI en rojo, así que sin esta lista nadie se entera.
+// DORA: "los fallos de las pruebas deben indicar un defecto real"; una intermitente se arregla o se aparta.
+if (intermitentes.length > 0) {
+  console.log('')
+  console.log(`### Pruebas intermitentes (${intermitentes.length})`)
+  console.log('')
+  console.log('Fallaron y pasaron al reintentar. Hay que arreglarlas o apartarlas, no ignorarlas.')
+  console.log('')
+  for (const linea of intermitentes) console.log(`- ${linea}`)
+}

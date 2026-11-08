@@ -221,6 +221,14 @@
   color: var(--olive-700);
 }
 
+/* Las dos salidas del estado vacío, lado a lado si caben y en columna si no. */
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
 .note {
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);

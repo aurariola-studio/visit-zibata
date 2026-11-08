@@ -102,11 +102,30 @@ describe('la puerta, de punta a punta', () => {
     expect(await puedeVerElPanel(con({ [CABECERA_ACCESS]: testigo }), entorno, AHORA)).toBe(false)
   })
 
-  it('la salida de desarrollo es una variable explícita, no el nombre de host', async () => {
-    // Antes era `hostname === 'localhost'`, que depende de qué nombre llega al Worker. Ahora hay que
-    // pedirlo a mano, y en producción esa variable no existe.
-    expect(await puedeVerElPanel(con(), { PANEL_ABIERTO: 'si' }, AHORA)).toBe(true)
-    expect(await puedeVerElPanel(con(), { PANEL_ABIERTO: 'no' }, AHORA)).toBe(false)
+  it('la salida de desarrollo pide la variable explícita Y un nombre de bucle local', async () => {
+    const local = (url: string) => new Request(url)
+    for (const url of [
+      'http://localhost:8787/api/panel',
+      'http://127.0.0.1:8787/api/panel',
+      'http://[::1]:8787/api/panel',
+    ]) {
+      expect(await puedeVerElPanel(local(url), { PANEL_ABIERTO: 'si' }, AHORA)).toBe(true)
+    }
+    expect(
+      await puedeVerElPanel(local('http://localhost:8787/'), { PANEL_ABIERTO: 'no' }, AHORA),
+    ).toBe(false)
+  })
+
+  it('el flag no abre el panel en un nombre que no es de esta máquina', async () => {
+    // El caso del DNS rebinding: la página llega con su propio nombre aunque el destino sea 127.0.0.1.
+    for (const url of [
+      'https://visitzibata.com/api/panel',
+      'http://rebind.example:8787/api/panel',
+      'http://localhost.evil.example/api/panel',
+      'http://127.0.0.1.evil.example/api/panel',
+    ]) {
+      expect(await puedeVerElPanel(new Request(url), { PANEL_ABIERTO: 'si' }, AHORA)).toBe(false)
+    }
   })
 })
 

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { LUGARES } from './catalogo.ts'
 import {
   ANADIR,
   cambioDe,
@@ -41,8 +42,24 @@ describe('lo que pide el navegador', () => {
   })
 
   it('pone un tope por petición', () => {
-    const demasiados = Array.from({ length: MAXIMO_POR_PETICION + 1 }, (_, i) => `lugar-${i}`)
+    // Con lugares reales: uno inventado se filtraría solo y el tope no llegaría a probarse.
+    const demasiados = [...LUGARES].slice(0, MAXIMO_POR_PETICION + 1)
+    expect(demasiados).toHaveLength(MAXIMO_POR_PETICION + 1)
     expect(cambioDe({ anadir: demasiados })).toBeNull()
+  })
+
+  it('solo se puede guardar un lugar que existe en el catálogo', () => {
+    const cambio = cambioDe({ anadir: ['tomassa', 'lugar-inventado', 'constructor'] })
+    expect(cambio).toEqual({ anadir: ['tomassa'], quitar: [] })
+    // Un gesto que solo trae slugs inventados no deja nada que guardar.
+    expect(cambioDe({ anadir: ['lugar-inventado'] })).toBeNull()
+  })
+
+  it('quitar acepta cualquier slug con forma de tal, para poder borrar lo que ya no existe', () => {
+    expect(cambioDe({ quitar: ['lugar-que-ya-no-existe'] })).toEqual({
+      anadir: [],
+      quitar: ['lugar-que-ya-no-existe'],
+    })
   })
 })
 
@@ -60,10 +77,9 @@ describe('las reglas del conteo público viven en el servidor', () => {
 
   it('el tope por cuenta sigue al catálogo y no se queda en un número de otra época', () => {
     /*
-     * El Worker no tiene los datos, así que el número se escribe a mano. Esto es lo que impide que
-     * se quede obsoleto en silencio: nadie guarda más lugares de los que hay, y si el catálogo se
-     * acerca al tope, esta prueba falla y obliga a revisarlo. El 500 anterior, con 101 locales, no
-     * freno nunca nada.
+     * El número se escribe a mano. Esto es lo que impide que se quede obsoleto en silencio: nadie
+     * guarda más lugares de los que hay, y si el catálogo se acerca al tope, esta prueba falla y
+     * obliga a revisarlo. El 500 anterior, con 101 locales, no freno nunca nada.
      */
     const datos = JSON.parse(readFileSync('data/commercial/places.json', 'utf8'))
     const lugares: number = (datos.places ?? datos).length

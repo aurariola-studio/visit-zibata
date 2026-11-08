@@ -32,6 +32,7 @@ import { MapLoader } from '../features/map/MapLoader.tsx'
 import { realismoActivo } from '../features/map/realismo/modo.ts'
 import type { MapStatus } from '../features/map/types.ts'
 import { hasSeenOnboarding } from '../features/onboarding/seen.ts'
+import { PlaceSkeleton } from '../features/places/PlaceSkeleton.tsx'
 import { ExplorePanel } from '../features/plazas/ExplorePanel.tsx'
 import { PlazaPanel } from '../features/plazas/PlazaPanel.tsx'
 import { ResultsPanel } from '../features/plazas/ResultsPanel.tsx'
@@ -363,7 +364,8 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
         right: controlsInRow ? 16 : 64,
       }
 
-  // Lo que hay en la lista ahora mismo: con una plaza abierta, sus lugares; buscando, todo Zibatá.
+  // Lo que hay en la lista ahora mismo: con una plaza abierta, sus lugares; buscando, lo que haya en
+  // la plaza elegida (o en todo Zibatá si no hay ninguna).
   // No depende de si además hay una ficha abierta encima.
   //
   // Ya no se pinta en la barra de filtros (lo dicen las cabeceras de los paneles, junto a la lista
@@ -391,11 +393,8 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
         <AppErrorBoundary variant="panel">
           <Suspense
             fallback={
-              // La ficha viaja en su propio trozo. Con el hueco vacío, el panel se veía roto mientras
-              // llegaba; con el aviso, se ve que está cargando.
-              <p className={styles.panelLoading} role="status">
-                {t('data.loading')}
-              </p>
+              // La ficha viaja en su propio trozo: mientras llega, el esqueleto ocupa su forma.
+              <PlaceSkeleton />
             }
           >
             <PlaceDetail
@@ -432,7 +431,15 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
       break
     case 'results':
       content = (
-        <ResultsPanel places={panel.places} onOpenPlace={openPlace} onClearFilters={closeResults} />
+        <ResultsPanel
+          places={panel.places}
+          onOpenPlace={openPlace}
+          onClearFilters={closeResults}
+          plazaName={
+            state.selectedPlazaId ? catalog.plazaById.get(state.selectedPlazaId)?.name : undefined
+          }
+          onClearPlaza={() => selectPlaza(null)}
+        />
       )
       break
     case 'explore':

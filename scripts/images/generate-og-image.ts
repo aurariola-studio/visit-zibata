@@ -3,7 +3,8 @@
  *
  * Genera las imágenes sociales public/og-image.png (español) y public/og-image-en.png (inglés), de
  * 1200×630, a partir del propio mapa: abre la app, oculta la interfaz, lo encuadra, superpone la
- * marca y captura. Requiere el navegador de Playwright (npx playwright install chromium).
+ * marca y captura. Del mismo mapa deja el recorte que usa el tutorial en public/tutorial/mapa.webp.
+ * Requiere el navegador de Playwright (npx playwright install chromium).
  *
  * Hay una por idioma y no una por local (ver prerender.ts): es lo que se ve al compartir cualquier
  * página del sitio, así que el texto va en el idioma de la página. Es una pieza de marca y de
@@ -16,6 +17,7 @@
  * `style-src 'self'` y el navegador rechaza el addStyleTag de aquí abajo.
  */
 import { readFileSync } from 'node:fs'
+import { mkdir } from 'node:fs/promises'
 import { parseArgs } from 'node:util'
 import { chromium } from '@playwright/test'
 import sharp from 'sharp'
@@ -244,6 +246,14 @@ try {
       .toFile(`${ROOT}public/${archivo}`)
     console.log(`✓ public/${archivo} (Special Gothic cargada)`)
   }
+
+  // El paso del mapa del tutorial muestra el mismo mapa, recortado y sin la marca encima.
+  await mkdir(`${ROOT}public/tutorial`, { recursive: true })
+  await sharp(`${ROOT}public/og-image.png`)
+    .extract({ left: 500, top: 0, width: 700, height: 400 })
+    .webp({ quality: 82 })
+    .toFile(`${ROOT}public/tutorial/mapa.webp`)
+  console.log('✓ public/tutorial/mapa.webp')
 } finally {
   await browser.close()
 }

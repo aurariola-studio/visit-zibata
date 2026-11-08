@@ -18,6 +18,25 @@
   --aro-abierto: var(--lime-50);
 }
 
+/* En una lista de muestra, la fila baja para que quepan varias sin tocar la letra del resto. */
+.card[data-compact] {
+  padding-right: var(--space-1);
+}
+
+.card[data-compact] .main {
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+}
+
+.card[data-compact] .thumb {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.card[data-compact] .name {
+  font-size: var(--text-sm);
+}
+
 /*
  * La tarjeta entera es el enlace al lugar. Sin subrayado ni color de enlace: lo que manda es la
  * tipografía de la tarjeta, y lo que marca que se puede pulsar es que toda la pieza responde.
@@ -146,8 +165,8 @@
 /*
  * El recorte va aquí y no en la fila: en un contenedor flex, `text-overflow` no alcanza al texto
  * suelto, así que la línea se cortaba a media palabra y sin puntos suspensivos. Hace falta para
- * cualquier local con giros de nombre largo, tenga secundarios o no: dieciséis de los ciento uno
- * pasan de treinta caracteres.
+ * cualquier local con giros de nombre largo: dieciséis de los ciento uno pasan de treinta
+ * caracteres.
  */
 .categoryText {
   min-width: 0;

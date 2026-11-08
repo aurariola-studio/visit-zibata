@@ -127,6 +127,7 @@
   .pildora[aria-pressed="true"],
   .pildora[aria-checked="true"],
   .pildora[aria-current="true"],
+  .pildora[aria-selected="true"],
   .pildora:has(input:checked)
 ) {
   color: var(--sand-25);
@@ -139,6 +140,7 @@
   .pildora[aria-pressed="true"]:hover:not(:disabled),
   .pildora[aria-checked="true"]:hover:not(:disabled),
   .pildora[aria-current="true"]:hover,
+  .pildora[aria-selected="true"]:hover,
   .pildora:has(input:checked):hover
 ) {
   background: var(--hover-strong);

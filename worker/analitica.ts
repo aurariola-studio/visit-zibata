@@ -84,6 +84,9 @@ function paginaDe(peticion: PeticionObservada): string | null {
   } catch {
     return null
   }
+  // Todas las rutas de la guía son ASCII sin escapes (los slugs salen de `slugDe`). Una con `%` es un
+  // alias codificado de otra (`%74omassa` por `tomassa`) y cada variante sería una fila nueva.
+  if (ruta.includes('%') || ruta.length > 200) return null
   // El español lleva `/es` desde el 28 de octubre de 2026, pero la fila sigue siendo la de siempre
   // (`/lugar/x`, `/`): así el historial y el panel no se parten en dos. El idioma ya dice que es español.
   ruta = ruta.replace(/^\/es(?=\/|$)/, '') || '/'

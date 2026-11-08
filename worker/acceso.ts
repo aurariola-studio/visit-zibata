@@ -95,6 +95,16 @@ export function olvidarClaves(): void {
   claves = null
 }
 
+/** ¿La URL apunta a esta misma máquina? `new URL` ya devuelve `[::1]` con corchetes. */
+export function esBucleLocal(url: string): boolean {
+  try {
+    const nombre = new URL(url).hostname
+    return nombre === 'localhost' || nombre === '127.0.0.1' || nombre === '[::1]'
+  } catch {
+    return false
+  }
+}
+
 /**
  * ¿Puede ver el panel quien hace esta petición?
  *
@@ -105,9 +115,11 @@ export async function puedeVerElPanel(
   entorno: EntornoAcceso,
   ahora = Date.now(),
 ): Promise<boolean> {
-  // La salida de desarrollo. No es el nombre de host: eso se puede falsificar con una cabecera Host
-  // en según qué topología, y además dependía de que nadie publicara el Worker en workers.dev.
-  if (entorno.PANEL_ABIERTO === 'si') return true
+  // La salida de desarrollo. El flag solo vale si la petición llegó a un nombre de bucle local: una
+  // página que reasigna su DNS (rebinding) hacia 127.0.0.1 llega con su propio nombre, no con
+  // `localhost`, y no entra. El flag sigue sin estar en ningún archivo de despliegue; esto cubre el
+  // caso de que se cuele en uno, que serviría el panel entero a cualquiera.
+  if (entorno.PANEL_ABIERTO === 'si') return esBucleLocal(peticion.url)
 
   const team = entorno.ACCESS_TEAM?.trim()
   const aud = entorno.ACCESS_AUD?.trim()

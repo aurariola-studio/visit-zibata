@@ -1,5 +1,23 @@
 import { expect, test } from '@playwright/test'
-import { elegirZona, openApp, panel, placesInCategory, placesInPlaza } from './helpers.ts'
+import {
+  AJENA,
+  CATEGORIA_EN_ZONA,
+  CATEGORIA_GRANDE,
+  CON_ACENTO,
+  CON_ERROR,
+  conPalabraQueEmpieza,
+  elegirZona,
+  esc,
+  LOCAL_BUSCABLE,
+  openApp,
+  POR_SINONIMO,
+  panel,
+  placesInCategory,
+  placesInPlaza,
+  TERMINOS_LITERALES,
+  ZONA_B,
+  ZONA_GRANDE,
+} from './helpers.ts'
 
 test.describe('Búsqueda y filtros', () => {
   test('encuentra lugares ignorando acentos, con sinónimos y con errores menores', async ({
@@ -8,25 +26,21 @@ test.describe('Búsqueda y filtros', () => {
     await openApp(page)
     const search = page.getByRole('searchbox', { name: 'Buscar lugares' })
     const region = panel(page)
+    const ficha = (nombre: string) =>
+      region.getByRole('link', { name: `Ver detalles de ${nombre}` })
 
-    await search.fill('cafe')
+    // Sin el acento que lleva su nombre.
+    await search.fill(CON_ACENTO.consulta)
     await expect(region.getByRole('heading', { name: 'Resultados' })).toBeVisible()
-    await expect(
-      region.getByRole('link', { name: 'Ver detalles de Good Morning Coffee' }),
-    ).toBeVisible()
+    await expect(ficha(CON_ACENTO.place.name)).toBeVisible()
 
-    await search.fill('coffee')
-    await expect(
-      region.getByRole('link', { name: 'Ver detalles de D’Lu Coffee & Bakery' }),
-    ).toBeVisible()
+    // Por el sinónimo de su giro: ninguna palabra de su nombre ni de su descripción es esa.
+    await search.fill(POR_SINONIMO.consulta)
+    await expect(ficha(POR_SINONIMO.place.name)).toBeVisible()
 
-    await search.fill('pizeria')
-    await expect(region.getByRole('link', { name: "Ver detalles de Domino's" })).toBeVisible()
-
-    await search.fill('helado')
-    await expect(
-      region.getByRole('link', { name: "Ver detalles de Husky's Ice Cream" }),
-    ).toBeVisible()
+    // Con una letra de menos en el nombre: sin coincidencia literal en nadie, entra la tolerancia.
+    await search.fill(CON_ERROR.consulta)
+    await expect(ficha(CON_ERROR.place.name)).toBeVisible()
   })
 
   test('una palabra con coincidencias literales no arrastra parecidos lejanos', async ({
@@ -35,56 +49,62 @@ test.describe('Búsqueda y filtros', () => {
     await openApp(page)
     const search = page.getByRole('searchbox', { name: 'Buscar lugares' })
     const region = panel(page)
-    // Primero quien sirve pasta; detrás, el resto de "Italiana" (su categoría, incluidos los
-    // locales cuyo segundo giro es una pizzería).
-    await search.fill('pasta')
-    await expect(region.getByRole('link', { name: /^Ver detalles de/ })).toHaveCount(
-      placesInCategory('italiana'),
-    )
-    await expect(
-      region.getByRole('link', { name: /^Ver detalles de/ }).first(),
-    ).toHaveAccessibleName('Ver detalles de Tomassa Almacén de Pastas')
-    // Todos llevan "bar" literal en su nombre, categoría o descripción: ninguno entra por parecido.
-    await search.fill('bar')
-    // Entra lo que lleva "bar" en el nombre, en la categoría o en la descripción…
-    await expect(
-      region.getByRole('link', { name: 'Ver detalles de Wicklow Irish Pub' }),
-    ).toBeVisible()
-    // …y no entra nada por parecido: "Bagel" no empieza por "bar".
-    await expect(region.getByRole('link', { name: 'Ver detalles de Mr. Bagel' })).toHaveCount(0)
-    // La tolerancia a errores sigue funcionando cuando no hay coincidencias literales.
-    await search.fill('rometa')
-    await expect(
-      region.getByRole('link', { name: 'Ver detalles de Rometta Gastrobar' }),
-    ).toBeVisible()
+    const enlaces = region.getByRole('link', { name: /^Ver detalles de/ })
+
+    for (const termino of TERMINOS_LITERALES) {
+      // Lo que devuelve una búsqueda literal: los locales con una palabra que EMPIEZA por el término
+      // (en su nombre, su zona, su categoría, sus giros, sus sinónimos o su descripción).
+      const esperados = conPalabraQueEmpieza(termino)
+      expect(esperados.length, termino).toBeGreaterThan(0)
+      await search.fill(termino)
+      await expect(enlaces, termino).toHaveCount(esperados.length)
+      // Y ninguno más: nada entra "por parecido" ("pasta" no trae "pastor", "bar" no trae "barista").
+      const nombres = (await enlaces.evaluateAll((nodos) =>
+        nodos.map((nodo) => nodo.getAttribute('aria-label') ?? ''),
+      )) as string[]
+      expect([...new Set(nombres)].sort(), termino).toEqual(
+        [...new Set(esperados.map((place) => `Ver detalles de ${place.name}`))].sort(),
+      )
+    }
   })
 
   test('escribir con una ficha abierta no quita el foco del buscador', async ({ page }) => {
-    await openApp(page, { path: 'lugar/el-hornero' })
+    await openApp(page, { path: `lugar/${LOCAL_BUSCABLE.slug}` })
     const search = page.getByRole('searchbox', { name: 'Buscar lugares' })
     await search.click()
     // La primera letra cierra la ficha y monta otro panel detrás: el foco se queda donde se escribe.
-    await search.pressSequentially('hor', { delay: 120 })
+    const letras = LOCAL_BUSCABLE.name.slice(0, 3).toLowerCase()
+    await search.pressSequentially(letras, { delay: 120 })
     await expect(search).toBeFocused()
-    await expect(search).toHaveValue('hor')
+    await expect(search).toHaveValue(letras)
     await expect(
-      panel(page).getByRole('link', { name: 'Ver detalles de El Hornero' }),
+      panel(page).getByRole('link', { name: `Ver detalles de ${LOCAL_BUSCABLE.name}` }),
     ).toBeVisible()
   })
 
-  test('con una plaza abierta, la búsqueda mira en todo Zibatá', async ({ page }) => {
-    await openApp(page, { path: 'zona/plaza-luna' })
+  test('con una plaza abierta, la búsqueda mira dentro de la plaza y ofrece buscar en toda la guía', async ({
+    page,
+  }) => {
+    // Una zona y una palabra de un local de otra que nada de la zona se parece.
+    const { zona, place, consulta } = AJENA
+    await openApp(page, { path: `zona/${zona.slug}` })
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Plaza Luna' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: zona.name })).toBeVisible()
+    const ficha = region.getByRole('link', { name: `Ver detalles de ${place.name}` })
 
-    await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('taco')
-    // Los resultados salen en una sola lista, con la zona en cada tarjeta y no solo la que estaba abierta.
+    await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill(consulta)
+    // La zona acota la búsqueda: el local está en otra zona.
     await expect(region.getByRole('heading', { name: 'Resultados' })).toBeVisible()
-    await expect(region.getByRole('link', { name: 'Ver detalles de Tacos el Pata' })).toBeVisible()
-    // La plaza sigue elegida y vuelve en cuanto se borra la búsqueda.
-    await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText('Plaza Luna')
-    await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('')
-    await expect(region.getByRole('heading', { level: 2, name: 'Plaza Luna' })).toBeVisible()
+    await expect(ficha).toHaveCount(0)
+    await expect(region.getByText(`Sin resultados en ${zona.name}`)).toBeVisible()
+
+    // La puerta del estado vacío suelta la zona y repite la búsqueda sin borrarla.
+    await region.getByRole('button', { name: 'Buscar en toda la guía' }).click()
+    await expect(ficha).toBeVisible()
+    await expect(page.getByRole('searchbox', { name: 'Buscar lugares' })).toHaveValue(consulta)
+    await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText(
+      'Todas las zonas',
+    )
   })
 
   test('muestra un estado vacío y permite limpiar la búsqueda', async ({ page }) => {
@@ -101,17 +121,18 @@ test.describe('Búsqueda y filtros', () => {
     page,
   }) => {
     await openApp(page)
-    await elegirZona(page, 'Paseo Zibatá')
+    await elegirZona(page, ZONA_GRANDE.name)
     const topCategories = page.getByRole('list', { name: 'Categorías' }).first()
-    await topCategories.getByRole('link', { name: /Desayunos y Café/ }).click()
+    const categoria = CATEGORIA_EN_ZONA
+    await topCategories.getByRole('link', { name: new RegExp(esc(categoria.label)) }).click()
 
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeVisible()
     const cards = region.getByRole('link', { name: /^Ver detalles de/ })
-    const desayunos = placesInCategory('desayunos-y-cafe', 'Paseo Zibatá')
+    const desayunos = placesInCategory(categoria.id, ZONA_GRANDE.name)
     await expect(cards).toHaveCount(desayunos)
     await expect(
-      region.getByRole('link', { name: 'Ver detalles de D’Lu Coffee & Bakery' }),
+      region.getByRole('link', { name: `Ver detalles de ${categoria.local.name}` }),
     ).toBeVisible()
     await expect(page.getByText(`${desayunos} resultados`, { exact: true }).first()).toBeVisible()
     /*
@@ -122,12 +143,14 @@ test.describe('Búsqueda y filtros', () => {
      * necesita, porque no puede mirar cuál está llena.
      */
     await expect(
-      topCategories.getByRole('link', { name: /Desayunos y Café/ }),
-    ).toHaveAccessibleName(`Desayunos y Café ${desayunos}`)
+      topCategories.getByRole('link', { name: new RegExp(esc(categoria.label)) }),
+    ).toHaveAccessibleName(`${categoria.label} ${desayunos}`)
     await expect(topCategories.getByRole('link', { name: /^Todo/ })).toHaveAccessibleName(
-      `Todo ${placesInPlaza('Paseo Zibatá')}`,
+      `Todo ${placesInPlaza(ZONA_GRANDE.name)}`,
     )
-    await expect(page).toHaveURL(/\/es\/zona\/paseo-zibata\?categoria=desayunos-y-cafe$/)
+    await expect(page).toHaveURL(
+      new RegExp(`/es/zona/${ZONA_GRANDE.slug}\\?categoria=${categoria.slug}$`),
+    )
 
     await page.getByRole('button', { name: 'Limpiar filtros' }).first().click()
     await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText(
@@ -146,20 +169,22 @@ test.describe('Búsqueda y filtros', () => {
     await page
       .getByRole('list', { name: 'Categorías' })
       .first()
-      .getByRole('link', { name: /^Bar / })
+      .getByRole('link', { name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)} `) })
       .click()
     // Una categoría sola es su propia página: la barra de direcciones lo dice.
-    await expect(page).toHaveURL(/\/es\/categoria\/bar$/)
+    await expect(page).toHaveURL(new RegExp(`/es/categoria/${CATEGORIA_GRANDE.slug}$`))
     const region = panel(page)
     await expect(region.getByRole('heading', { name: 'Resultados' })).toBeVisible()
     // Una lista, no una sección por plaza: ya no hay cabecera de zona que enlazar.
-    await expect(region.getByRole('link', { name: /^(Xentric Anáhuac|Paseo Zibatá)/ })).toHaveCount(
-      0,
-    )
+    await expect(
+      region.getByRole('link', {
+        name: new RegExp(`^(${esc(ZONA_GRANDE.name)}|${esc(ZONA_B.name)})`),
+      }),
+    ).toHaveCount(0)
     await expect(region.getByRole('link', { name: /^Ver detalles de/ })).toHaveCount(
-      placesInCategory('bar'),
+      placesInCategory(CATEGORIA_GRANDE.id),
     )
     // La zona sigue a la vista, ahora como fila de la tarjeta.
-    await expect(region.getByText('Xentric Anáhuac').first()).toBeVisible()
+    await expect(region.getByText(ZONA_GRANDE.name).first()).toBeVisible()
   })
 })

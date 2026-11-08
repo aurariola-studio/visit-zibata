@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { isMobile, openApp, panel } from './helpers.ts'
+import { inactivePlazas, isMobile, LOCAL, openApp, panel, ZONA_GRANDE } from './helpers.ts'
 
 test.describe('Teclado, enlaces y favoritos', () => {
   test('el primer Tab ofrece "Ir al buscador" y lleva el foco al campo de búsqueda', async ({
@@ -31,26 +31,26 @@ test.describe('Teclado, enlaces y favoritos', () => {
   })
 
   test('Escape cierra la ficha y después el panel de la plaza', async ({ page }) => {
-    await openApp(page, { path: 'lugar/tomassa' })
+    await openApp(page, { path: `lugar/${LOCAL.slug}` })
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Tomassa' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: LOCAL.name })).toBeVisible()
     await page.keyboard.press('Escape')
-    await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
-    await expect(page).toHaveURL(/\/es\/zona\/paseo-zibata$/)
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeVisible()
+    await expect(page).toHaveURL(new RegExp(`/es/zona/${ZONA_GRANDE.slug}$`))
     await page.keyboard.press('Escape')
-    await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeHidden()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeHidden()
     await expect(page).toHaveURL(/\/es$/)
   })
 
   test('Escape en el buscador borra el texto sin cerrar la plaza abierta', async ({ page }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeVisible()
     const search = page.getByRole('searchbox', { name: 'Buscar lugares' })
     await search.fill('pizza')
     await search.press('Escape')
     await expect(search).toHaveValue('')
-    await expect(region.getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeVisible()
   })
 
   /*
@@ -60,7 +60,11 @@ test.describe('Teclado, enlaces y favoritos', () => {
    * (una 404 propia en vez de llevar a la portada). El aviso interno sigue en el código como red
    * de seguridad por si alguna vez se sirve una página que el dato ya no respalda.
    */
-  for (const path of ['es/lugar/no-existe', 'es/zona/plaza-walmart', 'esto-no-existe']) {
+  for (const path of [
+    'es/lugar/no-existe',
+    `es/zona/${inactivePlazas()[0]?.slug ?? 'zona-sin-publicar'}`,
+    'esto-no-existe',
+  ]) {
     test(`un enlace a un registro no publicado responde 404 propio (${path})`, async ({ page }) => {
       const response = await page.goto(`./${path}`)
       expect(response?.status()).toBe(404)
@@ -75,11 +79,9 @@ test.describe('Teclado, enlaces y favoritos', () => {
   test('el contador de favoritos ignora identificadores que ya no están en la guía', async ({
     page,
   }) => {
-    await page.addInitScript(() =>
-      window.localStorage.setItem(
-        'zibata:favoritos',
-        JSON.stringify(['tomassa', 'lugar-cerrado-hace-tiempo', 'otro-inexistente']),
-      ),
+    await page.addInitScript(
+      (ids) => window.localStorage.setItem('zibata:favoritos', JSON.stringify(ids)),
+      [LOCAL.id, 'lugar-cerrado-hace-tiempo', 'otro-inexistente'],
     )
     await openApp(page)
     // La cuenta va en el nombre del control: el interruptor quedo desnudo y la cifra, al lado.
@@ -88,12 +90,14 @@ test.describe('Teclado, enlaces y favoritos', () => {
     if (isMobile(page)) {
       await expect(panel(page).getByRole('link', { name: /^Ver detalles de/ })).toHaveCount(1)
     } else {
-      await expect(panel(page).getByRole('link', { name: 'Ver detalles de Tomassa' })).toBeVisible()
+      await expect(
+        panel(page).getByRole('link', { name: `Ver detalles de ${LOCAL.name}` }),
+      ).toBeVisible()
     }
   })
 
   test('una sola región viva anuncia el número de resultados', async ({ page }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     await page.getByRole('searchbox', { name: 'Buscar lugares' }).fill('pizza')
     const live = page.locator('[aria-live]')
     await expect(live).toHaveCount(1)

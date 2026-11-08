@@ -46,9 +46,8 @@ export interface SearchIndex {
 }
 
 function toDocument(place: Place, catalog: Catalog): SearchDocument {
-  // Todos los giros del local se buscan, principales y secundarios, no solo el primero: "pizza"
-  // encuentra a la parrilla que hace pizzas. Y con ellos, sus categorías: "italiana" encuentra las
-  // pizzerías.
+  // Todos los giros del local se buscan, no solo el primero: "pizza" encuentra a la parrilla que
+  // hace pizzas. Y con ellos, sus categorías: "italiana" encuentra las pizzerías.
   const ids = allGiroIds(place)
   const giros = ids.map((id) => catalog.giroById.get(id)).filter((giro) => giro !== undefined)
   const categorias = [

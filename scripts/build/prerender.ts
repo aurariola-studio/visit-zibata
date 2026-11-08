@@ -20,10 +20,18 @@ import { dirname, join } from 'node:path'
 import type { Plugin } from 'vite'
 import { en } from '../../src/i18n/en.ts'
 import { es } from '../../src/i18n/es.ts'
+import {
+  etiquetaDeCategoria,
+  etiquetaDeGiro,
+  ganchoDeCategoria,
+  lista,
+  type Traductor,
+} from '../../src/lib/categorias.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
 import type { Category, Place, Plaza } from '../../src/types/domain.ts'
+import { CSS_CARGADOR, CSS_SIN_JS, htmlCargador } from './cargador.ts'
 import { categoriasDe, conCantidad, lugaresPorCategoria } from './categorias.ts'
 import { contenidoDeLista, contenidoDeLugar } from './contenido.ts'
 import { descripcionDeFicha, lugarDe, repetidos } from './metadatos.ts'
@@ -144,14 +152,18 @@ export function pagesFor(
   absolute: (href: string) => string,
 ): Page[] {
   const copy = CATALOGS[locale]
+  const traducir: Traductor = (clave, vars) => fill(copy[clave], vars ?? {})
   // Una imagen social por idioma, igual en todas las páginas de ese idioma (public/og-image.png y og-image-en.png): lleva escrito el
   // texto de la marca en su idioma, así que una ficha en inglés no se comparte con una imagen en español.
   const image = `${base}${locale === 'en' ? 'og-image-en.png' : 'og-image.png'}`
   const giroLabel = new Map<string, string>()
+  // En prosa, un giro que es solo el adjetivo se lee completo ("Comida Italiana").
+  const giroLargo = new Map<string, string>()
   const categoryOfGiro = new Map<string, Category>()
   for (const category of data.categories) {
     for (const giro of category.giros) {
       giroLabel.set(giro.id, text(giro.label, locale))
+      giroLargo.set(giro.id, etiquetaDeGiro(giro, locale, traducir))
       categoryOfGiro.set(giro.id, category)
     }
   }
@@ -269,32 +281,22 @@ export function pagesFor(
    */
   for (const categoria of categoriasConPagina) {
     const lugares = porCategoria.get(categoria.id) ?? []
-    const etiqueta = text(categoria.label, locale)
+    const traducir: Traductor = (clave, vars) => fill(copy[clave], vars ?? {})
+    const etiqueta = etiquetaDeCategoria(categoria, locale, traducir)
     const name = fill(copy['seo.category.name'], { label: etiqueta })
     const zonas = activePlazas.filter((plaza) =>
       lugares.some((place) => place.plazaId === plaza.id),
     )
-    // En singular y plural, y sin "en 0 zonas" si ninguno de sus locales está en una zona activa.
-    const resumen = fill(
-      conCantidad(
-        copy[zonas.length === 0 ? 'seo.category.descriptionSinZona' : 'seo.category.description'],
-        lugares.length,
-        locale,
-      ),
-      {
-        label: etiqueta,
-        lugares: conCantidad(copy['places.count'], lugares.length, locale),
-        zonas: conCantidad(copy['seo.category.zoneCount'], zonas.length, locale),
-      },
-    )
+    // La descripción arranca con el gancho de la categoría y cuenta cuántos lugares hay.
+    const resumen = fill(conCantidad(copy['seo.category.description'], lugares.length, locale), {
+      hook: ganchoDeCategoria(categoria, locale, traducir),
+    })
     /*
      * El título nombra lo que la gente busca cuando la etiqueta es más general ("Comida Rápida" se
      * busca como "hamburguesas" o "alitas"): los dos giros con más locales que la etiqueta no dice.
      * Con menos de dos no se añade nada, porque un solo giro suelto sonaría a hueco.
      */
-    const titulo = tituloDeCategoria(categoria, lugares, locale, (clave, vars) =>
-      fill(copy[clave], vars ?? {}),
-    )
+    const titulo = tituloDeCategoria(categoria, lugares, locale, traducir)
     pages.push({
       href: route({ categorySlug: categoria.slug[locale] }),
       lastmod: masReciente(lugares),
@@ -360,8 +362,15 @@ export function pagesFor(
           ? `${copy['closure.title']}. ${copy[`closure.${place.cierre.motivo}`]}`
           : undefined,
         contexto: {
-          giros: giros.slice(0, 2),
+          /*
+           * Todos los giros, no los dos primeros: la descripción enumera lo que el local es, y un
+           * tercero ("Crepas" en un italiano) es tan suyo como el primero. El texto del negocio
+           * filtra los que ya nombra y la frase se recorta a 160 caracteres, así que la lista no se
+           * desborda: el contexto más largo del catálogo mide 47.
+           */
+          giros: place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           lugar: lugarDe(nombrePlaza),
+          idioma: locale,
           conGiros: copy['seo.place.context'],
           soloLugar: copy['seo.place.contextLugar'],
         },
@@ -394,7 +403,7 @@ export function pagesFor(
       plazaId: place.plazaId,
       categorias: [
         ...new Set(
-          [...place.giros, ...(place.secundarios ?? [])].flatMap((giro) => {
+          [...place.giros].flatMap((giro) => {
             const categoria = categoryOfGiro.get(giro)
             return categoria ? [categoria.id] : []
           }),
@@ -434,7 +443,15 @@ export function pagesFor(
               copy['closure.noReturn'],
             ].join(' ')
           : undefined,
-        giros: [...place.giros, ...(place.secundarios ?? [])].map((id) => giroLabel.get(id) ?? id),
+        /*
+         * El cuerpo servido sin JavaScript también lee los giros completos y unidos como una lista
+         * ("Comida Italiana y Pizza"): es la primera línea que ve un rastreador y no puede decir menos
+         * que la descripción.
+         */
+        giros: lista(
+          place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
+          locale,
+        ),
         plaza: plaza?.active
           ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
           : undefined,
@@ -535,11 +552,19 @@ export const metaTag = (atributo: string, valor: string): RegExp =>
   new RegExp(`<meta\\s+${atributo}="${valor}"[^>]*/>`)
 
 /** Reemplaza una etiqueta existente en el HTML, o la añade antes de `</head>` si no estaba. */
-function setTag(html: string, pattern: RegExp, tag: string): string {
+export function setTag(html: string, pattern: RegExp, tag: string): string {
   return pattern.test(html)
-    ? html.replace(pattern, tag)
-    : html.replace('</head>', `  ${tag}\n  </head>`)
+    ? html.replace(pattern, literal(tag))
+    : html.replace('</head>', literal(`  ${tag}\n  </head>`))
 }
+
+/**
+ * Un reemplazo que se inserta tal cual. `String.replace` con una cadena interpreta `$&`, `$'`, `` $` `` y
+ * `$$` en el texto nuevo, y los datos del catálogo (nombres, descripciones) llegan hasta aquí sin que
+ * `escapeHtml` los toque: un `$'` en una descripción habría pegado media plantilla dentro de la
+ * página. Pasar una función evita toda esa sintaxis.
+ */
+export const literal = (texto: string) => () => texto
 
 /**
  * Ninguna de estas etiquetas puede salir dos veces. Es una comprobación barata sobre algo que ya
@@ -610,7 +635,7 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
 
           let html = template
             .replace('<html lang="es">', `<html lang="${locale}">`)
-            .replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(page.title)}</title>`)
+            .replace(/<title>[^<]*<\/title>/, literal(`<title>${escapeHtml(page.title)}</title>`))
           html = setTag(
             html,
             metaTag('name', 'description'),
@@ -651,13 +676,27 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
             /<link\s+rel="canonical"[^>]*\/>/,
             `<link rel="canonical" href="${escapeHtml(absolute(page.href))}" />`,
           )
-          html = html.replace('</head>', `  ${alternates.filter(Boolean).join('\n  ')}\n  </head>`)
+          html = html.replace(
+            '</head>',
+            literal(`  ${alternates.filter(Boolean).join('\n  ')}\n  </head>`),
+          )
           if (page.jsonLd) {
-            html = html.replace('</head>', `  ${bloque(page.jsonLd)}\n  </head>`)
+            html = html.replace('</head>', literal(`  ${bloque(page.jsonLd)}\n  </head>`))
           }
-          if (page.contenido) {
-            html = html.replace('<div id="root"></div>', `<div id="root">${page.contenido}</div>`)
-          }
+          /*
+           * El cargador va con su CSS en línea y antes del artículo. Sin JavaScript, se esconde y
+           * queda el artículo; con JavaScript, lo cubre hasta que React monta y vacía `#root`.
+           */
+          html = html.replace(
+            '</head>',
+            literal(
+              `  <style>${CSS_CARGADOR}</style>\n  <noscript><style>${CSS_SIN_JS}</style></noscript>\n  </head>`,
+            ),
+          )
+          html = html.replace(
+            '<div id="root"></div>',
+            literal(`<div id="root">${htmlCargador(locale)}${page.contenido ?? ''}</div>`),
+          )
           comprobarUnicas(html, page.href)
 
           // Archivos planos (`es/lugar/tomassa.html`) y no carpetas con índice: así `/es/lugar/tomassa`

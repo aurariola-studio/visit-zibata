@@ -1,20 +1,31 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, waitForSheet } from './helpers.ts'
+import { LOCAL, localesDe, openApp, panel, waitForSheet, ZONA_GRANDE } from './helpers.ts'
 
 test.describe('Orden personal', () => {
   test('sin historial, la plaza muestra su orden curado; con gustos, lo preferido sube', async ({
     page,
   }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     await waitForSheet(page)
     const cards = panel(page).getByRole('link', { name: /^Ver detalles de/ })
     await expect(cards.first()).toBeVisible()
     const curated = await cards.allTextContents()
-    expect(curated[0]).not.toContain('Luka')
+    // El favorito es un local que el orden curado NO pone primero: el que va más atrás de la zona.
+    const candidato = localesDe(ZONA_GRANDE)
+      .map((place) => ({
+        place,
+        posicion: curated.findIndex((texto) => texto.includes(place.name)),
+      }))
+      .filter((fila) => fila.posicion >= 2)
+      .sort((a, b) => b.posicion - a.posicion)[0]
+    if (!candidato) throw new Error('la zona necesita un local que no vaya entre los dos primeros')
+    const favorito = candidato.place
+    expect(curated[0]).not.toContain(favorito.name)
 
     // Favorito guardado en este dispositivo (lo mismo que pulsar el corazón en otra visita).
-    await page.evaluate(() =>
-      window.localStorage.setItem('zibata:favoritos', JSON.stringify(['luka-pokes'])),
+    await page.evaluate(
+      (id) => window.localStorage.setItem('zibata:favoritos', JSON.stringify([id])),
+      favorito.id,
     )
     await page.reload()
     await waitForSheet(page)
@@ -36,23 +47,23 @@ test.describe('Orden personal', () => {
         estado: item.querySelector('[data-estado]')?.getAttribute('data-estado') ?? '?',
       }))
     })
-    const luka = porEstado.findIndex((fila) => fila.nombre.includes('Luka'))
+    const luka = porEstado.findIndex((fila) => fila.nombre.includes(favorito.name))
     expect(luka, `orden: ${porEstado.map((f) => f.nombre).join(' | ')}`).toBeGreaterThanOrEqual(0)
-    expect(luka).toBeLessThan(curated.findIndex((texto) => texto.includes('Luka')))
+    expect(luka).toBeLessThan(candidato.posicion)
     const suEstado = porEstado[luka]?.estado
     const primeroDeSuEstado = porEstado.findIndex((fila) => fila.estado === suEstado)
     expect(primeroDeSuEstado, `estados: ${porEstado.map((f) => f.estado).join(',')}`).toBe(luka)
   })
 
   test('marcar un favorito dentro de la lista no la reordena bajo el dedo', async ({ page }) => {
-    await openApp(page, { path: 'zona/paseo-zibata' })
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     await waitForSheet(page)
     const region = panel(page)
     const cards = region.getByRole('link', { name: /^Ver detalles de/ })
     await expect(cards.first()).toBeVisible()
     const before = await cards.allTextContents()
     await region
-      .getByRole('button', { name: /Guardar .*Luka/ })
+      .getByRole('button', { name: `Guardar en favoritos: ${LOCAL.name}` })
       .first()
       .click()
     await expect(cards).toHaveText(before)

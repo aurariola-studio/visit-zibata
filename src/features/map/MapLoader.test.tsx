@@ -28,6 +28,20 @@ describe('MapLoader', () => {
     expect(estado.textContent).toContain('Cargando Zibatá')
   })
 
+  it('la variante de pantalla aparece en el mismo fotograma', () => {
+    render(<MapLoader visible variant="pantalla" />)
+    expect(screen.getByRole('status').textContent).toContain('Cargando Zibatá')
+  })
+
+  it('la primera frase no entra animada, para no parpadear en el relevo', () => {
+    const { container } = render(<MapLoader visible variant="pantalla" />)
+    expect(container.querySelector('p')?.getAttribute('data-animar')).toBe('false')
+    act(() => {
+      vi.advanceTimersByTime(2700)
+    })
+    expect(container.querySelector('p')?.getAttribute('data-animar')).toBe('true')
+  })
+
   it('la frase que cambia no se anuncia', () => {
     const { container } = render(<MapLoader visible />)
     act(() => {

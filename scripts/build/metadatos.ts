@@ -22,6 +22,7 @@
  * Que Google muestre esta descripción, o que respete su orden, no está garantizado: Google la usa
  * cuando le parece que describe mejor la página que el texto de la propia página.
  */
+import { lista } from '../../src/lib/categorias.ts'
 
 /**
  * Las expresiones con caracteres tipográficos se escriben con su código y no con el carácter, que es
@@ -171,6 +172,8 @@ export interface Contexto {
   giros: string[]
   /** "Plaza Loop Urban, Zibatá" (ver `lugarDe`). */
   lugar: string
+  /** El idioma de la ficha: decide cómo se unen los giros ("A y B" / "A and B"). */
+  idioma: 'es' | 'en'
   /** Plantilla con giros: "{giros} en {lugar}." */
   conGiros: string
   /** Plantilla sin giros, para cuando la descripción ya los dice: "En {lugar}." */
@@ -189,7 +192,10 @@ export function contextoDe(contexto: Contexto, base: string): string {
   const dicho = forma(base)
   const nuevos = contexto.giros.filter((giro) => !dicho.includes(forma(giro)))
   return nuevos.length > 0
-    ? llenar(contexto.conGiros, { giros: nuevos.join(', '), lugar: contexto.lugar })
+    ? llenar(contexto.conGiros, {
+        giros: lista(nuevos, contexto.idioma),
+        lugar: contexto.lugar,
+      })
     : llenar(contexto.soloLugar, { lugar: contexto.lugar })
 }
 
@@ -218,7 +224,11 @@ export function descripcionDeFicha(opciones: OpcionesDescripcion): string {
   const contexto = contextoDe(opciones.contexto, base)
   if (!base) return recortar(`${delante}${contexto}`, max)
   if (!corta && !conContexto) return `${delante}${recortar(base, max - delante.length)}`
-  const cabida = max - delante.length - contexto.length - 1
+  /*
+   * Dos de holgura y no uno: el espacio que separa el contexto del texto y el punto que `terminado`
+   * añade al final. Con uno solo, una descripción que llega justa salía de 161.
+   */
+  const cabida = max - delante.length - contexto.length - 2
   return `${delante}${contexto} ${terminado(recortar(base, cabida))}`
 }
 

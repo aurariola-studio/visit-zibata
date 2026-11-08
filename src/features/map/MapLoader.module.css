@@ -79,7 +79,11 @@
 .frase {
   font-size: var(--text-base);
   color: var(--color-text-muted);
-  /* El texto cambia cada 2,6 s: entra desde abajo, corto y sin rebote. */
+}
+
+/* La primera frase no entra: ya viene servida en el HTML y animarla haría parpadear el relevo. Las
+ * siguientes, que son las que cambia el componente, entran desde abajo, cortas y sin rebote. */
+.frase[data-animar="true"] {
   animation: frase 320ms var(--ease-out);
 }
 
@@ -100,7 +104,7 @@
     transition: none;
   }
 
-  .frase {
+  .frase[data-animar="true"] {
     animation: none;
   }
 }

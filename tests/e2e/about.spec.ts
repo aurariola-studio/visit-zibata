@@ -20,7 +20,7 @@ test.describe('Información de la guía', () => {
 
     const privacy = page.getByRole('dialog', { name: 'Privacidad y términos' })
     await expect(privacy).toBeVisible()
-    await expect(privacy).toContainText('no usa cuentas ni cookies de rastreo')
+    await expect(privacy).toContainText('no te pide crear una cuenta ni usa cookies de rastreo')
     // Lo que sí se hace también se dice, y en la página que la gente abre, no solo en el repositorio.
     await expect(privacy).toContainText('cuántas veces se abre cada página y cada lugar')
     await expect(privacy).toContainText('se envían para que no se pierdan')
@@ -74,8 +74,8 @@ test.describe('Información de la guía', () => {
     // Y desde que se recuerda por dispositivo, esta es la forma de volver a verlo.
     await about.getByRole('link', { name: 'Ver el tutorial' }).click()
     await expect(page.getByRole('button', { name: 'Saltar' })).toBeVisible()
-    // Por el id del título: la hoja de debajo también tiene un "Explora Zibatá".
-    await expect(page.locator('#onboarding-title')).toHaveText('Explora Zibatá')
+    // Por el id del título, que es el del diálogo del tutorial.
+    await expect(page.locator('#onboarding-title')).toHaveText('¿Cómo me muevo por el mapa?')
     // Tiene ruta propia, como las otras tres, y la hoja de debajo se cierra.
     await expect(page).toHaveURL(/\/es\/info\/tutorial$/)
     await expect(page.getByRole('dialog', { name: 'Acerca de esta guía' })).toHaveCount(0)

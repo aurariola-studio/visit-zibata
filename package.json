@@ -9,13 +9,15 @@
     "node": ">=22.18.0"
   },
   "scripts": {
+    "predev": "npm run map:prepare",
     "dev": "vite",
     "worker:dev": "wrangler dev --var PANEL_ABIERTO:si",
-    "build": "npm run data:validate && tsc -b && vite build",
+    "build": "npm run data:validate && npm run map:prepare && tsc -b && vite build && node scripts/images/derive-variants.ts",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
+    "pretest": "npm run map:prepare",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
@@ -24,13 +26,15 @@
     "data:validate": "node scripts/data/validate-data.ts",
     "data:import": "node scripts/data/import-csv.ts",
     "analitica:crear": "wrangler d1 create visit-zibata-analitica",
-    "analitica:esquema": "wrangler d1 execute visit-zibata-analitica --remote --file=worker/esquema.sql",
+    "analitica:esquema": "wrangler d1 execute visit-zibata-analitica --remote --file=worker/esquema.sql && wrangler d1 execute visit-zibata-analitica --remote --file=worker/esquema-cuentas.sql",
     "analitica:ver": "node scripts/analitica/ver.ts",
     "map:fetch": "npm run map:fetch:osm && npm run map:fetch:buildings && npm run map:fetch:trees",
     "map:fetch:osm": "node scripts/map/fetch-osm.ts",
     "map:fetch:buildings": "node scripts/map/fetch-overture.ts",
     "map:fetch:trees": "node scripts/map/fetch-landcover.ts",
     "map:fetch:realismo": "node scripts/map/realismo/fetch-realismo.ts",
+    "map:prepare": "node scripts/map/preparar.ts",
+    "map:snapshot": "node scripts/map/preparar.ts --snapshot",
     "map:build": "node scripts/map/build-map.ts",
     "map:build:realismo": "node scripts/map/realismo/build-realismo.ts",
     "map:build:mallas": "node scripts/map/realismo/build-mallas.ts",
@@ -78,10 +82,10 @@
     "papaparse": "^5.7.0",
     "pmtiles": "^4.5.0",
     "proj4": "2.22.0",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
     "vitest": "^5.0.5",
-    "wrangler": "4.147.0"
+    "wrangler": "4.157.0"
   }
 }

@@ -2,12 +2,18 @@ import { AxeBuilder } from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 import {
   elegirZona,
+  esc,
   isMobile,
+  LOCAL,
   openApp,
   panel,
   placesInPlaza,
   plazaMarker,
+  TRES_LOCALES,
   waitForMap,
+  ZONA_B,
+  ZONA_C,
+  ZONA_GRANDE,
 } from './helpers.ts'
 
 test.describe('Estados de error @mapa', () => {
@@ -33,10 +39,12 @@ test.describe('Estados de error @mapa', () => {
     if (isMobile(page)) await page.getByRole('button', { name: 'Ver las zonas' }).click()
     await page
       .getByRole('link', {
-        name: new RegExp(`^Paseo Zibatá, ${placesInPlaza('Paseo Zibatá')} lugares`),
+        name: new RegExp(`^${esc(ZONA_GRANDE.name)}, ${placesInPlaza(ZONA_GRANDE.name)} lugares`),
       })
       .click()
-    await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
+    await expect(
+      panel(page).getByRole('heading', { level: 2, name: ZONA_GRANDE.name }),
+    ).toBeVisible()
   })
 
   test('si los datos no cargan se muestra un error claro con opción de reintentar', async ({
@@ -53,7 +61,7 @@ test.describe('Estados de error @mapa', () => {
     // El caso que dejaba la tarjeta en blanco: publicación nueva que retiró el trozo, o red caída.
     await page.route(/\/assets\/PlaceDetail-[\w-]+\.js$/, (route) => route.abort())
     // Por el ayudante, que antepone la base: en el despliegue de subdirectorio la ruta no empieza en `/`.
-    await openApp(page, { path: 'lugar/grunen-lush-anahuac' })
+    await openApp(page, { path: `lugar/${LOCAL.slug}` })
     const aviso = panel(page).getByRole('alert')
     await expect(aviso).toContainText('No pudimos cargar los lugares')
     await expect(aviso.getByRole('button', { name: 'Reintentar' })).toBeVisible()
@@ -75,7 +83,7 @@ test.describe('Estados de error @mapa', () => {
       // El chunk es JavaScript minificado (claves sin comillas, cadenas con acentos graves).
       const body = (await response.text())
         .replace('links:{website:null', 'links:{website:`javascript:alert(1)`')
-        .replace('plazaId:`paseo-zibata`', 'plazaId:`plaza-que-no-existe`')
+        .replace(`plazaId:\`${ZONA_GRANDE.id}\``, 'plazaId:`plaza-que-no-existe`')
       await route.fulfill({ response, body })
     })
     await openApp(page)
@@ -84,10 +92,8 @@ test.describe('Estados de error @mapa', () => {
       .getByRole('button', { name: isMobile(page) ? 'Ver las zonas' : 'Explora Zibatá' })
       .click()
     // La plaza sigue abriéndose: solo faltan los registros defectuosos.
-    await page.getByRole('link', { name: /^Plaza Condesa, \d+ lugares/ }).click()
-    await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Plaza Condesa' }),
-    ).toBeVisible()
+    await page.getByRole('link', { name: new RegExp(`^${esc(ZONA_B.name)}, \\d+ lugares`) }).click()
+    await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
     expect(warnings.join(' ')).toMatch(/omitido|omitida/)
   })
 
@@ -104,10 +110,12 @@ test.describe('Estados de error @mapa', () => {
     if (isMobile(page)) await page.getByRole('button', { name: 'Ver las zonas' }).click()
     await page
       .getByRole('link', {
-        name: new RegExp(`^Paseo Zibatá, ${placesInPlaza('Paseo Zibatá')} lugares`),
+        name: new RegExp(`^${esc(ZONA_GRANDE.name)}, ${placesInPlaza(ZONA_GRANDE.name)} lugares`),
       })
       .click()
-    await expect(panel(page).getByRole('heading', { level: 2, name: 'Paseo Zibatá' })).toBeVisible()
+    await expect(
+      panel(page).getByRole('heading', { level: 2, name: ZONA_GRANDE.name }),
+    ).toBeVisible()
   })
 
   test('si la cartografía base no carga, se informa y se recupera al reintentar', async ({
@@ -150,15 +158,15 @@ test.describe('Accesibilidad', () => {
     }
     expect(await scan()).toEqual([])
 
-    await elegirZona(page, 'Xentric Zibatá')
-    await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Xentric Zibatá' }),
-    ).toBeVisible()
+    await elegirZona(page, ZONA_C.name)
+    await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_C.name })).toBeVisible()
     expect(await scan()).toEqual([])
 
-    await panel(page).getByRole('link', { name: 'Ver detalles de Cosi Fan Tutte' }).click()
+    await panel(page)
+      .getByRole('link', { name: `Ver detalles de ${TRES_LOCALES[2].name}` })
+      .click()
     await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Cosi Fan Tutte' }),
+      panel(page).getByRole('heading', { level: 2, name: TRES_LOCALES[2].name }),
     ).toBeVisible()
     expect(await scan()).toEqual([])
   })
@@ -168,11 +176,11 @@ test.describe('Accesibilidad', () => {
   }) => {
     await openApp(page)
     await waitForMap(page)
-    const marker = await plazaMarker(page, 'Xentric Anáhuac')
+    const marker = await plazaMarker(page, ZONA_GRANDE.name)
     await marker.focus()
     await page.keyboard.press('Enter')
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Xentric Anáhuac' })).toBeFocused()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_GRANDE.name })).toBeFocused()
     await region.getByRole('button', { name: 'Cerrar panel' }).focus()
     await page.keyboard.press('Enter')
     await expect(marker).toBeFocused()
@@ -182,9 +190,9 @@ test.describe('Accesibilidad', () => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await openApp(page)
     await waitForMap(page)
-    await (await plazaMarker(page, 'Xentric Anáhuac')).click()
+    await (await plazaMarker(page, ZONA_GRANDE.name)).click()
     await expect(
-      panel(page).getByRole('heading', { level: 2, name: 'Xentric Anáhuac' }),
+      panel(page).getByRole('heading', { level: 2, name: ZONA_GRANDE.name }),
     ).toBeVisible()
     const duration = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue('--duration-slow'),

@@ -7,8 +7,9 @@
  *
  * Las decisiones que no son obvias:
  *
- *  - **`id` y `slug` no se editan.** Cambiarlos rompería la URL de la ficha y no hay redirección
- *    por slug. En un local nuevo se derivan del nombre y se comprueba que no choquen.
+ *  - **`id` y `slug` no se editan aquí.** El id nunca cambia. El slug es la URL de la ficha y cambiarlo
+ *    pide una redirección: tiene su propio paso en `cambio-slug.ts`. En un local nuevo se derivan del
+ *    nombre y se comprueba que no choquen.
  *  - **Los campos derivados de la plaza se recalculan.** `placeIds` y `categories` no se escriben
  *    a mano: se sincronizan con los locales, igual que hace `data:validate --fix`.
  *  - **La verificación se actualiza al guardar.** Quien edita está afirmando que el dato es de hoy;
@@ -20,6 +21,7 @@ import { z } from 'zod'
 import categoriasJson from '../data/commercial/categories.json' with { type: 'json' }
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
 import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
+import redirectsJson from '../data/commercial/redirects.json' with { type: 'json' }
 import extent from '../data/geographic/extent.json' with { type: 'json' }
 import {
   type CommercialDataset,
@@ -35,10 +37,12 @@ import {
   PlazasFileSchema,
 } from '../src/data/schemas.ts'
 import { TITULOS_RESERVADOS } from '../src/data/titulos-reservados.ts'
+import { ANCHOS_DE_VARIANTE } from '../src/lib/image-variants.ts'
 import type { Category, Photo, Place } from '../src/types/domain.ts'
 import { fechaLocal } from './analitica.ts'
 import {
   type EntornoGitHub,
+  existeArchivo,
   leerArchivo,
   type Publicacion,
   prAbierta,
@@ -60,9 +64,10 @@ export const EntradaNegocioSchema = z.object({
     // El nombre va al título y al JSON-LD: sin saltos ni espacios dobles.
     .transform((valor) => valor.replace(/\s+/g, ' ')),
   plazaId: z.string().trim().min(1, 'Elige una plaza'),
-  giros: z.array(z.string().trim().min(1)).min(1, 'Elige al menos un giro').max(3),
-  /** Los secundarios van aparte y sin orden: la ficha solo los muestra como texto. */
-  secundarios: z.array(z.string().trim().min(1)).max(2).optional(),
+  giros: z
+    .array(z.string().trim().min(1))
+    .min(1, 'Elige al menos un giro')
+    .max(3, 'El tope son tres giros'),
   descripcionEs: z.string().trim().min(1, 'La descripción en español es obligatoria').max(2000),
   descripcionEn: z.string().trim().min(1, 'La descripción en inglés es obligatoria').max(2000),
   telefono: z.string().trim().max(40).optional().default(''),
@@ -146,7 +151,12 @@ export function bytesDeBase64(datos: string): Uint8Array | null {
 
 export interface PlazaResumen {
   id: string
+  slug: string
   name: string
+  description: { es: string; en?: string } | null
+  address: string | null
+  coordinates: { lat: number; lng: number }
+  googleMapsUri?: string
   active: boolean
   comingSoon?: boolean
 }
@@ -164,6 +174,26 @@ export interface NegocioGuardado {
   id: string
   nombre: string
   nuevo: boolean
+}
+
+/**
+ * Los archivos que puede tener una foto de un local, relativos a la raíz del repositorio. Son candidatos:
+ * quien los borra comprueba antes cuáles existen. Solo cuenta una foto que cuelga de la carpeta del propio
+ * local (`images/places/<id>/`); cualquier otra ruta no se toca, porque no es nuestra.
+ */
+export function archivosDeFoto(placeId: string, foto: { src: string }): string[] {
+  const carpeta = `images/places/${placeId}/`
+  if (!foto.src.startsWith(carpeta) || foto.src.slice(carpeta.length).includes('/')) return []
+  const sinExtension = foto.src.replace(/\.[a-z0-9]+$/i, '')
+  const nombre = foto.src.slice(carpeta.length)
+  return [
+    `public/${foto.src}`,
+    `data/commercial/photos-src/${placeId}/${nombre}`,
+    ...(['webp', 'avif'] as const).flatMap((formato) => [
+      `public/${sinExtension}.${formato}`,
+      ...ANCHOS_DE_VARIANTE.map((ancho) => `public/${sinExtension}-${ancho}.${formato}`),
+    ]),
+  ].filter((ruta, i, todas) => todas.indexOf(ruta) === i)
 }
 
 export type PreparadoFoto =
@@ -330,7 +360,8 @@ export interface Cargado {
   ref: string
   seco: boolean
   pr: Publicacion | null
-  crudo: { categories: Crudo; plazas: Crudo; places: Crudo }
+  /** `redirects` falta en una rama que se abrió antes de que existiera el archivo. */
+  crudo: { categories: Crudo; plazas: Crudo; places: Crudo; redirects?: Crudo }
   dataset: CommercialDataset
 }
 
@@ -345,6 +376,24 @@ const ENLACES_VACIOS = {
   didiFood: null,
 }
 
+/**
+ * Los slugs e ids ya borrados o abandonados de un tipo (locales o plazas): uno nuevo no puede heredar
+ * sus marcas ni competir con su redirección. Cada tipo tiene su propio espacio de nombres.
+ */
+export const slugsRedirigidos = (
+  crudo: Cargado['crudo'],
+  tipo: 'place' | 'plaza' = 'place',
+): string[] =>
+  (
+    (crudo.redirects?.redirects as
+      | { kind?: unknown; id?: unknown; slug?: unknown }[]
+      | undefined) ?? []
+  )
+    .filter((fila) => fila.kind === tipo || fila.kind === `${tipo}-slug`)
+    .flatMap((fila) =>
+      [fila.slug, fila.id].filter((valor): valor is string => typeof valor === 'string'),
+    )
+
 const [oeste, sur, este, norte] = extent.areaBbox as [number, number, number, number]
 export const LIMITES = { west: oeste, south: sur, east: este, north: norte }
 
@@ -352,6 +401,7 @@ const local = (): Cargado['crudo'] => ({
   categories: categoriasJson as unknown as Crudo,
   plazas: plazasJson as unknown as Crudo,
   places: lugaresJson as unknown as Crudo,
+  redirects: redirectsJson as unknown as Crudo,
 })
 
 function datasetDe(crudo: Cargado['crudo']): CommercialDataset {
@@ -377,10 +427,11 @@ export async function cargar(
 
   const pr = await prAbierta(entorno)
   const ref = pr ? ramaDe(entorno) : 'main'
-  const [categorias, plazas, lugares] = await Promise.all([
+  const [categorias, plazas, lugares, redirecciones] = await Promise.all([
     leerArchivo(entorno, 'data/commercial/categories.json', ref),
     leerArchivo(entorno, 'data/commercial/plazas.json', ref),
     leerArchivo(entorno, 'data/commercial/places.json', ref),
+    leerArchivo(entorno, 'data/commercial/redirects.json', ref),
   ])
   if (!categorias || !plazas || !lugares) {
     throw new Error(`faltan los archivos de contenido en ${ref}`)
@@ -389,6 +440,7 @@ export async function cargar(
     categories: JSON.parse(categorias) as Crudo,
     plazas: JSON.parse(plazas) as Crudo,
     places: JSON.parse(lugares) as Crudo,
+    ...(redirecciones ? { redirects: JSON.parse(redirecciones) as Crudo } : {}),
   }
   return { ref, seco: false, pr, crudo, dataset: datasetDe(crudo) }
 }
@@ -403,12 +455,29 @@ export async function contenido(
     seco: cargado.seco,
     pr: cargado.pr,
     categories: cargado.dataset.categories,
-    plazas: cargado.dataset.plazas.map(({ id, name, active, comingSoon }) => ({
-      id,
-      name,
-      active,
-      comingSoon,
-    })),
+    plazas: cargado.dataset.plazas.map(
+      ({
+        id,
+        slug,
+        name,
+        description,
+        address,
+        coordinates,
+        googleMapsUri,
+        active,
+        comingSoon,
+      }) => ({
+        id,
+        slug,
+        name,
+        description,
+        address,
+        coordinates,
+        googleMapsUri,
+        active,
+        comingSoon,
+      }),
+    ),
     places: cargado.dataset.places,
   }
 }
@@ -448,27 +517,17 @@ function construir(
 ): { place?: Place; problemas?: string[] } {
   /*
    * El orden de `giros` no es decorativo: el primero decide el icono de la ficha y la prioridad en
-   * la búsqueda. Ahora el formulario manda la lista ya ordenada, con sus secundarios aparte, así que
-   * se respeta tal cual. Antes eran casillas sin orden y el servidor tenía que adivinarlo.
+   * la búsqueda. El formulario manda la lista ya ordenada y se respeta tal cual.
    */
   const problemasDeGiros: string[] = []
   const pedidos = [...new Set(entrada.giros)]
   if (pedidos.length !== entrada.giros.length) {
-    problemasDeGiros.push('Hay un giro repetido en la lista principal.')
+    problemasDeGiros.push('Hay un giro repetido.')
   }
-  const giros = pedidos
-  const secundariosPedidos = entrada.secundarios
-    ? [...new Set(entrada.secundarios)]
-    : (existente?.secundarios ?? [])
-  if (secundariosPedidos.some((giro) => giros.includes(giro))) {
-    problemasDeGiros.push('Un giro no puede ser principal y secundario a la vez.')
+  if (pedidos.length > 3) {
+    problemasDeGiros.push('El tope son tres giros.')
   }
-  if (giros.length + secundariosPedidos.length > 3) {
-    problemasDeGiros.push('Entre giros principales y secundarios el tope son tres.')
-  }
-  const secundarios = secundariosPedidos
-    .filter((giro) => !giros.includes(giro))
-    .slice(0, Math.max(0, 3 - giros.length))
+  const giros = pedidos.slice(0, 3)
   if (problemasDeGiros.length > 0) return { problemas: problemasDeGiros }
 
   if ((entrada.lat == null) !== (entrada.lng == null)) {
@@ -538,7 +597,6 @@ function construir(
     name: entrada.nombre,
     plazaId: entrada.plazaId,
     giros,
-    secundarios,
     description: { es: entrada.descripcionEs, en: entrada.descripcionEn },
     hours: horarioDe(entrada.horario),
     location:
@@ -585,6 +643,8 @@ export type Preparado =
       lugares: Record<string, unknown>
       plazas: Record<string, unknown>
       avisos: string[]
+      /** Fotos que estaban en la galería y ya no: al guardar se borran también sus archivos. */
+      fotosQuitadas: Photo[]
     }
   | { ok: false; problemas: string[] }
 
@@ -616,7 +676,10 @@ export function prepararNegocio(
   }
 
   // También los slugs: un id nuevo no debe chocar con la URL de un local existente.
-  const ids = new Set(dataset.places.flatMap((place) => [place.id, place.slug]))
+  const ids = new Set([
+    ...dataset.places.flatMap((place) => [place.id, place.slug]),
+    ...slugsRedirigidos(crudo),
+  ])
   const construido = construir(entrada.data, existente, ids, hoy)
   if (!construido.place) {
     return { ok: false, problemas: construido.problemas ?? ['No se pudo armar el negocio'] }
@@ -756,6 +819,9 @@ export function prepararNegocio(
     lugares: { ...crudo.places, updatedAt: hoy, places: placesNuevos },
     plazas: { ...crudo.plazas, updatedAt: hoy, plazas: plazasNuevas },
     avisos,
+    fotosQuitadas: (existente?.photos ?? []).filter(
+      (previa) => !place.photos.some((foto) => foto.src === previa.src),
+    ),
   }
 }
 
@@ -789,6 +855,24 @@ export async function guardarNegocio(
     }
   }
 
+  // Quitar una foto de la galería borra también sus archivos, en el mismo commit. Solo los que existen:
+  // un borrado de una ruta que no está en el árbol lo rechazaría GitHub. Siguen en el historial de git.
+  const candidatos = preparado.fotosQuitadas.flatMap((foto) => archivosDeFoto(negocio.id, foto))
+  const existentes = (
+    await Promise.all(
+      candidatos.map(async (ruta) =>
+        (await existeArchivo(entorno, ruta, cargado.ref)) ? ruta : null,
+      ),
+    )
+  ).filter((ruta): ruta is string => ruta !== null)
+  const avisos =
+    existentes.length > 0
+      ? [
+          ...preparado.avisos,
+          `Se borraron ${existentes.length} ${existentes.length === 1 ? 'archivo' : 'archivos'} de fotos que se quitaron de la galería. Siguen en el historial de git.`,
+        ]
+      : preparado.avisos
+
   const pr = await publicar(
     entorno,
     [
@@ -800,6 +884,7 @@ export async function guardarNegocio(
         ruta: 'data/commercial/plazas.json',
         contenido: `${JSON.stringify(preparado.plazas, null, 2)}\n`,
       },
+      ...existentes.map((ruta) => ({ ruta, borrar: true as const })),
     ],
     `Panel: ${negocio.nuevo ? 'nuevo' : 'editar'} negocio "${negocio.nombre}"`,
   )
@@ -810,6 +895,6 @@ export async function guardarNegocio(
     pr,
     mensaje: negocio.nuevo ? 'Negocio enviado a la PR.' : 'Cambio enviado a la PR.',
     negocio,
-    avisos: preparado.avisos,
+    avisos,
   }
 }

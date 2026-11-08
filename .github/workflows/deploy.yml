@@ -8,10 +8,17 @@
 # El destino es un Worker con assets estáticos (ver wrangler.jsonc), no un proyecto de Pages:
 # Cloudflare está integrando Pages dentro de Workers y los sitios nuevos se crean así.
 #
-# Requisitos en GitHub (Settings → Secrets and variables → Actions):
+# Requisitos en GitHub (Settings → Environments → cloudflare):
 #   secreto  CLOUDFLARE_API_TOKEN    token de la plantilla "Edit Cloudflare Workers"
 #   secreto  CLOUDFLARE_ACCOUNT_ID   id de la cuenta de Cloudflare
 #   variable PAGES_SITE_URL          opcional; por omisión https://visitzibata.com/
+#
+# Los secretos van en el ENTORNO `cloudflare`, no en los del repositorio, y ese entorno restringe sus
+# ramas de despliegue a `main` (Deployment branches and tags → Selected branches → main). Es lo que
+# impide que quien pueda empujar otra rama edite este archivo, lo lance con `workflow_dispatch` y
+# lea el token: un secreto de repositorio lo ve cualquier workflow de cualquier rama. La condición
+# `if` del trabajo es una segunda barrera, pero una copia editada de este archivo puede borrarla;
+# la que no se puede editar desde la rama es la regla del entorno.
 name: Deploy
 
 on:
@@ -29,6 +36,8 @@ concurrency:
 jobs:
   deploy:
     name: Validar, testear, compilar y publicar
+    # Solo desde main, también cuando se lanza a mano. Defensa en profundidad, no el control (ver arriba).
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     environment:
@@ -43,6 +52,9 @@ jobs:
         with:
           # Gitleaks escanea la historia, no solo el árbol de trabajo.
           fetch-depth: 0
+          # Ningún paso empuja ni vuelve a hablar con GitHub: el token del checkout no necesita
+          # quedarse en la configuración de git durante el resto del trabajo (npm ci, tests, wrangler).
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
@@ -50,14 +62,9 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
       # También aquí y no solo en ci.yml: ese workflow corre en pull requests, así que mientras
-      # todo fue directo a main no se ejecutó ni una vez. Con el binario y no con la acción, que
-      # pide clave de licencia en organizaciones.
+      # todo fue directo a main no se ejecutó ni una vez. Es la misma acción local que usa ci.yml.
       - name: Escanear con Gitleaks
-        env:
-          GITLEAKS_VERSION: 8.30.1
-        run: |
-          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz gitleaks
-          ./gitleaks git --no-banner --redact --exit-code 1
+        uses: ./.github/actions/gitleaks
       - name: Validar datos comerciales
         run: npm run data:validate
       - name: Lint, tipos y tests
@@ -99,4 +106,6 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           npx wrangler deploy
-          echo "url=${{ vars.PAGES_SITE_URL || 'https://visitzibata.com/' }}" >> "$GITHUB_OUTPUT"
+          # Por `env`, no interpolada en el script: una variable con comillas o `$(...)` se ejecutaría
+          # en este paso, que es el único con el token de Cloudflare.
+          echo "url=${SITE_URL}" >> "$GITHUB_OUTPUT"

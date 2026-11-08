@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-10-25",
+  "updatedAt": "2026-11-04",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -304,6 +304,7 @@
         "panaderia-y-reposteria",
         "botanas",
         "postres-y-dulces",
+        "bebidas",
         "bar"
       ],
       "locationConfidence": "high",
@@ -619,7 +620,8 @@
         "asiatica",
         "postres-y-dulces",
         "internacional",
-        "casera"
+        "casera",
+        "bar"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección Paseo Tunas 18 (Cosi Fan Tutte, Trecielos, La Marmota, Honu Sushi…). Huella aproximada.",
@@ -718,6 +720,7 @@
         "hamburguesas",
         "italiana",
         "asiatica",
+        "entre-panes",
         "saludable",
         "panaderia-y-reposteria",
         "postres-y-dulces",
@@ -960,6 +963,7 @@
       ],
       "categories": [
         "desayunos-y-cafe",
+        "tacos-y-antojitos",
         "carnes-y-parrilla",
         "asiatica",
         "saludable",

@@ -6,15 +6,10 @@
  */
 import type { Locale } from '../i18n/index.ts'
 import type { Category, Place } from '../types/domain.ts'
-import { girosDeCategoria, lista } from './categorias.ts'
+import { etiquetaDeCategoria, girosDeCategoria, lista, type Traductor } from './categorias.ts'
 
 /** Por encima de este largo, el buscador corta el título. */
 export const TOPE_TITULO = 65
-
-type Clave = 'seo.title' | 'seo.category.title' | 'seo.category.name'
-
-/** Traduce con los mensajes del idioma de la página; el HTML y la app pasan el suyo. */
-export type Traductor = (clave: Clave, vars?: Record<string, string>) => string
 
 export function tituloDeCategoria(
   categoria: Category,
@@ -22,7 +17,7 @@ export function tituloDeCategoria(
   idioma: Locale,
   traducir: Traductor,
 ): string {
-  const etiqueta = categoria.label[idioma] ?? categoria.label.es
+  const etiqueta = etiquetaDeCategoria(categoria, idioma, traducir)
   const giros = girosDeCategoria(categoria, lugares, idioma).slice(0, 2)
   const conGiros = traducir('seo.title', {
     name: traducir('seo.category.title', { label: etiqueta, giros: lista(giros, idioma) }),

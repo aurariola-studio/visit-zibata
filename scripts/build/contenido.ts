@@ -95,7 +95,8 @@ export interface ContenidoDeLugar {
   nombre: string
   /** El aviso de cierre temporal, si lo hay. Va arriba del todo, antes incluso de los giros. */
   aviso?: string
-  giros: string[]
+  /** Los giros, ya completos y unidos como una lista ("Comida Italiana y Pizza"). */
+  giros: string
   plaza?: Enlace
   direccion?: string
   descripcion?: string
@@ -120,7 +121,7 @@ export function contenidoDeLugar(datos: ContenidoDeLugar): string {
      * su horario de siempre.
      */
     datos.aviso ? `<p><strong>${escaparHtml(datos.aviso)}</strong></p>` : '',
-    parrafo(datos.giros.join(' · ')),
+    parrafo(datos.giros),
     datos.plaza
       ? `<p><a href="${escaparHtml(datos.plaza.href)}">${escaparHtml(datos.plaza.texto)}</a>${datos.direccion ? ` · ${escaparHtml(datos.direccion)}` : ''}</p>`
       : parrafo(datos.direccion),

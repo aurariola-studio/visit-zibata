@@ -1,7 +1,47 @@
 import { describe, expect, it } from 'vitest'
-import { redireccionDe } from './redireccion.ts'
+import type { Redirect } from '../src/data/schemas.ts'
+import {
+  type Direcciones,
+  redireccionDe,
+  redireccionDeLugar,
+  redireccionDeZona,
+  resolverDirecciones,
+} from './redireccion.ts'
 
-const aDonde = (direccion: string) => redireccionDe(new URL(direccion))
+// Sin direcciones antiguas: estas pruebas son del prefijo /es y de las categorías, y no deben depender de
+// qué locales o zonas de la guía real se hayan borrado o cambiado de dirección desde el panel.
+const NINGUNA: Direcciones = {
+  lugares: new Map(),
+  zonas: new Map(),
+  categorias: { es: new Map(), en: new Map() },
+}
+const aDonde = (direccion: string) => redireccionDe(new URL(direccion), NINGUNA)
+
+describe('nunca redirige a otro sitio', () => {
+  it('una ruta que empieza con varias barras no produce un Location relativo al protocolo', () => {
+    for (const ruta of [
+      '//evil.example/x',
+      '///evil.example/x/',
+      '//evil.example',
+      '//',
+      '/\\evil.example/x',
+      '//es/lugar/tomassa',
+      '//en/',
+    ]) {
+      const destino = aDonde(`https://visitzibata.com${ruta}`)
+      if (destino !== null) {
+        expect(destino.startsWith('//')).toBe(false)
+        expect(destino.startsWith('/')).toBe(true)
+      }
+    }
+  })
+
+  it('las barras iniciales colapsan en la ruta que quería', () => {
+    expect(aDonde('https://visitzibata.com//es/lugar/tomassa')).toBe('/es/lugar/tomassa')
+    expect(aDonde('https://visitzibata.com//lugar/tomassa')).toBe('/es/lugar/tomassa')
+    expect(aDonde('https://visitzibata.com//')).toBe('/es')
+  })
+})
 
 describe('las direcciones del español sin prefijo', () => {
   it('pasan a /es en un solo salto, con la consulta intacta', () => {
@@ -70,5 +110,340 @@ describe('los enlaces antiguos de categoría', () => {
     expect(aDonde('https://visitzibata.com/es?categoria=italiana&utm_source=x')).toBeNull()
     expect(aDonde('https://visitzibata.com/es?utm_source=x')).toBeNull()
     expect(aDonde('https://visitzibata.com/es')).toBeNull()
+  })
+})
+
+/*
+ * Datos inventados y con id distinto del slug: en la guía real son iguales, y una prueba así no
+ * distinguiría "resolver por id" de "resolver por slug".
+ */
+const plazas = [
+  { id: 'p-uno', slug: 'plaza-uno', active: true },
+  { id: 'p-dos', slug: 'plaza-dos', active: false },
+  { id: 'p-tres', slug: 'plaza-tres', active: true },
+]
+const lugares = [
+  { id: 'l-nuevo', slug: 'cafe-nuevo', active: true, plazaId: 'p-uno' },
+  { id: 'l-oculto', slug: 'oculto-nuevo', active: false, plazaId: 'p-uno' },
+  { id: 'l-en-dos', slug: 'en-dos-nuevo', active: true, plazaId: 'p-dos' },
+]
+const resolver = (filas: Redirect[], plazasVivas = plazas): Direcciones =>
+  resolverDirecciones(filas, plazasVivas, lugares)
+const aDondeLugar = (d: Direcciones, ruta: string) => redireccionDeLugar(ruta, d.lugares)
+const aDondeZona = (d: Direcciones, ruta: string) => redireccionDeZona(ruta, d.zonas)
+
+describe('un local borrado desde el panel', () => {
+  const borrado: Redirect = {
+    kind: 'place',
+    id: 'l-viejo',
+    slug: 'cafe-viejo',
+    plazaId: 'p-uno',
+    giros: ['g'],
+  }
+  const d = resolver([borrado])
+
+  it('su ficha pasa a la página de la plaza, en el mismo idioma', () => {
+    expect(aDondeLugar(d, '/es/lugar/cafe-viejo')).toBe('/es/zona/plaza-uno')
+    expect(aDondeLugar(d, '/en/place/cafe-viejo')).toBe('/en/area/plaza-uno')
+  })
+
+  it('la dirección sin prefijo llega en un solo salto', () => {
+    expect(aDondeLugar(d, '/lugar/cafe-viejo')).toBe('/es/zona/plaza-uno')
+  })
+
+  it('no toca otros locales, otras rutas ni un segmento de otro idioma', () => {
+    expect(aDondeLugar(d, '/es/lugar/otro')).toBeNull()
+    expect(aDondeLugar(d, '/es/zona/cafe-viejo')).toBeNull()
+    expect(aDondeLugar(d, '/en/lugar/cafe-viejo')).toBeNull()
+    expect(aDondeLugar(d, '/es/lugar/cafe-viejo/mas')).toBeNull()
+    expect(aDondeLugar(d, '/es/lugar')).toBeNull()
+    expect(aDondeLugar(d, '/')).toBeNull()
+  })
+
+  it('si su plaza no tiene página (inactiva o borrada), va a la portada y no a un 404', () => {
+    const enInactiva = resolver([{ ...borrado, plazaId: 'p-dos' }])
+    expect(aDondeLugar(enInactiva, '/es/lugar/cafe-viejo')).toBe('/es')
+    expect(aDondeLugar(enInactiva, '/en/place/cafe-viejo')).toBe('/en')
+    const enBorrada = resolver([
+      { ...borrado, plazaId: 'p-vieja' },
+      { kind: 'plaza', id: 'p-vieja', slug: 'plaza-vieja' },
+    ])
+    expect(aDondeLugar(enBorrada, '/lugar/cafe-viejo')).toBe('/es')
+  })
+
+  it('el punto de entrada real lo resuelve, también con barra final y con la consulta', () => {
+    const real = (direccion: string) => redireccionDe(new URL(direccion), d)
+    expect(real('https://visitzibata.com/es/lugar/cafe-viejo')).toBe('/es/zona/plaza-uno')
+    expect(real('https://visitzibata.com/es/lugar/cafe-viejo/')).toBe('/es/zona/plaza-uno')
+    expect(real('https://visitzibata.com//lugar/cafe-viejo?x=1')).toBe('/es/zona/plaza-uno')
+    expect(real('https://visitzibata.com/en/place/cafe-viejo/')).toBe('/en/area/plaza-uno')
+    expect(real('https://visitzibata.com/es/lugar/otro')).toBeNull()
+  })
+
+  it('sin filas no hace nada', () => {
+    expect(aDondeLugar(resolver([]), '/es/lugar/cafe-viejo')).toBeNull()
+  })
+
+  it('el destino siempre es una ruta propia', () => {
+    const destino = aDondeLugar(d, '/es/lugar/cafe-viejo') ?? ''
+    expect(destino.startsWith('/')).toBe(true)
+    expect(destino.startsWith('//')).toBe(false)
+  })
+})
+
+describe('una plaza borrada desde el panel', () => {
+  const d = resolver([{ kind: 'plaza', id: 'p-vieja', slug: 'plaza-vieja' }])
+
+  it('su página va a la portada del mismo idioma, con o sin prefijo', () => {
+    expect(aDondeZona(d, '/es/zona/plaza-vieja')).toBe('/es')
+    expect(aDondeZona(d, '/en/area/plaza-vieja')).toBe('/en')
+    expect(aDondeZona(d, '/zona/plaza-vieja')).toBe('/es')
+  })
+
+  it('no toca otras plazas, otras familias de ruta ni un segmento de otro idioma', () => {
+    expect(aDondeZona(d, '/es/zona/otra')).toBeNull()
+    expect(aDondeZona(d, '/es/lugar/plaza-vieja')).toBeNull()
+    expect(aDondeZona(d, '/en/zona/plaza-vieja')).toBeNull()
+    expect(aDondeZona(d, '/es/zona/plaza-vieja/mas')).toBeNull()
+    expect(aDondeZona(d, '/es/zona')).toBeNull()
+  })
+
+  it('el punto de entrada real lo resuelve en un salto, con barra final y con la consulta', () => {
+    const real = (direccion: string) => redireccionDe(new URL(direccion), d)
+    expect(real('https://visitzibata.com/es/zona/plaza-vieja')).toBe('/es')
+    expect(real('https://visitzibata.com/es/zona/plaza-vieja/')).toBe('/es')
+    expect(real('https://visitzibata.com/zona/plaza-vieja?categoria=bebidas')).toBe('/es')
+    expect(real('https://visitzibata.com/en/area/plaza-vieja')).toBe('/en')
+    expect(real('https://visitzibata.com/es/zona/otra')).toBeNull()
+  })
+
+  it('sin plazas borradas no hace nada', () => {
+    expect(aDondeZona(resolver([]), '/es/zona/plaza-vieja')).toBeNull()
+  })
+})
+
+describe('un local con otra dirección', () => {
+  const renombre = (slug: string, id = 'l-nuevo'): Redirect => ({ kind: 'place-slug', id, slug })
+
+  it('la dirección antigua va a la de hoy de ese id, no a un slug escrito en la fila', () => {
+    const d = resolver([renombre('cafe-antiguo')])
+    expect(aDondeLugar(d, '/es/lugar/cafe-antiguo')).toBe('/es/lugar/cafe-nuevo')
+    expect(aDondeLugar(d, '/en/place/cafe-antiguo')).toBe('/en/place/cafe-nuevo')
+    expect(aDondeLugar(d, '/lugar/cafe-antiguo')).toBe('/es/lugar/cafe-nuevo')
+  })
+
+  it('una cadena lleva de cada dirección antigua directo a la actual, sin saltos', () => {
+    const d = resolver([renombre('primero'), renombre('segundo')])
+    expect(aDondeLugar(d, '/es/lugar/primero')).toBe('/es/lugar/cafe-nuevo')
+    expect(aDondeLugar(d, '/es/lugar/segundo')).toBe('/es/lugar/cafe-nuevo')
+    // El destino ya no figura como antiguo: no hay segundo salto.
+    expect(aDondeLugar(d, '/es/lugar/cafe-nuevo')).toBeNull()
+  })
+
+  it('no confunde dos locales: cada id lleva a su propio slug', () => {
+    const d = resolver([renombre('a-1'), renombre('b-1', 'l-en-dos')])
+    expect(aDondeLugar(d, '/es/lugar/a-1')).toBe('/es/lugar/cafe-nuevo')
+    // El local de la plaza inactiva no tiene ficha: baja a la portada, no a una página que no existe.
+    expect(aDondeLugar(d, '/es/lugar/b-1')).toBe('/es')
+  })
+
+  it('si luego se oculta, baja a la zona; si la zona también se oculta, a la portada', () => {
+    const d = resolver([renombre('oculto-antes', 'l-oculto')])
+    expect(aDondeLugar(d, '/es/lugar/oculto-antes')).toBe('/es/zona/plaza-uno')
+    const sinZona = resolver(
+      [renombre('oculto-antes', 'l-oculto')],
+      plazas.map((plaza) => ({ ...plaza, active: false })),
+    )
+    expect(aDondeLugar(sinZona, '/es/lugar/oculto-antes')).toBe('/es')
+  })
+
+  it('si luego se borra, la dirección antigua termina donde termina la del borrado', () => {
+    const d = resolver([
+      renombre('viejo-a', 'l-viejo'),
+      { kind: 'place', id: 'l-viejo', slug: 'viejo-b', plazaId: 'p-uno', giros: ['g'] },
+    ])
+    expect(aDondeLugar(d, '/es/lugar/viejo-a')).toBe('/es/zona/plaza-uno')
+    expect(aDondeLugar(d, '/es/lugar/viejo-b')).toBe('/es/zona/plaza-uno')
+    expect(aDondeLugar(d, '/en/place/viejo-a')).toBe('/en/area/plaza-uno')
+  })
+
+  it('un id que ya no existe en ningún sitio lleva a la portada, no a un 404', () => {
+    const d = resolver([renombre('huerfano', 'l-fantasma')])
+    expect(aDondeLugar(d, '/es/lugar/huerfano')).toBe('/es')
+  })
+
+  it('no toca las zonas: cada familia tiene su propio espacio de direcciones', () => {
+    const d = resolver([renombre('compartido')])
+    expect(aDondeZona(d, '/es/zona/compartido')).toBeNull()
+  })
+
+  it('la consulta viaja de ficha a ficha (un enlace compartido con su categoría), no si baja a la zona', () => {
+    const d = resolver([renombre('cafe-antiguo'), renombre('oculto-antes', 'l-oculto')])
+    const real = (direccion: string) => redireccionDe(new URL(direccion), d)
+    expect(real('https://visitzibata.com/es/lugar/cafe-antiguo?categoria=pizza')).toBe(
+      '/es/lugar/cafe-nuevo?categoria=pizza',
+    )
+    expect(real('https://visitzibata.com/lugar/cafe-antiguo?categoria=pizza')).toBe(
+      '/es/lugar/cafe-nuevo?categoria=pizza',
+    )
+    // Baja de la ficha a la zona: el filtro de una ficha no significa nada en una zona.
+    expect(real('https://visitzibata.com/es/lugar/oculto-antes?categoria=pizza')).toBe(
+      '/es/zona/plaza-uno',
+    )
+  })
+})
+
+describe('una plaza con otra dirección', () => {
+  const renombre = (slug: string, id = 'p-uno'): Redirect => ({ kind: 'plaza-slug', id, slug })
+
+  it('la zona antigua va a la de hoy de ese id', () => {
+    const d = resolver([renombre('zona-antigua')])
+    expect(aDondeZona(d, '/es/zona/zona-antigua')).toBe('/es/zona/plaza-uno')
+    expect(aDondeZona(d, '/en/area/zona-antigua')).toBe('/en/area/plaza-uno')
+    expect(aDondeZona(d, '/zona/zona-antigua')).toBe('/es/zona/plaza-uno')
+  })
+
+  it('una cadena lleva de cada dirección antigua directo a la actual', () => {
+    const d = resolver([renombre('primera'), renombre('segunda')])
+    expect(aDondeZona(d, '/es/zona/primera')).toBe('/es/zona/plaza-uno')
+    expect(aDondeZona(d, '/es/zona/segunda')).toBe('/es/zona/plaza-uno')
+  })
+
+  it('si la plaza se desactiva o se borra después, va a la portada', () => {
+    expect(aDondeZona(resolver([renombre('antes', 'p-dos')]), '/es/zona/antes')).toBe('/es')
+    const borrada = resolver([
+      renombre('antes', 'p-vieja'),
+      { kind: 'plaza', id: 'p-vieja', slug: 'plaza-vieja' },
+    ])
+    expect(aDondeZona(borrada, '/es/zona/antes')).toBe('/es')
+    expect(aDondeZona(borrada, '/es/zona/plaza-vieja')).toBe('/es')
+  })
+
+  it('no toca las fichas: cada familia tiene su propio espacio de direcciones', () => {
+    const d = resolver([renombre('compartido')])
+    expect(aDondeLugar(d, '/es/lugar/compartido')).toBeNull()
+  })
+
+  it('la consulta viaja de zona a zona, con y sin prefijo, y se suelta al ir a la portada', () => {
+    const d = resolver([renombre('zona-antigua'), renombre('inactiva-antes', 'p-dos')])
+    const real = (direccion: string) => redireccionDe(new URL(direccion), d)
+    expect(real('https://visitzibata.com/es/zona/zona-antigua?categoria=bebidas')).toBe(
+      '/es/zona/plaza-uno?categoria=bebidas',
+    )
+    expect(real('https://visitzibata.com/en/area/zona-antigua?category=drinks')).toBe(
+      '/en/area/plaza-uno?category=drinks',
+    )
+    // Sin prefijo: un solo salto, con la consulta.
+    expect(real('https://visitzibata.com/zona/zona-antigua?categoria=bebidas')).toBe(
+      '/es/zona/plaza-uno?categoria=bebidas',
+    )
+    // Con barra final también.
+    expect(real('https://visitzibata.com/es/zona/zona-antigua/?categoria=bebidas')).toBe(
+      '/es/zona/plaza-uno?categoria=bebidas',
+    )
+    // La zona se desactivó: va a la portada, donde ese filtro no existe.
+    expect(real('https://visitzibata.com/es/zona/inactiva-antes?categoria=bebidas')).toBe('/es')
+  })
+})
+
+describe('una categoría con otro slug', () => {
+  // Con id distinto del slug y con un slug por idioma, que es donde se esconden los fallos.
+  const categorias = [
+    {
+      id: 'cat-comida',
+      slug: { es: 'comida-actual', en: 'food-current' },
+      giros: [{ id: 'giro-a' }],
+    },
+    {
+      id: 'cat-vacia',
+      slug: { es: 'vacia-actual', en: 'empty-current' },
+      giros: [{ id: 'giro-v' }],
+    },
+  ]
+  const conGiro = [
+    { id: 'l-1', slug: 'uno', active: true, plazaId: 'p-uno', giros: ['giro-a'] },
+    { id: 'l-2', slug: 'dos', active: false, plazaId: 'p-uno', giros: ['giro-v'] },
+    { id: 'l-3', slug: 'tres', active: true, plazaId: 'p-dos', giros: ['giro-v'] },
+  ]
+  const fila = (lang: 'es' | 'en', slug: string, id = 'cat-comida'): Redirect => ({
+    kind: 'category-slug',
+    id,
+    lang,
+    slug,
+  })
+  const real = (filas: Redirect[], url: string) =>
+    redireccionDe(new URL(url), resolverDirecciones(filas, plazas, conGiro, categorias))
+
+  it('cada idioma lleva su propio slug de hoy, con o sin prefijo', () => {
+    const filas = [fila('es', 'comida-vieja'), fila('en', 'food-old')]
+    expect(real(filas, 'https://visitzibata.com/es/categoria/comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/categoria/comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/en/category/food-old')).toBe(
+      '/en/category/food-current',
+    )
+  })
+
+  it('un slug de un idioma no se mezcla con el otro', () => {
+    const filas = [fila('es', 'comida-vieja')]
+    expect(real(filas, 'https://visitzibata.com/en/category/comida-vieja')).toBeNull()
+    expect(
+      real([fila('en', 'food-old')], 'https://visitzibata.com/es/categoria/food-old'),
+    ).toBeNull()
+  })
+
+  it('una cadena lleva de cada slug antiguo al actual, y conserva la consulta', () => {
+    const filas = [fila('es', 'primero'), fila('es', 'segundo')]
+    expect(real(filas, 'https://visitzibata.com/es/categoria/primero?x=1')).toBe(
+      '/es/categoria/comida-actual?x=1',
+    )
+    expect(real(filas, 'https://visitzibata.com/es/categoria/segundo')).toBe(
+      '/es/categoria/comida-actual',
+    )
+  })
+
+  it('si la categoría ya no tiene página (sin locales visibles) o se borró, va a la portada', () => {
+    // 'cat-vacia' solo la usa un local oculto y otro en una plaza inactiva.
+    expect(
+      real(
+        [fila('es', 'vacia-vieja', 'cat-vacia')],
+        'https://visitzibata.com/es/categoria/vacia-vieja',
+      ),
+    ).toBe('/es')
+    expect(
+      real(
+        [fila('en', 'fantasma-old', 'cat-fantasma')],
+        'https://visitzibata.com/en/category/fantasma-old',
+      ),
+    ).toBe('/en')
+  })
+
+  it('el enlace antiguo de la portada con ?categoria= también llega al slug de hoy', () => {
+    const filas = [fila('es', 'comida-vieja'), fila('en', 'food-old')]
+    expect(real(filas, 'https://visitzibata.com/es?categoria=comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/?categoria=comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/en?category=food-old')).toBe(
+      '/en/category/food-current',
+    )
+    // La que ya no tiene página no inventa una.
+    expect(
+      real(
+        [fila('es', 'vacia-vieja', 'cat-vacia')],
+        'https://visitzibata.com/es?categoria=vacia-vieja',
+      ),
+    ).toBeNull()
+  })
+
+  it('no toca las fichas ni las zonas: cada familia tiene su propio espacio', () => {
+    const filas = [fila('es', 'compartido')]
+    expect(real(filas, 'https://visitzibata.com/es/lugar/compartido')).toBeNull()
+    expect(real(filas, 'https://visitzibata.com/es/zona/compartido')).toBeNull()
   })
 })

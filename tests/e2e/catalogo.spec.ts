@@ -7,7 +7,7 @@
  * costó encontrar: una regla compartida ganándole a la del módulo por el orden del paquete.
  */
 import { expect, test } from '@playwright/test'
-import { isMobile, openApp, waitForMap, waitForSheet } from './helpers.ts'
+import { esc, isMobile, openApp, waitForMap, waitForSheet, ZONA_GRANDE } from './helpers.ts'
 
 /** Las cinco formas que el catálogo permite en lo que se pulsa, más las dos que no son un radio. */
 const FORMAS_PERMITIDAS = new Set([
@@ -210,8 +210,10 @@ test.describe('catálogo de interactuables', () => {
       await waitForSheet(page)
     }
 
-    const renglon = page.getByRole('link', { name: /Paseo Zibatá, \d+ lugares/ })
-    await expect(renglon).toHaveAttribute('href', /\/zona\/paseo-zibata$/)
+    const renglon = page.getByRole('link', {
+      name: new RegExp(`^${esc(ZONA_GRANDE.name)}, \\d+ lugares`),
+    })
+    await expect(renglon).toHaveAttribute('href', new RegExp(`/zona/${ZONA_GRANDE.slug}$`))
 
     /*
      * Y las páginas de información. Van en el pie de Tu Zibatá, que existe en los dos tamaños; la

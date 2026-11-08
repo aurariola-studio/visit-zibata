@@ -11,10 +11,17 @@
 import { base64url, cumpleLaPrueba, digestDe } from '../src/lib/prueba-de-trabajo.ts'
 import { type EntornoAcceso, puedeVerElPanel } from './acceso.ts'
 import { fechaLocal } from './analitica.ts'
+import { borrarNegocio } from './borrado.ts'
+import { borrarCategoria } from './borrado-categoria.ts'
+import { borrarGiro } from './borrado-giro.ts'
+import { borrarPlaza } from './borrado-plaza.ts'
+import { cambiarSlug } from './cambio-slug.ts'
+import { LUGARES } from './catalogo.ts'
 import { guardarCategorias } from './categorias.ts'
 import { contenido, guardarFoto, guardarNegocio, TOPE_FOTO } from './contenido.ts'
 import { ALTA, type Base, huella, nuevaCuenta, RESOLVER, secretoDe } from './cuenta.ts'
-import { APUNTE_EVENTO, envioDe, MAXIMO_BYTES } from './eventos.ts'
+import { leerCuerpo, TOPE_POR_DEFECTO } from './cuerpo.ts'
+import { APUNTE_EVENTO_VARIAS, agruparEventos, envioDe, MAXIMO_BYTES } from './eventos.ts'
 import {
   ANADIR,
   CUANTOS_TIENE,
@@ -47,6 +54,7 @@ import {
   POR_PAGINA,
   RESUMEN,
 } from './panel.ts'
+import { guardarPlaza } from './plazas.ts'
 import {
   CONTEO_CORAZONES,
   CONTEO_NOTAS,
@@ -77,13 +85,44 @@ function falloDeContenido(error: unknown): Response {
   return json({ error: 'No se pudo guardar el contenido. Revisa el registro.' }, 500)
 }
 
-/** El cuerpo como JSON, o `undefined` si no lo es. Quien llama ya rechaza lo que no reconoce. */
-async function cuerpoDe(peticion: Request): Promise<unknown> {
+/** El texto como JSON, o `undefined` si no lo es. Quien llama ya rechaza lo que no reconoce. */
+function cuerpoDe(texto: string): unknown {
   try {
-    return await peticion.json()
+    return JSON.parse(texto)
   } catch {
     return undefined
   }
+}
+
+/**
+ * Cuántos bytes admite cada ruta de escritura. Sale del máximo legítimo de cada una, no del típico:
+ * el de las visitas es cien lugares de setecientas treinta fechas, que es lo que sube un dispositivo
+ * con dos años de historial en la primera sincronización. Una ruta que no está aquí admite el
+ * tope por defecto.
+ */
+const TOPES_DE_CUERPO: Record<string, number> = {
+  '/api/evento': MAXIMO_BYTES,
+  '/api/visitas': 1_300_000,
+  '/api/panel/contenido/negocio': 128 * 1024,
+  '/api/panel/contenido/negocio/borrar': 4 * 1024,
+  '/api/panel/contenido/negocio/slug': 4 * 1024,
+  '/api/panel/contenido/plaza': 16 * 1024,
+  '/api/panel/contenido/plaza/borrar': 4 * 1024,
+  '/api/panel/contenido/plaza/slug': 4 * 1024,
+  '/api/panel/contenido/categoria/slug': 4 * 1024,
+  '/api/panel/contenido/categorias': 128 * 1024,
+  '/api/panel/contenido/categoria/borrar': 4 * 1024,
+  '/api/panel/contenido/giro/borrar': 4 * 1024,
+  '/api/panel/contenido/foto': Math.ceil(TOPE_FOTO * 1.5),
+}
+
+/** Cuánto vive en memoria del isolate el conteo público antes de volver a preguntarle a la base. */
+const VIDA_DE_SENALES_MS = 60_000
+const senalesGuardadas = new WeakMap<object, { hasta: number; cuerpo: string }>()
+
+const CABECERAS_DE_SENALES = {
+  'content-type': 'application/json; charset=utf-8',
+  'cache-control': 'public, max-age=300',
 }
 
 const json = (datos: unknown, estado = 200, cache = 'no-store'): Response =>
@@ -117,16 +156,40 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
   if (!entorno.ANALITICA) return json({ error: 'sin base de datos' }, 503)
 
   /*
+   * Las escrituras del panel pasan por Access y por el origen ANTES de leer una sola línea del
+   * cuerpo: quien no es de la casa no hace que el Worker baje seis megas de una foto. Cada
+   * manejador repite las dos comprobaciones, a propósito (ninguno depende de que esta se mantenga).
+   */
+  if (peticion.method === 'POST' && ruta.startsWith('/api/panel/')) {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+  }
+
+  /*
+   * El cuerpo de toda escritura se lee aquí, una sola vez y con tope en bytes, antes de la prueba de
+   * trabajo y de la cuenta: ninguna ruta baja a memoria más de lo que le toca, venga o no
+   * `Content-Length`. Los manejadores de abajo solo interpretan el texto.
+   */
+  let texto = ''
+  if (peticion.method === 'POST') {
+    const leido = await leerCuerpo(peticion, TOPES_DE_CUERPO[ruta] ?? TOPE_POR_DEFECTO)
+    if (leido === null) {
+      if (ruta === '/api/evento') return new Response(null, { status: 413 })
+      if (ruta === '/api/panel/contenido/foto') {
+        return json({ error: 'La foto es demasiado grande; el navegador debe reducirla.' }, 413)
+      }
+      return json({ error: 'cuerpo demasiado grande' }, 413)
+    }
+    texto = leido
+  }
+
+  /*
    * Los eventos de uso (ver worker/eventos.ts). No piden cuenta ni miran quién los manda: ni la
    * credencial ni el user agent ni la IP entran en la cuenta, y lo que se guarda es un contador por
    * día. Responde 204 aunque no haya nada que guardar o la tabla no exista todavía: contar es lo
    * accesorio, y quien lo envía (un `sendBeacon`) ni siquiera lee la respuesta.
    */
   if (ruta === '/api/evento' && peticion.method === 'POST') {
-    const declarado = Number(peticion.headers.get('content-length') ?? 0)
-    if (declarado > MAXIMO_BYTES) return new Response(null, { status: 413 })
-    const texto = await peticion.text()
-    if (texto.length > MAXIMO_BYTES) return new Response(null, { status: 413 })
     let cuerpo: unknown
     try {
       cuerpo = JSON.parse(texto)
@@ -138,11 +201,12 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (envio.eventos.length > 0) {
       const fecha = fechaLocal(new Date())
       try {
+        // Los eventos idénticos de un envío se juntan: una escritura por evento distinto, con su cuenta.
         await entorno.ANALITICA.batch(
-          envio.eventos.map((evento) =>
+          agruparEventos(envio.eventos).map(({ evento, veces }) =>
             (entorno.ANALITICA as Base)
-              .prepare(APUNTE_EVENTO)
-              .bind(fecha, evento.tipo, evento.destino, evento.detalle, envio.idioma),
+              .prepare(APUNTE_EVENTO_VARIAS)
+              .bind(fecha, evento.tipo, evento.destino, evento.detalle, envio.idioma, veces),
           ),
         )
       } catch (error) {
@@ -196,12 +260,25 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
    * a esta escala una consulta por visita a D1 no se nota (el plan gratuito da millones al día).
    */
   if (ruta === '/api/senales' && peticion.method === 'GET') {
-    const limite = new Date(Date.now() - EDAD_MINIMA_MS).toISOString()
+    const ahora = Date.now()
+    const guardado = senalesGuardadas.get(entorno.ANALITICA)
+    if (guardado && guardado.hasta > ahora) {
+      return new Response(guardado.cuerpo, { headers: CABECERAS_DE_SENALES })
+    }
+    const limite = new Date(ahora - EDAD_MINIMA_MS).toISOString()
     const [corazones, notas] = await Promise.all([
       entorno.ANALITICA.prepare(CONTEO_CORAZONES).bind(limite).all<FilaCorazones>(),
       entorno.ANALITICA.prepare(CONTEO_NOTAS).bind(limite).all<FilaNotas>(),
     ])
-    return json(senalesDe(corazones.results ?? [], notas.results ?? []), 200, 'public, max-age=300')
+    // Solo cuentan los lugares del catálogo: lo que ya hubiera en la base sobre un slug inventado ni
+    // entra en el divisor ni en la media con la que se calibra el resto.
+    const delCatalogo = <T extends { lugar: string }>(filas: T[]): T[] =>
+      filas.filter((fila) => LUGARES.has(fila.lugar))
+    const cuerpo = JSON.stringify(
+      senalesDe(delCatalogo(corazones.results ?? []), delCatalogo(notas.results ?? [])),
+    )
+    senalesGuardadas.set(entorno.ANALITICA, { hasta: ahora + VIDA_DE_SENALES_MS, cuerpo })
+    return new Response(cuerpo, { headers: CABECERAS_DE_SENALES })
   }
 
   /*
@@ -210,7 +287,7 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
    * la prueba de trabajo del sello, y que el sello sea unico hace que cada una valga una vez.
    */
   if (ruta === '/api/sugerencia' && peticion.method === 'POST') {
-    const sugerencia = sugerenciaDe(await cuerpoDe(peticion))
+    const sugerencia = sugerenciaDe(cuerpoDe(texto))
     if (!sugerencia) return json({ error: 'sugerencia no valida' }, 400)
     if (!cumpleLaPrueba(await digestDe(sugerencia.sello))) {
       return json({ error: 'prueba de trabajo no valida' }, 403)
@@ -273,7 +350,85 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
-      const resultado = await guardarNegocio(entorno, await cuerpoDe(peticion))
+      const resultado = await guardarNegocio(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Editar una plaza: si cambia lo que se ve, primero responde con el impacto (ver worker/plazas.ts).
+  if (ruta === '/api/panel/contenido/plaza' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await guardarPlaza(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Borrar va en dos pasos (impacto y confirmación) por la misma ruta; ver worker/borrado.ts.
+  if (ruta === '/api/panel/contenido/negocio/borrar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await borrarNegocio(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Cambiar la dirección de un negocio o de una plaza, en dos pasos; ver worker/cambio-slug.ts.
+  for (const [rutaCambio, tipo] of [
+    ['/api/panel/contenido/negocio/slug', 'place'],
+    ['/api/panel/contenido/plaza/slug', 'plaza'],
+    ['/api/panel/contenido/categoria/slug', 'category'],
+  ] as const) {
+    if (ruta === rutaCambio && peticion.method === 'POST') {
+      if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+      if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+      try {
+        const resultado = await cambiarSlug(entorno, tipo, cuerpoDe(texto))
+        return json(resultado, resultado.ok ? 200 : 400)
+      } catch (error) {
+        return falloDeContenido(error)
+      }
+    }
+  }
+
+  // Lo mismo para una plaza vacía; ver worker/borrado-plaza.ts.
+  if (ruta === '/api/panel/contenido/plaza/borrar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await borrarPlaza(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Lo mismo para una categoría sin locales; ver worker/borrado-categoria.ts.
+  if (ruta === '/api/panel/contenido/categoria/borrar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await borrarCategoria(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Lo mismo para un giro suelto que ningún local usa; ver worker/borrado-giro.ts.
+  if (ruta === '/api/panel/contenido/giro/borrar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await borrarGiro(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)
@@ -284,7 +439,7 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
-      const resultado = await guardarCategorias(entorno, await cuerpoDe(peticion))
+      const resultado = await guardarCategorias(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)
@@ -292,20 +447,13 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
   }
 
   /*
-   * Una foto viaja en base64 y se queda por debajo de los seis megas. Se comprueba antes de leer el
-   * cuerpo entero: una imagen de un móvil sin reducir no debería llegar hasta aquí.
+   * Una foto viaja en base64 y se queda por debajo de los seis megas. El tope en bytes ya se aplicó
+   * arriba, antes de leer el cuerpo entero: una imagen de un móvil sin reducir no debería llegar aquí.
    */
   if (ruta === '/api/panel/contenido/foto' && peticion.method === 'POST') {
     if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
-    const tope = Math.ceil(TOPE_FOTO * 1.5)
-    const declarado = Number(peticion.headers.get('content-length') ?? 0)
-    if (declarado > tope) {
-      return json({ error: 'La foto es demasiado grande; el navegador debe reducirla.' }, 413)
-    }
     try {
-      const texto = await peticion.text()
-      if (texto.length > tope) return json({ error: 'La foto es demasiado grande.' }, 413)
       let cuerpo: unknown
       try {
         cuerpo = JSON.parse(texto)
@@ -370,7 +518,7 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
 
   if (ruta === '/api/favoritos' && peticion.method === 'POST') {
     if (!cuenta) return json({ error: 'sin cuenta' }, 401)
-    const cambio = cambioDe(await cuerpoDe(peticion))
+    const cambio = cambioDe(cuerpoDe(texto))
     if (!cambio) return json({ error: 'cambio no válido' }, 400)
 
     if (cambio.anadir.length > 0) {
@@ -407,14 +555,15 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     const filas = await entorno.ANALITICA.prepare(MIS_NOTAS)
       .bind(cuenta)
       .all<{ lugar_id: string; estrellas: number }>()
-    const notas: Record<string, number> = {}
+    // Sin prototipo: un `lugar_id` llamado `constructor` o `__proto__` no puede tocar lo heredado.
+    const notas: Record<string, number> = Object.create(null)
     for (const fila of filas.results ?? []) notas[fila.lugar_id] = fila.estrellas
     return json({ notas })
   }
 
   if (ruta === '/api/calificaciones' && peticion.method === 'POST') {
     if (!cuenta) return json({ error: 'sin cuenta' }, 401)
-    const cambio = calificacionesDe(await cuerpoDe(peticion))
+    const cambio = calificacionesDe(cuerpoDe(texto))
     if (!cambio) return json({ error: 'cambio no válido' }, 400)
     const ahora = new Date().toISOString()
     try {
@@ -441,7 +590,7 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     const filas = await entorno.ANALITICA.prepare(MIS_VISITAS)
       .bind(cuenta)
       .all<{ lugar_id: string; fecha: string }>()
-    const fechas: Record<string, string[]> = {}
+    const fechas: Record<string, string[]> = Object.create(null)
     for (const fila of filas.results ?? []) {
       const lista = fechas[fila.lugar_id] ?? []
       lista.push(fila.fecha)
@@ -453,7 +602,7 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
 
   if (ruta === '/api/visitas' && peticion.method === 'POST') {
     if (!cuenta) return json({ error: 'sin cuenta' }, 401)
-    const cambio = visitasDe(await cuerpoDe(peticion))
+    const cambio = visitasDe(cuerpoDe(texto))
     if (!cambio) return json({ error: 'cambio no válido' }, 400)
     try {
       await entorno.ANALITICA.batch(

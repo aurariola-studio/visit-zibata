@@ -1,5 +1,13 @@
 import { expect, test } from '@playwright/test'
-import { openApp, panel, plazaMarker, waitForMap, waitForSheet } from './helpers.ts'
+import {
+  LOCAL_B,
+  openApp,
+  panel,
+  plazaMarker,
+  waitForMap,
+  waitForSheet,
+  ZONA_B,
+} from './helpers.ts'
 
 // Solo en proyectos con pantalla táctil (teléfono Android, iPhone con WebKit y tableta).
 test.describe('Interacción táctil @mapa', () => {
@@ -11,14 +19,14 @@ test.describe('Interacción táctil @mapa', () => {
   test('tocar un marcador abre la plaza y tocar una tarjeta abre la ficha', async ({ page }) => {
     await openApp(page)
     await waitForMap(page)
-    const marker = await plazaMarker(page, 'Plaza Condesa')
+    const marker = await plazaMarker(page, ZONA_B.name)
     await marker.tap()
     const region = panel(page)
-    await expect(region.getByRole('heading', { level: 2, name: 'Plaza Condesa' })).toBeVisible()
-    await region.getByRole('link', { name: 'Ver detalles de Bendito Bocado' }).tap()
-    await expect(region.getByRole('heading', { level: 2, name: 'Bendito Bocado' })).toBeVisible()
-    await region.getByRole('button', { name: 'Volver a Plaza Condesa' }).tap()
-    await expect(region.getByRole('heading', { level: 2, name: 'Plaza Condesa' })).toBeVisible()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
+    await region.getByRole('link', { name: `Ver detalles de ${LOCAL_B.name}` }).tap()
+    await expect(region.getByRole('heading', { level: 2, name: LOCAL_B.name })).toBeVisible()
+    await region.getByRole('button', { name: `Volver a ${ZONA_B.name}` }).tap()
+    await expect(region.getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
   })
 
   test('las pastillas de categoría y el buscador responden al tacto', async ({ page }) => {

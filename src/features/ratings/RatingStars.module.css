@@ -1,36 +1,48 @@
 /*
- * La nota al lado, y debajo solo cuando la ficha es estrecha.
+ * La nota al lado, en una fila y siempre a 12 px.
  *
- * Lo que decide es el ancho del contenedor, no el largo del texto. Antes envolvía por sí sola, y
- * como el texto cambia (la invitación, la vista previa al pasar por encima, la calificación
- * puesta) cada uno tenía un ancho distinto: la nota saltaba de debajo a al lado según lo que
- * dijera, delante de los ojos y mientras se usaba. Con el umbral en el contenedor, en una pantalla
- * dada la nota está siempre en el mismo sitio, diga lo que diga.
+ * El tamaño del texto no se toca: es el de la ficha ("Registra tu primera visita", "Horario revisado
+ * el ..."), y encogerlo o partirlo rompería esa escala. Así que cuando el ancho aprieta son las
+ * estrellas las que ceden: la escala se queda con el espacio que deja la nota y cada estrella se
+ * encoge con ella, sin cambiar de alto.
+ *
+ * El hueco de la nota se reserva con el estado más largo ("Calificado con 4,5 estrellas") para que
+ * las estrellas no cambien de tamaño al pasar el puntero ni al elegir la nota.
+ *
+ * Lo que cuesta: la media estrella queda entre 13 y 23 px de ancho (44 de alto), por debajo de los 24
+ * que pide WCAG 2.2 AA en las dos direcciones. Se acepta a cambio de que el texto no se parta nunca;
+ * queda anotado en docs/ACCESIBILIDAD.md.
+ *
+ * La fila solo se parte en un caso que no está en la mano: el zoom de texto al 200 % en un teléfono,
+ * donde la nota sola ya ocupa más que la ficha. Ahí se prefiere que baje a que las estrellas
+ * desaparezcan, y el suelo de la escala (7,5 rem) mantiene el control a la vista.
  */
 .rating {
   display: flex;
+  /* Ocupa el ancho de la ficha: así la escala sabe cuánto le deja la nota y reparte. */
+  width: 100%;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem var(--space-3);
-}
-
-@container ficha (max-width: 20rem) {
-  .rating > .note {
-    flex: 1 0 100%;
-  }
+  gap: var(--space-2);
 }
 
 .scale {
-  display: inline-flex;
+  display: flex;
+  /* Crece hasta lo que miden cinco estrellas a 48 y no más: si sobra sitio, la nota va justo detrás
+     en vez de quedar empujada al otro extremo. Si falta, encoge y reparte. */
+  flex: 1 1 auto;
+  max-width: 15.6rem;
+  /* Suelo de 7,5 rem (cinco medias estrellas de 24): la fila solo parte si el texto crece tanto
+     (zoom al 200 %) que ya no cabe de ninguna manera. */
+  min-width: 7.5rem;
   align-items: center;
   gap: 0.15rem;
   border: 0;
   padding: 0;
   /*
    * Sin el margen de 2 px que un fieldset trae de fábrica, y corrida a la izquierda lo que sobra
-   * a cada lado del dibujo dentro de su zona sensible (2 rem de ancho, 1,2 rem de estrella): así
-   * la primera estrella empieza donde empieza el texto de la ficha y no 8 px más adentro. La zona
-   * pulsable no cambia de tamaño, solo asoma por el margen del panel.
+   * a cada lado del dibujo dentro de su zona sensible: así la primera estrella empieza donde empieza
+   * el texto de la ficha y no 8 px más adentro.
    */
   margin: 0 0 0 -0.4rem;
 }
@@ -49,15 +61,17 @@
  * media estrella es exactamente la mitad del mismo dibujo y no un glifo distinto.
  */
 /*
- * El alto se ajusta al dibujo (1,2 rem) para que la fila no arrastre aire arriba y abajo y rompa el
- * ritmo de la ficha. El ancho no se toca: es la zona sensible de las dos mitades.
+ * El alto se queda en 44 px y el ancho se reparte con las otras cuatro: el dibujo se encoge con su
+ * hueco, pero la zona sensible sigue siendo la mitad de la estrella en horizontal.
  */
 .star {
   position: relative;
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 1.7rem;
+  flex: 1 1 3rem;
+  min-width: 0;
+  max-width: 3rem;
+  height: 2.75rem;
   border-radius: var(--radius-pill);
   color: var(--sand-400);
 }
@@ -65,8 +79,9 @@
 .empty,
 .filled {
   grid-area: 1 / 1;
-  width: 1.2rem;
-  height: 1.2rem;
+  width: min(1.6rem, 62%);
+  height: auto;
+  aspect-ratio: 1;
   fill: none;
 }
 
@@ -125,7 +140,10 @@
 }
 
 .note {
+  flex: none;
+  min-width: 8.75rem;
   font-size: var(--text-xs);
+  white-space: nowrap;
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
 }

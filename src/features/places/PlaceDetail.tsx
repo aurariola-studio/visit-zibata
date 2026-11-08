@@ -18,6 +18,7 @@ import { DEFAULT_PLAZA_TONE, plazaTones, plazaVars } from '../../config/palette.
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { locale, localized, t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
+import { etiquetaDeGiro, lista } from '../../lib/categorias.ts'
 import { registrar, salidaDe } from '../../lib/eventos.ts'
 import { focusPanelHeading } from '../../lib/focus.ts'
 import { placeDirections, telUrl, whatsappUrl } from '../../lib/maps-url.ts'
@@ -29,7 +30,7 @@ import { VisitButton } from '../visits/VisitButton.tsx'
 import { HoursTable } from './HoursTable.tsx'
 import styles from './PlaceDetail.module.css'
 import { PlacePicture } from './PlacePicture.tsx'
-import { girosOf, girosSecundariosOf } from './placeIcon.ts'
+import { girosOf } from './placeIcon.ts'
 import { ShareButton } from './ShareButton.tsx'
 
 /**
@@ -66,12 +67,24 @@ function fechaLarga(fecha: string): string {
   )
 }
 
+export interface PlaceDetailDemo {
+  favorite?: boolean
+  favorites?: number | null
+  yours?: boolean
+  rating?: number | null
+  visitDate?: string | null
+}
+
 interface PlaceDetailProps {
   place: Place
   plaza: Plaza
   backLabel: string
   onBack: () => void
   onClose: () => void
+  /** En una miniatura de demostración el foco no debe saltar al título. */
+  focusOnMount?: boolean
+  /** Estado de las marcas para la demostración del tutorial, sin tocar los datos reales. */
+  demo?: PlaceDetailDemo
 }
 
 interface ContactLink {
@@ -115,24 +128,40 @@ function Description({ text }: { text: LocalizedText }) {
   )
 }
 
-export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceDetailProps) {
+export function PlaceDetail({
+  place,
+  plaza,
+  backLabel,
+  onBack,
+  onClose,
+  focusOnMount = true,
+  demo,
+}: PlaceDetailProps) {
   const catalog = useCatalog()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const directions = placeDirections(place, plaza)
   /**
-   * Los giros del local en una sola línea, en su orden y con el icono de cada uno: aquí hay sitio
-   * para todos, principales y secundarios, así que esta es la única vista que los enseña completos.
-   * El logo redondo, en cambio, lleva solo los principales.
+   * Los giros del local en una sola línea, en su orden y con el icono de cada uno. La ficha es la
+   * vista que los enseña completos; la tarjeta recorta por ancho y cuenta el resto.
    */
   const giros = girosOf(place, catalog)
-  const secundarios = girosSecundariosOf(place, catalog)
-  const todos = [...giros, ...secundarios]
-  const giroLabels = todos.map((giro) => localized(giro.label))
+  const giroLabels = giros.map((giro) => localized(giro.label))
+  /*
+   * Para compartir y para el `title` de la línea, los giros se leen como en una frase: completos
+   * ("Comida Italiana", no "Italiana") y unidos con comas y "y", no con puntos medios. El filtro
+   * sigue usando la etiqueta corta, que es la que cabe en una cápsula.
+   */
+  const girosEnProsa = lista(
+    giros.map((giro) => etiquetaDeGiro(giro, locale, t)),
+    locale,
+  )
+  const girosCortosEnProsa = lista(giroLabels, locale)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia el lugar mostrado.
   useEffect(() => {
+    if (!focusOnMount) return
     focusPanelHeading(headingRef.current)
-  }, [place.id])
+  }, [place.id, focusOnMount])
 
   const brand = (name: BrandName) => <BrandIcon name={name} />
   /**
@@ -267,7 +296,7 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
            * leían como la misma clase de cosa. El favorito se queda: es de un toque y está también
            * en la tarjeta, así que su sitio es el mismo en los dos lados.
            */}
-          <FavoriteButton placeId={place.id} placeName={place.name} />
+          <FavoriteButton placeId={place.id} placeName={place.name} demoActive={demo?.favorite} />
           <button
             type="button"
             className={styles.iconButton}
@@ -299,13 +328,10 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
             </h2>
             {/*
              * Los giros van debajo del nombre, uno por renglón: son el detalle del lugar, no su
-             * antetítulo. Un renglón por giro y no uno por nivel, porque repartirlos dos y uno
-             * partía la lista por donde no hay junta. Los dos niveles se pintan igual: en la ficha
-             * todos son lo que se vende ahí, y el orden ya dice cuál manda. Es un párrafo y no una
-             * lista: la única lista de la ficha es la de contacto.
+             * antetítulo. Es un párrafo y no una lista: la única lista de la ficha es la de contacto.
              */}
-            <p className={styles.giros} title={giroLabels.join(' · ')}>
-              {todos.map((giro) => (
+            <p className={styles.giros} title={girosCortosEnProsa}>
+              {giros.map((giro) => (
                 <span key={giro.id}>
                   <CategoryIcon name={giro.icon} size={14} />
                   {localized(giro.label)}
@@ -372,7 +398,7 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
         <ShareButton
           name={place.name}
           slug={place.slug}
-          giros={giroLabels.join(' · ')}
+          giros={girosEnProsa}
           plazaName={plaza.name}
           conNombre
         />
@@ -383,7 +409,7 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
        * porque es lo último que se mira antes de decidir: primero a dónde voy, después cuánta gente
        * lo guardó, y al final lo mío (estrellas y visitas). Arriba competía con el nombre del local.
        */}
-      <SocialStats placeId={place.id} />
+      <SocialStats placeId={place.id} demoFavorites={demo?.favorites} demoYours={demo?.yours} />
 
       {/*
        * Y lo que no sale de aquí. Calificar y registrar una visita solo cambian tu relación con el
@@ -393,13 +419,22 @@ export function PlaceDetail({ place, plaza, backLabel, onBack, onClose }: PlaceD
        * sigue siendo "Solo para ti", pero no hace falta repetirlo a la vista.
        */}
       <section className={styles.personal} aria-label={t('place.onlyYou')} data-nosnippet="">
-        <RatingStars placeId={place.id} placeName={place.name} />
-        <VisitButton placeId={place.id} placeName={place.name} sinSuperficie />
+        <RatingStars placeId={place.id} placeName={place.name} demoValue={demo?.rating} />
+        <VisitButton
+          placeId={place.id}
+          placeName={place.name}
+          sinSuperficie
+          demoDate={demo?.visitDate}
+        />
       </section>
 
       {place.description && <Description text={place.description} />}
 
-      <HoursTable hours={place.hours} cerrado={place.cierre !== undefined} />
+      <HoursTable
+        hours={place.hours}
+        cerrado={place.cierre !== undefined}
+        revisado={place.verification?.lastVerifiedAt}
+      />
 
       {links.length > 0 && (
         <section className={styles.contact} aria-label={t('place.contact')} data-nosnippet="">

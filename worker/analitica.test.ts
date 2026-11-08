@@ -71,6 +71,28 @@ describe('qué se cuenta', () => {
   })
 })
 
+describe('un alias codificado no abre una fila nueva', () => {
+  it('una ruta con escapes de porcentaje no se cuenta', () => {
+    for (const ruta of [
+      '/lugar/%74omassa',
+      '/es/lugar/tomass%61',
+      '/en/place/tomassa%2f',
+      '/lugar/%7a',
+    ]) {
+      expect(visitaDe(visita({ url: `https://visitzibata.com${ruta}` })), ruta).toBeNull()
+    }
+  })
+
+  it('una ruta absurdamente larga tampoco', () => {
+    const larga = `/lugar/${'a'.repeat(300)}`
+    expect(visitaDe(visita({ url: `https://visitzibata.com${larga}` }))).toBeNull()
+  })
+
+  it('la ruta normal sigue contando', () => {
+    expect(visitaDe(visita())?.ruta).toBe('/lugar/tomassa')
+  })
+})
+
 describe('qué no se cuenta', () => {
   it('un robot no es una visita', () => {
     for (const agente of [

@@ -52,23 +52,48 @@ describe('rankPlaces', () => {
     expect(ranked.indexOf('sushi-b')).toBeLessThan(ranked.indexOf('pizza-a'))
   })
 
-  it('un giro secundario arrastra igual que un principal', () => {
-    // El nivel es peso visual, no visibilidad: a quien le gusta el sushi hay que subirle la
-    // pizzería que además lo hace, aunque en la lista el dibujo sea el de la pizza.
-    const conSecundario = [
+  it('cualquier giro arrastra igual', () => {
+    // A quien le gusta el sushi hay que subirle la pizzería que además lo hace, aunque en la lista
+    // el dibujo sea el de la pizza.
+    const conDos = [
       ...places,
-      makePlace({ id: 'pizza-c', plazaId: 'p1', giros: ['pizza'], secundarios: ['sushi'] }),
+      makePlace({ id: 'pizza-c', plazaId: 'p1', giros: ['pizza', 'sushi'] }),
     ]
-    const porId = new Map(conSecundario.map((place) => [place.id, place]))
+    const porId = new Map(conDos.map((place) => [place.id, place]))
     const signals: PreferenceSignals = {
       ...none,
       favorites: new Set(['sushi-a']),
       interactions: new Map([['sushi-a', { opens: 5, lastOpenedAt: NOW - DAY }]]),
     }
     const ranked = ids(
-      rankPlaces(conSecundario, signals, { ...options, placeById: (id) => porId.get(id) }),
+      rankPlaces(conDos, signals, { ...options, placeById: (id) => porId.get(id) }),
     )
     expect(ranked.indexOf('pizza-c')).toBeLessThan(ranked.indexOf('pizza-a'))
+  })
+
+  it('un local que ya no está sigue enseñando qué le gusta, sin mostrarse', () => {
+    // El sushi que la persona marcó se borró de la guía: ya no está en la lista ni en el catálogo.
+    const retirado = { giros: ['sushi'], plazaId: 'p1' }
+    const lista = places.filter((place) => place.giros[0] !== 'sushi')
+    const conRetirado = (id: string) => (id === 'sushi-viejo' ? retirado : byId.get(id))
+    const signals: PreferenceSignals = {
+      ...none,
+      favorites: new Set(['sushi-viejo']),
+      ratings: new Map([['sushi-viejo', 5]]),
+    }
+
+    // Sin su huella, el favorito no dice nada y la lista queda como estaba.
+    const sinHuella = ids(rankPlaces(lista, signals, options))
+    // Con su huella, lo parecido sube; y nunca aparece el local retirado.
+    const conHuella = ids(rankPlaces(lista, signals, { ...options, placeById: conRetirado }))
+    expect(conHuella).not.toContain('sushi-viejo')
+    expect(conHuella).toHaveLength(lista.length)
+    expect(conHuella.slice().sort()).toEqual(sinHuella.slice().sort())
+
+    // La afinidad por categoría (las pastillas de filtro) también lo recuerda.
+    const afinidad = categoryAffinity(signals, conRetirado, NOW, categoryOfGiro)
+    expect(afinidad.get('asiatica') ?? 0).toBeGreaterThan(0)
+    expect(categoryAffinity(signals, options.placeById, NOW, categoryOfGiro).size).toBe(0)
   })
 
   it('una calificación baja hunde el lugar', () => {

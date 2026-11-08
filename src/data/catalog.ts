@@ -1,6 +1,6 @@
 import { ZIBATA_EXTENT } from '../config/map.ts'
 import type { Catalog, Category, Place, Plaza } from '../types/domain.ts'
-import { DataLoadError, type PlacesRepository } from './PlacesRepository.ts'
+import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
 import {
   type Bounds,
   type CommercialDataset,
@@ -13,6 +13,7 @@ export function buildCatalog(
   categories: Category[],
   allPlazas: Plaza[],
   allPlaces: Place[],
+  retired: readonly RetiredPlace[] = [],
 ): Catalog {
   const sortedCategories = [...categories].sort((a, b) => a.order - b.order)
   const activePlazas = new Set(allPlazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
@@ -37,6 +38,16 @@ export function buildCatalog(
     sortedCategories.flatMap((c) => c.giros.map((g) => [g.id, c] as const)),
   )
 
+  // Lo que no se muestra pero se marcó alguna vez: los ocultos conservan sus datos y los borrados
+  // dejan su huella en `redirects.json`. Un local que sí se muestra no entra (manda el real).
+  const shown = new Set(places.map((place) => place.id))
+  const retiredById = new Map<string, Pick<Place, 'giros' | 'plazaId'>>([
+    ...retired.map(({ id, giros, plazaId }) => [id, { giros, plazaId }] as const),
+    ...allPlaces
+      .filter((place) => !shown.has(place.id))
+      .map(({ id, giros, plazaId }) => [id, { giros, plazaId }] as const),
+  ])
+
   return {
     categories: sortedCategories,
     plazas,
@@ -47,6 +58,7 @@ export function buildCatalog(
     plazaById: new Map(plazas.map((p) => [p.id, p])),
     plazaBySlug: new Map(plazas.map((p) => [p.slug, p])),
     placeById: new Map(places.map((p) => [p.id, p])),
+    retiredById,
     placeBySlug: new Map(places.map((p) => [p.slug, p])),
     placesByPlaza,
   }
@@ -120,9 +132,22 @@ export async function loadCatalog(repository: PlacesRepository): Promise<Catalog
     { west, south, east, north },
   )
   for (const note of notes) console.warn(`[datos] ${note}`)
-  const catalog = buildCatalog(dataset.categories, dataset.plazas, dataset.places)
+  // Los borrados solo afinan las recomendaciones: si su archivo falla, la guía sigue sin ellos.
+  const retired = await (repository.getRetired?.() ?? Promise.resolve([])).catch(() => [])
+  const catalog = buildCatalog(dataset.categories, dataset.plazas, dataset.places, retired)
   if (catalog.categories.length === 0 || !catalog.plazas.some((plaza) => plaza.active)) {
     throw new DataLoadError('No hay datos comerciales válidos para mostrar', notes)
   }
   return catalog
+}
+
+/**
+ * Lo que se sabe de un local que alguien marcó, esté o no a la vista: el local, o al menos sus giros y
+ * su plaza. Lo usa el algoritmo para aprender gustos; no sirve para mostrar nada.
+ */
+export function markedPlace(
+  catalog: Catalog,
+  id: string,
+): Pick<Place, 'giros' | 'plazaId'> | undefined {
+  return catalog.placeById.get(id) ?? catalog.retiredById.get(id)
 }

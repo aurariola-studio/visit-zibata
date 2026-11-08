@@ -1,50 +1,70 @@
 /**
- * La hoja de "Tu Zibatá": una foto del presente, para mirar más que para tocar.
+ * La hoja de "Tu Zibatá": tres hojas que se pasan con una fila de pestañas y caben en una pantalla.
  *
- *  - ¿Por dónde he andado? Una frase con lo que llevas y las zonas de la guía como insignias, las
- *    estrenadas llenas y las que faltan en contorno. Son un cuadro, no botones.
- *  - ¿Cuáles son mis tres? Los lugares que más te representan, en el orden que sale de tus propias
- *    marcas. El orden es interno: en pantalla solo se ve el lugar, su giro y su plaza.
- *  - ¿Qué tipo de lugar busco siempre? Los tres giros donde más marcas hay, contando solo las que
- *    pones a propósito (visitas, notas y corazones), nunca las fichas que abriste.
+ *  - Zonas: tu paso por la guía, con las zonas que ya estrenaste como sellos y el resto en contorno.
+ *  - Podio: tus tres de siempre, con lo que has hecho con ellos (visitas, última, nota, corazón).
+ *  - Gustos: los tipos de lugar donde más marcas pones.
+ *
+ * La cabecera y las pestañas no se mueven; el contenido de cada hoja está medido para no necesitar
+ * scroll en ningún tamaño de la matriz de pruebas. El orden del podio es interno: en pantalla solo se
+ * ve el lugar y sus datos.
  *
  * Vive aparte del botón porque casi nunca se abre: así no viaja en el arranque de la guía.
  */
-import { Check, X } from 'lucide-react'
-import { type CSSProperties, useEffect, useMemo, useRef } from 'react'
+import { Clock, Heart, X } from 'lucide-react'
+import { type CSSProperties, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
 import { ProfileIcon } from '../../components/icons/ProfileIcon.tsx'
 import { DEFAULT_PLAZA_TONE, type PlazaTone, plazaTones, plazaVars } from '../../config/palette.ts'
 import { useCatalog } from '../../data/CatalogContext.tsx'
-import { localized, t, useLocale } from '../../i18n/index.ts'
+import { markedPlace } from '../../data/catalog.ts'
+import { formatNumber, localized, t, useLocale } from '../../i18n/index.ts'
 import { alPulsarEnlace } from '../../lib/navegacion.ts'
 import { type InfoTopic, rutaDeInfo, rutaDeLugar } from '../../lib/url-state.ts'
 import type { Category, Place, Plaza } from '../../types/domain.ts'
-import { girosOf, placeIconName } from '../places/placeIcon.ts'
+import { placeIconName } from '../places/placeIcon.ts'
 import { categoryAffinity } from '../ranking/rankPlaces.ts'
 import styles from './ProfileButton.module.css'
 import type { Marks } from './useMarks.ts'
 import { useMarks } from './useMarks.ts'
 
+/** Las hojas, en el orden en que se pasan. */
+const HOJAS = [
+  { id: 'zonas', label: 'profile.tabZones' },
+  { id: 'podio', label: 'profile.tabPodium' },
+  { id: 'gustos', label: 'profile.tabTastes' },
+] as const
+
+type HojaId = (typeof HOJAS)[number]['id']
+
 /** Las páginas de la guía, también aquí: en un teléfono esta hoja es el camino más corto. */
 const LINKS = [
   { topic: 'acerca', label: 'about.openShort' },
   { topic: 'privacidad', label: 'about.privacy' },
-  { topic: 'sugerir', label: 'about.fix' },
+  { topic: 'sugerir', label: 'about.suggestShort' },
+  { topic: 'tutorial', label: 'about.tutorialShort' },
 ] as const
 
-/** Cuántos lugares y cuántos antojos se enseñan. */
+/** Cuántos lugares caben en el podio y cuántos gustos se enseñan. */
 const TOP = 3
+const TOP_GUSTOS = 6
+/** Los puestos y renglones fijos de cada hoja, para dibujar también los que faltan. */
+const PUESTOS = Array.from({ length: TOP }, (_, indice) => indice + 1)
+const RENGLONES = Array.from({ length: TOP_GUSTOS }, (_, indice) => indice + 1)
+/** Los sellos de relleno que completan la última fila de la rejilla de zonas. */
+const RELLENOS = [1, 2, 3] as const
 
-/** Una zona en el pasaporte: su color del mapa, y si ya la estrenaste. */
+/** Una zona con su color del mapa, si ya la estrenaste, cuántos lugares llevas ahí y si aún no abrió. */
 interface Zone {
   plaza: Plaza
   visited: boolean
+  places: number
   tone: PlazaTone
+  upcoming: boolean
 }
 
-/** Un lugar de los tuyos, con todo lo que decide su puesto. Nada de esto se enseña. */
+/** Un lugar de los tuyos, con todo lo que decide su puesto y lo que se enseña en su renglón. */
 interface Ranked {
   place: Place
   rating: number
@@ -61,12 +81,12 @@ interface Journey {
   zonesVisited: number
   mine: Ranked[]
   tastes: { category: Category; count: number }[]
+  tastesRest: number
 }
 
 /**
  * El orden de tus tres, en cascada: primero lo que dijiste a propósito (las estrellas), luego lo que
- * hiciste (visitas, corazón), después lo que miraste, y al final los desempates. Es interno: en la
- * hoja no se explica ni se numera.
+ * hiciste (visitas, corazón), después lo que miraste, y al final los desempates.
  */
 function byMine(a: Ranked, b: Ranked): number {
   return (
@@ -88,18 +108,32 @@ function useJourney(marks: Marks): Journey {
     const exists = (place: Place | undefined): place is Place => Boolean(place)
     const visited = [...marks.visits.keys()].map(find).filter(exists)
 
-    // Las zonas llevan su color del mapa: la insignia verde de aquí es la misma plaza de allá.
+    // Las zonas llevan su color del mapa: el sello verde de aquí es la misma plaza de allá.
     const visitedZones = new Set(visited.map((place) => place.plazaId))
     const open = catalog.plazas.filter((plaza) => plaza.active)
-    const tones = plazaTones(open.map((plaza) => plaza.id))
-    const zones: Zone[] = open.map((plaza) => {
-      const tone = tones.get(plaza.id) ?? DEFAULT_PLAZA_TONE
-      return {
+    const soon = catalog.plazas.filter((plaza) => !plaza.active)
+    const tones = plazaTones([...open, ...soon].map((plaza) => plaza.id))
+    const zones: Zone[] = [
+      ...open.map((plaza) => {
+        const deLaZona = visited.filter((place) => place.plazaId === plaza.id)
+        return {
+          plaza,
+          visited: visitedZones.has(plaza.id),
+          places: deLaZona.length,
+          tone: tones.get(plaza.id) ?? DEFAULT_PLAZA_TONE,
+          upcoming: false,
+        }
+      }),
+      // Las que aún no abrieron se enseñan detrás, apagadas: el mapa ya las marca como próximas y
+      // así la hoja dice lo que viene en vez de dejar el hueco vacío.
+      ...soon.map((plaza) => ({
         plaza,
-        visited: visitedZones.has(plaza.id),
-        tone,
-      }
-    })
+        visited: false,
+        places: 0,
+        tone: tones.get(plaza.id) ?? DEFAULT_PLAZA_TONE,
+        upcoming: true,
+      })),
+    ]
 
     // Cuántas visitas llevas a cada plaza: el penúltimo desempate.
     const plazaVisits = new Map<string, number>()
@@ -109,15 +143,9 @@ function useJourney(marks: Marks): Journey {
       plazaVisits.set(place.plazaId, (plazaVisits.get(place.plazaId) ?? 0) + dates.length)
     }
 
-    // Para el orden entra todo, también las fichas abiertas: así siempre hay tres.
-    const seen = [
-      ...new Set([
-        ...marks.favorites,
-        ...marks.ratings.keys(),
-        ...marks.visits.keys(),
-        ...marks.interactions.keys(),
-      ]),
-    ]
+    // Solo cuenta lo que marcas a propósito: abrir una ficha es curiosidad, no que sea de tus tres.
+    // Las aperturas quedan solo para desempatar entre lugares ya marcados.
+    const seen = [...new Set([...marks.favorites, ...marks.ratings.keys(), ...marks.visits.keys()])]
       .map(find)
       .filter(exists)
 
@@ -135,7 +163,7 @@ function useJourney(marks: Marks): Journey {
       .slice(0, TOP)
 
     /*
-     * Para los antojos, en cambio, solo cuentan las marcas que pones a propósito: abrir una ficha es
+     * Para los gustos, en cambio, solo cuentan las marcas que pones a propósito: abrir una ficha es
      * curiosidad, no gusto. Se reusa el mismo cálculo que ordena las pastillas de categoría, con las
      * aperturas vacías.
      */
@@ -151,11 +179,12 @@ function useJourney(marks: Marks): Journey {
         interactions: new Map(),
         visits: marks.visits,
       },
-      find,
+      // Un local que ya no se muestra sigue diciendo qué te gusta.
+      (id) => markedPlace(catalog, id),
       Date.now(),
       (giro) => catalog.categoryOfGiro.get(giro)?.id,
     )
-    const tastes = [...affinity]
+    const todos = [...affinity]
       .filter(([, value]) => value > 0)
       .sort((a, b) => b[1] - a[1])
       .map(([id]) => ({
@@ -167,7 +196,7 @@ function useJourney(marks: Marks): Journey {
       .filter((entry): entry is { category: Category; count: number } =>
         Boolean(entry.category && entry.count > 0),
       )
-      .slice(0, TOP)
+    const tastes = todos.slice(0, TOP_GUSTOS)
 
     return {
       visitedPlaces: visited.length,
@@ -175,74 +204,244 @@ function useJourney(marks: Marks): Journey {
       zonesVisited: zones.filter((zone) => zone.visited).length,
       mine,
       tastes,
+      tastesRest: Math.max(0, todos.length - tastes.length),
     }
   }, [catalog, marks])
 }
 
 /**
- * El nombre corto de la zona para la insignia: "Plaza Luna" se lee "Luna". El nombre completo no se
- * pierde: el mapa y el resto de la guía lo llevan entero.
+ * El nombre corto de la zona para el sello: "Plaza Luna" se lee "Luna". El nombre completo no se
+ * pierde: el mapa y el resto de la guía lo llevan entero, y aquí va en el nombre accesible.
  */
 function shortZoneName(name: string): string {
   return name.replace(/^Plaza\s+/i, '')
 }
 
+/** "20 oct" a partir de la fecha guardada, sin pasar por UTC. */
+function fechaCorta(iso: string, idioma: string): string {
+  const [anio, mes, dia] = iso.split('-').map(Number)
+  if (!anio || !mes || !dia) return iso
+  return new Intl.DateTimeFormat(idioma, { day: 'numeric', month: 'short' })
+    .format(new Date(anio, mes - 1, dia))
+    .replace(/\.$/, '')
+}
+
 /**
- * Un escalón del podio: el icono del giro en el color de su plaza, el nombre, el giro y, abajo, el
- * bloque con el puesto y la plaza. El primero va al centro y más alto, como en cualquier podio; el
- * orden del documento sigue siendo 1, 2, 3, que es el que se lee y el que se recorre con el teclado.
+ * Lo que has hecho con ese lugar, en una línea y solo con lo que exista. Lo de guardado no va aquí:
+ * lo dice el corazón sobre el icono, que se entiende de un vistazo y no gasta una palabra que se
+ * corta en la columna.
  */
-function PodiumStep({
-  entry,
-  position,
-  onOpen,
+function loQueHiciste(entry: Ranked, idioma: string): string {
+  return [
+    entry.visits > 0 ? t('profile.visitCount', { count: entry.visits }) : null,
+    entry.last ? t('profile.lastVisit', { date: fechaCorta(entry.last, idioma) }) : null,
+    entry.rating > 0 ? `${formatNumber(entry.rating)} ★` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ')
+}
+
+function Zonas({ journey }: { journey: Journey }) {
+  const catalog = useCatalog()
+  const total = journey.zones.filter((zone) => !zone.upcoming).length
+  /*
+   * La última fila se completa con sellos genéricos de "Próximamente" cuando hay zonas por abrir:
+   * quince sellos dejan un hueco en la rejilla de cuatro columnas y el hueco se llena con uno más.
+   */
+  const relleno = journey.zones.some((zone) => zone.upcoming)
+    ? (4 - (journey.zones.length % 4)) % 4
+    : 0
+  return (
+    <>
+      <div className={styles.sheetHead}>
+        <h3 className={styles.blockTitle}>{t('profile.journey')}</h3>
+        <p className={styles.count}>
+          {t('profile.zonesDone', { done: journey.zonesVisited, total })}
+        </p>
+      </div>
+      {journey.visitedPlaces === 0 && (
+        <p className={styles.summary}>
+          {t('profile.noVisits', { total, places: catalog.places.length })}
+        </p>
+      )}
+      {/* Los sellos son un cuadro, no controles: aquí se mira lo que llevas. */}
+      <ul className={styles.zones} aria-label={t('profile.zonesLabel')}>
+        {journey.zones.map((zone) => (
+          <li
+            key={zone.plaza.id}
+            className={styles.zone}
+            data-visited={zone.visited}
+            data-upcoming={zone.upcoming}
+            title={zone.upcoming ? t('profile.zoneSoon') : zone.plaza.name}
+          >
+            {/* El sello: transparente sin estrenar, relleno con el tono de la plaza cuando ya fuiste. */}
+            <span
+              className={styles.zoneStamp}
+              style={plazaVars(zone.tone, 'zone') as CSSProperties}
+            >
+              {zone.upcoming ? (
+                <>
+                  <Clock className={styles.zoneCheck} aria-hidden="true" />
+                  <span className={styles.zoneName}>{t('profile.zoneSoonShort')}</span>
+                </>
+              ) : (
+                <span className={styles.zoneName}>{shortZoneName(zone.plaza.name)}</span>
+              )}
+            </span>
+            <span className="visually-hidden">
+              {zone.visited
+                ? `, ${t('profile.zoneDone')}, ${t('profile.zonePlaces', { count: zone.places })}`
+                : ''}
+            </span>
+          </li>
+        ))}
+        {/* El hueco de la última fila: otro sello genérico, sin nombre y fuera del lector. */}
+        {RELLENOS.slice(0, relleno).map((hueco) => (
+          <li
+            key={`relleno-${hueco}`}
+            className={styles.zone}
+            data-upcoming="true"
+            data-filler="true"
+            aria-hidden="true"
+          >
+            <span className={styles.zoneStamp}>
+              <Clock className={styles.zoneCheck} aria-hidden="true" />
+              <span className={styles.zoneName}>{t('profile.zoneSoonShort')}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </>
+  )
+}
+
+function Podio({
+  journey,
+  onOpenPlace,
 }: {
-  entry: Ranked
-  position: number
-  onOpen: (place: Place) => void
+  journey: Journey
+  onOpenPlace: (place: Place) => void
 }) {
   const catalog = useCatalog()
   const idioma = useLocale()
-  const { place } = entry
-  /*
-   * El color sale del identificador, no de la posición en la lista: pedir la lista entera es una
-   * costumbre del archivo, y una zona que no esté declarada cae al verde de marca.
-   */
-  const tone =
-    plazaTones(catalog.plazas.filter((item) => item.active).map((item) => item.id)).get(
-      place.plazaId,
-    ) ?? DEFAULT_PLAZA_TONE
-  const giro = girosOf(place, catalog)
-    .map((entry) => localized(entry.label))
-    .join(' · ')
+  const tones = plazaTones(catalog.plazas.filter((item) => item.active).map((item) => item.id))
   return (
-    <li className={styles.step} data-place={position}>
-      {/* La columna entera es el enlace a la ficha: el lugar tiene dirección propia. */}
-      <a
-        className={styles.stepButton}
-        href={rutaDeLugar(place.slug, idioma, import.meta.env.BASE_URL)}
-        onClick={alPulsarEnlace(() => onOpen(place))}
-        title={place.name}
-        aria-label={`${t('profile.position', { position })}. ${t('place.openDetail', {
-          name: place.name,
-        })}`}
-      >
-        <span
-          className={styles.stepIcon}
-          style={plazaVars(tone, 'zone') as CSSProperties}
-          aria-hidden="true"
-        >
-          <CategoryIcon name={placeIconName(place, catalog)} size={18} />
-        </span>
-        <span className={styles.stepName}>{place.name}</span>
-        <span className={styles.stepGiro}>{giro}</span>
-        <span className={styles.stepBlock} data-place={position}>
-          <span className={styles.stepNumber} aria-hidden="true">
-            {position}
-          </span>
-        </span>
-      </a>
-    </li>
+    <>
+      <div className={styles.sheetHead}>
+        <h3 className={styles.blockTitle}>{t('profile.podium')}</h3>
+        <p className={styles.count}>{t('profile.podiumCount', { count: journey.mine.length })}</p>
+      </div>
+      <ol className={styles.rankList}>
+        {journey.mine.map((entry, index) => {
+          const { place } = entry
+          const tone = tones.get(place.plazaId) ?? DEFAULT_PLAZA_TONE
+          const plaza = catalog.plazaById.get(place.plazaId)
+          return (
+            <li
+              key={place.id}
+              className={styles.rank}
+              data-place={index + 1}
+              data-saved={entry.favorite}
+            >
+              <a
+                className={styles.rankLink}
+                href={rutaDeLugar(place.slug, idioma, import.meta.env.BASE_URL)}
+                onClick={alPulsarEnlace(() => onOpenPlace(place))}
+                aria-label={`${t('profile.position', {
+                  position: index + 1,
+                })}${entry.favorite ? `, ${t('profile.saved')}` : ''}. ${t('place.openDetail', {
+                  name: place.name,
+                })}`}
+              >
+                <span className={styles.rankBody}>
+                  <span
+                    className={styles.rankIcon}
+                    style={plazaVars(tone, 'zone') as CSSProperties}
+                    aria-hidden="true"
+                  >
+                    <CategoryIcon name={placeIconName(place, catalog)} size={18} />
+                    {entry.favorite && (
+                      <Heart className={styles.rankHeart} fill="currentColor" aria-hidden="true" />
+                    )}
+                  </span>
+                  <span className={styles.rankName}>{place.name}</span>
+                  <span className={styles.rankMeta}>
+                    {[plaza?.name, loQueHiciste(entry, idioma)].filter(Boolean).join(' · ')}
+                  </span>
+                </span>
+                <span className={styles.stepBlock} data-place={index + 1} aria-hidden="true">
+                  <span className={styles.stepNumber}>{index + 1}</span>
+                </span>
+              </a>
+            </li>
+          )
+        })}
+        {/* Los puestos que faltan, apagados: la hoja enseña su capacidad antes de tener datos. */}
+        {PUESTOS.slice(journey.mine.length).map((puesto) => (
+          <li
+            key={`hueco-${puesto}`}
+            className={styles.rank}
+            data-place={puesto}
+            aria-hidden="true"
+          >
+            <span className={styles.ghostStep}>
+              <span className={styles.rankBody}>
+                <span className={styles.ghostIcon} />
+                <span className={styles.ghostName} />
+                <span className={styles.ghostMeta} />
+              </span>
+              <span className={styles.stepBlock} data-place={puesto} data-ghost="true">
+                <span className={styles.stepNumber}>{puesto}</span>
+              </span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </>
+  )
+}
+
+function Gustos({ journey }: { journey: Journey }) {
+  const max = journey.tastes[0]?.count ?? 1
+  return (
+    <>
+      <div className={styles.sheetHead}>
+        <h3 className={styles.blockTitle}>{t('profile.tastes')}</h3>
+        {journey.tastes.length > 0 && (
+          <p className={styles.count}>
+            {t('profile.tasteTotal', { count: journey.tastes.length + journey.tastesRest })}
+          </p>
+        )}
+      </div>
+      <ul className={styles.tasteList}>
+        {journey.tastes.map((taste) => (
+          <li key={taste.category.id} className={styles.taste}>
+            <span className={styles.tasteHead}>
+              <CategoryIcon name={taste.category.icon} size={16} strokeWidth={2} />
+              <span className={styles.tasteName}>{localized(taste.category.label)}</span>
+              <span className={styles.tasteCount}>{formatNumber(taste.count)}</span>
+            </span>
+            <span className={styles.tasteBar} aria-hidden="true">
+              <span style={{ width: `${Math.round((taste.count / max) * 100)}%` }} />
+            </span>
+          </li>
+        ))}
+        {/* Los renglones que faltan, apagados: los mismos que se llenarán con tus marcas. */}
+        {RENGLONES.slice(journey.tastes.length).map((renglon) => (
+          <li key={`hueco-${renglon}`} className={styles.taste} aria-hidden="true">
+            <span className={styles.tasteHead}>
+              <span className={styles.ghostDot} />
+              <span className={styles.ghostName} />
+              <span className={styles.ghostCount} />
+            </span>
+            <span className={styles.ghostBar} />
+          </li>
+        ))}
+      </ul>
+      {journey.tastesRest > 0 && (
+        <p className={styles.more}>{t('profile.moreTastes', { count: journey.tastesRest })}</p>
+      )}
+    </>
   )
 }
 
@@ -253,15 +452,19 @@ interface SheetProps {
 }
 
 export function ProfileSheet({ onClose, onOpenInfo, onOpenPlace }: SheetProps) {
-  const closeRef = useRef<HTMLButtonElement>(null)
+  const baseId = useId()
+  const tabsRef = useRef<HTMLDivElement>(null)
   const idioma = useLocale()
-  const catalog = useCatalog()
   const marks = useMarks()
   const journey = useJourney(marks)
+  const [hoja, setHoja] = useState<HojaId>('zonas')
+  const tabId = (id: HojaId) => `${baseId}-tab-${id}`
+  const panelId = (id: HojaId) => `${baseId}-panel-${id}`
 
-  // Al abrir, el foco entra en la hoja (y Escape la cierra desde cualquier parte, como las demás).
+  // Al abrir, el foco entra en la pestaña activa: quien navega con teclado sabe dónde está y con las
+  // flechas cambia de hoja. Escape la cierra desde cualquier parte, como las demás.
   useEffect(() => {
-    closeRef.current?.focus()
+    tabsRef.current?.querySelector<HTMLButtonElement>('[aria-selected="true"]')?.focus()
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
     }
@@ -269,7 +472,20 @@ export function ProfileSheet({ onClose, onOpenInfo, onOpenPlace }: SheetProps) {
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [onClose])
 
-  const started = marks.visits.size + marks.favorites.size + marks.ratings.size > 0
+  const porTeclado = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const indice = HOJAS.findIndex((item) => item.id === hoja)
+    let destino = indice
+    if (event.key === 'ArrowLeft') destino = (indice + HOJAS.length - 1) % HOJAS.length
+    else if (event.key === 'ArrowRight') destino = (indice + 1) % HOJAS.length
+    else if (event.key === 'Home') destino = 0
+    else if (event.key === 'End') destino = HOJAS.length - 1
+    else return
+    event.preventDefault()
+    const siguiente = HOJAS[destino]
+    if (!siguiente) return
+    setHoja(siguiente.id)
+    tabsRef.current?.querySelector<HTMLButtonElement>(`#${tabId(siguiente.id)}`)?.focus()
+  }
 
   // Igual que las hojas de información: fuera del panel, porque la barra superior crea contexto de
   // apilamiento (backdrop-filter) y un `position: fixed` dentro de ella se ancla a la barra.
@@ -295,7 +511,6 @@ export function ProfileSheet({ onClose, onOpenInfo, onOpenPlace }: SheetProps) {
             </div>
           </div>
           <button
-            ref={closeRef}
             type="button"
             className={styles.close}
             onClick={onClose}
@@ -305,85 +520,42 @@ export function ProfileSheet({ onClose, onOpenInfo, onOpenPlace }: SheetProps) {
           </button>
         </div>
 
-        {started ? (
-          <>
-            <section className={styles.journey} aria-labelledby="profile-journey">
-              <h3 id="profile-journey" className={styles.blockTitle}>
-                {t('profile.journey')}
-              </h3>
-              <p className={styles.summary}>
-                {journey.visitedPlaces > 0
-                  ? t('profile.visitsSummary', {
-                      count: journey.visitedPlaces,
-                      zones: journey.zonesVisited,
-                      total: journey.zones.length,
-                    })
-                  : t('profile.noVisits', {
-                      total: journey.zones.length,
-                      places: catalog.places.length,
-                    })}
-              </p>
-              {/* Las insignias son un cuadro, no controles: llenas las estrenadas, en contorno el resto. */}
-              <ul className={styles.zones} aria-label={t('profile.zonesLabel')}>
-                {journey.zones.map((zone) => (
-                  <li
-                    key={zone.plaza.id}
-                    className={styles.zone}
-                    data-visited={zone.visited}
-                    style={plazaVars(zone.tone, 'zone') as CSSProperties}
-                  >
-                    {zone.visited && <Check aria-hidden="true" className={styles.zoneCheck} />}
-                    {shortZoneName(zone.plaza.name)}
-                    {zone.visited && (
-                      <span className="visually-hidden">, {t('profile.zoneDone')}</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </section>
+        <div
+          ref={tabsRef}
+          className={styles.tabs}
+          role="tablist"
+          aria-label={t('profile.tabs')}
+          onKeyDown={porTeclado}
+        >
+          {HOJAS.map(({ id, label }) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              id={tabId(id)}
+              className={styles.tab}
+              aria-selected={hoja === id}
+              aria-controls={panelId(id)}
+              tabIndex={hoja === id ? 0 : -1}
+              onClick={() => setHoja(id)}
+            >
+              {t(label)}
+            </button>
+          ))}
+        </div>
 
-            {journey.mine.length > 0 && (
-              <section className={styles.block} aria-labelledby="profile-mine">
-                <h3 id="profile-mine" className={styles.blockTitle}>
-                  {t('profile.podium')}
-                </h3>
-                <ol className={styles.podium} data-steps={journey.mine.length}>
-                  {journey.mine.map((entry, index) => (
-                    <PodiumStep
-                      key={entry.place.id}
-                      entry={entry}
-                      position={index + 1}
-                      onOpen={onOpenPlace}
-                    />
-                  ))}
-                </ol>
-              </section>
-            )}
-
-            {journey.tastes.length > 0 && (
-              <section className={styles.block} aria-labelledby="profile-tastes">
-                <h3 id="profile-tastes" className={styles.blockTitle}>
-                  {t('profile.tastes')}
-                </h3>
-                <ul className={styles.tastes}>
-                  {journey.tastes.map((taste) => (
-                    <li key={taste.category.id} className={styles.taste}>
-                      <CategoryIcon name={taste.category.icon} size={16} strokeWidth={2} />
-                      <span className={styles.tasteName}>{localized(taste.category.label)}</span>
-                      <span className={styles.tasteCount}>
-                        {t('profile.tasteCount', { count: taste.count })}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-          </>
-        ) : (
-          <p className={styles.empty}>{t('profile.empty')}</p>
-        )}
-
-        <p className={styles.storage}>{t('profile.storage')}</p>
+        <div
+          className={styles.panel}
+          role="tabpanel"
+          id={panelId(hoja)}
+          aria-labelledby={tabId(hoja)}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: el panel solo se desplaza como respaldo; con este tope de tabulación ese caso sigue siendo alcanzable con el teclado.
+          tabIndex={0}
+        >
+          {hoja === 'zonas' && <Zonas journey={journey} />}
+          {hoja === 'podio' && <Podio journey={journey} onOpenPlace={onOpenPlace} />}
+          {hoja === 'gustos' && <Gustos journey={journey} />}
+        </div>
 
         <nav className={styles.links} aria-label={t('about.moreLabel')}>
           {LINKS.map((link) => (

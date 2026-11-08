@@ -5,11 +5,20 @@ import type { Category, Place, Plaza } from '../types/domain.ts'
  * `StaticPlacesRepository` (JSON estático); mañana puede hacerlo un CMS, Supabase o una API
  * (ver docs/ARQUITECTURA.md) sin cambiar componentes, búsqueda ni filtros.
  */
+/** Un local que ya no existe: lo único que se conserva es qué giros tenía y en qué plaza estaba. */
+export interface RetiredPlace {
+  id: string
+  giros: string[]
+  plazaId: string
+}
+
 export interface PlacesRepository {
   getCategories(): Promise<Category[]>
   getPlazas(): Promise<Plaza[]>
   /** Todos los locales, activos e inactivos. */
   getPlaces(): Promise<Place[]>
+  /** Los locales borrados desde el panel. Opcional: sin ellos la guía funciona igual. */
+  getRetired?(): Promise<RetiredPlace[]>
 }
 
 export class DataLoadError extends Error {

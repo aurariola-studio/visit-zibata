@@ -61,13 +61,16 @@ describe('quién puede escribir en el panel', () => {
 
   it('acepta lo que sale de esta misma página', () => {
     expect(origenPropio(peticion({ 'sec-fetch-site': 'same-origin' }))).toBe(true)
-    // Una pestaña abierta a mano no manda sitio: el navegador es el mismo.
-    expect(origenPropio(peticion({ 'sec-fetch-site': 'none' }))).toBe(true)
     expect(origenPropio(peticion({ origin: 'https://visitzibata.com' }))).toBe(true)
   })
 
   it('rechaza lo que llega de otra página y lo que no dice de dónde viene', () => {
     expect(origenPropio(peticion({ 'sec-fetch-site': 'cross-site' }))).toBe(false)
+    // `none` es una navegación escrita a mano; una escritura con fetch no lo trae.
+    expect(origenPropio(peticion({ 'sec-fetch-site': 'none' }))).toBe(false)
+    // Mismo host con otro esquema u otro puerto no es el mismo sitio.
+    expect(origenPropio(peticion({ origin: 'http://visitzibata.com' }))).toBe(false)
+    expect(origenPropio(peticion({ origin: 'https://visitzibata.com:8443' }))).toBe(false)
     expect(origenPropio(peticion({ 'sec-fetch-site': 'same-site' }))).toBe(false)
     expect(origenPropio(peticion({ origin: 'https://otro.example' }))).toBe(false)
     expect(origenPropio(peticion({}))).toBe(false)

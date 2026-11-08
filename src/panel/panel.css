@@ -254,6 +254,63 @@ body {
 
 /* ------------------------------------------------------------------ resumen */
 
+.pendiente {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.pendiente p {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ confirmar */
+
+.confirmar {
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-solid);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+}
+
+.confirmar::backdrop {
+  background: rgb(31 36 25 / 0.45);
+}
+
+.confirmar-caja {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.confirmar-caja h2,
+.confirmar-caja p {
+  margin: 0;
+}
+
+.confirmar-caja h2 {
+  font-family: var(--font-display);
+  font-size: var(--title-md);
+  font-stretch: var(--title-stretch);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.confirmar-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
 .resumen {
   display: grid;
   gap: var(--space-6);
@@ -447,9 +504,17 @@ td.tenue {
   font-size: var(--text-sm);
 }
 
+/* La única celda que puede romper línea: un nombre largo no debe ensanchar la tabla. */
+.celda-nombre {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .negocio-nombre {
   font-weight: var(--weight-strong);
   color: var(--ink-900);
+  overflow-wrap: anywhere;
 }
 
 .marca-estado {
@@ -462,6 +527,7 @@ td.tenue {
   color: var(--color-text-muted);
 }
 
+.marca-estado[data-activo="plaza"],
 .marca-estado[data-activo="cierre"] {
   color: var(--amber-700);
 }
@@ -560,6 +626,39 @@ td.tenue {
   flex: 1 1 16rem;
 }
 
+.barra-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.barra-filtros select {
+  flex: 0 1 16rem;
+  min-width: 0;
+}
+
+.meta-resultados:empty {
+  display: none;
+}
+
+.vacio p {
+  margin: 0;
+}
+
+.vacio button {
+  margin-top: var(--space-2);
+}
+
+/* Debajo del nombre: la plaza y los giros, que las pantallas estrechas no tienen en columna. */
+.negocio-detalle {
+  display: none;
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
 .meta-contenido {
   margin: 0 0 var(--space-3);
   color: var(--color-text-muted);
@@ -626,6 +725,61 @@ td.tenue {
 .editor-cuerpo {
   overflow-y: auto;
   padding: var(--space-5) var(--space-6);
+}
+
+.editor-indice {
+  position: sticky;
+  top: calc(-1 * var(--space-5));
+  z-index: 2;
+  display: flex;
+  gap: var(--space-4);
+  margin: calc(-1 * var(--space-5)) calc(-1 * var(--space-6)) var(--space-5);
+  padding: var(--space-3) var(--space-6);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-solid);
+  font-size: var(--text-sm);
+}
+
+.editor-indice a {
+  white-space: nowrap;
+}
+
+/* El título al que salta el índice recibe el foco por código: no necesita anillo, solo avisar al lector. */
+.editor-seccion h3:focus {
+  outline: none;
+}
+
+/* Las acciones que dejan una redirección o no se deshacen con un botón, juntas y al final. */
+.zona-delicada {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.zona-delicada > h3 {
+  color: var(--danger-600);
+}
+
+/* Los títulos de dentro de la zona (cada dirección) cuelgan del título de la zona: un peldaño menos. */
+.zona-delicada h4 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+  font-weight: var(--weight-strong);
+}
+
+.zona-delicada > .ayuda {
+  margin: 0 0 var(--space-4);
+}
+
+.zona-delicada .editor-seccion {
+  margin-top: var(--space-4);
+}
+
+.zona-borrar {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
 }
 
 .editor-seccion + .editor-seccion {
@@ -858,6 +1012,24 @@ td.tenue {
   background: var(--color-surface-solid);
 }
 
+.impacto-lista {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-5);
+  color: var(--ink-700);
+  font-size: var(--text-sm);
+}
+
+.impacto-lista li + li {
+  margin-top: var(--space-1);
+}
+
+.impacto-borrado {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
 .problemas:empty {
   display: none;
 }
@@ -897,7 +1069,7 @@ td.tenue {
 
 .giro-elegido {
   display: grid;
-  grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
   gap: var(--space-2) var(--space-3);
   align-items: center;
   padding: var(--space-2) var(--space-3);
@@ -919,11 +1091,6 @@ td.tenue {
   font-variant-numeric: tabular-nums;
 }
 
-.giro-elegido[data-rol="secundario"] .giro-puesto {
-  background: var(--color-surface-muted);
-  color: var(--color-text-muted);
-}
-
 .giro-texto {
   display: grid;
   gap: 0.1rem;
@@ -933,18 +1100,6 @@ td.tenue {
 .giro-texto .meta {
   color: var(--color-text-muted);
   font-size: var(--text-xs);
-}
-
-.marca-rol {
-  color: var(--color-text-muted);
-  font-size: var(--text-2xs);
-  font-weight: var(--weight-strong);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.giro-elegido[data-rol="principal"] .marca-rol {
-  color: var(--olive-600);
 }
 
 .giro-acciones {
@@ -1164,6 +1319,10 @@ td.tenue {
 /* ------------------------------------------------------------------ pantallas estrechas */
 
 @media (max-width: 52rem) {
+  .negocio-detalle {
+    display: block;
+  }
+
   .col-plaza,
   .col-giros,
   .col-orden {
@@ -1283,6 +1442,10 @@ td.tenue {
   }
 
   .buscar {
+    flex: 1 1 100%;
+  }
+
+  .barra-filtros select {
     flex: 1 1 100%;
   }
 

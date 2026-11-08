@@ -41,39 +41,35 @@ describe('PlaceCard', () => {
       giros: ['panaderia', 'cafeteria'],
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} showPlaza />)
-    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
+    expect(screen.getByText('Panadería y Cafetería')).toBeInTheDocument()
     expect(screen.getByText(/Plaza Sur/)).toBeInTheDocument()
   })
 
-  it('en la lista, el icono es de los principales y los secundarios solo se leen', async () => {
-    const place = makePlace({
-      id: 'trigo',
-      plazaId: 'plaza-sur',
-      name: 'Trigo',
-      giros: ['panaderia'],
-      secundarios: ['cafeteria'],
-    })
-    const { container } = await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    // Los dos se nombran...
-    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
-    // ...pero solo el principal lleva dibujo junto al texto.
-    expect(container.querySelectorAll('[class*="category"] svg')).toHaveLength(1)
-  })
-
-  it('nombra los giros que caben en la línea y cuenta el resto', async () => {
-    // "Panadería · Cafetería · Taquería" son treinta y dos letras y no entran en una línea de
-    // teléfono: se nombran las dos que caben y la tercera se cuenta. El title las lleva todas.
+  it('cada giro lleva su icono junto al texto', async () => {
     const place = makePlace({
       id: 'trigo',
       plazaId: 'plaza-sur',
       name: 'Trigo',
       giros: ['panaderia', 'cafeteria'],
-      secundarios: ['taqueria'],
+    })
+    const { container } = await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
+    expect(screen.getByText('Panadería y Cafetería')).toBeInTheDocument()
+    expect(container.querySelectorAll('[class*="category"] svg')).toHaveLength(2)
+  })
+
+  it('nombra los giros que caben en la línea y cuenta el resto', async () => {
+    // "Panadería, Cafetería y Taquería" son treinta y seis letras y no entran en una línea de
+    // teléfono: se nombran las dos que caben y la tercera se cuenta. El title las lleva todas.
+    const place = makePlace({
+      id: 'trigo',
+      plazaId: 'plaza-sur',
+      name: 'Trigo',
+      giros: ['panaderia', 'cafeteria', 'taqueria'],
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Panadería · Cafetería')).toBeInTheDocument()
+    expect(screen.getByText('Panadería y Cafetería')).toBeInTheDocument()
     expect(screen.getByText('+1')).toBeInTheDocument()
-    expect(screen.getByTitle('Panadería · Cafetería · Taquería')).toBeInTheDocument()
+    expect(screen.getByTitle('Panadería, Cafetería y Taquería')).toBeInTheDocument()
   })
 
   it('no muestra el estado de horario en la lista, ni con horario ni sin él', async () => {
@@ -131,13 +127,13 @@ describe('la marca de abierto', () => {
   it('un local abierto lleva su punto, con texto para quien no lo ve', async () => {
     const place = makePlace({ id: 'abre', plazaId: 'plaza-sur', name: 'Abre', hours: allDay })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Abierto ahora: Abre')).toBeInTheDocument()
+    expect(screen.getByText('Abierto ahora, Abre')).toBeInTheDocument()
   })
 
   it('un local cerrado lleva el suyo, y no dice "abierto"', async () => {
     const place = makePlace({ id: 'cierra', plazaId: 'plaza-sur', name: 'Cierra', hours: nunca })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Cerrado ahora: Cierra')).toBeInTheDocument()
+    expect(screen.getByText('Cerrado ahora, Cierra')).toBeInTheDocument()
     expect(screen.queryByText(/Abierto ahora/)).not.toBeInTheDocument()
   })
 
@@ -150,7 +146,7 @@ describe('la marca de abierto', () => {
       cierre: { motivo: 'remodelacion', desde: '2026-10-09' },
     })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Cerrado temporalmente: En obra')).toBeInTheDocument()
+    expect(screen.getByText('Cerrado temporalmente, En obra')).toBeInTheDocument()
     expect(screen.queryByText(/Abierto ahora/)).not.toBeInTheDocument()
   })
 
@@ -159,7 +155,7 @@ describe('la marca de abierto', () => {
     // afirmar que están cerrados, y la guía no lo sabe.
     const place = makePlace({ id: 'sin', plazaId: 'plaza-sur', name: 'Sin' })
     await renderWithCatalog(<PlaceCard place={place} onOpen={vi.fn()} />)
-    expect(screen.getByText('Sin horario publicado: Sin')).toBeInTheDocument()
+    expect(screen.getByText('Sin horario publicado, Sin')).toBeInTheDocument()
     expect(screen.queryByText(/Abierto ahora/)).not.toBeInTheDocument()
     expect(screen.queryByText(/Cerrado ahora/)).not.toBeInTheDocument()
   })

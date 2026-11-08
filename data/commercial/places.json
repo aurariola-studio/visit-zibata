@@ -9,9 +9,7 @@
       "name": "Carl's Jr.",
       "plazaId": "xentric-anahuac",
       "giros": [
-        "hamburguesas"
-      ],
-      "secundarios": [
+        "hamburguesas",
         "papas-fritas"
       ],
       "description": {
@@ -77,9 +75,7 @@
       "name": "Mirrus Kitchen",
       "plazaId": "xentric-anahuac",
       "giros": [
-        "brunch"
-      ],
-      "secundarios": [
+        "brunch",
         "reposteria"
       ],
       "description": {
@@ -145,9 +141,7 @@
       "name": "A'Kilos de Cecina",
       "plazaId": "xentric-anahuac",
       "giros": [
-        "cecina"
-      ],
-      "secundarios": [
+        "cecina",
         "taqueria"
       ],
       "description": {
@@ -217,7 +211,6 @@
       "giros": [
         "helados"
       ],
-      "secundarios": [],
       "description": {
         "es": "Husky’s Ice Cream | Helados artesanales en Querétaro 🍦 Fusión de ice cream americano y gelato italiano. Helado suave, yogurt y paletas de muchos sabores.",
         "en": "Husky’s Ice Cream | Craft ice cream in Querétaro 🍦 American ice cream meets Italian gelato. Soft serve, frozen yogurt and paletas in many flavours."
@@ -283,7 +276,6 @@
       "giros": [
         "boba"
       ],
-      "secundarios": [],
       "description": {
         "es": "Boba Station es el nuevo concepto de bobas (Tapioca) que llegó a la ciudad, con más de 11 años de experiencia. Ven a conocerlo 🤤🥰",
         "en": "Boba Station is the city’s new boba (tapioca) concept, backed by more than 11 years of experience. Come and try it 🤤🥰"
@@ -349,9 +341,7 @@
       "plazaId": "xentric-anahuac",
       "giros": [
         "saludable",
-        "desayunos"
-      ],
-      "secundarios": [
+        "desayunos",
         "jugos-y-smoothies"
       ],
       "description": {
@@ -421,7 +411,6 @@
       "giros": [
         "sandwiches"
       ],
-      "secundarios": [],
       "description": {
         "es": "Sucursal de la cadena de sándwiches Subway.",
         "en": "A branch of the Subway sandwich chain."
@@ -488,7 +477,6 @@
       "giros": [
         "desayunos"
       ],
-      "secundarios": [],
       "description": {
         "es": "Restaurante de desayuno y brunch.",
         "en": "Breakfast and brunch restaurant."
@@ -551,9 +539,7 @@
       "name": "Tortas Fifthy Fifthy",
       "plazaId": "xentric-anahuac",
       "giros": [
-        "tortas"
-      ],
-      "secundarios": [
+        "tortas",
         "wraps",
         "desayunos"
       ],
@@ -625,9 +611,7 @@
       "plazaId": "xentric-anahuac",
       "giros": [
         "gastrobar",
-        "cocina-internacional"
-      ],
-      "secundarios": [
+        "cocina-internacional",
         "bar"
       ],
       "description": {
@@ -697,7 +681,6 @@
       "giros": [
         "pizza"
       ],
-      "secundarios": [],
       "description": {
         "es": "Sucursal de la cadena de pizzas Domino's.",
         "en": "A branch of the Domino’s pizza chain."
@@ -766,7 +749,6 @@
         "alitas",
         "bar"
       ],
-      "secundarios": [],
       "description": {
         "es": "El lugar donde la música, la comida y las risas se mezclan\nAlitas & Pisto",
         "en": "Where music, food and laughter come together\nWings & drinks"
@@ -834,7 +816,6 @@
         "bar",
         "marisqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "RESTAURANT-BAR.",
         "en": "Restaurant bar."
@@ -899,7 +880,6 @@
       "giros": [
         "pub"
       ],
-      "secundarios": [],
       "description": {
         "es": "🍀 | Un verdadero Irish Pub",
         "en": "🍀 | A true Irish pub"
@@ -965,7 +945,6 @@
         "birria",
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Una buena birria para la barriga.\nCreamos recetas únicas y deliciosas.",
         "en": "Good birria for a happy belly.\nWe create unique, delicious recipes."
@@ -1030,7 +1009,6 @@
       "giros": [
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Taco Los Tarascos, Taquería con 38 años de tradición en México. Disfruta nuestros tacos en Monterrey, Acapulco, Puebla, Guadalajara, Querétaro y Tlaxcala.",
         "en": "Taco Los Tarascos, a taquería with 38 years of tradition in Mexico. Enjoy our tacos in Monterrey, Acapulco, Puebla, Guadalajara, Querétaro and Tlaxcala."
@@ -1087,7 +1065,6 @@
         "pasteleria",
         "reposteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Creamos momentos dulces y memorables todos los días. Nuestra panadería es puramente artesanal, utilizando ingredientes de primera calidad para consentir a tu paladar.",
         "en": "We create sweet, memorable moments every day. Our bakery is entirely handmade, with top quality ingredients to spoil your palate."
@@ -1153,9 +1130,7 @@
       "name": "Tim Hortons",
       "plazaId": "anahuac-queretaro",
       "giros": [
-        "cafeteria"
-      ],
-      "secundarios": [
+        "cafeteria",
         "desayunos"
       ],
       "description": {
@@ -1216,9 +1191,7 @@
       "plazaId": "paseo-zibata",
       "giros": [
         "brunch",
-        "cafeteria"
-      ],
-      "secundarios": [
+        "cafeteria",
         "reposteria"
       ],
       "description": {
@@ -1290,7 +1263,6 @@
       "giros": [
         "ceviches"
       ],
-      "secundarios": [],
       "description": {
         "es": "Ceviches frescos, saludables y deliciosos.",
         "en": "Fresh, healthy and delicious ceviche."
@@ -1361,7 +1333,6 @@
         "panaderia",
         "brunch"
       ],
-      "secundarios": [],
       "description": {
         "es": "D’Lu - Cafetería con alma francesa.\nLife is better together",
         "en": "D’Lu - A coffee shop with a French soul.\nLife is better together"
@@ -1429,7 +1400,6 @@
         "hamburguesas",
         "alitas"
       ],
-      "secundarios": [],
       "description": {
         "es": "Te ofrecemos deliciosas micheladas, azulitos y tragos nice en un ambiente relajado y agradable, acompañados con nuestros irresistibles snacks: alitas con diversas salsas, boneless, papas a la francesa y aros de cebolla.",
         "en": "We serve delicious micheladas, azulitos and good drinks in a relaxed, easygoing setting, along with snacks you cannot resist: wings with a range of sauces, boneless wings, French fries and onion rings."
@@ -1493,7 +1463,6 @@
       "giros": [
         "gastrobar"
       ],
-      "secundarios": [],
       "description": {
         "es": "El cruce entre la cocina y el coctel. La intersección que conecta alquimia con gastronomía.",
         "en": "Where the kitchen meets the cocktail. The crossing that connects alchemy with gastronomy."
@@ -1554,9 +1523,7 @@
       "name": "Currucucú Cocina Artesanal Mexicana",
       "plazaId": "paseo-zibata",
       "giros": [
-        "cocina-mexicana"
-      ],
-      "secundarios": [
+        "cocina-mexicana",
         "desayunos"
       ],
       "description": {
@@ -1627,7 +1594,6 @@
       "giros": [
         "poke"
       ],
-      "secundarios": [],
       "description": {
         "es": "JUST POKE & FUN 🍚😎🍚😎\nEst. 2018",
         "en": "JUST POKE & FUN 🍚😎🍚😎\nEst. 2018"
@@ -1694,9 +1660,7 @@
       "plazaId": "paseo-zibata",
       "giros": [
         "memelas",
-        "cocina-mexicana"
-      ],
-      "secundarios": [
+        "cocina-mexicana",
         "antojitos-de-masa"
       ],
       "description": {
@@ -1765,7 +1729,6 @@
       "giros": [
         "kebabs"
       ],
-      "secundarios": [],
       "description": {
         "es": "“Los Kebabs del Normal🐪”",
         "en": "“The kebabs from El Normal🐪”"
@@ -1808,9 +1771,7 @@
       "name": "Carnitas Don Toño",
       "plazaId": "paseo-zibata",
       "giros": [
-        "carnitas"
-      ],
-      "secundarios": [
+        "carnitas",
         "antojitos-de-masa",
         "desayunos"
       ],
@@ -1882,7 +1843,6 @@
         "sushi",
         "poke"
       ],
-      "secundarios": [],
       "description": {
         "es": "Masaru es un Restaurante en Querétaro que ofrece sushi, pokes y comida oriental de excelente calidad.",
         "en": "Masaru is a restaurant in Querétaro serving sushi, poke and Asian food of excellent quality."
@@ -1948,9 +1908,7 @@
       "plazaId": "paseo-zibata",
       "giros": [
         "pasta",
-        "cocina-italiana"
-      ],
-      "secundarios": [
+        "cocina-italiana",
         "pizza"
       ],
       "description": {
@@ -2017,7 +1975,6 @@
       "giros": [
         "helados"
       ],
-      "secundarios": [],
       "description": {
         "es": "La Michoacana es una marca de origen mexicano, la cual ha tenido una gran trayectoria alrededor del mundo de los helados y paletas artesanales 100% naturales.",
         "en": "La Michoacana is a Mexican brand with a long history in the world of 100% natural handmade ice cream and paletas."
@@ -2060,7 +2017,6 @@
       "giros": [
         "elotes-y-esquites"
       ],
-      "secundarios": [],
       "description": {
         "es": "🌽 Elotes y esquites 💛 Tus nuevos favoritos❤️‍🔥",
         "en": "🌽 Elotes and esquites 💛 Your new favourites❤️‍🔥"
@@ -2127,7 +2083,6 @@
       "giros": [
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "🌮 Los de la gente chingona",
         "en": "🌮 For the badass crowd"
@@ -2192,9 +2147,7 @@
       "name": "El Hornero",
       "plazaId": "paseo-zibata",
       "giros": [
-        "parrilla-argentina"
-      ],
-      "secundarios": [
+        "parrilla-argentina",
         "pizza",
         "empanadas"
       ],
@@ -2263,9 +2216,7 @@
       "name": "Birria Jáuregui",
       "plazaId": "paseo-zibata",
       "giros": [
-        "birria"
-      ],
-      "secundarios": [
+        "birria",
         "antojitos-de-masa"
       ],
       "description": {
@@ -2336,7 +2287,6 @@
       "giros": [
         "gaspachos"
       ],
-      "secundarios": [],
       "description": {
         "es": "Gaspachos tradicionales de fruta estilo Morelia.",
         "en": "Traditional Morelia-style fruit gaspachos."
@@ -2404,7 +2354,6 @@
       "giros": [
         "panaderia"
       ],
-      "secundarios": [],
       "description": {
         "es": "Más de 60 años perfeccionando el sabor del buen pan 🤎\nRecién hecho todos los días.",
         "en": "More than 60 years perfecting the taste of good bread 🤎\nBaked fresh every day."
@@ -2471,7 +2420,6 @@
         "sushi",
         "poke"
       ],
-      "secundarios": [],
       "description": {
         "es": "Somos sushi a domicilio: calidad, diseño y precio justo en cada roll. 🍣🥢❤️",
         "en": "Sushi delivered: quality, design and a fair price in every roll. 🍣🥢❤️"
@@ -2534,9 +2482,7 @@
       "name": "Tacos Carly",
       "plazaId": "condesa",
       "giros": [
-        "marisqueria"
-      ],
-      "secundarios": [
+        "marisqueria",
         "taqueria"
       ],
       "description": {
@@ -2606,7 +2552,6 @@
       "giros": [
         "arepas"
       ],
-      "secundarios": [],
       "description": {
         "es": "¿Te apetece un viaje gastronómico a la vibrante Venezuela sin salir de Zibatá? Ven a Arepanas\nBar de Arepas 🫓🫓🫓",
         "en": "Fancy a culinary trip to vibrant Venezuela without leaving Zibatá? Come to Arepanas\nArepa Bar 🫓🫓🫓"
@@ -2673,7 +2618,6 @@
         "ensaladas",
         "crepas"
       ],
-      "secundarios": [],
       "description": {
         "es": "Donde se combinan sabores auténticos y recetas artesanales. Todas nuestras masas son de masa madre y nuestras frescas ensaladas elaboradas con la mejor calidad de productos. La especialidad de la casa, las crepas.",
         "en": "Where authentic flavours meet handmade recipes. All our doughs are sourdough and our fresh salads are made with the best quality produce. The house specialty: crepes."
@@ -2739,7 +2683,6 @@
       "giros": [
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Taquería Y Parrillada.",
         "en": "Taquería and grill."
@@ -2807,7 +2750,6 @@
         "comida-casera",
         "desayunos"
       ],
-      "secundarios": [],
       "description": {
         "es": "Be-Bo (Bendito Bocado)\nNo es sólo comida, es amor en cada bocado. ❤️",
         "en": "Be-Bo (Bendito Bocado)\nIt is not just food, it is love in every bite. ❤️"
@@ -2870,9 +2812,7 @@
       "name": "Burger & Fries Forever",
       "plazaId": "plaza-loop",
       "giros": [
-        "hamburguesas"
-      ],
-      "secundarios": [
+        "hamburguesas",
         "hot-dogs",
         "papas-fritas"
       ],
@@ -2938,9 +2878,7 @@
       "name": "Bocuze Bistró Café",
       "plazaId": "xentric-zibata",
       "giros": [
-        "cocina-internacional"
-      ],
-      "secundarios": [
+        "cocina-internacional",
         "brunch"
       ],
       "description": {
@@ -3009,9 +2947,7 @@
       "name": "Cosi Fan Tutte",
       "plazaId": "xentric-zibata",
       "giros": [
-        "cocina-italiana"
-      ],
-      "secundarios": [
+        "cocina-italiana",
         "pizza"
       ],
       "description": {
@@ -3079,9 +3015,7 @@
       "plazaId": "xentric-zibata",
       "giros": [
         "sushi",
-        "cocina-asiatica"
-      ],
-      "secundarios": [
+        "cocina-asiatica",
         "poke"
       ],
       "description": {
@@ -3151,9 +3085,7 @@
       "plazaId": "xentric-zibata",
       "giros": [
         "alitas",
-        "hamburguesas"
-      ],
-      "secundarios": [
+        "hamburguesas",
         "pub"
       ],
       "description": {
@@ -3223,9 +3155,7 @@
       "plazaId": "xentric-zibata",
       "giros": [
         "brunch",
-        "cafeteria"
-      ],
-      "secundarios": [
+        "cafeteria",
         "desayunos"
       ],
       "description": {
@@ -3293,7 +3223,6 @@
       "giros": [
         "helados"
       ],
-      "secundarios": [],
       "description": {
         "es": "La Michoacana es una marca de origen mexicano, la cual ha tenido una gran trayectoria alrededor del mundo de los helados y paletas artesanales 100% naturales.",
         "en": "La Michoacana is a Mexican brand with a long history in the world of 100% natural handmade ice cream and paletas."
@@ -3356,9 +3285,7 @@
       "name": "Kazu's Kitchen",
       "plazaId": "plaza-zielo",
       "giros": [
-        "cocina-asiatica"
-      ],
-      "secundarios": [
+        "cocina-asiatica",
         "sushi"
       ],
       "description": {
@@ -3429,7 +3356,6 @@
         "cocina-internacional",
         "gastrobar"
       ],
-      "secundarios": [],
       "description": {
         "es": "Cocina Internacional Gourmet\nOfrecemos un menú que combina sabores frescos y creativos para satisfacer todos los paladares.",
         "en": "Gourmet International Cuisine\nOur menu combines fresh, creative flavours for every palate."
@@ -3498,7 +3424,6 @@
       "giros": [
         "helados"
       ],
-      "secundarios": [],
       "description": {
         "es": "Con Devoción, todo sabe mejor.",
         "en": "With devotion, everything tastes better."
@@ -3565,7 +3490,6 @@
       "giros": [
         "asador"
       ],
-      "secundarios": [],
       "description": {
         "es": "Entrecot Asador Mexicano\nChef Hugo Tellez",
         "en": "Entrecot Asador Mexicano\nChef Hugo Tellez"
@@ -3633,9 +3557,7 @@
       "name": "Hot Buns",
       "plazaId": "plaza-zielo",
       "giros": [
-        "hamburguesas"
-      ],
-      "secundarios": [
+        "hamburguesas",
         "papas-fritas"
       ],
       "description": {
@@ -3700,9 +3622,7 @@
       "name": "Escarola Food & Health",
       "plazaId": "plaza-zielo",
       "giros": [
-        "ensaladas"
-      ],
-      "secundarios": [
+        "ensaladas",
         "sandwiches"
       ],
       "description": {
@@ -3767,9 +3687,7 @@
       "name": "Donatto Pizza",
       "plazaId": "plaza-zielo",
       "giros": [
-        "pizza"
-      ],
-      "secundarios": [
+        "pizza",
         "alitas"
       ],
       "description": {
@@ -3836,9 +3754,7 @@
       "plazaId": "mol-jamadi",
       "giros": [
         "cafeteria",
-        "panaderia"
-      ],
-      "secundarios": [
+        "panaderia",
         "desayunos"
       ],
       "description": {
@@ -3909,7 +3825,6 @@
         "gastrobar",
         "desayunos"
       ],
-      "secundarios": [],
       "description": {
         "es": "Comida deliciosa, excelente compañía y la mejor vista de Querétaro\nEl restaurante favorito de los golfistas 🏌🏼‍♂️⛳️\n¡Te esperamos!",
         "en": "Great food, great company and the best view in Querétaro\nThe golfers’ favourite restaurant 🏌🏼‍♂️⛳️\nWe are waiting for you!"
@@ -3975,9 +3890,7 @@
       "name": "Agave Grill",
       "plazaId": "centro-zibata",
       "giros": [
-        "asador"
-      ],
-      "secundarios": [
+        "asador",
         "taqueria"
       ],
       "description": {
@@ -4047,7 +3960,6 @@
         "poke",
         "sushi"
       ],
-      "secundarios": [],
       "description": {
         "es": "Poke Bowls y Sushi Rolls.",
         "en": "Poke bowls and sushi rolls."
@@ -4115,7 +4027,6 @@
         "acai",
         "jugos-y-smoothies"
       ],
-      "secundarios": [],
       "description": {
         "es": "Bowl Revolution.",
         "en": "Bowl Revolution."
@@ -4182,7 +4093,6 @@
       "giros": [
         "cafeteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Sucursal de la cadena de cafeterías Starbucks.",
         "en": "A branch of the Starbucks coffee chain."
@@ -4248,9 +4158,7 @@
       "plazaId": "paseo-zibata",
       "giros": [
         "acai",
-        "bowls-de-fruta"
-      ],
-      "secundarios": [
+        "bowls-de-fruta",
         "jugos-y-smoothies"
       ],
       "description": {
@@ -4316,7 +4224,6 @@
       "giros": [
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Taquería originaria de Arandas, Jalisco. No los únicos, pero sí los mejores.",
         "en": "A taquería from Arandas, Jalisco. Not the only ones, but the best."
@@ -4380,9 +4287,7 @@
       "name": "Los del Mandil",
       "plazaId": "plaza-zielo",
       "giros": [
-        "cocina-mexicana"
-      ],
-      "secundarios": [
+        "cocina-mexicana",
         "desayunos"
       ],
       "description": {
@@ -4448,7 +4353,6 @@
       "giros": [
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Muy México, Muy Tacos.",
         "en": "Very Mexico, very tacos."
@@ -4516,7 +4420,6 @@
         "reposteria",
         "cafeteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Postres · Desayunos & Brunch.\nSin azúcar, en pequeños lotes.\nIngredientes nobles.",
         "en": "Desserts · Breakfast & brunch.\nSugar free, in small batches.\nHonest ingredients."
@@ -4583,7 +4486,6 @@
       "giros": [
         "reposteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Los mejores postres que vayas a probar en Querétaro.",
         "en": "The best desserts you will taste in Querétaro."
@@ -4651,7 +4553,6 @@
         "panaderia",
         "reposteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Marie Panadería Artesanal. Pan dulce artesanal delicioso, pan de caja con masa madre, pan de hotdog y hamburguesa para tu negocio y pasteles decorados y personalizados.",
         "en": "Marie Panadería Artesanal. Delicious handmade sweet bread, sourdough sandwich bread, hot dog and burger buns for your business, and decorated custom cakes."
@@ -4716,7 +4617,6 @@
         "pizza",
         "alitas"
       ],
-      "secundarios": [],
       "description": {
         "es": "Sede oficial dentro de las instalaciones de la Universidad Anáhuac, en donde saciaremos esa hambre de leones con estos deliciosos productos: hamburguesas, papas fritas, hot dogs, pizzas, alitas, postres y bebidas.",
         "en": "Official spot inside the Universidad Anáhuac campus, where we take care of that lion-sized hunger with burgers, fries, hot dogs, pizza, wings, desserts and drinks."
@@ -4758,7 +4658,6 @@
         "comida-casera",
         "desayunos"
       ],
-      "secundarios": [],
       "description": {
         "es": "🍽 Desayuno, comida y snacks\n🍛 Menú diferente todos los días",
         "en": "🍽 Breakfast, lunch and snacks\n🍛 A different menu every day"
@@ -4818,7 +4717,6 @@
       "giros": [
         "tortas"
       ],
-      "secundarios": [],
       "description": {
         "es": "¡Descubre el sabor de las mejores Tortas!",
         "en": "Discover the taste of the best tortas!"
@@ -4858,9 +4756,7 @@
       "plazaId": "anahuac-queretaro",
       "giros": [
         "saludable",
-        "jugos-y-smoothies"
-      ],
-      "secundarios": [
+        "jugos-y-smoothies",
         "entre-panes"
       ],
       "description": {
@@ -4905,7 +4801,6 @@
         "pasteleria",
         "desayunos"
       ],
-      "secundarios": [],
       "description": {
         "es": "Bienvenidos a OMA Bakery donde la dulzura une a la familia.",
         "en": "Welcome to OMA Bakery, where sweetness brings the family together."
@@ -4945,7 +4840,6 @@
         "pizza",
         "pasta"
       ],
-      "secundarios": [],
       "description": {
         "es": "Pizza & Pasta con calidez humana.",
         "en": "Pizza & pasta with a warm welcome."
@@ -4984,7 +4878,6 @@
       "giros": [
         "desayunos"
       ],
-      "secundarios": [],
       "description": {
         "es": "Al chile tienes que probar los mejores chilaquiles.",
         "en": "Seriously, you have to try the best chilaquiles."
@@ -5043,7 +4936,6 @@
         "sandwiches",
         "wraps"
       ],
-      "secundarios": [],
       "description": {
         "es": "Bar de ensaladas.",
         "en": "Salad bar."
@@ -5082,7 +4974,6 @@
       "giros": [
         "acai"
       ],
-      "secundarios": [],
       "description": {
         "es": "#RespectTheOAK\n🫐 Açaí #1 del mundo, directo desde la selva Amazónica🌴",
         "en": "#RespectTheOAK\n🫐 The world’s #1 açaí, straight from the Amazon rainforest🌴"
@@ -5146,9 +5037,7 @@
       "name": "Burgerthoven",
       "plazaId": "xentric-anahuac",
       "giros": [
-        "hamburguesas"
-      ],
-      "secundarios": [
+        "hamburguesas",
         "alitas",
         "papas-fritas"
       ],
@@ -5216,7 +5105,6 @@
       "giros": [
         "bagels"
       ],
-      "secundarios": [],
       "description": {
         "es": "You can't buy happiness, but you can buy bagels.",
         "en": "You can’t buy happiness, but you can buy bagels."
@@ -5288,7 +5176,6 @@
         "alitas",
         "ramen"
       ],
-      "secundarios": [],
       "description": {
         "es": "🎮 Game & Snack en Zibatá\n🍔 Juega, come y reta a tus amigos\n🏆 Torneos | Retos | Premios",
         "en": "🎮 Game & Snack in Zibatá\n🍔 Play, eat and challenge your friends\n🏆 Tournaments | Challenges | Prizes"
@@ -5351,7 +5238,6 @@
       "giros": [
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "🔥 Taquería Gastronómica de Fuego\nEl ingrediente es el origen.\nEl fuego, nuestro carácter.",
         "en": "🔥 A taquería of fire and flavour\nThe ingredient is the origin.\nThe fire, our character."
@@ -5415,7 +5301,6 @@
       "giros": [
         "helados"
       ],
-      "secundarios": [],
       "description": {
         "es": "Sucursal de la cadena de helados de yogur Nutrisa.",
         "en": "A branch of the Nutrisa frozen yogurt chain."
@@ -5480,7 +5365,6 @@
         "panaderia",
         "cafeteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "🍞Artesanal-Masa madre\n☕️Café, Pan, Desayunos, Tés, etc.",
         "en": "🍞Handmade sourdough\n☕️Coffee, bread, breakfast, tea and more."
@@ -5544,7 +5428,6 @@
       "giros": [
         "jugos-y-smoothies"
       ],
-      "secundarios": [],
       "description": {
         "es": "Fresh drinks\nFresh habits\nFresh mindset 🍃\n🥤 Juice Bar",
         "en": "Fresh drinks\nFresh habits\nFresh mindset 🍃\n🥤 Juice Bar"
@@ -5606,7 +5489,6 @@
       "giros": [
         "quesadillas"
       ],
-      "secundarios": [],
       "description": {
         "es": "🌮✨ ¡El verdadero sabor está en Kekas Fritas El Xavi! ✨🌮\nVen a probar nuestras quesadillas fritas: doraditas, crujientes y rellenas con los guisados más sabrosos, hechos en casa con puro sazón mexicano.",
         "en": "🌮✨ The real flavour is at Kekas Fritas El Xavi! ✨🌮\nCome and try our fried quesadillas: golden, crispy and filled with the tastiest homemade stews, with pure Mexican seasoning."
@@ -5669,7 +5551,6 @@
       "giros": [
         "comida-casera"
       ],
-      "secundarios": [],
       "description": {
         "es": "Comida casera • 1984",
         "en": "Home cooking • 1984"
@@ -5728,9 +5609,7 @@
       "name": "Sweet Crepe",
       "plazaId": "paseo-zibata",
       "giros": [
-        "crepas"
-      ],
-      "secundarios": [
+        "crepas",
         "cafeteria"
       ],
       "description": {
@@ -5796,7 +5675,6 @@
       "giros": [
         "bar"
       ],
-      "secundarios": [],
       "description": {
         "es": "En Sana Corazón vivirás una experiencia única con una temática inspirada en un hospital, donde las heridas del amor se alivian bailando, cantando y brindando.",
         "en": "At Sana Corazón you will find a one-of-a-kind experience themed around a hospital, where the wounds of love are healed by dancing, singing and raising a glass."
@@ -5852,7 +5730,6 @@
       "giros": [
         "pizza"
       ],
-      "secundarios": [],
       "description": {
         "es": "Pizza artesanal.",
         "en": "Handmade pizza."
@@ -5917,7 +5794,6 @@
         "brunch",
         "cafeteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Del grano a la taza☕️\n🌿Snacks saludables y ambiente chill\nTu dosis diaria de creatividad, bienestar y café",
         "en": "From bean to cup☕️\n🌿Healthy snacks and a chill atmosphere\nYour daily dose of creativity, wellbeing and coffee"
@@ -5982,7 +5858,6 @@
       "giros": [
         "helados"
       ],
-      "secundarios": [],
       "description": {
         "es": "Momentos fríos, sabores increíbles.\nAsí se vive Myköna Frozen Yogurt,\nel sabor que te enamora.🍦💙",
         "en": "Cold moments, incredible flavours.\nThat is Myköna Frozen Yogurt,\nthe taste you fall for.🍦💙"
@@ -6046,7 +5921,6 @@
       "giros": [
         "papas-preparadas"
       ],
-      "secundarios": [],
       "description": {
         "es": "Desde la Mochila 🎒 hasta Qro ⛰️",
         "en": "From the backpack 🎒 all the way to Qro ⛰️"
@@ -6112,7 +5986,6 @@
         "cafeteria",
         "reposteria"
       ],
-      "secundarios": [],
       "description": {
         "es": "Easy bakery & coffee.",
         "en": "Easy bakery & coffee."
@@ -6177,7 +6050,6 @@
         "alto-en-proteina",
         "jugos-y-smoothies"
       ],
-      "secundarios": [],
       "description": {
         "es": "Bar de smoothies de proteína 🥤\nFuel your move ✨\nYour new healthy obsession",
         "en": "Protein smoothie bar 🥤\nFuel your move ✨\nYour new healthy obsession"
@@ -6246,7 +6118,6 @@
       "giros": [
         "poke"
       ],
-      "secundarios": [],
       "description": {
         "es": "JUST POKE & FUN 🍚😎🍚😎\nEst. 2018",
         "en": "JUST POKE & FUN 🍚😎🍚😎\nEst. 2018"
@@ -6284,9 +6155,7 @@
       "plazaId": "anahuac-queretaro",
       "giros": [
         "brunch",
-        "cafeteria"
-      ],
-      "secundarios": [
+        "cafeteria",
         "reposteria"
       ],
       "description": {
@@ -6325,9 +6194,7 @@
       "name": "Starbucks",
       "plazaId": "anahuac-queretaro",
       "giros": [
-        "cafeteria"
-      ],
-      "secundarios": [
+        "cafeteria",
         "desayunos"
       ],
       "description": {
@@ -6368,7 +6235,6 @@
       "giros": [
         "baguettes"
       ],
-      "secundarios": [],
       "description": {
         "es": "FAST FRENCH 🇫🇷",
         "en": "FAST FRENCH 🇫🇷"
@@ -6433,7 +6299,6 @@
         "jugos-y-smoothies",
         "alto-en-proteina"
       ],
-      "secundarios": [],
       "description": {
         "es": "Your body asks for it ⚡️\nSmoothies Healthy\nSin Azúcar + Proteína",
         "en": "Your body asks for it ⚡️\nHealthy smoothies\nSugar-free + protein"
@@ -6498,19 +6363,30 @@
         "asador",
         "taqueria"
       ],
-      "secundarios": [],
       "description": {
         "es": "🌵 Tacos estilo Sonora en Querétaro\n🥩 Carne de calidad",
         "en": "🌵 Sonora-style tacos in Querétaro\n🥩 Quality beef"
       },
       "hours": {
         "mon": [],
-        "tue": ["13:00-22:00"],
-        "wed": ["13:00-22:00"],
-        "thu": ["13:00-22:00"],
-        "fri": ["13:00-22:00"],
-        "sat": ["13:00-22:00"],
-        "sun": ["13:00-22:00"]
+        "tue": [
+          "13:00-22:00"
+        ],
+        "wed": [
+          "13:00-22:00"
+        ],
+        "thu": [
+          "13:00-22:00"
+        ],
+        "fri": [
+          "13:00-22:00"
+        ],
+        "sat": [
+          "13:00-22:00"
+        ],
+        "sun": [
+          "13:00-22:00"
+        ]
       },
       "location": {
         "lat": 20.6853512,
@@ -6551,19 +6427,32 @@
         "taqueria",
         "antojitos-de-masa"
       ],
-      "secundarios": [],
       "description": {
         "es": "Pozole con el mejor sazón, ahora es tradición; somos el lugar preferido de las personas que comen pensando en el sabor donde un barniz especial creado por nosotros, siempre acompaña a tus tacos, brindándote un sabor único.",
         "en": "Pozole with the best seasoning, now a tradition: the favourite spot of people who eat with flavour in mind, where a special glaze of our own always goes with your tacos for a one-of-a-kind taste."
       },
       "hours": {
-        "mon": ["10:30-23:00"],
-        "tue": ["10:30-23:00"],
-        "wed": ["10:30-23:00"],
-        "thu": ["10:30-23:00"],
-        "fri": ["10:30-23:00"],
-        "sat": ["10:30-23:00"],
-        "sun": ["10:30-23:00"]
+        "mon": [
+          "10:30-23:00"
+        ],
+        "tue": [
+          "10:30-23:00"
+        ],
+        "wed": [
+          "10:30-23:00"
+        ],
+        "thu": [
+          "10:30-23:00"
+        ],
+        "fri": [
+          "10:30-23:00"
+        ],
+        "sat": [
+          "10:30-23:00"
+        ],
+        "sun": [
+          "10:30-23:00"
+        ]
       },
       "location": {
         "lat": 20.6851989,

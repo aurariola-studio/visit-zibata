@@ -46,16 +46,19 @@ export function desdeHace(dias: number, ahora = new Date()): string {
  * La cookie de Access viaja sola en cuanto la persona inició sesión, así que sin esta comprobación
  * cualquier página de fuera podría hacer que su navegador marcase sugerencias como atendidas. Lo que
  * la frena es `Sec-Fetch-Site`, que pone el navegador y una página no puede falsificar; y para quien
- * no lo mande, se compara el `Origin` con el host. Sin ninguno de los dos, se niega: adivinar aquí no
- * aporta nada.
+ * no lo mande, se compara el `Origin` con el sitio entero (esquema, host y puerto). Sin ninguno de
+ * los dos, se niega: adivinar aquí no aporta nada.
+ *
+ * Solo se usa en escrituras (POST con `fetch`), así que `none` (una navegación que escribió la
+ * persona en la barra) no es un valor que una escritura legítima traiga.
  */
 export function origenPropio(peticion: Request): boolean {
   const sitio = peticion.headers.get('sec-fetch-site')
-  if (sitio) return sitio === 'same-origin' || sitio === 'none'
+  if (sitio) return sitio === 'same-origin'
   const origen = peticion.headers.get('origin')
   if (!origen) return false
   try {
-    return new URL(origen).host === new URL(peticion.url).host
+    return new URL(origen).origin === new URL(peticion.url).origin
   } catch {
     return false
   }

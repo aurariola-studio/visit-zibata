@@ -13,10 +13,16 @@ import { z } from 'zod'
 import {
   type DataIssue,
   syncPlazaDerivedFields,
+  validateRedirects,
   validateRelations,
   validateTranslations,
 } from '../../src/data/relations.ts'
-import { CategoriesFileSchema, PlacesFileSchema, PlazasFileSchema } from '../../src/data/schemas.ts'
+import {
+  CategoriesFileSchema,
+  PlacesFileSchema,
+  PlazasFileSchema,
+  RedirectsFileSchema,
+} from '../../src/data/schemas.ts'
 import { variantPath } from '../../src/lib/image-variants.ts'
 import {
   DatasetError,
@@ -25,6 +31,7 @@ import {
   loadCategoriesFile,
   loadPlacesFile,
   loadPlazasFile,
+  loadRedirectsFile,
   today,
   writeDataFile,
 } from './lib/dataset.ts'
@@ -36,6 +43,7 @@ for (const [name, schema] of [
   ['categories', CategoriesFileSchema],
   ['plazas', PlazasFileSchema],
   ['places', PlacesFileSchema],
+  ['redirects', RedirectsFileSchema],
 ] as const) {
   writeDataFile(
     `${dataPaths.schemasDir}/${name}.schema.json`,
@@ -69,6 +77,7 @@ try {
   const issues: DataIssue[] = [
     ...validateRelations(dataset, bounds),
     ...validateTranslations(dataset),
+    ...validateRedirects(loadRedirectsFile()?.redirects ?? [], dataset),
   ]
 
   for (const place of dataset.places) {

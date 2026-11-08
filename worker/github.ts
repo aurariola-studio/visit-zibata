@@ -23,12 +23,16 @@ export interface EntornoGitHub {
   GITHUB_RAMA?: string
 }
 
-export interface Archivo {
-  ruta: string
-  contenido: string
-  /** Los JSON viajan como texto; las fotos, en base64. */
-  codificacion?: 'utf-8' | 'base64'
-}
+export type Archivo =
+  | {
+      ruta: string
+      contenido: string
+      /** Los JSON viajan como texto; las fotos, en base64. */
+      codificacion?: 'utf-8' | 'base64'
+      borrar?: undefined
+    }
+  /** Quita el archivo del árbol en el mismo commit. Tiene que existir: ver `existeArchivo`. */
+  | { ruta: string; borrar: true }
 
 export interface Publicacion {
   url: string
@@ -40,9 +44,26 @@ export interface Publicacion {
 const API = 'https://api.github.com'
 const RAMA_POR_OMISION = 'panel-contenido'
 
-/** La rama donde se acumulan los cambios del panel. */
-export const ramaDe = (entorno: EntornoGitHub): string =>
-  entorno.GITHUB_RAMA?.trim() || RAMA_POR_OMISION
+/** Ramas que el panel nunca toca, ni siquiera si la configuración se las pide. */
+const RAMAS_PROTEGIDAS = new Set(['main', 'master', 'HEAD'])
+
+/**
+ * La rama donde se acumulan los cambios del panel.
+ *
+ * Con `GITHUB_RAMA=main` el reinicio de la rama (que va con `force`) reescribiría la historia de
+ * producción, así que una rama protegida o con forma de referencia rara es un error, no un valor.
+ */
+export const ramaDe = (entorno: EntornoGitHub): string => {
+  const rama = entorno.GITHUB_RAMA?.trim() || RAMA_POR_OMISION
+  if (
+    RAMAS_PROTEGIDAS.has(rama) ||
+    !/^[A-Za-z0-9][A-Za-z0-9._/-]{0,99}$/.test(rama) ||
+    rama.includes('..')
+  ) {
+    throw new Error(`GITHUB_RAMA no puede ser "${rama}": el panel solo escribe en su rama propia`)
+  }
+  return rama
+}
 
 const repoDe = (entorno: EntornoGitHub): { repo: string; dueno: string } => {
   const repo = entorno.GITHUB_REPO?.trim()
@@ -120,6 +141,19 @@ export async function leerArchivo(
   return new TextDecoder().decode(bytes)
 }
 
+/** Si un archivo existe en una rama, sin descargar su contenido más de lo que GitHub ya manda. */
+export async function existeArchivo(
+  entorno: EntornoGitHub,
+  ruta: string,
+  ref: string,
+): Promise<boolean> {
+  const datos = await pedirOpcional<unknown>(
+    entorno,
+    `/contents/${ruta}?ref=${encodeURIComponent(ref)}`,
+  )
+  return datos !== null
+}
+
 /** La PR abierta de la rama del panel, si la hay. */
 export async function prAbierta(entorno: EntornoGitHub): Promise<Publicacion | null> {
   if (faltaToken(entorno)) return null
@@ -170,6 +204,8 @@ export async function publicar(
 
   const blobs = await Promise.all(
     archivos.map(async (archivo) => {
+      // Un `sha` nulo en el árbol borra la ruta: no hay blob que crear.
+      if (archivo.borrar) return { path: archivo.ruta, mode: '100644', type: 'blob', sha: null }
       const blob = await pedir<{ sha: string }>(entorno, '/git/blobs', {
         method: 'POST',
         body: JSON.stringify({
@@ -192,9 +228,11 @@ export async function publicar(
   })
 
   if (referencia) {
+    // Sin `force`: el commit nuevo cuelga de `cabeza`, así que es un avance simple. Si otro guardado
+    // movió la rama entretanto, GitHub lo rechaza (422) en vez de pisar su commit sin avisar.
     await pedir(entorno, `/git/refs/heads/${rama}`, {
       method: 'PATCH',
-      body: JSON.stringify({ sha: nuevo.sha, force: true }),
+      body: JSON.stringify({ sha: nuevo.sha }),
     })
   } else {
     await pedir(entorno, '/git/refs', {

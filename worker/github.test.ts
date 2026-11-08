@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { leerArchivo, prAbierta, publicar } from './github.ts'
+import { existeArchivo, leerArchivo, prAbierta, publicar } from './github.ts'
 
 const REPO = 'aurariola-studio/visit-zibata'
 const entorno = {
@@ -88,6 +88,41 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+describe('publicar con archivos que se borran', () => {
+  it('un borrado va al árbol con sha nulo y no crea blob', async () => {
+    const { llamadas } = montar()
+    await publicar(
+      entorno,
+      [
+        { ruta: 'data/commercial/places.json', contenido: '{}' },
+        { ruta: 'public/images/places/x/vieja.webp', borrar: true },
+      ],
+      'Panel: quitar foto',
+    )
+    expect(llamadas.filter((llamada) => llamada.ruta === '/git/blobs')).toHaveLength(1)
+    const arbol = llamadas.find((llamada) => llamada.ruta === '/git/trees')?.cuerpo?.tree as {
+      path: string
+      sha: string | null
+    }[]
+    expect(arbol).toHaveLength(2)
+    expect(arbol.find((fila) => fila.path === 'public/images/places/x/vieja.webp')?.sha).toBeNull()
+    expect(arbol.find((fila) => fila.path === 'data/commercial/places.json')?.sha).toMatch(/blob/)
+  })
+})
+
+describe('existeArchivo', () => {
+  it('dice que sí si GitHub lo encuentra y que no si responde 404', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string | URL | Request) =>
+        String(url).includes('existe.webp') ? respuesta({ type: 'file' }) : respuesta({}, 404),
+      ),
+    )
+    expect(await existeArchivo(entorno, 'public/existe.webp', 'main')).toBe(true)
+    expect(await existeArchivo(entorno, 'public/falta.webp', 'main')).toBe(false)
+  })
+})
+
 describe('publicar', () => {
   it('abre la rama, commitea los dos archivos y crea la PR', async () => {
     const { llamadas } = montar()
@@ -170,8 +205,28 @@ describe('publicar', () => {
     )
     expect(parches).toHaveLength(2)
     expect(parches[0]?.cuerpo).toEqual({ sha: 'main-sha', force: true })
-    expect(parches[1]?.cuerpo).toEqual({ sha: 'commit-nuevo', force: true })
+    // Solo el reinicio desde main lleva `force`; el avance con el commit nuevo no pisa nada.
+    expect(parches[1]?.cuerpo).toEqual({ sha: 'commit-nuevo' })
   })
+
+  it('el avance de una PR abierta no usa force', async () => {
+    const { llamadas } = montar({ rama: true, pr: true })
+    await publicar(entorno, [{ ruta: 'a.json', contenido: '{}' }], 'Panel: editar')
+    const parches = llamadas.filter((llamada) => llamada.metodo === 'PATCH')
+    expect(parches).toHaveLength(1)
+    expect(parches[0]?.cuerpo).toEqual({ sha: 'commit-nuevo' })
+  })
+
+  it.each(['main', 'master', 'HEAD', ' main ', '../x', 'a b', '-x', ''.padEnd(120, 'a')])(
+    'rechaza GITHUB_RAMA=%j antes de llamar a GitHub',
+    async (rama) => {
+      const { llamadas } = montar({ rama: true, pr: false })
+      await expect(
+        publicar({ ...entorno, GITHUB_RAMA: rama }, [{ ruta: 'a.json', contenido: '{}' }], 'x'),
+      ).rejects.toThrow(/GITHUB_RAMA/)
+      expect(llamadas).toHaveLength(0)
+    },
+  )
 })
 
 describe('leer el contenido', () => {

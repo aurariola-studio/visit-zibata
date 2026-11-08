@@ -205,9 +205,7 @@ describe('añadir y mover giros', () => {
       expect.objectContaining({ id: movido.id }),
     )
 
-    const locales = dataset.places.filter((place) =>
-      [...place.giros, ...place.secundarios].includes(giroNoGeneral.giro.id),
-    )
+    const locales = dataset.places.filter((place) => place.giros.includes(giroNoGeneral.giro.id))
     expect(preparado.afectados.locales).toBe(locales.length)
     expect(preparado.afectados.plazas).toBe(new Set(locales.map((place) => place.plazaId)).size)
   })
@@ -357,6 +355,63 @@ describe('una categoría nueva', () => {
   })
 })
 
+describe('una categoría nueva y los slugs que otra abandonó', () => {
+  const nuevaConNombre = (es: string, en: string) => {
+    const cuerpo = clonar()
+    cuerpo.categories.push({
+      label: { es, en },
+      icon: iconoLibre,
+      hue: 200,
+      order: 999,
+      synonyms: [],
+      giros: [{ label: { es: 'Uno', en: 'One' }, icon: iconoLibre, synonyms: [], general: true }],
+    })
+    return cuerpo
+  }
+  const crudoCon = (redirects: Record<string, unknown>[]) => ({
+    ...crudo,
+    redirects: { version: 1, updatedAt: HOY, redirects } as Record<string, unknown>,
+  })
+  const otra = dataset.categories[0]
+  if (!otra) throw new Error('el dataset necesita una categoría')
+
+  it('no toma un slug que una categoría abandonó: su redirección lleva a la otra', () => {
+    const cuerpo = nuevaConNombre('Gimnasios', 'Gyms')
+    const libre = prepararCategorias(dataset, crudo, cuerpo, HOY)
+    expect(libre.ok && libre.categorias.find((c) => c.id === 'gimnasios')?.slug).toEqual({
+      es: 'gimnasios',
+      en: 'gyms',
+    })
+    const reservado = prepararCategorias(
+      dataset,
+      crudoCon([{ kind: 'category-slug', id: otra.id, lang: 'es', slug: 'gimnasios' }]),
+      cuerpo,
+      HOY,
+    )
+    if (!reservado.ok) throw new Error(reservado.problemas.join(' '))
+    // En español salta a "gimnasios-2"; en inglés, que nadie abandonó, sigue siendo "gyms".
+    expect(reservado.categorias.find((c) => c.label.es === 'Gimnasios')?.slug).toEqual({
+      es: 'gimnasios-2',
+      en: 'gyms',
+    })
+  })
+
+  it('cada idioma reserva los suyos', () => {
+    const cuerpo = nuevaConNombre('Gimnasios', 'Gyms')
+    const preparado = prepararCategorias(
+      dataset,
+      crudoCon([{ kind: 'category-slug', id: otra.id, lang: 'en', slug: 'gyms' }]),
+      cuerpo,
+      HOY,
+    )
+    if (!preparado.ok) throw new Error(preparado.problemas.join(' '))
+    expect(preparado.categorias.find((c) => c.label.es === 'Gimnasios')?.slug).toEqual({
+      es: 'gimnasios',
+      en: 'gyms-2',
+    })
+  })
+})
+
 describe('el impacto', () => {
   it('sin cambios no afecta a ningún local', () => {
     const preparado = prepararCategorias(dataset, crudo, entrada(), HOY)
@@ -374,9 +429,7 @@ describe('el impacto', () => {
     const preparado = prepararCategorias(dataset, crudo, cuerpo, HOY)
     if (!preparado.ok) throw new Error('no preparó')
     const giros = new Set(giroNoGeneral.categoria.giros.map((giro) => giro.id))
-    const locales = dataset.places.filter((place) =>
-      [...place.giros, ...place.secundarios].some((giro) => giros.has(giro)),
-    )
+    const locales = dataset.places.filter((place) => place.giros.some((giro) => giros.has(giro)))
     expect(preparado.afectados.locales).toBe(locales.length)
   })
 })

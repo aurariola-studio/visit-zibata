@@ -10,7 +10,9 @@ describe('InfoDialog', () => {
     render(<InfoDialog topic="privacidad" onClose={vi.fn()} onGoTo={onGoTo} />)
 
     expect(screen.getByRole('dialog', { name: 'Privacidad y términos' })).toBeInTheDocument()
-    expect(screen.getByText(/no usa cuentas ni cookies de rastreo/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/no te pide crear una cuenta ni usa cookies de rastreo/),
+    ).toBeInTheDocument()
     expect(screen.getByText(/únicamente en este navegador/)).toBeInTheDocument()
     // Que los favoritos salgan del dispositivo se dice, no se calla.
     expect(screen.getByText(/se envían para que no se pierdan/)).toBeInTheDocument()
@@ -23,7 +25,7 @@ describe('InfoDialog', () => {
     // Los términos viven en esta misma página desde la v4.18, y lo que fijan son cuatro cosas.
     expect(screen.getByRole('heading', { name: 'Términos de uso' })).toBeInTheDocument()
     expect(screen.getByText(/No tiene relación comercial/)).toBeInTheDocument()
-    expect(screen.getByText(/nadie paga por estar/)).toBeInTheDocument()
+    expect(screen.getByText(/Nadie paga por estar/)).toBeInTheDocument()
     expect(screen.getByText(/sin garantía de que cada dato sea exacto hoy/)).toBeInTheDocument()
     expect(screen.getByText(/prefieres no aparecer/)).toBeInTheDocument()
     // Las otras páginas no se amontonan aquí: son enlaces a su propia ruta.

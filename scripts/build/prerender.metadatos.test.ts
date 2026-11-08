@@ -24,6 +24,29 @@ const data: Dataset = {
 const plazasActivas = new Set(data.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
 const visibles = data.places.filter((place) => place.active && plazasActivas.has(place.plazaId))
 
+/*
+ * El filtro usa la etiqueta corta ("Italiana", "Saludable"); el título, la descripción y el h1 la
+ * dicen completa. Estas formas no salen de los datos y aquí quedan fijadas.
+ */
+const NOMBRE_LARGO: Record<Idioma, Record<string, string>> = {
+  es: {
+    mexicana: 'Comida Mexicana',
+    italiana: 'Comida Italiana',
+    asiatica: 'Comida Asiática',
+    saludable: 'Comida Saludable',
+    casera: 'Comida Casera',
+    internacional: 'Comida Internacional',
+  },
+  en: {
+    mexicana: 'Mexican food',
+    italiana: 'Italian food',
+    asiatica: 'Asian food',
+    saludable: 'Healthy food',
+    casera: 'Home cooking',
+    internacional: 'International food',
+  },
+}
+
 const absoluta = (href: string) => `https://visitzibata.com${href}`
 const paginas = {
   es: pagesFor('es', data, '/', absoluta),
@@ -232,6 +255,115 @@ describe('lo que se comprobó en las fichas concretas de la auditoría', () => {
   })
 })
 
+/*
+ * La etiqueta de un giro es corta a propósito: es lo que cabe en una cápsula y lo que se busca
+ * ("Italiana", "Saludable"). En la descripción de una ficha se dice completa ("Comida Italiana"),
+ * porque ahí no compite por el espacio y "Italiana" a secas no dice qué se vende. Estas diez frases
+ * fijan esa regla: si alguien añade un giro con esa forma y no lo mapea en `src/lib/categorias.ts`,
+ * o cambia el texto, la prueba lo dice.
+ */
+describe('los giros que el filtro dice cortos se leen completos en la descripción', () => {
+  const casos = [
+    [
+      'cocina-italiana',
+      'Comida Italiana en Plaza Prueba, Zibatá.',
+      'Italian food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'cocina-mexicana',
+      'Comida Mexicana en Plaza Prueba, Zibatá.',
+      'Mexican food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'cocina-asiatica',
+      'Comida Asiática en Plaza Prueba, Zibatá.',
+      'Asian food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'cocina-internacional',
+      'Comida Internacional en Plaza Prueba, Zibatá.',
+      'International food at Plaza Prueba, Zibatá.',
+    ],
+    [
+      'saludable',
+      'Comida Saludable en Plaza Prueba, Zibatá.',
+      'Healthy food at Plaza Prueba, Zibatá.',
+    ],
+  ] as const
+
+  const plaza = {
+    ...(data.plazas[0] as Plaza),
+    id: 'plaza-prueba',
+    slug: 'plaza-prueba',
+    name: 'Plaza Prueba',
+    active: true,
+  } as unknown as Plaza
+  const base = data.places[0] as Place
+
+  const descripcionDe = (giro: string, idioma: Idioma): string => {
+    const lugar = {
+      ...base,
+      id: 'local-prueba',
+      slug: 'local-prueba',
+      name: 'Local Prueba',
+      plazaId: 'plaza-prueba',
+      giros: [giro],
+      // Sin texto del negocio, la descripción es solo el contexto: el giro y la zona.
+      description: null,
+      cierre: undefined,
+    } as unknown as Place
+    const pagina = pagesFor(
+      idioma,
+      { ...data, plazas: [plaza], places: [lugar] },
+      '/',
+      absoluta,
+    ).find((candidata) => candidata.href.includes('local-prueba'))
+    return pagina?.description ?? ''
+  }
+
+  for (const [giro, es, en] of casos) {
+    it(`${giro}: ${es}`, () => {
+      expect(descripcionDe(giro, 'es')).toBe(es)
+      expect(descripcionDe(giro, 'en')).toBe(en)
+    })
+  }
+})
+
+describe('la descripción enumera todas las categorías del local', () => {
+  it('no se queda con las dos primeras: el tercer giro también se dice', () => {
+    /*
+     * origenatural tiene tres giros (saludable, desayunos, jugos) y su texto no nombra ninguno, así
+     * que la descripción los dice los tres. Antes se cortaba en dos y "Jugos y Smoothies" no
+     * aparecía nunca.
+     */
+    expect(ficha('es', 'origenatural').description).toMatch(
+      /^Comida Saludable, Desayunos y Jugos y Smoothies en Xentric Anáhuac, Zibatá\./,
+    )
+    // En inglés la lista usa la convención inglesa: coma de Oxford y "and".
+    expect(ficha('en', 'origenatural').description).toMatch(
+      /^Healthy food, Breakfast, and Juices & Smoothies at Xentric Anáhuac, Zibatá\./,
+    )
+  })
+
+  it('los giros que el texto del negocio ya nombra no se repiten aunque se ofrezcan todos', () => {
+    // El texto de romani-pizzas ya dice ensaladas y crepas: la descripción solo añade la cocina.
+    expect(ficha('es', 'romani-pizzas').description).toMatch(
+      /^Comida Italiana en Plaza Condesa, Zibatá\./,
+    )
+    expect(ficha('en', 'romani-pizzas').description).toMatch(/^Italian food at Plaza Condesa/)
+  })
+
+  it('el cuerpo servido sin JavaScript usa las mismas etiquetas y la misma unión', () => {
+    // Lo que leen los rastreadores y quien no tiene JS no puede decir menos que la descripción.
+    expect(ficha('es', 'origenatural').contenido ?? '').toContain(
+      '<p>Comida Saludable, Desayunos y Jugos y Smoothies</p>',
+    )
+    expect(ficha('en', 'origenatural').contenido ?? '').toContain(
+      '<p>Healthy food, Breakfast, and Juices &amp; Smoothies</p>',
+    )
+  })
+})
+
 describe('la portada', () => {
   it('presenta la guía local de Zibatá, sin abrir con la marca ni reducirla a restaurantes', () => {
     for (const idioma of idiomas) {
@@ -254,11 +386,14 @@ describe('la portada', () => {
 
 describe('las zonas y la información no cambian de plantilla', () => {
   it('conservan el título "{nombre} · Visit Zibatá" y su propia descripción', () => {
-    const condesa = de('es', '/es/zona/condesa')
-    expect(condesa.title).toBe('Plaza Condesa · Visit Zibatá')
-    expect(condesa.description).toBe(
-      'Zona comercial del desarrollo Riscos Condesa I, frente a la Universidad Anáhuac.',
+    // Cualquier zona activa con descripción propia que quepa entera: el prerender recorta a 160.
+    const zona = data.plazas.find(
+      (plaza) => plaza.active && plaza.description && plaza.description.es.length <= 160,
     )
+    if (!zona?.description) throw new Error('el dataset necesita una zona activa con descripción')
+    const pagina = de('es', `/es/zona/${zona.slug}`)
+    expect(pagina.title).toBe(`${zona.name} · Visit Zibatá`)
+    expect(pagina.description).toBe(zona.description.es)
   })
 })
 
@@ -308,8 +443,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
   const categoriaDeGiro = new Map(
     data.categories.flatMap((c) => c.giros.map((g) => [g.id, c.id] as const)),
   )
-  const idsDe = (place: Place) =>
-    new Set([...place.giros, ...(place.secundarios ?? [])].map((g) => categoriaDeGiro.get(g)))
+  const idsDe = (place: Place) => new Set(place.giros.map((g) => categoriaDeGiro.get(g)))
   const conLocales = data.categories.filter((c) => data.places.some((p) => idsDe(p).has(c.id)))
 
   it('hay una por cada categoría que tiene al menos un local', () => {
@@ -369,7 +503,8 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     expect(titulos.size).toBe(todas.length)
     for (const categoria of conLocales) {
       const pagina = de(idioma, ruta(categoria.slug[idioma]))
-      const etiqueta = categoria.label[idioma] ?? categoria.label.es
+      const etiqueta =
+        NOMBRE_LARGO[idioma][categoria.id] ?? categoria.label[idioma] ?? categoria.label.es
       expect(pagina.title).toContain(etiqueta)
       expect(pagina.description).toContain(etiqueta)
       expect(pagina.contenido).toContain(`<h1>${etiqueta.replace(/&/g, '&amp;')}`)
@@ -454,9 +589,7 @@ describe('los locales ocultos', () => {
 
 describe('las páginas de categoría en los dos idiomas', () => {
   const conLocales = data.categories.filter((c) =>
-    visibles.some((p) =>
-      [...p.giros, ...(p.secundarios ?? [])].some((g) => c.giros.some((g2) => g2.id === g)),
-    ),
+    visibles.some((p) => p.giros.some((g) => c.giros.some((g2) => g2.id === g))),
   )
 
   it('ocupan la misma posición, que es lo que empareja las hreflang', () => {

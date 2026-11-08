@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { openApp, waitForMap } from './helpers.ts'
+import { LOCAL, LOCAL_COMPLETO, openApp, waitForMap, ZONA_B } from './helpers.ts'
 
 /**
  * El contrato tipográfico, fijado para que no vuelva a divergir:
@@ -33,7 +33,7 @@ test.describe('Subtítulos', () => {
       )
     }
 
-    await openApp(page, { path: 'zona/xentric-zibata' })
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
     await medir(page.getByRole('heading', { level: 3, name: 'Lugares en esta zona' }))
 
     await openApp(page, { path: 'info/acerca' })
@@ -43,8 +43,9 @@ test.describe('Subtítulos', () => {
     await medir(page.getByRole('heading', { level: 3, name: 'Términos de uso' }))
 
     // El perfil solo enseña sus bloques cuando hay algo guardado.
-    await page.addInitScript(() =>
-      window.localStorage.setItem('zibata:favoritos', JSON.stringify(['tomassa'])),
+    await page.addInitScript(
+      (id) => window.localStorage.setItem('zibata:favoritos', JSON.stringify([id])),
+      LOCAL.id,
     )
     await openApp(page)
     await page.getByRole('button', { name: 'Tu Zibatá' }).click()
@@ -130,19 +131,18 @@ test.describe('Títulos', () => {
       return estilo
     }
 
-    await openApp(page, { path: 'zona/xentric-zibata' })
-    const zona = await medir(page.getByRole('heading', { level: 2, name: 'Xentric Zibatá' }))
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
+    const zona = await medir(page.getByRole('heading', { level: 2, name: ZONA_B.name }))
 
-    await openApp(page, { path: 'lugar/al-grano' })
-    const ficha = await medir(
-      page.getByRole('heading', { level: 2, name: 'Al Grano Maíz & Snacks' }),
-    )
+    await openApp(page, { path: `lugar/${LOCAL_COMPLETO.slug}` })
+    const ficha = await medir(page.getByRole('heading', { level: 2, name: LOCAL_COMPLETO.name }))
 
     await openApp(page, { path: 'info/acerca' })
     const info = await medir(page.getByRole('heading', { level: 2, name: 'Acerca de esta guía' }))
 
-    await page.addInitScript(() =>
-      window.localStorage.setItem('zibata:favoritos', JSON.stringify(['tomassa'])),
+    await page.addInitScript(
+      (id) => window.localStorage.setItem('zibata:favoritos', JSON.stringify([id])),
+      LOCAL.id,
     )
     await openApp(page)
     await page.getByRole('button', { name: 'Tu Zibatá' }).click()
@@ -157,8 +157,8 @@ test.describe('Títulos', () => {
   test('el eje de ancho se aplica de verdad: el mismo texto mide menos al 88 % que al 100 %', async ({
     page,
   }) => {
-    await openApp(page, { path: 'zona/xentric-zibata' })
-    await expect(page.getByRole('heading', { level: 2, name: 'Xentric Zibatá' })).toBeVisible()
+    await openApp(page, { path: `zona/${ZONA_B.slug}` })
+    await expect(page.getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
     const anchos = await page.evaluate(async () => {
       await document.fonts.ready
       const medir = (ancho: string) => {

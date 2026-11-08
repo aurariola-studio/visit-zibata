@@ -19,6 +19,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
@@ -49,14 +51,17 @@ jobs:
       version: ${{ steps.leer.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - id: leer
         run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"
 
   e2e:
-    # Los cuatro nombres no se pueden cambiar sin tocar la regla de la rama `main` (Settings, Rules,
-    # Rulesets): exige estas comprobaciones por su nombre exacto, y un nombre nuevo se quedaría
-    # esperando para siempre.
-    name: E2E (Playwright, base ${{ matrix.base }}, ${{ matrix.grupo }})
+    # Un trabajo por grupo de pruebas, y los grupos son por tema (tests/e2e/grupos.ts): el nombre de
+    # un trabajo en rojo ya dice qué se rompió. Ninguno de estos nombres está en la regla de la rama
+    # `main`: la regla exige solo el trabajo "CI (resultado)" de abajo, que espera a todos. Así se
+    # puede repartir o fusionar grupos sin tocar Settings, Rules.
+    name: E2E (${{ matrix.base }}, ${{ matrix.nombre }})
     needs: [checks, playwright-version]
     runs-on: ubuntu-latest
     # Dentro de la imagen oficial de Playwright (https://playwright.dev/docs/ci, "Via Containers"). Antes
@@ -69,38 +74,62 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v${{ needs.playwright-version.outputs.version }}-noble
       options: --user 1001 --ipc=host --init
-    # Red de seguridad por encima de todo lo demás. Playwright corta antes con `globalTimeout` (45
+    # Red de seguridad por encima de todo lo demás. Playwright corta antes con `globalTimeout` (55
     # minutos, en playwright.config.ts) y los pasos tienen su propio tope, así que este solo salta si
     # algo se cuelga fuera de ellos.
-    timeout-minutes: 60
+    timeout-minutes: 70
     strategy:
       fail-fast: false
       matrix:
-        # La subruta se sigue probando: detecta rutas absolutas mal escritas antes de publicar, y
-        # mantiene el proyecto portable a otro hosting.
+        # Cada grupo tiene que estar en las dos bases y cada base ha de sumar todos los grupos:
+        # scripts/ci/grupos-e2e.test.ts lo comprueba.
         #
-        # Dos grupos por base. "mapa" son los archivos cuyas pruebas llevan `@mapa` en el título
-        # (mapa, capas, responsive, medición, táctil y errores) y "contenido" es todo lo demás. En CI
-        # "contenido" tarda más que en local (entre 23 y 35 minutos frente a 16 a 23 de "mapa"): al
-        # final de cada ejecución el resumen del trabajo lista el tiempo por archivo, que es el dato
-        # para repartirlos mejor si hace falta.
+        # La raíz corre los cuatro proyectos (escritorio, móvil, tableta y WebKit de iPhone), un
+        # trabajo por grupo. La subruta se sigue probando para detectar rutas absolutas mal escritas
+        # y mantener el proyecto portable a otro hosting, pero solo en escritorio: esa clase de error
+        # se rompe igual en cualquier navegador. Son dos trabajos y no seis para no pasar de los 20
+        # trabajos simultáneos del plan gratuito de la organización.
         include:
-          - base: '/'
-            grupo: 'mapa'
-            args: '--grep=@mapa'
-          - base: '/'
-            grupo: 'contenido'
-            args: '--grep-invert=@mapa'
-          - base: '/visit-zibata/'
-            grupo: 'mapa'
-            args: '--grep=@mapa'
-          - base: '/visit-zibata/'
-            grupo: 'contenido'
-            args: '--grep-invert=@mapa'
+          - id: raiz-fichas
+            base: '/'
+            nombre: 'fichas y búsqueda'
+            grupos: 'fichas'
+          - id: raiz-interfaz
+            base: '/'
+            nombre: 'interfaz y accesibilidad'
+            grupos: 'interfaz'
+          - id: raiz-rutas
+            base: '/'
+            nombre: 'rutas, SEO y panel'
+            grupos: 'rutas'
+          - id: raiz-mapa-capas
+            base: '/'
+            nombre: 'mapa: capas y datos'
+            grupos: 'mapa-capas'
+          - id: raiz-mapa-realismo
+            base: '/'
+            nombre: 'mapa: realismo y títulos'
+            grupos: 'mapa-realismo'
+          - id: raiz-mapa-uso
+            base: '/'
+            nombre: 'mapa: medición, táctil y errores'
+            grupos: 'mapa-uso'
+          - id: subruta-contenido
+            base: '/visit-zibata/'
+            nombre: 'contenido'
+            grupos: 'fichas interfaz rutas'
+            args: '--project=desktop'
+          - id: subruta-mapa
+            base: '/visit-zibata/'
+            nombre: 'mapa'
+            grupos: 'mapa-capas mapa-realismo mapa-uso'
+            args: '--project=desktop'
     env:
       BASE_PATH: ${{ matrix.base }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
@@ -112,16 +141,32 @@ jobs:
         run: npm run build
         timeout-minutes: 10
       - name: Pruebas E2E
-        run: npx playwright test ${{ matrix.args }}
-        timeout-minutes: 50
+        # La lista se calcula aparte: dentro de `$(...)` un fallo del script daria una lista vacía y
+        # Playwright correría TODAS las pruebas en este trabajo sin avisar. Así el paso aborta.
+        run: |
+          archivos="$(node scripts/ci/archivos-del-grupo.ts ${{ matrix.grupos }})"
+          test -n "$archivos"
+          npx playwright test $archivos ${{ matrix.args }}
+        timeout-minutes: 60
       - name: Tiempo de prueba por archivo
         if: ${{ !cancelled() }}
         run: node scripts/ci/resumen-tiempos.ts >> "$GITHUB_STEP_SUMMARY"
+      # Los tiempos de cada prueba se guardan siempre (es un JSON de unos cientos de KB): sin ellos
+      # no se puede repartir bien los grupos. El informe HTML, con sus trazas, pesa unos 4 MB y solo
+      # se guarda si el trabajo falla, para no gastar los 500 MB de artefactos del plan gratuito.
+      - name: Tiempos de las pruebas
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: tiempos-${{ matrix.id }}
+          path: test-results/informe.json
+          retention-days: 7
+          if-no-files-found: ignore
       - name: Informe de Playwright
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: playwright-report-${{ strategy.job-index }}
+          name: informe-${{ matrix.id }}
           path: playwright-report
           retention-days: 7
 
@@ -131,14 +176,40 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          persist-credentials: false
           fetch-depth: 0
-      # Se usa el binario y no gitleaks-action: esa acción exige clave de licencia cuando el
-      # repositorio vive en una organización, y desde el traslado a aurariola-studio vive en una.
-      # El binario es el mismo escáner, MIT y sin clave. La versión va fijada, igual que las
-      # acciones van fijadas por SHA.
+      # El binario y no gitleaks-action (exige clave de licencia en organizaciones), verificado por hash y con
+      # caché. Todo vive en .github/actions/gitleaks y scripts/ci/gitleaks.sh.
       - name: Escanear con Gitleaks
+        uses: ./.github/actions/gitleaks
+
+  # La única comprobación que la regla de la rama `main` exige para las pruebas E2E. Espera a todo
+  # lo demás y falla si algo no terminó en verde.
+  #
+  # `if: always()` es lo que lo hace seguro, y no es un detalle: un trabajo cuyos `needs` fallaron se
+  # OMITE, y GitHub da por buena (éxito) una comprobación omitida, aunque sea obligatoria
+  # (https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-jobs-with-conditions).
+  # Sin `always()`, un E2E en rojo dejaría este trabajo omitido y la fusión se permitiría con un
+  # verde falso. Por eso tampoco debe cambiarse a `!cancelled()`, y por eso el script de abajo
+  # cuenta como fallo cualquier resultado que no sea `success`, también `skipped`.
+  resultado:
+    name: CI (resultado)
+    if: ${{ always() }}
+    needs: [checks, playwright-version, secrets, e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Comprobar que todo terminó en verde
         env:
-          GITLEAKS_VERSION: 8.30.1
+          NECESITA: ${{ toJSON(needs) }}
         run: |
-          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz gitleaks
-          ./gitleaks git --no-banner --redact --exit-code 1
+          node -e '
+            const fallos = Object.entries(JSON.parse(process.env.NECESITA))
+              .filter(([, trabajo]) => trabajo.result !== "success")
+              .map(([nombre, trabajo]) => nombre + ": " + trabajo.result);
+            if (fallos.length > 0) {
+              console.error("No terminó en verde: " + fallos.join(", "));
+              process.exit(1);
+            }
+            console.log("Todo en verde.");
+          '

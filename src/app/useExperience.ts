@@ -1,5 +1,6 @@
 /** Datos derivados del estado: resultados, conteos por plaza y qué muestra el panel. */
 import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
+import { markedPlace } from '../data/catalog.ts'
 import { useFavorites } from '../features/favorites/useFavorites.ts'
 import {
   applyFilters,
@@ -33,11 +34,11 @@ export function useExperience(catalog: Catalog) {
   const query = useDeferredValue(state.searchQuery)
   const hasQuery = searchTerms(query).length > 0
   /**
-   * Al escribir se busca en todo Zibatá aunque haya una plaza abierta: quien busca "ramen" quiere
-   * saber dónde hay, no si lo hay en la plaza que estaba mirando. La plaza sigue seleccionada en el
-   * mapa y vuelve a acotar en cuanto se borra la búsqueda.
+   * La zona elegida acota también la búsqueda: buscar con Plaza Luna abierta mira dentro de Plaza
+   * Luna, que es lo que se espera de un filtro. El estado vacío ofrece la salida cuando ahí no hay
+   * nada, "Buscar en toda la guía", que suelta la zona y repite la búsqueda.
    */
-  const scopedPlazaId = hasQuery ? null : state.selectedPlazaId
+  const scopedPlazaId = state.selectedPlazaId
 
   // El reloj compartido de OpenStatus, no uno nuevo: avanza al cambiar el minuto, así que el filtro
   // y el orden se reevalúan solos cuando un local abre o cierra mientras alguien mira la guía.
@@ -50,7 +51,12 @@ export function useExperience(catalog: Catalog) {
     openNowOnly: state.openNowOnly,
   })
 
-  const matching = useMemo(
+  /**
+   * Todos los que cumplen los filtros en Zibatá. La zona no entra aquí, porque el mapa sigue
+   * contando en todo el mapa: un 0 fuera de la zona elegida diría que no hay nada, y sí hay. Además,
+   * pulsar esa zona la abre con el mismo filtro, así que el marcador es otra puerta.
+   */
+  const everywhere = useMemo(
     () =>
       applyFilters(
         catalog,
@@ -77,9 +83,16 @@ export function useExperience(catalog: Catalog) {
     ],
   )
 
+  /** Lo que se lista y se cuenta: lo de Zibatá, acotado a la zona elegida si hay una. */
+  const matching = useMemo(
+    () =>
+      scopedPlazaId ? everywhere.filter((place) => place.plazaId === scopedPlazaId) : everywhere,
+    [everywhere, scopedPlazaId],
+  )
+
   const matchCounts = useMemo(
-    () => (filtersActive ? countByPlaza(matching) : null),
-    [filtersActive, matching],
+    () => (filtersActive ? countByPlaza(everywhere) : null),
+    [filtersActive, everywhere],
   )
 
   // Conteo por categoría con los demás filtros aplicados (búsqueda, favoritos y plaza seleccionada, sin la
@@ -142,7 +155,7 @@ export function useExperience(catalog: Catalog) {
     const visible = catalog.categories.filter((category) => used.has(category.id))
     const affinity = categoryAffinity(
       preferences.read(),
-      (id) => catalog.placeById.get(id),
+      (id) => markedPlace(catalog, id),
       Date.now(),
       (giro) => catalog.categoryOfGiro.get(giro)?.id,
     )
@@ -168,16 +181,14 @@ export function useExperience(catalog: Catalog) {
     ? catalog.placeById.get(state.selectedPlaceId)
     : undefined
 
-  // Lista que se ve al navegar (plaza o resultados). Con texto de búsqueda manda la relevancia; sin él,
-  // el orden personal (gustos + descubrimiento, ver features/ranking).
+  // Lista que se ve al navegar (plaza o resultados). La zona y la búsqueda se combinan en `matching`;
+  // sin ningún filtro, la plaza muestra su orden curado. Con texto manda la relevancia.
   const browsing = useMemo(
     () =>
-      selectedPlaza && !hasQuery
-        ? filtersActive
-          ? matching.filter((place) => place.plazaId === selectedPlaza.id)
-          : (catalog.placesByPlaza.get(selectedPlaza.id) ?? [])
+      selectedPlaza && !filtersActive
+        ? (catalog.placesByPlaza.get(selectedPlaza.id) ?? [])
         : matching,
-    [catalog, selectedPlaza, hasQuery, filtersActive, matching],
+    [catalog, selectedPlaza, filtersActive, matching],
   )
   const personal = usePersonalOrder(
     browsing,
@@ -217,7 +228,7 @@ export function useExperience(catalog: Catalog) {
           fromResults: state.placeOrigin === 'results',
         }
     }
-    // Buscando, los resultados mandan aunque haya una plaza abierta (vienen de todo Zibatá).
+    // Buscando, los resultados mandan aunque haya una plaza abierta, ya acotados a ella.
     if (selectedPlaza && !hasQuery)
       return { kind: 'plaza', plaza: selectedPlaza, places: [...listed] }
     if (filtersActive) return { kind: 'results', places: [...listed] }

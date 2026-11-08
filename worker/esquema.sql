@@ -67,9 +67,9 @@ CREATE INDEX IF NOT EXISTS eventos_por_fecha ON eventos (fecha);
 -- UNIQUE: esa sola columna hace que cada prueba valga una vez, sin tabla aparte ni caducidades (el
 -- mismo arreglo que ya usa `credencial`).
 --
--- `atendida` no la mueve ningun endpoint: el panel solo lee, asi que el contador de "sin leer" se
--- pone a cero con `wrangler d1 execute` (ver docs/DESPLIEGUE.md). Es a proposito: una casilla en el
--- panel seria la primera escritura que aceptara, y por ahora no la vale.
+-- `atendida` la mueve el panel (POST /api/panel/sugerencias/:id, tras Access y la comprobacion de
+-- origen), y al atender se borra `contacto`. El panel lista primero las pendientes, asi que una
+-- racha de recados nuevos no esconde las viejas.
 CREATE TABLE IF NOT EXISTS sugerencia (
   id       TEXT PRIMARY KEY,
   creada   TEXT NOT NULL,

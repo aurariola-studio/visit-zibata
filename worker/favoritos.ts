@@ -12,6 +12,7 @@
  * La edad mínima vive aquí porque la usan las dos: es del servidor y no de la interfaz, para que no
  * se pueda saltar desde el navegador.
  */
+import { LUGARES } from './catalogo.ts'
 
 /**
  * Cuánto tiene que vivir una cuenta antes de que sus corazones cuenten para el público.
@@ -29,10 +30,9 @@ export const MAXIMO_POR_PETICION = 100
 /**
  * Tope por cuenta. Nadie guarda más lugares de los que hay, así que esto sigue al catálogo.
  *
- * El Worker no puede contar los lugares (no tiene los datos), así que el número se escribe aquí y lo
- * ata una prueba: `favoritos.test.ts` lee `data/` y falla si el catálogo se le acerca. Así no se
- * queda en un número de otra época sin que nadie se entere, que es lo que le pasó al 500 anterior
- * con 101 locales: no frenó nunca nada.
+ * El número se escribe aquí y lo ata una prueba: `favoritos.test.ts` lee `data/` y falla si el
+ * catálogo se le acerca. Así no se queda en un número de otra época sin que nadie se entere, que es
+ * lo que le pasó al 500 anterior con 101 locales: no frenó nunca nada.
  */
 export const MAXIMO_POR_CUENTA = 150
 
@@ -53,13 +53,21 @@ export interface Cambio {
 export function cambioDe(cuerpo: unknown): Cambio | null {
   if (typeof cuerpo !== 'object' || cuerpo === null) return null
   const crudo = cuerpo as { anadir?: unknown; quitar?: unknown }
-  const limpiar = (valor: unknown): string[] =>
+  const limpiar = (valor: unknown, admite: (id: string) => boolean): string[] =>
     Array.isArray(valor)
-      ? [...new Set(valor.filter((id): id is string => typeof id === 'string' && SLUG.test(id)))]
+      ? [
+          ...new Set(
+            valor.filter(
+              (id): id is string => typeof id === 'string' && SLUG.test(id) && admite(id),
+            ),
+          ),
+        ]
       : []
 
-  const anadir = limpiar(crudo.anadir)
-  const quitar = limpiar(crudo.quitar)
+  // Solo se puede guardar un lugar que existe. Quitar acepta cualquier slug con forma de tal: así un
+  // corazón sobre un lugar que ya salió del catálogo se puede borrar, y borrar no inventa nada.
+  const anadir = limpiar(crudo.anadir, (id) => LUGARES.has(id))
+  const quitar = limpiar(crudo.quitar, () => true)
   if (anadir.length + quitar.length === 0) return null
   if (anadir.length + quitar.length > MAXIMO_POR_PETICION) return null
   // Pedir añadir y quitar lo mismo no es un cambio, es un error de quien llama.
