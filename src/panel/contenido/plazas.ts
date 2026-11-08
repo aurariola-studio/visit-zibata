@@ -32,10 +32,10 @@ export function pintarPlazas(): void {
       const estado = estadoDeLaPlaza(plaza)
       const total = (vista.datos?.places ?? []).filter((n) => n.plazaId === plaza.id).length
       return `<tr>
-        <td><span class="negocio-nombre">${texto(plaza.name)}</span></td>
+        <td class="celda-nombre"><span class="negocio-nombre">${texto(plaza.name)}</span></td>
         <td class="cifra col-giros">${numero(localesVisiblesDe(plaza))}</td>
         <td class="cifra col-orden">${numero(total)}</td>
-        <td><span class="marca-estado" data-activo="${estado.marca}" title="${texto(estado.nota)}">${texto(estado.rotulo)}</span></td>
+        <td class="celda-estado"><span class="marca-estado" data-activo="${estado.marca}" title="${texto(estado.nota)}">${texto(estado.rotulo)}</span></td>
         <td class="accion"><button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-editar-plaza="${texto(plaza.id)}" aria-label="Editar ${texto(plaza.name)}">Editar</button></td>
       </tr>`
     })

@@ -128,9 +128,9 @@ export function pintarZonaNegocios(): void {
       const estado = estadoDelNegocio(negocio)
       return `<tr>
         <td class="celda-nombre"><span class="negocio-nombre">${texto(negocio.name)}</span><span class="negocio-detalle">${texto([donde, que].filter(Boolean).join(' · '))}</span></td>
-        <td class="tenue col-plaza">${texto(donde)}</td>
-        <td class="tenue col-giros">${texto(que)}</td>
-        <td><span class="marca-estado" data-activo="${estado.marca}" title="${texto(estado.nota)}">${texto(estado.rotulo)}</span></td>
+        <td class="tenue celda-nombre col-plaza">${texto(donde)}</td>
+        <td class="tenue celda-nombre col-giros">${texto(que)}</td>
+        <td class="celda-estado"><span class="marca-estado" data-activo="${estado.marca}" title="${texto(estado.nota)}">${texto(estado.rotulo)}</span></td>
         <td class="accion"><button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-editar="${texto(negocio.id)}" aria-label="Editar ${texto(negocio.name)}">Editar</button></td>
       </tr>`
     })
