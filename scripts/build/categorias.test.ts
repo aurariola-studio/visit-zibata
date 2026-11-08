@@ -20,7 +20,7 @@ describe('los giros que nombran una categoría', () => {
   })
 
   it('no repite lo que la etiqueta ya dice, con o sin acentos ni mayúsculas', () => {
-    const cafe = categorias.find((c) => c.slug.es === 'desayunos-y-cafe') as Category
+    const cafe = categorias.find((c) => c.id === 'desayunos-y-cafe') as Category
     const giros = girosDeCategoria(cafe, porCategoria.get(cafe.id) ?? [], 'es')
     expect(giros).not.toContain('café')
     expect(giros).not.toContain('desayunos')

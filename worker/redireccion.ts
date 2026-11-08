@@ -44,14 +44,18 @@ const SLUGS = {
   en: new Set(categorias.categories.map((categoria) => categoria.slug.en)),
 }
 
-/** A dónde lleva una dirección antigua: una ficha, una zona, o `null` para la portada. */
-export type Destino = { tipo: 'lugar' | 'zona'; slug: string } | null
+/** A dónde lleva una dirección antigua: una ficha, una zona, una categoría, o `null` para la portada. */
+export type Destino = { tipo: 'lugar' | 'zona' | 'categoria'; slug: string } | null
+
+type Idioma = 'es' | 'en'
 
 export interface Direcciones {
   /** `/lugar/<slug>` antiguos. */
   lugares: ReadonlyMap<string, Destino>
   /** `/zona/<slug>` antiguos. */
   zonas: ReadonlyMap<string, Destino>
+  /** `/categoria/<slug>` antiguos, uno por idioma: el slug de una categoría es uno por idioma. */
+  categorias: Record<Idioma, ReadonlyMap<string, Destino>>
 }
 
 /**
@@ -60,14 +64,39 @@ export interface Direcciones {
  * quedan cubiertas sin tocar las filas viejas.
  *
  * Solo las fichas y zonas ACTIVAS tienen página: si el destino no la tiene, la dirección antigua baja un
- * escalón (de la ficha a su zona, de la zona a la portada) en vez de acabar en un 404.
+ * escalón (de la ficha a su zona, de la zona a la portada) en vez de acabar en un 404. Una categoría solo
+ * tiene página si algún local visible la usa.
  */
 export function resolverDirecciones(
   filas: readonly Redirect[],
   plazas: readonly { id: string; slug: string; active: boolean }[],
-  lugares: readonly { id: string; slug: string; active: boolean; plazaId: string }[],
+  lugares: readonly {
+    id: string
+    slug: string
+    active: boolean
+    plazaId: string
+    giros?: readonly string[]
+  }[],
+  categorias: readonly {
+    id: string
+    slug: Record<Idioma, string>
+    giros: readonly { id: string }[]
+  }[] = [],
 ): Direcciones {
   const plazaViva = new Map(plazas.map((plaza) => [plaza.id, plaza]))
+  const categoriaViva = new Map(categorias.map((categoria) => [categoria.id, categoria]))
+  const paginaDeCategoria = (id: string, idioma: Idioma): Destino => {
+    const categoria = categoriaViva.get(id)
+    if (!categoria) return null
+    const giros = new Set(categoria.giros.map((giro) => giro.id))
+    const conPagina = lugares.some(
+      (lugar) =>
+        lugar.active &&
+        plazaViva.get(lugar.plazaId)?.active &&
+        lugar.giros?.some((giro) => giros.has(giro)),
+    )
+    return conPagina ? { tipo: 'categoria', slug: categoria.slug[idioma] } : null
+  }
   const lugarVivo = new Map(lugares.map((lugar) => [lugar.id, lugar]))
   const zonaDe = (plazaId: string): Destino => {
     const plaza = plazaViva.get(plazaId)
@@ -90,7 +119,12 @@ export function resolverDirecciones(
 
   const lugaresAntiguos = new Map<string, Destino>()
   const zonasAntiguas = new Map<string, Destino>()
+  const categoriasAntiguas: Record<Idioma, Map<string, Destino>> = { es: new Map(), en: new Map() }
   for (const fila of filas) {
+    if (fila.kind === 'category-slug') {
+      categoriasAntiguas[fila.lang].set(fila.slug, paginaDeCategoria(fila.id, fila.lang))
+      continue
+    }
     if (fila.kind === 'place') lugaresAntiguos.set(fila.slug, lugarBorrado.get(fila.id) ?? null)
     else if (fila.kind === 'place-slug') {
       lugaresAntiguos.set(fila.slug, fichaDe(fila.id) ?? lugarBorrado.get(fila.id) ?? null)
@@ -100,14 +134,21 @@ export function resolverDirecciones(
       zonasAntiguas.set(fila.slug, zonaDe(fila.id))
     }
   }
-  return { lugares: lugaresAntiguos, zonas: zonasAntiguas }
+  return { lugares: lugaresAntiguos, zonas: zonasAntiguas, categorias: categoriasAntiguas }
 }
 
-const DIRECCIONES = resolverDirecciones(borrados.redirects, plazasJson.plazas, lugaresJson.places)
+const DIRECCIONES = resolverDirecciones(
+  borrados.redirects,
+  plazasJson.plazas,
+  lugaresJson.places,
+  categorias.categories,
+)
 
-const rutaDe = (destino: Destino, idioma: 'es' | 'en'): string =>
+const SEGMENTO_DE_DESTINO = { lugar: 'place', zona: 'plaza', categoria: 'category' } as const
+
+const rutaDe = (destino: Destino, idioma: Idioma): string =>
   destino
-    ? `/${PREFIX[idioma]}/${SEGMENTS[idioma][destino.tipo === 'lugar' ? 'place' : 'plaza']}/${destino.slug}`
+    ? `/${PREFIX[idioma]}/${SEGMENTS[idioma][SEGMENTO_DE_DESTINO[destino.tipo]]}/${destino.slug}`
     : `/${PREFIX[idioma]}`
 
 /**
@@ -120,19 +161,25 @@ const rutaDe = (destino: Destino, idioma: 'es' | 'en'): string =>
  */
 function redireccionDeFamilia(
   ruta: string,
-  familia: 'place' | 'plaza',
-  mapa: ReadonlyMap<string, Destino>,
+  familia: 'place' | 'plaza' | 'category',
+  mapas: ReadonlyMap<string, Destino> | Record<Idioma, ReadonlyMap<string, Destino>>,
   consulta = '',
 ): string | null {
-  if (mapa.size === 0) return null
   const partes = ruta.split('/').filter(Boolean)
   const idioma = partes[0] === 'en' ? 'en' : partes[0] === 'es' ? 'es' : null
+  // Las fichas y las zonas tienen un mapa; las categorías, uno por idioma (cada idioma, su slug).
+  const mapa =
+    mapas instanceof Map
+      ? mapas
+      : (mapas as Record<Idioma, ReadonlyMap<string, Destino>>)[idioma ?? 'es']
+  if (!mapa || mapa.size === 0) return null
   const [segmento, slug] = idioma ? partes.slice(1) : partes
   if (!slug || segmento !== SEGMENTS[idioma ?? 'es'][familia]) return null
   if (partes.length !== (idioma ? 3 : 2)) return null
   if (!mapa.has(slug)) return null
   const destino = mapa.get(slug) ?? null
-  const mismaClase = destino?.tipo === (familia === 'place' ? 'lugar' : 'zona')
+  const mismaClase =
+    destino?.tipo === { place: 'lugar', plaza: 'zona', category: 'categoria' }[familia]
   return rutaDe(destino, idioma ?? 'es') + (mismaClase ? consulta : '')
 }
 
@@ -150,17 +197,35 @@ export const redireccionDeZona = (
   consulta = '',
 ): string | null => redireccionDeFamilia(ruta, 'plaza', mapa, consulta)
 
+/** La categoría con otro slug a la que pasa una dirección antigua (por idioma, con o sin prefijo). */
+export const redireccionDeCategoriaAntigua = (
+  ruta: string,
+  mapas: Record<Idioma, ReadonlyMap<string, Destino>> = DIRECCIONES.categorias,
+  consulta = '',
+): string | null => redireccionDeFamilia(ruta, 'category', mapas, consulta)
+
 /** Los segmentos con los que empezaban las rutas del español sin prefijo. */
 const SEGMENTOS_ANTIGUOS: ReadonlySet<string> = new Set(Object.values(SEGMENTS.es))
 
 /** La dirección de la categoría que pide una portada con `?categoria=`, o `null`. */
-function redireccionDeCategoria(url: URL, idioma: 'es' | 'en'): string | null {
+function redireccionDeCategoria(
+  url: URL,
+  idioma: Idioma,
+  antiguas: Direcciones['categorias'],
+): string | null {
   const parametro = SEGMENTS[idioma].category
   const claves = [...url.searchParams.keys()]
   if (claves.length !== 1 || claves[0] !== parametro) return null
 
-  const slug = url.searchParams.get(parametro) ?? ''
-  if (!SLUGS[idioma].has(slug)) return null
+  const pedido = url.searchParams.get(parametro) ?? ''
+  // Un slug vivo vale tal cual; uno antiguo, solo si su categoría sigue teniendo página.
+  const antigua = antiguas[idioma].get(pedido)
+  const slug = SLUGS[idioma].has(pedido)
+    ? pedido
+    : antigua?.tipo === 'categoria'
+      ? antigua.slug
+      : null
+  if (!slug) return null
   return `/${PREFIX[idioma]}/${SEGMENTS[idioma].category}/${slug}`
 }
 
@@ -175,17 +240,18 @@ export function redireccionDe(url: URL, direcciones: Direcciones = DIRECCIONES):
 
   const antigua =
     redireccionDeLugar(ruta, direcciones.lugares, url.search) ??
-    redireccionDeZona(ruta, direcciones.zonas, url.search)
+    redireccionDeZona(ruta, direcciones.zonas, url.search) ??
+    redireccionDeCategoriaAntigua(ruta, direcciones.categorias, url.search)
   if (antigua) return antigua
 
-  if (ruta === '/en') return redireccionDeCategoria(url, 'en') ?? sinBarra
-  if (ruta === '/es') return redireccionDeCategoria(url, 'es') ?? sinBarra
+  if (ruta === '/en') return redireccionDeCategoria(url, 'en', direcciones.categorias) ?? sinBarra
+  if (ruta === '/es') return redireccionDeCategoria(url, 'es', direcciones.categorias) ?? sinBarra
 
   const [primero = ''] = ruta.split('/').filter(Boolean)
   if (ruta === '/' || SEGMENTOS_ANTIGUOS.has(primero)) {
     // La portada con una categoría va directa a la página de la categoría, sin pasar por `/es`.
     if (ruta === '/') {
-      const categoria = redireccionDeCategoria(url, 'es')
+      const categoria = redireccionDeCategoria(url, 'es', direcciones.categorias)
       if (categoria) return categoria
     }
     return `/es${ruta === '/' ? '' : ruta}${url.search}`

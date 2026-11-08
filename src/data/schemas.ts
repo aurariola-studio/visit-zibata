@@ -300,11 +300,19 @@ const RedirectPlazaSlugSchema = z.strictObject({
   id: slug,
   slug,
 })
+/** El slug de una categoría es uno por idioma: la fila dice de cuál es el antiguo. */
+const RedirectCategorySlugSchema = z.strictObject({
+  kind: z.literal('category-slug'),
+  id: slug,
+  lang: z.enum(['es', 'en']),
+  slug,
+})
 export const RedirectSchema = z.discriminatedUnion('kind', [
   RedirectPlaceSchema,
   RedirectPlazaSchema,
   RedirectPlaceSlugSchema,
   RedirectPlazaSlugSchema,
+  RedirectCategorySlugSchema,
 ])
 export type Redirect = z.infer<typeof RedirectSchema>
 

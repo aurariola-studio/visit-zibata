@@ -10,7 +10,11 @@ import {
 
 // Sin direcciones antiguas: estas pruebas son del prefijo /es y de las categorías, y no deben depender de
 // qué locales o zonas de la guía real se hayan borrado o cambiado de dirección desde el panel.
-const NINGUNA: Direcciones = { lugares: new Map(), zonas: new Map() }
+const NINGUNA: Direcciones = {
+  lugares: new Map(),
+  zonas: new Map(),
+  categorias: { es: new Map(), en: new Map() },
+}
 const aDonde = (direccion: string) => redireccionDe(new URL(direccion), NINGUNA)
 
 describe('nunca redirige a otro sitio', () => {
@@ -339,5 +343,107 @@ describe('una plaza con otra dirección', () => {
     )
     // La zona se desactivó: va a la portada, donde ese filtro no existe.
     expect(real('https://visitzibata.com/es/zona/inactiva-antes?categoria=bebidas')).toBe('/es')
+  })
+})
+
+describe('una categoría con otro slug', () => {
+  // Con id distinto del slug y con un slug por idioma, que es donde se esconden los fallos.
+  const categorias = [
+    {
+      id: 'cat-comida',
+      slug: { es: 'comida-actual', en: 'food-current' },
+      giros: [{ id: 'giro-a' }],
+    },
+    {
+      id: 'cat-vacia',
+      slug: { es: 'vacia-actual', en: 'empty-current' },
+      giros: [{ id: 'giro-v' }],
+    },
+  ]
+  const conGiro = [
+    { id: 'l-1', slug: 'uno', active: true, plazaId: 'p-uno', giros: ['giro-a'] },
+    { id: 'l-2', slug: 'dos', active: false, plazaId: 'p-uno', giros: ['giro-v'] },
+    { id: 'l-3', slug: 'tres', active: true, plazaId: 'p-dos', giros: ['giro-v'] },
+  ]
+  const fila = (lang: 'es' | 'en', slug: string, id = 'cat-comida'): Redirect => ({
+    kind: 'category-slug',
+    id,
+    lang,
+    slug,
+  })
+  const real = (filas: Redirect[], url: string) =>
+    redireccionDe(new URL(url), resolverDirecciones(filas, plazas, conGiro, categorias))
+
+  it('cada idioma lleva su propio slug de hoy, con o sin prefijo', () => {
+    const filas = [fila('es', 'comida-vieja'), fila('en', 'food-old')]
+    expect(real(filas, 'https://visitzibata.com/es/categoria/comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/categoria/comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/en/category/food-old')).toBe(
+      '/en/category/food-current',
+    )
+  })
+
+  it('un slug de un idioma no se mezcla con el otro', () => {
+    const filas = [fila('es', 'comida-vieja')]
+    expect(real(filas, 'https://visitzibata.com/en/category/comida-vieja')).toBeNull()
+    expect(
+      real([fila('en', 'food-old')], 'https://visitzibata.com/es/categoria/food-old'),
+    ).toBeNull()
+  })
+
+  it('una cadena lleva de cada slug antiguo al actual, y conserva la consulta', () => {
+    const filas = [fila('es', 'primero'), fila('es', 'segundo')]
+    expect(real(filas, 'https://visitzibata.com/es/categoria/primero?x=1')).toBe(
+      '/es/categoria/comida-actual?x=1',
+    )
+    expect(real(filas, 'https://visitzibata.com/es/categoria/segundo')).toBe(
+      '/es/categoria/comida-actual',
+    )
+  })
+
+  it('si la categoría ya no tiene página (sin locales visibles) o se borró, va a la portada', () => {
+    // 'cat-vacia' solo la usa un local oculto y otro en una plaza inactiva.
+    expect(
+      real(
+        [fila('es', 'vacia-vieja', 'cat-vacia')],
+        'https://visitzibata.com/es/categoria/vacia-vieja',
+      ),
+    ).toBe('/es')
+    expect(
+      real(
+        [fila('en', 'fantasma-old', 'cat-fantasma')],
+        'https://visitzibata.com/en/category/fantasma-old',
+      ),
+    ).toBe('/en')
+  })
+
+  it('el enlace antiguo de la portada con ?categoria= también llega al slug de hoy', () => {
+    const filas = [fila('es', 'comida-vieja'), fila('en', 'food-old')]
+    expect(real(filas, 'https://visitzibata.com/es?categoria=comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/?categoria=comida-vieja')).toBe(
+      '/es/categoria/comida-actual',
+    )
+    expect(real(filas, 'https://visitzibata.com/en?category=food-old')).toBe(
+      '/en/category/food-current',
+    )
+    // La que ya no tiene página no inventa una.
+    expect(
+      real(
+        [fila('es', 'vacia-vieja', 'cat-vacia')],
+        'https://visitzibata.com/es?categoria=vacia-vieja',
+      ),
+    ).toBeNull()
+  })
+
+  it('no toca las fichas ni las zonas: cada familia tiene su propio espacio', () => {
+    const filas = [fila('es', 'compartido')]
+    expect(real(filas, 'https://visitzibata.com/es/lugar/compartido')).toBeNull()
+    expect(real(filas, 'https://visitzibata.com/es/zona/compartido')).toBeNull()
   })
 })

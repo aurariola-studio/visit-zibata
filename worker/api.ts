@@ -108,6 +108,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
   '/api/panel/contenido/plaza/slug': 4 * 1024,
+  '/api/panel/contenido/categoria/slug': 4 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
   '/api/panel/contenido/categoria/borrar': 4 * 1024,
   '/api/panel/contenido/foto': Math.ceil(TOPE_FOTO * 1.5),
@@ -382,6 +383,7 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
   for (const [rutaCambio, tipo] of [
     ['/api/panel/contenido/negocio/slug', 'place'],
     ['/api/panel/contenido/plaza/slug', 'plaza'],
+    ['/api/panel/contenido/categoria/slug', 'category'],
   ] as const) {
     if (ruta === rutaCambio && peticion.method === 'POST') {
       if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)

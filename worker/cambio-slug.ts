@@ -15,14 +15,15 @@
  * Solo cambia la URL. Volver a una dirección anterior quita su fila en el mismo commit; si no, el 301
  * taparía la ficha (`validateRedirects` lo rechaza).
  *
- * Qué NO hace: no cambia el slug de una categoría (tiene uno por idioma y su redirección lee los slugs
- * vivos de la portada), ni toca el mapa: el contorno y los edificios se enlazan por id.
+ * El slug de una categoría es uno por idioma: la petición dice cuál (`lang`) y la fila de redirección
+ * también. No toca el mapa: el contorno y los edificios se enlazan por id.
  */
 import { z } from 'zod'
 import {
   type CommercialDataset,
   type DataIssue,
   esBorrado,
+  type FamiliaDeRedireccion,
   familiaDeRedireccion,
   validateRelations,
 } from '../src/data/relations.ts'
@@ -33,7 +34,7 @@ import { anotarRedirecciones } from './borrado.ts'
 import { type Cargado, cargar, LIMITES } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
 
-export type TipoDireccion = 'place' | 'plaza'
+export type TipoDireccion = 'place' | 'plaza' | 'category'
 
 export const EntradaCambioSlugSchema = z.strictObject({
   id: z.string().trim().min(1, 'Falta qué cambiar'),
@@ -47,12 +48,15 @@ export const EntradaCambioSlugSchema = z.strictObject({
       SLUG_PATTERN,
       'Solo minúsculas, números y guiones, sin espacios, p. ej. "cafe-del-paseo"',
     ),
+  /** El idioma del slug: solo una categoría tiene uno por idioma. */
+  lang: z.enum(['es', 'en']).optional(),
   /** Sin esto, solo se calcula el impacto. */
   confirmar: z.boolean().optional().default(false),
 })
 
 export interface ImpactoCambioSlug {
   tipo: TipoDireccion
+  lang: 'es' | 'en' | null
   entidad: { id: string; nombre: string }
   antes: string
   despues: string
@@ -80,7 +84,15 @@ export type PreparadoCambioSlug =
 const SEGMENTOS = {
   place: { es: 'lugar', en: 'place' },
   plaza: { es: 'zona', en: 'area' },
+  category: { es: 'categoria', en: 'category' },
 } as const
+
+const KIND_DE_CAMBIO = {
+  place: 'place-slug',
+  plaza: 'plaza-slug',
+  category: 'category-slug',
+} as const
+const NOMBRE_DE = { place: 'negocio', plaza: 'plaza', category: 'categoría' } as const
 
 const mensajes = (asuntos: DataIssue[]): string[] =>
   asuntos.filter((asunto) => asunto.level === 'error').map((asunto) => asunto.message)
@@ -102,26 +114,45 @@ export function prepararCambioSlug(
       ),
     }
   }
-  const { id, slug: nuevo } = entrada.data
+  const { id, slug: nuevo, lang } = entrada.data
+  if (tipo === 'category' && !lang) {
+    return { ok: false, problemas: ['lang: Falta el idioma del slug de la categoría'] }
+  }
+  if (tipo !== 'category' && lang) {
+    return { ok: false, problemas: ['lang: Solo una categoría tiene un slug por idioma'] }
+  }
+  const idioma = lang ?? 'es'
 
-  const nombreDe = tipo === 'place' ? 'negocio' : 'plaza'
-  const vivos = tipo === 'place' ? dataset.places : dataset.plazas
+  const nombreDe = NOMBRE_DE[tipo]
+  // Una vista común de lo que se puede cambiar: id, slug (el del idioma, en una categoría) y nombre.
+  const vivos: { id: string; slug: string; name: string }[] =
+    tipo === 'place'
+      ? dataset.places
+      : tipo === 'plaza'
+        ? dataset.plazas
+        : dataset.categories.map((categoria) => ({
+            id: categoria.id,
+            slug: categoria.slug[idioma],
+            name: categoria.label.es,
+          }))
   const actual = vivos.find((fila) => fila.id === id)
   if (!actual) return { ok: false, problemas: [`Ese ${nombreDe} ya no existe`] }
   if (actual.slug === nuevo) {
     return { ok: false, problemas: ['Ya tiene esa dirección: no hay nada que cambiar'] }
   }
 
-  const archivoCrudo = tipo === 'place' ? crudo.places : crudo.plazas
-  const claveDeFilas = tipo === 'place' ? 'places' : 'plazas'
+  const archivoCrudo =
+    tipo === 'place' ? crudo.places : tipo === 'plaza' ? crudo.plazas : crudo.categories
+  const claveDeFilas = tipo === 'place' ? 'places' : tipo === 'plaza' ? 'plazas' : 'categories'
   const filas = (archivoCrudo[claveDeFilas] as Record<string, unknown>[] | undefined) ?? []
   if (!filas.some((fila) => String(fila.id) === id)) {
     return { ok: false, problemas: [`Ese ${nombreDe} ya no existe`] }
   }
 
+  const familia: FamiliaDeRedireccion = tipo === 'category' ? `category-${idioma}` : tipo
   const previas = (crudo.redirects?.redirects as Redirect[] | undefined) ?? []
-  const delTipo = previas.filter((fila) => familiaDeRedireccion(fila) === tipo)
-  const kindCambio = tipo === 'place' ? 'place-slug' : 'plaza-slug'
+  const delTipo = previas.filter((fila) => familiaDeRedireccion(fila) === familia)
+  const kindCambio = KIND_DE_CAMBIO[tipo]
   // La fila de una dirección que esta misma entidad abandonó: volver a ella la libera.
   const propia = delTipo.find(
     (fila) => fila.kind === kindCambio && fila.id === id && fila.slug === nuevo,
@@ -152,17 +183,21 @@ export function prepararCambioSlug(
       tipo === 'place' ? dataset.places.map((fila) => cambiar(fila, id, nuevo)) : dataset.places,
     plazas:
       tipo === 'plaza' ? dataset.plazas.map((fila) => cambiar(fila, id, nuevo)) : dataset.plazas,
+    categories:
+      tipo === 'category'
+        ? dataset.categories.map((fila) =>
+            fila.id === id ? { ...fila, slug: { ...fila.slug, [idioma]: nuevo } } : fila,
+          )
+        : dataset.categories,
   }
   const problemas = mensajes(validateRelations(despues, LIMITES))
   if (problemas.length > 0) return { ok: false, problemas }
 
-  const anotado = anotarRedirecciones(
-    crudo,
-    [{ kind: kindCambio, id, slug: actual.slug }],
-    despues,
-    hoy,
-    (fila) => fila === propia,
-  )
+  const filaNueva: Redirect =
+    tipo === 'category'
+      ? { kind: 'category-slug', id, lang: idioma, slug: actual.slug }
+      : { kind: kindCambio as 'place-slug' | 'plaza-slug', id, slug: actual.slug }
+  const anotado = anotarRedirecciones(crudo, [filaNueva], despues, hoy, (fila) => fila === propia)
   if (!anotado.ok) return anotado
 
   // Las que ya llevaban a esta entidad (sus nombres anteriores, y los de un borrado si lo hubiera).
@@ -170,15 +205,22 @@ export function prepararCambioSlug(
     (fila) => fila !== propia && fila.kind === kindCambio && fila.id === id,
   ).length
 
+  const activas = new Set(dataset.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
+  const visibles = dataset.places.filter((place) => place.active && activas.has(place.plazaId))
   const tienePagina =
     tipo === 'plaza'
-      ? (actual as CommercialDataset['plazas'][number]).active
-      : (() => {
-          const lugar = actual as CommercialDataset['places'][number]
-          return lugar.active && dataset.plazas.find((p) => p.id === lugar.plazaId)?.active === true
-        })()
+      ? (dataset.plazas.find((plaza) => plaza.id === id)?.active ?? false)
+      : tipo === 'place'
+        ? visibles.some((place) => place.id === id)
+        : (() => {
+            const giros = new Set(
+              dataset.categories.find((categoria) => categoria.id === id)?.giros.map((g) => g.id),
+            )
+            return visibles.some((place) => place.giros.some((giro) => giros.has(giro)))
+          })()
 
-  const [es, en] = [SEGMENTOS[tipo].es, SEGMENTOS[tipo].en]
+  const segmento = SEGMENTOS[tipo]
+  const idiomas = tipo === 'category' ? [idioma] : (['es', 'en'] as const)
   const avisos: string[] = []
   if (tienePagina) {
     avisos.push(
@@ -188,7 +230,7 @@ export function prepararCambioSlug(
     )
   } else {
     avisos.push(
-      `Hoy no tiene página (${tipo === 'place' ? 'está oculto o su plaza lo está' : 'la plaza está inactiva'}): la dirección antigua nunca se publicó. Se anota igual, por si circulaba.`,
+      `Hoy no tiene página (${tipo === 'place' ? 'está oculto o su plaza lo está' : tipo === 'plaza' ? 'la plaza está inactiva' : 'ningún local visible la usa'}): la dirección antigua nunca se publicó. Se anota igual, por si circulaba.`,
     )
   }
   if (anteriores > 0) {
@@ -204,6 +246,12 @@ export function prepararCambioSlug(
   if (tipo === 'plaza') {
     avisos.push('Las direcciones de sus locales no cambian: no llevan la de la zona.')
   }
+  if (tipo === 'category') {
+    avisos.push(
+      `Solo cambia el slug en ${idioma === 'es' ? 'español' : 'inglés'}; el otro idioma y el nombre visible quedan como están.`,
+      'Un enlace compartido de una zona con el filtro antiguo (?categoria=…) no se redirige: abre la zona sin filtro.',
+    )
+  }
   avisos.push(
     'Se revierte con git, no con un botón. Si algún E2E abre esta dirección por su nombre, fallará en la PR.',
   )
@@ -212,13 +260,14 @@ export function prepararCambioSlug(
     ok: true,
     impacto: {
       tipo,
+      lang: lang ?? null,
       entidad: { id, nombre: actual.name },
       antes: actual.slug,
       despues: nuevo,
-      redirecciones: [
-        { desde: `/es/${es}/${actual.slug}`, hacia: `/es/${es}/${nuevo}` },
-        { desde: `/en/${en}/${actual.slug}`, hacia: `/en/${en}/${nuevo}` },
-      ],
+      redirecciones: idiomas.map((i) => ({
+        desde: `/${i}/${segmento[i]}/${actual.slug}`,
+        hacia: `/${i}/${segmento[i]}/${nuevo}`,
+      })),
       anterioresQueSeguiran: anteriores,
       vuelveAUnaAnterior: Boolean(propia),
       tienePagina,
@@ -227,9 +276,12 @@ export function prepararCambioSlug(
     archivo: {
       ...archivoCrudo,
       updatedAt: hoy,
-      [claveDeFilas]: filas.map((fila) =>
-        String(fila.id) === id ? { ...fila, slug: nuevo } : fila,
-      ),
+      [claveDeFilas]: filas.map((fila) => {
+        if (String(fila.id) !== id) return fila
+        return tipo === 'category'
+          ? { ...fila, slug: { ...(fila.slug as Record<string, string>), [idioma]: nuevo } }
+          : { ...fila, slug: nuevo }
+      }),
     },
     redirects: anotado.redirects,
   }
@@ -287,7 +339,7 @@ export async function cambiarSlug(
     entorno,
     [
       {
-        ruta: `data/commercial/${tipo === 'place' ? 'places' : 'plazas'}.json`,
+        ruta: `data/commercial/${tipo === 'place' ? 'places' : tipo === 'plaza' ? 'plazas' : 'categories'}.json`,
         contenido: `${JSON.stringify(preparado.archivo, null, 2)}\n`,
       },
       {
@@ -295,7 +347,7 @@ export async function cambiarSlug(
         contenido: `${JSON.stringify(preparado.redirects, null, 2)}\n`,
       },
     ],
-    `Panel: cambiar la dirección de "${preparado.impacto.entidad.nombre}"`,
+    `Panel: cambiar la dirección de "${preparado.impacto.entidad.nombre}"${preparado.impacto.lang ? ` (${preparado.impacto.lang})` : ''}`,
   )
   return {
     ok: true,

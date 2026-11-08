@@ -372,6 +372,49 @@ describe.each([
   })
 })
 
+describe('cambiar el slug de una categoría', () => {
+  const ruta = '/api/panel/contenido/categoria/slug'
+  const cambiar = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir(ruta, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+  const primera = async (): Promise<{ id: string; slug: { es: string; en: string } }> => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      categories: { id: string; slug: { es: string; en: string } }[]
+    }
+    const fila = datos.categories[0]
+    if (!fila) throw new Error('sin categorías')
+    return fila
+  }
+
+  it('sin confirmar responde con el impacto del idioma pedido', async () => {
+    const { id } = await primera()
+    const respuesta = await cambiar({ id, slug: 'direccion-nueva-de-prueba', lang: 'en' })
+    expect(respuesta?.status).toBe(200)
+    const datos = (await respuesta?.json()) as {
+      impacto: { lang: string; redirecciones: { hacia: string }[] }
+    }
+    expect(datos.impacto.lang).toBe('en')
+    expect(datos.impacto.redirecciones[0]?.hacia).toBe('/en/category/direccion-nueva-de-prueba')
+  })
+
+  it('sin idioma es un 400 que lo dice', async () => {
+    const { id } = await primera()
+    const respuesta = await cambiar({ id, slug: 'direccion-nueva-de-prueba' })
+    expect(respuesta?.status).toBe(400)
+    const datos = (await respuesta?.json()) as { problemas: string[] }
+    expect(datos.problemas.join(' ')).toMatch(/idioma/)
+  })
+
+  it('exige el propio sitio y respeta el tope de cuerpo', async () => {
+    const { id } = await primera()
+    expect((await cambiar({ id, slug: 'x-nuevo', lang: 'es' }, 'cross-site'))?.status).toBe(403)
+    expect((await cambiar({ id: 'x'.repeat(6000), slug: 'a', lang: 'es' }))?.status).toBe(413)
+  })
+})
+
 describe('editar una plaza', () => {
   const editar = (cuerpo: unknown, sitio = 'same-origin') =>
     pedir('/api/panel/contenido/plaza', {
