@@ -18,7 +18,7 @@ interface DatasetPlace {
   giros: string[]
   googleMapsUri: string | null
   active: boolean
-  description: { es: string } | null
+  description: { es: string; en?: string } | null
   links: Record<string, string | null | undefined>
   hours: unknown
   phone: string | null
@@ -39,7 +39,8 @@ interface DatasetCategory {
   id: string
   slug: { es: string; en: string }
   label: { es: string }
-  giros: { id: string }[]
+  synonyms: string[]
+  giros: { id: string; label: { es: string }; synonyms: string[] }[]
 }
 
 const dataset = {
@@ -325,6 +326,177 @@ export const CATEGORIA_B: CategoriaDeEjemplo = unico(
   categoriasPorTamano()[1],
   'una segunda categoría',
 )
+
+/* ------------------------------------------------------------------------------------------ búsqueda
+ * Las pruebas de la búsqueda tampoco nombran un local ni una palabra: salen de rasgos del dato. Un
+ * "oráculo" dice qué texto tiene cada local (el mismo que indexa la búsqueda: nombre, zona, categoría,
+ * giros, sinónimos y descripción) y de ahí se eligen, de forma determinista, un nombre con acento, un
+ * sinónimo, un error de escritura y una palabra que una zona no tiene. Si el dato cambia, cambian ellos.
+ */
+
+const sinAcentos = (texto: string): string =>
+  texto
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+
+/** Las palabras de un texto, en minúsculas y sin acentos ni signos. */
+export const palabrasDe = (texto: string): string[] =>
+  sinAcentos(texto)
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+
+const giroPorId = new Map(
+  dataset.categories.flatMap((categoria) =>
+    categoria.giros.map((giro) => [giro.id, { giro, categoria }] as const),
+  ),
+)
+
+/** Todo lo que la búsqueda sabe de un local, como una sola cadena de texto. */
+export const textoBuscable = (place: DatasetPlace): string => {
+  const giros = place.giros.flatMap((id) => {
+    const encontrado = giroPorId.get(id)
+    return encontrado ? [encontrado] : []
+  })
+  const categorias = [...new Set(giros.map(({ categoria }) => categoria))]
+  return [
+    place.name,
+    plazaDe(place).name,
+    ...categorias.flatMap((categoria) => [categoria.label.es, ...categoria.synonyms]),
+    ...giros.flatMap(({ giro }) => [giro.label.es, ...giro.synonyms]),
+    place.description?.es,
+    place.description?.en,
+  ]
+    .filter(Boolean)
+    .join(' ')
+}
+
+/** Los locales que se ven en la guía (activos y en una zona activa). */
+const visibles = (): DatasetPlace[] =>
+  deMenorId(
+    dataset.places.filter(
+      (place) => place.active && dataset.plazas.find((zona) => zona.id === place.plazaId)?.active,
+    ),
+  )
+
+/** Los locales visibles con alguna palabra que EMPIEZA por `termino`: lo que una búsqueda literal devuelve. */
+export const conPalabraQueEmpieza = (termino: string): DatasetPlace[] => {
+  const buscado = sinAcentos(termino)
+  return visibles().filter((place) =>
+    palabrasDe(textoBuscable(place)).some((palabra) => palabra.startsWith(buscado)),
+  )
+}
+
+const soloLetras = (palabra: string): boolean => /^[a-z]+$/.test(palabra)
+
+/** Un local cuya primera palabra lleva acento, y esa palabra escrita sin él: la búsqueda ignora acentos. */
+export const CON_ACENTO: { place: DatasetPlace; consulta: string } = (() => {
+  for (const place of visibles()) {
+    const primera = place.name.split(/\s+/)[0] ?? ''
+    const sin = sinAcentos(primera)
+    if (sin.length >= 4 && soloLetras(sin) && sin !== primera.toLowerCase()) {
+      return { place, consulta: sin }
+    }
+  }
+  throw new Error('El dataset no tiene ningún local cuyo nombre empiece por una palabra con acento')
+})()
+
+/**
+ * Un local que solo se encuentra por el sinónimo de su giro: la consulta es un sinónimo de una sola palabra
+ * y ninguna palabra del nombre ni de la descripción del local empieza por ella.
+ */
+export const POR_SINONIMO: { place: DatasetPlace; consulta: string } = (() => {
+  for (const place of visibles()) {
+    const propias = [place.name, place.description?.es, place.description?.en]
+      .filter(Boolean)
+      .flatMap((texto) => palabrasDe(texto as string))
+    for (const id of place.giros) {
+      for (const sinonimo of giroPorId.get(id)?.giro.synonyms ?? []) {
+        const consulta = sinAcentos(sinonimo)
+        if (
+          consulta.length >= 5 &&
+          soloLetras(consulta) &&
+          !propias.some((palabra) => palabra.startsWith(consulta))
+        ) {
+          return { place, consulta }
+        }
+      }
+    }
+  }
+  throw new Error(
+    'El dataset no tiene ningún local que solo se encuentre por el sinónimo de su giro',
+  )
+})()
+
+/**
+ * Un local y su nombre con una letra de menos: un error de escritura. Se escoge uno cuya versión con la
+ * errata no está escrita, tal cual, en el texto de ningún local, para que la búsqueda no la encuentre por
+ * coincidencia literal y tenga que recurrir a la tolerancia a errores.
+ */
+export const CON_ERROR: { place: DatasetPlace; consulta: string } = (() => {
+  const todo = visibles().map((place) => sinAcentos(textoBuscable(place)))
+  for (const place of visibles()) {
+    const primera = sinAcentos(place.name.split(/\s+/)[0] ?? '')
+    if (primera.length < 7 || !soloLetras(primera)) continue
+    const consulta = primera.slice(0, 2) + primera.slice(3)
+    if (!todo.some((texto) => texto.includes(consulta))) return { place, consulta }
+  }
+  throw new Error(
+    'El dataset no tiene ningún local con un nombre que admita una errata sin coincidir',
+  )
+})()
+
+/** Los trozos de cuatro letras de un texto: dos textos sin ninguno en común no se parecen para Fuse. */
+const trozos = (texto: string): Set<string> => {
+  const limpio = sinAcentos(texto).replace(/[^a-z0-9]/g, '')
+  return new Set(
+    Array.from({ length: Math.max(0, limpio.length - 3) }, (_, i) => limpio.slice(i, i + 4)),
+  )
+}
+
+/**
+ * Una zona y una palabra de un local de OTRA zona que nada de esa zona se parece: ni la contiene ni
+ * comparte con ella un trozo de cuatro letras. Buscarla con la zona abierta no da nada, y al buscar en toda
+ * la guía aparece el local.
+ */
+export const AJENA: { zona: DatasetPlaza; place: DatasetPlace; consulta: string } = (() => {
+  const zonas = deMenorId(dataset.plazas.filter((zona) => zona.active))
+    .map((zona) => ({ zona, locales: visibles().filter((place) => place.plazaId === zona.id) }))
+    .filter(({ locales }) => locales.length > 0)
+    .sort((a, b) => a.locales.length - b.locales.length)
+  for (const { zona, locales } of zonas) {
+    const suyos = new Set(locales.flatMap((place) => [...trozos(textoBuscable(place))]))
+    for (const place of visibles().filter((otro) => otro.plazaId !== zona.id)) {
+      for (const palabra of palabrasDe(place.name)) {
+        if (palabra.length < 6 || !soloLetras(palabra)) continue
+        if ([...trozos(palabra)].some((trozo) => suyos.has(trozo))) continue
+        return { zona, place, consulta: palabra }
+      }
+    }
+  }
+  throw new Error('El dataset no tiene una zona a la que le falte una palabra de otra')
+})()
+
+/**
+ * Palabras de las que buscar para comprobar que una coincidencia literal no arrastra parecidos lejanos:
+ * la etiqueta más corta de una categoría y un par de sinónimos largos, todos con al menos un local.
+ */
+export const TERMINOS_LITERALES: string[] = (() => {
+  const etiquetas = dataset.categories
+    .map((categoria) => sinAcentos(categoria.label.es))
+    .filter((etiqueta) => etiqueta.length >= 3 && soloLetras(etiqueta))
+    .sort((a, b) => a.length - b.length || a.localeCompare(b))
+  const sinonimos = dataset.categories
+    .flatMap((categoria) => categoria.synonyms)
+    .map(sinAcentos)
+    .filter((sinonimo) => sinonimo.length >= 5 && soloLetras(sinonimo))
+    .sort((a, b) => a.localeCompare(b))
+  const candidatos = [etiquetas[0], ...sinonimos].filter((t): t is string => Boolean(t))
+  const elegidos = [...new Set(candidatos)].filter((t) => conPalabraQueEmpieza(t).length >= 2)
+  if (elegidos.length === 0)
+    throw new Error('El dataset no tiene palabras con coincidencias literales')
+  return elegidos.slice(0, 3)
+})()
 
 /** Texto literal dentro de una expresión regular. */
 export const esc = (texto: string): string => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
