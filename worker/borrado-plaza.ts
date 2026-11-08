@@ -118,7 +118,7 @@ export function prepararBorradoPlaza(
   }
   avisos.push(
     'Sus edificios en el mapa se quedan dibujados, en gris y sin interacción, hasta que se reconstruya el mapa (`npm run map:build`).',
-    'Se revierte con git, no con un botón. Si hay pruebas que nombran esta plaza, fallarán en la PR.',
+    'Se revierte con git, no con un botón. Si algún E2E abre esta zona por su dirección, fallará en la PR.',
   )
 
   const filas = (crudo.plazas.plazas as Record<string, unknown>[] | undefined) ?? []
