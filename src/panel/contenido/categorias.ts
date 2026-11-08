@@ -159,7 +159,7 @@ export function pintarCategoria(categoria: Categoria | null): void {
           </label>
           <label class="campo-form">
             <span>Icono</span>
-            <select class="campo-select" data-campo="icon">${opcionesDeIconos(base.icon, new Set())}</select>
+            <select class="${controls.campo}" data-campo="icon">${opcionesDeIconos(base.icon, new Set())}</select>
           </label>
           <label class="campo-form">
             <span>Tono <span class="ayuda">0 a 359; vacío solo para Otros</span></span>
@@ -222,12 +222,12 @@ function filaDeGiroFormulario(
     <div class="giro-campos">
       <label class="campo-form"><span>Nombre en español</span><input class="${controls.campo}" type="text" data-campo="giroLabelEs" value="${texto(giro.label.es)}" maxlength="80" /></label>
       <label class="campo-form"><span>Nombre en inglés</span><input class="${controls.campo}" type="text" data-campo="giroLabelEn" value="${texto(giro.label.en ?? '')}" maxlength="80" /></label>
-      <label class="campo-form"><span>Icono</span><select class="campo-select" data-campo="giroIcon"${general ? ' disabled' : ''}>${opcionesDeIconos(giro.icon, usados)}</select></label>
+      <label class="campo-form"><span>Icono</span><select class="${controls.campo}" data-campo="giroIcon"${general ? ' disabled' : ''}>${opcionesDeIconos(giro.icon, usados)}</select></label>
       <label class="campo-form"><span>Sinónimos</span><input class="${controls.campo}" type="text" data-campo="giroSynonyms" value="${texto(giro.synonyms.join(', '))}" /></label>
       ${
         esNueva
           ? ''
-          : `<label class="campo-form"><span>Categoría</span><select class="campo-select" data-campo="destino"${general ? ' disabled' : ''}>${opcionesDeCategorias(destino)}</select></label>`
+          : `<label class="campo-form"><span>Categoría</span><select class="${controls.campo}" data-campo="destino"${general ? ' disabled' : ''}>${opcionesDeCategorias(destino)}</select></label>`
       }
     </div>
     ${esNueva ? '' : accionesDeGiro(giro)}

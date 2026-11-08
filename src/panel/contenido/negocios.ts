@@ -186,7 +186,7 @@ export function pintarFormulario(negocio: Negocio | null): void {
           </label>
           <label class="campo-form">
             <span>Plaza</span>
-            <select class="campo-select" name="plazaId" required>
+            <select class="${controls.campo}" name="plazaId" required>
               <option value="">Elige una plaza</option>
               ${plazas}
             </select>
@@ -212,7 +212,7 @@ export function pintarFormulario(negocio: Negocio | null): void {
           <div class="editor-rejilla campo-ancho cierre-campos" data-cierre-campos${negocio?.cierre ? '' : ' hidden'}>
             <label class="campo-form">
               <span>Motivo</span>
-              <select class="campo-select" name="cierreMotivo">${motivos}</select>
+              <select class="${controls.campo}" name="cierreMotivo">${motivos}</select>
             </label>
             <label class="campo-form">
               <span>Desde</span>
@@ -318,7 +318,7 @@ function filaDeHorario(dia: string, nombre: string, negocio: Negocio | null): st
   const rangos = estado === 'abierto' ? (valor ?? []).join(', ') : ''
   return `<div class="horario-fila" data-dia="${dia}">
     <span>${nombre}</span>
-    <select class="campo-select" data-estado aria-label="${nombre}">
+    <select class="${controls.campo}" data-estado aria-label="${nombre}">
       <option value="no"${estado === 'no' ? ' selected' : ''}>No sé</option>
       <option value="abierto"${estado === 'abierto' ? ' selected' : ''}>Abierto</option>
       <option value="cerrado"${estado === 'cerrado' ? ' selected' : ''}>Cerrado</option>
