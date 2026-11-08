@@ -2,8 +2,9 @@ import controls from '../../styles/controls.module.css'
 import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import type { PlazaResumen } from './tipos.ts'
-import { numero, texto } from './tipos.ts'
+import { numero, plural, texto } from './tipos.ts'
 import { vista } from './vista.ts'
+import { zonaDelicada } from './zona-delicada.ts'
 
 /* ------------------------------------------------------------------ la lista */
 
@@ -123,7 +124,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
           <div class="campo-form">
             <span>Visibilidad</span>
             <label class="casilla"><input type="checkbox" name="activa"${plaza.active ? ' checked' : ''} /><span>Activa en la guía</span></label>
-            <span class="ayuda">${numero(locales.length)} locales están en esta plaza. Al desactivarla dejan de verse y su página da 404; te mostraré el efecto antes de guardar.${locales.length > 0 ? ' Para borrarla, primero hay que borrar sus locales.' : ''}</span>
+            <span class="ayuda">${plural(locales.length, 'local', 'locales')} ${locales.length === 1 ? 'está' : 'están'} en esta plaza. Al desactivarla dejan de verse y su página da 404; te mostraré el efecto antes de guardar.${locales.length > 0 ? ' Para borrarla, primero hay que borrar sus locales.' : ''}</span>
           </div>
           <div class="campo-form">
             <span>Próximamente</span>
@@ -135,16 +136,13 @@ export function pintarPlaza(plaza: PlazaResumen): void {
 
       <div data-impacto-plaza></div>
 
-      ${seccionDireccion('plaza', plaza.slug)}
-
-      <div data-borrado-plaza></div>
+      ${zonaDelicada({ direcciones: seccionDireccion('plaza', plaza.slug), borrado: locales.length === 0 ? { atributo: 'data-borrar-plaza', rotulo: 'Borrar plaza', zona: '<div data-borrado-plaza></div>' } : undefined })}
 
       <footer class="editor-pie">
         <div class="problemas" data-problemas role="alert"></div>
         <div class="acciones">
           <button type="submit" class="${controls.base} ${controls.boton} ${controls.principal}">Guardar cambios</button>
           <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-cancelar>Cancelar</button>
-          ${locales.length === 0 ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-borrar-plaza>Borrar plaza</button>` : ''}
         </div>
       </footer>
     </form>`,

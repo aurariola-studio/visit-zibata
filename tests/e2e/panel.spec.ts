@@ -842,6 +842,95 @@ test.describe('Panel', () => {
     expect(cuerpos).toEqual([])
   })
 
+  test('un formulario largo tiene un índice fijo que lleva a cada sección y mueve el foco', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const indice = dialogo.getByRole('navigation', { name: 'Ir a una sección del formulario' })
+    await expect(indice).toBeVisible()
+    const nombres = await indice.getByRole('link').allInnerTexts()
+    expect(nombres).toEqual(
+      expect.arrayContaining(['Identidad', 'Fotos', 'Contacto', 'Zona delicada']),
+    )
+    // Un enlace por sección, sin la aclaración de su título ("la primera es la portada").
+    expect(nombres.every((nombre) => !nombre.includes('portada'))).toBe(true)
+
+    // Llevar a "Zona delicada" desde arriba: la sección entra en la vista y su título recibe el foco.
+    await indice.getByRole('link', { name: 'Zona delicada' }).click()
+    const titulo = dialogo.getByRole('heading', { name: 'Zona delicada' })
+    await expect(titulo).toBeFocused()
+    await expect(titulo).toBeInViewport()
+    // El índice sigue a la vista al bajar: es lo que lo hace útil en una pantalla pequeña.
+    await expect(indice).toBeInViewport()
+    await sinDesplazamientoLateral(page)
+    const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+      ['serious', 'critical'].includes(v.impact ?? ''),
+    )
+    expect(graves.map((v) => v.id)).toEqual([])
+  })
+
+  test('lo que deja una redirección o no se deshace va en su zona, no junto a Guardar', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const zona = dialogo.locator('section.zona-delicada')
+    await expect(zona.getByRole('button', { name: 'Borrar negocio' })).toBeVisible()
+    await expect(zona.getByRole('button', { name: /Ver el impacto/ })).toBeVisible()
+    // El pie queda con lo normal: guardar o cancelar. Nada de borrar al lado de "Guardar cambios".
+    const pie = dialogo.locator('.editor-pie')
+    await expect(pie.getByRole('button', { name: 'Guardar cambios' })).toBeVisible()
+    await expect(pie.getByRole('button', { name: 'Cancelar' })).toBeVisible()
+    await expect(pie.getByRole('button', { name: /Borrar/ })).toHaveCount(0)
+
+    // Lo mismo en una plaza sin locales y en una categoría vacía.
+    await dialogo.getByRole('button', { name: 'Cancelar' }).click()
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Tres' }).click()
+    await expect(
+      dialogo.locator('section.zona-delicada').getByRole('button', { name: 'Borrar plaza' }),
+    ).toBeVisible()
+    await expect(
+      dialogo.locator('.editor-pie').getByRole('button', { name: /Borrar/ }),
+    ).toHaveCount(0)
+    await dialogo.getByRole('button', { name: 'Cancelar' }).click()
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Categoría vacía' }).click()
+    await expect(
+      dialogo.locator('section.zona-delicada').getByRole('button', { name: 'Borrar categoría' }),
+    ).toBeVisible()
+    await expect(
+      dialogo.locator('.editor-pie').getByRole('button', { name: /Borrar/ }),
+    ).toHaveCount(0)
+  })
+
+  test('una plaza con locales no ofrece borrarse, pero su dirección sigue en la zona delicada', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    const zona = page.locator('#editor section.zona-delicada')
+    await expect(zona.getByRole('button', { name: /Ver el impacto/ })).toBeVisible()
+    await expect(zona.getByRole('button', { name: 'Borrar plaza' })).toHaveCount(0)
+  })
+
+  test('los textos concuerdan en número: "1 local", no "1 locales"', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Categoría vacía' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo).not.toContainText(/\b1 locales\b|\b1 plazas\b/)
+    await dialogo.getByRole('button', { name: 'Cancelar' }).click()
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    await expect(dialogo).not.toContainText(/\b1 locales\b|\b1 plazas\b/)
+  })
+
   test('un negocio nuevo no ofrece cambiar la dirección', async ({ page }) => {
     await abrirPanel(page)
     await irA(page, 'negocios', 'Negocios')
