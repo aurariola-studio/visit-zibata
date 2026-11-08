@@ -424,15 +424,92 @@ test.describe('Panel', () => {
     await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
     await expect(nombre).toHaveAttribute('aria-invalid', 'true')
 
-    // Hay un cambio sin guardar, así que cerrar pide confirmación; al aceptarla el diálogo se cierra.
-    let pidioConfirmar = false
-    page.once('dialog', (aviso) => {
-      pidioConfirmar = true
-      void aviso.accept()
+    // Hay un cambio sin guardar, así que cerrar pregunta, y al descartar el diálogo se cierra.
+    await dialogo.getByRole('button', { name: 'Cerrar' }).click()
+    await page.getByRole('button', { name: 'Descartar cambios' }).click()
+    await expect(dialogo).toBeHidden()
+  })
+
+  test('cambios sin guardar: se pregunta con un diálogo propio y se puede seguir editando', async ({
+    page,
+  }) => {
+    // El `confirm()` del navegador ya no se usa: si saltara, la prueba lo vería y fallaría.
+    let nativo = false
+    page.on('dialog', (aviso) => {
+      nativo = true
+      void aviso.dismiss()
     })
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const pregunta = page.getByRole('dialog', { name: '¿Descartar los cambios?' })
+    await expect(dialogo).toBeVisible()
+
+    // Sin cambios, cerrar no pregunta nada.
     await dialogo.getByRole('button', { name: 'Cerrar' }).click()
     await expect(dialogo).toBeHidden()
-    expect(pidioConfirmar).toBe(true)
+    await expect(pregunta).toBeHidden()
+
+    // Con un cambio, tanto el botón como Escape preguntan, y el foco empieza en la opción segura.
+    await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+    await dialogo.locator('input[name="nombre"]').fill('Otro nombre')
+    await dialogo.getByRole('button', { name: 'Cerrar' }).click()
+    await expect(pregunta).toBeVisible()
+    await expect(pregunta.getByRole('button', { name: 'Seguir editando' })).toBeFocused()
+
+    // Escape en la pregunta es seguir editando: el formulario sigue abierto con lo escrito.
+    await page.keyboard.press('Escape')
+    await expect(pregunta).toBeHidden()
+    await expect(dialogo).toBeVisible()
+    await expect(dialogo.locator('input[name="nombre"]')).toHaveValue('Otro nombre')
+
+    // Escape en el formulario también pregunta, en vez de cerrarlo sin avisar.
+    await page.keyboard.press('Escape')
+    await expect(pregunta).toBeVisible()
+    await pregunta.getByRole('button', { name: 'Seguir editando' }).click()
+    await expect(dialogo).toBeVisible()
+
+    // Escape, Escape y otra vez Escape, sin un solo clic entre medias: el navegador deja de permitir
+    // cancelar el cierre si no hay activación del usuario, y el formulario no debe cerrarse por eso.
+    await page.keyboard.press('Escape')
+    await expect(pregunta).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(pregunta).toBeHidden()
+    await page.keyboard.press('Escape')
+    await expect(pregunta).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(pregunta).toBeHidden()
+    await page.keyboard.press('Escape')
+    await expect(pregunta).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(dialogo).toBeVisible()
+    await expect(dialogo.locator('input[name="nombre"]')).toHaveValue('Otro nombre')
+
+    // Descartar cierra y el foco vuelve a la lista, sin pasar por el aviso del navegador.
+    await dialogo.getByRole('button', { name: 'Cerrar' }).click()
+    await pregunta.getByRole('button', { name: 'Descartar cambios' }).click()
+    await expect(dialogo).toBeHidden()
+    await expect(pregunta).toBeHidden()
+    expect(nativo).toBe(false)
+  })
+
+  test('el resumen dice si hay cambios esperando revisión', async ({ page }) => {
+    // En desarrollo (`seco`) no se commitea nada, y el resumen lo dice en vez de prometer una PR.
+    await abrirPanel(page)
+    await expect(page.locator('[data-pendiente]')).toContainText('no hay nada pendiente')
+
+    await abrirPanel(page, { datos: { ...contenido, seco: false } })
+    await expect(page.locator('[data-pendiente]')).toContainText('No hay cambios pendientes')
+
+    const pr = { url: 'https://github.com/o/r/pull/7', numero: 7 }
+    await abrirPanel(page, { datos: { ...contenido, seco: false, pr } })
+    const bloque = page.locator('[data-pendiente]')
+    await expect(bloque).toContainText('Hay cambios esperando revisión')
+    await expect(bloque.getByRole('link', { name: 'Revisar la PR #7' })).toHaveAttribute(
+      'href',
+      pr.url,
+    )
   })
 
   test('los giros del negocio se añaden, se reordenan y se quitan', async ({ page }) => {
@@ -1334,6 +1411,11 @@ test.describe('Panel', () => {
 
   test('sin permiso el panel lo dice con palabras', async ({ page }) => {
     await abrirPanel(page, { contenidoStatus: 403 })
+    // El resumen no se queda en "Cargando": dice que no pudo consultar y por qué.
+    const pendiente = page.locator('[data-pendiente]')
+    await expect(pendiente).toContainText('No se pudo consultar el estado de los cambios')
+    await expect(pendiente).toContainText('Sin permiso')
+    await expect(pendiente).not.toContainText('Cargando')
     await page.locator('[data-vista="negocios"]').click()
     await expect(page.getByText(/Sin permiso/)).toBeVisible()
   })

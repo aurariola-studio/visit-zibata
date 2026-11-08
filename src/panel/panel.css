@@ -254,6 +254,63 @@ body {
 
 /* ------------------------------------------------------------------ resumen */
 
+.pendiente {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.pendiente p {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ confirmar */
+
+.confirmar {
+  width: min(26rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-solid);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+}
+
+.confirmar::backdrop {
+  background: rgb(31 36 25 / 0.45);
+}
+
+.confirmar-caja {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.confirmar-caja h2,
+.confirmar-caja p {
+  margin: 0;
+}
+
+.confirmar-caja h2 {
+  font-family: var(--font-display);
+  font-size: var(--title-md);
+  font-stretch: var(--title-stretch);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.confirmar-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
 .resumen {
   display: grid;
   gap: var(--space-6);
