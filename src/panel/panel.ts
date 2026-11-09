@@ -10,13 +10,18 @@
  * palabras.
  */
 import controls from '../styles/controls.module.css'
+import { coincidencias } from './contenido/revision.ts'
 import {
+  abrirNegocio,
+  abrirRevision,
+  catalogoParaSugerencias,
   type EstadoContenido,
   montarContenido,
   mostrarContenido,
   ocultarContenido,
   precargarContenido,
   recargarContenido,
+  recuentosDeRevision,
 } from './contenido.ts'
 import './panel.css'
 import { montarPr } from './pr.ts'
@@ -255,6 +260,21 @@ let estadoContenido: EstadoContenido | null = null
 /** Por qué no se pudo cargar el contenido, si no se pudo. */
 let errorContenido: string | null = null
 
+/** Lo que conviene revisar, con un botón que abre la lista de negocios ya filtrada. Vacío si el contenido no cargó. */
+function bloquePorRevisar(): string {
+  const recuentos = recuentosDeRevision()
+  if (!recuentos) return ''
+  const pendientes = recuentos.filter((fila) => fila.total > 0)
+  if (pendientes.length === 0)
+    return '<p>Nada por revisar: ninguna verificación vieja, cierre largo ni local sin horario.</p>'
+  return `<p>Por revisar:</p>${pendientes
+    .map(
+      (fila) =>
+        `<button type="button" class="${controls.base} ${controls.pildora}" data-ir-revision="${texto(fila.clave)}">${texto(fila.rotulo)} <span class="${controls.cifra}">${numero(fila.total)}</span></button>`,
+    )
+    .join('')}`
+}
+
 /** Pinta la tarjeta de la PR bajo el bloque, si hay una PR de verdad (no en desarrollo ni sin cambios). */
 function cargarDetallePr(): void {
   const zona = document.querySelector<HTMLElement>('[data-pr-detalle]')
@@ -287,7 +307,11 @@ function actualizarEstado(estado: EstadoContenido | null, error: string | null =
   errorContenido = error
   const pendiente = document.querySelector<HTMLElement>('[data-pendiente]')
   if (pendiente) pendiente.innerHTML = bloquePendiente()
+  const porRevisar = document.querySelector<HTMLElement>('[data-por-revisar]')
+  if (porRevisar) porRevisar.innerHTML = bloquePorRevisar()
   cargarDetallePr()
+  // Si el contenido llega con las sugerencias ya a la vista, ahora se pueden reconocer sus locales.
+  if (vista === 'sugerencias') pintarSugerencias()
   if (!estadoRama || !enlacePr) return
   enlacePr.hidden = true
   if (!estado) {
@@ -380,6 +404,7 @@ function pintarResumen(): void {
   vistaEl.innerHTML = `
     <section class="resumen">
       <div class="pendiente" data-pendiente>${bloquePendiente()}</div>
+      <div class="pendiente" data-por-revisar>${bloquePorRevisar()}</div>
       <div class="pr-detalle" data-pr-detalle></div>
       <div class="cifras">
         <div class="cifra-grande">
@@ -495,6 +520,18 @@ function pintarSugerencias(): void {
                 const contacto = fila.contacto
                   ? `<p class="solicitud-contacto">${texto(fila.contacto)}</p>`
                   : ''
+                const catalogo = catalogoParaSugerencias()
+                const candidatos = catalogo
+                  ? coincidencias(fila.lugar, catalogo.negocios, catalogo.plazas)
+                  : []
+                const abrir = candidatos.length
+                  ? `<div class="acciones">${candidatos
+                      .map(
+                        ({ negocio, plaza }) =>
+                          `<button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-abrir-negocio="${texto(negocio.id)}">Abrir ${texto(negocio.name)}${plaza ? ` (${texto(plaza)})` : ''}</button>`,
+                      )
+                      .join('')}</div>`
+                  : ''
                 const accion =
                   fila.atendida === 0
                     ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-atender="${texto(fila.id)}">Marcar como atendida</button>`
@@ -503,6 +540,7 @@ function pintarSugerencias(): void {
                   <p class="solicitud-meta">${texto(cabecera)}</p>
                   <p class="solicitud-mensaje">${texto(fila.mensaje)}</p>
                   ${contacto}
+                  ${abrir}
                   ${accion}
                 </article>`
               })
@@ -582,6 +620,22 @@ vistaEl?.addEventListener('click', (evento) => {
   if (ir?.dataset.ir) {
     vista = ir.dataset.ir as Vista
     pintarVista()
+    return
+  }
+  const revision = objetivo.closest<HTMLElement>('[data-ir-revision]')
+  if (revision?.dataset.irRevision) {
+    // Primero la vista, que borra los filtros al cambiar de modo; el filtro de revisión va después.
+    vista = 'negocios'
+    pintarVista()
+    abrirRevision(revision.dataset.irRevision)
+    return
+  }
+  const abrirLocal = objetivo.closest<HTMLElement>('[data-abrir-negocio]')
+  if (abrirLocal?.dataset.abrirNegocio) {
+    // El formulario vive en la vista de negocios: cambiar de sección cierra cualquier diálogo.
+    vista = 'negocios'
+    pintarVista()
+    abrirNegocio(abrirLocal.dataset.abrirNegocio)
     return
   }
   const periodo = objetivo.closest<HTMLButtonElement>('[data-dias]')

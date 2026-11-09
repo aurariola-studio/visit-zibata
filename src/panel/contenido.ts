@@ -76,8 +76,15 @@ import {
   pintarPlaza,
   pintarPlazas,
 } from './contenido/plazas.ts'
-import type { Datos, EstadoContenido, ModoContenido } from './contenido/tipos.ts'
-import { texto } from './contenido/tipos.ts'
+import { contarRevisiones } from './contenido/revision.ts'
+import type {
+  Datos,
+  EstadoContenido,
+  ModoContenido,
+  Negocio,
+  PlazaResumen,
+} from './contenido/tipos.ts'
+import { hoy, texto } from './contenido/tipos.ts'
 import { vista } from './contenido/vista.ts'
 
 export type { EstadoContenido, ModoContenido }
@@ -138,11 +145,41 @@ export function mostrarContenido(cual: ModoContenido): void {
     vista.consulta = ''
     vista.filtroEstado = ''
     vista.filtroPlaza = ''
+    vista.filtroRevision = ''
     vista.pagina = 0
     vista.aviso = null
   }
   pintarLista()
   if (!vista.datos && !vista.cargando) void cargar()
+}
+
+/** Los recuentos de revisión para el Resumen; `null` si el contenido no está cargado. */
+export function recuentosDeRevision(): ReturnType<typeof contarRevisiones> | null {
+  return vista.datos ? contarRevisiones(vista.datos.places, hoy()) : null
+}
+
+/**
+ * Abre la lista de negocios ya filtrada por una revisión. Se llama DESPUÉS de cambiar a la vista de negocios:
+ * `mostrarContenido` borra los filtros al cambiar de modo, y este tiene que ganar.
+ */
+export function abrirRevision(clave: string): void {
+  vista.consulta = ''
+  vista.filtroEstado = ''
+  vista.filtroPlaza = ''
+  vista.filtroRevision = clave
+  vista.pagina = 0
+  if (vista.visible) pintarLista()
+}
+
+/** Los locales y las plazas para reconocer de qué habla una sugerencia; `null` si el contenido no cargó. */
+export function catalogoParaSugerencias(): { negocios: Negocio[]; plazas: PlazaResumen[] } | null {
+  return vista.datos ? { negocios: vista.datos.places, plazas: vista.datos.plazas } : null
+}
+
+/** Abre el formulario de un local. La vista de negocios tiene que estar ya a la vista. */
+export function abrirNegocio(id: string): void {
+  const negocio = vista.datos?.places.find((fila) => fila.id === id)
+  if (negocio) pintarFormulario(negocio)
 }
 
 /** Vuelve a leer el contenido y el estado de la rama (la PR cambió: se retiró un cambio o se cerró). */
@@ -241,6 +278,7 @@ function alPulsar(evento: Event): void {
     vista.consulta = ''
     vista.filtroEstado = ''
     vista.filtroPlaza = ''
+    vista.filtroRevision = ''
     vista.pagina = 0
     pintarLista()
     // El botón que se pulsó desaparece al repintar: el foco vuelve al buscador, no a la página.
@@ -311,6 +349,7 @@ function alFiltrar(evento: Event): void {
   const filtro = (evento.target as HTMLElement | null)?.closest<HTMLSelectElement>('[data-filtro]')
   if (!filtro) return
   if (filtro.dataset.filtro === 'estado') vista.filtroEstado = filtro.value
+  else if (filtro.dataset.filtro === 'revision') vista.filtroRevision = filtro.value
   else vista.filtroPlaza = filtro.value
   vista.pagina = 0
   pintarZonaNegocios()

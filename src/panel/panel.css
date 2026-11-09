@@ -269,6 +269,10 @@ body {
   margin: 0;
 }
 
+.pendiente:empty {
+  display: none;
+}
+
 /* La tarjeta de la PR cuelga del bloque de pendientes; sin PR no ocupa sitio. */
 .pr-detalle:empty {
   display: none;
