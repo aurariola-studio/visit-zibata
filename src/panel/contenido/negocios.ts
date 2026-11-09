@@ -2,6 +2,7 @@ import controls from '../../styles/controls.module.css'
 import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import { pintarFotosFormulario } from './fotos.ts'
+import { leerProcedencia, seccionProcedencia, validarProcedencia } from './procedencia.ts'
 import type { Cierre, Negocio } from './tipos.ts'
 import { DIAS, hoy, MOTIVOS, normalizar, numero, POR_PAGINA, plural, texto } from './tipos.ts'
 import { categoriaDeGiro, mapaDeGiros, mapaDePlazas, paginacion, vista } from './vista.ts'
@@ -292,6 +293,8 @@ export function pintarFormulario(negocio: Negocio | null): void {
         <div class="horario" data-grupo="horario">${DIAS.map(([dia, nombre]) => filaDeHorario(dia, nombre, negocio)).join('')}</div>
       </section>
 
+      ${seccionProcedencia({ verificacion: negocio?.verification, obligatoria: !negocio, conEstado: false })}
+
       ${negocio ? zonaDelicada({ direcciones: seccionDireccion('negocio', negocio.slug), borrado: { atributo: 'data-borrar-negocio', rotulo: 'Borrar negocio', zona: '<div data-borrado></div>' } }) : ''}
 
       <footer class="editor-pie">
@@ -529,6 +532,7 @@ function validarNegocio(formEl: HTMLFormElement): string[] {
     if (!foto.alt.trim()) problemas.push(`fotos.${indice}.alt: Escribe el texto alternativo.`)
   })
   problemas.push(...validarHorario(formEl))
+  problemas.push(...validarProcedencia(formEl, !formEl.dataset.id))
   return problemas
 }
 
@@ -591,6 +595,7 @@ function leerFormulario(formulario: HTMLFormElement): {
     cierre,
     fotos: vista.formularioActual?.fotos.map((foto) => ({ src: foto.src, alt: foto.alt })) ?? [],
     activo: formulario.querySelector<HTMLInputElement>('input[name="activo"]')?.checked ?? true,
+    verificacion: leerProcedencia(formulario, false),
   }
   return { cuerpo, problemas }
 }

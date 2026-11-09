@@ -12,8 +12,8 @@
  *    nombre y se comprueba que no choquen.
  *  - **Los campos derivados de la plaza se recalculan.** `placeIds` y `categories` no se escriben
  *    a mano: se sincronizan con los locales, igual que hace `data:validate --fix`.
- *  - **La verificación se actualiza al guardar.** Quien edita está afirmando que el dato es de hoy;
- *    se apunta la fecha y una fuente `campo:AAAA-MM-DD`, como el resto del dataset.
+ *  - **La verificación no se actualiza sola.** Guardar una errata no afirma nada: la fecha y las fuentes
+ *    solo cambian con evidencia declarada (la casilla "Lo comprobé yo" o una URL nueva). Ver `verificacion.ts`.
  *  - **El diff se mantiene pequeño.** Se reemplaza solo el local tocado y los campos derivados de
  *    su plaza, en vez de volver a serializar todo el archivo desde los objetos de Zod.
  */
@@ -31,7 +31,7 @@ import {
   validateRelations,
   validateTranslations,
 } from '../src/data/relations.ts'
-import { PUBLISHABLE_STATUS } from '../src/data/rules.ts'
+import { FIELD_SOURCE_PATTERN } from '../src/data/rules.ts'
 import {
   CategoriesFileSchema,
   PlaceSchema,
@@ -53,6 +53,7 @@ import {
 } from './github.ts'
 import { slugDe, unico } from './slug.ts'
 import { SUFIJO_TITULO, TOPE_TITULO } from './titulos.ts'
+import { EntradaVerificacionSchema, resolverVerificacion } from './verificacion.ts'
 
 /** Lo que manda el formulario. Los nombres van en español porque son los de la interfaz. */
 export const EntradaNegocioSchema = z.object({
@@ -100,6 +101,8 @@ export const EntradaNegocioSchema = z.object({
     .max(20)
     .optional(),
   activo: z.boolean().optional().default(true),
+  /** Ausente = no se toca la procedencia. Un local nuevo la necesita (ver `verificacion.ts`). */
+  verificacion: EntradaVerificacionSchema.optional(),
 })
 
 /** Lo que manda el formulario de fotos: la imagen ya viene reducida desde el navegador. */
@@ -484,6 +487,7 @@ export async function contenido(
         geometry,
         active,
         comingSoon,
+        verification,
       }) => ({
         id,
         slug,
@@ -496,6 +500,7 @@ export async function contenido(
         geometry,
         active,
         comingSoon,
+        verification,
       }),
     ),
     places: cargado.dataset.places,
@@ -587,30 +592,25 @@ function construir(
   }
 
   const id = existente?.id ?? unico(slugDe(entrada.nombre), ids)
-  const fuentes = [...(existente?.verification?.sources ?? []), `campo:${hoy}`]
   /*
-   * Guardar actualiza la fecha, pero no inventa un estado. Si el local ya era publicable, conserva
-   * su estado y su confianza; si se hace visible uno que no lo era, se promueve a activo. Ocultarlo
-   * no lo convierte en cerrado: oculto es una decisión de la guía, cerrado es un hecho del negocio.
+   * La procedencia no se fabrica: sin evidencia nueva declarada (la casilla o una URL), editar no toca
+   * `verification`. Un local nuevo, o uno que se hace visible sin un estado que lo publique, la exige.
    */
-  const estadoPrevio = existente?.verification?.status
-  const publicable =
-    estadoPrevio !== undefined && (PUBLISHABLE_STATUS as readonly string[]).includes(estadoPrevio)
-  const status = entrada.activo
-    ? publicable
-      ? (estadoPrevio as string)
-      : 'active'
-    : (estadoPrevio ?? 'uncertain')
-  const confidence =
-    entrada.activo && !publicable
-      ? 'high'
-      : (existente?.verification?.confidence ?? (entrada.activo ? 'high' : 'low'))
-  const verification = {
-    status,
-    confidence,
-    lastVerifiedAt: hoy,
-    sources: [...new Set(fuentes)].slice(-8),
+  const previa = existente?.verification
+  const declarada = entrada.verificacion ?? {
+    comprobadoPorMi: false,
+    fuentes: (previa?.sources ?? []).filter((fuente) => !FIELD_SOURCE_PATTERN.test(fuente)),
+    confianza: previa?.confidence ?? 'medium',
   }
+  const resuelta = resolverVerificacion({
+    previa,
+    entrada: declarada,
+    hoy,
+    visible: entrada.activo,
+    promover: true,
+  })
+  if (!resuelta.ok) return { problemas: resuelta.problemas }
+  const verification = resuelta.verification
 
   const place = {
     id,

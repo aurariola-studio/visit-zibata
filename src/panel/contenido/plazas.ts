@@ -2,6 +2,7 @@ import controls from '../../styles/controls.module.css'
 import { contornoListo, seccionContorno } from './contorno.ts'
 import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
+import { leerProcedencia, seccionProcedencia, validarProcedencia } from './procedencia.ts'
 import type { PlazaResumen } from './tipos.ts'
 import { numero, plural, texto } from './tipos.ts'
 import { vista } from './vista.ts'
@@ -141,6 +142,8 @@ export function pintarPlaza(plaza: PlazaResumen): void {
         </div>
       </section>
 
+      ${seccionProcedencia({ verificacion: plaza.verification, obligatoria: false, conEstado: true })}
+
       <div data-impacto-plaza></div>
 
       ${zonaDelicada({ direcciones: seccionDireccion('plaza', plaza.slug), borrado: locales.length === 0 ? { atributo: 'data-borrar-plaza', rotulo: 'Borrar plaza', zona: '<div data-borrado-plaza></div>' } : undefined })}
@@ -216,6 +219,7 @@ function validarPlaza(formulario: HTMLFormElement): string[] {
   if (marcada(formulario, 'activa') && marcada(formulario, 'proximamente')) {
     problemas.push('proximamente: Una plaza "próximamente" no puede estar activa.')
   }
+  problemas.push(...validarProcedencia(formulario, false))
   return problemas
 }
 
@@ -231,6 +235,7 @@ function leerPlaza(formulario: HTMLFormElement, confirmar: boolean): Record<stri
     googleMapsUri: valorDe(formulario, 'googleMapsUri'),
     activa: marcada(formulario, 'activa'),
     proximamente: marcada(formulario, 'proximamente'),
+    verificacion: leerProcedencia(formulario, true),
     ...(confirmar ? { confirmar: true } : {}),
   }
 }

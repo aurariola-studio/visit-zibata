@@ -32,13 +32,14 @@ import {
   syncPlazaDerivedFields,
   validateRelations,
 } from '../src/data/relations.ts'
-import { isGoogleMapsUrl, isHttpUrl, LOCATION_CONFIDENCE } from '../src/data/rules.ts'
+import { isGoogleMapsUrl, LOCATION_CONFIDENCE } from '../src/data/rules.ts'
 import { PlazasFileSchema } from '../src/data/schemas.ts'
 import { fechaLocal } from './analitica.ts'
 import { type Cargado, CONTORNO_DE_ZIBATA, cargar, LIMITES, slugsRedirigidos } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
 import { prepararPlaza } from './plazas.ts'
 import { slugDe, unico } from './slug.ts'
+import { resolverVerificacion } from './verificacion.ts'
 
 /** Medio lado del cuadrado provisional: 30 m, es decir, 60 m de lado. */
 const MEDIO_LADO_M = 30
@@ -138,21 +139,31 @@ export function prepararPlazaNueva(
     return { ok: false, problemas: ['nombre: El nombre necesita letras o números'] }
   }
 
-  // Las fuentes son URL públicas. `campo:` no se escribe a mano: lo pone la casilla, porque afirma una
-  // verificación en el lugar.
-  const fuentes = [...new Set(dato.fuentes.filter((fuente) => fuente.length > 0))]
-  const malas = fuentes.filter((fuente) => !isHttpUrl(fuente))
-  if (fuentes.length === 0) {
+  /*
+   * La procedencia sale del mismo módulo que usan los locales y la edición de plazas: las fuentes son URL
+   * públicas, `campo:` solo lo pone la casilla, y una plaza activa sin la casilla necesita una fuente que
+   * la metodología acepte (no solo OpenStreetMap ni reparto). Una "próximamente" no se publica.
+   */
+  const activa = dato.estado === 'activa'
+  const resuelta = resolverVerificacion({
+    previa: undefined,
+    entrada: {
+      comprobadoPorMi: dato.aportadoPorMi,
+      fuentes: dato.fuentes,
+      confianza: dato.confianza,
+      ...(activa ? {} : { estado: 'coming_soon' as const }),
+    },
+    hoy,
+    visible: activa,
+    promover: true,
+  })
+  if (!resuelta.ok) return { ok: false, problemas: resuelta.problemas }
+  const verification = resuelta.verification
+  if (!verification) {
     return { ok: false, problemas: ['fuentes: Aporta al menos una fuente (una URL)'] }
   }
-  if (malas.length > 0) {
-    return {
-      ok: false,
-      problemas: [
-        `fuentes: "${malas[0]}" no es una URL https. Escribe la dirección completa; para una verificación en el lugar usa la casilla "Lo comprobé yo en el lugar".`,
-      ],
-    }
-  }
+  const investigacion = verification.status
+  const sources = verification.sources
   if (dato.googleMapsUri && !isGoogleMapsUrl(dato.googleMapsUri)) {
     return { ok: false, problemas: ['googleMapsUri: Debe ser un enlace https de Google Maps'] }
   }
@@ -184,10 +195,7 @@ export function prepararPlazaNueva(
     }
   }
 
-  const activa = dato.estado === 'activa'
-  const investigacion = activa ? (dato.aportadoPorMi ? 'active' : 'likely_active') : 'coming_soon'
   const locationSource = `${conPunto(dato.evidencia)} Huella provisional: cuadrado de 60 m centrado en el marcador, creado desde el panel el ${hoy}.`
-  const sources = [...fuentes, ...(dato.aportadoPorMi ? [`campo:${hoy}`] : [])]
   const descripcion =
     dato.descripcionEs || dato.descripcionEn
       ? {
@@ -212,12 +220,7 @@ export function prepararPlazaNueva(
     categories: [],
     locationConfidence: dato.confianza,
     locationSource,
-    verification: {
-      status: investigacion,
-      confidence: dato.confianza,
-      lastVerifiedAt: hoy,
-      sources,
-    },
+    verification,
   }
 
   const filas = (crudo.plazas.plazas as Record<string, unknown>[] | undefined) ?? []

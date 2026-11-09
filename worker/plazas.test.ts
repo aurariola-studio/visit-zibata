@@ -130,16 +130,15 @@ describe('editar una plaza', () => {
     expect(preparada.plazas.updatedAt).toBe(HOY)
   })
 
-  it('guardar apunta la verificación de campo sin inventar un estado', () => {
+  it('guardar una errata no toca la verificación: ni fecha, ni fuentes, ni estado', () => {
     const preparada = prepararPlaza(dataset, crudo, igual({ direccion: 'Otra calle 2' }), HOY)
     expect(preparada.ok).toBe(true)
     if (!preparada.ok || !plaza.verification) return
     const fila = (
       preparada.plazas.plazas as { id: string; verification: typeof plaza.verification }[]
     ).find((otra) => otra.id === plaza.id)
-    expect(fila?.verification?.lastVerifiedAt).toBe(HOY)
-    expect(fila?.verification?.sources).toContain(`campo:${HOY}`)
-    expect(fila?.verification?.status).toBe(plaza.verification.status)
+    expect(fila?.verification).toEqual(plaza.verification)
+    expect(JSON.stringify(fila?.verification)).not.toContain(`campo:${HOY}`)
   })
 
   it('rechaza un marcador fuera de Zibatá', () => {
@@ -220,8 +219,12 @@ describe('los títulos no se repiten', () => {
 })
 
 describe('activar una plaza que no está verificada', () => {
+  // Las fuentes que la plaza ya tenía: repetirlas no es evidencia nueva.
+  const urlsDeLaApagada = (apagada.verification?.sources ?? []).filter(
+    (fuente) => !fuente.startsWith('campo:'),
+  )
   // La plaza apagada del propio dataset, con cada estado de investigación puesto a mano.
-  const activar = (estado: string) => {
+  const activar = (estado: string, extra: Record<string, unknown> = {}) => {
     const verification = {
       sources: ['https://ejemplo.test/x'],
       confidence: 'low',
@@ -243,7 +246,7 @@ describe('activar una plaza que no está verificada', () => {
         plazas: filas.map((f) => (f.id === apagada.id ? { ...f, verification } : f)),
       },
     }
-    return prepararPlaza(ds, cr, activarApagada(), HOY)
+    return prepararPlaza(ds, cr, activarApagada(extra), HOY)
   }
   const estadoEscrito = (r: ReturnType<typeof activar>) => {
     if (!r.ok) throw new Error(r.problemas.join(' | '))
@@ -272,6 +275,107 @@ describe('activar una plaza que no está verificada', () => {
       expect(r.ok, estado).toBe(false)
       if (!r.ok) expect(r.problemas.join(' '), estado).toContain(`"${estado}"`)
     }
+  })
+
+  it('lo descartado se revierte con evidencia nueva en el mismo guardado: "Lo comprobé yo" lo deja active', () => {
+    for (const estado of ['closed', 'removed', 'duplicate', 'rejected']) {
+      const r = activar(estado, {
+        verificacion: {
+          comprobadoPorMi: true,
+          fuentes: ['https://ejemplo.test/x'],
+          confianza: 'high',
+        },
+      })
+      expect(r.ok, estado).toBe(true)
+      expect(estadoEscrito(r), estado).toBe('active')
+      if (r.ok) {
+        const fila = (
+          r.plazas.plazas as {
+            id: string
+            verification: { sources: string[]; lastVerifiedAt: string }
+          }[]
+        ).find((otra) => otra.id === apagada.id)
+        expect(fila?.verification.sources, estado).toContain(`campo:${HOY}`)
+        expect(fila?.verification.lastVerifiedAt, estado).toBe(HOY)
+        // La confirmación enseña lo que se afirma: el cambio de estado y la marca en el lugar.
+        const avisos = r.impacto.avisos.join(' ')
+        expect(avisos, estado).toContain(`pasa de "${estado}" a "active"`)
+        expect(avisos, estado).toContain(`campo:${HOY}`)
+      }
+    }
+  })
+
+  it('una plaza activa no puede quedar con un estado que dice "no": se desactiva también', () => {
+    for (const estado of ['closed', 'removed', 'duplicate', 'rejected', 'uncertain']) {
+      const r = prepararPlaza(
+        dataset,
+        crudo,
+        igual({
+          verificacion: {
+            comprobadoPorMi: false,
+            fuentes: (plaza.verification?.sources ?? []).filter((f) => !f.startsWith('campo:')),
+            confianza: 'high',
+            estado,
+          },
+        }),
+        HOY,
+      )
+      expect(r.ok, estado).toBe(false)
+      if (!r.ok) expect(r.problemas.join(' '), estado).toMatch(/no puede quedar como/)
+    }
+  })
+
+  it('cerrar una plaza apagada es un cambio de estado sin evidencia y sin activarla', () => {
+    const r = activar('uncertain', {
+      activa: false,
+      verificacion: {
+        comprobadoPorMi: false,
+        fuentes: urlsDeLaApagada,
+        confianza: 'high',
+        estado: 'closed',
+      },
+    })
+    expect(r.ok, r.ok ? '' : r.problemas.join(' | ')).toBe(true)
+    expect(estadoEscrito(r)).toBe('closed')
+  })
+
+  it('lo descartado también se revierte con una fuente oficial nueva y el cambio de estado', () => {
+    const r = activar('removed', {
+      verificacion: {
+        comprobadoPorMi: false,
+        fuentes: ['https://ejemplo.test/x', 'https://www.walmart.com.mx/tiendas/zibata'],
+        confianza: 'medium',
+        estado: 'likely_active',
+      },
+    })
+    expect(r.ok, r.ok ? '' : r.problemas.join(' | ')).toBe(true)
+    expect(estadoEscrito(r)).toBe('likely_active')
+  })
+
+  it('cambiar el estado a uno que se publica sin evidencia nueva se rechaza', () => {
+    const r = activar('removed', {
+      verificacion: {
+        comprobadoPorMi: false,
+        fuentes: urlsDeLaApagada,
+        confianza: 'medium',
+        estado: 'likely_active',
+      },
+    })
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.problemas.join(' ')).toMatch(/evidencia nueva/)
+  })
+
+  it('una fuente que es solo OpenStreetMap no revierte un estado descartado', () => {
+    const r = activar('removed', {
+      verificacion: {
+        comprobadoPorMi: false,
+        fuentes: [...urlsDeLaApagada, 'https://www.openstreetmap.org/node/1'],
+        confianza: 'medium',
+        estado: 'likely_active',
+      },
+    })
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.problemas.join(' ')).toMatch(/OpenStreetMap o de apps de reparto/)
   })
 
   it('si ya es publicable conserva su estado y no avisa de ninguna transición', () => {

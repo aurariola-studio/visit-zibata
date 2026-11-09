@@ -33,6 +33,8 @@ const nuevo = (extra: Record<string, unknown> = {}) => ({
   descripcionEs: 'Un local de prueba.',
   descripcionEn: 'A test place.',
   activo: true,
+  // Un local nuevo declara su procedencia: aquí, que lo comprobó quien lo crea.
+  verificacion: { comprobadoPorMi: true, fuentes: [], confianza: 'high' },
   ...extra,
 })
 
@@ -248,12 +250,116 @@ describe('preparar un negocio nuevo', () => {
     expect(visible.ok).toBe(true)
   })
 
-  it('marca la verificación de hoy con la fuente del panel', () => {
-    const preparado = prepararNegocio(dataset, crudo, nuevo(), HOY)
-    if (!preparado.ok) throw new Error('no preparó')
-    expect(preparado.place.verification?.lastVerifiedAt).toBe(HOY)
-    expect(preparado.place.verification?.sources).toContain(`campo:${HOY}`)
-    expect(preparado.place.verification?.status).toBe('active')
+  describe('procedencia de un local nuevo', () => {
+    const rechazo = (extra: Record<string, unknown>): string => {
+      const preparado = prepararNegocio(dataset, crudo, nuevo(extra), HOY)
+      expect(preparado.ok).toBe(false)
+      return preparado.ok ? '' : preparado.problemas.join(' ')
+    }
+
+    it('con "Lo comprobé yo" nace active, con campo de hoy y la confianza que se eligió', () => {
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        nuevo({ verificacion: { comprobadoPorMi: true, fuentes: [], confianza: 'medium' } }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification).toEqual({
+        status: 'active',
+        confidence: 'medium',
+        lastVerifiedAt: HOY,
+        sources: [`campo:${HOY}`],
+      })
+    })
+
+    it('sin la casilla, con una fuente que la metodología acepta, nace likely_active y sin campo', () => {
+      const oficial = 'https://www.instagram.com/un-negocio-de-prueba/'
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        nuevo({
+          verificacion: { comprobadoPorMi: false, fuentes: [oficial], confianza: 'medium' },
+        }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification).toEqual({
+        status: 'likely_active',
+        confidence: 'medium',
+        lastVerifiedAt: HOY,
+        sources: [oficial],
+      })
+    })
+
+    it('sin procedencia no se crea: nada se afirma por omisión', () => {
+      expect(rechazo({ verificacion: undefined })).toMatch(/evidencia nueva/)
+      expect(
+        rechazo({ verificacion: { comprobadoPorMi: false, fuentes: [], confianza: 'high' } }),
+      ).toMatch(/evidencia nueva/)
+    })
+
+    it('solo OpenStreetMap o reparto no basta para publicar (metodología)', () => {
+      for (const fuente of [
+        'https://www.openstreetmap.org/node/3139369680',
+        'https://www.rappi.com.mx/tiendas/12345-oxxo',
+        'https://www.ubereats.com/mx/store/oxxo',
+      ]) {
+        expect(
+          rechazo({
+            verificacion: { comprobadoPorMi: false, fuentes: [fuente], confianza: 'medium' },
+          }),
+        ).toMatch(/OpenStreetMap o de apps de reparto/)
+      }
+    })
+
+    it('con OpenStreetMap, la casilla sí lo respalda: lo declara quien fue a verlo', () => {
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        nuevo({
+          verificacion: {
+            comprobadoPorMi: true,
+            fuentes: ['https://www.openstreetmap.org/node/3139369680'],
+            confianza: 'high',
+          },
+        }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification?.status).toBe('active')
+      expect(preparado.place.verification?.sources).toEqual([
+        'https://www.openstreetmap.org/node/3139369680',
+        `campo:${HOY}`,
+      ])
+    })
+
+    it('"campo:" no se escribe a mano: lo pone la casilla', () => {
+      expect(
+        rechazo({
+          verificacion: { comprobadoPorMi: false, fuentes: [`campo:${HOY}`], confianza: 'high' },
+        }),
+      ).toMatch(/no se escribe a mano/)
+    })
+
+    it('una fuente que no es URL se rechaza con el motivo', () => {
+      expect(
+        rechazo({
+          verificacion: {
+            comprobadoPorMi: false,
+            fuentes: ['lo vi en un grupo'],
+            confianza: 'low',
+          },
+        }),
+      ).toMatch(/no es una URL/)
+    })
+
+    it('más fuentes que el tope se rechazan, no se recortan en silencio', () => {
+      const fuentes = Array.from({ length: 8 }, (_, i) => `https://ejemplo.com/${i}`)
+      expect(
+        rechazo({ verificacion: { comprobadoPorMi: true, fuentes, confianza: 'high' } }),
+      ).toMatch(/el tope son 8/)
+    })
   })
 
   it('recalcula las categorías de la plaza con el giro nuevo', () => {
@@ -359,17 +465,129 @@ describe('editar un negocio existente', () => {
     expect(preparado.place.links.rappi).toBe(existente.links.rappi)
   })
 
-  it('conserva el estado de verificación y solo actualiza fecha y fuentes', () => {
-    const conEstado =
-      dataset.places.find((fila) => fila.active && fila.verification?.status === 'likely_active') ??
-      dataset.places.find((fila) => fila.active && fila.verification)
-    if (!conEstado?.verification) return
-    const preparado = prepararNegocio(dataset, crudo, editar(conEstado), HOY)
-    if (!preparado.ok) throw new Error('no preparó')
-    expect(preparado.place.verification?.status).toBe(conEstado.verification.status)
-    expect(preparado.place.verification?.confidence).toBe(conEstado.verification.confidence)
-    expect(preparado.place.verification?.lastVerifiedAt).toBe(HOY)
-    expect(preparado.place.verification?.sources).toContain(`campo:${HOY}`)
+  describe('procedencia al editar: una errata no afirma nada', () => {
+    const conEstado = dataset.places.find(
+      (fila) => fila.active && fila.verification?.status === 'likely_active',
+    ) as Place
+    const previa = conEstado.verification as NonNullable<Place['verification']>
+    const urlsPrevias = previa.sources.filter((fuente) => !fuente.startsWith('campo:'))
+
+    it('sin bloque de verificación, la verificación queda idéntica, fecha incluida', () => {
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        editar(conEstado, {
+          descripcionEs: `${conEstado.description?.es ?? ''} Una errata corregida.`,
+        }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification).toEqual(previa)
+      expect(preparado.place.verification?.lastVerifiedAt).not.toBe(HOY)
+      expect(JSON.stringify(preparado.place.verification)).not.toContain(`campo:${HOY}`)
+    })
+
+    it('con el bloque tal como lo manda el formulario sin tocarlo, tampoco cambia', () => {
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        editar(conEstado, {
+          verificacion: {
+            comprobadoPorMi: false,
+            fuentes: urlsPrevias,
+            confianza: previa.confidence,
+          },
+        }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification).toEqual(previa)
+    })
+
+    it('"Lo comprobé yo" sube la fecha, añade campo y pasa el local a active', () => {
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        editar(conEstado, {
+          verificacion: { comprobadoPorMi: true, fuentes: urlsPrevias, confianza: 'high' },
+        }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification).toEqual({
+        status: 'active',
+        confidence: 'high',
+        lastVerifiedAt: HOY,
+        sources: [
+          ...urlsPrevias,
+          ...previa.sources.filter((f) => f.startsWith('campo:')),
+          `campo:${HOY}`,
+        ].filter((fuente, i, todas) => todas.indexOf(fuente) === i),
+      })
+    })
+
+    it('una fuente nueva cuenta como evidencia y sube la fecha', () => {
+      const nueva = 'https://ejemplo.com/ficha-oficial'
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        editar(conEstado, {
+          verificacion: {
+            comprobadoPorMi: false,
+            fuentes: [...urlsPrevias, nueva],
+            confianza: previa.confidence,
+          },
+        }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification?.lastVerifiedAt).toBe(HOY)
+      expect(preparado.place.verification?.sources).toContain(nueva)
+      expect(preparado.place.verification?.status).toBe(previa.status)
+    })
+
+    it('quitar una fuente o cambiar la confianza no es evidencia: la fecha no se mueve', () => {
+      const otraConfianza = previa.confidence === 'high' ? 'medium' : 'high'
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        editar(conEstado, {
+          verificacion: {
+            comprobadoPorMi: false,
+            fuentes: urlsPrevias.slice(1),
+            confianza: otraConfianza,
+          },
+        }),
+        HOY,
+      )
+      if (!preparado.ok) throw new Error('no preparó')
+      expect(preparado.place.verification?.lastVerifiedAt).toBe(previa.lastVerifiedAt)
+      expect(preparado.place.verification?.confidence).toBe(otraConfianza)
+    })
+
+    it('hacer visible un local que no se publica exige evidencia nueva', () => {
+      const oculto: Place = {
+        ...conEstado,
+        active: false,
+        verification: { ...previa, status: 'uncertain' },
+      }
+      const conOculto = {
+        ...dataset,
+        places: dataset.places.map((fila) => (fila.id === conEstado.id ? oculto : fila)),
+      }
+      const sin = prepararNegocio(conOculto, crudo, editar(oculto), HOY)
+      expect(sin.ok).toBe(false)
+      if (!sin.ok) expect(sin.problemas.join(' ')).toMatch(/evidencia nueva/)
+      const con = prepararNegocio(
+        conOculto,
+        crudo,
+        editar(oculto, {
+          verificacion: { comprobadoPorMi: true, fuentes: urlsPrevias, confianza: 'high' },
+        }),
+        HOY,
+      )
+      expect(con.ok).toBe(true)
+    })
   })
 
   it('respeta el orden de los giros que manda el formulario', () => {
@@ -471,7 +689,15 @@ describe('editar un negocio existente', () => {
       ...dataset,
       places: dataset.places.map((fila) => (fila.id === existente.id ? cerrado : fila)),
     }
-    const preparado = prepararNegocio(conCerrado, crudo, editar(cerrado, { cierre: null }), HOY)
+    const preparado = prepararNegocio(
+      conCerrado,
+      crudo,
+      editar(cerrado, {
+        cierre: null,
+        verificacion: { comprobadoPorMi: true, fuentes: [], confianza: 'high' },
+      }),
+      HOY,
+    )
     if (!preparado.ok) throw new Error('no preparó')
     expect(preparado.place.active).toBe(true)
     expect(preparado.place.cierre).toBeUndefined()

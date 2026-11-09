@@ -168,6 +168,7 @@ describe('un slug borrado no vuelve', () => {
         descripcionEs: 'Una panadería de prueba.',
         descripcionEn: 'A test bakery.',
         activo: true,
+        verificacion: { comprobadoPorMi: true, fuentes: [], confianza: 'high' },
       },
       HOY,
     )
@@ -202,6 +203,7 @@ describe('un slug borrado no vuelve', () => {
         descripcionEs: 'Una panadería de prueba.',
         descripcionEn: 'A test bakery.',
         activo: true,
+        verificacion: { comprobadoPorMi: true, fuentes: [], confianza: 'high' },
       },
       HOY,
     )

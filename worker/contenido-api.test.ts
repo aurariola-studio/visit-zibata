@@ -20,6 +20,7 @@ const negocio = {
   descripcionEs: 'Una panadería de prueba.',
   descripcionEn: 'A test bakery.',
   activo: true,
+  verificacion: { comprobadoPorMi: true, fuentes: [], confianza: 'high' },
 }
 
 describe('la API de contenido', () => {
