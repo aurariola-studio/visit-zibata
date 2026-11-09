@@ -67,8 +67,9 @@ describe('prepararImportacion', () => {
     const r = prepararImportacion(dataset, crudo, csvDe(fila), HOY)
     if (!r.ok) throw new Error(r.problemas.join(' | '))
     expect(r.vista.listo, r.vista.filas[0]?.problemas.join(' | ')).toBe(true)
+    if (!r.archivos) throw new Error('no dejó archivos')
     const nuevo = (
-      r.archivos?.lugares.places as { name: string; description: { es: string } }[]
+      r.archivos.lugares.places as { name: string; description: { es: string } }[]
     ).find((place) => place.name === 'Tienda Rara')
     expect(nuevo?.description.es).toBe(texto)
   })
