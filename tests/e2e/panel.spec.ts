@@ -151,7 +151,12 @@ const contenido = {
       location: null,
       googleMapsUri: null,
       phone: null,
-      links: {},
+      links: {
+        tiktok: 'https://www.tiktok.com/@cafe.de.prueba',
+        rappi: 'https://www.rappi.com.mx/restaurantes/1-cafe-de-prueba',
+        uberEats: 'https://www.ubereats.com/mx/store/cafe-de-prueba/abc',
+        didiFood: null,
+      },
       photos: [
         { src: '/prueba/fachada.webp', alt: 'Fachada' },
         { src: '/prueba/interior.webp', alt: 'Interior' },
@@ -1500,6 +1505,58 @@ test.describe('Panel', () => {
         fuentes: ['https://ejemplo.test/cafe'],
         confianza: 'high',
       })
+    })
+
+    test('los enlaces de reparto se ven como están guardados y un guardado sin tocarlos los reenvía iguales', async ({
+      page,
+    }) => {
+      const cuerpos: Record<string, unknown>[] = []
+      await page.route(RUTA_NEGOCIO, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({ json: guardado })
+      })
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+      const dialogo = page.locator('#editor')
+      await expect(dialogo.locator('input[name="rappi"]')).toHaveValue(
+        'https://www.rappi.com.mx/restaurantes/1-cafe-de-prueba',
+      )
+      await expect(dialogo.locator('input[name="didiFood"]')).toHaveValue('')
+      await dialogo.locator('textarea[name="descripcionEs"]').fill('Una errata corregida.')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
+      expect(cuerpos[0]).toMatchObject({
+        tiktok: 'https://www.tiktok.com/@cafe.de.prueba',
+        rappi: 'https://www.rappi.com.mx/restaurantes/1-cafe-de-prueba',
+        uberEats: 'https://www.ubereats.com/mx/store/cafe-de-prueba/abc',
+        didiFood: '',
+      })
+    })
+
+    test('vaciar un enlace manda vacío (lo quita) y uno que no es URL se avisa en su campo', async ({
+      page,
+    }) => {
+      const cuerpos: Record<string, unknown>[] = []
+      await page.route(RUTA_NEGOCIO, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({ json: guardado })
+      })
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+      const dialogo = page.locator('#editor')
+      await dialogo.locator('input[name="uberEats"]').fill('mi tienda')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(dialogo.locator('input[name="uberEats"]')).toHaveAttribute(
+        'aria-invalid',
+        'true',
+      )
+      expect(cuerpos).toHaveLength(0)
+      await dialogo.locator('input[name="uberEats"]').fill('')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
+      expect(cuerpos[0]).toMatchObject({ uberEats: '' })
     })
 
     test('editar sin tocar la sección no afirma nada, y se ve lo que había guardado', async ({

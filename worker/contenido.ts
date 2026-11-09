@@ -78,6 +78,14 @@ export const EntradaNegocioSchema = z.object({
   instagram: z.string().trim().max(500).optional().default(''),
   facebook: z.string().trim().max(500).optional().default(''),
   whatsapp: z.string().trim().max(40).optional().default(''),
+  /*
+   * TikTok y los enlaces de reparto no llevan valor por omisión, a diferencia de los de arriba: ausente
+   * conserva el que ya había y vacío lo borra. Así un cliente que no los conoce no vacía los de 93 locales.
+   */
+  tiktok: z.string().trim().max(500).optional(),
+  rappi: z.string().trim().max(500).optional(),
+  uberEats: z.string().trim().max(500).optional(),
+  didiFood: z.string().trim().max(500).optional(),
   googleMapsUri: z.string().trim().max(500).optional().default(''),
   lat: z.number().min(-90).max(90).nullable().optional(),
   lng: z.number().min(-180).max(180).nullable().optional(),
@@ -524,9 +532,11 @@ const urlDe = (valor: string): string | null => (valor ? valor : null)
 /** Día ausente = no se sabe; lista vacía = cerrado. Una cadena vacía del formulario es "no se sabe". */
 function horarioDe(
   horario: Record<string, string[]> | null | undefined,
-): Record<string, string[]> | null {
-  if (!horario) return null
-  const salida: Record<string, string[]> = {}
+  nota?: string,
+): Record<string, string[] | string> | null {
+  // La nota del horario no tiene campo en el formulario: se conserva, porque perderla es perder un dato.
+  if (!horario) return nota ? { note: nota } : null
+  const salida: Record<string, string[] | string> = nota ? { note: nota } : {}
   for (const [dia, rangos] of Object.entries(horario)) {
     const limpios = rangos.map((rango) => rango.trim()).filter(Boolean)
     if (limpios.length > 0 || rangos.length === 0) salida[dia] = limpios
@@ -619,7 +629,7 @@ function construir(
     plazaId: entrada.plazaId,
     giros,
     description: { es: entrada.descripcionEs, en: entrada.descripcionEn },
-    hours: horarioDe(entrada.horario),
+    hours: horarioDe(entrada.horario, existente?.hours?.note),
     location:
       entrada.lat != null && entrada.lng != null ? { lat: entrada.lat, lng: entrada.lng } : null,
     googleMapsUri: urlDe(entrada.googleMapsUri),
@@ -632,6 +642,11 @@ function construir(
       instagram: urlDe(entrada.instagram),
       facebook: urlDe(entrada.facebook),
       whatsapp: telefonoDe(entrada.whatsapp),
+      // Ausente conserva el que ya había (el `...existente.links` de arriba); vacío lo borra.
+      ...(entrada.tiktok !== undefined && { tiktok: urlDe(entrada.tiktok) }),
+      ...(entrada.rappi !== undefined && { rappi: urlDe(entrada.rappi) }),
+      ...(entrada.uberEats !== undefined && { uberEats: urlDe(entrada.uberEats) }),
+      ...(entrada.didiFood !== undefined && { didiFood: urlDe(entrada.didiFood) }),
     },
     active: entrada.activo,
     // `null` lo quita, `undefined` conserva el que hubiera: el formulario decide, no una heurística.

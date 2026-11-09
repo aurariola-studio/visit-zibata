@@ -277,7 +277,24 @@ export function pintarFormulario(negocio: Negocio | null): void {
             <span>Enlace de Google Maps <span class="ayuda">si falta, Cómo llegar usa la plaza</span></span>
             <input class="${controls.campo}" type="url" name="googleMapsUri" value="${texto(negocio?.googleMapsUri ?? '')}" placeholder="https://maps.app.goo.gl/…" />
           </label>
+          <label class="campo-form">
+            <span>TikTok</span>
+            <input class="${controls.campo}" type="url" name="tiktok" value="${texto(negocio?.links?.tiktok ?? '')}" placeholder="https://www.tiktok.com/@…" />
+          </label>
+          <label class="campo-form">
+            <span>Rappi <span class="ayuda">la tienda de este negocio</span></span>
+            <input class="${controls.campo}" type="url" name="rappi" value="${texto(negocio?.links?.rappi ?? '')}" placeholder="https://www.rappi.com.mx/…" />
+          </label>
+          <label class="campo-form">
+            <span>Uber Eats</span>
+            <input class="${controls.campo}" type="url" name="uberEats" value="${texto(negocio?.links?.uberEats ?? '')}" placeholder="https://www.ubereats.com/…" />
+          </label>
+          <label class="campo-form">
+            <span>DiDi Food</span>
+            <input class="${controls.campo}" type="url" name="didiFood" value="${texto(negocio?.links?.didiFood ?? '')}" placeholder="https://www.didi-food.com/…" />
+          </label>
         </div>
+        <p class="ayuda">Rappi, Uber Eats y DiDi Food dibujan un botón en la ficha solo si hay enlace: nunca uno que no lleve a ningún lado. Vacío lo quita.</p>
       </section>
 
       <section class="editor-seccion">
@@ -532,6 +549,12 @@ function validarNegocio(formEl: HTMLFormElement): string[] {
     if (!foto.alt.trim()) problemas.push(`fotos.${indice}.alt: Escribe el texto alternativo.`)
   })
   problemas.push(...validarHorario(formEl))
+  for (const campo of ['tiktok', 'rappi', 'uberEats', 'didiFood']) {
+    const enlace = valorDe(formEl, campo)
+    if (enlace && !/^https?:\/\/\S+$/i.test(enlace)) {
+      problemas.push(`${campo}: Escribe la dirección completa, con https://.`)
+    }
+  }
   problemas.push(...validarProcedencia(formEl, !formEl.dataset.id))
   return problemas
 }
@@ -587,6 +610,10 @@ function leerFormulario(formulario: HTMLFormElement): {
     sitio: valorDe(formulario, 'sitio'),
     instagram: valorDe(formulario, 'instagram'),
     facebook: valorDe(formulario, 'facebook'),
+    tiktok: valorDe(formulario, 'tiktok'),
+    rappi: valorDe(formulario, 'rappi'),
+    uberEats: valorDe(formulario, 'uberEats'),
+    didiFood: valorDe(formulario, 'didiFood'),
     whatsapp: valorDe(formulario, 'whatsapp'),
     googleMapsUri: valorDe(formulario, 'googleMapsUri'),
     lat: latTexto ? Number(latTexto) : null,
