@@ -44,7 +44,15 @@ import {
   alPulsarDireccion,
   alTeclearDireccion,
 } from './contenido/direccion.ts'
-import { alPulsarEdificio, pintarEdificios, pintarQuitarEdificio } from './contenido/edificios.ts'
+import {
+  alCambiarEdificio,
+  alPulsarEdificio,
+  enviarAjustarEdificio,
+  olvidarMapaEdificios,
+  pintarAjustarEdificio,
+  pintarEdificios,
+  pintarQuitarEdificio,
+} from './contenido/edificios.ts'
 import { cerrarEditor, limpiarErrorDe } from './contenido/editor.ts'
 import { alCambiarFoto, alEscribirFoto, alPulsarFoto } from './contenido/fotos.ts'
 import {
@@ -131,6 +139,7 @@ export function montarContenido(
   editor.addEventListener('close', () => {
     vista.formularioActual = null
     olvidarContorno()
+    olvidarMapaEdificios()
     contenedor.focus({ preventScroll: true })
   })
 
@@ -263,6 +272,10 @@ async function alEnviar(evento: Event): Promise<void> {
     enviarPlazaNueva(formulario)
     return
   }
+  if (formulario.dataset.editor === 'edificio-ajustar') {
+    await enviarAjustarEdificio(formulario)
+    return
+  }
   if (formulario.dataset.editor === 'importar') {
     enviarImportar(formulario)
     return
@@ -297,6 +310,10 @@ function alPulsar(evento: Event): void {
   const quitarEdificio = objetivo.closest<HTMLElement>('[data-quitar-edificio]')
   if (quitarEdificio?.dataset.quitarEdificio) {
     pintarQuitarEdificio(quitarEdificio.dataset.quitarEdificio)
+    return
+  }
+  if (objetivo.closest('[data-ajustar-edificio]')) {
+    pintarAjustarEdificio()
     return
   }
   if (objetivo.closest('[data-nueva-plaza]')) {
@@ -386,6 +403,7 @@ function alEscribirEditor(evento: Event): void {
   if (!objetivo) return
   alCambiarPlazaNueva(objetivo)
   alCambiarImportar(objetivo)
+  alCambiarEdificio(objetivo)
 
   if (alEscribirDireccion(objetivo)) return
   if (alEscribirContorno(objetivo)) return
@@ -404,6 +422,7 @@ function alCambiarEditor(evento: Event): void {
   if (!objetivo) return
   alCambiarPlazaNueva(objetivo)
   alCambiarImportar(objetivo)
+  alCambiarEdificio(objetivo)
 
   if (alCambiarDireccion(objetivo)) return
   if (alCambiarFoto(objetivo)) return

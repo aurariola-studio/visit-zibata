@@ -49,7 +49,7 @@ const mismoPunto = (a: AjusteEdificio, p: { lat: number; lng: number }) =>
   a.punto.lat === seis(p.lat) && a.punto.lng === seis(p.lng)
 
 const AVISO_DE_BUILD =
-  'Al construir, el build comprueba con el crudo de edificios que el punto cae en UNA sola huella. Si no, falla, y esa PR no se puede fusionar (la PR del panel agrupa todos sus cambios).'
+  'Al construir, el build comprueba con el crudo de edificios que el punto cae en UNA sola huella. Si no, falla, y esa PR no se puede fusionar (la PR del panel agrupa todos sus cambios). Si falla, retíralo con "Retirar el último cambio" en el Resumen.'
 
 /** La parte pura: valida y deja el archivo de ajustes listo. */
 export function prepararEdificio(

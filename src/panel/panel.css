@@ -1481,7 +1481,8 @@ td.tenue {
   margin-bottom: var(--space-2);
 }
 
-.contorno-mapa {
+.contorno-mapa,
+.edificios-mapa {
   position: relative;
   height: 22rem;
   overflow: hidden;
@@ -1716,7 +1717,8 @@ td.tenue {
     grid-column: 2 / -1;
   }
 
-  .contorno-mapa {
+  .contorno-mapa,
+  .edificios-mapa {
     height: 18rem;
   }
 
