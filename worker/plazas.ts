@@ -20,13 +20,14 @@ import {
   validateRelations,
   validateTranslations,
 } from '../src/data/relations.ts'
-import { PUBLISHABLE_STATUS } from '../src/data/rules.ts'
+import { FIELD_SOURCE_PATTERN, PUBLISHABLE_STATUS } from '../src/data/rules.ts'
 import { PlazaSchema } from '../src/data/schemas.ts'
 import { TITULOS_RESERVADOS } from '../src/data/titulos-reservados.ts'
 import { fechaLocal } from './analitica.ts'
 import { type Cargado, cargar, LIMITES } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
 import { SUFIJO_TITULO, TOPE_TITULO } from './titulos.ts'
+import { EntradaVerificacionSchema, resolverVerificacion } from './verificacion.ts'
 
 /** Estados de investigación que dicen "no": la plaza se descartó, y activarla no es una edición. */
 const DESCARTADOS: readonly string[] = ['closed', 'removed', 'duplicate', 'rejected']
@@ -48,6 +49,8 @@ export const EntradaPlazaSchema = z.strictObject({
   googleMapsUri: z.string().trim().max(500).optional().default(''),
   activa: z.boolean(),
   proximamente: z.boolean().optional().default(false),
+  /** Ausente = no se toca la procedencia. */
+  verificacion: EntradaVerificacionSchema.optional(),
   /** Sin esto, un cambio que afecta a lo que se ve solo calcula el impacto. */
   confirmar: z.boolean().optional().default(false),
 })
@@ -128,31 +131,50 @@ export function prepararPlaza(
     ...(datos.googleMapsUri ? { googleMapsUri: datos.googleMapsUri } : {}),
   }
   const previa = antes.verification
+  /*
+   * La procedencia no se sella sola: sin evidencia nueva declarada, editar no toca `verification`. El bloque
+   * trae el estado de siempre salvo que se cambie, y cambiarlo a uno que se publica pide evidencia en este
+   * mismo guardado (ver `verificacion.ts`).
+   */
+  const declarada = datos.verificacion ?? {
+    comprobadoPorMi: false,
+    fuentes: (previa?.sources ?? []).filter((fuente) => !FIELD_SOURCE_PATTERN.test(fuente)),
+    confianza: previa?.confidence ?? 'medium',
+    estado: previa?.status,
+  }
+  const resuelta = resolverVerificacion({
+    previa,
+    entrada: declarada,
+    hoy,
+    visible: datos.activa,
+    promover: false,
+  })
+  if (!resuelta.ok) return { ok: false, problemas: resuelta.problemas }
+  const declaradaVerificada = resuelta.verification
   const activando = datos.activa && !antes.active
   /*
    * Activar una plaza la publica, así que su estado de investigación no puede quedarse en uno que no
    * se publica. Los que dicen "todavía no" (`coming_soon`, `uncertain`) pasan a `likely_active`; los que
-   * dicen "no" (cerrada, quitada, duplicada, rechazada) son una conclusión de la investigación y no se
-   * revierten desde aquí: activarla sería publicar lo que se descartó.
+   * dicen "no" (cerrada, quitada, duplicada, rechazada) son una conclusión de la investigación: para
+   * revertirla hay que declarar evidencia nueva en el mismo guardado (la casilla "Lo comprobé yo", o una
+   * fuente oficial y el cambio de estado), y entonces el estado resultante ya no es uno descartado.
    */
   const estadoPrevio = previa?.status
-  if (activando && estadoPrevio && DESCARTADOS.includes(estadoPrevio)) {
+  const estadoActual = declaradaVerificada?.status ?? estadoPrevio
+  if (activando && estadoActual && DESCARTADOS.includes(estadoActual)) {
     return {
       ok: false,
       problemas: [
-        `Su estado de investigación es "${estadoPrevio}": la investigación la descartó y activarla la publicaría. Eso no se hace desde el panel.`,
+        `Su estado de investigación es "${estadoActual}": la investigación la descartó y activarla la publicaría. Para revertirlo declara evidencia nueva en la sección Procedencia: marca "Lo comprobé yo" si fuiste a verla, o añade una fuente oficial y cambia su estado.`,
       ],
     }
   }
   const promovida =
-    activando && estadoPrevio !== undefined && !PUBLISHABLE_STATUS.includes(estadoPrevio)
-  if (previa) {
-    nueva.verification = {
-      ...previa,
-      ...(promovida ? { status: 'likely_active' } : {}),
-      lastVerifiedAt: hoy,
-      sources: [...new Set([...previa.sources, `campo:${hoy}`])].slice(-8),
-    }
+    activando && estadoActual !== undefined && !PUBLISHABLE_STATUS.includes(estadoActual)
+  if (declaradaVerificada) {
+    nueva.verification = promovida
+      ? { ...declaradaVerificada, status: 'likely_active' }
+      : declaradaVerificada
   }
 
   const revisada = PlazaSchema.safeParse(nueva)
@@ -259,7 +281,7 @@ export function prepararPlaza(
     )
     if (promovida) {
       avisos.push(
-        `Su estado de investigación pasa de "${estadoPrevio}" a "likely_active", para que se publique. El panel no comprueba que la plaza haya abierto: lo da por probable porque la activas tú.`,
+        `Su estado de investigación pasa de "${estadoActual}" a "likely_active", para que se publique. El panel no comprueba que la plaza haya abierto: lo da por probable porque la activas tú.`,
       )
     }
   }

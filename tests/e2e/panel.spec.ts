@@ -131,6 +131,12 @@ const contenido = {
       coordinates: { lat: 20.67, lng: -100.3 },
       active: false,
       comingSoon: true,
+      verification: {
+        status: 'removed',
+        confidence: 'high',
+        lastVerifiedAt: '2026-09-14',
+        sources: ['https://ejemplo.test/plaza-tres'],
+      },
     },
   ],
   places: [
@@ -151,6 +157,12 @@ const contenido = {
         { src: '/prueba/interior.webp', alt: 'Interior' },
       ],
       active: true,
+      verification: {
+        status: 'likely_active',
+        confidence: 'medium',
+        lastVerifiedAt: '2026-09-21',
+        sources: ['https://ejemplo.test/cafe', 'campo:2026-09-21'],
+      },
     },
     {
       id: 'taller-de-prueba',
@@ -1395,6 +1407,172 @@ test.describe('Panel', () => {
     await page.getByRole('button', { name: 'Nuevo negocio' }).click()
     await expect(page.locator('#editor')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Borrar negocio' })).toHaveCount(0)
+  })
+
+  test.describe('procedencia', () => {
+    const guardado = {
+      ok: true,
+      seco: false,
+      pr: { url: 'https://example.test/pr/9', numero: 9, creada: true },
+      mensaje: 'Cambio enviado a la PR.',
+      negocio: { id: 'x', nombre: 'x', nuevo: false },
+    }
+    const RUTA_NEGOCIO = /\/api\/panel\/contenido\/negocio$/
+
+    test('un local nuevo no se manda sin casilla ni fuente, y el aviso va en el campo', async ({
+      page,
+    }) => {
+      let enviado = false
+      await page.route(RUTA_NEGOCIO, async (ruta) => {
+        enviado = true
+        await ruta.fulfill({ json: guardado })
+      })
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Nuevo negocio' }).click()
+      const dialogo = page.locator('#editor')
+      await dialogo.locator('input[name="nombre"]').fill('Tienda de prueba')
+      await dialogo.locator('select[name="plazaId"]').selectOption('plaza-uno')
+      await dialogo.locator('textarea[name="descripcionEs"]').fill('Una tienda inventada.')
+      await dialogo.locator('textarea[name="descripcionEn"]').fill('An invented shop.')
+      await dialogo.getByRole('button', { name: 'Crear negocio' }).click()
+      // Sin giro también falla, pero el aviso de la procedencia tiene que estar en su campo.
+      await expect(dialogo.locator('textarea[name="fuentes"]')).toHaveAttribute(
+        'aria-invalid',
+        'true',
+      )
+      expect(enviado).toBe(false)
+    })
+
+    test('con "Lo comprobé yo" el bloque viaja con la casilla y la confianza elegida', async ({
+      page,
+    }) => {
+      const cuerpos: { verificacion?: Record<string, unknown> }[] = []
+      await page.route(RUTA_NEGOCIO, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({ json: guardado })
+      })
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+      const dialogo = page.locator('#editor')
+      await dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }).check()
+      await dialogo.locator('select[name="confianza"]').selectOption('high')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
+      expect(cuerpos[0]?.verificacion).toEqual({
+        comprobadoPorMi: true,
+        fuentes: ['https://ejemplo.test/cafe'],
+        confianza: 'high',
+      })
+    })
+
+    test('editar sin tocar la sección no afirma nada, y se ve lo que había guardado', async ({
+      page,
+    }) => {
+      const cuerpos: { verificacion?: Record<string, unknown> }[] = []
+      await page.route(RUTA_NEGOCIO, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({ json: guardado })
+      })
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+      const dialogo = page.locator('#editor')
+      const historia = dialogo.locator('[data-procedencia-historia]')
+      await expect(historia).toContainText('Probablemente activa')
+      await expect(historia).toContainText('2026-09-21')
+      await expect(historia.locator('code')).toHaveText('campo:2026-09-21')
+      // La marca en el lugar no se edita a mano: no está en el cuadro de fuentes.
+      await expect(dialogo.locator('textarea[name="fuentes"]')).toHaveValue(
+        'https://ejemplo.test/cafe',
+      )
+      await expect(
+        dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }),
+      ).not.toBeChecked()
+      await dialogo.locator('textarea[name="descripcionEs"]').fill('Una errata corregida.')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
+      expect(cuerpos[0]?.verificacion).toEqual({
+        comprobadoPorMi: false,
+        fuentes: ['https://ejemplo.test/cafe'],
+        confianza: 'medium',
+      })
+    })
+
+    test('una fuente que no es URL se avisa en el campo sin llamar al servidor', async ({
+      page,
+    }) => {
+      let enviado = false
+      await page.route(RUTA_NEGOCIO, async (ruta) => {
+        enviado = true
+        await ruta.fulfill({ json: guardado })
+      })
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+      const dialogo = page.locator('#editor')
+      await dialogo.locator('textarea[name="fuentes"]').fill('lo vi en un grupo')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(dialogo.locator('textarea[name="fuentes"]')).toHaveAttribute(
+        'aria-invalid',
+        'true',
+      )
+      expect(enviado).toBe(false)
+    })
+
+    test('el rechazo del servidor por una fuente débil se ve en el campo', async ({ page }) => {
+      await page.route(RUTA_NEGOCIO, (ruta) =>
+        ruta.fulfill({
+          status: 400,
+          json: {
+            ok: false,
+            problemas: [
+              'fuentes: Solo hay fuentes de OpenStreetMap o de apps de reparto, y la metodología no las acepta como respaldo.',
+            ],
+          },
+        }),
+      )
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+      const dialogo = page.locator('#editor')
+      await dialogo.locator('textarea[name="fuentes"]').fill('https://www.openstreetmap.org/node/1')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(dialogo.locator('.campo-error.dinamico')).toContainText(
+        'OpenStreetMap o de apps de reparto',
+      )
+    })
+
+    test('una plaza enseña su estado de investigación y lo manda con la casilla para revertirlo', async ({
+      page,
+    }) => {
+      const cuerpos: { activa: boolean; verificacion?: Record<string, unknown> }[] = []
+      await page.route(/\/api\/panel\/contenido\/plaza$/, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({
+          json: { ...guardado, confirmado: true, requiereConfirmacion: false },
+        })
+      })
+      await abrirPanel(page)
+      await irA(page, 'plazas', 'Plazas')
+      await page.getByRole('button', { name: 'Editar Plaza Tres' }).click()
+      const dialogo = page.locator('#editor')
+      await expect(dialogo.locator('select[name="estado"]')).toHaveValue('removed')
+      await expect(dialogo.locator('[data-procedencia-historia]')).toContainText('Quitada')
+      await dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }).check()
+      await dialogo.locator('input[name="proximamente"]').uncheck()
+      await dialogo.locator('input[name="activa"]').check()
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
+      expect(cuerpos[0]?.activa).toBe(true)
+      expect(cuerpos[0]?.verificacion).toEqual({
+        comprobadoPorMi: true,
+        fuentes: ['https://ejemplo.test/plaza-tres'],
+        confianza: 'high',
+        estado: 'removed',
+      })
+    })
   })
 
   test.describe('edificios', () => {

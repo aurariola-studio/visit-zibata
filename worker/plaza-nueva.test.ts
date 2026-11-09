@@ -230,7 +230,30 @@ describe('lo que se rechaza', () => {
 
   it('una fuente tiene que ser una URL https, y "campo:" no se escribe a mano', () => {
     expect(rechaza({ fuentes: ['lo vi en el mapa'] })).toMatch(/no es una URL/)
-    expect(rechaza({ fuentes: [`campo:${HOY}`] })).toMatch(/no es una URL.*casilla/)
+    expect(rechaza({ fuentes: [`campo:${HOY}`] })).toMatch(/no se escribe a mano.*casilla/)
+  })
+
+  it('una plaza activa que solo tiene OpenStreetMap o reparto no se publica sin la casilla', () => {
+    for (const fuente of ['https://www.openstreetmap.org/node/1', 'https://www.rappi.com.mx/x']) {
+      expect(rechaza({ estado: 'activa', fuentes: [fuente], aportadoPorMi: false })).toMatch(
+        /OpenStreetMap o de apps de reparto/,
+      )
+    }
+    const fila = filaNueva(
+      preparar({
+        estado: 'activa',
+        fuentes: ['https://www.openstreetmap.org/node/1'],
+        aportadoPorMi: true,
+      }),
+    )
+    expect(fila.verification.status).toBe('active')
+  })
+
+  it('una "próximamente" no se publica: cualquier fuente sirve, también OpenStreetMap', () => {
+    const fila = filaNueva(
+      preparar({ estado: 'proximamente', fuentes: ['https://www.openstreetmap.org/node/1'] }),
+    )
+    expect(fila.verification.status).toBe('coming_soon')
   })
 
   it('pide la frase de evidencia, y no vale una palabra suelta', () => {

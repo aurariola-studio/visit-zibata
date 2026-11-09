@@ -18,6 +18,14 @@ export interface Categoria {
   giros: Giro[]
 }
 
+/** De dónde sale que existe: lo que el panel muestra y deja editar en la sección Procedencia. */
+export interface Verificacion {
+  status: string
+  confidence: string
+  lastVerifiedAt: string
+  sources: string[]
+}
+
 export interface PlazaResumen {
   id: string
   slug: string
@@ -30,6 +38,7 @@ export interface PlazaResumen {
   geometry?: { type: string; coordinates: unknown }
   active: boolean
   comingSoon?: boolean
+  verification?: Verificacion
 }
 
 export interface Foto {
@@ -62,6 +71,7 @@ export interface Negocio {
   photos: Foto[]
   cierre?: Cierre
   active: boolean
+  verification?: Verificacion
 }
 
 /** Un ajuste a mano de un edificio del mapa, tal como lo manda el Worker. */
