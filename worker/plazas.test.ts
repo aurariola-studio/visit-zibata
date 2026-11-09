@@ -72,8 +72,11 @@ const conLocalesOcultos = (plazaId?: string) => {
 }
 
 /** Una plaza apagada del propio dataset que no es un "próximamente", y lo que manda el formulario al activarla. */
-const apagada = dataset.plazas.find((fila) => !fila.active && !fila.comingSoon)
-if (!apagada) throw new Error('el dataset necesita una plaza inactiva que no sea próximamente')
+// Por regla sobre el dato, no por orden: apagada, sin ser un próximamente ni una descartada.
+const apagada = dataset.plazas.find(
+  (fila) => !fila.active && !fila.comingSoon && fila.verification?.status === 'uncertain',
+)
+if (!apagada) throw new Error('el dataset necesita una plaza inactiva con estado "uncertain"')
 const activarApagada = (extra: Record<string, unknown> = {}) => ({
   id: apagada.id,
   nombre: apagada.name,

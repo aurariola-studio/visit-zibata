@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
 import { atenderApi, type EntornoApi } from './api.ts'
 import type { Base } from './cuenta.ts'
 
@@ -642,7 +643,16 @@ describe('editar una plaza', () => {
         comingSoon?: boolean
       }[]
     }
-    const apagada = datos.plazas.find((fila) => !fila.active && !fila.comingSoon)
+    // El catálogo no trae el estado de investigación: se elige por regla sobre el dato, no por orden.
+    const sinVerificar = new Set(
+      plazasJson.plazas
+        .filter(
+          (fila) =>
+            !fila.active && !('comingSoon' in fila) && fila.verification?.status === 'uncertain',
+        )
+        .map((fila) => fila.id),
+    )
+    const apagada = datos.plazas.find((fila) => sinVerificar.has(fila.id))
     if (!apagada) throw new Error('el catálogo necesita una plaza apagada')
     const respuesta = await editar({
       id: apagada.id,

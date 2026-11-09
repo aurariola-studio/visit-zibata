@@ -169,7 +169,7 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
       // vale en los dos sentidos (crear o mover el local, y desactivar la plaza con locales dentro).
       error(
         'places',
-        `El local "${place.name}" está visible y su plaza "${plaza.name}" no está activa: una plaza que no abre no puede tener locales abiertos. Oculta o mueve el local, o activa la plaza.`,
+        `El local "${place.name}" está visible y su plaza "${plaza.name}" no está activa. Una plaza que no abre no puede tener locales abiertos: oculta o mueve el local, o activa la plaza.`,
         place.id,
       )
     }

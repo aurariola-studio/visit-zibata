@@ -1517,19 +1517,21 @@ test.describe('Panel', () => {
     expect(Object.keys(cuerpos[0] ?? {})).not.toContain('geometry')
   })
 
-  test('desactivar una plaza enseña el impacto y no guarda hasta confirmar', async ({ page }) => {
+  test('desactivar una plaza sin locales visibles enseña el impacto y no guarda hasta confirmar', async ({
+    page,
+  }) => {
     const cuerpos: Record<string, unknown>[] = []
     await page.route(/\/api\/panel\/contenido\/plaza$/, async (ruta) => {
       const cuerpo = ruta.request().postDataJSON() as Record<string, unknown>
       cuerpos.push(cuerpo)
       const impacto = {
-        plaza: { id: 'plaza-uno', nombre: 'Plaza Uno' },
+        plaza: { id: 'plaza-dos', nombre: 'Plaza Dos' },
         cambiaActiva: true,
         activaAntes: true,
         activaDespues: false,
-        localesAntes: 1,
+        localesAntes: 0,
         localesDespues: 0,
-        categoriasSinPagina: ['Servicios de prueba'],
+        categoriasSinPagina: [],
         categoriasNuevas: [],
         avisos: ['La página de la zona deja de existir y su dirección da 404.'],
       }
@@ -1557,14 +1559,13 @@ test.describe('Panel', () => {
     })
     await abrirPanel(page)
     await irA(page, 'plazas', 'Plazas')
-    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    await page.getByRole('button', { name: 'Editar Plaza Dos' }).click()
     const dialogo = page.locator('#editor')
     await dialogo.getByLabel('Activa en la guía').uncheck()
     await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
 
     const impacto = dialogo.locator('.impacto-borrado')
     await expect(impacto).toContainText('pasa de activa a inactiva')
-    await expect(impacto).toContainText('Servicios de prueba')
     await expect(impacto).toContainText('da 404')
     expect(cuerpos).toHaveLength(1)
     expect(cuerpos[0]?.confirmar).toBeUndefined()
@@ -1585,6 +1586,28 @@ test.describe('Panel', () => {
     await expect(dialogo).toBeHidden()
     await expect(page.getByRole('status').filter({ hasText: 'PR abierta #4' })).toBeVisible()
     expect(cuerpos.at(-1)?.confirmar).toBe(true)
+  })
+
+  test('una plaza con locales visibles lo dice, y si el servidor rechaza desactivarla lo muestra', async ({
+    page,
+  }) => {
+    const mensaje =
+      'El local "Café de Prueba" está visible y su plaza "Plaza Uno" no está activa. Una plaza que no abre no puede tener locales abiertos: oculta o mueve el local, o activa la plaza.'
+    await page.route(/\/api\/panel\/contenido\/plaza$/, async (ruta) => {
+      await ruta.fulfill({ status: 400, json: { ok: false, problemas: [mensaje] } })
+    })
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    const dialogo = page.locator('#editor')
+    await expect(dialogo).toContainText('1 local visible está en esta plaza')
+    await expect(dialogo).toContainText('primero hay que ocultarlos o moverlos')
+    await dialogo.getByLabel('Activa en la guía').uncheck()
+    await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+    await expect(dialogo.locator('[data-problemas]')).toContainText(
+      'no puede tener locales abiertos',
+    )
+    await expect(dialogo.locator('.impacto-borrado')).toHaveCount(0)
   })
 
   test('una plaza con locales no ofrece borrarse y dice por qué', async ({ page }) => {
@@ -1662,6 +1685,28 @@ test.describe('Panel', () => {
     await expect(dialogo).toBeHidden()
     await expect(page.getByRole('status').filter({ hasText: 'PR abierta #12' })).toBeVisible()
     expect(cuerpos.at(-1)).toEqual({ id: 'plaza-tres', confirmar: true })
+  })
+
+  test('un mensaje del servidor con dos puntos y comillas no se toma por un campo ni rompe el formulario', async ({
+    page,
+  }) => {
+    await page.route(/\/api\/panel\/contenido\/plaza$/, async (ruta) => {
+      await ruta.fulfill({
+        status: 400,
+        json: {
+          ok: false,
+          problemas: ['El local "X" no cabe: revisa "Plaza Uno" y vuelve a guardar.'],
+        },
+      })
+    })
+    await abrirPanel(page)
+    await irA(page, 'plazas', 'Plazas')
+    await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+    const dialogo = page.locator('#editor')
+    await dialogo.locator('input[name="direccion"]').fill('Calle Nueva 9')
+    await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+    await expect(dialogo.locator('[data-problemas]')).toContainText('no cabe: revisa')
+    await expect(dialogo).not.toContainText('No se pudo hablar con el servidor')
   })
 
   test('activa y próximamente no van juntas y los errores salen en el campo', async ({ page }) => {
