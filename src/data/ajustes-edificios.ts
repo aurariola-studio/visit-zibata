@@ -43,3 +43,17 @@ export const AjustesEdificiosFileSchema = z.strictObject({
 
 export type AjusteEdificio = z.infer<typeof AjusteEdificioSchema>
 export type AjustesEdificiosFile = z.infer<typeof AjustesEdificiosFileSchema>
+
+/**
+ * Lee el archivo tal como llega (o `undefined` si la rama es anterior a su creación, que equivale a vacío).
+ * Un archivo que no pasa el esquema no se edita: sobrescribirlo perdería lo que contiene.
+ */
+export function leerAjustes(
+  crudo: unknown,
+): { valido: true; ajustes: AjusteEdificio[] } | { valido: false; ajustes: [] } {
+  if (crudo === undefined) return { valido: true, ajustes: [] }
+  const resultado = AjustesEdificiosFileSchema.safeParse(crudo)
+  return resultado.success
+    ? { valido: true, ajustes: resultado.data.ajustes }
+    : { valido: false, ajustes: [] }
+}

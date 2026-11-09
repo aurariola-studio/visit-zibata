@@ -19,6 +19,7 @@ export class Ajustador {
   /** Por cada ajuste, los ids de Overture de las huellas que contienen su punto. */
   private readonly aciertos: string[][]
   private readonly ajustes: readonly AjusteEdificio[]
+  private readonly sinEfecto: string[] = []
 
   constructor(ajustes: readonly AjusteEdificio[]) {
     this.ajustes = ajustes
@@ -29,12 +30,25 @@ export class Ajustador {
    * Qué hay que hacer con esta huella. Si dos ajustes caen en la misma se combinan aquí, pero
    * `problemas()` lo da por error: el mapa no se da por bueno.
    */
-  para(polygon: Polygon | MultiPolygon, overtureId: string): Resultado | null {
+  para(
+    polygon: Polygon | MultiPolygon,
+    overtureId: string,
+    /**
+     * La plaza que sustituye sus huellas reales por un volumen generado (`replaceExisting`), si esta huella
+     * es de una: un ajuste sobre ella se resolvería sin cambiar nada, y eso es un error, no un éxito.
+     */
+    plazaQueSustituye?: string,
+  ): Resultado | null {
     let resultado: Resultado | null = null
     this.ajustes.forEach((ajuste, i) => {
       const punto: [number, number] = [ajuste.punto.lng, ajuste.punto.lat]
       if (!turf.booleanPointInPolygon(punto, polygon)) return
       this.aciertos[i]?.push(overtureId)
+      if (plazaQueSustituye) {
+        this.sinEfecto.push(
+          `Ajuste ${ajuste.accion} sobre el edificio ${overtureId}: está en la plaza ${plazaQueSustituye}, que sustituye sus huellas por un volumen generado, así que no cambiaría nada.`,
+        )
+      }
       resultado = {
         ...(resultado ?? { ocultar: false }),
         ...(ajuste.accion === 'ocultar' ? { ocultar: true } : { alturaFijaM: ajuste.alturaM }),
@@ -48,7 +62,7 @@ export class Ajustador {
    * ajustes sobre la misma huella. Vacío si todo se aplicó.
    */
   problemas(): string[] {
-    const salida: string[] = []
+    const salida: string[] = [...this.sinEfecto]
     const porHuella = new Map<string, number>()
     this.ajustes.forEach((ajuste, i) => {
       const donde = `(${ajuste.punto.lat}, ${ajuste.punto.lng})`

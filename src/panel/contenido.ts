@@ -44,6 +44,7 @@ import {
   alPulsarDireccion,
   alTeclearDireccion,
 } from './contenido/direccion.ts'
+import { alPulsarEdificio, pintarEdificios, pintarQuitarEdificio } from './contenido/edificios.ts'
 import { cerrarEditor, limpiarErrorDe } from './contenido/editor.ts'
 import { alCambiarFoto, alEscribirFoto, alPulsarFoto } from './contenido/fotos.ts'
 import {
@@ -192,6 +193,7 @@ function pintarLista(): void {
   vista.raiz.setAttribute('aria-busy', 'false')
   if (vista.modo === 'categorias') pintarCategorias()
   else if (vista.modo === 'plazas') pintarPlazas()
+  else if (vista.modo === 'edificios') pintarEdificios()
   else pintarNegocios()
 }
 
@@ -239,6 +241,11 @@ function alPulsar(evento: Event): void {
     return
   }
 
+  const quitarEdificio = objetivo.closest<HTMLElement>('[data-quitar-edificio]')
+  if (quitarEdificio?.dataset.quitarEdificio) {
+    pintarQuitarEdificio(quitarEdificio.dataset.quitarEdificio)
+    return
+  }
   if (objetivo.closest('[data-nueva-plaza]')) {
     pintarPlazaNueva()
     return
@@ -308,6 +315,7 @@ function alPulsarEditor(evento: Event): void {
   if (alPulsarBorrarGiro(objetivo, cargar)) return
   if (!vista.formularioActual) return
   if (alPulsarContorno(objetivo, cargar)) return
+  if (alPulsarEdificio(objetivo, cargar)) return
   if (alPulsarPlazaNueva(objetivo, cargar)) return
   if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return

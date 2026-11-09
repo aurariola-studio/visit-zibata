@@ -21,6 +21,7 @@ import { guardarCategorias } from './categorias.ts'
 import { contenido, guardarFoto, guardarNegocio, TOPE_FOTO } from './contenido.ts'
 import { ALTA, type Base, huella, nuevaCuenta, RESOLVER, secretoDe } from './cuenta.ts'
 import { leerCuerpo, TOPE_POR_DEFECTO } from './cuerpo.ts'
+import { ajustarEdificio } from './edificios.ts'
 import { APUNTE_EVENTO_VARIAS, agruparEventos, envioDe, MAXIMO_BYTES } from './eventos.ts'
 import {
   ANADIR,
@@ -111,6 +112,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
   '/api/panel/contenido/plaza/contorno': 16 * 1024,
+  '/api/panel/contenido/edificio': 4 * 1024,
   '/api/panel/contenido/plaza/nueva': 16 * 1024,
   '/api/panel/contenido/plaza/slug': 4 * 1024,
   '/api/panel/contenido/categoria/slug': 4 * 1024,
@@ -433,6 +435,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await guardarContorno(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Ajustar un edificio del mapa, con vista previa; ver worker/edificios.ts.
+  if (ruta === '/api/panel/contenido/edificio' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await ajustarEdificio(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)

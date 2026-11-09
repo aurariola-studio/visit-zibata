@@ -225,6 +225,11 @@ const rawBuildings = readJson<FeatureCollection<Polygon | MultiPolygon, Overture
 )
 rawBuildings.features.sort((a, b) => a.properties.id.localeCompare(b.properties.id))
 
+/** Las reglas del volumen generado de una plaza: la general mezclada con la suya. */
+const reglaSintetica = (plazaId: string) => ({
+  ...config.buildings.plazaSynthetic.default,
+  ...config.buildings.plazaSynthetic.plazas[plazaId],
+})
 const ajustador = new Ajustador(
   AjustesEdificiosFileSchema.parse(readJson(paths.ajustesEdificios)).ajustes,
 )
@@ -259,13 +264,19 @@ for (const building of rawBuildings.features) {
     const center = turf.centroid(polygon).geometry.coordinates
     if (!inBbox(center)) continue
 
-    // Un edificio oculto a mano se descarta antes de darle id: sale de las teselas, de las mallas y de las plazas.
-    const ajuste = ajustador.para(polygon, building.properties.id)
-    if (ajuste?.ocultar) continue
-
     const inside = (area: Feature<Polygon | MultiPolygon>) =>
       turf.booleanPointInPolygon(center, area)
     const plaza = plazaShapes.find(({ shape }) => inside(shape))?.plaza
+
+    // Un edificio oculto a mano se descarta antes de darle id: sale de las teselas, de las mallas y de las plazas.
+    // Una plaza con `replaceExisting` descarta sus huellas reales: el ajustador rechaza un ajuste sobre una de ellas.
+    const ajuste = ajustador.para(
+      polygon,
+      building.properties.id,
+      plaza && reglaSintetica(plaza.id).replaceExisting ? plaza.id : undefined,
+    )
+    if (ajuste?.ocultar) continue
+
     let type: BuildingType = 'residential'
     if (plaza || commercialAreas.some(inside)) type = 'commercial'
     else if (educationAreas.some(inside)) type = 'education'
@@ -323,10 +334,7 @@ const synthesized: string[] = []
 /** Por qué cada plaza lleva volumen generado (para docs/MAPA.md y la auditoría). */
 const synthesisDetail: { plazaId: string; replacedFootprints: number; reason: string }[] = []
 for (const { plaza, shape } of plazaShapes) {
-  const rule = {
-    ...config.buildings.plazaSynthetic.default,
-    ...config.buildings.plazaSynthetic.plazas[plaza.id],
-  }
+  const rule = reglaSintetica(plaza.id)
   const existing = plazaBuildings.get(plaza.id) ?? []
   if (existing.length > 0 && !rule.replaceExisting) continue
   const scaled = turf.transformScale(shape, rule.scale, { origin: 'centroid' })
