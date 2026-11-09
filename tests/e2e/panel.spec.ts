@@ -1337,6 +1337,27 @@ test.describe('Panel', () => {
     await expect(page.locator('#editor')).toContainText('Un negocio nuevo se crea visible')
   })
 
+  test('un local visible no puede elegir una plaza que no abre, y uno oculto sí', async ({
+    page,
+  }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Nuevo negocio' }).click()
+    const plaza = page.locator('#editor select[name="plazaId"]')
+    await expect(plaza.locator('option', { hasText: 'Plaza Tres' })).toHaveAttribute('disabled', '')
+    await expect(plaza.locator('option', { hasText: 'Plaza Uno' })).not.toHaveAttribute('disabled')
+    await page.keyboard.press('Escape')
+    await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
+    await expect(
+      page.locator('#editor select[name="plazaId"] option', { hasText: 'Plaza Tres' }),
+    ).toHaveAttribute('disabled', '')
+    await page.keyboard.press('Escape')
+    await page.getByRole('button', { name: 'Editar Taller de Prueba' }).click()
+    await expect(
+      page.locator('#editor select[name="plazaId"] option', { hasText: 'Plaza Tres' }),
+    ).not.toHaveAttribute('disabled')
+  })
+
   test('un negocio nuevo no ofrece borrar', async ({ page }) => {
     await abrirPanel(page)
     await irA(page, 'negocios', 'Negocios')

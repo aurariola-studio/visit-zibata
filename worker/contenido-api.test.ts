@@ -625,13 +625,38 @@ describe('editar una plaza', () => {
     expect(datos).toMatchObject({ ok: true, confirmado: true, seco: true })
   })
 
-  it('desactivarla pide confirmación', async () => {
+  it('desactivarla con locales visibles se rechaza y dice qué hacer', async () => {
     const respuesta = await editar({ ...(await formulario()), activa: false })
-    const datos = (await respuesta?.json()) as {
+    const datos = (await respuesta?.json()) as { ok: boolean; problemas: string[] }
+    expect(datos.ok).toBe(false)
+    expect(datos.problemas.join(' ')).toMatch(/no puede tener locales abiertos/)
+  })
+
+  it('activar una plaza apagada pide confirmación', async () => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      plazas: {
+        id: string
+        name: string
+        coordinates: { lat: number; lng: number }
+        active: boolean
+        comingSoon?: boolean
+      }[]
+    }
+    const apagada = datos.plazas.find((fila) => !fila.active && !fila.comingSoon)
+    if (!apagada) throw new Error('el catálogo necesita una plaza apagada')
+    const respuesta = await editar({
+      id: apagada.id,
+      nombre: apagada.name,
+      lat: apagada.coordinates.lat,
+      lng: apagada.coordinates.lng,
+      activa: true,
+    })
+    const resultado = (await respuesta?.json()) as {
+      ok: boolean
       confirmado: boolean
       requiereConfirmacion: boolean
     }
-    expect(datos).toMatchObject({ confirmado: false, requiereConfirmacion: true })
+    expect(resultado).toMatchObject({ ok: true, confirmado: false, requiereConfirmacion: true })
   })
 
   it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {

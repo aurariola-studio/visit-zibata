@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import categoriasJson from '../data/commercial/categories.json' with { type: 'json' }
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
 import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
-import type { CommercialDataset } from '../src/data/relations.ts'
+import { type CommercialDataset, syncPlazaDerivedFields } from '../src/data/relations.ts'
 import { CategoriesFileSchema, PlacesFileSchema, PlazasFileSchema } from '../src/data/schemas.ts'
 import { guardarPlaza, prepararPlaza } from './plazas.ts'
 
@@ -41,6 +41,50 @@ const igual = (extra: Record<string, unknown> = {}) => ({
   googleMapsUri: plaza.googleMapsUri ?? '',
   activa: plaza.active,
   proximamente: plaza.comingSoon ?? false,
+  ...extra,
+})
+
+/**
+ * El dataset con los locales de la plaza (o de todas, sin argumento) ocultos, y lo derivado de las plazas al
+ * día, tanto en el dataset como en el crudo: el Worker parte de las filas crudas de las plazas.
+ */
+const conLocalesOcultos = (plazaId?: string) => {
+  const places = dataset.places.map((place) =>
+    plazaId === undefined || place.plazaId === plazaId ? { ...place, active: false } : place,
+  )
+  const plazas = syncPlazaDerivedFields({ ...dataset, places })
+  const filas = (crudo.plazas as unknown as { plazas: Record<string, unknown>[] }).plazas
+  const derivado = new Map(plazas.map((fila) => [fila.id, fila]))
+  return {
+    ds: { ...dataset, places, plazas } as CommercialDataset,
+    cr: {
+      ...crudo,
+      plazas: {
+        ...crudo.plazas,
+        plazas: filas.map((fila) => ({
+          ...fila,
+          placeIds: derivado.get(String(fila.id))?.placeIds,
+          categories: derivado.get(String(fila.id))?.categories,
+        })),
+      },
+    },
+  }
+}
+
+/** Una plaza apagada del propio dataset que no es un "próximamente", y lo que manda el formulario al activarla. */
+const apagada = dataset.plazas.find((fila) => !fila.active && !fila.comingSoon)
+if (!apagada) throw new Error('el dataset necesita una plaza inactiva que no sea próximamente')
+const activarApagada = (extra: Record<string, unknown> = {}) => ({
+  id: apagada.id,
+  nombre: apagada.name,
+  descripcionEs: apagada.description?.es ?? '',
+  descripcionEn: apagada.description?.en ?? '',
+  direccion: apagada.address ?? '',
+  lat: apagada.coordinates.lat,
+  lng: apagada.coordinates.lng,
+  googleMapsUri: apagada.googleMapsUri ?? '',
+  activa: true,
+  proximamente: false,
   ...extra,
 })
 
@@ -173,22 +217,19 @@ describe('los títulos no se repiten', () => {
 })
 
 describe('activar una plaza que no está verificada', () => {
-  // Una plaza inactiva del propio dataset a la que se le da cada estado de investigación.
-  const inactiva = dataset.plazas.find((fila) => !fila.active && !fila.comingSoon)
-
+  // La plaza apagada del propio dataset, con cada estado de investigación puesto a mano.
   const activar = (estado: string) => {
-    if (!inactiva) throw new Error('el dataset no tiene una plaza inactiva que no sea próximamente')
     const verification = {
       sources: ['https://ejemplo.test/x'],
       confidence: 'low',
       lastVerifiedAt: HOY,
-      ...inactiva.verification,
+      ...apagada.verification,
       status: estado,
     }
     const ds: CommercialDataset = {
       ...dataset,
       plazas: dataset.plazas.map((fila) =>
-        fila.id === inactiva.id ? ({ ...fila, verification } as typeof fila) : fila,
+        fila.id === apagada.id ? ({ ...fila, verification } as typeof fila) : fila,
       ),
     }
     const filas = (crudo.plazas as unknown as { plazas: Record<string, unknown>[] }).plazas
@@ -196,74 +237,81 @@ describe('activar una plaza que no está verificada', () => {
       ...crudo,
       plazas: {
         ...crudo.plazas,
-        plazas: filas.map((f) => (f.id === inactiva.id ? { ...f, verification } : f)),
+        plazas: filas.map((f) => (f.id === apagada.id ? { ...f, verification } : f)),
       },
     }
-    return prepararPlaza(
-      ds,
-      cr,
-      {
-        id: inactiva.id,
-        nombre: inactiva.name,
-        descripcionEs: inactiva.description?.es ?? '',
-        descripcionEn: inactiva.description?.en ?? '',
-        direccion: inactiva.address ?? '',
-        lat: inactiva.coordinates.lat,
-        lng: inactiva.coordinates.lng,
-        googleMapsUri: inactiva.googleMapsUri ?? '',
-        activa: true,
-        proximamente: false,
-      },
-      HOY,
+    return prepararPlaza(ds, cr, activarApagada(), HOY)
+  }
+  const estadoEscrito = (r: ReturnType<typeof activar>) => {
+    if (!r.ok) throw new Error(r.problemas.join(' | '))
+    const fila = (r.plazas.plazas as { id: string; verification?: { status: string } }[]).find(
+      (otra) => otra.id === apagada.id,
     )
+    return fila?.verification?.status
   }
 
-  it('avisa de que se publicaría sin verificar, con su estado', () => {
-    const r = activar('uncertain')
-    expect(r.ok, r.ok ? '' : r.problemas.join(' | ')).toBe(true)
-    if (r.ok) expect(r.impacto.avisos.join(' ')).toMatch(/"uncertain".*sin verificarla/)
+  it('lo que dice "todavía no" pasa a likely_active, lo escribe y lo avisa con la transición', () => {
+    for (const estado of ['uncertain', 'coming_soon']) {
+      const r = activar(estado)
+      expect(r.ok, estado).toBe(true)
+      expect(estadoEscrito(r), estado).toBe('likely_active')
+      if (r.ok) {
+        expect(r.impacto.avisos.join(' '), estado).toContain(
+          `pasa de "${estado}" a "likely_active"`,
+        )
+      }
+    }
   })
 
-  it('no avisa si su estado ya es publicable', () => {
+  it('lo que la investigación descartó no se activa desde el panel', () => {
+    for (const estado of ['closed', 'removed', 'duplicate', 'rejected']) {
+      const r = activar(estado)
+      expect(r.ok, estado).toBe(false)
+      if (!r.ok) expect(r.problemas.join(' '), estado).toContain(`"${estado}"`)
+    }
+  })
+
+  it('si ya es publicable conserva su estado y no avisa de ninguna transición', () => {
     for (const estado of ['active', 'likely_active']) {
       const r = activar(estado)
       expect(r.ok, estado).toBe(true)
-      if (r.ok) expect(r.impacto.avisos.join(' '), estado).not.toMatch(/sin verificarla/)
+      expect(estadoEscrito(r), estado).toBe(estado)
+      if (r.ok) expect(r.impacto.avisos.join(' '), estado).not.toMatch(/pasa de/)
     }
+  })
+
+  it('desactivar una plaza no toca su estado de investigación', () => {
+    const vaciaTodo = conLocalesOcultos()
+    const r = prepararPlaza(vaciaTodo.ds, vaciaTodo.cr, igual({ activa: false }), HOY)
+    expect(r.ok, r.ok ? '' : r.problemas.join(' | ')).toBe(true)
+    if (!r.ok) return
+    const fila = (r.plazas.plazas as { id: string; verification?: { status: string } }[]).find(
+      (otra) => otra.id === plaza.id,
+    )
+    expect(fila?.verification?.status).toBe(plaza.verification?.status)
   })
 })
 
 describe('desactivar o activar una plaza', () => {
-  it('desactivar una plaza con locales pide confirmación y dice qué se pierde', () => {
-    const preparada = prepararPlaza(dataset, crudo, igual({ activa: false }), HOY)
-    expect(preparada.ok).toBe(true)
+  it('una plaza con locales visibles no se puede desactivar ni pasar a próximamente', () => {
+    for (const extra of [{ activa: false }, { activa: false, proximamente: true }]) {
+      const preparada = prepararPlaza(dataset, crudo, igual(extra), HOY)
+      expect(preparada.ok, JSON.stringify(extra)).toBe(false)
+      if (!preparada.ok) {
+        expect(preparada.problemas.join(' ')).toMatch(/no puede tener locales abiertos/)
+      }
+    }
+  })
+
+  it('sin locales visibles se desactiva, pide confirmación y dice que su dirección da 404', () => {
+    const vacia = conLocalesOcultos(plaza.id)
+    const preparada = prepararPlaza(vacia.ds, vacia.cr, igual({ activa: false }), HOY)
+    expect(preparada.ok, preparada.ok ? '' : preparada.problemas.join(' | ')).toBe(true)
     if (!preparada.ok) return
     expect(preparada.requiereConfirmacion).toBe(true)
     expect(preparada.impacto.cambiaActiva).toBe(true)
-    expect(preparada.impacto.localesAntes).toBeGreaterThan(0)
     expect(preparada.impacto.localesDespues).toBe(0)
     expect(preparada.impacto.avisos.join(' ')).toMatch(/404/)
-  })
-
-  it('una categoría que solo vivía en esta plaza pierde su página, y se avisa', () => {
-    // Un dataset con una sola plaza: desactivarla deja sin local visible a todas sus categorías.
-    const sola: CommercialDataset = {
-      ...dataset,
-      plazas: [plaza],
-      places: dataset.places.filter((place) => place.plazaId === plaza.id),
-    }
-    const preparada = prepararPlaza(
-      sola,
-      {
-        ...crudo,
-        plazas: { ...crudo.plazas, plazas: [plazasJson.plazas.find((p) => p.id === plaza.id)] },
-      },
-      igual({ activa: false }),
-      HOY,
-    )
-    expect(preparada.ok).toBe(true)
-    if (!preparada.ok) return
-    expect(preparada.impacto.categoriasSinPagina.length).toBeGreaterThan(0)
   })
 
   it('activar una inactiva pide confirmación y dice qué empieza a verse', () => {
@@ -303,8 +351,8 @@ describe('guardarPlaza en desarrollo', () => {
     expect(resultado.ok && resultado.seco).toBe(true)
   })
 
-  it('desactivar sin confirmar solo calcula el impacto', async () => {
-    const resultado = await guardarPlaza(entorno, igual({ activa: false }))
+  it('activar sin confirmar solo calcula el impacto', async () => {
+    const resultado = await guardarPlaza(entorno, activarApagada())
     expect(resultado.ok).toBe(true)
     if (!resultado.ok) return
     expect(resultado.confirmado).toBe(false)
@@ -313,7 +361,7 @@ describe('guardarPlaza en desarrollo', () => {
   })
 
   it('confirmado valida y no commitea sin testigo de GitHub', async () => {
-    const resultado = await guardarPlaza(entorno, igual({ activa: false, confirmar: true }))
+    const resultado = await guardarPlaza(entorno, activarApagada({ confirmar: true }))
     expect(resultado.ok && resultado.confirmado).toBe(true)
     expect(resultado.ok && resultado.seco).toBe(true)
   })
@@ -387,7 +435,7 @@ describe('con GitHub simulado', () => {
 
   it('un cambio de activa sin confirmar no escribe nada', async () => {
     const { arboles } = montar()
-    const resultado = await guardarPlaza(entorno, igual({ activa: false }))
+    const resultado = await guardarPlaza(entorno, activarApagada())
     expect(resultado.ok && resultado.confirmado).toBe(false)
     expect(arboles).toHaveLength(0)
   })

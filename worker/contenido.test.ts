@@ -272,17 +272,38 @@ describe('preparar un negocio nuevo', () => {
     expect(tocada?.categories).toContain(sinCategoria.id)
   })
 
-  it('avisa si se guarda un local visible en una plaza inactiva', () => {
+  it('no admite un local visible en una plaza que no está activa', () => {
     const inactiva = dataset.plazas.find((fila) => !fila.active)
-    if (!inactiva) return
+    if (!inactiva) throw new Error('el dataset necesita una plaza inactiva')
     const preparado = prepararNegocio(
       dataset,
       crudo,
       nuevo({ plazaId: inactiva.id, nombre: 'Local en plaza inactiva' }),
       HOY,
     )
-    if (!preparado.ok) throw new Error('no preparó')
-    expect(preparado.avisos.join(' ')).toContain('plaza inactiva')
+    expect(preparado.ok).toBe(false)
+    if (!preparado.ok)
+      expect(preparado.problemas.join(' ')).toMatch(/no puede tener locales abiertos/)
+  })
+
+  it('mover un local visible a una plaza que no está activa tampoco se admite', () => {
+    const inactiva = dataset.plazas.find((fila) => !fila.active)
+    if (!inactiva) throw new Error('el dataset necesita una plaza inactiva')
+    const preparado = prepararNegocio(
+      dataset,
+      crudo,
+      {
+        id: existente.id,
+        nombre: existente.name,
+        plazaId: inactiva.id,
+        giros: existente.giros,
+        descripcionEs: existente.description?.es ?? '',
+        descripcionEn: existente.description?.en ?? '',
+        activo: true,
+      },
+      HOY,
+    )
+    expect(preparado.ok).toBe(false)
   })
 
   it('el archivo conserva los demás locales y solo cambia el que se tocó', () => {

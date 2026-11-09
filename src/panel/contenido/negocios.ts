@@ -163,7 +163,7 @@ export function pintarFormulario(negocio: Negocio | null): void {
   const plazas = vista.datos.plazas
     .map(
       (plaza) =>
-        `<option value="${texto(plaza.id)}"${plaza.id === negocio?.plazaId ? ' selected' : ''}>${texto(plaza.name)}${plaza.active ? '' : ' (inactiva)'}</option>`,
+        `<option value="${texto(plaza.id)}"${plaza.id === negocio?.plazaId ? ' selected' : ''}${plaza.active || negocio?.active === false ? '' : ' disabled'}>${texto(plaza.name)}${plaza.active ? '' : ' (inactiva)'}</option>`,
     )
     .join('')
   const motivos = MOTIVOS.map(
@@ -327,14 +327,17 @@ function filaDeHorario(dia: string, nombre: string, negocio: Negocio | null): st
   </div>`
 }
 
-/** Un local visible en una plaza inactiva no se verá: conviene decirlo antes de guardar. */
+/** Un local visible no puede estar en una plaza que no abre: el Worker lo rechaza, y aquí se dice antes. */
 function actualizarAvisoPlaza(): void {
   const plazaId = vista.dialogo?.querySelector<HTMLSelectElement>('select[name="plazaId"]')?.value
   const nota = vista.dialogo?.querySelector<HTMLElement>('[data-plaza-aviso]')
   if (!nota) return
+  const visible = vista.dialogo?.querySelector<HTMLInputElement>('input[name="activo"]')?.checked
   const plaza = vista.datos?.plazas.find((fila) => fila.id === plazaId)
   nota.textContent =
-    plaza && !plaza.active ? 'La plaza está inactiva: el local no se verá aunque esté visible.' : ''
+    plaza && !plaza.active && visible
+      ? 'Esa plaza no está activa: un local visible no puede estar en ella. Elige otra, o activa la plaza primero.'
+      : ''
 }
 
 function actualizarCierre(): void {
@@ -771,6 +774,7 @@ export function alCambiarNegocio(objetivo: HTMLElement): boolean {
     return true
   }
   if (objetivo.matches('input[name="activo"]')) {
+    actualizarAvisoPlaza()
     vista.formularioActual.sucio = true
     return true
   }
