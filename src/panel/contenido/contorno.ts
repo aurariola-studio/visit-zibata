@@ -62,6 +62,9 @@ interface Estado {
   /** El último contorno que se pudo leer entero: lo que se dibuja mientras hay un campo a medio escribir. */
   ultimoValido: number[][] | null
   edificios: number[][][] | null
+  /** El lienzo con el mapa, si está abierto (se carga bajo demanda). */
+  mapa: import('./contorno-mapa.ts').MapaDelContorno | null
+  mapaAbierto: boolean
 }
 
 let estado: Estado | null = null
@@ -146,10 +149,25 @@ export function seccionContorno(plaza: PlazaResumen): string {
   const vertices = anillo
     .slice(0, -1)
     .map(([lng = 0, lat = 0]) => ({ lng: aTexto(lng), lat: aTexto(lat) }))
-  estado = { plaza, vertices, firmaImpacto: null, ultimoValido: anillo, edificios: null }
+  estado = {
+    plaza,
+    vertices,
+    firmaImpacto: null,
+    ultimoValido: anillo,
+    edificios: null,
+    mapa: null,
+    mapaAbierto: false,
+  }
   return `<section class="editor-seccion contorno" data-contorno-seccion>
     <h3>Contorno</h3>
     <p class="ayuda">Los vértices del polígono que se dibuja en el mapa, en orden. Sirve para ajustar un contorno que ya existe: dibujarlo sobre el mapa llega en la siguiente entrega. Coordenadas en grados, con punto decimal.</p>
+    <div class="acciones contorno-herramientas">
+      <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-contorno-mapa-alternar aria-expanded="false">Dibujar sobre el mapa</button>
+    </div>
+    <div class="contorno-mapa-zona" data-contorno-mapa-zona hidden>
+      <p class="ayuda" data-contorno-mapa-ayuda>Arrastra un vértice para moverlo. Pulsa un punto blanco entre dos vértices para añadir uno ahí. Sin ratón ni pantalla táctil, usa la lista de abajo: hace lo mismo.</p>
+      <div class="contorno-mapa" data-contorno-mapa role="group" aria-label="Mapa para mover los vértices del contorno"></div>
+    </div>
     <div class="contorno-vista" data-contorno-vista></div>
     <p class="contorno-resumen" role="status" data-contorno-resumen></p>
     <ol class="contorno-lista" data-contorno-lista aria-label="Vértices del contorno">${vertices.map((v, i) => fila(v, i, vertices.length)).join('')}</ol>
@@ -325,6 +343,7 @@ function actualizar(): void {
   const aDibujar = anillo ?? estado.ultimoValido
   // El dibujo mide lo que mide su contenedor, para que una unidad sea un píxel: si no, el texto escalaría con
   // el dibujo y en un teléfono los números de los vértices saldrían de unos 5 px.
+  estado.mapa?.actualizar(aDibujar)
   if (vistaPrevia && aDibujar) {
     vistaPrevia.innerHTML = dibujo(
       aDibujar,
@@ -378,6 +397,117 @@ export function contornoListo(): void {
     actual.edificios = todos.filter((e) => e.plazaId === actual.plaza.id).map((e) => e.anillo)
     actualizar()
   })
+}
+
+/* ---------------------------------------------------------------------------------------------- mapa */
+
+/** Pone en los campos de una fila lo que ya está en el estado, sin reconstruir la lista (no se pierde el foco). */
+function escribirFila(i: number): void {
+  const v = estado?.vertices[i]
+  const fila = seccion()?.querySelector<HTMLElement>(`[data-vertice="${i}"]`)
+  if (!v || !fila) return
+  const lng = fila.querySelector<HTMLInputElement>('[data-contorno-campo="lng"]')
+  const lat = fila.querySelector<HTMLInputElement>('[data-contorno-campo="lat"]')
+  if (lng) lng.value = v.lng
+  if (lat) lat.value = v.lat
+}
+
+function cerrarMapa(): void {
+  const raiz = seccion()
+  if (estado) {
+    estado.mapa?.destruir()
+    estado.mapa = null
+    estado.mapaAbierto = false
+  }
+  if (!raiz) return
+  const boton = raiz.querySelector<HTMLButtonElement>('[data-contorno-mapa-alternar]')
+  if (boton) {
+    boton.textContent = 'Dibujar sobre el mapa'
+    boton.setAttribute('aria-expanded', 'false')
+  }
+  raiz.querySelector<HTMLElement>('[data-contorno-mapa-zona]')?.setAttribute('hidden', '')
+  raiz.querySelector<HTMLElement>('[data-contorno-vista]')?.removeAttribute('hidden')
+}
+
+/**
+ * Deja el mapa entero a la vista. El pie del formulario es fijo y tapa lo de abajo, y los vértices del
+ * borde inferior quedarían detrás de él. Se desplaza solo el cuerpo del diálogo (no `scrollIntoView`, que
+ * movía también la caja del diálogo; ver `editor.ts`).
+ */
+function mostrarMapa(zona: HTMLElement): void {
+  const cuerpo = zona.closest<HTMLElement>('.editor-cuerpo')
+  if (!cuerpo) return
+  const indice = cuerpo.querySelector<HTMLElement>('.editor-indice')
+  const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const arriba =
+    zona.getBoundingClientRect().top -
+    cuerpo.getBoundingClientRect().top +
+    cuerpo.scrollTop -
+    (indice?.offsetHeight ?? 0) -
+    16
+  cuerpo.scrollTo({ top: Math.max(0, arriba), behavior: sinMovimiento ? 'auto' : 'smooth' })
+}
+
+/** Abre o cierra el mapa. MapLibre se descarga la primera vez que se abre. */
+async function alternarMapa(): Promise<void> {
+  const raiz = seccion()
+  const actual = estado
+  if (!raiz || !actual) return
+  if (actual.mapaAbierto) {
+    cerrarMapa()
+    return
+  }
+  const caja = raiz.querySelector<HTMLElement>('[data-contorno-mapa]')
+  const ayuda = raiz.querySelector<HTMLElement>('[data-contorno-mapa-ayuda]')
+  const boton = raiz.querySelector<HTMLButtonElement>('[data-contorno-mapa-alternar]')
+  if (!caja || !boton) return
+  actual.mapaAbierto = true
+  boton.textContent = 'Ocultar el mapa'
+  boton.setAttribute('aria-expanded', 'true')
+  const zona = raiz.querySelector<HTMLElement>('[data-contorno-mapa-zona]')
+  zona?.removeAttribute('hidden')
+  if (zona) mostrarMapa(zona)
+  // El dibujo plano sobra con el mapa delante; vuelve al cerrarlo.
+  raiz.querySelector<HTMLElement>('[data-contorno-vista]')?.setAttribute('hidden', '')
+  const textoAyuda = ayuda?.textContent ?? ''
+  if (ayuda) ayuda.textContent = 'Cargando el mapa…'
+  try {
+    const { abrirMapaDelContorno } = await import('./contorno-mapa.ts')
+    // Mientras se descargaba pudo cerrarse el mapa o el formulario.
+    if (estado !== actual || !actual.mapaAbierto) return
+    if (ayuda) ayuda.textContent = textoAyuda
+    actual.mapa = await abrirMapaDelContorno({
+      contenedor: caja,
+      plazas: (vistaDatos()?.plazas ?? []).filter((otra) => otra.id !== actual.plaza.id),
+      marcador: actual.plaza.coordinates,
+      anillo: leer(actual.vertices).anillo ?? actual.ultimoValido,
+      alMover(i, lng, lat) {
+        const v = actual.vertices[i]
+        if (!v || estado !== actual) return
+        v.lng = aTexto(lng)
+        v.lat = aTexto(lat)
+        escribirFila(i)
+        marcarSucio()
+        actualizar()
+      },
+      alAnadir(despuesDe, lng, lat) {
+        if (estado !== actual || actual.vertices.length >= MAX_VERTICES) return
+        actual.vertices.splice(despuesDe + 1, 0, { lng: aTexto(lng), lat: aTexto(lat) })
+        marcarSucio()
+        repintarFilas()
+      },
+    })
+    if (estado !== actual || !actual.mapaAbierto) {
+      actual.mapa.destruir()
+      actual.mapa = null
+    }
+  } catch {
+    if (estado !== actual) return
+    cerrarMapa()
+    mostrarProblemas(raiz.closest('form') as HTMLFormElement, [
+      'No se pudo cargar el mapa. El contorno se puede ajustar igual con la lista de vértices.',
+    ])
+  }
 }
 
 /* -------------------------------------------------------------------------------------------- pasos */
@@ -557,6 +687,10 @@ export function alPulsarContorno(objetivo: HTMLElement, recargar: () => Promise<
     return true
   }
 
+  if (objetivo.closest('[data-contorno-mapa-alternar]')) {
+    void alternarMapa()
+    return true
+  }
   if (objetivo.closest('[data-contorno-ver]')) {
     void pedirImpacto(formulario)
     return true
@@ -596,5 +730,6 @@ export function alTeclearContorno(evento: KeyboardEvent): void {
 
 /** Al abrir otro formulario o cerrar el diálogo, lo de la plaza anterior no se queda colgando. */
 export function olvidarContorno(): void {
+  estado?.mapa?.destruir()
   estado = null
 }

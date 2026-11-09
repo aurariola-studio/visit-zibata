@@ -10,7 +10,7 @@ export const SOURCE = {
   contextRoads: 'realismo-vias',
 } as const
 
-/** Capas con las que el usuario interactÃºa (hover / clic sobre plazas). */
+/** Capas con las que el usuario interactúa (hover / clic sobre plazas). */
 export const INTERACTIVE_PLAZA_LAYERS = ['plaza-buildings', 'plaza-sites-fill'] as const
 
 export const LAYER = {
