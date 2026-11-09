@@ -172,6 +172,67 @@ describe('los títulos no se repiten', () => {
   })
 })
 
+describe('activar una plaza que no está verificada', () => {
+  // Una plaza inactiva del propio dataset a la que se le da cada estado de investigación.
+  const inactiva = dataset.plazas.find((fila) => !fila.active && !fila.comingSoon)
+
+  const activar = (estado: string) => {
+    if (!inactiva) throw new Error('el dataset no tiene una plaza inactiva que no sea próximamente')
+    const verification = {
+      sources: ['https://ejemplo.test/x'],
+      confidence: 'low',
+      lastVerifiedAt: HOY,
+      ...inactiva.verification,
+      status: estado,
+    }
+    const ds: CommercialDataset = {
+      ...dataset,
+      plazas: dataset.plazas.map((fila) =>
+        fila.id === inactiva.id ? ({ ...fila, verification } as typeof fila) : fila,
+      ),
+    }
+    const filas = (crudo.plazas as unknown as { plazas: Record<string, unknown>[] }).plazas
+    const cr = {
+      ...crudo,
+      plazas: {
+        ...crudo.plazas,
+        plazas: filas.map((f) => (f.id === inactiva.id ? { ...f, verification } : f)),
+      },
+    }
+    return prepararPlaza(
+      ds,
+      cr,
+      {
+        id: inactiva.id,
+        nombre: inactiva.name,
+        descripcionEs: inactiva.description?.es ?? '',
+        descripcionEn: inactiva.description?.en ?? '',
+        direccion: inactiva.address ?? '',
+        lat: inactiva.coordinates.lat,
+        lng: inactiva.coordinates.lng,
+        googleMapsUri: inactiva.googleMapsUri ?? '',
+        activa: true,
+        proximamente: false,
+      },
+      HOY,
+    )
+  }
+
+  it('avisa de que se publicaría sin verificar, con su estado', () => {
+    const r = activar('uncertain')
+    expect(r.ok, r.ok ? '' : r.problemas.join(' | ')).toBe(true)
+    if (r.ok) expect(r.impacto.avisos.join(' ')).toMatch(/"uncertain".*sin verificarla/)
+  })
+
+  it('no avisa si su estado ya es publicable', () => {
+    for (const estado of ['active', 'likely_active']) {
+      const r = activar(estado)
+      expect(r.ok, estado).toBe(true)
+      if (r.ok) expect(r.impacto.avisos.join(' '), estado).not.toMatch(/sin verificarla/)
+    }
+  })
+})
+
 describe('desactivar o activar una plaza', () => {
   it('desactivar una plaza con locales pide confirmación y dice qué se pierde', () => {
     const preparada = prepararPlaza(dataset, crudo, igual({ activa: false }), HOY)

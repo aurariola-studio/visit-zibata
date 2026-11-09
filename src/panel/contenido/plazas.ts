@@ -42,7 +42,10 @@ export function pintarPlazas(): void {
     })
     .join('')
   vista.raiz.innerHTML = `
-    <p class="meta-contenido">${numero(plazas.length)} plazas · ${numero(plazas.filter((p) => p.active).length)} activas</p>
+    <div class="barra-contenido">
+      <p class="meta-contenido">${numero(plazas.length)} plazas · ${numero(plazas.filter((p) => p.active).length)} activas</p>
+      <button type="button" class="${controls.base} ${controls.boton} ${controls.principal}" data-nueva-plaza>Nueva plaza</button>
+    </div>
     ${vista.aviso ? `<p class="aviso-contenido" role="status">${texto(vista.aviso)}</p>` : ''}
     <div class="tabla"><table>
       <thead><tr>
@@ -54,7 +57,7 @@ export function pintarPlazas(): void {
       </tr></thead>
       <tbody>${cuerpo}</tbody>
     </table></div>
-    <p class="meta-contenido">Crear una plaza nueva y editar su contorno llegan con el editor del mapa. Aquí se cambia lo demás.</p>`
+    <p class="meta-contenido">Una plaza nueva nace inactiva y con un contorno provisional: se ajusta en su formulario, en la sección Contorno.</p>`
 }
 
 /* ------------------------------------------------------------------ el formulario */

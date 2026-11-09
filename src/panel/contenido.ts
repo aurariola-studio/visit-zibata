@@ -57,6 +57,12 @@ import {
   pintarZonaNegocios,
 } from './contenido/negocios.ts'
 import {
+  alCambiarPlazaNueva,
+  alPulsarPlazaNueva,
+  enviarPlazaNueva,
+  pintarPlazaNueva,
+} from './contenido/plaza-nueva.ts'
+import {
   alCambiarPlaza,
   alPulsarPlaza,
   enviarPlaza,
@@ -203,6 +209,10 @@ async function alEnviar(evento: Event): Promise<void> {
     await enviarPlaza(formulario, cargar)
     return
   }
+  if (formulario.dataset.editor === 'plaza-nueva') {
+    enviarPlazaNueva(formulario)
+    return
+  }
   await enviarNegocio(formulario, cargar)
 }
 
@@ -229,6 +239,10 @@ function alPulsar(evento: Event): void {
     return
   }
 
+  if (objetivo.closest('[data-nueva-plaza]')) {
+    pintarPlazaNueva()
+    return
+  }
   if (objetivo.closest('[data-nueva-categoria]')) {
     pintarCategoria(null)
     return
@@ -294,6 +308,7 @@ function alPulsarEditor(evento: Event): void {
   if (alPulsarBorrarGiro(objetivo, cargar)) return
   if (!vista.formularioActual) return
   if (alPulsarContorno(objetivo, cargar)) return
+  if (alPulsarPlazaNueva(objetivo, cargar)) return
   if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return
   alPulsarFoto(objetivo)
@@ -302,6 +317,7 @@ function alPulsarEditor(evento: Event): void {
 function alEscribirEditor(evento: Event): void {
   const objetivo = evento.target as HTMLElement | null
   if (!objetivo) return
+  alCambiarPlazaNueva(objetivo)
 
   if (alEscribirDireccion(objetivo)) return
   if (alEscribirContorno(objetivo)) return
@@ -318,6 +334,7 @@ function alEscribirEditor(evento: Event): void {
 function alCambiarEditor(evento: Event): void {
   const objetivo = evento.target as HTMLElement | null
   if (!objetivo) return
+  alCambiarPlazaNueva(objetivo)
 
   if (alCambiarDireccion(objetivo)) return
   if (alCambiarFoto(objetivo)) return

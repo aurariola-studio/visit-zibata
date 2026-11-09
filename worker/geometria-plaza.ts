@@ -5,8 +5,10 @@
  * a la PR del panel. Las reglas del contorno son las de `src/data/geometria.ts`, las mismas que aplica
  * `data:validate` en el CI, así que lo que el servidor acepta el build no lo rechaza.
  *
- * **Lo que cambia el commit es solo la `geometry` de esa plaza** (y `updatedAt`): el resto de
- * `plazas.json` queda igual, byte a byte. Hay una prueba que lo fija.
+ * **Lo que cambia el commit es la `geometry` de esa plaza, una cláusula en su `locationSource` ("Contorno
+ * ajustado a mano en el panel el AAAA-MM-DD") y `updatedAt`**: el resto de `plazas.json` queda igual, byte a
+ * byte. La cláusula evita que la procedencia siga diciendo "huella provisional" o "aproximada" cuando alguien
+ * ya la ajustó. Hay una prueba que lo fija.
  *
  * El mapa no se toca aquí: desde la Fase 3a los edificios y las mallas de las plazas se derivan de
  * `plazas.json` en cada build, así que al fusionar la PR el despliegue dibuja el contorno nuevo.
@@ -55,6 +57,11 @@ export interface ImpactoContorno {
 export type PreparadoContorno =
   | { ok: true; impacto: ImpactoContorno; plazas: Record<string, unknown> }
   | { ok: false; problemas: string[] }
+
+/** La cláusula que deja constancia de quién y cuándo ajustó el contorno. Una sola: la última sustituye a la anterior. */
+const CLAUSULA_DE_AJUSTE = /\s*Contorno ajustado a mano en el panel el \d{4}-\d{2}-\d{2}\./g
+export const conClausulaDeAjuste = (procedencia: string, hoy: string): string =>
+  `${procedencia.replace(CLAUSULA_DE_AJUSTE, '').trimEnd()} Contorno ajustado a mano en el panel el ${hoy}.`
 
 const anilloDe = (geometria: { type: string; coordinates: unknown }): number[][] =>
   geometria.type === 'Polygon' ? ((geometria.coordinates as number[][][])[0] ?? []) : []
@@ -172,7 +179,16 @@ export function prepararContorno(
     plazas: {
       ...crudo.plazas,
       updatedAt: hoy,
-      plazas: filas.map((fila) => (String(fila.id) === plaza.id ? { ...fila, geometry } : fila)),
+      // La procedencia no se queda diciendo "huella provisional" o "aproximada" cuando alguien ya la ajustó.
+      plazas: filas.map((fila) =>
+        String(fila.id) === plaza.id
+          ? {
+              ...fila,
+              geometry,
+              locationSource: conClausulaDeAjuste(plaza.locationSource, hoy),
+            }
+          : fila,
+      ),
     },
   }
 }

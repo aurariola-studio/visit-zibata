@@ -55,6 +55,7 @@ import {
   POR_PAGINA,
   RESUMEN,
 } from './panel.ts'
+import { crearPlaza } from './plaza-nueva.ts'
 import { guardarPlaza } from './plazas.ts'
 import {
   CONTEO_CORAZONES,
@@ -110,6 +111,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/plaza': 16 * 1024,
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
   '/api/panel/contenido/plaza/contorno': 16 * 1024,
+  '/api/panel/contenido/plaza/nueva': 16 * 1024,
   '/api/panel/contenido/plaza/slug': 4 * 1024,
   '/api/panel/contenido/categoria/slug': 4 * 1024,
   '/api/panel/contenido/categorias': 128 * 1024,
@@ -407,6 +409,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await borrarPlaza(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Crear una plaza (inactiva, con su procedencia); ver worker/plaza-nueva.ts.
+  if (ruta === '/api/panel/contenido/plaza/nueva' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await crearPlaza(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)

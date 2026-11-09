@@ -1753,6 +1753,174 @@ test.describe('Panel', () => {
     })
   })
 
+  test.describe('crear una plaza', () => {
+    const resumenDePrueba = {
+      id: 'plaza-de-prueba',
+      nombre: 'Plaza de Prueba',
+      estado: 'uncertain',
+      confianza: 'medium',
+      locationSource: 'Evidencia escrita en la prueba. Huella provisional: cuadrado de 60 m.',
+      fuentes: ['https://uno.test/a', 'https://dos.test/b', 'campo:2026-11-09'],
+      areaProvisional: 3600,
+      avisos: ['Aviso de prueba de la plaza nueva.'],
+    }
+
+    /** El Worker simulado: apunta cada cuerpo; responde con el resumen y, al confirmar, con la PR. */
+    async function abrirNueva(page: Page, respuesta?: { status: number; json: object }) {
+      const cuerpos: Record<string, unknown>[] = []
+      await page.route(/\/api\/panel\/contenido\/plaza\/nueva$/, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as Record<string, unknown>
+        cuerpos.push(cuerpo)
+        if (respuesta) {
+          await ruta.fulfill(respuesta)
+          return
+        }
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            confirmado: cuerpo.confirmar === true,
+            seco: false,
+            pr: cuerpo.confirmar
+              ? { url: 'https://example.test/pr/7', numero: 7, creada: true }
+              : null,
+            mensaje: cuerpo.confirmar ? 'Plaza enviada a la PR.' : 'Esto es lo que se guardaría.',
+            resumen: resumenDePrueba,
+          },
+        })
+      })
+      await abrirPanel(page)
+      await irA(page, 'plazas', 'Plazas')
+      await page.getByRole('button', { name: 'Nueva plaza' }).click()
+      const dialogo = page.locator('#editor')
+      await expect(
+        dialogo.getByRole('heading', { level: 3, name: 'De dónde sale la ubicación' }),
+      ).toBeVisible()
+      return { cuerpos, dialogo }
+    }
+
+    async function rellenar(dialogo: Locator, extra: { campo?: boolean } = {}) {
+      await dialogo.locator('[name="nombre"]').fill('Plaza de Prueba')
+      await dialogo.locator('[name="lat"]').fill('20,6905')
+      await dialogo.locator('[name="lng"]').fill('-100.3355')
+      await dialogo.locator('[name="fuentes"]').fill('https://uno.test/a\nhttps://dos.test/b')
+      await dialogo.locator('[name="evidencia"]').fill('Evidencia escrita en la prueba.')
+      await dialogo.locator('[name="confianza"]').selectOption('medium')
+      if (extra.campo)
+        await dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }).check()
+    }
+
+    test('por defecto no afirma nada: nada de "campo:" ni confianza alta, y nace inactiva', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo } = await abrirNueva(page)
+      await expect(
+        dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }),
+      ).not.toBeChecked()
+      await expect(dialogo.locator('[name="confianza"]')).toHaveValue('low')
+      await expect(dialogo.getByText('nace inactiva')).toBeVisible()
+      // El formulario, sin violaciones graves de accesibilidad.
+      const resultado = await new AxeBuilder({ page }).include('#editor').analyze()
+      const graves = resultado.violations.filter((v) =>
+        ['serious', 'critical'].includes(v.impact ?? ''),
+      )
+      expect(graves, graves.map((v) => v.id).join(', ')).toEqual([])
+      await rellenar(dialogo)
+      await dialogo.locator('[name="confianza"]').selectOption('low')
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      await expect(
+        dialogo.getByRole('heading', { name: 'Se creará la plaza "Plaza de Prueba"' }),
+      ).toBeVisible()
+      expect(cuerpos).toHaveLength(1)
+      expect(cuerpos[0]).toMatchObject({
+        aportadoPorMi: false,
+        proximamente: false,
+        confianza: 'low',
+      })
+      expect(Object.keys(cuerpos[0] ?? {})).not.toContain('confirmar')
+    })
+
+    test('lee la coma decimal y una URL por línea, y manda lo escrito', async ({ page }) => {
+      const { cuerpos, dialogo } = await abrirNueva(page)
+      await rellenar(dialogo, { campo: true })
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      await expect(dialogo.getByText(resumenDePrueba.locationSource)).toBeVisible()
+      expect(cuerpos[0]).toMatchObject({
+        nombre: 'Plaza de Prueba',
+        lat: 20.6905,
+        lng: -100.3355,
+        fuentes: ['https://uno.test/a', 'https://dos.test/b'],
+        evidencia: 'Evidencia escrita en la prueba.',
+        aportadoPorMi: true,
+        confianza: 'medium',
+      })
+      await expect(dialogo.getByText('Aviso de prueba de la plaza nueva.')).toBeVisible()
+    })
+
+    test('lo que se confirma es lo que se vio: cambiar algo después borra el botón de crear', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo } = await abrirNueva(page)
+      await rellenar(dialogo)
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toBeVisible()
+
+      // Cualquier cambio (un campo de texto, una casilla o la confianza) borra lo enseñado y el botón.
+      await dialogo.locator('[name="evidencia"]').fill('Otra evidencia distinta.')
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toHaveCount(0)
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toBeVisible()
+      await dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }).check()
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toHaveCount(0)
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+
+      await dialogo.getByRole('button', { name: 'Crear plaza' }).click()
+      await expect(dialogo).toBeHidden()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #7' })).toBeVisible()
+      expect(cuerpos).toHaveLength(4)
+      expect(cuerpos[3]?.confirmar).toBe(true)
+      // Lo que se guarda es lo del último impacto, campo por campo.
+      const { confirmar: _c, ...guardado } = cuerpos[3] ?? {}
+      expect(guardado).toEqual(cuerpos[2])
+      expect(guardado).toMatchObject({ evidencia: 'Otra evidencia distinta.', aportadoPorMi: true })
+    })
+
+    test('avisa en el campo de lo que el servidor rechaza, y no crea nada', async ({ page }) => {
+      const { cuerpos, dialogo } = await abrirNueva(page, {
+        status: 400,
+        json: { ok: false, problemas: ['fuentes: Aporta al menos una fuente (una URL)'] },
+      })
+      await rellenar(dialogo)
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      await expect(dialogo.locator('[name="fuentes"]')).toHaveAttribute('aria-invalid', 'true')
+      await expect(dialogo.getByText('Aporta al menos una fuente')).toBeVisible()
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toHaveCount(0)
+      expect(cuerpos.every((cuerpo) => cuerpo.confirmar === undefined)).toBe(true)
+    })
+
+    test('una coordenada que no es un número se avisa en el campo y no se manda', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo } = await abrirNueva(page)
+      await rellenar(dialogo)
+      await dialogo.locator('[name="lat"]').fill('veinte')
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      await expect(dialogo.locator('[name="lat"]')).toHaveAttribute('aria-invalid', 'true')
+      expect(cuerpos).toHaveLength(0)
+    })
+
+    test('cerrar con algo escrito pregunta antes de descartarlo, y cabe en un teléfono', async ({
+      page,
+    }) => {
+      const { dialogo } = await abrirNueva(page)
+      await dialogo.locator('[name="nombre"]').fill('Plaza a medias')
+      await sinDesplazamientoLateral(page)
+      await dialogo.getByRole('button', { name: 'Cerrar' }).click()
+      await expect(page.getByRole('dialog', { name: '¿Descartar los cambios?' })).toBeVisible()
+      await page.getByRole('button', { name: 'Descartar cambios' }).click()
+      await expect(dialogo).toBeHidden()
+    })
+  })
+
   test('sin permiso el panel lo dice con palabras', async ({ page }) => {
     await abrirPanel(page, { contenidoStatus: 403 })
     // El resumen no se queda en "Cargando": dice que no pudo consultar y por qué.
