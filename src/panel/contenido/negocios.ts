@@ -201,8 +201,8 @@ export function pintarFormulario(negocio: Negocio | null): void {
         <div class="editor-rejilla">
           <div class="campo-form">
             <span>Visibilidad</span>
-            <label class="casilla"><input type="checkbox" name="activo"${negocio?.active === false ? '' : ' checked'} /><span>Visible en la guía</span></label>
-            <span class="ayuda">Oculto sale de listas, buscador y sitemap; su ficha y su enlace directo dejan de existir. Se conservan sus datos.</span>
+            <label class="casilla"><input type="checkbox" name="activo"${negocio?.active === false ? '' : ' checked'}${negocio ? '' : ' disabled'} /><span>Visible en la guía</span></label>
+            <span class="ayuda">${negocio ? 'Oculto sale de listas, buscador y sitemap; su ficha y su enlace directo dejan de existir. Se conservan sus datos.' : 'Un negocio nuevo se crea visible. Si todavía no sabes si existe, no se puede añadir.'}</span>
           </div>
           <div class="campo-form" data-grupo="cierre">
             <span>Cierre temporal</span>

@@ -240,6 +240,14 @@ describe('preparar un negocio nuevo', () => {
     expect(preparado.place.id).toBe('panaderia-la-esquina')
   })
 
+  it('un local nuevo se crea visible: sin "no sé" ni oculto de nacimiento', () => {
+    const oculto = prepararNegocio(dataset, crudo, nuevo({ activo: false }), HOY)
+    expect(oculto.ok).toBe(false)
+    if (!oculto.ok) expect(oculto.problemas.join(' ')).toMatch(/nuevo se crea visible/)
+    const visible = prepararNegocio(dataset, crudo, nuevo({ activo: true }), HOY)
+    expect(visible.ok).toBe(true)
+  })
+
   it('marca la verificación de hoy con la fuente del panel', () => {
     const preparado = prepararNegocio(dataset, crudo, nuevo(), HOY)
     if (!preparado.ok) throw new Error('no preparó')
