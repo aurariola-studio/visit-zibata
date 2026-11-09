@@ -1414,6 +1414,237 @@ test.describe('Panel', () => {
     await expect(page.getByRole('button', { name: 'Borrar negocio' })).toHaveCount(0)
   })
 
+  test.describe('la PR del panel en el resumen', () => {
+    const RUTA_PR = /\/api\/panel\/contenido\/pr$/
+    const RUTA_RETIRAR = /\/api\/panel\/contenido\/pr\/retirar$/
+    const RUTA_DESCARTAR = /\/api\/panel\/contenido\/pr\/descartar$/
+    const RUTA_CONTENIDO = /\/api\/panel\/contenido$/
+    const CABEZA = 'a'.repeat(40)
+    const conPr = {
+      ...contenido,
+      seco: false,
+      pr: { url: 'https://github.test/pull/8', numero: 8 },
+    }
+    const sinPr = { ...contenido, seco: false, pr: null }
+
+    const vistaPr = (extra: Record<string, unknown> = {}) => ({
+      ok: true,
+      seco: false,
+      pr: {
+        numero: 8,
+        url: 'https://github.test/pull/8',
+        titulo: 'Contenido desde el panel',
+        estado: 'verde',
+        estadoDeGithub: 'clean',
+        cabeza: CABEZA,
+        cambios: [
+          {
+            sha: CABEZA,
+            mensaje: 'Panel: editar plaza "Plaza Uno"',
+            fecha: '2026-11-09T17:00:00Z',
+            delPanel: true,
+          },
+          {
+            sha: 'b'.repeat(40),
+            mensaje: 'Panel: nuevo negocio "Tienda Uno"',
+            fecha: '2026-11-09T16:00:00Z',
+            delPanel: true,
+          },
+        ],
+        checks: { correctos: 12, pendientes: 0, fallidos: [] },
+        ...extra,
+      },
+    })
+
+    async function abrirConPr(page: Page, vista: unknown): Promise<Locator> {
+      await page.route(RUTA_PR, (ruta) => ruta.fulfill({ json: vista }))
+      await abrirPanel(page, { datos: conPr })
+      const tarjeta = page.locator('[data-pr-detalle]')
+      await expect(tarjeta.getByRole('heading', { name: /PR #8/ })).toBeVisible()
+      return tarjeta
+    }
+
+    test('en verde dice que se puede fusionar y lista los cambios del último al primero', async ({
+      page,
+    }) => {
+      const tarjeta = await abrirConPr(page, vistaPr())
+      await expect(tarjeta).toContainText('En verde')
+      await expect(tarjeta).toContainText('se puede fusionar')
+      const cambios = tarjeta.locator('li')
+      await expect(cambios.first()).toContainText('Plaza Uno')
+      await expect(cambios.first()).toContainText('(el último)')
+      await expect(cambios.nth(1)).toContainText('Tienda Uno')
+      await sinDesplazamientoLateral(page)
+    })
+
+    test('con un check fallido dice cuál, con su enlace', async ({ page }) => {
+      const tarjeta = await abrirConPr(
+        page,
+        vistaPr({
+          estado: 'rojo',
+          estadoDeGithub: 'blocked',
+          checks: {
+            correctos: 11,
+            pendientes: 0,
+            fallidos: [{ nombre: 'E2E (desktop)', url: 'https://github.test/runs/1' }],
+          },
+        }),
+      )
+      await expect(tarjeta).toContainText('Falló')
+      await expect(tarjeta.getByRole('link', { name: 'E2E (desktop)' })).toHaveAttribute(
+        'href',
+        'https://github.test/runs/1',
+      )
+    })
+
+    test('sin permiso para leer los checks lo dice, y el resto sigue funcionando', async ({
+      page,
+    }) => {
+      const tarjeta = await abrirConPr(page, vistaPr({ checks: null }))
+      await expect(tarjeta).toContainText('Checks: lectura')
+      await expect(tarjeta).toContainText('En verde')
+    })
+
+    test('los conflictos se dicen con palabras', async ({ page }) => {
+      const tarjeta = await abrirConPr(
+        page,
+        vistaPr({ estado: 'conflictos', estadoDeGithub: 'dirty' }),
+      )
+      await expect(tarjeta).toContainText('Con conflictos')
+      await expect(tarjeta).toContainText('resolverlo en GitHub')
+    })
+
+    test('sin PR (o en desarrollo) no hay tarjeta', async ({ page }) => {
+      await abrirPanel(page)
+      await expect(page.locator('[data-pr-detalle] section')).toHaveCount(0)
+    })
+
+    test('retirar el último cambio enseña lo que se pierde y manda la cabeza que se vio', async ({
+      page,
+    }) => {
+      const cuerpos: { cabeza: string; confirmar?: boolean }[] = []
+      await page.route(RUTA_RETIRAR, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as { cabeza: string; confirmar?: boolean }
+        cuerpos.push(cuerpo)
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            confirmado: Boolean(cuerpo.confirmar),
+            mensaje: 'x',
+            pierde: {
+              mensaje: 'Panel: editar plaza "Plaza Uno"',
+              archivos: ['data/commercial/plazas.json', 'public/images/places/x/1.webp'],
+              conFoto: true,
+            },
+          },
+        })
+      })
+      const tarjeta = await abrirConPr(page, vistaPr())
+      await tarjeta.getByRole('button', { name: 'Retirar el último cambio' }).click()
+      await expect(
+        tarjeta.getByRole('heading', { name: /Se retiraría: Panel: editar plaza/ }),
+      ).toBeVisible()
+      await expect(tarjeta).toContainText('sube una foto')
+      await expect(tarjeta).toContainText('data/commercial/plazas.json')
+      expect(cuerpos).toEqual([{ cabeza: CABEZA }])
+
+      // Después de la confirmación la PR tiene un solo cambio: ya no se puede retirar, solo descartar.
+      await page.unroute(RUTA_PR)
+      await page.route(RUTA_PR, (ruta) =>
+        ruta.fulfill({ json: vistaPr({ cambios: [vistaPr().pr.cambios[1]] }) }),
+      )
+      await tarjeta.getByRole('button', { name: 'Retirar este cambio' }).click()
+      await expect(tarjeta.getByRole('button', { name: 'Retirar el último cambio' })).toBeDisabled()
+      await expect(tarjeta).toContainText('único cambio')
+      expect(cuerpos.at(-1)).toEqual({ cabeza: CABEZA, confirmar: true })
+    })
+
+    test('si la rama cambió, el rechazo del servidor se ve y no se retira nada', async ({
+      page,
+    }) => {
+      await page.route(RUTA_RETIRAR, (ruta) =>
+        ruta.fulfill({
+          status: 400,
+          json: { ok: false, problemas: ['La rama cambió desde que la viste. Recarga el panel.'] },
+        }),
+      )
+      const tarjeta = await abrirConPr(page, vistaPr())
+      await tarjeta.getByRole('button', { name: 'Retirar el último cambio' }).click()
+      await expect(tarjeta.getByRole('alert')).toContainText('La rama cambió')
+      await expect(tarjeta.getByRole('button', { name: 'Retirar este cambio' })).toHaveCount(0)
+    })
+
+    test('descartar la PR dice qué pasa, la cierra al confirmar y la tarjeta desaparece', async ({
+      page,
+    }) => {
+      const cuerpos: { numero: number; confirmar?: boolean }[] = []
+      await page.route(RUTA_DESCARTAR, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as { numero: number; confirmar?: boolean }
+        cuerpos.push(cuerpo)
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            confirmado: Boolean(cuerpo.confirmar),
+            mensaje: 'PR cerrada.',
+            cambios: 2,
+          },
+        })
+      })
+      const tarjeta = await abrirConPr(page, vistaPr())
+      await tarjeta.getByRole('button', { name: 'Descartar la PR' }).click()
+      await expect(tarjeta.getByRole('heading', { name: 'Se cerraría la PR #8' })).toBeVisible()
+      await expect(tarjeta).toContainText('empieza de cero desde main')
+      expect(cuerpos).toEqual([{ numero: 8 }])
+
+      await page.unroute(RUTA_CONTENIDO)
+      await page.route(RUTA_CONTENIDO, (ruta) => ruta.fulfill({ json: sinPr }))
+      await page.unroute(RUTA_PR)
+      await page.route(RUTA_PR, (ruta) =>
+        ruta.fulfill({ json: { ok: true, seco: false, pr: null } }),
+      )
+      await tarjeta.getByRole('button', { name: 'Cerrar la PR' }).click()
+      await expect(page.getByText('No hay cambios pendientes')).toBeVisible()
+      await expect(page.locator('[data-pr-detalle] section')).toHaveCount(0)
+      expect(cuerpos.at(-1)).toEqual({ numero: 8, confirmar: true })
+    })
+
+    test('"Mejor no" cierra la vista sin llamar al servidor otra vez', async ({ page }) => {
+      let confirmaciones = 0
+      await page.route(RUTA_DESCARTAR, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as { confirmar?: boolean }
+        if (cuerpo.confirmar) confirmaciones++
+        await ruta.fulfill({ json: { ok: true, confirmado: false, mensaje: 'x', cambios: 2 } })
+      })
+      const tarjeta = await abrirConPr(page, vistaPr())
+      await tarjeta.getByRole('button', { name: 'Descartar la PR' }).click()
+      await tarjeta.getByRole('button', { name: 'Mejor no' }).click()
+      await expect(tarjeta.getByRole('button', { name: 'Cerrar la PR' })).toHaveCount(0)
+      expect(confirmaciones).toBe(0)
+    })
+
+    test('axe no encuentra violaciones graves en la tarjeta con su vista abierta', async ({
+      page,
+    }) => {
+      await page.route(RUTA_DESCARTAR, (ruta) =>
+        ruta.fulfill({ json: { ok: true, confirmado: false, mensaje: 'x', cambios: 2 } }),
+      )
+      const tarjeta = await abrirConPr(
+        page,
+        vistaPr({
+          estado: 'rojo',
+          checks: { correctos: 1, pendientes: 0, fallidos: [{ nombre: 'lint', url: null }] },
+        }),
+      )
+      await tarjeta.getByRole('button', { name: 'Descartar la PR' }).click()
+      await expect(tarjeta.getByRole('heading', { name: /Se cerraría/ })).toBeVisible()
+      const resultado = await new AxeBuilder({ page }).analyze()
+      const graves = resultado.violations.filter((v) =>
+        ['serious', 'critical'].includes(v.impact ?? ''),
+      )
+      expect(graves, graves.map((v) => v.id).join(', ')).toEqual([])
+    })
+  })
+
   test.describe('importar desde un CSV', () => {
     const RUTA_IMPORTAR = /\/api\/panel\/contenido\/importar$/
     const CSV =
