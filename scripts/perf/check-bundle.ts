@@ -52,6 +52,25 @@ const KB = 1024
  * build. El costo es el mismo de la partición por idioma: el cambio de idioma y el arranque del
  * tutorial pasan a ser asíncronos.
  *
+ * De 126 a 128 (2026-11-09, decisión del propietario), con el paquete medido en 125,9. Se midió antes de
+ * subir, y lo que dijo la medición:
+ *
+ *     ~64 KB  react-dom          el marco
+ *     ~24 KB  la aplicación      (filtros, paneles, tarjetas)
+ *      ~8 KB  fuse.js            el buscador: `SearchIndex.search()` es síncrono y se usa en el primer pintado
+ *                                y con `?q=`; diferirlo cambia esa interfaz y deja la guía sin resultados un instante
+ *     ~12 KB  catálogo del idioma activo
+ *     ~11 KB  iconos de categorías
+ *    ~1,3 KB  runtimeValidation  capa de seguridad (enlaces, teléfonos, rutas de fotos): no se quita
+ *
+ * No hay código muerto: el empaquetador ya elimina lo no usado. El salto de 125,7 a 125,9 no fue código nuevo: llegó
+ * al abrir el mapa del contorno en el panel (un módulo pasó a un fragmento compartido por la guía y el panel), el
+ * mismo caso de "solo del troceado" de la subida anterior. Con un margen de 0,1 KB, un cambio del troceado que no
+ * añade ni una línea basta para tumbar el CI. Con Brotli, que es lo que sirve Cloudflare, el paquete inicial
+ * pesa 109 a 120 KB, y 2 KB más son unos 10 ms en 4G lento. Lo que siga apretando ya no se arregla subiendo el
+ * número: hay que escoger entre diferir `fuse.js` y partir el catálogo por función, y las dos cambian cómo se
+ * comporta la guía.
+ *
  * `tiles` es el juego de teselas entero, que el navegador NO descarga: pide solo las que entran en
  * pantalla. Por eso el límite que de verdad afecta a la fluidez es `largestTile` (la tesela más pesada),
  * y el del conjunto cuida el peso del despliegue. Se miden **comprimidas**, que es como viajan: en
@@ -68,7 +87,7 @@ const KB = 1024
  * obligaría a recargar los datos al cambiar de idioma en caliente, y medir antes de subir otra vez.
  */
 const BUDGET = {
-  initialJs: 126,
+  initialJs: 128,
   // 11 y no 10: el estilo del contenido escrito que trae cada página (v4.16) dejó la medida en 9,9
   // de 10, y un margen de cien bytes hace que el siguiente cambio honesto rompa la compilación sin
   // que haya pasado nada. El tope sigue existiendo para cazar un crecimiento descuidado, no para
