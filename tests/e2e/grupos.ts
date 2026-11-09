@@ -64,6 +64,6 @@ export const GRUPOS: Record<string, Grupo> = {
   },
   'mapa-uso': {
     nombre: 'mapa: medición, táctil y errores',
-    archivos: ['responsive', 'medicion', 'camara', 'touch', 'resilience'],
+    archivos: ['responsive', 'medicion', 'camara', 'touch', 'resilience', 'panel-mapa'],
   },
 }

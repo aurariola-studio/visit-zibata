@@ -37,11 +37,11 @@ export interface MapStyleOptions {
   realismo?: RealismoStyleOptions
 }
 
-/** AtribuciÃ³n de la ODbL para lo que sale de OpenStreetMap, y de cada fuente de las demÃ¡s capas. */
+/** Atribución de la ODbL para lo que sale de OpenStreetMap, y de cada fuente de las demás capas. */
 export const MAP_ATTRIBUTION =
-  '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Â© OpenStreetMap</a> Â· ' +
-  '<a href="https://overturemaps.org/" target="_blank" rel="noopener">Overture Maps</a> Â· ' +
-  '<a href="https://esa-worldcover.org/" target="_blank" rel="noopener">ESA WorldCover</a> Â· ' +
+  '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap</a> · ' +
+  '<a href="https://overturemaps.org/" target="_blank" rel="noopener">Overture Maps</a> · ' +
+  '<a href="https://esa-worldcover.org/" target="_blank" rel="noopener">ESA WorldCover</a> · ' +
   '<a href="https://maplibre.org/" target="_blank" rel="noopener">MapLibre</a>'
 
 const absolute = (url: string) => new URL(url, window.location.href).href
@@ -62,7 +62,7 @@ export function plazaSitesGeoJSON(plazas: readonly Plaza[]): FeatureCollection {
   }
 }
 
-/** PolÃ­gono "mundo con hueco": todo lo que queda fuera del contorno de ZibatÃ¡. */
+/** Polígono "mundo con hueco": todo lo que queda fuera del contorno de Zibatá. */
 export function outsideMask(boundary: Polygon, [west, south, east, north]: Bbox): Feature {
   const margin = 0.2
   const outer = [
@@ -85,7 +85,7 @@ export function buildMapStyle(options: MapStyleOptions): StyleSpecification {
   const { realismo } = options
   return {
     version: 8,
-    name: 'ZibatÃ¡: maqueta',
+    name: 'Zibatá: maqueta',
     'font-faces': {
       [FONT.sans]: absolute(gothic500),
     },

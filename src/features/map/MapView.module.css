@@ -2,8 +2,8 @@
   position: absolute;
   inset: 0;
   background: #ebe4d7;
-  /* Contexto de apilamiento propio: los marcadores ordenan su z-index por cercanÃ­a (hasta ~11 000) y,
-     sin esto, competÃ­an con el panel, la barra superior y los controles, y los tapaban. */
+  /* Contexto de apilamiento propio: los marcadores ordenan su z-index por cercanía (hasta ~11 000) y,
+     sin esto, competían con el panel, la barra superior y los controles, y los tapaban. */
   isolation: isolate;
 }
 
@@ -16,21 +16,21 @@
  * Los marcadores son parte del mapa, no flotan sobre la interfaz.
  *
  * MapLibre cuelga cada marcador de este contenedor, y el solucionador de colisiones les pone un
- * z-index por cercanÃ­a que llega a ~11 000. Sin un contexto de apilamiento aquÃ­, esos numeros
- * competÃ­an con los controles de zoom, brÃºjula y mi ubicacion (--z-map-ui: 10) y los tapaban: una
- * gota caÃ­a encima del botÃ³n de mÃ¡s y se quedaba con el clic. Con el contexto, todo el orden por
- * cercanÃ­a se resuelve dentro de esta capa y la capa entera queda debajo de los controles, que es
- * lo que --z-map-ui ya prometÃ­a.
+ * z-index por cercanía que llega a ~11 000. Sin un contexto de apilamiento aquí, esos numeros
+ * competían con los controles de zoom, brújula y mi ubicacion (--z-map-ui: 10) y los tapaban: una
+ * gota caía encima del botón de más y se quedaba con el clic. Con el contexto, todo el orden por
+ * cercanía se resuelve dentro de esta capa y la capa entera queda debajo de los controles, que es
+ * lo que --z-map-ui ya prometía.
  *
- * Va en el contenedor del lienzo y no en `.canvas` a propÃ³sito: la atribuciÃ³n de MapLibre es otra
- * hermana, y bajarla con los marcadores la metia debajo de la viÃ±eta, que le resta contraste a un
+ * Va en el contenedor del lienzo y no en `.canvas` a propósito: la atribución de MapLibre es otra
+ * hermana, y bajarla con los marcadores la metia debajo de la viñeta, que le resta contraste a un
  * texto que la licencia obliga a mantener legible.
  */
 .root :global(.maplibregl-canvas-container) {
   isolation: isolate;
 }
 
-/* ViÃ±eta muy suave: sensaciÃ³n de maqueta sobre una mesa, sin bloquear la interacciÃ³n. */
+/* Viñeta muy suave: sensación de maqueta sobre una mesa, sin bloquear la interacción. */
 .root::after {
   content: "";
   position: absolute;
@@ -42,13 +42,13 @@
 /*
  * Los marcadores HTML (etiquetas de zona) viven dentro del contenedor de MapLibre, y su hoja le pone a
  * todo el mapa `font: 12px/20px "Helvetica Neue"`. Sin esto, el texto de las etiquetas heredaba esa
- * fuente y no la de la guÃ­a, aunque el resto de la interfaz ya usara Special Gothic.
+ * fuente y no la de la guía, aunque el resto de la interfaz ya usara Special Gothic.
  */
 .root :global(.maplibregl-marker) {
   font-family: var(--font-sans);
 }
 
-/* AtribuciÃ³n compacta y discreta, siempre visible. */
+/* Atribución compacta y discreta, siempre visible. */
 .root :global(.maplibregl-ctrl-attrib) {
   background: rgb(252 250 246 / 0.82);
   font-family: var(--font-sans);
@@ -57,8 +57,8 @@
 }
 
 /*
- * Plegada, MapLibre deja el contenedor 4 px mÃ¡s corto que su propio botÃ³n: la â“˜ se descolgaba y abrÃ­a
- * un hueco raro entre la franja de la guÃ­a y el mapa. Con el alto del botÃ³n, plegada y desplegada
+ * Plegada, MapLibre deja el contenedor 4 px más corto que su propio botón: la â“˜ se descolgaba y abría
+ * un hueco raro entre la franja de la guía y el mapa. Con el alto del botón, plegada y desplegada
  * ocupan exactamente la misma franja.
  */
 .root :global(.maplibregl-ctrl-attrib.maplibregl-compact) {
@@ -66,7 +66,7 @@
   min-height: 24px;
 }
 
-/* Nunca llega bajo los controles del mapa (a la derecha): en pantallas estrechas pasa a dos lÃ­neas. */
+/* Nunca llega bajo los controles del mapa (a la derecha): en pantallas estrechas pasa a dos líneas. */
 .root :global(.maplibregl-ctrl-bottom-left .maplibregl-ctrl-attrib) {
   box-sizing: border-box;
   max-width: calc(100vw - 5.75rem);
@@ -81,8 +81,8 @@
 }
 
 /*
- * En mÃ³vil la hoja inferior ocupa el borde: la atribuciÃ³n (obligatoria por la ODbL) se coloca encima.
- * A la izquierda arranca donde arranca la franja de la guÃ­a (--space-4 menos los 10 px de margen que
+ * En móvil la hoja inferior ocupa el borde: la atribución (obligatoria por la ODbL) se coloca encima.
+ * A la izquierda arranca donde arranca la franja de la guía (--space-4 menos los 10 px de margen que
  * pone MapLibre), para que las dos piezas del pie compartan el mismo borde.
  */
 .root :global(.maplibregl-ctrl-bottom-left) {
