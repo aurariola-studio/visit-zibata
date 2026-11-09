@@ -15,14 +15,17 @@ import Papa from 'papaparse'
 import { z } from 'zod'
 import { CSV_COLUMNS, type CsvRow } from '../src/data/csv-negocio.ts'
 import type { CommercialDataset } from '../src/data/relations.ts'
+import { MENSAJE_NO_UTF8, noEsUtf8 } from '../src/data/utf8.ts'
 import { fechaLocal } from './analitica.ts'
 import { type Cargado, cargar } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
 import { importarFilas, type ResultadoFila } from './importar-csv.ts'
 
 /**
- * Cada fila revalida el conjunto entero. Cien filas son unos cientos de milisegundos; más que eso se parte en
- * dos archivos, que además da dos PR que se pueden revisar.
+ * Cada fila revalida el conjunto entero. Medido en Node (2026-11-09, 100 locales nuevos en la misma plaza):
+ * 69 ms en total, unos 0,7 ms por fila; la primera, en frío, unos 6 ms. No se sabe el techo de CPU del Worker
+ * desplegado: `wrangler.jsonc` no declara límites ni plan. Si resultara bajo, es este número el que se baja.
+ * Más filas que esto se parten en dos archivos, que además dan dos PR que se pueden revisar.
  */
 export const TOPE_DE_FILAS = 100
 export const TOPE_DE_BYTES_CSV = 256 * 1024
@@ -57,6 +60,7 @@ export function prepararImportacion(
   csv: string,
   hoy: string,
 ): Preparada {
+  if (noEsUtf8(csv)) return { ok: false, problemas: [MENSAJE_NO_UTF8] }
   const leido = Papa.parse<CsvRow>(csv.replace(/^﻿/, ''), {
     header: true,
     skipEmptyLines: 'greedy',

@@ -1566,6 +1566,20 @@ test.describe('Panel', () => {
       await expect(dialogo.locator('tbody tr')).toHaveCount(0)
     })
 
+    test('un archivo de Excel que no está en UTF-8 se rechaza y no llena el cuadro', async ({
+      page,
+    }) => {
+      const dialogo = await abrirImportar(page)
+      await dialogo.locator('input[data-importar-archivo]').setInputFiles({
+        name: 'locales.csv',
+        mimeType: 'text/csv',
+        // Windows-1252, como lo guarda Excel con "CSV" a secas: la é es el byte 0xE9.
+        buffer: Buffer.from('name,plaza\nCafé Luna,Plaza Luna', 'latin1'),
+      })
+      await expect(dialogo.locator('[data-problemas]')).toContainText('no está en UTF-8')
+      await expect(dialogo.locator('textarea[name="csv"]')).toHaveValue('')
+    })
+
     test('el rechazo del servidor se ve en el formulario', async ({ page }) => {
       await page.route(RUTA_IMPORTAR, (ruta) =>
         ruta.fulfill({

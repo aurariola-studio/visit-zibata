@@ -98,6 +98,27 @@ describe('prepararImportacion', () => {
     if (!largo.ok) expect(largo.problemas.join(' ')).toMatch(/el tope son 100/)
   })
 
+  it('un CSV en Windows-1252 (Excel sin "CSV UTF-8") se rechaza entero, no se guarda con acentos rotos', () => {
+    // Los bytes de un archivo ANSI, leídos como UTF-8 como hace el navegador con File.text().
+    const ansi = new TextDecoder('utf-8').decode(Buffer.from(csvDe(buena('Café Luna')), 'latin1'))
+    expect(ansi).toContain('�')
+    const r = prepararImportacion(dataset, crudo, ansi, HOY)
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.problemas.join(' ')).toMatch(/no está en UTF-8/)
+  })
+
+  it('varios giros separados por ; dentro de un CSV con comas se leen como giros, no como columnas', () => {
+    const [uno, dos] = dataset.categories.flatMap((c) => c.giros.map((g) => g.id))
+    const fila = `Tienda Giros,${plaza.name},${uno};${dos},Una tienda con dos giros.,A shop with two giros.,sí,sí`
+    const r = prepararImportacion(dataset, crudo, csvDe(fila), HOY)
+    expect(r.ok && r.vista.listo, r.ok ? r.vista.filas[0]?.problemas.join(' | ') : '').toBe(true)
+    if (!r.ok || !r.archivos) return
+    const nuevo = (r.archivos.lugares.places as { name: string; giros: string[] }[]).find(
+      (p) => p.name === 'Tienda Giros',
+    )
+    expect(nuevo?.giros).toEqual([uno, dos])
+  })
+
   it('un CSV que Papa no puede leer se rechaza con la fila', () => {
     const roto = `${ENCABEZADO}\n"sin cerrar,${plaza.name}`
     const leido = Papa.parse(roto, { header: true })

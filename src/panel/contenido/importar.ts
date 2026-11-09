@@ -1,3 +1,4 @@
+import { MENSAJE_NO_UTF8, noEsUtf8 } from '../../data/utf8.ts'
 import controls from '../../styles/controls.module.css'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import { numero, plural, texto } from './tipos.ts'
@@ -247,6 +248,11 @@ export function alCambiarImportar(objetivo: HTMLElement): void {
     const cuadro = formulario.querySelector<HTMLTextAreaElement>('textarea[name="csv"]')
     if (archivo && cuadro) {
       void archivo.text().then((contenido) => {
+        if (noEsUtf8(contenido)) {
+          mostrarProblemas(formulario, [MENSAJE_NO_UTF8])
+          return
+        }
+        mostrarProblemas(formulario, [])
         cuadro.value = contenido
         const zona = zonaVista(formulario)
         if (zona) zona.innerHTML = ''

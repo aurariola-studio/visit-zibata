@@ -15,6 +15,7 @@ import { parseArgs } from 'node:util'
 import Papa from 'papaparse'
 import { CSV_COLUMNS, type CsvRow } from '../../src/data/csv-negocio.ts'
 import { syncPlazaDerivedFields, validateRelations } from '../../src/data/relations.ts'
+import { MENSAJE_NO_UTF8, noEsUtf8 } from '../../src/data/utf8.ts'
 import { fechaLocal } from '../../worker/analitica.ts'
 import { importarFilas } from '../../worker/importar-csv.ts'
 import {
@@ -38,7 +39,12 @@ if (!csvPath) {
   process.exit(1)
 }
 
-const parsed = Papa.parse<CsvRow>(readFileSync(csvPath, 'utf8').replace(/^﻿/, ''), {
+const contenido = readFileSync(csvPath, 'utf8')
+if (noEsUtf8(contenido)) {
+  console.error(`✗ ${MENSAJE_NO_UTF8}`)
+  process.exit(1)
+}
+const parsed = Papa.parse<CsvRow>(contenido.replace(/^﻿/, ''), {
   header: true,
   skipEmptyLines: 'greedy',
   transformHeader: (header) => header.trim(),
