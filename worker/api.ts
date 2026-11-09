@@ -59,6 +59,7 @@ import {
 } from './panel.ts'
 import { crearPlaza } from './plaza-nueva.ts'
 import { guardarPlaza } from './plazas.ts'
+import { descartarPr, retirarUltimo, verPr } from './pr.ts'
 import {
   CONTEO_CORAZONES,
   CONTEO_NOTAS,
@@ -110,6 +111,8 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/negocio': 128 * 1024,
   // El CSV va dentro de un JSON: las comillas y los saltos de línea se escapan y lo agrandan.
   '/api/panel/contenido/importar': TOPE_DE_BYTES_CSV * 2,
+  '/api/panel/contenido/pr/retirar': 4 * 1024,
+  '/api/panel/contenido/pr/descartar': 4 * 1024,
   '/api/panel/contenido/negocio/borrar': 4 * 1024,
   '/api/panel/contenido/negocio/slug': 4 * 1024,
   '/api/panel/contenido/plaza': 16 * 1024,
@@ -363,6 +366,31 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)
+    }
+  }
+
+  // La PR del panel: verla, retirar su último cambio o descartarla (ver worker/pr.ts).
+  if (ruta === '/api/panel/contenido/pr' && peticion.method === 'GET') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    try {
+      return json(await verPr(entorno))
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+  for (const [rutaPr, accion] of [
+    ['/api/panel/contenido/pr/retirar', retirarUltimo],
+    ['/api/panel/contenido/pr/descartar', descartarPr],
+  ] as const) {
+    if (ruta === rutaPr && peticion.method === 'POST') {
+      if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+      if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+      try {
+        const resultado = await accion(entorno, cuerpoDe(texto))
+        return json(resultado, resultado.ok ? 200 : 400)
+      } catch (error) {
+        return falloDeContenido(error)
+      }
     }
   }
 

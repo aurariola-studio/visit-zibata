@@ -74,10 +74,10 @@ const repoDe = (entorno: EntornoGitHub): { repo: string; dueno: string } => {
   return { repo, dueno }
 }
 
-const faltaToken = (entorno: EntornoGitHub): boolean => !entorno.GITHUB_TOKEN?.trim()
+export const faltaToken = (entorno: EntornoGitHub): boolean => !entorno.GITHUB_TOKEN?.trim()
 
 /** La respuesta cruda de una llamada a la API. */
-async function respuestaDe(
+export async function respuestaDe(
   entorno: EntornoGitHub,
   ruta: string,
   init: RequestInit = {},
@@ -97,7 +97,11 @@ async function respuestaDe(
 }
 
 /** Una llamada a la API. Cualquier respuesta que no sea 2xx se convierte en un error con su texto. */
-async function pedir<T>(entorno: EntornoGitHub, ruta: string, init: RequestInit = {}): Promise<T> {
+export async function pedir<T>(
+  entorno: EntornoGitHub,
+  ruta: string,
+  init: RequestInit = {},
+): Promise<T> {
   const respuesta = await respuestaDe(entorno, ruta, init)
   if (!respuesta.ok) {
     const detalle = await respuesta.text()
@@ -107,7 +111,7 @@ async function pedir<T>(entorno: EntornoGitHub, ruta: string, init: RequestInit 
 }
 
 /** Como `pedir`, pero un 404 es un `null` en vez de un error. */
-async function pedirOpcional<T>(
+export async function pedirOpcional<T>(
   entorno: EntornoGitHub,
   ruta: string,
   init: RequestInit = {},

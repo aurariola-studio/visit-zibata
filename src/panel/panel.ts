@@ -16,8 +16,10 @@ import {
   mostrarContenido,
   ocultarContenido,
   precargarContenido,
+  recargarContenido,
 } from './contenido.ts'
 import './panel.css'
+import { montarPr } from './pr.ts'
 
 interface Dia {
   fecha: string
@@ -253,6 +255,17 @@ let estadoContenido: EstadoContenido | null = null
 /** Por qué no se pudo cargar el contenido, si no se pudo. */
 let errorContenido: string | null = null
 
+/** Pinta la tarjeta de la PR bajo el bloque, si hay una PR de verdad (no en desarrollo ni sin cambios). */
+function cargarDetallePr(): void {
+  const zona = document.querySelector<HTMLElement>('[data-pr-detalle]')
+  if (!zona) return
+  if (!estadoContenido?.pr || estadoContenido.seco) {
+    zona.innerHTML = ''
+    return
+  }
+  void montarPr(zona, recargarContenido)
+}
+
 /** El bloque de "contenido pendiente" del resumen: lo que espera revisión, dicho en una frase. */
 function bloquePendiente(): string {
   const estado = estadoContenido
@@ -274,6 +287,7 @@ function actualizarEstado(estado: EstadoContenido | null, error: string | null =
   errorContenido = error
   const pendiente = document.querySelector<HTMLElement>('[data-pendiente]')
   if (pendiente) pendiente.innerHTML = bloquePendiente()
+  cargarDetallePr()
   if (!estadoRama || !enlacePr) return
   enlacePr.hidden = true
   if (!estado) {
@@ -366,6 +380,7 @@ function pintarResumen(): void {
   vistaEl.innerHTML = `
     <section class="resumen">
       <div class="pendiente" data-pendiente>${bloquePendiente()}</div>
+      <div class="pr-detalle" data-pr-detalle></div>
       <div class="cifras">
         <div class="cifra-grande">
           <p class="rotulo">Visitas</p>
@@ -446,6 +461,7 @@ function pintarResumen(): void {
       </div>
     </section>
   `
+  cargarDetallePr()
   vistaEl.setAttribute('aria-busy', 'false')
 }
 

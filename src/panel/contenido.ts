@@ -145,6 +145,11 @@ export function mostrarContenido(cual: ModoContenido): void {
   if (!vista.datos && !vista.cargando) void cargar()
 }
 
+/** Vuelve a leer el contenido y el estado de la rama (la PR cambió: se retiró un cambio o se cerró). */
+export function recargarContenido(): void {
+  void cargar()
+}
+
 /** Carga el contenido sin pintarlo: el resumen necesita saber si hay una PR esperando revisión. */
 export function precargarContenido(): void {
   if (!vista.datos && !vista.cargando) void cargar()
