@@ -467,6 +467,7 @@ export async function contenido(
         address,
         coordinates,
         googleMapsUri,
+        geometry,
         active,
         comingSoon,
       }) => ({
@@ -477,6 +478,8 @@ export async function contenido(
         address,
         coordinates,
         googleMapsUri,
+        // El contorno viaja al panel para poder editarlo: son unos cientos de bytes por plaza.
+        geometry,
         active,
         comingSoon,
       }),

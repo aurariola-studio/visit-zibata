@@ -25,6 +25,8 @@ export interface PlazaResumen {
   address: string | null
   coordinates: { lat: number; lng: number }
   googleMapsUri?: string
+  /** El contorno. Falta en lo que el panel simula sin él; el editor del contorno no sale si no está. */
+  geometry?: { type: string; coordinates: unknown }
   active: boolean
   comingSoon?: boolean
 }

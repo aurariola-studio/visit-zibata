@@ -16,6 +16,8 @@ import { expect, type Locator, type Page, test } from '@playwright/test'
  *  - y que sin permiso el panel lo dice con palabras, no se queda en blanco.
  */
 
+import extentJson from '../../data/geographic/extent.json' with { type: 'json' }
+
 const hoy = new Date().toISOString().slice(0, 10)
 
 const estadisticas = {
@@ -260,6 +262,51 @@ const marcaDe = (lugar: LugarDePrueba): string => {
 }
 const nombresCon = (marca: string): string[] =>
   conEstados.places.filter((lugar) => marcaDe(lugar) === marca).map((lugar) => lugar.name)
+
+/**
+ * El contorno de dos plazas del panel simulado, en el centro real de Zibatá (el aviso del panel usa el
+ * contorno de verdad), y un local dentro de la primera. Datos de la prueba: no son ninguna plaza real.
+ */
+const [centroLng = 0, centroLat = 0] = extentJson.center as [number, number]
+const seis = (n: number) => Number(n.toFixed(6))
+const cuadradoEn = (lng: number, lat: number, lado = 0.002) => ({
+  type: 'Polygon' as const,
+  coordinates: [
+    [
+      [seis(lng - lado / 2), seis(lat - lado / 2)],
+      [seis(lng + lado / 2), seis(lat - lado / 2)],
+      [seis(lng + lado / 2), seis(lat + lado / 2)],
+      [seis(lng - lado / 2), seis(lat + lado / 2)],
+      [seis(lng - lado / 2), seis(lat - lado / 2)],
+    ],
+  ],
+})
+const conContorno = {
+  ...contenido,
+  plazas: contenido.plazas.map((plaza) =>
+    plaza.id === 'plaza-uno'
+      ? {
+          ...plaza,
+          coordinates: { lat: centroLat, lng: centroLng },
+          geometry: cuadradoEn(centroLng, centroLat),
+        }
+      : plaza.id === 'plaza-dos'
+        ? { ...plaza, geometry: cuadradoEn(centroLng + 0.004, centroLat) }
+        : plaza,
+  ),
+  places: contenido.places.map((lugar) =>
+    lugar.id === 'cafe-de-prueba'
+      ? { ...lugar, location: { lat: centroLat, lng: seis(centroLng + 0.0003) } }
+      : lugar,
+  ),
+}
+const impactoDePrueba = {
+  plaza: { id: 'plaza-uno', nombre: 'Plaza Uno' },
+  vertices: { antes: 4, despues: 4 },
+  area: { antes: 1000, despues: 1100, cambio: 100 },
+  locales: { quedanFuera: [], vuelvenDentro: [], siguenFuera: 0 },
+  avisos: ['Aviso de prueba del contorno.'],
+}
 
 interface Opciones {
   /** El estado con el que responde `/api/panel/contenido`: 200 por defecto, 403 si no hay Access. */
@@ -1482,6 +1529,228 @@ test.describe('Panel', () => {
       'aria-invalid',
       'true',
     )
+  })
+
+  test.describe('el contorno de una plaza', () => {
+    /** El Worker simulado: apunta cada cuerpo y responde con el impacto (y la PR si se confirma). */
+    async function abrirPlaza(page: Page, datos: object = conContorno) {
+      const cuerpos: {
+        id: string
+        geometria: { coordinates: number[][][] }
+        confirmar?: boolean
+      }[] = []
+      await page.route(/\/api\/panel\/contenido\/plaza\/contorno$/, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as (typeof cuerpos)[number]
+        cuerpos.push(cuerpo)
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            confirmado: cuerpo.confirmar === true,
+            seco: false,
+            pr: cuerpo.confirmar
+              ? { url: 'https://example.test/pr/5', numero: 5, creada: true }
+              : null,
+            mensaje: cuerpo.confirmar ? 'Contorno enviado a la PR.' : 'Esto es lo que cambiaría.',
+            impacto: impactoDePrueba,
+          },
+        })
+      })
+      await abrirPanel(page, { datos })
+      await irA(page, 'plazas', 'Plazas')
+      await page.getByRole('button', { name: 'Editar Plaza Uno' }).click()
+      const dialogo = page.locator('#editor')
+      await expect(dialogo.getByRole('heading', { level: 3, name: 'Contorno' })).toBeVisible()
+      return { cuerpos, dialogo, lista: dialogo.locator('[data-contorno-lista]') }
+    }
+
+    test('muestra los vértices y una vista previa, y deja ver el impacto antes de guardar', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo, lista } = await abrirPlaza(page)
+      await expect(lista.locator('li')).toHaveCount(4)
+      await expect(dialogo.getByRole('status').filter({ hasText: '4 vértices' })).toBeVisible()
+      await expect(dialogo.getByRole('img', { name: /Vista previa del contorno/ })).toBeVisible()
+
+      await dialogo.getByRole('button', { name: 'Ver el impacto del contorno' }).click()
+      await expect(
+        dialogo.getByRole('heading', { name: 'Si guardas este contorno en Plaza Uno' }),
+      ).toBeVisible()
+      expect(cuerpos).toHaveLength(1)
+      expect(cuerpos[0]?.confirmar).toBeUndefined()
+      // El anillo viaja cerrado: cuatro vértices y el primero repetido.
+      expect(cuerpos[0]?.geometria.coordinates[0]).toHaveLength(5)
+      await expect(dialogo.getByText('Aviso de prueba del contorno.')).toBeVisible()
+    })
+
+    test('un impacto no se puede confirmar si el contorno cambió después de verlo', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo, lista } = await abrirPlaza(page)
+      await dialogo.getByRole('button', { name: 'Ver el impacto del contorno' }).click()
+      await expect(dialogo.getByRole('button', { name: 'Guardar contorno' })).toBeVisible()
+
+      // Cualquier cambio en un vértice borra el impacto y, con él, el botón de guardar.
+      const lng = lista.locator('li').first().locator('[data-contorno-campo="lng"]')
+      await lng.fill(`${Number(await lng.inputValue()) + 0.0001}`)
+      await expect(
+        dialogo.getByRole('heading', { name: 'Si guardas este contorno en Plaza Uno' }),
+      ).toBeHidden()
+      await expect(dialogo.getByRole('button', { name: 'Guardar contorno' })).toHaveCount(0)
+
+      // Se vuelve a pedir y entonces sí: lo que se guarda es exactamente lo que se vio.
+      await dialogo.getByRole('button', { name: 'Ver el impacto del contorno' }).click()
+      await dialogo.getByRole('button', { name: 'Guardar contorno' }).click()
+      await expect(dialogo).toBeHidden()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #5' })).toBeVisible()
+      expect(cuerpos).toHaveLength(3)
+      expect(cuerpos[2]?.confirmar).toBe(true)
+      expect(cuerpos[2]?.geometria).toEqual(cuerpos[1]?.geometria)
+      expect(cuerpos[2]?.geometria).not.toEqual(cuerpos[0]?.geometria)
+    })
+
+    test('"Guardar cambios" nunca manda el contorno, y cerrar con vértices a medio escribir pregunta', async ({
+      page,
+    }) => {
+      const { dialogo, lista } = await abrirPlaza(page)
+      const guardados: Record<string, unknown>[] = []
+      await page.route(/\/api\/panel\/contenido\/plaza$/, async (ruta) => {
+        guardados.push(ruta.request().postDataJSON() as Record<string, unknown>)
+        await ruta.fulfill({
+          json: { ok: true, confirmado: true, seco: false, pr: null, mensaje: 'ok', impacto: {} },
+        })
+      })
+      // Los campos de los vértices no llevan `name`: no entran en el formulario.
+      await expect(lista.locator('input[name]')).toHaveCount(0)
+
+      await lista.locator('li').first().locator('[data-contorno-campo="lat"]').fill('20.5')
+      await dialogo.getByRole('button', { name: 'Cerrar' }).click()
+      await expect(page.getByRole('dialog', { name: '¿Descartar los cambios?' })).toBeVisible()
+      await page.getByRole('button', { name: 'Seguir editando' }).click()
+
+      await dialogo.locator('input[name="direccion"]').fill('Calle Nueva 9')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect.poll(() => guardados.length).toBe(1)
+      expect(Object.keys(guardados[0] ?? {})).not.toContain('geometry')
+      expect(Object.keys(guardados[0] ?? {})).not.toContain('geometria')
+      expect(JSON.stringify(guardados[0])).not.toContain('20.5')
+    })
+
+    test('avisa en el campo de lo que no es un número y acepta la coma decimal', async ({
+      page,
+    }) => {
+      const { dialogo, lista } = await abrirPlaza(page)
+      const primera = lista.locator('li').first()
+      const lng = primera.locator('[data-contorno-campo="lng"]')
+      const ver = dialogo.getByRole('button', { name: 'Ver el impacto del contorno' })
+
+      await lng.fill('abc')
+      await expect(lng).toHaveAttribute('aria-invalid', 'true')
+      await expect(primera.getByText(/Escribe un número/)).toBeVisible()
+      await expect(ver).toBeDisabled()
+
+      // Con coma decimal se entiende igual: -100,35 es -100.35.
+      await lng.fill(`${centroLng - 0.001}`.replace('.', ','))
+      await expect(lng).not.toHaveAttribute('aria-invalid', 'true')
+      await expect(ver).toBeEnabled()
+    })
+
+    test('rechaza en vivo un contorno que se cruza consigo mismo', async ({ page }) => {
+      const { dialogo, lista } = await abrirPlaza(page)
+      const filas = lista.locator('li')
+      // Cruzar el segundo vértice con el cuarto convierte el cuadrado en un lazo.
+      const segundo = filas.nth(1)
+      const cuarto = filas.nth(3)
+      const lng4 = await cuarto.locator('[data-contorno-campo="lng"]').inputValue()
+      const lat4 = await cuarto.locator('[data-contorno-campo="lat"]').inputValue()
+      await segundo.locator('[data-contorno-campo="lng"]').fill(lng4)
+      await segundo.locator('[data-contorno-campo="lat"]').fill(lat4)
+      await expect(dialogo.locator('[data-contorno-avisos]')).toContainText(/cruza|toca|repetidos/)
+      await expect(
+        dialogo.getByRole('button', { name: 'Ver el impacto del contorno' }),
+      ).toBeDisabled()
+    })
+
+    test('añade un vértice en el punto medio, quita hasta tres, y mueve el foco a la fila afectada', async ({
+      page,
+    }) => {
+      const { cuerpos, lista } = await abrirPlaza(page)
+      const dialogo = page.locator('#editor')
+      const primero = lista.locator('li').first()
+      const lng1 = Number(await primero.locator('[data-contorno-campo="lng"]').inputValue())
+      const lng2 = Number(
+        await lista.locator('li').nth(1).locator('[data-contorno-campo="lng"]').inputValue(),
+      )
+
+      await dialogo.getByRole('button', { name: 'Añadir un vértice después del 1' }).click()
+      await expect(lista.locator('li')).toHaveCount(5)
+      const nuevo = lista.locator('li').nth(1)
+      await expect(nuevo.locator('[data-contorno-campo="lng"]')).toBeFocused()
+      expect(Number(await nuevo.locator('[data-contorno-campo="lng"]').inputValue())).toBeCloseTo(
+        (lng1 + lng2) / 2,
+        5,
+      )
+
+      // Se quitan hasta quedar tres: a tres, "Quitar" ya no se puede pulsar y el foco no se pierde.
+      await dialogo.getByRole('button', { name: 'Quitar el vértice 2' }).click()
+      await expect(lista.locator('li')).toHaveCount(4)
+      await dialogo.getByRole('button', { name: 'Quitar el vértice 4' }).click()
+      await expect(lista.locator('li')).toHaveCount(3)
+      await expect(lista.locator('li').nth(2).locator('[data-contorno-campo="lng"]')).toBeFocused()
+      await expect(
+        dialogo.getByRole('button', { name: /Quitar el vértice/ }).first(),
+      ).toBeDisabled()
+      expect(cuerpos).toHaveLength(0)
+    })
+
+    test('no manda nada si el resto del formulario tiene cambios sin guardar', async ({ page }) => {
+      const { cuerpos, dialogo } = await abrirPlaza(page)
+      await dialogo.locator('input[name="direccion"]').fill('Calle Nueva 9')
+      await dialogo.getByRole('button', { name: 'Ver el impacto del contorno' }).click()
+      await expect(dialogo.locator('[data-problemas]')).toContainText(
+        'Hay cambios sin guardar en el resto del formulario',
+      )
+      expect(cuerpos).toHaveLength(0)
+    })
+
+    test('con cien vértices en un teléfono la lista se desplaza dentro y la página no', async ({
+      page,
+    }) => {
+      const circulo = {
+        type: 'Polygon' as const,
+        coordinates: [
+          (() => {
+            const anillo = Array.from({ length: 100 }, (_, i) => {
+              const t = (2 * Math.PI * i) / 100
+              return [
+                seis(centroLng + 0.0008 * Math.cos(t)),
+                seis(centroLat + 0.0008 * Math.sin(t)),
+              ]
+            })
+            return [...anillo, anillo[0] ?? []]
+          })(),
+        ],
+      }
+      const datos = {
+        ...conContorno,
+        plazas: conContorno.plazas.map((plaza) =>
+          plaza.id === 'plaza-uno' ? { ...plaza, geometry: circulo } : plaza,
+        ),
+      }
+      await page.setViewportSize({ width: 320, height: 640 })
+      const { dialogo, lista } = await abrirPlaza(page, datos)
+      await expect(lista.locator('li')).toHaveCount(100)
+      await sinDesplazamientoLateral(page)
+      const [seDesplaza, dialogoAncho] = await Promise.all([
+        lista.evaluate((el) => el.scrollHeight > el.clientHeight),
+        dialogo.evaluate((el) => el.scrollWidth - el.clientWidth),
+      ])
+      expect(seDesplaza).toBe(true)
+      expect(dialogoAncho).toBeLessThanOrEqual(0)
+      // En 100 vértices ya no se puede añadir otro.
+      await expect(
+        dialogo.getByRole('button', { name: 'Añadir un vértice después del 1', exact: true }),
+      ).toBeDisabled()
+    })
   })
 
   test('sin permiso el panel lo dice con palabras', async ({ page }) => {
