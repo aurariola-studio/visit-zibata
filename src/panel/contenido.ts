@@ -48,6 +48,12 @@ import { alPulsarEdificio, pintarEdificios, pintarQuitarEdificio } from './conte
 import { cerrarEditor, limpiarErrorDe } from './contenido/editor.ts'
 import { alCambiarFoto, alEscribirFoto, alPulsarFoto } from './contenido/fotos.ts'
 import {
+  alCambiarImportar,
+  alPulsarImportar,
+  enviarImportar,
+  pintarImportar,
+} from './contenido/importar.ts'
+import {
   actualizarContadores,
   alCambiarNegocio,
   alEscribirNegocio,
@@ -215,6 +221,10 @@ async function alEnviar(evento: Event): Promise<void> {
     enviarPlazaNueva(formulario)
     return
   }
+  if (formulario.dataset.editor === 'importar') {
+    enviarImportar(formulario)
+    return
+  }
   await enviarNegocio(formulario, cargar)
 }
 
@@ -248,6 +258,10 @@ function alPulsar(evento: Event): void {
   }
   if (objetivo.closest('[data-nueva-plaza]')) {
     pintarPlazaNueva()
+    return
+  }
+  if (objetivo.closest('[data-importar]')) {
+    pintarImportar()
     return
   }
   if (objetivo.closest('[data-nueva-categoria]')) {
@@ -317,6 +331,7 @@ function alPulsarEditor(evento: Event): void {
   if (alPulsarContorno(objetivo, cargar)) return
   if (alPulsarEdificio(objetivo, cargar)) return
   if (alPulsarPlazaNueva(objetivo, cargar)) return
+  if (alPulsarImportar(objetivo, cargar)) return
   if (alPulsarPlaza(objetivo, cargar)) return
   if (alPulsarNegocio(objetivo, cargar)) return
   alPulsarFoto(objetivo)
@@ -326,6 +341,7 @@ function alEscribirEditor(evento: Event): void {
   const objetivo = evento.target as HTMLElement | null
   if (!objetivo) return
   alCambiarPlazaNueva(objetivo)
+  alCambiarImportar(objetivo)
 
   if (alEscribirDireccion(objetivo)) return
   if (alEscribirContorno(objetivo)) return
@@ -343,6 +359,7 @@ function alCambiarEditor(evento: Event): void {
   const objetivo = evento.target as HTMLElement | null
   if (!objetivo) return
   alCambiarPlazaNueva(objetivo)
+  alCambiarImportar(objetivo)
 
   if (alCambiarDireccion(objetivo)) return
   if (alCambiarFoto(objetivo)) return

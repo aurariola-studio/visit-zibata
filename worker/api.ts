@@ -34,6 +34,7 @@ import {
 } from './favoritos.ts'
 import { guardarContorno } from './geometria-plaza.ts'
 import type { EntornoGitHub } from './github.ts'
+import { guardarImportacion, TOPE_DE_BYTES_CSV } from './importar.ts'
 import {
   calificacionesDe,
   MARCAR_VISITA,
@@ -107,6 +108,8 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/evento': MAXIMO_BYTES,
   '/api/visitas': 1_300_000,
   '/api/panel/contenido/negocio': 128 * 1024,
+  // El CSV va dentro de un JSON: las comillas y los saltos de línea se escapan y lo agrandan.
+  '/api/panel/contenido/importar': TOPE_DE_BYTES_CSV * 2,
   '/api/panel/contenido/negocio/borrar': 4 * 1024,
   '/api/panel/contenido/negocio/slug': 4 * 1024,
   '/api/panel/contenido/plaza': 16 * 1024,
@@ -357,6 +360,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await guardarNegocio(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // Carga masiva de locales desde un CSV, en dos pasos (ver worker/importar.ts).
+  if (ruta === '/api/panel/contenido/importar' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await guardarImportacion(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)
