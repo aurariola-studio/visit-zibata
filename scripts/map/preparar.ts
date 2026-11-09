@@ -128,6 +128,7 @@ export function preparar(): void {
     paths.plazas,
     paths.extent,
     paths.config,
+    paths.ajustesEdificios,
     ...codigoDe(join(ROOT, 'scripts/map/lib')),
     ...codigoDe(join(ROOT, 'scripts/map/realismo')),
     MAPA,

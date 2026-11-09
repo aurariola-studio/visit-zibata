@@ -14,6 +14,8 @@ export const paths = {
   rawTreeCover: `${ROOT}data/geographic/raw/overture-tree-cover.geojson`,
   rawTreeCoverMeta: `${ROOT}data/geographic/raw/overture-tree-cover.meta.json`,
   extent: `${ROOT}data/geographic/extent.json`,
+  /** Ocultar un edificio o fijarle la altura, a mano (lo escribe el panel). Ver src/data/ajustes-edificios.ts. */
+  ajustesEdificios: `${ROOT}data/geographic/ajustes-edificios.json`,
   manifest: `${ROOT}data/geographic/manifest.json`,
   plazas: `${ROOT}data/commercial/plazas.json`,
   publicMap: `${ROOT}public/map`,

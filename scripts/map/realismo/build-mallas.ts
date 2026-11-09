@@ -37,6 +37,8 @@ interface Huella {
   id: number
   inside: boolean
   alturaEstimada: number
+  /** Metros fijados a mano en ajustes-edificios.json: se usan tal cual, sin mezclar ni redondear a pisos. */
+  alturaFija: number | undefined
   /** Altura de Open Buildings 2.5D (máximo de las celdas que tocan la huella ampliada 2 m). */
   h2: number | null
   anillo: Punto[]
@@ -117,7 +119,7 @@ const celdaOb = (gx: number, gy: number): number => {
 
 // ── Huellas ────────────────────────────────────────────────────────────────────────────────────────
 const entrada = readJson<
-  FeatureCollection<Polygon, { id: number; height: number; inside: boolean }>
+  FeatureCollection<Polygon, { id: number; height: number; inside: boolean; alturaFija?: true }>
 >(paths.rawEdificiosBase)
 const huellas: (Huella | null)[] = entrada.features.map((f) => {
   const anilloLngLat = (f.geometry.coordinates[0] ?? []).slice(0, -1)
@@ -154,6 +156,7 @@ const huellas: (Huella | null)[] = entrada.features.map((f) => {
     id: f.properties.id,
     inside: f.properties.inside,
     alturaEstimada: f.properties.height,
+    alturaFija: f.properties.alturaFija ? f.properties.height : undefined,
     h2: Number.isFinite(h2) && h2 > 0 ? Math.round(h2 * 10) / 10 : null,
     anillo,
     area: Math.abs(doble / 2),
@@ -249,7 +252,7 @@ for (const h of B) {
   else if (gemelas.length >= 3) metros = mediana(gemelas)
   else if (h.area >= 150) metros = h.h2
   else metros = 0.5 * h.h2 + 0.5 * h.alturaEstimada
-  h.altura = Math.max(1, Math.min(13, Math.round(metros / 3))) * 3
+  h.altura = h.alturaFija ?? Math.max(1, Math.min(13, Math.round(metros / 3))) * 3
 }
 
 // ── Grupo de paleta: casas del mismo modelo comparten tono; el resto, por manzana de 120 m ─────────

@@ -8,7 +8,7 @@ import { PUBLISHABLE_STATUS } from './rules.ts'
 import type { Redirect } from './schemas.ts'
 
 export type IssueLevel = 'error' | 'warning'
-export type DatasetName = 'categories' | 'plazas' | 'places' | 'redirects'
+export type DatasetName = 'categories' | 'plazas' | 'places' | 'redirects' | 'ajustes-edificios'
 
 export interface DataIssue {
   level: IssueLevel

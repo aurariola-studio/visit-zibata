@@ -121,3 +121,11 @@ describe('la marca que decide si hay que regenerar', () => {
     expect(huella([a, join(raiz, 'no-existe.json')])).toHaveLength(64)
   })
 })
+
+describe('los ajustes de edificios invalidan la marca', () => {
+  it('el archivo de ajustes está entre lo que decide si hay que regenerar el mapa', async () => {
+    const { readFileSync } = await import('node:fs')
+    const codigo = readFileSync(new URL('./preparar.ts', import.meta.url), 'utf8')
+    expect(codigo).toContain('paths.ajustesEdificios')
+  })
+})
