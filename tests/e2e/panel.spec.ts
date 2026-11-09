@@ -1435,13 +1435,48 @@ test.describe('Panel', () => {
       await dialogo.locator('select[name="plazaId"]').selectOption('plaza-uno')
       await dialogo.locator('textarea[name="descripcionEs"]').fill('Una tienda inventada.')
       await dialogo.locator('textarea[name="descripcionEn"]').fill('An invented shop.')
+      await dialogo.locator('[data-anadir-giro-id="servicios-general"]').click()
       await dialogo.getByRole('button', { name: 'Crear negocio' }).click()
-      // Sin giro también falla, pero el aviso de la procedencia tiene que estar en su campo.
       await expect(dialogo.locator('textarea[name="fuentes"]')).toHaveAttribute(
         'aria-invalid',
         'true',
       )
       expect(enviado).toBe(false)
+    })
+
+    test('un local nuevo con "Lo comprobé yo" se crea: el bloque viaja y el formulario sigue abierto', async ({
+      page,
+    }) => {
+      const cuerpos: { id?: string; activo: boolean; verificacion?: Record<string, unknown> }[] = []
+      await page.route(RUTA_NEGOCIO, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({
+          json: {
+            ...guardado,
+            negocio: { id: 'tienda-de-prueba', nombre: 'Tienda de prueba', nuevo: true },
+          },
+        })
+      })
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Nuevo negocio' }).click()
+      const dialogo = page.locator('#editor')
+      await dialogo.locator('input[name="nombre"]').fill('Tienda de prueba')
+      await dialogo.locator('select[name="plazaId"]').selectOption('plaza-uno')
+      await dialogo.locator('textarea[name="descripcionEs"]').fill('Una tienda inventada.')
+      await dialogo.locator('textarea[name="descripcionEn"]').fill('An invented shop.')
+      await dialogo.locator('[data-anadir-giro-id="servicios-general"]').click()
+      await dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }).check()
+      await dialogo.getByRole('button', { name: 'Crear negocio' }).click()
+      await expect(dialogo.locator('[data-guardado]')).toContainText('Negocio creado')
+      expect(cuerpos).toHaveLength(1)
+      expect(cuerpos[0]?.id).toBeUndefined()
+      expect(cuerpos[0]?.activo).toBe(true)
+      expect(cuerpos[0]?.verificacion).toEqual({
+        comprobadoPorMi: true,
+        fuentes: [],
+        confianza: 'medium',
+      })
     })
 
     test('con "Lo comprobé yo" el bloque viaja con la casilla y la confianza elegida', async ({

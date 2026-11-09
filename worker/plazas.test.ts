@@ -297,8 +297,46 @@ describe('activar una plaza que no está verificada', () => {
         ).find((otra) => otra.id === apagada.id)
         expect(fila?.verification.sources, estado).toContain(`campo:${HOY}`)
         expect(fila?.verification.lastVerifiedAt, estado).toBe(HOY)
+        // La confirmación enseña lo que se afirma: el cambio de estado y la marca en el lugar.
+        const avisos = r.impacto.avisos.join(' ')
+        expect(avisos, estado).toContain(`pasa de "${estado}" a "active"`)
+        expect(avisos, estado).toContain(`campo:${HOY}`)
       }
     }
+  })
+
+  it('una plaza activa no puede quedar con un estado que dice "no": se desactiva también', () => {
+    for (const estado of ['closed', 'removed', 'duplicate', 'rejected', 'uncertain']) {
+      const r = prepararPlaza(
+        dataset,
+        crudo,
+        igual({
+          verificacion: {
+            comprobadoPorMi: false,
+            fuentes: (plaza.verification?.sources ?? []).filter((f) => !f.startsWith('campo:')),
+            confianza: 'high',
+            estado,
+          },
+        }),
+        HOY,
+      )
+      expect(r.ok, estado).toBe(false)
+      if (!r.ok) expect(r.problemas.join(' '), estado).toMatch(/no puede quedar como/)
+    }
+  })
+
+  it('cerrar una plaza apagada es un cambio de estado sin evidencia y sin activarla', () => {
+    const r = activar('uncertain', {
+      activa: false,
+      verificacion: {
+        comprobadoPorMi: false,
+        fuentes: urlsDeLaApagada,
+        confianza: 'high',
+        estado: 'closed',
+      },
+    })
+    expect(r.ok, r.ok ? '' : r.problemas.join(' | ')).toBe(true)
+    expect(estadoEscrito(r)).toBe('closed')
   })
 
   it('lo descartado también se revierte con una fuente oficial nueva y el cambio de estado', () => {

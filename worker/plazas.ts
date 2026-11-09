@@ -285,6 +285,14 @@ export function prepararPlaza(
       )
     }
   }
+  // Lo que se afirma con este guardado, dicho donde se confirma: el cambio de estado y la marca en el lugar.
+  const estadoFinal = plaza.verification?.status
+  if (!promovida && estadoPrevio !== undefined && estadoFinal && estadoFinal !== estadoPrevio) {
+    avisos.push(`Su estado de investigación pasa de "${estadoPrevio}" a "${estadoFinal}".`)
+  }
+  if (datos.verificacion?.comprobadoPorMi) {
+    avisos.push(`Se anota "campo:${hoy}": afirma que se comprobó en el lugar.`)
+  }
   if (plaza.active && antes.active && enPlazaAntes === 0) {
     avisos.push('La plaza está activa pero no tiene ningún local visible.')
   }

@@ -38,7 +38,12 @@ export const EntradaVerificacionSchema = z.strictObject({
   /** Declara que se comprobó en el lugar: añade `campo:AAAA-MM-DD`. */
   comprobadoPorMi: z.boolean().optional().default(false),
   /** URL públicas. Los `campo:` ya guardados se conservan solos; no se escriben a mano. */
-  fuentes: z.array(z.string().trim().max(500)).max(TOPE_DE_FUENTES).optional().default([]),
+  // El tope de verdad (8, con las marcas en el lugar) lo dice el resolver, en español y en el campo.
+  fuentes: z
+    .array(z.string().trim().max(500))
+    .max(30, 'Son demasiadas fuentes.')
+    .optional()
+    .default([]),
   confianza: z.enum(LOCATION_CONFIDENCE),
   /** Solo plazas: el estado de investigación. Sin él se conserva el que había. */
   estado: z.enum(RESEARCH_STATUS).optional(),
@@ -148,6 +153,16 @@ export function resolverVerificacion(parametros: Parametros): ResultadoVerificac
   else if (estadoPrevio && (publicable(estadoPrevio) || !promover || !visible))
     estado = estadoPrevio
   else estado = visible && promover ? 'likely_active' : (estadoPrevio ?? 'uncertain')
+
+  // Un estado que dice "no" y la visibilidad se contradicen: se publicaría lo que la investigación descartó.
+  if (pedido && visible && !publicable(pedido)) {
+    return {
+      ok: false,
+      problemas: [
+        `estado: Una plaza activa no puede quedar como "${pedido}": para cambiarlo, desactívala también.`,
+      ],
+    }
+  }
 
   // Pasar a un estado que se publica pide evidencia en este mismo guardado, y que la metodología la acepte.
   const sube = publicable(estado) && !publicable(estadoPrevio)
