@@ -1414,6 +1414,192 @@ test.describe('Panel', () => {
     await expect(page.getByRole('button', { name: 'Borrar negocio' })).toHaveCount(0)
   })
 
+  test.describe('revisión y sugerencias', () => {
+    const haceDias = (dias: number): string =>
+      new Date(Date.now() - dias * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+    const verificado = (dias: number) => ({
+      status: 'active',
+      confidence: 'high',
+      lastVerifiedAt: haceDias(dias),
+      sources: ['campo:2026-01-01'],
+    })
+    const conHorario = { mon: ['09:00-18:00'] }
+    const local = (id: string, name: string, extra: Record<string, unknown> = {}) => ({
+      ...cafe,
+      id,
+      slug: id,
+      name,
+      plazaId: 'plaza-uno',
+      hours: conHorario,
+      active: true,
+      verification: verificado(10),
+      ...extra,
+    })
+    const datosRevision = {
+      ...contenido,
+      places: [
+        local('viejo', 'Local Viejo', { verification: verificado(400) }),
+        local('medio', 'Local Medio', { verification: verificado(200) }),
+        local('cierre', 'Local Cierre', {
+          cierre: { motivo: 'vacaciones', desde: haceDias(100) },
+        }),
+        local('sin-horario', 'Local Sin Horario', { hours: null }),
+        local('al-dia', 'Local Al Dia'),
+        // Oculto: no se publica y no hay nada que revisar, aunque le falte todo.
+        local('oculto', 'Local Oculto', {
+          active: false,
+          hours: null,
+          verification: verificado(500),
+        }),
+      ],
+    }
+    const sinPendientes = { ...contenido, places: [local('al-dia', 'Local Al Dia')] }
+
+    const sugerencia = (id: string, lugar: string, extra: Record<string, unknown> = {}) => ({
+      id,
+      creada: `${hoy}T10:00:00.000Z`,
+      quien: 'vecino',
+      lugar,
+      mensaje: `Mensaje de ${id}.`,
+      contacto: '',
+      atendida: 0,
+      ...extra,
+    })
+
+    /** Abre el panel y cambia sus sugerencias: la ruta del resumen se registra tras abrirlo y se recarga. */
+    async function abrirConSugerencias(
+      page: Page,
+      sugerencias: unknown[],
+      opciones: { datos?: object; contenidoStatus?: number } = {},
+    ): Promise<void> {
+      await abrirPanel(page, opciones)
+      await page.route(/\/api\/panel\?dias=\d+$/, (ruta) =>
+        ruta.fulfill({ json: { ...estadisticas, sugerencias, sinAtender: sugerencias.length } }),
+      )
+      await page.reload()
+      await expect(page.getByText('Sugerencias sin atender')).toBeVisible()
+    }
+
+    test('el filtro de revisión cuenta cada criterio y deja solo lo que lo cumple', async ({
+      page,
+    }) => {
+      await abrirPanel(page, { datos: datosRevision })
+      await irA(page, 'negocios', 'Negocios')
+      const filtro = page.getByRole('combobox', { name: 'Filtrar por revisión' })
+      await expect(filtro.locator('option')).toContainText([
+        'Cualquier revisión',
+        'Verificación de más de 12 meses (1)',
+        'Verificación de más de 6 meses (aviso) (2)',
+        'Cierre temporal de más de 90 días (1)',
+        'Sin horario conocido (1)',
+      ])
+      await filtro.selectOption('verificacion-6')
+      await expect(page.locator('tbody tr')).toHaveCount(2)
+      await expect(page.locator('tbody')).toContainText('Local Viejo')
+      await expect(page.locator('tbody')).toContainText('Local Medio')
+      await expect(page.locator('tbody')).not.toContainText('Local Oculto')
+      await expect(page.locator('[data-resultados]')).toHaveText('2 de 6 negocios')
+    })
+
+    test('"Quitar filtros" también quita el de revisión', async ({ page }) => {
+      await abrirPanel(page, { datos: datosRevision })
+      await irA(page, 'negocios', 'Negocios')
+      const filtro = page.getByRole('combobox', { name: 'Filtrar por revisión' })
+      await filtro.selectOption('cierre-90')
+      await page.getByRole('searchbox', { name: 'Buscar negocio' }).fill('zzz')
+      await expect(page.getByText('Ningún negocio coincide.')).toBeVisible()
+      await page.getByRole('button', { name: 'Quitar filtros' }).click()
+      await expect(filtro).toHaveValue('')
+      await expect(page.locator('tbody tr')).toHaveCount(6)
+    })
+
+    test('el Resumen cuenta lo que hay por revisar y lo abre ya filtrado, viniendo de otra sección', async ({
+      page,
+    }) => {
+      await abrirPanel(page, { datos: datosRevision })
+      // El filtro no puede perderse: pasar antes por Plazas cambia el modo, y eso borra los filtros.
+      await irA(page, 'plazas', 'Plazas')
+      await irA(page, 'resumen', 'Resumen')
+      const boton = page.getByRole('button', { name: /Sin horario conocido/ })
+      await expect(boton).toContainText('1')
+      await boton.click()
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Negocios')
+      await expect(page.getByRole('combobox', { name: 'Filtrar por revisión' })).toHaveValue(
+        'sin-horario',
+      )
+      await expect(page.locator('tbody tr')).toHaveCount(1)
+      await expect(page.locator('tbody')).toContainText('Local Sin Horario')
+    })
+
+    test('sin nada por revisar, el Resumen lo dice', async ({ page }) => {
+      await abrirPanel(page, { datos: sinPendientes })
+      await expect(page.getByText('Nada por revisar')).toBeVisible()
+      await expect(page.locator('[data-ir-revision]')).toHaveCount(0)
+    })
+
+    test('una sugerencia ofrece abrir el local que nombra, y el formulario se abre', async ({
+      page,
+    }) => {
+      await abrirConSugerencias(page, [sugerencia('s1', 'local sin horario')], {
+        datos: datosRevision,
+      })
+      await irA(page, 'sugerencias', 'Sugerencias')
+      await page.getByRole('button', { name: 'Abrir Local Sin Horario (Plaza Uno)' }).click()
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Negocios')
+      await expect(page.locator('#editor input[name="nombre"]')).toHaveValue('Local Sin Horario')
+    })
+
+    test('lo que escribió la persona sale como texto, y varios candidatos no se resuelven solos', async ({
+      page,
+    }) => {
+      await page.addInitScript(() => {
+        ;(window as unknown as { __xss?: number }).__xss = 0
+      })
+      const cafes = Array.from({ length: 6 }, (_, i) => local(`t${i}`, `Tostadora ${i}`))
+      await abrirConSugerencias(
+        page,
+        [sugerencia('s1', '<img src=x onerror="window.__xss=1">'), sugerencia('s2', 'tostadora')],
+        { datos: { ...contenido, places: cafes } },
+      )
+      await irA(page, 'sugerencias', 'Sugerencias')
+      await expect(page.getByText('<img src=x onerror="window.__xss=1">').first()).toBeVisible()
+      // Seis candidatos son demasiados para ofrecer un botón por cada uno: no se elige por ella.
+      await expect(page.getByRole('button', { name: /^Abrir / })).toHaveCount(0)
+      expect(await page.evaluate(() => (window as unknown as { __xss?: number }).__xss)).toBe(0)
+    })
+
+    test('con pocos candidatos los lista todos, con su plaza', async ({ page }) => {
+      const dos = [
+        local('a', 'Tostadora Uno'),
+        local('b', 'Tostadora Dos', { plazaId: 'plaza-dos' }),
+      ]
+      await abrirConSugerencias(page, [sugerencia('s1', 'tostadora')], {
+        datos: { ...contenido, places: dos },
+      })
+      await irA(page, 'sugerencias', 'Sugerencias')
+      await expect(page.getByRole('button', { name: /^Abrir / })).toHaveText([
+        'Abrir Tostadora Dos (Plaza Dos)',
+        'Abrir Tostadora Uno (Plaza Uno)',
+      ])
+    })
+
+    test('si el contenido no carga, las sugerencias siguen y se pueden marcar como atendidas', async ({
+      page,
+    }) => {
+      await page.route(/\/api\/panel\/sugerencias\/s1$/, (ruta) =>
+        ruta.fulfill({ json: { sinAtender: 0 } }),
+      )
+      await abrirConSugerencias(page, [sugerencia('s1', 'local sin horario')], {
+        contenidoStatus: 500,
+      })
+      await irA(page, 'sugerencias', 'Sugerencias')
+      await expect(page.getByText('Mensaje de s1.')).toBeVisible()
+      await expect(page.getByRole('button', { name: /^Abrir / })).toHaveCount(0)
+      await page.getByRole('button', { name: 'Marcar como atendida' }).click()
+      await expect(page.getByText('No queda nada por atender.')).toBeVisible()
+    })
+  })
+
   test.describe('la PR del panel en el resumen', () => {
     const RUTA_PR = /\/api\/panel\/contenido\/pr$/
     const RUTA_RETIRAR = /\/api\/panel\/contenido\/pr\/retirar$/

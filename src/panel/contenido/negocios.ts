@@ -3,6 +3,7 @@ import { seccionDireccion } from './direccion.ts'
 import { abrirEditor, cerrarEditor, mostrarProblemas } from './editor.ts'
 import { pintarFotosFormulario } from './fotos.ts'
 import { leerProcedencia, seccionProcedencia, validarProcedencia } from './procedencia.ts'
+import { contarRevisiones, pideRevision } from './revision.ts'
 import type { Cierre, Negocio } from './tipos.ts'
 import { DIAS, hoy, MOTIVOS, normalizar, numero, POR_PAGINA, plural, texto } from './tipos.ts'
 import { categoriaDeGiro, mapaDeGiros, mapaDePlazas, paginacion, vista } from './vista.ts'
@@ -46,6 +47,7 @@ export function pintarNegocios(): void {
   const cuantos = (marca: string) =>
     vista.datos?.places.filter((negocio) => estadoDelNegocio(negocio).marca === marca).length ?? 0
   const enPlazaInactiva = cuantos('plaza')
+  const revisiones = contarRevisiones(vista.datos.places, hoy())
   vista.raiz.innerHTML = `
     <div class="barra-contenido">
       <input class="${controls.campo} buscar" type="search" placeholder="Buscar por nombre, plaza o giro" aria-label="Buscar negocio" value="${texto(vista.consulta)}" data-buscar />
@@ -67,6 +69,10 @@ export function pintarNegocios(): void {
           )
           .join('')}
       </select>
+      <select class="${controls.campo}" aria-label="Filtrar por revisión" data-filtro="revision">
+        <option value="">Cualquier revisión</option>
+        ${revisiones.map(({ clave, rotulo, total }) => `<option value="${clave}"${vista.filtroRevision === clave ? ' selected' : ''}>${texto(rotulo)} (${numero(total)})</option>`).join('')}
+      </select>
     </div>
     <p class="meta-contenido">${numero(vista.datos.places.length)} negocios · ${numero(cuantos('no'))} ocultos · ${numero(cuantos('cierre'))} cerrados temporalmente${enPlazaInactiva > 0 ? ` · ${numero(enPlazaInactiva)} en plazas inactivas` : ''}</p>
     <p class="meta-contenido meta-resultados" role="status" aria-live="polite" data-resultados></p>
@@ -87,6 +93,9 @@ export function pintarZonaNegocios(): void {
       (negocio) => !vista.filtroEstado || estadoDelNegocio(negocio).marca === vista.filtroEstado,
     )
     .filter((negocio) => !vista.filtroPlaza || negocio.plazaId === vista.filtroPlaza)
+    .filter(
+      (negocio) => !vista.filtroRevision || pideRevision(vista.filtroRevision, negocio, hoy()),
+    )
     .filter((negocio) => {
       if (!buscado) return true
       return normalizar(
@@ -101,7 +110,9 @@ export function pintarZonaNegocios(): void {
 
   // La región en vivo está fuera de la zona: esta se reconstruye entera en cada pulsación y un aviso
   // que se recrea no se anuncia.
-  const filtrando = Boolean(buscado || vista.filtroEstado || vista.filtroPlaza)
+  const filtrando = Boolean(
+    buscado || vista.filtroEstado || vista.filtroPlaza || vista.filtroRevision,
+  )
   const resultados = vista.raiz?.querySelector<HTMLElement>('[data-resultados]')
   if (resultados) {
     const total = vista.datos.places.length

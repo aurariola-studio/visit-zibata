@@ -20,6 +20,8 @@ interface Vista {
   /** Filtros de la lista de negocios; vacío es "todos". */
   filtroEstado: string
   filtroPlaza: string
+  /** Una clave de `revision.ts`; vacío es "cualquiera". */
+  filtroRevision: string
   pagina: number
   aviso: string | null
   error: string | null
@@ -39,6 +41,7 @@ export const vista: Vista = {
   consulta: '',
   filtroEstado: '',
   filtroPlaza: '',
+  filtroRevision: '',
   pagina: 0,
   aviso: null,
   error: null,
