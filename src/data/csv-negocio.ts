@@ -165,7 +165,8 @@ export function filaAEntrada(row: CsvRow, dataset: CommercialDataset): FilaConve
     try {
       const parsed = parseHoursText(textoHorario)
       if (parsed?.note) avisos.push('La nota del horario no se importa: el panel no la edita.')
-      horario = dias(parsed)
+      // Día por día: el CSV cambia los días que nombra y deja los demás. Un horario parcial no borra el resto.
+      horario = { ...horario, ...dias(parsed) }
     } catch (error) {
       problemas.push(`Horario: ${(error as Error).message}`)
     }

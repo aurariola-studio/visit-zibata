@@ -13,6 +13,7 @@
  */
 import { type CsvRow, filaAEntrada } from '../src/data/csv-negocio.ts'
 import { type CommercialDataset, syncPlazaDerivedFields } from '../src/data/relations.ts'
+import { normalizeText } from '../src/lib/text.ts'
 import type { Place } from '../src/types/domain.ts'
 import { type Cargado, prepararNegocio } from './contenido.ts'
 
@@ -39,7 +40,8 @@ export interface ResultadoImportacion {
   dataset: CommercialDataset
 }
 
-const claveDe = (place: Place) => `${place.plazaId}|${place.name.trim().toLowerCase()}`
+// La misma comparación que usa el adaptador para decir que dos filas son el mismo local: "Café X" y "Cafe X" lo son.
+const claveDe = (place: Place) => `${place.plazaId}|${normalizeText(place.name)}`
 
 export function importarFilas(
   filas: CsvRow[],

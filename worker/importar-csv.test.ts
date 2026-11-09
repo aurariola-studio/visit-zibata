@@ -140,6 +140,38 @@ describe('importar un CSV pasa por prepararNegocio', () => {
     })
   })
 
+  it('importar sin cambiar nada no reescribe los archivos: ni un byte distinto', () => {
+    // Una fila en blanco (solo nombre y plaza) por cada local, como un CSV que no trae nada nuevo.
+    const filas = dataset.places.map((place) => ({
+      name: place.name,
+      plaza: dataset.plazas.find((otra) => otra.id === place.plazaId)?.name,
+    }))
+    const r = importar(filas)
+    expect(r.ok, r.filas.flatMap((f) => f.problemas).join(' | ')).toBe(true)
+    // Comparar el texto, no los objetos: un toEqual no ve el orden de las claves ni un `undefined`.
+    const lugares = (r.archivos?.lugares as { places: unknown[] } | undefined)?.places
+    const plazas = (r.archivos?.plazas as { plazas: unknown[] } | undefined)?.plazas
+    expect(JSON.stringify(lugares)).toBe(
+      JSON.stringify((lugaresJson as { places: unknown[] }).places),
+    )
+    expect(JSON.stringify(plazas)).toBe(
+      JSON.stringify((plazasJson as { plazas: unknown[] }).plazas),
+    )
+  })
+
+  it('un horario parcial cambia los días que nombra y deja los demás', () => {
+    const conHorario = dataset.places.find(
+      (place) => place.active && place.hours?.mon && place.hours.tue && place.hours.wed,
+    ) as Place
+    const plazaDe = dataset.plazas.find((otra) => otra.id === conHorario.plazaId)
+    const r = importar([{ name: conHorario.name, plaza: plazaDe?.name, hours: 'mie 07:00-08:00' }])
+    expect(r.ok, r.filas[0]?.problemas.join(' | ')).toBe(true)
+    const despues = r.dataset.places.find((place) => place.id === conHorario.id)
+    expect(despues?.hours?.wed).toEqual(['07:00-08:00'])
+    expect(despues?.hours?.mon).toEqual(conHorario.hours?.mon)
+    expect(despues?.hours?.tue).toEqual(conHorario.hours?.tue)
+  })
+
   describe('las filas se ven entre sí', () => {
     it('el mismo nombre dos veces en la misma plaza: la segunda se rechaza', () => {
       const r = importar([fila(), fila()])
@@ -147,6 +179,12 @@ describe('importar un CSV pasa por prepararNegocio', () => {
       expect(r.filas[0]?.ok).toBe(true)
       expect(r.filas[1]?.ok).toBe(false)
       expect(r.archivos).toBeNull()
+    })
+
+    it('"Café X" y "Cafe X" son el mismo local: la segunda fila se rechaza', () => {
+      const r = importar([fila({ name: 'Café Doble' }), fila({ name: 'Cafe Doble' })])
+      expect(r.ok).toBe(false)
+      expect(r.filas[1]?.ok).toBe(false)
     })
 
     it('el mismo nombre en dos plazas se acepta si los títulos distintos caben', () => {
