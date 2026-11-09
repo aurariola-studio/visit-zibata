@@ -165,7 +165,13 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
     if (!plaza) {
       error('places', `La plaza "${place.plazaId}" no existe`, place.id)
     } else if (place.active && !plaza.active) {
-      warn('places', `Local activo en la plaza inactiva "${plaza.id}": no se mostrará`, place.id)
+      // Un error y no un aviso: un local abierto en una plaza que no abre es un dato incoherente, y
+      // vale en los dos sentidos (crear o mover el local, y desactivar la plaza con locales dentro).
+      error(
+        'places',
+        `El local "${place.name}" está visible y su plaza "${plaza.name}" no está activa. Una plaza que no abre no puede tener locales abiertos: oculta o mueve el local, o activa la plaza.`,
+        place.id,
+      )
     }
 
     for (const giro of place.giros) {

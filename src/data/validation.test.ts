@@ -201,6 +201,35 @@ describe('validateRelations', () => {
     expect(errorsOf(validateRelations(fixed, bounds))).toEqual([])
   })
 
+  it('un local visible en una plaza que no está activa es un error, en los dos sentidos', () => {
+    const apagada = {
+      ...dataset,
+      plazas: dataset.plazas.map((plaza) =>
+        plaza.id === 'plaza-sur' ? { ...plaza, active: false } : plaza,
+      ),
+    }
+    const enLaApagada = apagada.places.filter(
+      (place) => place.plazaId === 'plaza-sur' && place.active,
+    )
+    expect(enLaApagada.length).toBeGreaterThan(0)
+    const errores = errorsOf(validateRelations(apagada, bounds))
+    expect(
+      errores.filter((mensaje) => mensaje.includes('no puede tener locales abiertos')),
+    ).toHaveLength(enLaApagada.length)
+    // Con los locales ocultos la plaza puede estar apagada: es el camino correcto para cerrarla.
+    const ocultos = {
+      ...apagada,
+      places: apagada.places.map((place) =>
+        place.plazaId === 'plaza-sur' ? { ...place, active: false } : place,
+      ),
+    }
+    expect(
+      errorsOf(validateRelations(ocultos, bounds)).filter((mensaje) =>
+        mensaje.includes('no puede tener locales abiertos'),
+      ),
+    ).toEqual([])
+  })
+
   it('exige verificación publicable en los locales activos', () => {
     const verification = {
       status: 'likely_active' as const,

@@ -167,7 +167,10 @@ export function mostrarProblemas(formEl: HTMLFormElement, problemas: string[]): 
   const generales: string[] = []
   for (const problema of problemas) {
     const separador = problema.indexOf(':')
-    const ruta = separador > 0 ? problema.slice(0, separador).trim() : ''
+    // Solo un nombre de campo (`nombre`, `fotos.2`) es una ruta: un mensaje con dos puntos y comillas no lo es,
+    // y como selector rompería el guardado entero.
+    const candidata = separador > 0 ? problema.slice(0, separador).trim() : ''
+    const ruta = /^[A-Za-z][\w.-]*$/.test(candidata) ? candidata : ''
     const mensaje = separador > 0 ? problema.slice(separador + 1).trim() : problema
     if (ruta && marcarError(formEl, ruta, mensaje)) continue
     generales.push(problema)

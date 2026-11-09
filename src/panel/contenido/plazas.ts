@@ -73,6 +73,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
     consultaGiro: '',
   }
   const locales = (vista.datos?.places ?? []).filter((negocio) => negocio.plazaId === plaza.id)
+  const visibles = locales.filter((negocio) => negocio.active).length
 
   abrirEditor(
     'Plazas',
@@ -130,7 +131,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
           <div class="campo-form">
             <span>Visibilidad</span>
             <label class="casilla"><input type="checkbox" name="activa"${plaza.active ? ' checked' : ''} /><span>Activa en la guía</span></label>
-            <span class="ayuda">${plural(locales.length, 'local', 'locales')} ${locales.length === 1 ? 'está' : 'están'} en esta plaza. Al desactivarla dejan de verse y su página da 404; te mostraré el efecto antes de guardar.${locales.length > 0 ? ' Para borrarla, primero hay que borrar sus locales.' : ''}</span>
+            <span class="ayuda">${visibles > 0 ? `${plural(visibles, 'local visible', 'locales visibles')} ${visibles === 1 ? 'está' : 'están'} en esta plaza: para desactivarla o pasarla a próximamente, primero hay que ocultarlos o moverlos.` : 'Al desactivarla su página da 404; te mostraré el efecto antes de guardar.'}${locales.length > 0 ? ' Para borrarla, primero hay que borrar sus locales.' : ''}</span>
           </div>
           <div class="campo-form">
             <span>Próximamente</span>

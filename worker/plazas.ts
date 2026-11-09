@@ -28,6 +28,9 @@ import { type Cargado, cargar, LIMITES } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
 import { SUFIJO_TITULO, TOPE_TITULO } from './titulos.ts'
 
+/** Estados de investigación que dicen "no": la plaza se descartó, y activarla no es una edición. */
+const DESCARTADOS: readonly string[] = ['closed', 'removed', 'duplicate', 'rejected']
+
 export const EntradaPlazaSchema = z.strictObject({
   id: z.string().trim().min(1, 'Falta la plaza'),
   nombre: z
@@ -125,9 +128,28 @@ export function prepararPlaza(
     ...(datos.googleMapsUri ? { googleMapsUri: datos.googleMapsUri } : {}),
   }
   const previa = antes.verification
+  const activando = datos.activa && !antes.active
+  /*
+   * Activar una plaza la publica, así que su estado de investigación no puede quedarse en uno que no
+   * se publica. Los que dicen "todavía no" (`coming_soon`, `uncertain`) pasan a `likely_active`; los que
+   * dicen "no" (cerrada, quitada, duplicada, rechazada) son una conclusión de la investigación y no se
+   * revierten desde aquí: activarla sería publicar lo que se descartó.
+   */
+  const estadoPrevio = previa?.status
+  if (activando && estadoPrevio && DESCARTADOS.includes(estadoPrevio)) {
+    return {
+      ok: false,
+      problemas: [
+        `Su estado de investigación es "${estadoPrevio}": la investigación la descartó y activarla la publicaría. Eso no se hace desde el panel.`,
+      ],
+    }
+  }
+  const promovida =
+    activando && estadoPrevio !== undefined && !PUBLISHABLE_STATUS.includes(estadoPrevio)
   if (previa) {
     nueva.verification = {
       ...previa,
+      ...(promovida ? { status: 'likely_active' } : {}),
       lastVerifiedAt: hoy,
       sources: [...new Set([...previa.sources, `campo:${hoy}`])].slice(-8),
     }
@@ -227,7 +249,7 @@ export function prepararPlaza(
   const avisos: string[] = []
   if (cambiaActiva && !plaza.active) {
     avisos.push(
-      `La página de la zona deja de existir y su dirección da 404. Los locales de la plaza (${enPlazaAntes} visibles) salen de las listas, del buscador y del sitemap.`,
+      'La página de la zona deja de existir y su dirección da 404.',
       'Un local borrado antes de esta plaza seguirá yendo a la portada, no a la zona.',
     )
   }
@@ -235,10 +257,9 @@ export function prepararPlaza(
     avisos.push(
       `Se publica la página de la zona y salen a la vista ${enPlazaDespues} locales de la plaza.`,
     )
-    const estado = antes.verification?.status
-    if (estado && !(PUBLISHABLE_STATUS as readonly string[]).includes(estado)) {
+    if (promovida) {
       avisos.push(
-        `Su estado de investigación es "${estado}", no "active" ni "likely_active": activarla la publica sin verificarla, y hoy el panel no cambia ese estado al activar.`,
+        `Su estado de investigación pasa de "${estadoPrevio}" a "likely_active", para que se publique. El panel no comprueba que la plaza haya abierto: lo da por probable porque la activas tú.`,
       )
     }
   }
