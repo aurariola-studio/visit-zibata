@@ -1307,6 +1307,16 @@ test.describe('Panel', () => {
     await expect(page.locator('#editor').locator('[data-slug-nuevo]')).toHaveCount(0)
   })
 
+  test('un negocio nuevo nace visible y no se puede ocultar de nacimiento', async ({ page }) => {
+    await abrirPanel(page)
+    await irA(page, 'negocios', 'Negocios')
+    await page.getByRole('button', { name: 'Nuevo negocio' }).click()
+    const visible = page.locator('#editor').getByRole('checkbox', { name: 'Visible en la guía' })
+    await expect(visible).toBeChecked()
+    await expect(visible).toBeDisabled()
+    await expect(page.locator('#editor')).toContainText('Un negocio nuevo se crea visible')
+  })
+
   test('un negocio nuevo no ofrece borrar', async ({ page }) => {
     await abrirPanel(page)
     await irA(page, 'negocios', 'Negocios')

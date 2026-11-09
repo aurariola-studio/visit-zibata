@@ -680,6 +680,19 @@ export function prepararNegocio(
   if (entrada.data.id && !existente) {
     return { ok: false, problemas: ['Ese negocio ya no existe'] }
   }
+  /*
+   * Un local nuevo nace visible. `active: false` es la baja definitiva de uno que ya existía: crear uno
+   * así sería guardar un registro del que no se sabe nada (nunca se publicaría y quedaría `uncertain`).
+   * Si no se sabe si el local existe, todavía no se puede añadir.
+   */
+  if (!existente && !entrada.data.activo) {
+    return {
+      ok: false,
+      problemas: [
+        'activo: Un local nuevo se crea visible en la guía. Si todavía no sabes si existe, no se puede añadir.',
+      ],
+    }
+  }
 
   // También los slugs: un id nuevo no debe chocar con la URL de un local existente.
   const ids = new Set([
