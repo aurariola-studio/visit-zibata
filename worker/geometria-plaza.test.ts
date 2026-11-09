@@ -124,7 +124,7 @@ describe('la vista de impacto', () => {
 })
 
 describe('lo que se guarda', () => {
-  it('cambia solo la geometría de esa plaza y la fecha, y nada más del archivo', () => {
+  it('cambia solo la geometría de esa plaza, su procedencia y la fecha, y nada más del archivo', () => {
     const preparado = prepararContorno(
       completo,
       crudo,
@@ -147,12 +147,15 @@ describe('lo que se guarda', () => {
     despues.plazas.forEach((fila, i) => {
       const original = antes.plazas[i] ?? {}
       if (fila.id === plaza.id) {
-        // La misma plaza, con la misma lista de claves: solo `geometry` es distinta.
+        // La misma plaza, con la misma lista de claves: solo cambian `geometry` y la cláusula de su procedencia.
         expect(Object.keys(fila)).toEqual(Object.keys(original))
-        const { geometry: nueva, ...restoFila } = fila
-        const { geometry: vieja, ...restoOriginal } = original
+        const { geometry: nueva, locationSource: nuevaFuente, ...restoFila } = fila
+        const { geometry: vieja, locationSource: viejaFuente, ...restoOriginal } = original
         expect(restoFila).toEqual(restoOriginal)
         expect(nueva).not.toEqual(vieja)
+        expect(nuevaFuente).toBe(
+          `${String(viejaFuente).trimEnd()} Contorno ajustado a mano en el panel el ${HOY}.`,
+        )
       } else {
         expect(fila).toEqual(original)
       }
@@ -183,6 +186,43 @@ describe('lo que se guarda', () => {
       return s + ((p[0] ?? 0) * (q[1] ?? 0) - (q[0] ?? 0) * (p[1] ?? 0))
     }, 0)
     expect(doble).toBeGreaterThan(0)
+  })
+})
+
+describe('la procedencia después de ajustar', () => {
+  const fuenteDe = (r: ReturnType<typeof prepararContorno>) => {
+    if (!r.ok) throw new Error('debía ser válida')
+    const filas = (r.plazas as unknown as { plazas: { id: string; locationSource: string }[] })
+      .plazas
+    return filas.find((fila) => fila.id === plaza.id)?.locationSource ?? ''
+  }
+  const ajustar = (dataset: CommercialDataset, anillo: number[][], fecha: string) =>
+    fuenteDe(prepararContorno(dataset, crudo, { id: plaza.id, geometria: poligono(anillo) }, fecha))
+
+  it('deja constancia, con la fecha, de que se ajustó a mano: no sigue diciendo solo "provisional"', () => {
+    const fuente = ajustar(completo, reducida, HOY)
+    expect(fuente).toContain(plaza.locationSource.trimEnd())
+    expect(fuente.endsWith(`Contorno ajustado a mano en el panel el ${HOY}.`)).toBe(true)
+  })
+
+  it('un segundo ajuste sustituye la cláusula, no las acumula', () => {
+    const primera = ajustar(completo, reducida, '2026-11-01')
+    const conPrimera: CommercialDataset = {
+      ...completo,
+      plazas: completo.plazas.map((fila) =>
+        fila.id === plaza.id ? { ...fila, locationSource: primera } : fila,
+      ),
+    }
+    const segunda = ajustar(conPrimera, escalar(reducida, 0.95), '2026-11-09')
+    expect(segunda.match(/Contorno ajustado a mano/g)).toHaveLength(1)
+    expect(segunda).toContain('2026-11-09')
+    expect(segunda).not.toContain('2026-11-01')
+    expect(segunda).toContain(plaza.locationSource.trimEnd())
+  })
+
+  it('si no hay nada que guardar, no se escribe nada (y la procedencia no se toca)', () => {
+    const r = prepararContorno(completo, crudo, { id: plaza.id, geometria: plaza.geometry }, HOY)
+    expect(r.ok).toBe(false)
   })
 })
 

@@ -261,6 +261,49 @@ describe('borrar una plaza', () => {
   })
 })
 
+describe('crear una plaza', () => {
+  const crear = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir('/api/panel/contenido/plaza/nueva', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+
+  it('sin fuentes es un 400 que lo dice, aunque se confirme', async () => {
+    const respuesta = await crear({
+      nombre: 'Plaza de Prueba',
+      lat: 20.69,
+      lng: -100.33,
+      fuentes: [],
+      evidencia: 'Evidencia de la prueba, en una frase.',
+      confianza: 'low',
+      confirmar: true,
+    })
+    expect(respuesta?.status).toBe(400)
+    const datos = (await respuesta?.json()) as { problemas: string[] }
+    expect(datos.problemas.join(' ')).toMatch(/fuente/)
+  })
+
+  it('exige que la petición salga del propio sitio, antes de leer el cuerpo', async () => {
+    const respuesta = await crear({ nombre: 'x', confirmar: true }, 'cross-site')
+    expect(respuesta?.status).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee', async () => {
+    const respuesta = await crear({ nombre: 'x'.repeat(20_000) })
+    expect(respuesta?.status).toBe(413)
+  })
+
+  it('un JSON roto es un 400 y no una caída', async () => {
+    const respuesta = await pedir('/api/panel/contenido/plaza/nueva', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': 'same-origin' },
+      body: '{no es json',
+    })
+    expect(respuesta?.status).toBe(400)
+  })
+})
+
 describe('lo que el panel recibe de cada plaza', () => {
   it('lleva el contorno de cada plaza, para poder editarlo', async () => {
     const respuesta = await pedir('/api/panel/contenido')

@@ -262,6 +262,7 @@ describe('las escrituras del panel no leen el cuerpo de quien no puede entrar', 
     '/api/panel/contenido/negocio',
     '/api/panel/contenido/categorias',
     '/api/panel/contenido/plaza/contorno',
+    '/api/panel/contenido/plaza/nueva',
   ])('un POST anónimo a %s es un 403 y no baja nada', async (ruta) => {
     const { base } = baseFalsa()
     const { peticion, estado } = pedidaGigante(ruta, PROPIO)

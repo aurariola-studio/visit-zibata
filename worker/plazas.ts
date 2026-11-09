@@ -20,6 +20,7 @@ import {
   validateRelations,
   validateTranslations,
 } from '../src/data/relations.ts'
+import { PUBLISHABLE_STATUS } from '../src/data/rules.ts'
 import { PlazaSchema } from '../src/data/schemas.ts'
 import { TITULOS_RESERVADOS } from '../src/data/titulos-reservados.ts'
 import { fechaLocal } from './analitica.ts'
@@ -234,6 +235,12 @@ export function prepararPlaza(
     avisos.push(
       `Se publica la página de la zona y salen a la vista ${enPlazaDespues} locales de la plaza.`,
     )
+    const estado = antes.verification?.status
+    if (estado && !(PUBLISHABLE_STATUS as readonly string[]).includes(estado)) {
+      avisos.push(
+        `Su estado de investigación es "${estado}", no "active" ni "likely_active": activarla la publica sin verificarla, y hoy el panel no cambia ese estado al activar.`,
+      )
+    }
   }
   if (plaza.active && antes.active && enPlazaAntes === 0) {
     avisos.push('La plaza está activa pero no tiene ningún local visible.')
