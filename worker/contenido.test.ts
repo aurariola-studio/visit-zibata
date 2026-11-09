@@ -445,6 +445,89 @@ describe('editar un negocio existente', () => {
     expect(preparado.place.name).toBe(`${existente.name} renovado`)
   })
 
+  describe('enlaces de reparto y TikTok', () => {
+    const conEnlaces = dataset.places.find(
+      (fila) => fila.active && fila.links.rappi && fila.links.uberEats && fila.links.tiktok,
+    ) as Place
+    const guardar = (extra: Record<string, unknown>) => {
+      const preparado = prepararNegocio(dataset, crudo, editar(conEnlaces, extra), HOY)
+      if (!preparado.ok) throw new Error(preparado.problemas.join(' | '))
+      return preparado.place
+    }
+
+    it('un guardado que no los menciona deja `links` idéntico, sin vaciar ninguno', () => {
+      // El formulario no manda sitio, instagram ni facebook aquí: se igualan a los guardados para aislar el caso.
+      const place = guardar({
+        sitio: conEnlaces.links.website ?? '',
+        instagram: conEnlaces.links.instagram ?? '',
+        facebook: conEnlaces.links.facebook ?? '',
+        whatsapp: conEnlaces.links.whatsapp ?? '',
+      })
+      expect(place.links).toEqual(conEnlaces.links)
+    })
+
+    it('el formulario los manda tal como los muestra y `links` queda igual', () => {
+      const place = guardar({
+        sitio: conEnlaces.links.website ?? '',
+        instagram: conEnlaces.links.instagram ?? '',
+        facebook: conEnlaces.links.facebook ?? '',
+        whatsapp: conEnlaces.links.whatsapp ?? '',
+        tiktok: conEnlaces.links.tiktok ?? '',
+        rappi: conEnlaces.links.rappi ?? '',
+        uberEats: conEnlaces.links.uberEats ?? '',
+        didiFood: conEnlaces.links.didiFood ?? '',
+      })
+      expect(place.links).toEqual(conEnlaces.links)
+    })
+
+    it('vacío lo borra, y un valor nuevo lo cambia, sin tocar los demás', () => {
+      const place = guardar({
+        sitio: conEnlaces.links.website ?? '',
+        instagram: conEnlaces.links.instagram ?? '',
+        facebook: conEnlaces.links.facebook ?? '',
+        whatsapp: conEnlaces.links.whatsapp ?? '',
+        rappi: '',
+        didiFood: 'https://www.didi-food.com/es-MX/store/prueba',
+      })
+      expect(place.links.rappi ?? null).toBeNull()
+      expect(place.links.didiFood).toBe('https://www.didi-food.com/es-MX/store/prueba')
+      expect(place.links.uberEats).toBe(conEnlaces.links.uberEats)
+      expect(place.links.tiktok).toBe(conEnlaces.links.tiktok)
+    })
+
+    it('un enlace que no es URL se rechaza con el motivo', () => {
+      const preparado = prepararNegocio(
+        dataset,
+        crudo,
+        editar(conEnlaces, { rappi: 'mi tienda en rappi' }),
+        HOY,
+      )
+      expect(preparado.ok).toBe(false)
+    })
+  })
+
+  it('la nota del horario no se pierde al guardar, con o sin días', () => {
+    const conNota: Place = {
+      ...existente,
+      hours: { mon: ['09:00-18:00'], note: 'Cierra en días festivos' },
+    }
+    const ds = {
+      ...dataset,
+      places: dataset.places.map((fila) => (fila.id === existente.id ? conNota : fila)),
+    }
+    const conDias = prepararNegocio(
+      ds,
+      crudo,
+      editar(conNota, { horario: { mon: ['09:00-18:00'] } }),
+      HOY,
+    )
+    if (!conDias.ok) throw new Error('no preparó')
+    expect(conDias.place.hours?.note).toBe('Cierra en días festivos')
+    const sinDias = prepararNegocio(ds, crudo, editar(conNota, { horario: null }), HOY)
+    if (!sinDias.ok) throw new Error('no preparó')
+    expect(sinDias.place.hours).toEqual({ note: 'Cierra en días festivos' })
+  })
+
   it('conserva las fotos y el resto de enlaces que el formulario no toca', () => {
     const preparado = prepararNegocio(
       dataset,
