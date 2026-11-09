@@ -511,6 +511,10 @@ td.tenue {
   overflow-wrap: anywhere;
 }
 
+.celda-nombre .ayuda {
+  display: block;
+}
+
 .negocio-nombre {
   font-weight: var(--weight-strong);
   color: var(--ink-900);

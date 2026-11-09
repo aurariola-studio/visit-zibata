@@ -22,7 +22,9 @@ import categoriasJson from '../data/commercial/categories.json' with { type: 'js
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
 import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
 import redirectsJson from '../data/commercial/redirects.json' with { type: 'json' }
+import ajustesJson from '../data/geographic/ajustes-edificios.json' with { type: 'json' }
 import extent from '../data/geographic/extent.json' with { type: 'json' }
+import { type AjusteEdificio, leerAjustes } from '../src/data/ajustes-edificios.ts'
 import {
   type CommercialDataset,
   syncPlazaDerivedFields,
@@ -168,6 +170,8 @@ export interface ResultadoContenido {
   categories: Category[]
   plazas: PlazaResumen[]
   places: Place[]
+  /** Los ajustes de edificios del mapa; `valido: false` si el archivo no pasa el esquema (no se edita desde el panel). */
+  edificios: { valido: boolean; ajustes: AjusteEdificio[] }
 }
 
 export interface NegocioGuardado {
@@ -361,7 +365,14 @@ export interface Cargado {
   seco: boolean
   pr: Publicacion | null
   /** `redirects` falta en una rama que se abrió antes de que existiera el archivo. */
-  crudo: { categories: Crudo; plazas: Crudo; places: Crudo; redirects?: Crudo }
+  crudo: {
+    categories: Crudo
+    plazas: Crudo
+    places: Crudo
+    redirects?: Crudo
+    /** `data/geographic/ajustes-edificios.json`; falta en una rama anterior a su creación. */
+    ajustesEdificios?: Crudo
+  }
   dataset: CommercialDataset
 }
 
@@ -405,6 +416,7 @@ const local = (): Cargado['crudo'] => ({
   plazas: plazasJson as unknown as Crudo,
   places: lugaresJson as unknown as Crudo,
   redirects: redirectsJson as unknown as Crudo,
+  ajustesEdificios: ajustesJson as unknown as Crudo,
 })
 
 function datasetDe(crudo: Cargado['crudo']): CommercialDataset {
@@ -430,11 +442,12 @@ export async function cargar(
 
   const pr = await prAbierta(entorno)
   const ref = pr ? ramaDe(entorno) : 'main'
-  const [categorias, plazas, lugares, redirecciones] = await Promise.all([
+  const [categorias, plazas, lugares, redirecciones, ajustes] = await Promise.all([
     leerArchivo(entorno, 'data/commercial/categories.json', ref),
     leerArchivo(entorno, 'data/commercial/plazas.json', ref),
     leerArchivo(entorno, 'data/commercial/places.json', ref),
     leerArchivo(entorno, 'data/commercial/redirects.json', ref),
+    leerArchivo(entorno, 'data/geographic/ajustes-edificios.json', ref),
   ])
   if (!categorias || !plazas || !lugares) {
     throw new Error(`faltan los archivos de contenido en ${ref}`)
@@ -444,6 +457,7 @@ export async function cargar(
     plazas: JSON.parse(plazas) as Crudo,
     places: JSON.parse(lugares) as Crudo,
     ...(redirecciones ? { redirects: JSON.parse(redirecciones) as Crudo } : {}),
+    ...(ajustes ? { ajustesEdificios: JSON.parse(ajustes) as Crudo } : {}),
   }
   return { ref, seco: false, pr, crudo, dataset: datasetDe(crudo) }
 }
@@ -485,6 +499,7 @@ export async function contenido(
       }),
     ),
     places: cargado.dataset.places,
+    edificios: leerAjustes(cargado.crudo.ajustesEdificios),
   }
 }
 

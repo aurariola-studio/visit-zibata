@@ -95,6 +95,16 @@ describe('aplicar ajustes a las huellas', () => {
     expect(problemas.join(' ')).toMatch(/2 ajustes sobre la misma huella/)
   })
 
+  it('un ajuste sobre una huella que la plaza sustituye por un volumen generado es un error', () => {
+    const ajustador = new Ajustador([ocultar()])
+    ajustador.para(A, 'a', 'paseo-zibata')
+    expect(ajustador.problemas().join(' ')).toMatch(/paseo-zibata.*no cambiaría nada/)
+    // Una huella sin ajuste dentro de esa misma plaza no es un problema.
+    const sinAjuste = new Ajustador([])
+    sinAjuste.para(A, 'a', 'paseo-zibata')
+    expect(sinAjuste.problemas()).toEqual([])
+  })
+
   it('una huella con varios polígonos (un MultiPolygon) cuenta como una', () => {
     const ajustador = new Ajustador([ocultar()])
     ajustador.para(A, 'multi')

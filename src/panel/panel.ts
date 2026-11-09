@@ -74,7 +74,7 @@ interface Datos {
   sinAtender: number
 }
 
-type Vista = 'resumen' | 'sugerencias' | 'negocios' | 'categorias' | 'plazas'
+type Vista = 'resumen' | 'sugerencias' | 'negocios' | 'categorias' | 'plazas' | 'edificios'
 type Filtro = 'pendientes' | 'atendidas' | 'todas'
 
 const vistaEl = document.getElementById('vista')
@@ -307,6 +307,8 @@ function cabeceraDe(vistaActual: Vista): { antetitulo: string; titulo: string } 
       return { antetitulo: 'Taxonomía', titulo: 'Categorías y giros' }
     case 'plazas':
       return { antetitulo: 'Lugares', titulo: 'Plazas' }
+    case 'edificios':
+      return { antetitulo: 'Mapa', titulo: 'Edificios' }
   }
 }
 
@@ -335,7 +337,12 @@ function pintarVista(): void {
   }
   actualizarCuentaSugerencias()
 
-  if (vista === 'negocios' || vista === 'categorias' || vista === 'plazas') {
+  if (
+    vista === 'negocios' ||
+    vista === 'categorias' ||
+    vista === 'plazas' ||
+    vista === 'edificios'
+  ) {
     mostrarContenido(vista)
     return
   }

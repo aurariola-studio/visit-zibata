@@ -316,6 +316,23 @@ interface Opciones {
 }
 
 /** Abre el panel con las rutas de lectura simuladas. */
+/** Un ajuste con un motivo larguísimo y sin espacios: el peor caso para la tabla en un teléfono. */
+const ajustesDePrueba = [
+  {
+    accion: 'ocultar' as const,
+    punto: { lat: 20.69, lng: -100.35 },
+    motivo: `Demolido ${'sinespaciosylargo'.repeat(8)}`,
+    creado: '2026-11-01',
+  },
+  {
+    accion: 'altura' as const,
+    alturaM: 10.5,
+    punto: { lat: 20.6905, lng: -100.3455 },
+    motivo: 'Medida en el sitio',
+    creado: '2026-11-02',
+  },
+]
+
 async function abrirPanel(
   page: Page,
   { contenidoStatus = 200, datos = contenido }: Opciones = {},
@@ -466,8 +483,11 @@ test.describe('Panel', () => {
       ['negocios', 'Negocios'],
       ['categorias', 'Categorías y giros'],
       ['plazas', 'Plazas'],
+      ['edificios', 'Edificios'],
     ] as const
-    await abrirPanel(page, { datos: conEstados })
+    await abrirPanel(page, {
+      datos: { ...conEstados, edificios: { valido: true, ajustes: ajustesDePrueba } },
+    })
 
     const fallos: string[] = []
     for (const ancho of anchos) {
@@ -1323,6 +1343,107 @@ test.describe('Panel', () => {
     await page.getByRole('button', { name: 'Nuevo negocio' }).click()
     await expect(page.locator('#editor')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Borrar negocio' })).toHaveCount(0)
+  })
+
+  test.describe('edificios', () => {
+    const conAjustes = { ...contenido, edificios: { valido: true, ajustes: ajustesDePrueba } }
+
+    test('sin ajustes lo dice y no enseña una tabla vacía', async ({ page }) => {
+      await abrirPanel(page)
+      await irA(page, 'edificios', 'Edificios')
+      await expect(page.getByText('Todavía no hay ajustes')).toBeVisible()
+      await expect(page.locator('.tabla')).toHaveCount(0)
+      await sinDesplazamientoLateral(page)
+    })
+
+    test('lista cada ajuste con lo que hace, el punto y el motivo', async ({ page }) => {
+      await abrirPanel(page, { datos: conAjustes })
+      await irA(page, 'edificios', 'Edificios')
+      await expect(page.getByText('2 ajustes de edificios')).toBeVisible()
+      await expect(page.getByText('Oculto', { exact: true })).toBeVisible()
+      await expect(page.getByText(/Altura fijada a 10[.,]5 m/)).toBeVisible()
+      await expect(page.getByText('Medida en el sitio')).toBeVisible()
+      await sinDesplazamientoLateral(page)
+    })
+
+    test('un archivo inválido se avisa y el resto sigue', async ({ page }) => {
+      await abrirPanel(page, { datos: { ...contenido, edificios: { valido: false, ajustes: [] } } })
+      await irA(page, 'edificios', 'Edificios')
+      await expect(page.getByRole('alert').filter({ hasText: 'no pasa el esquema' })).toBeVisible()
+    })
+
+    test('quitar un ajuste enseña lo que cambia y confirma lo que se vio', async ({ page }) => {
+      const cuerpos: Record<string, unknown>[] = []
+      await page.route(/\/api\/panel\/contenido\/edificio$/, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as Record<string, unknown>
+        cuerpos.push(cuerpo)
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            confirmado: cuerpo.confirmar === true,
+            seco: false,
+            pr: cuerpo.confirmar
+              ? { url: 'https://example.test/pr/8', numero: 8, creada: true }
+              : null,
+            mensaje: cuerpo.confirmar ? 'Ajuste quitado en la PR.' : 'Esto es lo que cambiaría.',
+            resumen: {
+              operacion: 'quitar',
+              total: 1,
+              avisos: ['El edificio vuelve a aparecer en el mapa.'],
+            },
+          },
+        })
+      })
+      await abrirPanel(page, { datos: conAjustes })
+      await irA(page, 'edificios', 'Edificios')
+      await page.getByRole('button', { name: /Quitar el ajuste: Oculto/ }).click()
+      const dialogo = page.locator('#editor')
+      await expect(dialogo.getByRole('heading', { name: 'Se quitará este ajuste' })).toBeVisible()
+      await expect(dialogo.getByText('vuelve a aparecer en el mapa')).toBeVisible()
+      // El primer paso no confirma nada.
+      expect(cuerpos).toHaveLength(1)
+      expect(cuerpos[0]).toEqual({ operacion: 'quitar', punto: { lat: 20.69, lng: -100.35 } })
+      await dialogo.getByRole('button', { name: 'Quitar ajuste' }).click()
+      await expect(dialogo).toBeHidden()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #8' })).toBeVisible()
+      expect(cuerpos).toHaveLength(2)
+      expect(cuerpos[1]).toEqual({ ...cuerpos[0], confirmar: true })
+    })
+
+    test('"Mejor no" cierra sin mandar nada más', async ({ page }) => {
+      const cuerpos: unknown[] = []
+      await page.route(/\/api\/panel\/contenido\/edificio$/, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            confirmado: false,
+            seco: false,
+            pr: null,
+            mensaje: '',
+            resumen: { operacion: 'quitar', total: 1, avisos: ['Aviso.'] },
+          },
+        })
+      })
+      await abrirPanel(page, { datos: conAjustes })
+      await irA(page, 'edificios', 'Edificios')
+      await page.getByRole('button', { name: /Quitar el ajuste: Oculto/ }).click()
+      await page.locator('#editor').getByRole('button', { name: 'Mejor no' }).click()
+      await expect(page.locator('#editor')).toBeHidden()
+      expect(cuerpos).toHaveLength(1)
+    })
+
+    test('si el servidor lo rechaza, lo dice y no hay botón para confirmar', async ({ page }) => {
+      await page.route(/\/api\/panel\/contenido\/edificio$/, (ruta) =>
+        ruta.fulfill({ status: 400, json: { ok: false, problemas: ['Ese ajuste ya no existe'] } }),
+      )
+      await abrirPanel(page, { datos: conAjustes })
+      await irA(page, 'edificios', 'Edificios')
+      await page.getByRole('button', { name: /Quitar el ajuste: Oculto/ }).click()
+      const dialogo = page.locator('#editor')
+      await expect(dialogo.getByText('Ese ajuste ya no existe')).toBeVisible()
+      await expect(dialogo.getByRole('button', { name: 'Quitar ajuste' })).toHaveCount(0)
+    })
   })
 
   test('plazas: lista con su estado y sus locales', async ({ page }) => {

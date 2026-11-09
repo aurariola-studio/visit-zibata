@@ -63,6 +63,15 @@ export interface Negocio {
   active: boolean
 }
 
+/** Un ajuste a mano de un edificio del mapa, tal como lo manda el Worker. */
+export interface AjusteEdificio {
+  accion: 'ocultar' | 'altura'
+  punto: { lat: number; lng: number }
+  alturaM?: number
+  motivo: string
+  creado: string
+}
+
 export interface Datos {
   ref: string
   seco: boolean
@@ -70,6 +79,8 @@ export interface Datos {
   categories: Categoria[]
   plazas: PlazaResumen[]
   places: Negocio[]
+  /** Ausente en un Worker anterior a los ajustes de edificios. */
+  edificios?: { valido: boolean; ajustes: AjusteEdificio[] }
 }
 
 /** Lo que el rail necesita saber de la rama del contenido. */
@@ -78,7 +89,7 @@ export interface EstadoContenido {
   pr: { url: string; numero: number } | null
 }
 
-export type ModoContenido = 'negocios' | 'categorias' | 'plazas'
+export type ModoContenido = 'negocios' | 'categorias' | 'plazas' | 'edificios'
 
 export interface FormularioAbierto {
   id: string
