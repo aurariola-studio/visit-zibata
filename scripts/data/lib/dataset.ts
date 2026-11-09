@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { z } from 'zod'
+import { AjustesEdificiosFileSchema } from '../../../src/data/ajustes-edificios.ts'
 import type { Bounds } from '../../../src/data/relations.ts'
 import {
   CategoriesFileSchema,
@@ -16,6 +17,7 @@ export const dataPaths = {
   plazas: `${ROOT}data/commercial/plazas.json`,
   places: `${ROOT}data/commercial/places.json`,
   redirects: `${ROOT}data/commercial/redirects.json`,
+  ajustesEdificios: `${ROOT}data/geographic/ajustes-edificios.json`,
   schemasDir: `${ROOT}data/commercial/schemas`,
   extent: `${ROOT}data/geographic/extent.json`,
   public: `${ROOT}public`,
@@ -52,6 +54,10 @@ export function loadPlazasFile(): PlazasFile {
 
 export function loadPlacesFile(): PlacesFile | null {
   return existsSync(dataPaths.places) ? parseFile(dataPaths.places, PlacesFileSchema) : null
+}
+
+export function loadAjustesEdificios(): z.infer<typeof AjustesEdificiosFileSchema> {
+  return parseFile(dataPaths.ajustesEdificios, AjustesEdificiosFileSchema)
 }
 
 export function loadRedirectsFile(): RedirectsFile | null {

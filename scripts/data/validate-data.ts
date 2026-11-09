@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { validarContornoDePlaza } from '../../src/data/geometria.ts'
 import {
   type DataIssue,
+  isWithinBounds,
   syncPlazaDerivedFields,
   validateRedirects,
   validateRelations,
@@ -28,6 +29,7 @@ import { variantPath } from '../../src/lib/image-variants.ts'
 import {
   DatasetError,
   dataPaths,
+  loadAjustesEdificios,
   loadBounds,
   loadCategoriesFile,
   loadContorno,
@@ -96,6 +98,31 @@ try {
       otras,
     })) {
       issues.push({ level: 'error', dataset: 'plazas', id: plaza.id, message: problema.mensaje })
+    }
+  }
+
+  // Los ajustes de edificios: forma, punto dentro del área y sin dos ajustes sobre el mismo punto. Que cada punto
+  // caiga en UNA huella solo se puede saber con el crudo: lo comprueba `map:build`, y falla si no.
+  const vistos = new Set<string>()
+  for (const ajuste of loadAjustesEdificios().ajustes) {
+    const clave = `${ajuste.punto.lat},${ajuste.punto.lng}`
+    const donde = `${ajuste.accion} en (${clave})`
+    if (vistos.has(clave)) {
+      issues.push({
+        level: 'error',
+        dataset: 'ajustes-edificios',
+        id: donde,
+        message: 'Hay dos ajustes en el mismo punto',
+      })
+    }
+    vistos.add(clave)
+    if (bounds && !isWithinBounds(ajuste.punto, bounds)) {
+      issues.push({
+        level: 'error',
+        dataset: 'ajustes-edificios',
+        id: donde,
+        message: 'El punto cae fuera del área del mapa',
+      })
     }
   }
 

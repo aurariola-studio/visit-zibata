@@ -23,8 +23,10 @@ import type {
   Polygon,
   Position,
 } from 'geojson'
+import { AjustesEdificiosFileSchema } from '../../src/data/ajustes-edificios.ts'
 import { PlazasFileSchema } from '../../src/data/schemas.ts'
 import { normalizeText } from '../../src/lib/text.ts'
+import { Ajustador } from './lib/ajustes.ts'
 import {
   type BuildingType,
   classifyLabel,
@@ -223,6 +225,10 @@ const rawBuildings = readJson<FeatureCollection<Polygon | MultiPolygon, Overture
 )
 rawBuildings.features.sort((a, b) => a.properties.id.localeCompare(b.properties.id))
 
+const ajustador = new Ajustador(
+  AjustesEdificiosFileSchema.parse(readJson(paths.ajustesEdificios)).ajustes,
+)
+
 const SOURCE_CODE: Record<string, string> = {
   OpenStreetMap: 'osm',
   'Microsoft ML Buildings': 'microsoft',
@@ -235,6 +241,8 @@ type BuildingProps = {
   minHeight?: number
   type: BuildingType
   src: string
+  /** Metros fijados a mano: `build-mallas` los respeta tal cual, sin mezclarlos ni redondearlos a pisos. */
+  alturaFija?: true
   /** Dentro del contorno de Zibatá: el estilo atenúa el contexto exterior. */
   inside: boolean
 }
@@ -250,6 +258,10 @@ for (const building of rawBuildings.features) {
     if (areaM2 < config.buildings.minAreaM2) continue
     const center = turf.centroid(polygon).geometry.coordinates
     if (!inBbox(center)) continue
+
+    // Un edificio oculto a mano se descarta antes de darle id: sale de las teselas, de las mallas y de las plazas.
+    const ajuste = ajustador.para(polygon, building.properties.id)
+    if (ajuste?.ocultar) continue
 
     const inside = (area: Feature<Polygon | MultiPolygon>) =>
       turf.booleanPointInPolygon(center, area)
@@ -275,6 +287,10 @@ for (const building of rawBuildings.features) {
       src: SOURCE_CODE[(building.properties.src ?? '').split(',')[0] ?? ''] ?? 'other',
       inside: turf.booleanPointInPolygon(center, boundary),
     }
+    if (ajuste?.alturaFijaM !== undefined) {
+      props.height = ajuste.alturaFijaM
+      props.alturaFija = true
+    }
     if (building.properties.min_height) props.minHeight = building.properties.min_height
     const geometry = turf.rewind(polygon) as Polygon
 
@@ -292,6 +308,14 @@ for (const building of rawBuildings.features) {
       buildingArea.set(feature, areaM2)
     }
   }
+}
+
+const problemasDeAjustes = ajustador.problemas()
+if (problemasDeAjustes.length > 0) {
+  for (const problema of problemasDeAjustes) console.error(`✗ ${problema}`)
+  throw new Error(
+    `${problemasDeAjustes.length} ajuste(s) de edificios sin aplicar (data/geographic/ajustes-edificios.json)`,
+  )
 }
 
 // Plazas sin huellas (o con huellas incompletas): volumen generado a partir de su geometría.
