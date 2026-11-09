@@ -22,6 +22,8 @@ const real = {
 const categoria = {
   ...(real.categories[0] as Category),
   id: 'belleza',
+  // Sin tipo declarado: una categoría nueva se queda en el general, no hereda el de la que se copió.
+  schemaType: undefined,
   slug: { es: 'belleza', en: 'beauty' },
   label: { es: 'Belleza', en: 'Beauty' },
   giros: [

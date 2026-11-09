@@ -12,6 +12,7 @@ export interface Categoria {
   label: { es: string; en?: string }
   icon: string
   hue?: number
+  schemaType?: string
   order: number
   synonyms: string[]
   giros: Giro[]

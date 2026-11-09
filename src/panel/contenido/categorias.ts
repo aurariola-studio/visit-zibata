@@ -1,4 +1,5 @@
 import { ICONOS } from '../../data/iconos.ts'
+import { SCHEMA_TYPES } from '../../data/rules.ts'
 import controls from '../../styles/controls.module.css'
 import { accionesDeGiro } from './borrar-giro.ts'
 import { seccionDireccion } from './direccion.ts'
@@ -13,6 +14,25 @@ import {
   vista,
 } from './vista.ts'
 import { zonaDelicada } from './zona-delicada.ts'
+
+/** Cómo se llama cada tipo de schema.org en el panel. La lista de tipos válidos es la de `SCHEMA_TYPES`. */
+const TIPOS_DE_NEGOCIO: Record<(typeof SCHEMA_TYPES)[number], string> = {
+  LocalBusiness: 'Negocio local (general)',
+  FoodEstablishment: 'Comida, sin más precisión',
+  Restaurant: 'Restaurante',
+  FastFoodRestaurant: 'Comida rápida',
+  CafeOrCoffeeShop: 'Cafetería',
+  Bakery: 'Panadería',
+  BarOrPub: 'Bar',
+  Store: 'Tienda o supermercado',
+}
+
+function opcionesDeTipo(actual: string | undefined): string {
+  return SCHEMA_TYPES.map(
+    (tipo) =>
+      `<option value="${tipo}"${(actual ?? 'LocalBusiness') === tipo ? ' selected' : ''}>${TIPOS_DE_NEGOCIO[tipo]}</option>`,
+  ).join('')
+}
 
 export function pintarCategorias(): void {
   if (!vista.raiz || !vista.datos) return
@@ -162,6 +182,10 @@ export function pintarCategoria(categoria: Categoria | null): void {
             <select class="${controls.campo}" data-campo="icon">${opcionesDeIconos(base.icon, new Set())}</select>
           </label>
           <label class="campo-form">
+            <span>Tipo para buscadores <span class="ayuda">cómo lo entiende Google; sin saber, el general</span></span>
+            <select class="${controls.campo}" data-campo="schemaType">${opcionesDeTipo(base.schemaType)}</select>
+          </label>
+          <label class="campo-form">
             <span>Tono <span class="ayuda">0 a 359; vacío solo para Otros</span></span>
             <span class="campo-tono">
               <input class="${controls.campo}" type="number" data-campo="hue" min="0" max="359" value="${base.hue ?? ''}" placeholder="200" />
@@ -295,6 +319,7 @@ function leerFormularioCategoria(formulario: HTMLFormElement): {
   const labelEn = campoDe('labelEn')
   const icono = campoDe('icon')
   const hueTexto = campoDe('hue')
+  const tipoTexto = campoDe('schemaType')
   const ordenTexto = campoDe('order')
   const sinonimos = sinonimosDe(campoDe('synonyms'))
 
@@ -370,6 +395,7 @@ function leerFormularioCategoria(formulario: HTMLFormElement): {
   actual.label = { es: labelEs, en: labelEn }
   actual.icon = icono
   actual.hue = hueTexto ? Number(hueTexto) : undefined
+  actual.schemaType = tipoTexto || undefined
   actual.order = Number(ordenTexto)
   actual.synonyms = sinonimos
 

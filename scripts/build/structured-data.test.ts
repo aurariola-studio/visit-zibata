@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import categoriasJson from '../../data/commercial/categories.json' with { type: 'json' }
 import type { Category, Place, Plaza } from '../../src/types/domain.ts'
 import { bloque, listado, negocio } from './structured-data.ts'
 
@@ -8,7 +9,9 @@ import { bloque, listado, negocio } from './structured-data.ts'
  * las de Node, bajo las que corre este script. Son tres literales, y mantienen la frontera donde
  * está: `structured-data.ts` es puro y solo necesita las formas, no el catálogo entero.
  */
+/** La categoría real si existe (el tipo de schema.org sale del dato) y, si no, una sin tipo. */
 const categoria = (id: string): Category =>
+  (categoriasJson.categories.find((fila) => fila.id === id) as Category | undefined) ??
   ({
     id,
     slug: { es: id, en: id },
@@ -17,7 +20,7 @@ const categoria = (id: string): Category =>
     order: 1,
     synonyms: [],
     giros: [],
-  }) as Category
+  } as Category)
 
 const hacerPlaza = (extra: Partial<Plaza> = {}): Plaza =>
   ({
@@ -67,8 +70,14 @@ describe('datos estructurados de un local', () => {
     expect(tipo('mexicana')).toBe('Restaurant')
     // "Otros" puede no ser comida: la guía va más allá, así que se queda en el tipo general.
     expect(tipo('otros')).toBe('LocalBusiness')
-    // Una categoría que no esté en la tabla tampoco miente hacia abajo.
+    // Una categoría sin tipo declarado tampoco miente hacia abajo.
     expect(tipo('inventada')).toBe('LocalBusiness')
+    // Una categoría nueva lo declara en el dato, sin tocar el código.
+    expect(
+      negocio({ ...base, place, category: { ...categoria('inventada'), schemaType: 'Store' } })[
+        '@type'
+      ],
+    ).toBe('Store')
   })
 
   it('no dice que sirve comida lo que no es un establecimiento de comida', () => {

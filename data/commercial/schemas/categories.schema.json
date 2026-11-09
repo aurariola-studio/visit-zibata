@@ -67,6 +67,19 @@
             "minimum": 0,
             "maximum": 359
           },
+          "schemaType": {
+            "type": "string",
+            "enum": [
+              "LocalBusiness",
+              "FoodEstablishment",
+              "Restaurant",
+              "FastFoodRestaurant",
+              "CafeOrCoffeeShop",
+              "Bakery",
+              "BarOrPub",
+              "Store"
+            ]
+          },
           "order": {
             "type": "integer",
             "minimum": -9007199254740991,

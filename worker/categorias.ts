@@ -27,6 +27,7 @@ import {
   validateRelations,
   validateTranslations,
 } from '../src/data/relations.ts'
+import { SCHEMA_TYPES } from '../src/data/rules.ts'
 import { CategoriesFileSchema } from '../src/data/schemas.ts'
 import { TITULOS_RESERVADOS } from '../src/data/titulos-reservados.ts'
 import type { Category } from '../src/types/domain.ts'
@@ -65,6 +66,8 @@ const CategoriaEntradaSchema = z.object({
   label: Texto,
   icon: z.string().trim().min(1).max(60),
   hue: z.number().int().min(0).max(359).nullable().optional(),
+  /** Sin tipo, la categoría se queda en el general (`LocalBusiness`). */
+  schemaType: z.enum(SCHEMA_TYPES).nullable().optional(),
   order: z.number().int().min(0).max(999),
   synonyms: z.array(z.string()).optional().default([]),
   giros: z.array(GiroEntradaSchema).min(1, 'Una categoría necesita al menos un giro'),
@@ -229,6 +232,7 @@ export function prepararCategorias(
       label: { es: entradaCategoria.label.es, en: entradaCategoria.label.en },
       icon: entradaCategoria.icon,
       ...(hue === undefined ? {} : { hue }),
+      ...(entradaCategoria.schemaType ? { schemaType: entradaCategoria.schemaType } : {}),
       order: entradaCategoria.order,
       synonyms: limpiarSinonimos(entradaCategoria.synonyms),
       giros,
@@ -370,6 +374,7 @@ export function prepararCategorias(
     label: categoria.label,
     icon: categoria.icon,
     hue: categoria.hue,
+    schemaType: categoria.schemaType,
     order: categoria.order,
     synonyms: categoria.synonyms,
   })

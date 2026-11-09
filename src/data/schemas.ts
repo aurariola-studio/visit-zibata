@@ -17,6 +17,7 @@ import {
   isValidTimeRange,
   LOCATION_CONFIDENCE,
   RESEARCH_STATUS,
+  SCHEMA_TYPES,
   SLUG_PATTERN,
   TIME_RANGE_PATTERN,
 } from './rules.ts'
@@ -244,6 +245,8 @@ export const CategorySchema = z.strictObject({
   icon: nonEmptyText,
   /** Tono (0-359) de la placa de color en listas y fichas; sin él se usa un neutro. */
   hue: z.number().int().min(0).max(359).optional(),
+  /** Tipo de schema.org de los locales de la categoría; sin él, `LocalBusiness`. */
+  schemaType: z.enum(SCHEMA_TYPES).optional(),
   order: z.number().int(),
   synonyms: z.array(nonEmptyText),
   giros: z.array(GiroSchema).min(1),

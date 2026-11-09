@@ -30,6 +30,7 @@ type Entrada = {
     label: { es: string; en: string }
     icon: string
     hue: number | null
+    schemaType?: string | null
     order: number
     synonyms: string[]
     giros: {
@@ -48,6 +49,7 @@ const entrada = (): Entrada => ({
     label: { ...categoria.label, en: categoria.label.en ?? '' },
     icon: categoria.icon,
     hue: categoria.hue ?? null,
+    schemaType: categoria.schemaType ?? null,
     order: categoria.order,
     synonyms: [...categoria.synonyms],
     giros: categoria.giros.map((giro) => ({
@@ -417,6 +419,40 @@ describe('el impacto', () => {
     const preparado = prepararCategorias(dataset, crudo, entrada(), HOY)
     if (!preparado.ok) throw new Error(preparado.problemas.join(' '))
     expect(preparado.afectados).toEqual({ locales: 0, plazas: 0 })
+  })
+
+  it('el tipo de schema.org de una categoría cuenta como cambio de presentación', () => {
+    const cuerpo = clonar()
+    const objetivo = cuerpo.categories.find(
+      (categoria) => categoria.id === giroNoGeneral.categoria.id,
+    )
+    if (!objetivo) throw new Error('sin categoría')
+    objetivo.schemaType = objetivo.schemaType === 'Store' ? 'LocalBusiness' : 'Store'
+    const preparado = prepararCategorias(dataset, crudo, cuerpo, HOY)
+    if (!preparado.ok) throw new Error(preparado.problemas.join(' '))
+    expect(preparado.categorias.find((fila) => fila.id === objetivo.id)?.schemaType).toBe(
+      objetivo.schemaType,
+    )
+    const giros = new Set(giroNoGeneral.categoria.giros.map((giro) => giro.id))
+    const locales = dataset.places.filter((place) => place.giros.some((giro) => giros.has(giro)))
+    expect(preparado.afectados.locales).toBe(locales.length)
+  })
+
+  it('un tipo que no es de schema.org se rechaza, y quitarlo deja la categoría en el general', () => {
+    const malo = clonar()
+    const a = malo.categories[0]
+    if (!a) throw new Error('sin categoría')
+    a.schemaType = 'Restaurante'
+    expect(prepararCategorias(dataset, crudo, malo, HOY).ok).toBe(false)
+
+    const sinTipo = clonar()
+    const b = sinTipo.categories[0]
+    if (!b) throw new Error('sin categoría')
+    b.schemaType = null
+    const preparado = prepararCategorias(dataset, crudo, sinTipo, HOY)
+    if (!preparado.ok) throw new Error(preparado.problemas.join(' '))
+    const escrito = preparado.categorias.find((fila) => fila.id === b.id)
+    expect(escrito?.schemaType).toBeUndefined()
   })
 
   it('cambiar la etiqueta de una categoría cuenta los locales de sus giros', () => {
