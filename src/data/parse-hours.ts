@@ -7,9 +7,10 @@
  * Días: lun, mar, mie, jue, vie, sab, dom (con o sin acentos), rangos "lun-vie" y listas "sab,dom".
  * Los días no mencionados quedan sin información.
  */
-import { DAY_KEYS, TIME_RANGE_PATTERN } from '../../../src/data/schemas.ts'
-import { normalizeText } from '../../../src/lib/text.ts'
-import type { DayKey, Hours } from '../../../src/types/domain.ts'
+
+import { normalizeText } from '../lib/text.ts'
+import type { DayKey, Hours } from '../types/domain.ts'
+import { DAY_KEYS, TIME_RANGE_PATTERN } from './schemas.ts'
 
 const DAY_ALIASES: Record<string, DayKey> = {
   lun: 'mon',

@@ -1,25 +1,29 @@
 /**
  * npm run data:import -- data/commercial/imports/restaurantes-zibata.csv [--dry-run]
  *
- * Importa locales desde CSV (UTF-8, con encabezados) a data/commercial/places.json.
- * - Crea los locales nuevos y actualiza los existentes (mismo id) con las columnas no vacías,
- *   conservando lo que no viene en el CSV (fotos, googlePlaceId…).
- * - Recalcula `placeIds` y `categories` de cada plaza y valida todo el conjunto antes de escribir.
+ * Importa locales desde CSV (UTF-8, con encabezados) a data/commercial/places.json. Cada fila pasa por
+ * `prepararNegocio`, el mismo camino que el formulario del panel (worker/importar-csv.ts): las reglas de
+ * publicación son las del panel, no unas propias del script.
+ *
+ * - Una fila crea un local o actualiza el que ya existe (por `id`, o por el mismo nombre en la misma plaza).
+ *   Una columna vacía conserva lo que el local ya tiene.
+ * - Un local nuevo exige su procedencia: columnas `fuentes` y/o `comprobado`. Sin ellas, la fila se rechaza.
+ * - Todo o nada: si una fila falla, no se escribe ningún archivo.
  */
 import { readFileSync } from 'node:fs'
 import { parseArgs } from 'node:util'
 import Papa from 'papaparse'
+import { CSV_COLUMNS, type CsvRow } from '../../src/data/csv-negocio.ts'
 import { syncPlazaDerivedFields, validateRelations } from '../../src/data/relations.ts'
-import { slugify } from '../../src/lib/text.ts'
-import type { Place } from '../../src/types/domain.ts'
-import { CSV_COLUMNS, type CsvRow, rowToPlace } from './lib/csv-row.ts'
+import { fechaLocal } from '../../worker/analitica.ts'
+import { importarFilas } from '../../worker/importar-csv.ts'
 import {
   dataPaths,
   loadBounds,
   loadCategoriesFile,
   loadPlacesFile,
   loadPlazasFile,
-  today,
+  loadRedirectsFile,
   writeDataFile,
 } from './lib/dataset.ts'
 
@@ -51,81 +55,44 @@ if (unknownColumns.length > 0) console.warn(`⚠ Columnas ignoradas: ${unknownCo
 
 const categoriesFile = loadCategoriesFile()
 const plazasFile = loadPlazasFile()
-const existing = loadPlacesFile()
-const places = new Map<string, Place>((existing?.places ?? []).map((place) => [place.id, place]))
-const context = { categories: categoriesFile.categories, plazas: plazasFile.plazas }
-
-const usedIds = new Set<string>()
-let created = 0
-let updated = 0
-let failed = 0
-
-parsed.data.forEach((row, index) => {
-  const line = index + 2
-  const explicitId = row.id?.trim()
-  const base = slugify(row.name ?? '')
-  const plazaSlug = slugify(row.plaza ?? '')
-  // Con columna `id` el registro conserva su identificador aunque cambie el nombre. Sin ella, mismo
-  // nombre en otra plaza (p. ej. cadenas) se desambigua con la plaza.
-  let id = explicitId || base
-  if (explicitId && usedIds.has(id)) {
-    failed++
-    console.error(`✗ fila ${line} (${row.name ?? '¿?'}): id repetido "${id}"`)
-    return
-  }
-  if (!explicitId && usedIds.has(id)) id = `${base}-${plazaSlug}`
-  for (let n = 2; !explicitId && usedIds.has(id); n++) id = `${base}-${plazaSlug}-${n}`
-
-  const result = rowToPlace(row, id, context)
-  for (const warning of result.warnings) console.warn(`⚠ fila ${line} (${row.name}): ${warning}`)
-  if (!result.place) {
-    failed++
-    for (const error of result.errors)
-      console.error(`✗ fila ${line} (${row.name ?? '¿?'}): ${error}`)
-    return
-  }
-  usedIds.add(id)
-
-  const previous = places.get(id)
-  if (previous) {
-    const incoming = result.place
-    const links = { ...previous.links }
-    for (const key of Object.keys(incoming.links) as (keyof Place['links'])[]) {
-      if (incoming.links[key]) links[key] = incoming.links[key]
-    }
-    places.set(id, {
-      ...previous,
-      name: incoming.name,
-      plazaId: incoming.plazaId,
-      giros: incoming.giros,
-      active: incoming.active,
-      description: incoming.description ?? previous.description,
-      hours: incoming.hours ?? previous.hours,
-      location: incoming.location ?? previous.location,
-      googleMapsUri: incoming.googleMapsUri ?? previous.googleMapsUri,
-      phone: incoming.phone ?? previous.phone,
-      links,
-    })
-    updated++
-  } else {
-    places.set(id, result.place)
-    created++
-  }
-})
-
-if (failed > 0) {
-  console.error(`\n✗ ${failed} fila(s) con errores. No se escribió ningún archivo.`)
-  process.exit(1)
-}
-
+const placesFile = loadPlacesFile()
+const redirectsFile = loadRedirectsFile()
 const dataset = {
   categories: categoriesFile.categories,
   plazas: plazasFile.plazas,
-  places: [...places.values()],
+  places: placesFile?.places ?? [],
 }
-dataset.plazas = syncPlazaDerivedFields(dataset)
+const crudo = {
+  categories: JSON.parse(readFileSync(dataPaths.categories, 'utf8')),
+  plazas: JSON.parse(readFileSync(dataPaths.plazas, 'utf8')),
+  places: JSON.parse(readFileSync(dataPaths.places, 'utf8')),
+  ...(redirectsFile ? { redirects: JSON.parse(readFileSync(dataPaths.redirects, 'utf8')) } : {}),
+}
 
-const issues = validateRelations(dataset, loadBounds())
+const resultado = importarFilas(parsed.data, dataset, crudo, fechaLocal(new Date()))
+
+for (const fila of resultado.filas) {
+  const etiqueta = `fila ${fila.linea} (${fila.nombre || '¿?'})`
+  for (const aviso of fila.avisos) console.warn(`⚠ ${etiqueta}: ${aviso}`)
+  if (fila.ok) {
+    if (fila.afirma.length > 0) console.log(`• ${etiqueta}: afirma ${fila.afirma.join(' y ')}`)
+  } else {
+    for (const problema of fila.problemas) console.error(`✗ ${etiqueta}: ${problema}`)
+  }
+}
+
+const fallidas = resultado.filas.filter((fila) => !fila.ok).length
+if (!resultado.archivos) {
+  console.error(`\n✗ ${fallidas} fila(s) con errores. No se escribió ningún archivo.`)
+  process.exit(1)
+}
+
+// Una última revisión del conjunto, por si una fila válida sola rompe algo junto a otras.
+const final = {
+  ...resultado.dataset,
+  plazas: syncPlazaDerivedFields(resultado.dataset),
+}
+const issues = validateRelations(final, loadBounds())
 for (const issue of issues) {
   const log = issue.level === 'error' ? console.error : console.warn
   log(
@@ -135,17 +102,12 @@ for (const issue of issues) {
 if (issues.some((issue) => issue.level === 'error')) process.exit(1)
 
 console.log(
-  `\n${created} locales nuevos, ${updated} actualizados, ${dataset.places.length} en total.`,
+  `\n${resultado.creados} locales nuevos, ${resultado.actualizados} actualizados, ${final.places.length} en total.`,
 )
 if (values['dry-run']) {
   console.log('(--dry-run: no se escribieron archivos)')
 } else {
-  writeDataFile(dataPaths.places, {
-    $schema: './schemas/places.schema.json',
-    version: 1,
-    updatedAt: today(),
-    places: dataset.places,
-  })
-  writeDataFile(dataPaths.plazas, { ...plazasFile, updatedAt: today(), plazas: dataset.plazas })
+  writeDataFile(dataPaths.places, resultado.archivos.lugares)
+  writeDataFile(dataPaths.plazas, resultado.archivos.plazas)
   console.log(`✓ Escrito ${dataPaths.places} y ${dataPaths.plazas}`)
 }
