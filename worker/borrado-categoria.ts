@@ -8,7 +8,9 @@
  * A diferencia de un local o una plaza, no deja redirección: la página de una categoría solo existe si
  * tiene algún local (`prerender.ts`), así que una categoría vacía no tiene ninguna dirección que perder.
  *
- * `otros` no se borra: es el giro al que va todo local que se importa sin giro (`csv-row.ts`).
+ * `otros` no se borra: es la categoría general de reserva. Antes recibía los locales que el CSV importaba
+ * sin giro; ya no (un local sin giro se rechaza) y hoy ningún local la usa, así que la guarda la prudencia,
+ * no un uso vivo. Quitarla es una decisión del propietario, no un efecto de borrar una categoría.
  *
  * Los locales ya borrados que guardaban uno de sus giros siguen en `redirects.json`: el algoritmo tolera un
  * giro que ya no está en ninguna categoría (deja de sumar a la categoría, nada más), y el impacto lo cuenta.

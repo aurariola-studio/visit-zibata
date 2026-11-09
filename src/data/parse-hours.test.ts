@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
-import { HoursSchema } from '../../../src/data/schemas.ts'
 import { parseHoursText } from './parse-hours.ts'
+import { HoursSchema } from './schemas.ts'
 
 describe('parseHoursText', () => {
   it('interpreta rangos de días, listas, cerrado y varios turnos', () => {
