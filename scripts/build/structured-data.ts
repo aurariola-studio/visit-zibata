@@ -23,35 +23,12 @@ import type { Category, Place, Plaza } from '../../src/types/domain.ts'
 
 type Locale = 'es' | 'en'
 
-/**
- * El tipo de schema.org por categoría. No todo es un `Restaurant`: una panadería es `Bakery` y un
- * bar es `BarOrPub`, y acertar es lo que permite al buscador encajar la ficha donde toca.
- *
- * Cuando la categoría no identifica una forma concreta de negocio se usa el padre común
- * (`FoodEstablishment`), y "Otros" se queda en `LocalBusiness` porque la guía va más allá de la
- * comida y ahí puede haber cualquier cosa. Mentir hacia abajo (decir `Restaurant` de lo que no lo
- * es) cuesta más que quedarse en el tipo general.
+/*
+ * El tipo de schema.org lo declara cada categoría en los datos (`schemaType`): una panadería es `Bakery` y un bar es
+ * `BarOrPub`, y acertar es lo que permite al buscador encajar la ficha donde toca. Una categoría sin tipo se queda
+ * en `LocalBusiness`, el general: mentir hacia abajo (decir `Restaurant` de lo que no lo es) cuesta más que no
+ * precisar. Antes esto era una tabla en el código y una categoría creada desde el panel caía siempre en el general.
  */
-const SCHEMA_TYPE: Record<string, string> = {
-  'desayunos-y-cafe': 'CafeOrCoffeeShop',
-  'tacos-y-antojitos': 'Restaurant',
-  mexicana: 'Restaurant',
-  'carnes-y-parrilla': 'Restaurant',
-  mariscos: 'Restaurant',
-  hamburguesas: 'FastFoodRestaurant',
-  italiana: 'Restaurant',
-  asiatica: 'Restaurant',
-  'entre-panes': 'Restaurant',
-  saludable: 'Restaurant',
-  'panaderia-y-reposteria': 'Bakery',
-  botanas: 'Restaurant',
-  'postres-y-dulces': 'FoodEstablishment',
-  bebidas: 'FoodEstablishment',
-  internacional: 'Restaurant',
-  casera: 'Restaurant',
-  bar: 'BarOrPub',
-  otros: 'LocalBusiness',
-}
 
 /** `servesCuisine` solo existe bajo `FoodEstablishment`: ponerlo en otro tipo es marcado inválido. */
 const SIRVE_COMIDA = new Set([
@@ -110,7 +87,7 @@ export interface DatosDelLugar {
 /** El negocio de una ficha. */
 export function negocio(datos: DatosDelLugar): Record<string, unknown> {
   const { place, plaza, category, giros, url, image, locale } = datos
-  const tipo = (category && SCHEMA_TYPE[category.id]) ?? 'LocalBusiness'
+  const tipo = category?.schemaType ?? 'LocalBusiness'
   const direccion = plaza?.address
 
   // `sameAs` son los perfiles oficiales del propio negocio, que es justo lo que el campo espera.

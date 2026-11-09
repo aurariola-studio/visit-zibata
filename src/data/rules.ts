@@ -30,6 +30,22 @@ export function isValidSource(value: string): boolean {
   return isHttpUrl(value) || FIELD_SOURCE_PATTERN.test(value)
 }
 
+/**
+ * Tipos de schema.org que puede declarar una categoría para sus locales (`schemaType`). Es una lista cerrada: un
+ * tipo inventado deja el marcado inválido. Sin tipo, la categoría se queda en `LocalBusiness`, que no miente
+ * hacia abajo. `servesCuisine` solo cabe bajo los tipos de comida (ver `scripts/build/structured-data.ts`).
+ */
+export const SCHEMA_TYPES = [
+  'LocalBusiness',
+  'FoodEstablishment',
+  'Restaurant',
+  'FastFoodRestaurant',
+  'CafeOrCoffeeShop',
+  'Bakery',
+  'BarOrPub',
+  'Store',
+] as const
+
 export const LOCATION_CONFIDENCE = ['high', 'medium', 'low'] as const
 
 /**

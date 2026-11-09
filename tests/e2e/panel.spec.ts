@@ -739,6 +739,37 @@ test.describe('Panel', () => {
     ).toHaveValue(elegido)
   })
 
+  test('una categoría declara su tipo para buscadores y el formulario lo manda', async ({
+    page,
+  }) => {
+    const cuerpos: { categories: { id: string; schemaType?: string }[] }[] = []
+    await page.route(/\/api\/panel\/contenido\/categorias$/, async (ruta) => {
+      cuerpos.push(ruta.request().postDataJSON())
+      await ruta.fulfill({
+        json: {
+          ok: true,
+          seco: false,
+          pr: { url: 'https://example.test/pr/5', numero: 5, creada: true },
+          mensaje: 'Cambio enviado a la PR.',
+          afectados: { locales: 1, plazas: 1 },
+        },
+      })
+    })
+    await abrirPanel(page)
+    await irA(page, 'categorias', 'Categorías y giros')
+    await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+    const dialogo = page.locator('#editor')
+    const tipo = dialogo.locator('select[data-campo="schemaType"]')
+    // Sin tipo declarado, el formulario enseña el general: no inventa uno de comida.
+    await expect(tipo).toHaveValue('LocalBusiness')
+    await expect(tipo.locator('option', { hasText: 'Tienda o supermercado' })).toHaveCount(1)
+    await tipo.selectOption('Store')
+    await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+    await expect(page.getByRole('status').filter({ hasText: 'PR abierta #5' })).toBeVisible()
+    expect(cuerpos).toHaveLength(1)
+    expect(cuerpos[0]?.categories.find((fila) => fila.id === 'servicios')?.schemaType).toBe('Store')
+  })
+
   test('borrar un negocio enseña el impacto primero y pide confirmación', async ({ page }) => {
     const cuerpos: { id: string; confirmar?: boolean }[] = []
     await page.route(/\/api\/panel\/contenido\/negocio\/borrar$/, async (ruta) => {

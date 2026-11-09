@@ -15,6 +15,7 @@
       },
       "icon": "coffee",
       "hue": 32,
+      "schemaType": "CafeOrCoffeeShop",
       "order": 10,
       "synonyms": [
         "café",
@@ -93,6 +94,7 @@
       },
       "icon": "taco",
       "hue": 18,
+      "schemaType": "Restaurant",
       "order": 20,
       "synonyms": [
         "tacos",
@@ -202,6 +204,7 @@
       },
       "icon": "molcajete",
       "hue": 4,
+      "schemaType": "Restaurant",
       "order": 30,
       "synonyms": [
         "comida mexicana",
@@ -279,6 +282,7 @@
       },
       "icon": "beef",
       "hue": 350,
+      "schemaType": "Restaurant",
       "order": 35,
       "synonyms": [
         "carne",
@@ -336,6 +340,7 @@
       },
       "icon": "shrimp",
       "hue": 192,
+      "schemaType": "Restaurant",
       "order": 40,
       "synonyms": [
         "pescado",
@@ -390,6 +395,7 @@
       },
       "icon": "hamburger",
       "hue": 44,
+      "schemaType": "FastFoodRestaurant",
       "order": 50,
       "synonyms": [
         "hamburguesa",
@@ -472,6 +478,7 @@
       },
       "icon": "italiana",
       "hue": 12,
+      "schemaType": "Restaurant",
       "order": 60,
       "synonyms": [
         "antipasto",
@@ -544,6 +551,7 @@
       },
       "icon": "chopsticks",
       "hue": 228,
+      "schemaType": "Restaurant",
       "order": 70,
       "synonyms": [
         "sushi",
@@ -626,6 +634,7 @@
       },
       "icon": "pan",
       "hue": 268,
+      "schemaType": "Restaurant",
       "order": 75,
       "synonyms": [
         "torta",
@@ -749,6 +758,7 @@
       },
       "icon": "leafy-green",
       "hue": 104,
+      "schemaType": "Restaurant",
       "order": 80,
       "synonyms": [
         "saludable",
@@ -849,6 +859,7 @@
       },
       "icon": "croissant",
       "hue": 38,
+      "schemaType": "Bakery",
       "order": 85,
       "synonyms": [
         "pan",
@@ -921,6 +932,7 @@
       },
       "icon": "popcorn",
       "hue": 56,
+      "schemaType": "Restaurant",
       "order": 86,
       "synonyms": [
         "botana",
@@ -1006,6 +1018,7 @@
       },
       "icon": "candy",
       "hue": 322,
+      "schemaType": "FoodEstablishment",
       "order": 90,
       "synonyms": [
         "postre",
@@ -1075,6 +1088,7 @@
       },
       "icon": "cup-soda",
       "hue": 176,
+      "schemaType": "FoodEstablishment",
       "order": 92,
       "synonyms": [
         "bebida",
@@ -1135,6 +1149,7 @@
       },
       "icon": "hand-platter",
       "hue": 210,
+      "schemaType": "Restaurant",
       "order": 95,
       "synonyms": [
         "internacional",
@@ -1174,6 +1189,7 @@
       },
       "icon": "cooking-pot",
       "hue": 140,
+      "schemaType": "Restaurant",
       "order": 96,
       "synonyms": [
         "casera",
@@ -1213,6 +1229,7 @@
       },
       "icon": "martini",
       "hue": 154,
+      "schemaType": "BarOrPub",
       "order": 100,
       "synonyms": [
         "bar",
@@ -1286,6 +1303,7 @@
         "en": "Other"
       },
       "icon": "utensils-crossed",
+      "schemaType": "LocalBusiness",
       "order": 999,
       "synonyms": [
         "food truck",
