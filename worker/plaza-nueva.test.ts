@@ -32,6 +32,7 @@ const base = {
   fuentes: ['https://ejemplo.test/la-plaza'],
   evidencia: 'Enlace de Google Maps aportado por quien mantiene la guía.',
   confianza: 'medium' as const,
+  estado: 'proximamente' as const,
 }
 
 /** Un punto libre: el primero de una rejilla sobre Zibatá en el que la creación es válida. */
@@ -65,6 +66,7 @@ describe('lo que se guarda', () => {
     const r = preparar()
     const fila = filaNueva(r)
     expect(PlazasFileSchema.safeParse((r as { plazas: unknown }).plazas).success).toBe(true)
+    // La base es una plaza próximamente: no se publica. Una activa se prueba aparte.
     expect(fila.active).toBe(false)
     expect(fila.placeIds).toEqual([])
     expect(fila.categories).toEqual([])
@@ -93,7 +95,7 @@ describe('lo que se guarda', () => {
     if (!completa) throw new Error('el dataset no tiene una plaza con todas las claves')
     const orden = Object.keys(completa)
     const fila = filaNueva(
-      preparar({ proximamente: true, googleMapsUri: 'https://maps.app.goo.gl/ejemplo' }),
+      preparar({ estado: 'proximamente', googleMapsUri: 'https://maps.app.goo.gl/ejemplo' }),
     )
     expect(Object.keys(fila)).toEqual(orden.filter((clave) => clave in fila))
   })
@@ -142,13 +144,64 @@ describe('la procedencia: no se inventa', () => {
     }
   })
 
-  it('nace sin verificar (uncertain), o como próximamente si se declara; nunca activa', () => {
-    expect(filaNueva(preparar()).verification.status).toBe('uncertain')
-    expect('comingSoon' in filaNueva(preparar())).toBe(false)
-    const proxima = filaNueva(preparar({ proximamente: true }))
-    expect(proxima.verification.status).toBe('coming_soon')
-    expect(proxima.comingSoon).toBe(true)
-    expect(proxima.active).toBe(false)
+  it('el estado es obligatorio: no hay un "no sé", ni uncertain, ni un valor por omisión', () => {
+    const sinEstado = preparar({ estado: undefined })
+    expect(sinEstado.ok).toBe(false)
+    if (!sinEstado.ok) expect(sinEstado.problemas.join(' | ')).toMatch(/activa o es próximamente/)
+    for (const malo of ['', 'nose', 'uncertain', 'inactiva', null, true]) {
+      expect(preparar({ estado: malo }).ok, String(malo)).toBe(false)
+    }
+  })
+
+  it('próximamente: confirmada y en construcción, no se publica y su estado es coming_soon', () => {
+    const fila = filaNueva(preparar({ estado: 'proximamente' }))
+    expect(fila.active).toBe(false)
+    expect(fila.comingSoon).toBe(true)
+    expect(fila.verification.status).toBe('coming_soon')
+  })
+
+  describe('activa', () => {
+    /** Un nombre que no choca con ninguna plaza ni local (si no, una activa se rechaza por título repetido). */
+    const nombre = 'Plaza Nueva de Prueba Unica'
+
+    it('se publica: active, sin comingSoon, y likely_active si no se comprobó en el lugar', () => {
+      const fila = filaNueva(preparar({ estado: 'activa', nombre }))
+      expect(fila.active).toBe(true)
+      expect('comingSoon' in fila).toBe(false)
+      expect(fila.verification.status).toBe('likely_active')
+    })
+
+    it('es active solo si se declara que se comprobó en el lugar', () => {
+      const fila = filaNueva(preparar({ estado: 'activa', nombre, aportadoPorMi: true }))
+      expect(fila.verification.status).toBe('active')
+      expect(fila.verification.sources).toContain(`campo:${HOY}`)
+    })
+
+    it('pasa lo mismo que activar una plaza que ya existe: no vale el nombre de una plaza ni de un local', () => {
+      const plazaExistente = completo.plazas[0]
+      const local = completo.places.find((place) => place.active)
+      if (!plazaExistente || !local) throw new Error('hacen falta una plaza y un local')
+      const conPlaza = preparar({ estado: 'activa', nombre: plazaExistente.name })
+      expect(conPlaza.ok).toBe(false)
+      if (!conPlaza.ok) expect(conPlaza.problemas.join(' | ')).toMatch(/Ya hay una plaza llamada/)
+      const conLocal = preparar({ estado: 'activa', nombre: local.name })
+      expect(conLocal.ok).toBe(false)
+    })
+
+    it('el nombre tiene que caber en el título de la página, pero no hace falta si es próximamente', () => {
+      const largo = 'Plaza con un nombre larguísimo que no cabe en el título de una página web'
+      expect(preparar({ estado: 'activa', nombre: largo }).ok).toBe(false)
+      expect(preparar({ estado: 'proximamente', nombre: largo }).ok).toBe(true)
+    })
+
+    it('avisa de que se publica, con su página, y de que saldrá vacía', async () => {
+      const r = preparar({ estado: 'activa', nombre })
+      if (!r.ok) throw new Error('debía ser válida')
+      const avisos = r.resumen.avisos.join(' ')
+      expect(avisos).toMatch(/Se publica: tendrá página/)
+      expect(avisos).toMatch(/saldrá vacía/)
+      expect(avisos).toMatch(/cuadrado provisional/)
+    })
   })
 
   it('no inventa descripción ni dirección: sin ellas, quedan nulas', () => {
@@ -243,17 +296,19 @@ describe('el endpoint en desarrollo', () => {
     const r = await crearPlaza(entorno, peticion)
     expect(r.ok && r.confirmado).toBe(false)
     if (r.ok) {
-      expect(r.resumen.estado).toBe('uncertain')
-      expect(r.resumen.avisos.join(' ')).toMatch(/inactiva/)
+      expect(r.resumen.estado).toBe('proximamente')
+      expect(r.resumen.investigacion).toBe('coming_soon')
+      expect(r.resumen.avisos.join(' ')).toMatch(/Próximamente/)
     }
   })
 
-  it('avisa de que el contorno SÍ se dibuja en el mapa público aunque esté inactiva', async () => {
+  it('avisa de que el contorno provisional se dibuja en el mapa público', async () => {
     const r = await crearPlaza(entorno, peticion)
     if (!r.ok) throw new Error('debía ser válida')
     const avisos = r.resumen.avisos.join(' ')
-    expect(avisos).toMatch(/SÍ se dibuja en el mapa público/)
-    expect(avisos).toMatch(/gris y sin interacción/)
+    expect(avisos).toMatch(/cuadrado provisional de 60 m/)
+    expect(avisos).toMatch(/se dibuja en el mapa público con esa forma/)
+    expect(avisos).toMatch(/antes de fusionar la PR/)
   })
 
   it('al confirmar valida, pero en desarrollo no commitea', async () => {

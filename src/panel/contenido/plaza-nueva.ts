@@ -10,7 +10,8 @@ import { vista } from './vista.ts'
  * frase de qué evidencia respalda la ubicación, la confianza que elige quien la crea, y `campo:AAAA-MM-DD`
  * solo si declara en una casilla que lo comprobó en el lugar.
  *
- * Nace inactiva y con un cuadrado provisional de 60 m alrededor del marcador; el contorno se ajusta después
+ * **El estado es obligatorio: activa o próximamente. No hay un "no sé"**: si no se sabe cuál es, todavía no se
+ * puede crear. Empieza con un cuadrado provisional de 60 m alrededor del marcador; el contorno se ajusta después
  * con la sección Contorno de su formulario. En dos pasos, como cualquier escritura del panel:
  *
  *  1. "Ver lo que se guardará" pide al Worker el registro, sin guardar nada.
@@ -32,7 +33,7 @@ interface Cuerpo {
   evidencia: string
   aportadoPorMi: boolean
   confianza: string
-  proximamente: boolean
+  estado: string
 }
 
 interface Respuesta {
@@ -44,6 +45,7 @@ interface Respuesta {
     id: string
     nombre: string
     estado: string
+    investigacion: string
     confianza: string
     locationSource: string
     fuentes: string[]
@@ -53,8 +55,8 @@ interface Respuesta {
 }
 
 const ESTADO = {
-  uncertain: 'sin verificar',
-  coming_soon: 'próximamente (confirmada y en construcción)',
+  activa: 'activa: se publica con su página',
+  proximamente: 'próximamente: confirmada y en construcción',
 } as const
 const CONFIANZA = { low: 'baja', medium: 'media', high: 'alta' } as const
 
@@ -141,10 +143,12 @@ export function pintarPlazaNueva(): void {
 
       <section class="editor-seccion">
         <h3>Estado</h3>
-        <div class="campo-form">
-          <label class="casilla"><input type="checkbox" name="proximamente" /><span>Plaza confirmada y en construcción (Próximamente)</span></label>
-          <span class="ayuda">Una plaza nueva <strong>nace inactiva</strong>: sin página, sin su nombre en el mapa y fuera del sitemap hasta que la actives. <strong>Pero su contorno sí se dibuja en el mapa público</strong>, en gris y sin interacción: los edificios que haya dentro o, si no hay ninguno, un volumen generado a partir de un cuadrado provisional de 60 m alrededor del marcador. Se ajusta en su formulario, en la sección Contorno.</span>
-        </div>
+        <fieldset class="campo-form estado-plaza">
+          <legend>Estado de la plaza <span class="ayuda">obligatorio</span></legend>
+          <label class="casilla"><input type="radio" name="estado" value="activa" /><span>Activa: ya existe y se puede visitar. Se publica con su página, su nombre en el mapa y su entrada en el sitemap.</span></label>
+          <label class="casilla"><input type="radio" name="estado" value="proximamente" /><span>Próximamente: confirmada y en construcción. Sale en el mapa con su marcador y en la lista "En construcción", sin página ni locales.</span></label>
+          <span class="ayuda">No hay una opción de "no sé": si no sabes cuál es, todavía no se puede crear. Su contorno empieza como un cuadrado provisional de 60 m alrededor del marcador y <strong>se dibuja en el mapa público con esa forma</strong>: ajústalo en su formulario, en la sección Contorno, antes de fusionar la PR.</span>
+        </fieldset>
       </section>
 
       <div data-plaza-nueva-impacto></div>
@@ -167,11 +171,19 @@ function leer(formulario: HTMLFormElement): { cuerpo: Cuerpo | null; problemas: 
       ?.value ?? ''
   const marca = (nombre: string) =>
     (formulario.elements.namedItem(nombre) as HTMLInputElement | null)?.checked ?? false
+  // Sin valor por omisión: o se elige, o no se puede crear.
+  const estado =
+    formulario.querySelector<HTMLInputElement>('input[name="estado"]:checked')?.value ?? ''
   const lat = leerCoordenada(campo('lat'))
   const lng = leerCoordenada(campo('lng'))
   const problemas: string[] = []
   if (lat === null) problemas.push('lat: Escribe la latitud como número, por ejemplo 20.69.')
   if (lng === null) problemas.push('lng: Escribe la longitud como número, por ejemplo -100.35.')
+  if (!estado) {
+    problemas.push(
+      'estado: Elige si la plaza está activa o es próximamente. Si no lo sabes, todavía no se puede crear.',
+    )
+  }
   if (problemas.length > 0 || lat === null || lng === null) return { cuerpo: null, problemas }
   return {
     problemas,
@@ -191,7 +203,7 @@ function leer(formulario: HTMLFormElement): { cuerpo: Cuerpo | null; problemas: 
       evidencia: campo('evidencia'),
       aportadoPorMi: marca('aportadoPorMi'),
       confianza: campo('confianza'),
-      proximamente: marca('proximamente'),
+      estado,
     },
   }
 }
@@ -251,8 +263,8 @@ async function pedirImpacto(formulario: HTMLFormElement): Promise<void> {
   zona.innerHTML = `<section class="editor-seccion impacto-borrado" aria-labelledby="titulo-plaza-nueva" tabindex="-1" data-firma="${texto(JSON.stringify(cuerpo))}">
       <h3 id="titulo-plaza-nueva">Se creará la plaza "${texto(resumen.nombre)}"</h3>
       <ul class="impacto-lista">
-        <li>Dirección web: <code>${texto(resumen.id)}</code> (no existe hasta que se active).</li>
-        <li>Estado: inactiva, ${texto(ESTADO[resumen.estado as keyof typeof ESTADO] ?? resumen.estado)}. Confianza ${texto(CONFIANZA[resumen.confianza as keyof typeof CONFIANZA] ?? resumen.confianza)}.</li>
+        <li>Dirección web: <code>${texto(resumen.id)}</code>${resumen.estado === 'activa' ? '.' : ' (no tiene página hasta que se active).'}</li>
+        <li>Estado: ${texto(ESTADO[resumen.estado as keyof typeof ESTADO] ?? resumen.estado)}. Investigación: <code>${texto(resumen.investigacion)}</code>. Confianza ${texto(CONFIANZA[resumen.confianza as keyof typeof CONFIANZA] ?? resumen.confianza)}.</li>
         <li>Procedencia de la ubicación, tal como se guardará: <em>${texto(resumen.locationSource)}</em></li>
         <li>Fuentes: ${resumen.fuentes.map((fuente) => `<code>${texto(fuente)}</code>`).join(', ')}.</li>
       </ul>

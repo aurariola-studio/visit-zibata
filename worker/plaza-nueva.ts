@@ -10,12 +10,18 @@
  *    comprobó en el lugar** (esa marca afirma una verificación en sitio: no se pone sin que se diga).
  *  - `locationConfidence` y la confianza de `verification`: las elige esa persona.
  *
- * Nace **inactiva**: sin página, sin marcador y sin entrar en el sitemap hasta que alguien la active tras
- * verificarla. Su estado de investigación es `uncertain` (no se sabe si abre), o `coming_soon` si se declara
- * confirmada y en construcción.
+ * **El estado es obligatorio y solo hay dos: activa o próximamente. No existe un "no sé".** Si quien crea la plaza
+ * no sabe cuál es, todavía no se puede crear: una plaza se publica por lo que se afirma de ella, no por lo que
+ * se ignora.
+ *
+ *  - `activa`: se publica con su página, su nombre en el mapa y su entrada en el sitemap. Su estado de
+ *    investigación es `active` si se declara que se comprobó en el lugar y `likely_active` si no.
+ *  - `proximamente`: confirmada y en construcción. Sale en el mapa con su marcador y en la lista "En construcción", sin
+ *    página ni locales. Su estado es `coming_soon`.
  *
  * El contorno inicial es un cuadrado **provisional** de 60 m centrado en el marcador, y `locationSource` lo
- * dice. Se ajusta después con la sección Contorno del formulario de la plaza (con su vista de impacto).
+ * dice. Se ajusta después con la sección Contorno del formulario de la plaza (con su vista de impacto), y esa
+ * edición añade su propia cláusula a la procedencia.
  *
  * Como cualquier escritura del panel, va en dos pasos: sin `confirmar` solo devuelve lo que se guardaría.
  */
@@ -31,6 +37,7 @@ import { PlazasFileSchema } from '../src/data/schemas.ts'
 import { fechaLocal } from './analitica.ts'
 import { type Cargado, CONTORNO_DE_ZIBATA, cargar, LIMITES, slugsRedirigidos } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
+import { prepararPlaza } from './plazas.ts'
 import { slugDe, unico } from './slug.ts'
 
 /** Medio lado del cuadrado provisional: 30 m, es decir, 60 m de lado. */
@@ -65,8 +72,11 @@ export const EntradaPlazaNuevaSchema = z.strictObject({
   /** Declara que lo comprobó en el lugar: añade `campo:AAAA-MM-DD`. */
   aportadoPorMi: z.boolean().optional().default(false),
   confianza: z.enum(LOCATION_CONFIDENCE),
-  /** Confirmada y en construcción. Sigue inactiva. */
-  proximamente: z.boolean().optional().default(false),
+  /** Obligatorio y sin valor por omisión: o está activa, o es próximamente. No hay un "no sé". */
+  estado: z.enum(['activa', 'proximamente'], {
+    error:
+      'Elige si la plaza está activa o es próximamente. Si no lo sabes, todavía no se puede crear.',
+  }),
   /** Sin esto, solo se calcula lo que se guardaría. */
   confirmar: z.boolean().optional().default(false),
 })
@@ -75,7 +85,10 @@ export interface ResumenPlazaNueva {
   id: string
   slug: string
   nombre: string
-  estado: string
+  /** Lo que se afirmó al crearla. */
+  estado: 'activa' | 'proximamente'
+  /** El estado de investigación que se guarda en `verification.status`. */
+  investigacion: string
   confianza: string
   locationSource: string
   fuentes: string[]
@@ -129,8 +142,9 @@ export function prepararPlazaNueva(
   // verificación en el lugar.
   const fuentes = [...new Set(dato.fuentes.filter((fuente) => fuente.length > 0))]
   const malas = fuentes.filter((fuente) => !isHttpUrl(fuente))
-  if (fuentes.length === 0)
+  if (fuentes.length === 0) {
     return { ok: false, problemas: ['fuentes: Aporta al menos una fuente (una URL)'] }
+  }
   if (malas.length > 0) {
     return {
       ok: false,
@@ -170,9 +184,9 @@ export function prepararPlazaNueva(
     }
   }
 
-  // Solo lo que es verdad al crearla; si luego se ajusta el contorno, esa edición añade su propia cláusula.
+  const activa = dato.estado === 'activa'
+  const investigacion = activa ? (dato.aportadoPorMi ? 'active' : 'likely_active') : 'coming_soon'
   const locationSource = `${conPunto(dato.evidencia)} Huella provisional: cuadrado de 60 m centrado en el marcador, creado desde el panel el ${hoy}.`
-  const estado = dato.proximamente ? 'coming_soon' : 'uncertain'
   const sources = [...fuentes, ...(dato.aportadoPorMi ? [`campo:${hoy}`] : [])]
   const descripcion =
     dato.descripcionEs || dato.descripcionEn
@@ -191,15 +205,15 @@ export function prepararPlazaNueva(
     address: dato.direccion || null,
     coordinates: { lat: dato.lat, lng: dato.lng },
     geometry,
-    active: false,
-    ...(dato.proximamente ? { comingSoon: true } : {}),
+    active: activa,
+    ...(activa ? {} : { comingSoon: true }),
     ...(dato.googleMapsUri ? { googleMapsUri: dato.googleMapsUri } : {}),
     placeIds: [],
     categories: [],
     locationConfidence: dato.confianza,
     locationSource,
     verification: {
-      status: estado,
+      status: investigacion,
       confidence: dato.confianza,
       lastVerifiedAt: hoy,
       sources,
@@ -233,15 +247,53 @@ export function prepararPlazaNueva(
     .map((asunto) => asunto.message)
   if (nuevos.length > 0) return { ok: false, problemas: nuevos }
 
-  const avisos = [
-    'Nace inactiva: no tiene página, ni marcador con su nombre, ni entra en el sitemap hasta que alguien la active.',
-    'Pero su contorno SÍ se dibuja en el mapa público, en gris y sin interacción: el build dibuja los edificios que haya dentro y, si no hay ninguno, genera un volumen a partir del cuadrado provisional de 60 m.',
-    'Ajusta el contorno con la sección Contorno de su formulario antes de fusionar la PR si no quieres que ese volumen aparezca donde está el marcador.',
+  // Una plaza activa se publica: tiene que pasar lo mismo que activar una plaza que ya existe (título único y
+  // que quepa, descripciones distintas, sin chocar con un local o una página de información). En vez de
+  // repetir esas reglas, se prueba la activación de la plaza recién añadida como inactiva.
+  if (activa) {
+    const comoInactiva = { ...fila, active: false }
+    const datasetInactivo: CommercialDataset = {
+      ...despues,
+      plazas: despues.plazas.map((plaza) =>
+        plaza.id === id ? { ...plaza, active: false } : plaza,
+      ),
+    }
+    const crudoInactivo = { ...crudo, plazas: { ...plazas, plazas: [...filas, comoInactiva] } }
+    const activacion = prepararPlaza(
+      datasetInactivo,
+      crudoInactivo,
+      {
+        id,
+        nombre: dato.nombre,
+        descripcionEs: dato.descripcionEs,
+        descripcionEn: dato.descripcionEn,
+        direccion: dato.direccion,
+        lat: dato.lat,
+        lng: dato.lng,
+        googleMapsUri: dato.googleMapsUri,
+        activa: true,
+        proximamente: false,
+      },
+      hoy,
+    )
+    if (!activacion.ok) return { ok: false, problemas: activacion.problemas }
+  }
+
+  const avisos = activa
+    ? [
+        `Se publica: tendrá página (/es/zona/${id}), su nombre en el mapa y entrará en el sitemap.`,
+        'Todavía no tiene locales: su página saldrá vacía hasta que los añadas.',
+      ]
+    : [
+        'Próximamente: sale en el mapa con su marcador y un contorno punteado, y en la lista "En construcción"; sin página, sin locales y sin entrar en filtros ni conteos.',
+      ]
+  avisos.push(
+    'Su contorno es un cuadrado provisional de 60 m alrededor del marcador, y se dibuja en el mapa público con esa forma. Ajústalo con la sección Contorno de su formulario antes de fusionar la PR.',
     dato.aportadoPorMi
       ? `Se anota "campo:${hoy}": afirma que la ubicación se comprobó en el lugar.`
       : 'No se anota "campo:": no se afirma una verificación en el lugar.',
     'Se revierte con git, no con un botón.',
-  ]
+  )
   if (id !== slugDe(dato.nombre)) {
     avisos.push(`El nombre ya estaba en uso: la plaza se llamará "${id}" en la dirección.`)
   }
@@ -252,7 +304,8 @@ export function prepararPlazaNueva(
       id,
       slug: id,
       nombre: dato.nombre,
-      estado,
+      estado: dato.estado,
+      investigacion,
       confianza: dato.confianza,
       locationSource,
       fuentes: sources,

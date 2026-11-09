@@ -1757,7 +1757,8 @@ test.describe('Panel', () => {
     const resumenDePrueba = {
       id: 'plaza-de-prueba',
       nombre: 'Plaza de Prueba',
-      estado: 'uncertain',
+      estado: 'proximamente',
+      investigacion: 'coming_soon',
       confianza: 'medium',
       locationSource: 'Evidencia escrita en la prueba. Huella provisional: cuadrado de 60 m.',
       fuentes: ['https://uno.test/a', 'https://dos.test/b', 'campo:2026-11-09'],
@@ -1798,7 +1799,13 @@ test.describe('Panel', () => {
       return { cuerpos, dialogo }
     }
 
-    async function rellenar(dialogo: Locator, extra: { campo?: boolean } = {}) {
+    async function rellenar(
+      dialogo: Locator,
+      extra: { campo?: boolean; estado?: 'activa' | 'proximamente' | null } = {},
+    ) {
+      // El estado se elige siempre: por omisión, próximamente. `null` lo deja sin elegir.
+      const estado = extra.estado === undefined ? 'proximamente' : extra.estado
+      if (estado) await dialogo.locator(`input[name="estado"][value="${estado}"]`).check()
       await dialogo.locator('[name="nombre"]').fill('Plaza de Prueba')
       await dialogo.locator('[name="lat"]').fill('20,6905')
       await dialogo.locator('[name="lng"]').fill('-100.3355')
@@ -1809,15 +1816,49 @@ test.describe('Panel', () => {
         await dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }).check()
     }
 
-    test('por defecto no afirma nada: nada de "campo:" ni confianza alta, y nace inactiva', async ({
+    test('el estado es obligatorio: sin elegirlo no se manda nada, y no hay un "no sé"', async ({
       page,
     }) => {
+      const { cuerpos, dialogo } = await abrirNueva(page)
+      // Ninguna opción viene marcada y solo hay dos.
+      await expect(dialogo.locator('input[name="estado"]')).toHaveCount(2)
+      await expect(dialogo.locator('input[name="estado"]:checked')).toHaveCount(0)
+      await expect(dialogo.getByText('No hay una opción de "no sé"')).toBeVisible()
+      await rellenar(dialogo, { estado: null })
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      // El aviso queda en el propio grupo de opciones, no en una caja aparte.
+      await expect(dialogo.locator('.estado-plaza .campo-error')).toContainText(
+        'Elige si la plaza está activa o es próximamente',
+      )
+      await expect(dialogo.locator('input[name="estado"]').first()).toHaveAttribute(
+        'aria-invalid',
+        'true',
+      )
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toHaveCount(0)
+      expect(cuerpos).toHaveLength(0)
+      // Al elegir una, ya se puede.
+      await dialogo.locator('input[name="estado"][value="activa"]').check()
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      expect(cuerpos).toHaveLength(1)
+      expect(cuerpos[0]).toMatchObject({ estado: 'activa' })
+    })
+
+    test('el estado elegido se manda tal cual y cambiarlo borra lo enseñado', async ({ page }) => {
+      const { cuerpos, dialogo } = await abrirNueva(page)
+      await rellenar(dialogo, { estado: 'proximamente' })
+      await dialogo.getByRole('button', { name: 'Ver lo que se guardará' }).click()
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toBeVisible()
+      expect(cuerpos[0]).toMatchObject({ estado: 'proximamente' })
+      await dialogo.locator('input[name="estado"][value="activa"]').check()
+      await expect(dialogo.getByRole('button', { name: 'Crear plaza' })).toHaveCount(0)
+    })
+
+    test('por defecto no afirma nada: nada de "campo:" ni confianza alta', async ({ page }) => {
       const { cuerpos, dialogo } = await abrirNueva(page)
       await expect(
         dialogo.getByRole('checkbox', { name: 'Lo comprobé yo en el lugar' }),
       ).not.toBeChecked()
       await expect(dialogo.locator('[name="confianza"]')).toHaveValue('low')
-      await expect(dialogo.getByText('nace inactiva')).toBeVisible()
       // El formulario, sin violaciones graves de accesibilidad.
       const resultado = await new AxeBuilder({ page }).include('#editor').analyze()
       const graves = resultado.violations.filter((v) =>
@@ -1833,7 +1874,7 @@ test.describe('Panel', () => {
       expect(cuerpos).toHaveLength(1)
       expect(cuerpos[0]).toMatchObject({
         aportadoPorMi: false,
-        proximamente: false,
+        estado: 'proximamente',
         confianza: 'low',
       })
       expect(Object.keys(cuerpos[0] ?? {})).not.toContain('confirmar')
