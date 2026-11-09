@@ -49,6 +49,7 @@ export function pintarNegocios(): void {
   vista.raiz.innerHTML = `
     <div class="barra-contenido">
       <input class="${controls.campo} buscar" type="search" placeholder="Buscar por nombre, plaza o giro" aria-label="Buscar negocio" value="${texto(vista.consulta)}" data-buscar />
+      <button type="button" class="${controls.base} ${controls.boton} ${controls.secundario}" data-importar>Importar CSV</button>
       <button type="button" class="${controls.base} ${controls.boton} ${controls.principal}" data-nuevo>Nuevo negocio</button>
     </div>
     <div class="barra-filtros">

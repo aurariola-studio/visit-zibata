@@ -1414,6 +1414,189 @@ test.describe('Panel', () => {
     await expect(page.getByRole('button', { name: 'Borrar negocio' })).toHaveCount(0)
   })
 
+  test.describe('importar desde un CSV', () => {
+    const RUTA_IMPORTAR = /\/api\/panel\/contenido\/importar$/
+    const CSV =
+      'name,plaza,giros,active,comprobado\nTienda Uno,Plaza Uno,servicios-general,sí,sí\nTienda Dos,Plaza Uno,servicios-general,sí,sí'
+    const fila = (extra: Record<string, unknown>) => ({
+      linea: 2,
+      nombre: 'Tienda Uno',
+      ok: true,
+      nuevo: true,
+      id: 'tienda-uno',
+      problemas: [],
+      avisos: [],
+      afirma: ['estado "active"', 'campo:2026-11-09 (comprobado en el lugar)'],
+      ...extra,
+    })
+    const vistaOk = {
+      ok: true,
+      confirmado: false,
+      seco: false,
+      pr: null,
+      mensaje: 'Esto es lo que pasaría.',
+      vista: {
+        listo: true,
+        creados: 2,
+        actualizados: 0,
+        columnasIgnoradas: [],
+        filas: [fila({}), fila({ linea: 3, nombre: 'Tienda Dos', id: 'tienda-dos' })],
+      },
+    }
+
+    async function abrirImportar(page: Page): Promise<Locator> {
+      await abrirPanel(page)
+      await irA(page, 'negocios', 'Negocios')
+      await page.getByRole('button', { name: 'Importar CSV' }).click()
+      const dialogo = page.locator('#editor')
+      await expect(dialogo).toBeVisible()
+      return dialogo
+    }
+
+    test('sin archivo ni texto no se llama al servidor y el aviso va en el formulario', async ({
+      page,
+    }) => {
+      let llamado = false
+      await page.route(RUTA_IMPORTAR, async (ruta) => {
+        llamado = true
+        await ruta.fulfill({ json: vistaOk })
+      })
+      const dialogo = await abrirImportar(page)
+      await dialogo.getByRole('button', { name: 'Ver lo que pasaría' }).click()
+      await expect(dialogo.locator('textarea[name="csv"]')).toHaveAttribute('aria-invalid', 'true')
+      await expect(dialogo.locator('.campo-error.dinamico')).toContainText('Elige un archivo')
+      expect(llamado).toBe(false)
+      await sinDesplazamientoLateral(page)
+    })
+
+    test('enseña cada fila con lo que afirma, y cambiar el texto borra la vista y el botón', async ({
+      page,
+    }) => {
+      await page.route(RUTA_IMPORTAR, (ruta) => ruta.fulfill({ json: vistaOk }))
+      const dialogo = await abrirImportar(page)
+      await dialogo.locator('textarea[name="csv"]').fill(CSV)
+      await dialogo.getByRole('button', { name: 'Ver lo que pasaría' }).click()
+      await expect(
+        dialogo.getByRole('heading', { name: /Se importarían 2 filas: 2 nuevos/ }),
+      ).toBeVisible()
+      await expect(dialogo.locator('tbody tr')).toHaveCount(2)
+      await expect(dialogo.locator('tbody tr').first()).toContainText('campo:2026-11-09')
+      await expect(dialogo.getByRole('button', { name: 'Importar 2 locales' })).toBeVisible()
+      await sinDesplazamientoLateral(page)
+
+      await dialogo.locator('textarea[name="csv"]').fill(`${CSV}\n`)
+      await expect(dialogo.locator('tbody tr')).toHaveCount(0)
+      await expect(dialogo.getByRole('button', { name: /Importar \d/ })).toHaveCount(0)
+    })
+
+    test('confirmar manda exactamente el archivo que se vio, con confirmar', async ({ page }) => {
+      const cuerpos: { csv: string; confirmar?: boolean }[] = []
+      await page.route(RUTA_IMPORTAR, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as { csv: string; confirmar?: boolean }
+        cuerpos.push(cuerpo)
+        await ruta.fulfill({
+          json: cuerpo.confirmar
+            ? {
+                ...vistaOk,
+                confirmado: true,
+                pr: { url: 'https://example.test/pr/9', numero: 9, creada: true },
+                mensaje: 'Importación enviada a la PR.',
+              }
+            : vistaOk,
+        })
+      })
+      const dialogo = await abrirImportar(page)
+      await dialogo.locator('textarea[name="csv"]').fill(CSV)
+      await dialogo.getByRole('button', { name: 'Ver lo que pasaría' }).click()
+      await dialogo.getByRole('button', { name: 'Importar 2 locales' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #9' })).toBeVisible()
+      expect(cuerpos).toHaveLength(2)
+      expect(cuerpos[0]?.confirmar).toBeUndefined()
+      expect(cuerpos[1]).toEqual({ csv: CSV, confirmar: true })
+    })
+
+    test('con una fila con error no hay botón de importar: todo o nada', async ({ page }) => {
+      await page.route(RUTA_IMPORTAR, (ruta) =>
+        ruta.fulfill({
+          json: {
+            ...vistaOk,
+            vista: {
+              listo: false,
+              creados: 1,
+              actualizados: 0,
+              columnasIgnoradas: ['columna_rara'],
+              filas: [
+                fila({}),
+                fila({
+                  linea: 3,
+                  nombre: 'Mala',
+                  ok: false,
+                  nuevo: false,
+                  problemas: ['Plaza no encontrada: "Otra"'],
+                  afirma: [],
+                }),
+              ],
+            },
+          },
+        }),
+      )
+      const dialogo = await abrirImportar(page)
+      await dialogo.locator('textarea[name="csv"]').fill(CSV)
+      await dialogo.getByRole('button', { name: 'Ver lo que pasaría' }).click()
+      await expect(
+        dialogo.getByRole('heading', { name: /1 fila tiene errores: no se importa nada/ }),
+      ).toBeVisible()
+      await expect(dialogo.locator('tbody tr').nth(1)).toContainText('Plaza no encontrada')
+      await expect(dialogo).toContainText('columna_rara')
+      await expect(dialogo.getByRole('button', { name: /Importar \d/ })).toHaveCount(0)
+    })
+
+    test('un archivo elegido llena el cuadro y borra la vista anterior', async ({ page }) => {
+      await page.route(RUTA_IMPORTAR, (ruta) => ruta.fulfill({ json: vistaOk }))
+      const dialogo = await abrirImportar(page)
+      await dialogo.locator('textarea[name="csv"]').fill('name,plaza\nX,Y')
+      await dialogo.getByRole('button', { name: 'Ver lo que pasaría' }).click()
+      await expect(dialogo.locator('tbody tr')).toHaveCount(2)
+      await dialogo.locator('input[data-importar-archivo]').setInputFiles({
+        name: 'locales.csv',
+        mimeType: 'text/csv',
+        buffer: Buffer.from(CSV),
+      })
+      await expect(dialogo.locator('textarea[name="csv"]')).toHaveValue(CSV)
+      await expect(dialogo.locator('tbody tr')).toHaveCount(0)
+    })
+
+    test('un archivo de Excel que no está en UTF-8 se rechaza y no llena el cuadro', async ({
+      page,
+    }) => {
+      const dialogo = await abrirImportar(page)
+      await dialogo.locator('input[data-importar-archivo]').setInputFiles({
+        name: 'locales.csv',
+        mimeType: 'text/csv',
+        // Windows-1252, como lo guarda Excel con "CSV" a secas: la é es el byte 0xE9.
+        buffer: Buffer.from('name,plaza\nCafé Luna,Plaza Luna', 'latin1'),
+      })
+      await expect(dialogo.locator('[data-problemas]')).toContainText('no está en UTF-8')
+      await expect(dialogo.locator('textarea[name="csv"]')).toHaveValue('')
+    })
+
+    test('el rechazo del servidor se ve en el formulario', async ({ page }) => {
+      await page.route(RUTA_IMPORTAR, (ruta) =>
+        ruta.fulfill({
+          status: 400,
+          json: {
+            ok: false,
+            problemas: ['Falta la columna "plaza" en el encabezado del archivo.'],
+          },
+        }),
+      )
+      const dialogo = await abrirImportar(page)
+      await dialogo.locator('textarea[name="csv"]').fill('name\nX')
+      await dialogo.getByRole('button', { name: 'Ver lo que pasaría' }).click()
+      await expect(dialogo.locator('[data-problemas]')).toContainText('Falta la columna "plaza"')
+    })
+  })
+
   test.describe('procedencia', () => {
     const guardado = {
       ok: true,
@@ -2489,5 +2672,40 @@ test.describe('Panel', () => {
     await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
     await expect(page.locator('#editor')).toBeVisible()
     await revisar('formulario')
+    await page.keyboard.press('Escape')
+    await page.route(/\/api\/panel\/contenido\/importar$/, (ruta) =>
+      ruta.fulfill({
+        json: {
+          ok: true,
+          confirmado: false,
+          seco: false,
+          pr: null,
+          mensaje: '',
+          vista: {
+            listo: false,
+            creados: 0,
+            actualizados: 0,
+            columnasIgnoradas: ['columna_rara'],
+            filas: [
+              {
+                linea: 2,
+                nombre: 'Tienda',
+                ok: false,
+                nuevo: false,
+                problemas: ['Falta el nombre'],
+                avisos: [],
+                afirma: [],
+              },
+            ],
+          },
+        },
+      }),
+    )
+    await page.getByRole('button', { name: 'Importar CSV' }).click()
+    await revisar('importar')
+    await page.locator('#editor textarea[name="csv"]').fill('name,plaza\nX,Y')
+    await page.getByRole('button', { name: 'Ver lo que pasaría' }).click()
+    await expect(page.locator('#editor tbody tr')).toHaveCount(1)
+    await revisar('importar con la vista')
   })
 })
