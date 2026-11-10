@@ -215,3 +215,17 @@ export async function guardarVolumen(
     impacto: preparado.impacto,
   }
 }
+
+/**
+ * Las plazas cuyo volumen **reemplaza** sus huellas reales (`replaceExisting`): ahí un ajuste de edificio no
+ * cambiaría nada y el build lo da por error. Vacío si el archivo de volúmenes falta o no pasa el esquema.
+ */
+export function plazasQueReemplazan(
+  crudo: Cargado['crudo'],
+  dataset: CommercialDataset,
+): CommercialDataset['plazas'] {
+  const leido = leerVolumenes(crudo.volumenesPlaza)
+  if (!leido.valido) return []
+  const { archivo } = leido
+  return dataset.plazas.filter((plaza) => reglaDeVolumen(archivo, plaza.id).replaceExisting)
+}
