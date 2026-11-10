@@ -6518,11 +6518,11 @@
       "verification": {
         "status": "active",
         "confidence": "high",
-        "lastVerifiedAt": "2026-11-10",
+        "lastVerifiedAt": "2026-11-09",
         "sources": [
           "https://www.walmartmexico.com/sala-de-prensa/2022/10/11/inaugura-walmart-express-su-tienda-numero-100-en-mexico",
           "https://maps.app.goo.gl/BLyVhi3vAdVWrPM78",
-          "campo:2026-11-10"
+          "campo:2026-11-09"
         ]
       }
     },
