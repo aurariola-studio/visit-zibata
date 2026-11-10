@@ -325,11 +325,15 @@ const impactoDePrueba = {
   avisos: ['Aviso de prueba del contorno.'],
 }
 
+const versionAlDia = { estado: 'al-dia', fijada: '2026-10-21.0', ultima: '2026-10-21.0' }
+
 interface Opciones {
   /** El estado con el que responde `/api/panel/contenido`: 200 por defecto, 403 si no hay Access. */
   contenidoStatus?: number
   /** Los datos con los que responde: por defecto `contenido`. */
   datos?: object
+  /** La versión de Overture: un objeto con el que responde, o un número de estado de error. Por defecto, al día. */
+  mapaVersion?: object | number
 }
 
 /** Abre el panel con las rutas de lectura simuladas. */
@@ -352,8 +356,13 @@ const ajustesDePrueba = [
 
 async function abrirPanel(
   page: Page,
-  { contenidoStatus = 200, datos = contenido }: Opciones = {},
+  { contenidoStatus = 200, datos = contenido, mapaVersion = versionAlDia }: Opciones = {},
 ): Promise<void> {
+  await page.route(/\/api\/panel\/mapa\/version$/, (ruta) =>
+    typeof mapaVersion === 'number'
+      ? ruta.fulfill({ status: mapaVersion, json: { error: 'no' } })
+      : ruta.fulfill({ json: mapaVersion }),
+  )
   await page.route(/\/api\/panel\?dias=\d+$/, (ruta) => ruta.fulfill({ json: estadisticas }))
   await page.route(/\/api\/panel\/contenido$/, (ruta) =>
     contenidoStatus === 200
@@ -389,6 +398,77 @@ test.describe('Panel', () => {
     await abrirPanel(page)
     await expect(page.getByText('Visitas por día')).toBeVisible()
     await sinDesplazamientoLateral(page)
+  })
+
+  test.describe('la versión de Overture en el resumen', () => {
+    test('al día lo dice en una nota, sin llamar la atención', async ({ page }) => {
+      await abrirPanel(page)
+      const zona = page.locator('[data-mapa-version]')
+      await expect(zona).toContainText(
+        'versión más reciente de los edificios de Overture (2026-10-21.0)',
+      )
+      await expect(zona.locator('.pendiente')).toHaveCount(0)
+    })
+
+    test('una versión nueva se avisa con las dos versiones y sin cabecera de error', async ({
+      page,
+    }) => {
+      await abrirPanel(page, {
+        mapaVersion: { estado: 'hay-nueva', fijada: '2026-10-21.0', ultima: '2026-11-18.0' },
+      })
+      const aviso = page.locator('[data-mapa-version] .pendiente')
+      await expect(aviso).toContainText('2026-11-18.0')
+      await expect(aviso).toContainText('El mapa usa la 2026-10-21.0')
+      await sinDesplazamientoLateral(page)
+    })
+
+    test('si Overture ya no publica la fijada, lo dice y que el mapa sigue con su copia', async ({
+      page,
+    }) => {
+      await abrirPanel(page, {
+        mapaVersion: { estado: 'fijada-retirada', fijada: '2026-07-01.0', ultima: '2026-10-21.0' },
+      })
+      const aviso = page.locator('[data-mapa-version] .pendiente')
+      await expect(aviso).toContainText('ya no publica la versión 2026-07-01.0')
+      await expect(aviso).toContainText('copia guardada')
+    })
+
+    test('un fallo de la consulta se dice con el motivo, y un texto del servidor no se toma por marcado', async ({
+      page,
+    }) => {
+      await abrirPanel(page, {
+        mapaVersion: {
+          estado: 'desconocido',
+          fijada: null,
+          ultima: null,
+          motivo: 'Overture respondió <b>503</b>.',
+        },
+      })
+      const zona = page.locator('[data-mapa-version]')
+      await expect(zona).toContainText('No se pudo comprobar si hay una versión nueva')
+      await expect(zona).toContainText('Overture respondió <b>503</b>.')
+      await expect(zona.locator('b')).toHaveCount(0)
+    })
+
+    test('un error del servidor se dice', async ({ page }) => {
+      await abrirPanel(page, { mapaVersion: 500 })
+      await expect(page.locator('[data-mapa-version]')).toContainText('No se pudo comprobar')
+    })
+
+    test('un 403 (Access no cubre la ruta) se dice, no desaparece', async ({ page }) => {
+      await abrirPanel(page, { mapaVersion: 403 })
+      await expect(page.locator('[data-mapa-version]')).toContainText('No se pudo comprobar')
+    })
+
+    test('con 503 la zona queda vacía', async ({ page }) => {
+      // Sin acceso a GitHub el Resumen ya lo dice en otro bloque: aquí no se repite. Se espera a la respuesta y a
+      // que el navegador pinte, para que "vacía" no se cumpla solo porque aún no llegó nada.
+      const respondida = page.waitForResponse(/\/api\/panel\/mapa\/version$/)
+      await abrirPanel(page, { mapaVersion: 503 })
+      await respondida
+      await page.evaluate(() => new Promise((listo) => setTimeout(listo, 150)))
+      await expect(page.locator('[data-mapa-version]')).toBeEmpty()
+    })
   })
 
   test('negocios: lista, búsqueda y estado de cada local', async ({ page }) => {

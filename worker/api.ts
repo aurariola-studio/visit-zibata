@@ -35,6 +35,7 @@ import {
 import { guardarContorno } from './geometria-plaza.ts'
 import type { EntornoGitHub } from './github.ts'
 import { guardarImportacion, TOPE_DE_BYTES_CSV } from './importar.ts'
+import { versionDelMapa } from './mapa.ts'
 import {
   calificacionesDe,
   MARCAR_VISITA,
@@ -376,6 +377,15 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
     try {
       return json(await verPr(entorno))
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+  // ¿Hay una versión de Overture más nueva que la del mapa? Solo lee; ver worker/mapa.ts.
+  if (ruta === '/api/panel/mapa/version' && peticion.method === 'GET') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    try {
+      return json(await versionDelMapa(entorno))
     } catch (error) {
       return falloDeContenido(error)
     }

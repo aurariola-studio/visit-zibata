@@ -24,6 +24,7 @@ import {
   recuentosDeRevision,
 } from './contenido.ts'
 import './panel.css'
+import { montarVersionDelMapa } from './mapa.ts'
 import { montarPr } from './pr.ts'
 
 interface Dia {
@@ -406,6 +407,7 @@ function pintarResumen(): void {
       <div class="pendiente" data-pendiente>${bloquePendiente()}</div>
       <div class="pendiente" data-por-revisar>${bloquePorRevisar()}</div>
       <div class="pr-detalle" data-pr-detalle></div>
+      <div data-mapa-version></div>
       <div class="cifras">
         <div class="cifra-grande">
           <p class="rotulo">Visitas</p>
@@ -487,6 +489,8 @@ function pintarResumen(): void {
     </section>
   `
   cargarDetallePr()
+  const versionDelMapa = vistaEl.querySelector<HTMLElement>('[data-mapa-version]')
+  if (versionDelMapa) void montarVersionDelMapa(versionDelMapa)
   vistaEl.setAttribute('aria-busy', 'false')
 }
 
