@@ -6,6 +6,7 @@ import {
   mismoContorno,
   normalizarContorno,
   puntoEnContorno,
+  puntoInterior,
   validarContornoDePlaza,
 } from './geometria.ts'
 
@@ -251,5 +252,93 @@ describe('mismoContorno', () => {
     const movido = base.map((p) => [...p])
     movido[2] = [(movido[2]?.[0] ?? 0) + 0.0001, movido[2]?.[1] ?? 0]
     expect(mismoContorno(base, movido)).toBe(false)
+  })
+})
+
+describe('puntoInterior', () => {
+  const LNG = -100.33
+  const LAT = 20.68
+  const M_LAT = 110_574
+  const M_LNG = 111_320 * Math.cos((LAT * Math.PI) / 180)
+  /** Un polígono dado en metros desde (LNG, LAT), como anillo cerrado en grados. */
+  const enMetros = (metros: number[][]) => {
+    const anillo = metros.map(([x = 0, y = 0]) => [LNG + x / M_LNG, LAT + y / M_LAT])
+    return [...anillo, anillo[0] ?? []]
+  }
+
+  it('un cuadrado de 20 m: el centro, a 10 m de cualquier borde', () => {
+    const r = puntoInterior([
+      enMetros([
+        [0, 0],
+        [20, 0],
+        [20, 20],
+        [0, 20],
+      ]),
+    ])
+    expect(r?.margenM).toBeGreaterThan(9.5)
+    expect(r?.lng).toBeCloseTo(LNG + 10 / M_LNG, 6)
+  })
+
+  it('una U: el centroide cae en el hueco, el punto interior no', () => {
+    const u = enMetros([
+      [0, 0],
+      [30, 0],
+      [30, 30],
+      [20, 30],
+      [20, 10],
+      [10, 10],
+      [10, 30],
+      [0, 30],
+    ])
+    const r = puntoInterior([u])
+    if (!r) throw new Error('debía haber punto')
+    expect(puntoEnContorno({ lat: r.lat, lng: r.lng }, u)).toBe(true)
+    expect(r.margenM).toBeGreaterThan(3)
+  })
+
+  it('una tira de 2 m de ancho: el margen es ~1 m, y lo dice', () => {
+    const r = puntoInterior([
+      enMetros([
+        [0, 0],
+        [60, 0],
+        [60, 2],
+        [0, 2],
+      ]),
+    ])
+    expect(r?.margenM).toBeGreaterThan(0.8)
+    expect(r?.margenM).toBeLessThan(1.05)
+  })
+
+  it('un patio interior: el punto no cae en el agujero', () => {
+    const exterior = enMetros([
+      [0, 0],
+      [40, 0],
+      [40, 40],
+      [0, 40],
+    ])
+    const patio = enMetros([
+      [12, 12],
+      [12, 28],
+      [28, 28],
+      [28, 12],
+    ])
+    const r = puntoInterior([exterior, patio])
+    if (!r) throw new Error('debía haber punto')
+    expect(puntoEnContorno({ lat: r.lat, lng: r.lng }, patio)).toBe(false)
+    expect(puntoEnContorno({ lat: r.lat, lng: r.lng }, exterior)).toBe(true)
+    // Entre el patio y el borde hay 12 m de anillo: el mejor punto queda a unos 6 m de los dos.
+    expect(r.margenM).toBeGreaterThan(5)
+  })
+
+  it('un anillo degenerado no tiene punto', () => {
+    expect(puntoInterior([])).toBeNull()
+    expect(
+      puntoInterior([
+        [
+          [LNG, LAT],
+          [LNG, LAT],
+        ],
+      ]),
+    ).toBeNull()
   })
 })

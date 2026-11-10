@@ -377,3 +377,78 @@ export function puntoEnContorno(punto: { lat: number; lng: number }, anillo: Ani
   const limite = proyectar(anillo, lat0)
   return p !== undefined && dentro(p, limite)
 }
+
+/* ------------------------------------------------------------------ punto interior de un edificio */
+
+function distanciaASegmento(p: Punto, a: Punto, b: Punto): number {
+  const dx = b[0] - a[0]
+  const dy = b[1] - a[1]
+  const largo2 = dx * dx + dy * dy
+  const t =
+    largo2 === 0 ? 0 : Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / largo2))
+  return Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy))
+}
+
+/**
+ * El punto de un polígono (con sus agujeros) más lejano de cualquier borde, y a cuántos metros está. Es lo que
+ * hay que mandar al ajustar un edificio: un punto "dentro" sirve de poco si por poco, porque la geometría del
+ * mapa se recorta en los bordes de las teselas y se simplifica, y un punto al filo puede caer fuera de la huella
+ * original que usa `map:build` para resolverlo.
+ *
+ * Búsqueda en rejilla sobre la caja del polígono, refinada tres veces alrededor del mejor punto: a la escala de
+ * un edificio sobra, y no depende de nada externo. `anillos[0]` es el exterior; el resto, agujeros.
+ */
+export function puntoInterior(anillos: readonly Anillo[]): {
+  lat: number
+  lng: number
+  margenM: number
+} | null {
+  const exterior = anillos[0]
+  if (!exterior || exterior.length < 4) return null
+  const lat0 = latMedia(exterior)
+  const kx = M_POR_GRADO_LNG_ECUADOR * Math.cos((lat0 * Math.PI) / 180)
+  const proyectados = anillos.map((anillo) => proyectar(anillo, lat0))
+  // Dentro del exterior y fuera de todos los agujeros.
+  const contiene = (p: Punto): boolean =>
+    dentro(p, proyectados[0] ?? []) && !proyectados.slice(1).some((anillo) => dentro(p, anillo))
+  const margen = (p: Punto): number => {
+    let mejor = Number.POSITIVE_INFINITY
+    for (const anillo of proyectados) {
+      for (let i = 0; i < anillo.length - 1; i++) {
+        const a = anillo[i]
+        const b = anillo[i + 1]
+        if (a && b) mejor = Math.min(mejor, distanciaASegmento(p, a, b))
+      }
+    }
+    return mejor
+  }
+
+  const xs = (proyectados[0] ?? []).map((p) => p[0])
+  const ys = (proyectados[0] ?? []).map((p) => p[1])
+  let minX = Math.min(...xs)
+  let maxX = Math.max(...xs)
+  let minY = Math.min(...ys)
+  let maxY = Math.max(...ys)
+  let mejor: { p: Punto; m: number } | null = null
+  const PASOS = 24
+  for (let ronda = 0; ronda < 4; ronda++) {
+    const dx = (maxX - minX) / PASOS
+    const dy = (maxY - minY) / PASOS
+    for (let i = 0; i <= PASOS; i++) {
+      for (let j = 0; j <= PASOS; j++) {
+        const p: Punto = [minX + i * dx, minY + j * dy]
+        if (!contiene(p)) continue
+        const m = margen(p)
+        if (!mejor || m > mejor.m) mejor = { p, m }
+      }
+    }
+    if (!mejor) return null
+    // La siguiente ronda mira solo alrededor del mejor punto, con la caja a un par de pasos de lado.
+    minX = mejor.p[0] - 2 * dx
+    maxX = mejor.p[0] + 2 * dx
+    minY = mejor.p[1] - 2 * dy
+    maxY = mejor.p[1] + 2 * dy
+  }
+  if (!mejor) return null
+  return { lng: mejor.p[0] / kx, lat: mejor.p[1] / M_POR_GRADO_LAT, margenM: mejor.m }
+}
