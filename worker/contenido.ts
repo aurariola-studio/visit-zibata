@@ -42,7 +42,7 @@ import {
 import { TITULOS_RESERVADOS } from '../src/data/titulos-reservados.ts'
 import { leerVolumenes, type VolumenesPlazaFile } from '../src/data/volumenes-plaza.ts'
 import { ANCHOS_DE_VARIANTE } from '../src/lib/image-variants.ts'
-import type { Category, Photo, Place } from '../src/types/domain.ts'
+import type { Category, Photo, Place, Sector } from '../src/types/domain.ts'
 import { fechaLocal } from './analitica.ts'
 import {
   type EntornoGitHub,
@@ -185,6 +185,8 @@ export interface ResultadoContenido {
   places: Place[]
   /** Los ajustes de edificios del mapa; `valido: false` si el archivo no pasa el esquema (no se edita desde el panel). */
   edificios: { valido: boolean; ajustes: AjusteEdificio[] }
+  /** Los sectores que agrupan las categorías; ausente si el archivo todavía no los declara. */
+  sectors?: Sector[]
   /** El volumen provisional de las plazas; `null` si el archivo falta o no pasa el esquema (no se edita). */
   volumenes: VolumenesPlazaFile | null
 }
@@ -438,8 +440,10 @@ const local = (): Cargado['crudo'] => ({
 })
 
 function datasetDe(crudo: Cargado['crudo']): CommercialDataset {
+  const archivoCategorias = CategoriesFileSchema.parse(crudo.categories)
   return {
-    categories: CategoriesFileSchema.parse(crudo.categories).categories,
+    ...(archivoCategorias.sectors && { sectors: archivoCategorias.sectors }),
+    categories: archivoCategorias.categories,
     plazas: PlazasFileSchema.parse(crudo.plazas).plazas,
     places: PlacesFileSchema.parse(crudo.places).places,
   }
@@ -521,6 +525,7 @@ export async function contenido(
       }),
     ),
     places: cargado.dataset.places,
+    ...(cargado.dataset.sectors && { sectors: cargado.dataset.sectors }),
     edificios: leerAjustes(cargado.crudo.ajustesEdificios),
     volumenes: (() => {
       const leido = leerVolumenes(cargado.crudo.volumenesPlaza)

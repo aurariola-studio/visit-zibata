@@ -64,6 +64,7 @@ try {
     throw new DatasetError(`No existe ${dataPaths.places}. Ejecuta npm run data:import.`)
 
   const dataset = {
+    ...(categoriesFile.sectors && { sectors: categoriesFile.sectors }),
     categories: categoriesFile.categories,
     plazas: plazasFile.plazas,
     places: placesFile.places,

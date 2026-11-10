@@ -64,6 +64,7 @@ const plazasFile = loadPlazasFile()
 const placesFile = loadPlacesFile()
 const redirectsFile = loadRedirectsFile()
 const dataset = {
+  ...(categoriesFile.sectors && { sectors: categoriesFile.sectors }),
   categories: categoriesFile.categories,
   plazas: plazasFile.plazas,
   places: placesFile?.places ?? [],

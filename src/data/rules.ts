@@ -49,6 +49,8 @@ export const SCHEMA_TYPES = [
   'Bakery',
   'BarOrPub',
   'Store',
+  'GroceryStore',
+  'ConvenienceStore',
 ] as const
 
 export const LOCATION_CONFIDENCE = ['high', 'medium', 'low'] as const

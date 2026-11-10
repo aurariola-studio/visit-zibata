@@ -24,7 +24,24 @@ const TIPOS_DE_NEGOCIO: Record<(typeof SCHEMA_TYPES)[number], string> = {
   CafeOrCoffeeShop: 'Cafetería',
   Bakery: 'Panadería',
   BarOrPub: 'Bar',
-  Store: 'Tienda o supermercado',
+  Store: 'Tienda, sin más precisión',
+  GroceryStore: 'Supermercado o abarrotes',
+  ConvenienceStore: 'Tienda de conveniencia',
+}
+
+/** Las opciones del sector. Una categoría nueva arranca sin elegir: el sector se decide a propósito, no por omisión. */
+function opcionesDeSector(actual: string | undefined): string {
+  const sectores = [...(vista.datos?.sectors ?? [])].sort((a, b) => a.order - b.order)
+  const elegir = actual ? '' : '<option value="" selected>Elige un sector</option>'
+  return (
+    elegir +
+    sectores
+      .map(
+        (sector) =>
+          `<option value="${texto(sector.id)}"${sector.id === actual ? ' selected' : ''}>${texto(sector.label.es)}</option>`,
+      )
+      .join('')
+  )
 }
 
 function opcionesDeTipo(actual: string | undefined): string {
@@ -177,6 +194,14 @@ export function pintarCategoria(categoria: Categoria | null): void {
             <span>Nombre en inglés</span>
             <input class="${controls.campo}" type="text" data-campo="labelEn" value="${texto(base.label.en ?? '')}" maxlength="80" required />
           </label>
+          ${
+            vista.datos.sectors?.length
+              ? `<label class="campo-form">
+            <span>Sector <span class="ayuda">dónde se agrupa en el filtro</span></span>
+            <select class="${controls.campo}" data-campo="sector" required>${opcionesDeSector(base.sectorId)}</select>
+          </label>`
+              : ''
+          }
           <label class="campo-form">
             <span>Icono</span>
             <select class="${controls.campo}" data-campo="icon">${opcionesDeIconos(base.icon, new Set())}</select>
@@ -320,11 +345,14 @@ function leerFormularioCategoria(formulario: HTMLFormElement): {
   const icono = campoDe('icon')
   const hueTexto = campoDe('hue')
   const tipoTexto = campoDe('schemaType')
+  const sectorTexto = campoDe('sector')
   const ordenTexto = campoDe('order')
   const sinonimos = sinonimosDe(campoDe('synonyms'))
 
   if (!labelEs) problemas.push('El nombre en español es obligatorio.')
   if (!labelEn) problemas.push('El nombre en inglés es obligatorio.')
+  if (vista.datos?.sectors?.length && !sectorTexto)
+    problemas.push('Elige el sector de la categoría.')
   if (categoriaId !== 'otros' && !hueTexto) {
     problemas.push('Esta categoría necesita un tono entre 0 y 359.')
   }
@@ -396,6 +424,7 @@ function leerFormularioCategoria(formulario: HTMLFormElement): {
   actual.icon = icono
   actual.hue = hueTexto ? Number(hueTexto) : undefined
   actual.schemaType = tipoTexto || undefined
+  if (sectorTexto) actual.sectorId = sectorTexto
   actual.order = Number(ordenTexto)
   actual.synonyms = sinonimos
 

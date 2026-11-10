@@ -11,6 +11,7 @@ import type {
   PlaceSchema,
   PlazaGeometrySchema,
   PlazaSchema,
+  SectorSchema,
 } from '../data/schemas.ts'
 
 export type LocalizedText = z.infer<typeof LocalizedTextSchema>
@@ -24,6 +25,7 @@ export type PlazaGeometry = z.infer<typeof PlazaGeometrySchema>
 export type Plaza = z.infer<typeof PlazaSchema>
 export type Giro = z.infer<typeof GiroSchema>
 export type Category = z.infer<typeof CategorySchema>
+export type Sector = z.infer<typeof SectorSchema>
 
 /** Datos comerciales listos para la UI: colecciones validadas + índices de acceso. */
 export interface Catalog {
