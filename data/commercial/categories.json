@@ -1343,91 +1343,6 @@
           "general": true
         }
       ]
-    },
-    {
-      "id": "supermercados",
-      "slug": {
-        "es": "supermercados",
-        "en": "supermarkets"
-      },
-      "sectorId": "super-y-autoservicio",
-      "label": {
-        "es": "Supermercado",
-        "en": "Supermarket"
-      },
-      "icon": "shopping-cart",
-      "hue": 78,
-      "schemaType": "GroceryStore",
-      "order": 200,
-      "synonyms": [
-        "super",
-        "supermercado",
-        "súper",
-        "despensa",
-        "abarrotes",
-        "mandado",
-        "walmart",
-        "heb"
-      ],
-      "giros": [
-        {
-          "id": "supermercado",
-          "label": {
-            "es": "Supermercado",
-            "en": "Supermarket"
-          },
-          "icon": "shopping-cart",
-          "synonyms": [
-            "super",
-            "supermercado",
-            "súper",
-            "despensa",
-            "mandado"
-          ],
-          "general": true
-        }
-      ]
-    },
-    {
-      "id": "tiendas-de-conveniencia",
-      "slug": {
-        "es": "tiendas-de-conveniencia",
-        "en": "convenience-stores"
-      },
-      "sectorId": "super-y-autoservicio",
-      "label": {
-        "es": "Tienda de conveniencia",
-        "en": "Convenience store"
-      },
-      "icon": "store",
-      "hue": 300,
-      "schemaType": "ConvenienceStore",
-      "order": 210,
-      "synonyms": [
-        "tienda",
-        "conveniencia",
-        "oxxo",
-        "abarrotes",
-        "autoservicio",
-        "24 horas"
-      ],
-      "giros": [
-        {
-          "id": "tienda-de-conveniencia",
-          "label": {
-            "es": "Tienda de conveniencia",
-            "en": "Convenience store"
-          },
-          "icon": "store",
-          "synonyms": [
-            "tienda",
-            "conveniencia",
-            "oxxo",
-            "autoservicio"
-          ],
-          "general": true
-        }
-      ]
     }
   ],
   "sectors": [
@@ -1443,19 +1358,6 @@
       },
       "icon": "utensils-crossed",
       "order": 10
-    },
-    {
-      "id": "super-y-autoservicio",
-      "slug": {
-        "es": "super-y-autoservicio",
-        "en": "grocery-and-convenience"
-      },
-      "label": {
-        "es": "Súper y Autoservicio",
-        "en": "Grocery & Convenience"
-      },
-      "icon": "shopping-cart",
-      "order": 20
     }
   ]
 }
