@@ -84,15 +84,15 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2511709,
-      "sha256": "964a31e82862a87dcbe3f790b826c44d8b547c0153798ab47079306e9ee25116",
+      "bytes": 2511124,
+      "sha256": "632d36244536828ec8c81018d70f1573d1e1f30a11a99d89446fccf938a34b55",
       "tiles": 265,
       "bytesByZoom": {
         "12": 46047,
         "13": 245444,
-        "14": 519927,
-        "15": 716843,
-        "16": 982149
+        "14": 519834,
+        "15": 716647,
+        "16": 981852
       },
       "largestTile": {
         "z": 13,
@@ -107,14 +107,14 @@
         "waterway": 8,
         "buildings": 16020,
         "labels": 20,
-        "trees": 30015,
+        "trees": 29988,
         "shrubs": 1580
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 8927,
-      "sha256": "ab54beec670f534fc37bebf148fe52a95bca0d64ddc4ad9918b27067346155ed",
-      "features": 24,
+      "bytes": 9264,
+      "sha256": "77275bd093ca431f69a9d6ddf52c67abf228eb5a7081cecca5f748e19891fcf7",
+      "features": 25,
       "synthesizedFor": [
         "paseo-zibata",
         "foodtrucks-pickleball",
@@ -122,7 +122,8 @@
         "campo-de-golf",
         "distrito-nandu",
         "plaza-luna",
-        "xenica"
+        "xenica",
+        "h-e-b"
       ],
       "synthesisDetail": [
         {
@@ -157,6 +158,11 @@
         },
         {
           "plazaId": "xenica",
+          "replacedFootprints": 0,
+          "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
+        },
+        {
+          "plazaId": "h-e-b",
           "replacedFootprints": 0,
           "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
         }
@@ -252,8 +258,8 @@
         "sha256": "1c706d2dcda7833c737fcd1b1257196f1479e8bcabcffe3c3c7fe055ace0080f"
       },
       "public/map/realismo/arboles.bin": {
-        "bytes": 142120,
-        "sha256": "04e8e7a26aa1e2a7fd10e97bcf05f166652fc1d8a6dd19918d4660550378b833"
+        "bytes": 141832,
+        "sha256": "6985b01955e2261d1f2271a16a91bbc3b2aa6adcf3290b38f297ecce0529379e"
       }
     }
   }

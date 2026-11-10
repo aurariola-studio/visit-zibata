@@ -1233,6 +1233,62 @@
           "https://maps.app.goo.gl/2K2suM5iCjE9U13o6"
         ]
       }
+    },
+    {
+      "id": "h-e-b",
+      "slug": "h-e-b",
+      "name": "H-E-B",
+      "description": null,
+      "address": "Av. Paseo de las Pitahayas 23, Zibatá",
+      "coordinates": {
+        "lat": 20.6757227,
+        "lng": -100.3252778
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -100.325892,
+              20.675524
+            ],
+            [
+              -100.325748,
+              20.675388
+            ],
+            [
+              -100.324961,
+              20.675388
+            ],
+            [
+              -100.324961,
+              20.676446
+            ],
+            [
+              -100.325892,
+              20.676446
+            ],
+            [
+              -100.325892,
+              20.675524
+            ]
+          ]
+        ]
+      },
+      "active": false,
+      "placeIds": [],
+      "categories": [],
+      "locationConfidence": "low",
+      "locationSource": "Solo conserva el edificio en el mapa; no se muestra como zona. Punto de OpenStreetMap (nodo 13994367601). Contorno provisional trazado sobre el techo visible en Sentinel-2 (2026-10-20): el edificio no está en OSM ni en Overture. Sustituir por la huella real cuando entre en una versión de Overture.",
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-10",
+        "sources": [
+          "https://maps.app.goo.gl/CB1gfAwxNFc5V9Mr9",
+          "campo:2026-11-10"
+        ]
+      }
     }
   ]
 }

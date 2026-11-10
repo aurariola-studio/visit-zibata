@@ -28,6 +28,10 @@
     "distrito-nandu": {
       "height": 10,
       "scale": 0.85
+    },
+    "h-e-b": {
+      "height": 9,
+      "scale": 0.9
     }
   }
 }
