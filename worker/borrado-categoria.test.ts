@@ -12,6 +12,7 @@ import { borrarCategoria, CATEGORIA_FIJA, prepararBorradoCategoria } from './bor
  */
 const completo: CommercialDataset = {
   categories: CategoriesFileSchema.parse(categoriasJson).categories,
+  sectors: CategoriesFileSchema.parse(categoriasJson).sectors,
   plazas: PlazasFileSchema.parse(plazasJson).plazas,
   places: PlacesFileSchema.parse(lugaresJson).places,
 }

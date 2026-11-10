@@ -64,7 +64,7 @@ const crudoCategorias = {
   sectors: SECTORES,
   categories: [
     ...(categoriasJson.categories as Record<string, unknown>[]).map((fila) => {
-      const { id, slug, ...resto } = fila
+      const { id, slug, sectorId: _propio, ...resto } = fila
       return { id, slug, sectorId: 'comida', ...resto }
     }),
     TIENDAS,

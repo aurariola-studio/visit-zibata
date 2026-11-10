@@ -13,6 +13,7 @@ const plazas = PlazasFileSchema.parse(plazasJson)
 const lugares = PlacesFileSchema.parse(lugaresJson)
 const dataset: CommercialDataset = {
   categories: categorias.categories,
+  sectors: categorias.sectors,
   plazas: plazas.plazas,
   places: lugares.places,
 }
@@ -27,6 +28,7 @@ const HOY = '2026-10-31'
 type Entrada = {
   categories: {
     id?: string
+    sectorId?: string
     label: { es: string; en: string }
     icon: string
     hue: number | null
@@ -334,6 +336,7 @@ describe('una categoría nueva', () => {
   it('deriva id, slugs y deja el primer giro como general', () => {
     const cuerpo = clonar()
     cuerpo.categories.push({
+      sectorId: 'comida-y-bebida',
       label: { es: 'Gimnasios', en: 'Gyms' },
       icon: iconoLibre,
       hue: 200,
@@ -361,6 +364,7 @@ describe('una categoría nueva y los slugs que otra abandonó', () => {
   const nuevaConNombre = (es: string, en: string) => {
     const cuerpo = clonar()
     cuerpo.categories.push({
+      sectorId: 'comida-y-bebida',
       label: { es, en },
       icon: iconoLibre,
       hue: 200,

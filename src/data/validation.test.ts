@@ -324,7 +324,12 @@ describe('datos reales del repositorio', () => {
     const z = PlazasFileSchema.parse(plazas)
     const p = PlacesFileSchema.parse(places)
     const [west, south, east, north] = extent.areaBbox as [number, number, number, number]
-    const dataset = { categories: c.categories, plazas: z.plazas, places: p.places }
+    const dataset = {
+      sectors: c.sectors,
+      categories: c.categories,
+      plazas: z.plazas,
+      places: p.places,
+    }
     const issues = validateRelations(dataset, { west, south, east, north })
     expect(errorsOf(issues)).toEqual([])
     expect(validateTranslations(dataset)).toEqual([])

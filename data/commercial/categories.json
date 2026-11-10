@@ -9,6 +9,7 @@
         "es": "desayunos-y-cafe",
         "en": "breakfast-and-coffee"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Desayunos y Café",
         "en": "Breakfast & Coffee"
@@ -88,6 +89,7 @@
         "es": "tacos-y-antojitos",
         "en": "tacos-and-street-food"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Tacos y Antojitos",
         "en": "Tacos & Street Food"
@@ -198,6 +200,7 @@
         "es": "mexicana",
         "en": "mexican"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Mexicana",
         "en": "Mexican"
@@ -276,6 +279,7 @@
         "es": "carnes-y-parrilla",
         "en": "grill-and-steak"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Carnes y Parrilla",
         "en": "Grill & Steak"
@@ -334,6 +338,7 @@
         "es": "mariscos",
         "en": "seafood"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Mariscos",
         "en": "Seafood"
@@ -389,6 +394,7 @@
         "es": "hamburguesas",
         "en": "fast-food"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Comida Rápida",
         "en": "Fast Food"
@@ -472,6 +478,7 @@
         "es": "italiana",
         "en": "italian"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Italiana",
         "en": "Italian"
@@ -545,6 +552,7 @@
         "es": "asiatica",
         "en": "asian"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Asiática",
         "en": "Asian"
@@ -628,6 +636,7 @@
         "es": "entre-panes",
         "en": "sandwiches-and-wraps"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Entre Panes",
         "en": "Sandwiches & Wraps"
@@ -752,6 +761,7 @@
         "es": "saludable",
         "en": "healthy"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Saludable",
         "en": "Healthy"
@@ -853,6 +863,7 @@
         "es": "panaderia-y-reposteria",
         "en": "bakery-and-pastry"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Panadería y Repostería",
         "en": "Bakery & Pastry"
@@ -926,6 +937,7 @@
         "es": "botanas",
         "en": "snacks-and-bites"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Para Picar",
         "en": "Snacks & Bites"
@@ -1012,6 +1024,7 @@
         "es": "postres-y-dulces",
         "en": "desserts-and-sweets"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Postres y Dulces",
         "en": "Desserts & Sweets"
@@ -1082,6 +1095,7 @@
         "es": "bebidas",
         "en": "drinks"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Bebidas",
         "en": "Drinks"
@@ -1143,6 +1157,7 @@
         "es": "internacional",
         "en": "international"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Internacional",
         "en": "International"
@@ -1183,6 +1198,7 @@
         "es": "casera",
         "en": "home-cooking"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Casera y Fondas",
         "en": "Home Cooking"
@@ -1223,6 +1239,7 @@
         "es": "bar",
         "en": "bar"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Bar",
         "en": "Bar"
@@ -1298,6 +1315,7 @@
         "es": "otros",
         "en": "other"
       },
+      "sectorId": "comida-y-bebida",
       "label": {
         "es": "Otros",
         "en": "Other"
@@ -1325,6 +1343,119 @@
           "general": true
         }
       ]
+    },
+    {
+      "id": "supermercados",
+      "slug": {
+        "es": "supermercados",
+        "en": "supermarkets"
+      },
+      "sectorId": "super-y-autoservicio",
+      "label": {
+        "es": "Supermercado",
+        "en": "Supermarket"
+      },
+      "icon": "shopping-cart",
+      "hue": 78,
+      "schemaType": "GroceryStore",
+      "order": 200,
+      "synonyms": [
+        "super",
+        "supermercado",
+        "súper",
+        "despensa",
+        "abarrotes",
+        "mandado",
+        "walmart",
+        "heb"
+      ],
+      "giros": [
+        {
+          "id": "supermercado",
+          "label": {
+            "es": "Supermercado",
+            "en": "Supermarket"
+          },
+          "icon": "shopping-cart",
+          "synonyms": [
+            "super",
+            "supermercado",
+            "súper",
+            "despensa",
+            "mandado"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "tiendas-de-conveniencia",
+      "slug": {
+        "es": "tiendas-de-conveniencia",
+        "en": "convenience-stores"
+      },
+      "sectorId": "super-y-autoservicio",
+      "label": {
+        "es": "Tienda de conveniencia",
+        "en": "Convenience store"
+      },
+      "icon": "store",
+      "hue": 300,
+      "schemaType": "ConvenienceStore",
+      "order": 210,
+      "synonyms": [
+        "tienda",
+        "conveniencia",
+        "oxxo",
+        "abarrotes",
+        "autoservicio",
+        "24 horas"
+      ],
+      "giros": [
+        {
+          "id": "tienda-de-conveniencia",
+          "label": {
+            "es": "Tienda de conveniencia",
+            "en": "Convenience store"
+          },
+          "icon": "store",
+          "synonyms": [
+            "tienda",
+            "conveniencia",
+            "oxxo",
+            "autoservicio"
+          ],
+          "general": true
+        }
+      ]
+    }
+  ],
+  "sectors": [
+    {
+      "id": "comida-y-bebida",
+      "slug": {
+        "es": "comida-y-bebida",
+        "en": "food-and-drink"
+      },
+      "label": {
+        "es": "Comida y Bebida",
+        "en": "Food & Drink"
+      },
+      "icon": "utensils-crossed",
+      "order": 10
+    },
+    {
+      "id": "super-y-autoservicio",
+      "slug": {
+        "es": "super-y-autoservicio",
+        "en": "grocery-and-convenience"
+      },
+      "label": {
+        "es": "Súper y Autoservicio",
+        "en": "Grocery & Convenience"
+      },
+      "icon": "shopping-cart",
+      "order": 20
     }
   ]
 }
