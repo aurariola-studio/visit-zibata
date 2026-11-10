@@ -475,9 +475,9 @@
       }
     },
     {
-      "id": "walmart",
-      "slug": "walmart",
-      "name": "Walmart",
+      "id": "plaza-walmart",
+      "slug": "plaza-walmart",
+      "name": "Plaza Walmart",
       "description": {
         "es": "Walmart Express Zibatá (supermercado), sobre Av. Paseo de las Pitahayas.",
         "en": "Walmart Express Zibatá (supermarket), on Av. Paseo de las Pitahayas."
@@ -546,26 +546,19 @@
           ]
         ]
       },
-      "active": true,
-      "placeIds": [
-        "walmart-express-zibata"
-      ],
-      "categories": [
-        "supermercados"
-      ],
+      "active": false,
+      "placeIds": [],
+      "categories": [],
       "locationConfidence": "high",
-      "locationSource": "Ubicación publicada de Walmart Express Zibatá (Av. Paseo de las Pitahayas 6A), enlace de Google Maps aportado por quien mantiene la guía; huella de Overture.",
+      "locationSource": "Ubicación publicada de Walmart Express Zibatá (Av. Paseo de las Pitahayas 6A); huella de Overture. Inactiva: sin locales activos registrados.",
       "verification": {
-        "status": "active",
+        "status": "removed",
         "confidence": "high",
-        "lastVerifiedAt": "2026-11-09",
+        "lastVerifiedAt": "2026-09-14",
         "sources": [
-          "https://www.walmartmexico.com/sala-de-prensa/2022/10/11/inaugura-walmart-express-su-tienda-numero-100-en-mexico",
-          "https://maps.app.goo.gl/BLyVhi3vAdVWrPM78",
-          "campo:2026-11-09"
+          "https://www.walmartmexico.com/sala-de-prensa/2022/10/11/inaugura-walmart-express-su-tienda-numero-100-en-mexico"
         ]
-      },
-      "googleMapsUri": "https://maps.app.goo.gl/BLyVhi3vAdVWrPM78"
+      }
     },
     {
       "id": "xentric-zibata",
@@ -1245,10 +1238,7 @@
       "id": "h-e-b",
       "slug": "h-e-b",
       "name": "H-E-B",
-      "description": {
-        "es": "H-E-B Zibatá (supermercado), sobre Av. Paseo de las Pitahayas.",
-        "en": "H-E-B Zibatá (supermarket), on Av. Paseo de las Pitahayas."
-      },
+      "description": null,
       "address": "Av. Paseo de las Pitahayas 23, Zibatá",
       "coordinates": {
         "lat": 20.6757227,
@@ -1285,18 +1275,13 @@
           ]
         ]
       },
-      "active": true,
-      "googleMapsUri": "https://maps.app.goo.gl/CB1gfAwxNFc5V9Mr9",
-      "placeIds": [
-        "h-e-b-zibata"
-      ],
-      "categories": [
-        "supermercados"
-      ],
+      "active": false,
+      "placeIds": [],
+      "categories": [],
       "locationConfidence": "low",
-      "locationSource": "Dirección del enlace de Google Maps aportado por quien mantiene la guía. Punto de OpenStreetMap (nodo 13994367601). Contorno provisional trazado sobre el techo visible en Sentinel-2 (2026-10-20): el edificio no está en OSM ni en Overture. Sustituir por la huella real cuando entre en una versión de Overture.",
+      "locationSource": "Solo conserva el edificio en el mapa; no se muestra como zona. Punto de OpenStreetMap (nodo 13994367601). Contorno provisional trazado sobre el techo visible en Sentinel-2 (2026-10-20): el edificio no está en OSM ni en Overture. Sustituir por la huella real cuando entre en una versión de Overture.",
       "verification": {
-        "status": "active",
+        "status": "likely_active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-10",
         "sources": [
