@@ -6,6 +6,7 @@ import { leerProcedencia, seccionProcedencia, validarProcedencia } from './proce
 import type { PlazaResumen } from './tipos.ts'
 import { numero, plural, texto } from './tipos.ts'
 import { vista } from './vista.ts'
+import { seccionVolumen, volumenListo } from './volumen.ts'
 import { zonaDelicada } from './zona-delicada.ts'
 
 /* ------------------------------------------------------------------ la lista */
@@ -126,6 +127,8 @@ export function pintarPlaza(plaza: PlazaResumen): void {
 
       ${seccionContorno(plaza)}
 
+      ${seccionVolumen(plaza)}
+
       <section class="editor-seccion">
         <h3>Estado en la guía</h3>
         <div class="editor-rejilla">
@@ -158,6 +161,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
     </form>`,
   )
   contornoListo()
+  volumenListo()
 }
 
 /* ------------------------------------------------------------------ leer y guardar */

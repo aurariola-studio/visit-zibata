@@ -5,6 +5,11 @@
  */
 
 export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+/** Altura del prisma de una plaza, en metros, y su tamaño como factor del contorno (1 es el contorno entero). */
+export const ALTURA_MIN_M = 1
+export const ALTURA_MAX_M = 60
+export const ESCALA_MIN = 0.3
+export const ESCALA_MAX = 1
 
 export const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
 

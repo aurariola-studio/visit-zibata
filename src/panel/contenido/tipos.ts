@@ -74,6 +74,18 @@ export interface Negocio {
   verification?: Verificacion
 }
 
+/** La regla del prisma de una plaza (`data/geographic/volumenes-plaza.json`), tal como la manda el Worker. */
+export interface ReglaVolumen {
+  height: number
+  scale: number
+  replaceExisting: boolean
+}
+export interface VolumenesDePlaza {
+  default: ReglaVolumen
+  /** Solo lo que cada plaza fija: lo que falta se hereda de `default`. */
+  plazas: Record<string, Partial<ReglaVolumen>>
+}
+
 /** Un ajuste a mano de un edificio del mapa, tal como lo manda el Worker. */
 export interface AjusteEdificio {
   accion: 'ocultar' | 'altura'
@@ -92,6 +104,8 @@ export interface Datos {
   places: Negocio[]
   /** Ausente en un Worker anterior a los ajustes de edificios. */
   edificios?: { valido: boolean; ajustes: AjusteEdificio[] }
+  /** Ausente en un Worker anterior al volumen provisional; `null` si el archivo no se puede editar. */
+  volumenes?: VolumenesDePlaza | null
 }
 
 /** Lo que el rail necesita saber de la rama del contenido. */

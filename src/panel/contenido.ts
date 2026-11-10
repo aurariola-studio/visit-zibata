@@ -94,6 +94,12 @@ import type {
 } from './contenido/tipos.ts'
 import { hoy, texto } from './contenido/tipos.ts'
 import { vista } from './contenido/vista.ts'
+import {
+  alEscribirVolumen,
+  alPulsarVolumen,
+  alTeclearVolumen,
+  olvidarVolumen,
+} from './contenido/volumen.ts'
 
 export type { EstadoContenido, ModoContenido }
 
@@ -120,6 +126,7 @@ export function montarContenido(
   editor.addEventListener('input', alEscribirEditor)
   editor.addEventListener('keydown', alTeclearDireccion)
   editor.addEventListener('keydown', alTeclearContorno)
+  editor.addEventListener('keydown', alTeclearVolumen)
   editor.addEventListener('change', alCambiarEditor)
   // Escape con cambios sin guardar: primero se pregunta. Se frena la tecla y no el evento `cancel`,
   // porque el navegador deja de permitir cancelarlo si no hubo un clic o una tecla de activación entre
@@ -139,6 +146,7 @@ export function montarContenido(
   editor.addEventListener('close', () => {
     vista.formularioActual = null
     olvidarContorno()
+    olvidarVolumen()
     olvidarMapaEdificios()
     contenedor.focus({ preventScroll: true })
   })
@@ -390,6 +398,7 @@ function alPulsarEditor(evento: Event): void {
   if (alPulsarBorrarGiro(objetivo, cargar)) return
   if (!vista.formularioActual) return
   if (alPulsarContorno(objetivo, cargar)) return
+  if (alPulsarVolumen(objetivo, cargar)) return
   if (alPulsarEdificio(objetivo, cargar)) return
   if (alPulsarPlazaNueva(objetivo, cargar)) return
   if (alPulsarImportar(objetivo, cargar)) return
@@ -407,6 +416,7 @@ function alEscribirEditor(evento: Event): void {
 
   if (alEscribirDireccion(objetivo)) return
   if (alEscribirContorno(objetivo)) return
+  if (alEscribirVolumen(objetivo)) return
   if (alEscribirNegocio(objetivo)) return
   if (alEscribirCategoria(objetivo)) return
   if (alEscribirFoto(objetivo)) return

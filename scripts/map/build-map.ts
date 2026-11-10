@@ -25,6 +25,7 @@ import type {
 } from 'geojson'
 import { AjustesEdificiosFileSchema } from '../../src/data/ajustes-edificios.ts'
 import { PlazasFileSchema } from '../../src/data/schemas.ts'
+import { reglaDeVolumen, VolumenesPlazaFileSchema } from '../../src/data/volumenes-plaza.ts'
 import { normalizeText } from '../../src/lib/text.ts'
 import { Ajustador } from './lib/ajustes.ts'
 import {
@@ -226,10 +227,8 @@ const rawBuildings = readJson<FeatureCollection<Polygon | MultiPolygon, Overture
 rawBuildings.features.sort((a, b) => a.properties.id.localeCompare(b.properties.id))
 
 /** Las reglas del volumen generado de una plaza: la general mezclada con la suya. */
-const reglaSintetica = (plazaId: string) => ({
-  ...config.buildings.plazaSynthetic.default,
-  ...config.buildings.plazaSynthetic.plazas[plazaId],
-})
+const volumenes = VolumenesPlazaFileSchema.parse(readJson(paths.volumenesPlaza))
+const reglaSintetica = (plazaId: string) => reglaDeVolumen(volumenes, plazaId)
 const ajustador = new Ajustador(
   AjustesEdificiosFileSchema.parse(readJson(paths.ajustesEdificios)).ajustes,
 )
@@ -362,7 +361,7 @@ for (const { plaza, shape } of plazaShapes) {
     reason:
       existing.length === 0
         ? 'Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza'
-        : 'Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en config.json)',
+        : 'Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en volumenes-plaza.json)',
   })
 }
 log(

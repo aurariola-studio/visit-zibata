@@ -265,7 +265,7 @@ describe('con GitHub simulado', () => {
   const enBase64 = (datos: unknown) => Buffer.from(JSON.stringify(datos)).toString('base64')
 
   /** Un GitHub cuya plaza escogida ya no tiene locales; apunta lo que se escribe. */
-  function montar() {
+  function montar(extra: Record<string, unknown> = {}) {
     const arboles: { path: string; sha: string }[][] = []
     const blobs: string[] = []
     vi.stubGlobal(
@@ -277,6 +277,7 @@ describe('con GitHub simulado', () => {
           '/contents/data/commercial/categories.json?ref=main': categoriasJson,
           '/contents/data/commercial/plazas.json?ref=main': crudo.plazas,
           '/contents/data/commercial/places.json?ref=main': crudo.places,
+          ...extra,
         }
         if (metodo === 'GET' && ruta in contenido) {
           return json({ encoding: 'base64', content: enBase64(contenido[ruta]) })
@@ -307,6 +308,29 @@ describe('con GitHub simulado', () => {
   }
 
   afterEach(() => vi.unstubAllGlobals())
+
+  it('si la plaza tenía volumen propio, lo quita en el mismo commit', async () => {
+    const volumenes = {
+      default: { height: 8, scale: 0.8, replaceExisting: false },
+      plazas: {
+        [plaza.id]: { height: 12, scale: 0.7, replaceExisting: false },
+        otra: { height: 5 },
+      },
+    }
+    const { arboles, blobs } = montar({
+      '/contents/data/geographic/volumenes-plaza.json?ref=main': volumenes,
+    })
+    const resultado = await borrarPlaza(entorno, { id: plaza.id, confirmar: true })
+    expect(resultado.ok).toBe(true)
+    expect(arboles[0]?.map((fila) => fila.path).sort()).toEqual([
+      'data/commercial/plazas.json',
+      'data/commercial/redirects.json',
+      'data/geographic/volumenes-plaza.json',
+    ])
+    const escrito = blobs.map((texto) => JSON.parse(texto)).find((dato) => 'default' in dato)
+    expect(Object.keys(escrito.plazas)).toEqual(['otra'])
+    expect(escrito.default).toEqual(volumenes.default)
+  })
 
   it('manda plazas.json y redirects.json en un solo commit, y no toca los locales', async () => {
     const { arboles, blobs } = montar()

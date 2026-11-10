@@ -1,0 +1,33 @@
+{
+  "$comment": "Volumen generado a partir del contorno de la plaza cuando no hay huellas de edificio dentro (o cuando las existentes están incompletas: replaceExisting). scale = factor sobre el contorno de la plaza; height en metros. `plazas` guarda solo lo que se aparta de `default`. Se edita desde el panel (sección Volumen provisional).",
+  "default": {
+    "height": 8,
+    "scale": 0.8,
+    "replaceExisting": false
+  },
+  "plazas": {
+    "paseo-zibata": {
+      "height": 9,
+      "scale": 0.62,
+      "replaceExisting": true
+    },
+    "xentric-zibata": {
+      "height": 8,
+      "scale": 0.8,
+      "replaceExisting": true
+    },
+    "campo-de-golf": {
+      "height": 6,
+      "scale": 0.85,
+      "replaceExisting": true
+    },
+    "foodtrucks-pickleball": {
+      "height": 4,
+      "scale": 0.75
+    },
+    "distrito-nandu": {
+      "height": 10,
+      "scale": 0.85
+    }
+  }
+}

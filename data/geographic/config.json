@@ -374,40 +374,7 @@
   },
   "buildings": {
     "defaultLevelHeight": 3.2,
-    "minAreaM2": 12,
-    "plazaSynthetic": {
-      "$comment": "Volumen generado a partir de la geometría de la plaza cuando no hay huellas de edificio dentro (o cuando las existentes están incompletas: replaceExisting). scale = factor sobre el polígono de la plaza.",
-      "default": {
-        "height": 8,
-        "scale": 0.8,
-        "replaceExisting": false
-      },
-      "plazas": {
-        "paseo-zibata": {
-          "height": 9,
-          "scale": 0.62,
-          "replaceExisting": true
-        },
-        "xentric-zibata": {
-          "height": 8,
-          "scale": 0.8,
-          "replaceExisting": true
-        },
-        "campo-de-golf": {
-          "height": 6,
-          "scale": 0.85,
-          "replaceExisting": true
-        },
-        "foodtrucks-pickleball": {
-          "height": 4,
-          "scale": 0.75
-        },
-        "distrito-nandu": {
-          "height": 10,
-          "scale": 0.85
-        }
-      }
-    }
+    "minAreaM2": 12
   },
   "trees": {
     "$comment": "Árboles y arbustos del mapa: cobertura arbórea real (ESA WorldCover), parques, glorietas, prados, golf y camellones de avenidas de doble calzada. spacing* = separación media entre plantas; roadClearanceM = distancia mínima entre la copa y el eje de cada clase de vía.",

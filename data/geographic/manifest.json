@@ -128,7 +128,7 @@
         {
           "plazaId": "paseo-zibata",
           "replacedFootprints": 1,
-          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en config.json)"
+          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en volumenes-plaza.json)"
         },
         {
           "plazaId": "foodtrucks-pickleball",
@@ -138,12 +138,12 @@
         {
           "plazaId": "xentric-zibata",
           "replacedFootprints": 1,
-          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en config.json)"
+          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en volumenes-plaza.json)"
         },
         {
           "plazaId": "campo-de-golf",
           "replacedFootprints": 1,
-          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en config.json)"
+          "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en volumenes-plaza.json)"
         },
         {
           "plazaId": "distrito-nandu",
