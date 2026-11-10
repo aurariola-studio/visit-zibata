@@ -16,10 +16,15 @@ import {
   AjustesEdificiosFileSchema,
   leerAjustes,
 } from '../src/data/ajustes-edificios.ts'
-import { isWithinBounds } from '../src/data/relations.ts'
+import {
+  type CommercialDataset,
+  isInsidePlazaGeometry,
+  isWithinBounds,
+} from '../src/data/relations.ts'
 import { fechaLocal } from './analitica.ts'
 import { type Cargado, cargar, LIMITES } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
+import { plazasQueReemplazan } from './volumen-plaza.ts'
 
 const seis = (n: number) => Math.round(n * 1e6) / 1e6
 
@@ -56,6 +61,8 @@ export function prepararEdificio(
   crudo: Cargado['crudo'],
   cuerpo: unknown,
   hoy: string,
+  /** Sin él no se sabe en qué plaza cae el punto, y solo se omite la comprobación de las plazas que reemplazan. */
+  dataset?: CommercialDataset,
 ): PreparadoEdificio {
   const entrada = EntradaEdificioSchema.safeParse(cuerpo)
   if (!entrada.success) {
@@ -103,6 +110,19 @@ export function prepararEdificio(
   }
   if (!isWithinBounds(dato.punto, LIMITES)) {
     return { ok: false, problemas: ['El punto cae fuera del área del mapa'] }
+  }
+  const reemplazadora =
+    dataset &&
+    plazasQueReemplazan(crudo, dataset).find((plaza) =>
+      isInsidePlazaGeometry(dato.punto, plaza.geometry),
+    )
+  if (reemplazadora) {
+    return {
+      ok: false,
+      problemas: [
+        `Ese punto está en ${reemplazadora.name}, cuyo volumen reemplaza las huellas reales: el mapa descarta ese edificio y el ajuste no cambiaría nada (el build fallaría). Apaga "Reemplazar las huellas reales" en el formulario de la plaza si quieres ajustar edificios reales.`,
+      ],
+    }
   }
   if (actual.ajustes.some((ajuste) => mismoPunto(ajuste, dato.punto))) {
     return {
@@ -173,7 +193,7 @@ export async function ajustarEdificio(
 ): Promise<ResultadoEdificio> {
   const cargado = await cargar(entorno)
   const hoy = fechaLocal(new Date())
-  const preparado = prepararEdificio(cargado.crudo, cuerpo, hoy)
+  const preparado = prepararEdificio(cargado.crudo, cuerpo, hoy, cargado.dataset)
   if (!preparado.ok) return preparado
 
   if (!EntradaEdificioSchema.parse(cuerpo).confirmar) {

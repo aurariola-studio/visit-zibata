@@ -14,6 +14,7 @@
  * `plazas.json` en cada build, así que al fusionar la PR el despliegue dibuja el contorno nuevo.
  */
 import { z } from 'zod'
+import { leerAjustes } from '../src/data/ajustes-edificios.ts'
 import {
   areaM2,
   mismoContorno,
@@ -29,6 +30,7 @@ import type { PlazaGeometry } from '../src/types/domain.ts'
 import { fechaLocal } from './analitica.ts'
 import { type Cargado, CONTORNO_DE_ZIBATA, cargar, LIMITES } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
+import { plazasQueReemplazan } from './volumen-plaza.ts'
 
 export const EntradaContornoSchema = z.strictObject({
   id: z.string().trim().min(1, 'Falta la plaza'),
@@ -132,6 +134,24 @@ export function prepararContorno(
     .filter((asunto) => asunto.level === 'error')
     .map((asunto) => asunto.message)
   if (problemas.length > 0) return { ok: false, problemas }
+
+  // Una plaza que reemplaza sus huellas reales no admite ajustes de edificio dentro: si el contorno nuevo se traga
+  // un ajuste que antes caía fuera, ese ajuste dejaría de resolver y el build fallaría.
+  if (plazasQueReemplazan(crudo, dataset).some((fila) => fila.id === plaza.id)) {
+    const tragados = leerAjustes(crudo.ajustesEdificios).ajustes.filter(
+      (ajuste) =>
+        isInsidePlazaGeometry(ajuste.punto, geometry) &&
+        !isInsidePlazaGeometry(ajuste.punto, plaza.geometry),
+    )
+    if (tragados.length > 0) {
+      return {
+        ok: false,
+        problemas: [
+          `Con el contorno nuevo ${tragados.length === 1 ? 'un ajuste de edificio queda' : `${tragados.length} ajustes de edificio quedan`} dentro de ${plaza.name}, cuyo volumen reemplaza las huellas reales: el ajuste no cambiaría nada y el build fallaría. Quita ${tragados.length === 1 ? 'ese ajuste' : 'esos ajustes'} antes (pestaña Edificios) o deja ese edificio fuera del contorno.`,
+        ],
+      }
+    }
+  }
 
   // Los locales con ubicación, contra el contorno de antes y el de después con la misma regla que
   // `data:validate` (que hoy deja 13 fuera como aviso): solo cuenta como "queda fuera" el que estaba dentro.
