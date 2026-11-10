@@ -117,8 +117,10 @@ for (const folder of folders) {
   placesById.set(folder, { ...place, photos })
 }
 
+const categoriesFile = loadCategoriesFile()
 const dataset = {
-  categories: loadCategoriesFile().categories,
+  ...(categoriesFile.sectors && { sectors: categoriesFile.sectors }),
+  categories: categoriesFile.categories,
   plazas: loadPlazasFile().plazas,
   places: placesFile.places.map((place) => placesById.get(place.id) ?? place),
 }

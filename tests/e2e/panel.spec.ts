@@ -836,6 +836,104 @@ test.describe('Panel', () => {
     ).toHaveValue(elegido)
   })
 
+  test.describe('el sector de una categoría', () => {
+    const sectores = [
+      {
+        id: 'comida',
+        slug: { es: 'comida', en: 'food' },
+        label: { es: 'Comida', en: 'Food' },
+        icon: 'utensils-crossed',
+        order: 10,
+      },
+      {
+        id: 'tiendas',
+        slug: { es: 'tiendas', en: 'shops' },
+        label: { es: 'Súper y tiendas', en: 'Shops' },
+        icon: 'store',
+        order: 20,
+      },
+    ]
+    const conSectores = {
+      ...contenido,
+      sectors: sectores,
+      categories: contenido.categories.map((categoria) => ({ ...categoria, sectorId: 'comida' })),
+    }
+    type Cuerpo = { categories: { id?: string; sectorId?: string; label: { es: string } }[] }
+
+    async function abrir(page: Page, datos: object) {
+      const cuerpos: Cuerpo[] = []
+      await page.route(/\/api\/panel\/contenido\/categorias$/, async (ruta) => {
+        cuerpos.push(ruta.request().postDataJSON())
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            seco: false,
+            pr: { url: 'https://example.test/pr/5', numero: 5, creada: true },
+            mensaje: 'Cambio enviado a la PR.',
+            afectados: { locales: 0, plazas: 0 },
+          },
+        })
+      })
+      await abrirPanel(page, { datos })
+      await irA(page, 'categorias', 'Categorías y giros')
+      return { cuerpos, dialogo: page.locator('#editor') }
+    }
+
+    test('una categoría existente enseña su sector y lo manda tal cual al guardar', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo } = await abrir(page, conSectores)
+      await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+      const sector = dialogo.locator('select[data-campo="sector"]')
+      await expect(sector).toHaveValue('comida')
+      await expect(sector.locator('option')).toHaveText(['Comida', 'Súper y tiendas'])
+
+      await sector.selectOption('tiendas')
+      await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #5' })).toBeVisible()
+      expect(cuerpos).toHaveLength(1)
+      const servicios = cuerpos[0]?.categories.find((fila) => fila.id === 'servicios')
+      expect(servicios?.sectorId).toBe('tiendas')
+      // Las demás viajan con el suyo: el servidor no tiene que adivinarlo.
+      expect(
+        cuerpos[0]?.categories.filter((fila) => fila.sectorId === 'comida').length,
+      ).toBeGreaterThan(0)
+    })
+
+    test('una categoría nueva no arranca con ningún sector y no se guarda sin elegir uno', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo } = await abrir(page, conSectores)
+      await page.getByRole('button', { name: 'Nueva categoría' }).click()
+      const sector = dialogo.locator('select[data-campo="sector"]')
+      await expect(sector).toHaveValue('')
+      await expect(sector.locator('option').first()).toHaveText('Elige un sector')
+
+      await dialogo.locator('[data-campo="labelEs"]').fill('Ferretería')
+      await dialogo.locator('[data-campo="labelEn"]').fill('Hardware')
+      await dialogo.locator('[data-campo="hue"]').fill('100')
+      await dialogo.locator('[data-campo="giroLabelEs"]').first().fill('Ferretería')
+      await dialogo.locator('[data-campo="giroLabelEn"]').first().fill('Hardware')
+      await dialogo.getByRole('button', { name: 'Crear categoría' }).click()
+      await expect(dialogo.locator('[data-problemas]')).toContainText('Elige el sector')
+      expect(cuerpos).toHaveLength(0)
+
+      await sector.selectOption('tiendas')
+      await dialogo.getByRole('button', { name: 'Crear categoría' }).click()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #5' })).toBeVisible()
+      const nueva = cuerpos[0]?.categories.find((fila) => fila.label.es === 'Ferretería')
+      expect(nueva?.sectorId).toBe('tiendas')
+      expect(nueva?.id).toBeUndefined()
+    })
+
+    test('sin sectores en los datos, el formulario no ofrece el selector', async ({ page }) => {
+      const { dialogo } = await abrir(page, contenido)
+      await page.getByRole('button', { name: 'Editar Servicios de prueba' }).click()
+      await expect(dialogo.locator('[data-campo="schemaType"]')).toBeVisible()
+      await expect(dialogo.locator('select[data-campo="sector"]')).toHaveCount(0)
+    })
+  })
+
   test('una categoría declara su tipo para buscadores y el formulario lo manda', async ({
     page,
   }) => {
@@ -859,7 +957,7 @@ test.describe('Panel', () => {
     const tipo = dialogo.locator('select[data-campo="schemaType"]')
     // Sin tipo declarado, el formulario enseña el general: no inventa uno de comida.
     await expect(tipo).toHaveValue('LocalBusiness')
-    await expect(tipo.locator('option', { hasText: 'Tienda o supermercado' })).toHaveCount(1)
+    await expect(tipo.locator('option', { hasText: 'Tienda, sin más precisión' })).toHaveCount(1)
     await tipo.selectOption('Store')
     await dialogo.getByRole('button', { name: 'Guardar cambios' }).click()
     await expect(page.getByRole('status').filter({ hasText: 'PR abierta #5' })).toBeVisible()

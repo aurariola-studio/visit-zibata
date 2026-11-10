@@ -238,9 +238,26 @@ export const GiroSchema = z.strictObject({
  */
 export const LocalizedSlugSchema = z.strictObject({ es: slug, en: slug })
 
+/**
+ * Un sector: el nivel por encima de las categorías ("Comida y Bebida", "Súper y tiendas"). Agrupa categorías y no
+ * tiene giros ni locales propios. El slug es cara pública de su futura página; el `id` es la clave estable.
+ */
+export const SectorSchema = z.strictObject({
+  id: slug,
+  slug: LocalizedSlugSchema,
+  label: LocalizedTextSchema,
+  icon: nonEmptyText,
+  order: z.number().int(),
+})
+
 export const CategorySchema = z.strictObject({
   id: slug,
   slug: LocalizedSlugSchema,
+  /**
+   * El sector al que pertenece. Opcional mientras el archivo no declara `sectors`; con `sectors`, todas las
+   * categorías lo llevan (lo comprueba `validateRelations`, no el esquema, porque necesita el otro archivo de la lista).
+   */
+  sectorId: slug.optional(),
   label: LocalizedTextSchema,
   icon: nonEmptyText,
   /** Tono (0-359) de la placa de color en listas y fichas; sin él se usa un neutro. */
@@ -260,6 +277,8 @@ const datasetMeta = {
 
 export const CategoriesFileSchema = z.strictObject({
   ...datasetMeta,
+  /** Los sectores. Ausente en un archivo anterior a su creación, que equivale a "sin sectores". */
+  sectors: z.array(SectorSchema).optional(),
   categories: z.array(CategorySchema),
 })
 export const PlazasFileSchema = z.strictObject({ ...datasetMeta, plazas: z.array(PlazaSchema) })

@@ -6,9 +6,19 @@ export interface Giro {
   general?: boolean
 }
 
+export interface Sector {
+  id: string
+  slug: { es: string; en: string }
+  label: { es: string; en?: string }
+  icon: string
+  order: number
+}
+
 export interface Categoria {
   id: string
   slug: { es: string; en: string }
+  /** Ausente mientras el archivo no declara sectores. */
+  sectorId?: string
   label: { es: string; en?: string }
   icon: string
   hue?: number
@@ -104,6 +114,8 @@ export interface Datos {
   places: Negocio[]
   /** Ausente en un Worker anterior a los ajustes de edificios. */
   edificios?: { valido: boolean; ajustes: AjusteEdificio[] }
+  /** Ausente en un Worker anterior a los sectores, o en un archivo que todavía no los declara. */
+  sectors?: Sector[]
   /** Ausente en un Worker anterior al volumen provisional; `null` si el archivo no se puede editar. */
   volumenes?: VolumenesDePlaza | null
 }

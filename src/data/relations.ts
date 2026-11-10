@@ -3,7 +3,7 @@
  * IDs duplicados, referencias inexistentes, campos derivados desincronizados y coordenadas
  * fuera de Zibatá. La usan la app en runtime y `npm run data:validate` en build.
  */
-import type { Category, LatLng, Place, Plaza } from '../types/domain.ts'
+import type { Category, LatLng, Place, Plaza, Sector } from '../types/domain.ts'
 import { PUBLISHABLE_STATUS } from './rules.ts'
 import type { Redirect } from './schemas.ts'
 
@@ -24,6 +24,8 @@ export interface DataIssue {
 }
 
 export interface CommercialDataset {
+  /** Los sectores que agrupan las categorías; ausente si el archivo todavía no los declara. */
+  sectors?: Sector[]
   categories: Category[]
   plazas: Plaza[]
   places: Place[]
@@ -121,6 +123,58 @@ function sameMembers(a: readonly string[], b: readonly string[]): boolean {
   return a.length === b.length && a.every((value) => b.includes(value))
 }
 
+/**
+ * Los sectores y su relación con las categorías. O el archivo declara sectores y **toda** categoría tiene el suyo,
+ * o no declara ninguno y ninguna categoría lo menciona: un estado a medias dejaría categorías sin lugar en el filtro.
+ */
+function validarSectores(
+  { sectors, categories }: CommercialDataset,
+  error: (d: DatasetName, message: string, id?: string) => void,
+  warn: (d: DatasetName, message: string, id?: string) => void,
+): void {
+  if (sectors === undefined) {
+    for (const category of categories) {
+      if (category.sectorId) {
+        error(
+          'categories',
+          `La categoría "${category.id}" tiene sectorId, pero el archivo no declara sectores`,
+          category.id,
+        )
+      }
+    }
+    return
+  }
+  for (const dup of findDuplicates(sectors.map((s) => s.id))) {
+    error('categories', `ID de sector duplicado: "${dup}"`, dup)
+  }
+  // Los slugs de sector, como los de categoría, van a la URL: únicos dentro de cada idioma.
+  for (const locale of ['es', 'en'] as const) {
+    for (const dup of findDuplicates(sectors.map((s) => s.slug[locale]))) {
+      error('categories', `Slug de sector duplicado en ${locale}: "${dup}"`, dup)
+    }
+  }
+  const ids = new Set(sectors.map((s) => s.id))
+  const usados = new Set<string>()
+  for (const category of categories) {
+    if (!category.sectorId) {
+      error('categories', `La categoría "${category.id}" no tiene sector`, category.id)
+    } else if (!ids.has(category.sectorId)) {
+      error(
+        'categories',
+        `La categoría "${category.id}" apunta al sector "${category.sectorId}", que no existe`,
+        category.id,
+      )
+    } else {
+      usados.add(category.sectorId)
+    }
+  }
+  for (const sector of sectors) {
+    // Aviso y no error: un sector recién creado puede esperar su primera categoría sin atascar el guardado.
+    if (!usados.has(sector.id))
+      warn('categories', `El sector "${sector.id}" no tiene categorías`, sector.id)
+  }
+}
+
 export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): DataIssue[] {
   const issues: DataIssue[] = []
   const error = (d: DatasetName, message: string, id?: string) =>
@@ -141,6 +195,7 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
       error('categories', `Slug de categoría duplicado en ${locale}: "${dup}"`, dup)
     }
   }
+  validarSectores(dataset, error, warn)
   for (const category of categories) {
     for (const dup of findDuplicates(category.giros.map((giro) => giro.id))) {
       error('categories', `Giro duplicado "${dup}" en "${category.id}"`, category.id)

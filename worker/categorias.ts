@@ -64,6 +64,8 @@ const CategoriaEntradaSchema = z.object({
   /** Vacío al crear. Con valor, es la categoría que se edita. */
   id: z.string().trim().optional(),
   label: Texto,
+  /** El sector. Obligatorio al crear cuando el archivo declara sectores; al editar, sin él se conserva el actual. */
+  sectorId: z.string().trim().optional(),
   icon: z.string().trim().min(1).max(60),
   hue: z.number().int().min(0).max(359).nullable().optional(),
   /** Sin tipo, la categoría se queda en el general (`LocalBusiness`). */
@@ -192,6 +194,20 @@ export function prepararCategorias(
       hue = entradaCategoria.hue
     }
 
+    // Con sectores declarados, toda categoría tiene el suyo y una nueva lo elige a propósito: un valor por
+    // omisión archivaría una futura "Ferretería" bajo comida sin que nadie lo decidiera.
+    let sectorId: string | undefined
+    if (dataset.sectors === undefined) {
+      if (entradaCategoria.sectorId) error('El archivo todavía no declara sectores.')
+    } else {
+      sectorId = entradaCategoria.sectorId || base?.sectorId
+      if (!sectorId) {
+        error(`Elige el sector de la categoría "${entradaCategoria.label.es}".`)
+      } else if (!dataset.sectors.some((sector) => sector.id === sectorId)) {
+        error(`El sector "${sectorId}" no existe.`)
+      }
+    }
+
     const giros: Category['giros'] = []
     let generales = 0
     for (const entradaGiro of entradaCategoria.giros) {
@@ -229,6 +245,7 @@ export function prepararCategorias(
     nuevas.push({
       id,
       slug,
+      ...(sectorId ? { sectorId } : {}),
       label: { es: entradaCategoria.label.es, en: entradaCategoria.label.en },
       icon: entradaCategoria.icon,
       ...(hue === undefined ? {} : { hue }),
@@ -322,6 +339,7 @@ export function prepararCategorias(
     places: dataset.places,
   })
   const conPlazas: CommercialDataset = {
+    ...(dataset.sectors && { sectors: dataset.sectors }),
     categories: categorias,
     plazas,
     places: dataset.places,
@@ -371,6 +389,7 @@ export function prepararCategorias(
   const sinGiros = (categoria: Category) => ({
     id: categoria.id,
     slug: categoria.slug,
+    sectorId: categoria.sectorId,
     label: categoria.label,
     icon: categoria.icon,
     hue: categoria.hue,
