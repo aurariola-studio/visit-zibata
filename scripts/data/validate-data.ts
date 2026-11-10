@@ -36,6 +36,7 @@ import {
   loadPlacesFile,
   loadPlazasFile,
   loadRedirectsFile,
+  loadVolumenesPlaza,
   today,
   writeDataFile,
 } from './lib/dataset.ts'
@@ -122,6 +123,19 @@ try {
         dataset: 'ajustes-edificios',
         id: donde,
         message: 'El punto cae fuera del área del mapa',
+      })
+    }
+  }
+
+  // El volumen provisional: la forma la fija el esquema; aquí, que cada clave sea una plaza que existe.
+  const idsDePlaza = new Set(dataset.plazas.map((plaza) => plaza.id))
+  for (const id of Object.keys(loadVolumenesPlaza().plazas)) {
+    if (!idsDePlaza.has(id)) {
+      issues.push({
+        level: 'error',
+        dataset: 'volumenes-plaza',
+        id,
+        message: 'Esa plaza no existe: quita su entrada de volumenes-plaza.json',
       })
     }
   }

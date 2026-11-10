@@ -17,6 +17,7 @@ import {
   validateRelations,
 } from '../src/data/relations.ts'
 import type { Redirect } from '../src/data/schemas.ts'
+import { leerVolumenes } from '../src/data/volumenes-plaza.ts'
 import { fechaLocal } from './analitica.ts'
 import { anotarRedirecciones } from './borrado.ts'
 import { type Cargado, cargar, LIMITES } from './contenido.ts'
@@ -45,6 +46,8 @@ export type PreparadoBorradoPlaza =
       impacto: ImpactoBorradoPlaza
       plazas: Record<string, unknown>
       redirects: Record<string, unknown>
+      /** El archivo de volúmenes sin la entrada de esta plaza, si la tenía: una clave huérfana tumba data:validate. */
+      volumenes?: Record<string, unknown>
     }
   | { ok: false; problemas: string[] }
 
@@ -122,6 +125,16 @@ export function prepararBorradoPlaza(
   )
 
   const filas = (crudo.plazas.plazas as Record<string, unknown>[] | undefined) ?? []
+  const volumenes = leerVolumenes(crudo.volumenesPlaza)
+  const sinSuVolumen =
+    volumenes.valido && plaza.id in volumenes.archivo.plazas
+      ? {
+          ...volumenes.archivo,
+          plazas: Object.fromEntries(
+            Object.entries(volumenes.archivo.plazas).filter(([id]) => id !== plaza.id),
+          ),
+        }
+      : undefined
   return {
     ok: true,
     impacto: {
@@ -140,6 +153,7 @@ export function prepararBorradoPlaza(
       plazas: filas.filter((fila) => String(fila.id) !== plaza.id),
     },
     redirects: anotado.redirects,
+    ...(sinSuVolumen && { volumenes: sinSuVolumen }),
   }
 }
 
@@ -197,6 +211,14 @@ export async function borrarPlaza(
         ruta: 'data/commercial/redirects.json',
         contenido: `${JSON.stringify(preparado.redirects, null, 2)}\n`,
       },
+      ...(preparado.volumenes
+        ? [
+            {
+              ruta: 'data/geographic/volumenes-plaza.json',
+              contenido: `${JSON.stringify(preparado.volumenes, null, 2)}\n`,
+            },
+          ]
+        : []),
     ],
     `Panel: borrar plaza "${preparado.impacto.plaza.nombre}"`,
   )

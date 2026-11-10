@@ -382,6 +382,49 @@ describe('el contorno de una plaza', () => {
   })
 })
 
+describe('el volumen provisional de una plaza', () => {
+  const guardar = (cuerpo: unknown, sitio = 'same-origin') =>
+    pedir('/api/panel/contenido/plaza/volumen', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'sec-fetch-site': sitio },
+      body: JSON.stringify(cuerpo),
+    })
+  const regla = { height: 12, scale: 0.7, replaceExisting: false }
+
+  it('sin confirmar solo enseña lo que cambiaría y no guarda', async () => {
+    const respuesta = await guardar({ id: 'plaza-luna', ...regla })
+    expect(respuesta?.status).toBe(200)
+    const datos = (await respuesta?.json()) as {
+      confirmado: boolean
+      impacto: { despues: unknown }
+    }
+    expect(datos.confirmado).toBe(false)
+    expect(datos.impacto.despues).toEqual(regla)
+  })
+
+  it('una cifra fuera de rango es un 400 que dice cuál', async () => {
+    const respuesta = await guardar({ id: 'plaza-luna', ...regla, height: 99 })
+    expect(respuesta?.status).toBe(400)
+    expect(JSON.stringify(await respuesta?.json())).toContain('height')
+  })
+
+  it('exige que la petición salga del propio sitio', async () => {
+    expect((await guardar({ id: 'plaza-luna', ...regla }, 'cross-site'))?.status).toBe(403)
+  })
+
+  it('un cuerpo por encima del tope no se lee', async () => {
+    expect((await guardar({ id: 'x'.repeat(5_000), ...regla }))?.status).toBe(413)
+  })
+
+  it('el listado del panel trae el volumen, para rellenar el formulario', async () => {
+    const datos = (await (await pedir('/api/panel/contenido'))?.json()) as {
+      volumenes: { default: unknown; plazas: Record<string, unknown> } | null
+    }
+    expect(datos.volumenes?.default).toEqual({ height: 8, scale: 0.8, replaceExisting: false })
+    expect(Object.keys(datos.volumenes?.plazas ?? {})).toContain('paseo-zibata')
+  })
+})
+
 describe('borrar una categoría', () => {
   const borrar = (cuerpo: unknown, sitio = 'same-origin') =>
     pedir('/api/panel/contenido/categoria/borrar', {

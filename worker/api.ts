@@ -75,6 +75,7 @@ import {
   sugerenciaDe,
   ULTIMAS,
 } from './sugerencias.ts'
+import { guardarVolumen } from './volumen-plaza.ts'
 
 export interface EntornoApi extends EntornoAcceso, EntornoGitHub {
   ANALITICA?: Base
@@ -119,6 +120,7 @@ const TOPES_DE_CUERPO: Record<string, number> = {
   '/api/panel/contenido/plaza/borrar': 4 * 1024,
   '/api/panel/contenido/plaza/contorno': 16 * 1024,
   '/api/panel/contenido/edificio': 4 * 1024,
+  '/api/panel/contenido/plaza/volumen': 4 * 1024,
   '/api/panel/contenido/plaza/nueva': 16 * 1024,
   '/api/panel/contenido/plaza/slug': 4 * 1024,
   '/api/panel/contenido/categoria/slug': 4 * 1024,
@@ -490,6 +492,18 @@ export async function atenderApi(peticion: Request, entorno: EntornoApi): Promis
     if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
     try {
       const resultado = await ajustarEdificio(entorno, cuerpoDe(texto))
+      return json(resultado, resultado.ok ? 200 : 400)
+    } catch (error) {
+      return falloDeContenido(error)
+    }
+  }
+
+  // El volumen provisional de una plaza, con vista previa; ver worker/volumen-plaza.ts.
+  if (ruta === '/api/panel/contenido/plaza/volumen' && peticion.method === 'POST') {
+    if (!(await puedeVerElPanel(peticion, entorno))) return json({ error: 'sin permiso' }, 403)
+    if (!origenPropio(peticion)) return json({ error: 'origen no permitido' }, 403)
+    try {
+      const resultado = await guardarVolumen(entorno, cuerpoDe(texto))
       return json(resultado, resultado.ok ? 200 : 400)
     } catch (error) {
       return falloDeContenido(error)

@@ -546,7 +546,7 @@ async function llamar(
 }
 
 /** Si hay algo escrito en los demás campos del formulario (los del contorno no llevan `name`). */
-function otrosCambios(formulario: HTMLFormElement): boolean {
+export function otrosCambios(formulario: HTMLFormElement): boolean {
   for (const control of formulario.elements) {
     if (!(control as HTMLInputElement).name) continue
     if (control instanceof HTMLInputElement) {

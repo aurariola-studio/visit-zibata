@@ -16,6 +16,7 @@ export const paths = {
   extent: `${ROOT}data/geographic/extent.json`,
   /** Ocultar un edificio o fijarle la altura, a mano (lo escribe el panel). Ver src/data/ajustes-edificios.ts. */
   ajustesEdificios: `${ROOT}data/geographic/ajustes-edificios.json`,
+  volumenesPlaza: `${ROOT}data/geographic/volumenes-plaza.json`,
   manifest: `${ROOT}data/geographic/manifest.json`,
   plazas: `${ROOT}data/commercial/plazas.json`,
   publicMap: `${ROOT}public/map`,
@@ -66,10 +67,6 @@ export interface GeoConfig {
   buildings: {
     defaultLevelHeight: number
     minAreaM2: number
-    plazaSynthetic: {
-      default: PlazaSyntheticRule
-      plazas: Record<string, Partial<PlazaSyntheticRule>>
-    }
   }
   realismo: {
     sentinel: { escena: string; tif: string; utm: string; anio: number }
@@ -86,12 +83,6 @@ export interface GeoConfig {
     }
     vias: { clases: Record<string, string[]> }
   }
-}
-
-export interface PlazaSyntheticRule {
-  height: number
-  scale: number
-  replaceExisting: boolean
 }
 
 export function readJson<T>(file: string): T {

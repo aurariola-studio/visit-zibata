@@ -129,3 +129,11 @@ describe('los ajustes de edificios invalidan la marca', () => {
     expect(codigo).toContain('paths.ajustesEdificios')
   })
 })
+
+describe('los volúmenes de plaza invalidan la marca', () => {
+  it('su archivo está entre lo que decide si hay que regenerar el mapa', async () => {
+    const { readFileSync } = await import('node:fs')
+    const codigo = readFileSync(new URL('./preparar.ts', import.meta.url), 'utf8')
+    expect(codigo).toContain('paths.volumenesPlaza')
+  })
+})

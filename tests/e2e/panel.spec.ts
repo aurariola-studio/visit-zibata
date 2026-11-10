@@ -2629,6 +2629,181 @@ test.describe('Panel', () => {
     )
   })
 
+  test.describe('el volumen provisional de una plaza', () => {
+    const conVolumen = {
+      ...conContorno,
+      volumenes: {
+        default: { height: 8, scale: 0.8, replaceExisting: false },
+        plazas: { 'plaza-dos': { height: 12, scale: 0.6, replaceExisting: true } },
+      },
+    }
+    const impactoVolumen = {
+      plaza: { id: 'plaza-uno', nombre: 'Plaza Uno' },
+      antes: { height: 8, scale: 0.8, replaceExisting: false },
+      despues: { height: 14, scale: 0.8, replaceExisting: false },
+      general: { height: 8, scale: 0.8, replaceExisting: false },
+      avisos: ['Aviso de prueba del volumen.'],
+    }
+
+    /** El Worker simulado: apunta cada cuerpo y responde con el impacto (y la PR si se confirma). */
+    async function abrir(page: Page, plaza = 'Plaza Uno', datos: object = conVolumen) {
+      const cuerpos: Record<string, unknown>[] = []
+      await page.route(/\/api\/panel\/contenido\/plaza\/volumen$/, async (ruta) => {
+        const cuerpo = ruta.request().postDataJSON() as Record<string, unknown>
+        cuerpos.push(cuerpo)
+        await ruta.fulfill({
+          json: {
+            ok: true,
+            confirmado: cuerpo.confirmar === true,
+            seco: false,
+            pr: cuerpo.confirmar
+              ? { url: 'https://example.test/pr/6', numero: 6, creada: true }
+              : null,
+            mensaje: cuerpo.confirmar ? 'Volumen enviado a la PR.' : 'Esto es lo que cambiaría.',
+            impacto: impactoVolumen,
+          },
+        })
+      })
+      // El mapa publicado tal como lo produce el build: Plaza Uno con dos huellas reales (reemplazar apagado);
+      // Plaza Dos solo con el volumen generado, porque `replaceExisting` descarta las huellas reales; y Plaza Tres,
+      // sin huellas reales, también con solo el volumen generado.
+      await page.route(/\/map\/plaza-buildings\.geojson$/, (ruta) =>
+        ruta.fulfill({
+          json: {
+            features: [
+              { properties: { plazaId: 'plaza-uno', src: 'osm' } },
+              { properties: { plazaId: 'plaza-uno', src: 'microsoft' } },
+              { properties: { plazaId: 'plaza-dos', src: 'synthetic' } },
+              { properties: { plazaId: 'plaza-tres', src: 'synthetic' } },
+            ],
+          },
+        }),
+      )
+      await abrirPanel(page, { datos })
+      await irA(page, 'plazas', 'Plazas')
+      await page.getByRole('button', { name: `Editar ${plaza}` }).click()
+      const dialogo = page.locator('#editor')
+      return { cuerpos, dialogo }
+    }
+
+    test('enseña la regla de la plaza, hereda la general y dice qué trae el mapa publicado', async ({
+      page,
+    }) => {
+      const { dialogo } = await abrir(page)
+      await expect(
+        dialogo.getByRole('heading', { level: 3, name: 'Volumen provisional' }),
+      ).toBeVisible()
+      await expect(dialogo.getByLabel('Altura (metros)')).toHaveValue('8')
+      await expect(dialogo.getByLabel('Tamaño (% del contorno)')).toHaveValue('80')
+      await expect(dialogo.getByLabel('Reemplazar las huellas reales')).not.toBeChecked()
+      await expect(dialogo.getByText('dibuja 2 huellas reales')).toBeVisible()
+      // Sin entrada propia no hay nada que restablecer.
+      await expect(dialogo.getByRole('button', { name: /Restablecer/ })).toHaveCount(0)
+      await sinDesplazamientoLateral(page)
+      await sinTextoRoto(dialogo)
+      const graves = (await new AxeBuilder({ page }).analyze()).violations.filter((v) =>
+        ['serious', 'critical'].includes(v.impact ?? ''),
+      )
+      expect(graves.map((v) => v.id)).toEqual([])
+    })
+
+    test('una plaza con regla propia la enseña y deja restablecerla', async ({ page }) => {
+      const { cuerpos, dialogo } = await abrir(page, 'Plaza Dos')
+      await expect(dialogo.getByLabel('Altura (metros)')).toHaveValue('12')
+      await expect(dialogo.getByLabel('Tamaño (% del contorno)')).toHaveValue('60')
+      await expect(dialogo.getByLabel('Reemplazar las huellas reales')).toBeChecked()
+      // Con `replaceExisting` lo publicado solo trae el prisma: no puede afirmar que no haya huellas reales.
+      await expect(dialogo.getByText('no se sabe si las tiene')).toBeVisible()
+      await expect(dialogo.getByText('esta plaza no tiene huellas reales')).toHaveCount(0)
+
+      await dialogo.getByRole('button', { name: 'Restablecer a la regla general' }).click()
+      await expect(
+        dialogo.getByRole('heading', { name: /Si guardas este volumen en/ }),
+      ).toBeVisible()
+      expect(cuerpos).toEqual([{ id: 'plaza-dos', restablecer: true }])
+    })
+
+    test('una plaza sin huellas reales y sin reemplazar dice que solo dibuja el prisma', async ({
+      page,
+    }) => {
+      const { dialogo } = await abrir(page, 'Plaza Tres')
+      await expect(dialogo.getByText('esta plaza no tiene huellas reales')).toBeVisible()
+      await expect(dialogo.getByText('no se sabe si las tiene')).toHaveCount(0)
+    })
+
+    test('el impacto no se puede confirmar si la regla cambió después de verlo', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo } = await abrir(page)
+      const altura = dialogo.getByLabel('Altura (metros)')
+      await altura.fill('14')
+      await dialogo.getByRole('button', { name: 'Ver el impacto del volumen' }).click()
+      await expect(dialogo.getByText('Aviso de prueba del volumen.')).toBeVisible()
+      expect(cuerpos).toEqual([{ id: 'plaza-uno', height: 14, scale: 0.8, replaceExisting: false }])
+
+      // Cualquier cambio borra el impacto y, con él, el botón de guardar.
+      await dialogo.getByLabel('Reemplazar las huellas reales').check()
+      await expect(dialogo.getByRole('button', { name: 'Guardar volumen' })).toHaveCount(0)
+
+      // Se vuelve a pedir y entonces sí: lo que se guarda es exactamente lo que se vio.
+      await dialogo.getByRole('button', { name: 'Ver el impacto del volumen' }).click()
+      await dialogo.getByRole('button', { name: 'Guardar volumen' }).click()
+      await expect(dialogo).toBeHidden()
+      await expect(page.getByRole('status').filter({ hasText: 'PR abierta #6' })).toBeVisible()
+      expect(cuerpos).toHaveLength(3)
+      expect(cuerpos[2]).toEqual({ ...cuerpos[1], confirmar: true })
+      expect(cuerpos[1]).toEqual({
+        id: 'plaza-uno',
+        height: 14,
+        scale: 0.8,
+        replaceExisting: true,
+      })
+    })
+
+    test('avisa en el campo de lo que no vale, acepta la coma decimal y no llama al servidor', async ({
+      page,
+    }) => {
+      const { cuerpos, dialogo } = await abrir(page)
+      const altura = dialogo.getByLabel('Altura (metros)')
+      const tamano = dialogo.getByLabel('Tamaño (% del contorno)')
+      const ver = dialogo.getByRole('button', { name: 'Ver el impacto del volumen' })
+
+      await altura.fill('61')
+      await expect(altura).toHaveAttribute('aria-invalid', 'true')
+      await expect(dialogo.getByText('Escribe de 1 a 60 metros.')).toBeVisible()
+      await expect(ver).toBeDisabled()
+      await altura.fill('abc')
+      await expect(ver).toBeDisabled()
+      await altura.fill('9,5')
+      await expect(altura).not.toHaveAttribute('aria-invalid', 'true')
+      await expect(ver).toBeEnabled()
+
+      await tamano.fill('29')
+      await expect(dialogo.getByText('Escribe de 30 a 100 %.')).toBeVisible()
+      await expect(ver).toBeDisabled()
+      await tamano.fill('100')
+      await expect(ver).toBeEnabled()
+      expect(cuerpos).toEqual([])
+    })
+
+    test('sus campos no llevan nombre: "Guardar cambios" nunca los manda', async ({ page }) => {
+      const { dialogo } = await abrir(page)
+      await expect(dialogo.locator('[data-volumen-seccion] [name]')).toHaveCount(0)
+    })
+
+    test('con un Worker anterior, sin volúmenes, la sección no aparece', async ({ page }) => {
+      const { dialogo } = await abrir(page, 'Plaza Uno', conContorno)
+      await expect(dialogo.getByRole('heading', { level: 3, name: 'Contorno' })).toBeVisible()
+      await expect(dialogo.getByRole('heading', { name: 'Volumen provisional' })).toHaveCount(0)
+    })
+
+    test('con el archivo roto lo dice y no ofrece editar', async ({ page }) => {
+      const { dialogo } = await abrir(page, 'Plaza Uno', { ...conContorno, volumenes: null })
+      await expect(dialogo.getByText(/no pasa el esquema/)).toBeVisible()
+      await expect(dialogo.getByLabel('Altura (metros)')).toHaveCount(0)
+    })
+  })
+
   test.describe('el contorno de una plaza', () => {
     /** El Worker simulado: apunta cada cuerpo y responde con el impacto (y la PR si se confirma). */
     async function abrirPlaza(page: Page, datos: object = conContorno) {
