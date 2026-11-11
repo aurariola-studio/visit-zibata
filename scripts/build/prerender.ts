@@ -170,7 +170,15 @@ export function pagesFor(
   const plazaById = new Map(data.plazas.map((plaza) => [plaza.id, plaza]))
   const route = (state: Partial<Parameters<typeof buildPath>[0]>) =>
     buildPath(
-      { locale, plazaSlug: null, placeSlug: null, categorySlug: null, infoTopic: null, ...state },
+      {
+        locale,
+        plazaSlug: null,
+        placeSlug: null,
+        categorySlug: null,
+        sectorSlug: null,
+        infoTopic: null,
+        ...state,
+      },
       base,
     )
   const activePlazas = data.plazas.filter((plaza) => plaza.active)

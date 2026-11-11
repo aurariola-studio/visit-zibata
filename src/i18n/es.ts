@@ -14,6 +14,7 @@ export const es = {
   'search.clear': 'Borrar búsqueda',
 
   'filters.categories': 'Categorías',
+  'filters.sectors': 'Sectores',
   'filters.allCategories': 'Todo',
   'filters.plaza': 'Filtrar por zona',
   'filters.allPlazas': 'Todas las zonas',

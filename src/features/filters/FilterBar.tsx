@@ -12,7 +12,7 @@ import {
 import { createPortal } from 'react-dom'
 import { plazaTones } from '../../config/palette.ts'
 import { t } from '../../i18n/index.ts'
-import type { Category, Plaza } from '../../types/domain.ts'
+import type { Category, Plaza, Sector } from '../../types/domain.ts'
 import { CategoryChips } from '../plazas/CategoryChips.tsx'
 import styles from './FilterBar.module.css'
 
@@ -45,6 +45,13 @@ function QuitarFiltros() {
 }
 
 interface FilterBarProps {
+  /** Vacío cuando hay un solo sector con lugares: entonces no se dibuja la fila. */
+  sectors?: readonly Sector[]
+  sectorCounts?: ReadonlyMap<string, number>
+  sectorTotalCount?: number
+  activeSectorId?: string | null
+  onSectorChange?: (sectorId: string | null) => void
+  sectorHref?: (sectorId: string | null) => string
   categories: readonly Category[]
   categoryCounts: ReadonlyMap<string, number>
   totalCount: number
@@ -66,6 +73,12 @@ interface FilterBarProps {
 }
 
 export function FilterBar({
+  sectors = [],
+  sectorCounts,
+  sectorTotalCount,
+  activeSectorId = null,
+  onSectorChange,
+  sectorHref,
   categories,
   categoryCounts,
   totalCount,
@@ -250,6 +263,18 @@ export function FilterBar({
 
   return (
     <div className={styles.bar}>
+      {sectors.length > 0 && onSectorChange && sectorHref && (
+        <CategoryChips
+          categories={sectors}
+          counts={sectorCounts}
+          totalCount={sectorTotalCount}
+          activeId={activeSectorId}
+          onChange={onSectorChange}
+          hrefFor={sectorHref}
+          label={t('filters.sectors')}
+          variant="floating"
+        />
+      )}
       <CategoryChips
         categories={categories}
         counts={categoryCounts}

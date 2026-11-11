@@ -24,6 +24,13 @@ describe('robots.txt', () => {
     expect(bloqueada(texto, '/zona/xentric-anahuac?categoria=italiana')).toBe(true)
   })
 
+  it('bloquea también el filtro de sector dentro de una zona, pero no su página', () => {
+    expect(bloqueada(texto, '/es/zona/xentric-anahuac?sector=salud')).toBe(true)
+    expect(bloqueada(texto, '/en/area/xentric-anahuac?sector=health')).toBe(true)
+    expect(bloqueada(texto, '/es/sector/salud')).toBe(false)
+    expect(bloqueada(texto, '/en/sector/health')).toBe(false)
+  })
+
   it('no bloquea nada que sea una página', () => {
     for (const ruta of [
       '/',
@@ -35,6 +42,8 @@ describe('robots.txt', () => {
       '/en/place/tomassa',
       '/es/categoria/italiana',
       '/en/category/italian',
+      '/es/sector/salud',
+      '/en/sector/health',
       '/es/info/privacidad',
       // La portada con parámetro la redirige el Worker: el rastreador tiene que poder llegar.
       '/?categoria=italiana',

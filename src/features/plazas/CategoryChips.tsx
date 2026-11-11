@@ -6,8 +6,11 @@ import { localized, t } from '../../i18n/index.ts'
 import type { Category } from '../../types/domain.ts'
 import styles from './CategoryChips.module.css'
 
+/** Lo mínimo que pinta una pastilla: sirve igual para una categoría que para un sector. */
+type Chip = Pick<Category, 'id' | 'label' | 'icon'>
+
 interface CategoryChipsProps {
-  categories: readonly Category[]
+  categories: readonly Chip[]
   counts?: ReadonlyMap<string, number>
   totalCount?: number
   activeId: string | null
@@ -18,6 +21,8 @@ interface CategoryChipsProps {
    */
   hrefFor: (categoryId: string | null) => string
   label: string
+  /** El texto de la pastilla que quita la selección. Por omisión, "Todo". */
+  allLabel?: string
   variant?: 'floating' | 'inline'
 }
 
@@ -28,7 +33,7 @@ interface CategoryChipsProps {
  * rueda vertical a desplazamiento lateral. El teclado ya funcionaba: al tabular el navegador acerca
  * cada pastilla.
  */
-function useHorizontalScroll(categories: readonly Category[], counts: unknown) {
+function useHorizontalScroll(categories: readonly Chip[], counts: unknown) {
   const ref = useRef<HTMLDivElement>(null)
   const [overflow, setOverflow] = useState({ start: false, end: false })
 
@@ -91,6 +96,7 @@ export function CategoryChips({
   onChange,
   hrefFor,
   label,
+  allLabel = t('filters.allCategories'),
   variant = 'inline',
 }: CategoryChipsProps) {
   const { ref, overflow, sync, scrollBy } = useHorizontalScroll(categories, counts)
@@ -105,12 +111,10 @@ export function CategoryChips({
               className={styles.chip}
               href={hrefFor(null)}
               aria-current={activeId === null ? 'true' : undefined}
-              aria-label={
-                totalCount === undefined ? undefined : `${t('filters.allCategories')} ${totalCount}`
-              }
+              aria-label={totalCount === undefined ? undefined : `${allLabel} ${totalCount}`}
               onClick={alPulsar(() => onChange(null))}
             >
-              {t('filters.allCategories')}
+              {allLabel}
             </a>
           </li>
           {categories.map((category) => {

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -161,5 +161,69 @@ describe('el filtro de abiertos', () => {
       'aria-checked',
       'true',
     )
+  })
+})
+
+describe('FilterBar: la fila de sectores', () => {
+  const sectores = [
+    {
+      id: 'comida',
+      slug: { es: 'comida', en: 'food' },
+      label: { es: 'Comida y Bebida' },
+      icon: 'utensils-crossed',
+      order: 10,
+    },
+    {
+      id: 'salud',
+      slug: { es: 'salud', en: 'health' },
+      label: { es: 'Salud' },
+      icon: 'heart-pulse',
+      order: 20,
+    },
+  ]
+  const conSectores = (extra: Partial<ComponentProps<typeof FilterBar>> = {}) =>
+    setup({
+      sectors: sectores,
+      sectorCounts: new Map([
+        ['comida', 4],
+        ['salud', 2],
+      ]),
+      sectorTotalCount: 6,
+      activeSectorId: null,
+      onSectorChange: vi.fn(),
+      sectorHref: (id) => (id ? `/es/sector/${id}` : '/es'),
+      ...extra,
+    })
+
+  it('sin sectores que elegir no dibuja nada: la guía queda como estaba', () => {
+    setup()
+    expect(screen.queryByRole('list', { name: 'Sectores' })).not.toBeInTheDocument()
+  })
+
+  it('con dos sectores dibuja una fila de enlaces, con "Todo" activo y la cuenta en el nombre', () => {
+    conSectores()
+    const fila = within(screen.getByRole('list', { name: 'Sectores' }))
+    expect(fila.getByRole('link', { name: 'Todo 6' })).toHaveAttribute('aria-current', 'true')
+    const salud = fila.getByRole('link', { name: 'Salud 2' })
+    expect(salud).toHaveAttribute('href', '/es/sector/salud')
+    expect(salud).not.toHaveAttribute('aria-current')
+  })
+
+  it('el sector elegido queda marcado y pulsarlo lo quita (su enlace va a la vista sin sector)', async () => {
+    const { onSectorChange } = conSectores({ activeSectorId: 'salud' })
+    const fila = within(screen.getByRole('list', { name: 'Sectores' }))
+    const salud = fila.getByRole('link', { name: 'Salud 2' })
+    expect(salud).toHaveAttribute('aria-current', 'true')
+    expect(salud).toHaveAttribute('href', '/es')
+    await userEvent.click(salud)
+    expect(onSectorChange).toHaveBeenCalledWith(null)
+  })
+
+  it('pulsar otro sector lo elige', async () => {
+    const { onSectorChange } = conSectores()
+    await userEvent.click(
+      within(screen.getByRole('list', { name: 'Sectores' })).getByRole('link', { name: 'Salud 2' }),
+    )
+    expect(onSectorChange).toHaveBeenCalledWith('salud')
   })
 })

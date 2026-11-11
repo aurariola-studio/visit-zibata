@@ -7,7 +7,9 @@ import {
   categoriesOf,
   countByCategory,
   countByPlaza,
+  countBySector,
   hasActiveFilters,
+  sectorsOf,
 } from '../features/filters/filters.ts'
 import { useZonedNow } from '../features/places/OpenStatus.tsx'
 import { preferences } from '../features/ranking/preferences.ts'
@@ -47,6 +49,7 @@ export function useExperience(catalog: Catalog) {
   const filtersActive = hasActiveFilters({
     query,
     categoryId: state.activeCategoryId,
+    sectorId: state.activeSectorId,
     favoritesOnly: state.favoritesOnly,
     openNowOnly: state.openNowOnly,
   })
@@ -64,6 +67,7 @@ export function useExperience(catalog: Catalog) {
         {
           query,
           categoryId: state.activeCategoryId,
+          sectorId: state.activeSectorId,
           plazaId: null,
           favoritesOnly: state.favoritesOnly,
           openNowOnly: state.openNowOnly,
@@ -76,6 +80,7 @@ export function useExperience(catalog: Catalog) {
       searchIndex,
       query,
       state.activeCategoryId,
+      state.activeSectorId,
       state.favoritesOnly,
       state.openNowOnly,
       favorites.ids,
@@ -106,6 +111,7 @@ export function useExperience(catalog: Catalog) {
         {
           query,
           categoryId: null,
+          sectorId: state.activeSectorId,
           plazaId: scopedPlazaId,
           favoritesOnly: state.favoritesOnly,
           openNowOnly: state.openNowOnly,
@@ -118,6 +124,7 @@ export function useExperience(catalog: Catalog) {
       searchIndex,
       query,
       scopedPlazaId,
+      state.activeSectorId,
       state.favoritesOnly,
       state.openNowOnly,
       favorites.ids,
@@ -125,6 +132,59 @@ export function useExperience(catalog: Catalog) {
     ],
   )
   const categoryCounts = useMemo(() => countByCategory(forChips, catalog), [forChips, catalog])
+
+  /**
+   * El sector que se ve elegido: el de su página o el de la categoría elegida, que lo implica. Los dos
+   * no se guardan a la vez en el estado, pero a la vista sí cuentan los dos.
+   */
+  const effectiveSectorId =
+    state.activeSectorId ??
+    (state.activeCategoryId
+      ? (catalog.sectorOfCategory.get(state.activeCategoryId)?.id ?? null)
+      : null)
+
+  /**
+   * Los sectores con algún lugar activo, y solo si hay dos o más: con uno solo (hoy, Comida y Bebida)
+   * la fila de sectores sería un botón único que no lleva a ningún otro sitio.
+   */
+  const visibleSectors = useMemo(() => {
+    const used = new Set(catalog.places.flatMap((place) => sectorsOf(place, catalog)))
+    const visible = catalog.sectors.filter((sector) => used.has(sector.id))
+    return visible.length >= 2 ? visible : []
+  }, [catalog])
+
+  /** Los lugares que cuentan los sectores: los mismos filtros menos la categoría y el propio sector. */
+  const forSectors = useMemo(
+    () =>
+      visibleSectors.length === 0
+        ? []
+        : applyFilters(
+            catalog,
+            searchIndex,
+            {
+              query,
+              categoryId: null,
+              sectorId: null,
+              plazaId: scopedPlazaId,
+              favoritesOnly: state.favoritesOnly,
+              openNowOnly: state.openNowOnly,
+            },
+            favorites.ids,
+            ahora,
+          ),
+    [
+      catalog,
+      searchIndex,
+      query,
+      scopedPlazaId,
+      state.favoritesOnly,
+      state.openNowOnly,
+      favorites.ids,
+      ahora,
+      visibleSectors,
+    ],
+  )
+  const sectorCounts = useMemo(() => countBySector(forSectors, catalog), [forSectors, catalog])
 
   /**
    * Cuántos están abiertos ahora dentro del ámbito actual, **sin** contar el propio filtro de
@@ -152,7 +212,14 @@ export function useExperience(catalog: Catalog) {
    */
   const visibleCategories = useMemo(() => {
     const used = new Set(catalog.places.flatMap((place) => categoriesOf(place, catalog)))
-    const visible = catalog.categories.filter((category) => used.has(category.id))
+    const visible = catalog.categories.filter(
+      (category) =>
+        used.has(category.id) &&
+        // Con un sector elegido, solo sus categorías (y solo cuando hay sectores que elegir).
+        (visibleSectors.length === 0 ||
+          effectiveSectorId === null ||
+          category.sectorId === effectiveSectorId),
+    )
     const affinity = categoryAffinity(
       preferences.read(),
       (id) => markedPlace(catalog, id),
@@ -164,7 +231,7 @@ export function useExperience(catalog: Catalog) {
       .map((category, index) => ({ category, index, score: affinity.get(category.id) ?? 0 }))
       .sort((a, b) => b.score - a.score || a.index - b.index)
       .map((entry) => entry.category)
-  }, [catalog])
+  }, [catalog, visibleSectors, effectiveSectorId])
 
   const placeCounts = useMemo(
     () =>
@@ -258,6 +325,10 @@ export function useExperience(catalog: Catalog) {
     openNowCount,
     totalCount,
     visibleCategories,
+    visibleSectors,
+    sectorCounts,
+    sectorTotalCount: forSectors.length,
+    effectiveSectorId,
     panel,
     activePlazas: catalog.plazas.filter((plaza) => plaza.active),
   }
