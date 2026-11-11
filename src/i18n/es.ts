@@ -15,6 +15,8 @@ export const es = {
 
   'filters.categories': 'Categorías',
   'filters.sectors': 'Sectores',
+  'filters.sectorBack': 'Ver todos los sectores',
+  'filters.sectorAll': 'Todas las categorías del sector',
   'filters.allCategories': 'Todo',
   'filters.plaza': 'Filtrar por zona',
   'filters.allPlazas': 'Todas las zonas',

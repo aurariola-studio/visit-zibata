@@ -596,7 +596,6 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
           <FilterBar
             sectors={experience.visibleSectors}
             sectorCounts={experience.sectorCounts}
-            sectorTotalCount={experience.sectorTotalCount}
             activeSectorId={experience.effectiveSectorId}
             onSectorChange={setSector}
             sectorHref={sectorHref}

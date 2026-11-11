@@ -11,7 +11,7 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { plazaTones } from '../../config/palette.ts'
-import { t } from '../../i18n/index.ts'
+import { localized, t } from '../../i18n/index.ts'
 import type { Category, Plaza, Sector } from '../../types/domain.ts'
 import { CategoryChips } from '../plazas/CategoryChips.tsx'
 import styles from './FilterBar.module.css'
@@ -48,7 +48,6 @@ interface FilterBarProps {
   /** Vacío cuando hay un solo sector con lugares: entonces no se dibuja la fila. */
   sectors?: readonly Sector[]
   sectorCounts?: ReadonlyMap<string, number>
-  sectorTotalCount?: number
   activeSectorId?: string | null
   onSectorChange?: (sectorId: string | null) => void
   sectorHref?: (sectorId: string | null) => string
@@ -75,7 +74,6 @@ interface FilterBarProps {
 export function FilterBar({
   sectors = [],
   sectorCounts,
-  sectorTotalCount,
   activeSectorId = null,
   onSectorChange,
   sectorHref,
@@ -261,30 +259,63 @@ export function FilterBar({
     }
   }
 
+  /*
+   * Con dos o más sectores, el carril es uno solo y baja de nivel: arriba, los sectores; al elegir uno,
+   * sus categorías, con el sector mismo a la izquierda. Ese sector es el "Todo" del nivel, y por eso ahí
+   * no hay pastilla "Todo". Con un solo sector (hoy) no hay nada que subir y el carril es el de siempre.
+   */
+  const sector =
+    onSectorChange && sectorHref && activeSectorId
+      ? sectors.find((candidate) => candidate.id === activeSectorId)
+      : undefined
+  const porSectores = sectors.length > 0 && onSectorChange && sectorHref
+  // Quitar la categoría dentro de un sector deja el sector, no la portada.
+  const quitaAlSector = (id: string | null) => id === null && sector !== undefined
+
   return (
     <div className={styles.bar}>
-      {sectors.length > 0 && onSectorChange && sectorHref && (
+      {porSectores && !sector ? (
         <CategoryChips
           categories={sectors}
           counts={sectorCounts}
-          totalCount={sectorTotalCount}
-          activeId={activeSectorId}
-          onChange={onSectorChange}
+          activeId={null}
+          onChange={(id) => onSectorChange(id)}
           hrefFor={sectorHref}
           label={t('filters.sectors')}
+          hideAll
+          variant="floating"
+        />
+      ) : (
+        <CategoryChips
+          categories={categories}
+          counts={categoryCounts}
+          totalCount={totalCount}
+          activeId={activeCategoryId}
+          onChange={(id) =>
+            quitaAlSector(id) ? onSectorChange?.(activeSectorId) : onCategoryChange(id)
+          }
+          hrefFor={(id) =>
+            quitaAlSector(id) && sectorHref ? sectorHref(activeSectorId) : categoryHref(id)
+          }
+          label={t('filters.categories')}
+          hideAll={sector !== undefined}
+          clearMark={sector !== undefined}
+          lead={
+            sector && onSectorChange && sectorHref
+              ? {
+                  label: localized(sector.label),
+                  icon: sector.icon,
+                  selected: activeCategoryId === null,
+                  href: activeCategoryId === null ? sectorHref(null) : sectorHref(sector.id),
+                  hint:
+                    activeCategoryId === null ? t('filters.sectorBack') : t('filters.sectorAll'),
+                  onPress: () => onSectorChange(activeCategoryId === null ? null : sector.id),
+                }
+              : undefined
+          }
           variant="floating"
         />
       )}
-      <CategoryChips
-        categories={categories}
-        counts={categoryCounts}
-        totalCount={totalCount}
-        activeId={activeCategoryId}
-        onChange={onCategoryChange}
-        hrefFor={categoryHref}
-        label={t('filters.categories')}
-        variant="floating"
-      />
       <div className={styles.row}>
         {/*
          * La zona: un campo, y dentro el mismo alfiler que marca esa zona en el mapa, en miniatura y

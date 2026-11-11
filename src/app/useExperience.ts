@@ -327,7 +327,6 @@ export function useExperience(catalog: Catalog) {
     visibleCategories,
     visibleSectors,
     sectorCounts,
-    sectorTotalCount: forSectors.length,
     effectiveSectorId,
     panel,
     activePlazas: catalog.plazas.filter((plaza) => plaza.active),

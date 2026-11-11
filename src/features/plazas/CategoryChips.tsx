@@ -1,5 +1,5 @@
 /** Pastillas de categoría con conteo, reutilizadas en la barra de filtros y dentro de cada plaza. */
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { type MouseEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
 import { localized, t } from '../../i18n/index.ts'
@@ -8,6 +8,22 @@ import styles from './CategoryChips.module.css'
 
 /** Lo mínimo que pinta una pastilla: sirve igual para una categoría que para un sector. */
 type Chip = Pick<Category, 'id' | 'label' | 'icon'>
+
+/**
+ * La cápsula que abre el carril cuando se está dentro de un sector: el sector mismo, con una flecha que
+ * dice que se viene de un nivel más alto. Elegida (ninguna categoría puesta) es el "Todo" del sector;
+ * pulsarla sube al nivel de los sectores. Con una categoría puesta queda neutra, y pulsarla vuelve a
+ * todo el sector.
+ */
+export interface LeadChip {
+  label: string
+  icon: string
+  selected: boolean
+  href: string
+  /** Lo que lee un lector de pantalla además del nombre: a dónde lleva pulsarla. */
+  hint: string
+  onPress: () => void
+}
 
 interface CategoryChipsProps {
   categories: readonly Chip[]
@@ -23,6 +39,11 @@ interface CategoryChipsProps {
   label: string
   /** El texto de la pastilla que quita la selección. Por omisión, "Todo". */
   allLabel?: string
+  /** Sin la pastilla "Todo": la cápsula de cabecera (o no tener ninguna elegida) ya significa todo. */
+  hideAll?: boolean
+  lead?: LeadChip
+  /** La elegida lleva una ✕: pulsarla la quita, y que lo diga ella misma evita explicarlo. */
+  clearMark?: boolean
   variant?: 'floating' | 'inline'
 }
 
@@ -97,6 +118,9 @@ export function CategoryChips({
   hrefFor,
   label,
   allLabel = t('filters.allCategories'),
+  hideAll = false,
+  lead,
+  clearMark = false,
   variant = 'inline',
 }: CategoryChipsProps) {
   const { ref, overflow, sync, scrollBy } = useHorizontalScroll(categories, counts)
@@ -105,18 +129,35 @@ export function CategoryChips({
     <div className={styles.rail} data-variant={variant}>
       <div ref={ref} className={styles.scroller} onScroll={sync}>
         <ul className={styles.chips} aria-label={label}>
-          <li>
-            {/* El conteo va en su propio elemento: sin etiqueta accesible, NVDA lee "Todo19". */}
-            <a
-              className={styles.chip}
-              href={hrefFor(null)}
-              aria-current={activeId === null ? 'true' : undefined}
-              aria-label={totalCount === undefined ? undefined : `${allLabel} ${totalCount}`}
-              onClick={alPulsar(() => onChange(null))}
-            >
-              {allLabel}
-            </a>
-          </li>
+          {lead && (
+            <li>
+              <a
+                className={styles.chip}
+                href={lead.href}
+                aria-current={lead.selected ? 'true' : undefined}
+                aria-label={`${lead.label}. ${lead.hint}`}
+                onClick={alPulsar(lead.onPress)}
+              >
+                <ChevronLeft aria-hidden="true" />
+                <CategoryIcon name={lead.icon} size={16} strokeWidth={2} />
+                {lead.label}
+              </a>
+            </li>
+          )}
+          {!hideAll && (
+            <li>
+              {/* El conteo va en su propio elemento: sin etiqueta accesible, NVDA lee "Todo19". */}
+              <a
+                className={styles.chip}
+                href={hrefFor(null)}
+                aria-current={activeId === null ? 'true' : undefined}
+                aria-label={totalCount === undefined ? undefined : `${allLabel} ${totalCount}`}
+                onClick={alPulsar(() => onChange(null))}
+              >
+                {allLabel}
+              </a>
+            </li>
+          )}
           {categories.map((category) => {
             const count = counts?.get(category.id)
             const active = activeId === category.id
@@ -133,6 +174,7 @@ export function CategoryChips({
                 >
                   <CategoryIcon name={category.icon} size={16} strokeWidth={2} />
                   {localized(category.label)}
+                  {clearMark && active && <X aria-hidden="true" />}
                 </a>
               </li>
             )
