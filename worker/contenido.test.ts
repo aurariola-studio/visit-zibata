@@ -12,6 +12,7 @@ const plazas = PlazasFileSchema.parse(plazasJson)
 const lugares = PlacesFileSchema.parse(lugaresJson)
 const dataset: CommercialDataset = {
   categories: categorias.categories,
+  sectors: categorias.sectors,
   plazas: plazas.plazas,
   places: lugares.places,
 }

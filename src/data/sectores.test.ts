@@ -24,6 +24,7 @@ const sector = (id: string, orden: number) => ({
   order: orden,
 })
 const SECTORES = [sector('comida', 10), sector('tiendas', 20)]
+const sinSector = base.categories.map(({ sectorId: _s, ...categoria }) => categoria)
 
 /** El dato real, con todas las categorías en el sector "comida" salvo las que se indiquen. */
 const conSectores = (
@@ -46,7 +47,7 @@ const mensajes = (dataset: CommercialDataset) => errores(dataset).map((i) => i.m
 
 describe('los sectores en validateRelations', () => {
   it('el dato actual, sin sectores, sigue sin errores', () => {
-    expect(errores({ categories: base.categories, plazas, places })).toEqual([])
+    expect(errores({ categories: sinSector, plazas, places })).toEqual([])
   })
 
   it('con sectores y todas las categorías en uno, no hay errores; uno vacío es solo un aviso', () => {
