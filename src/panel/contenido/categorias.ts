@@ -27,6 +27,10 @@ const TIPOS_DE_NEGOCIO: Record<(typeof SCHEMA_TYPES)[number], string> = {
   Store: 'Tienda, sin más precisión',
   GroceryStore: 'Supermercado o abarrotes',
   ConvenienceStore: 'Tienda de conveniencia',
+  Pharmacy: 'Farmacia',
+  MedicalClinic: 'Clínica o consultorio',
+  Dentist: 'Dentista',
+  DiagnosticLab: 'Laboratorio de diagnóstico',
 }
 
 /** Las opciones del sector. Una categoría nueva arranca sin elegir: el sector se decide a propósito, no por omisión. */

@@ -147,7 +147,11 @@
               "BarOrPub",
               "Store",
               "GroceryStore",
-              "ConvenienceStore"
+              "ConvenienceStore",
+              "Pharmacy",
+              "MedicalClinic",
+              "Dentist",
+              "DiagnosticLab"
             ]
           },
           "order": {

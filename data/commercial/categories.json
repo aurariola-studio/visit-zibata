@@ -1343,6 +1343,213 @@
           "general": true
         }
       ]
+    },
+    {
+      "id": "farmacias",
+      "slug": {
+        "es": "farmacias",
+        "en": "pharmacies"
+      },
+      "sectorId": "salud",
+      "label": {
+        "es": "Farmacias",
+        "en": "Pharmacies"
+      },
+      "icon": "pill",
+      "hue": 80,
+      "schemaType": "Pharmacy",
+      "order": 200,
+      "synonyms": [
+        "farmacia",
+        "botica",
+        "medicinas",
+        "medicamentos",
+        "pharmacy",
+        "drugstore"
+      ],
+      "giros": [
+        {
+          "id": "farmacia",
+          "label": {
+            "es": "Farmacia",
+            "en": "Pharmacy"
+          },
+          "icon": "pill",
+          "synonyms": [
+            "farmacia",
+            "botica",
+            "medicinas",
+            "medicamentos"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "consultorios-y-clinicas",
+      "slug": {
+        "es": "consultorios-y-clinicas",
+        "en": "clinics-and-doctors"
+      },
+      "sectorId": "salud",
+      "label": {
+        "es": "Consultorios y Clínicas",
+        "en": "Clinics & Doctors"
+      },
+      "icon": "stethoscope",
+      "hue": 120,
+      "schemaType": "MedicalClinic",
+      "order": 210,
+      "synonyms": [
+        "médico",
+        "doctor",
+        "consultorio",
+        "clínica",
+        "centro médico",
+        "consulta",
+        "especialista",
+        "clinic"
+      ],
+      "giros": [
+        {
+          "id": "consulta-general",
+          "label": {
+            "es": "Consulta general",
+            "en": "General practice"
+          },
+          "icon": "stethoscope",
+          "synonyms": [
+            "médico general",
+            "doctor",
+            "consulta"
+          ],
+          "general": true
+        },
+        {
+          "id": "consulta-de-especialidad",
+          "label": {
+            "es": "Consulta de especialidad",
+            "en": "Specialist care"
+          },
+          "icon": "heart-pulse",
+          "synonyms": [
+            "especialista",
+            "especialidad",
+            "pediatra",
+            "ginecólogo",
+            "dermatólogo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dentistas",
+      "slug": {
+        "es": "dentistas",
+        "en": "dentists"
+      },
+      "sectorId": "salud",
+      "label": {
+        "es": "Dentistas",
+        "en": "Dentists"
+      },
+      "icon": "tooth",
+      "hue": 250,
+      "schemaType": "Dentist",
+      "order": 220,
+      "synonyms": [
+        "dentista",
+        "dental",
+        "odontología",
+        "ortodoncia",
+        "muelas",
+        "dentist"
+      ],
+      "giros": [
+        {
+          "id": "dentista",
+          "label": {
+            "es": "Dentista",
+            "en": "Dentist"
+          },
+          "icon": "tooth",
+          "synonyms": [
+            "dentista",
+            "dental",
+            "odontología",
+            "muelas"
+          ],
+          "general": true
+        },
+        {
+          "id": "ortodoncia",
+          "label": {
+            "es": "Ortodoncia",
+            "en": "Orthodontics"
+          },
+          "icon": "tooth",
+          "synonyms": [
+            "ortodoncia",
+            "brackets",
+            "invisalign"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "laboratorios-y-diagnostico",
+      "slug": {
+        "es": "laboratorios-y-diagnostico",
+        "en": "labs-and-diagnostics"
+      },
+      "sectorId": "salud",
+      "label": {
+        "es": "Laboratorio y Diagnóstico",
+        "en": "Labs & Diagnostics"
+      },
+      "icon": "microscope",
+      "hue": 296,
+      "schemaType": "DiagnosticLab",
+      "order": 230,
+      "synonyms": [
+        "laboratorio",
+        "análisis",
+        "estudios",
+        "rayos x",
+        "radiología",
+        "ultrasonido",
+        "lab"
+      ],
+      "giros": [
+        {
+          "id": "laboratorio-clinico",
+          "label": {
+            "es": "Laboratorio clínico",
+            "en": "Clinical lab"
+          },
+          "icon": "microscope",
+          "synonyms": [
+            "laboratorio",
+            "análisis clínicos",
+            "estudios de sangre"
+          ],
+          "general": true
+        },
+        {
+          "id": "radiologia-y-ultrasonido",
+          "label": {
+            "es": "Radiología y ultrasonido",
+            "en": "Imaging"
+          },
+          "icon": "microscope",
+          "synonyms": [
+            "radiología",
+            "rayos x",
+            "ultrasonido",
+            "imagen"
+          ]
+        }
+      ]
     }
   ],
   "sectors": [
@@ -1358,6 +1565,19 @@
       },
       "icon": "utensils-crossed",
       "order": 10
+    },
+    {
+      "id": "salud",
+      "slug": {
+        "es": "salud",
+        "en": "health"
+      },
+      "label": {
+        "es": "Salud",
+        "en": "Health"
+      },
+      "icon": "heart-pulse",
+      "order": 20
     }
   ]
 }
