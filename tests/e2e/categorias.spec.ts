@@ -69,6 +69,29 @@ test.describe('Páginas de categoría', () => {
     )
   })
 
+  test('una cápsula elegida lejos del borde queda a la vista dentro del carril', async ({
+    page,
+  }) => {
+    // La última del carril es la más lejana: con el carril en su principio quedaría fuera de la pantalla.
+    await openApp(page)
+    await waitForMap(page)
+    const href = await cápsulas(page).getByRole('link').last().getAttribute('href')
+    const slug = href?.split('/').pop()
+    if (!slug) throw new Error('no hay una última categoría')
+
+    await openApp(page, { path: `categoria/${slug}` })
+    const elegida = cápsulas(page).locator('[aria-current="true"]')
+    await expect(elegida).toBeVisible()
+    const carril = cápsulas(page).locator('xpath=..')
+    await expect
+      .poll(async () => {
+        const [a, b] = await Promise.all([elegida.boundingBox(), carril.boundingBox()])
+        if (!a || !b) return false
+        return a.x >= b.x && a.x + a.width <= b.x + b.width
+      })
+      .toBe(true)
+  })
+
   test('cambiar de categoría no llena el historial: atrás no recorre las cápsulas', async ({
     page,
   }) => {
