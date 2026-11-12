@@ -1570,8 +1570,7 @@
         "gym",
         "pesas",
         "fitness",
-        "entrenamiento",
-        "crossfit"
+        "musculación"
       ],
       "giros": [
         {
@@ -1589,7 +1588,34 @@
             "musculación"
           ],
           "general": true
-        },
+        }
+      ]
+    },
+    {
+      "id": "entrenamiento-en-grupo",
+      "slug": {
+        "es": "entrenamiento-en-grupo",
+        "en": "group-training"
+      },
+      "sectorId": "fitness-y-deporte",
+      "label": {
+        "es": "Entrenamiento en Grupo",
+        "en": "Group Training"
+      },
+      "icon": "users",
+      "hue": 310,
+      "order": 305,
+      "synonyms": [
+        "entrenamiento en grupo",
+        "clases grupales",
+        "bootcamp",
+        "funcional",
+        "spinning",
+        "ciclismo indoor",
+        "hiit",
+        "group training"
+      ],
+      "giros": [
         {
           "id": "entrenamiento-funcional",
           "label": {
@@ -1634,7 +1660,7 @@
         "es": "Yoga, Pilates y Barre",
         "en": "Yoga, Pilates & Barre"
       },
-      "icon": "yoga",
+      "icon": "flower-2",
       "hue": 70,
       "order": 310,
       "synonyms": [
@@ -1658,8 +1684,7 @@
             "meditación",
             "hot yoga",
             "vinyasa"
-          ],
-          "general": true
+          ]
         },
         {
           "id": "pilates",
@@ -1753,7 +1778,7 @@
         "es": "Deportes",
         "en": "Sports"
       },
-      "icon": "trophy",
+      "icon": "medal",
       "hue": 238,
       "order": 330,
       "synonyms": [

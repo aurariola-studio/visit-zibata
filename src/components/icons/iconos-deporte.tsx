@@ -1,9 +1,10 @@
 /**
- * Iconos de Fitness y Deporte. Viven aparte de `CategoryIcon.tsx` porque las siluetas de Material y
- * game-icons pesan unos 3 KB comprimidos y ningún giro de este sector tiene locales todavía: así no
+ * Iconos de Fitness y Deporte. Viven aparte de `CategoryIcon.tsx` porque las siluetas de Material
+ * (más cuatro de Lucide que solo usan estas categorías) pesan unos 2 KB comprimidos y ningún giro de este sector tiene locales todavía: así no
  * entran en el paquete inicial, que tiene presupuesto. `CategoryIcon` los carga la primera vez que
  * pinta uno.
  */
+import { Bike, Flower2, Medal, Users } from 'lucide-react'
 import { custom, type IconComponent, solid } from './dibujar.tsx'
 
 /** Barra con sus discos: el gimnasio de pesas. Tabler Icons (MIT). */
@@ -79,24 +80,27 @@ const Pickleball = solid(
   </>,
 )
 
-/** Zapatillas de punta con sus cintas. Delapouite, game-icons.net (CC BY 3.0). */
+/** Zapatillas de ballet. Material Design Icons (Apache 2.0). */
 const Ballet = solid(
   <>
-    <path d="M197.6 14.67c.5 4.53 1.1 9.7 1.5 16.34c1.1 15.45 1.7 35.77.8 56.37c-.8 18.22-2.7 36.52-6.8 52.22c20 6.5 40.9 15.4 58.2 24.8c.3-8.8.6-17.6 1-26.2c-17.5-39.52-35-79.46-43.4-123.53zm29.7.12c11.2 55.18 38 105.41 60.3 159.61c15.1-5.3 30.4-9.4 45.7-12.9l-.6-1v-2.8c.7-45.5 2.6-97.35-6.4-142.91zM187.2 156.7c-.1.2-.2.4-.3.7c8.6 7.4 18.1 16.7 28 26.8c11.9 12.3 24 25.6 34.4 38.1c.6-12.5 1-25 1.3-37.4c-17-10.1-41.1-20.8-63.4-28.2m-10.9 15.5c-2.5 2.2-5.2 4-8.2 5.4c-1.3 39.3 5.1 75.5 17 107.8c25.6-9.6 45.5-24.1 59.9-39.6c-11.2-14.8-27.3-33-43-49c-9-9.3-18-17.8-25.7-24.6m166.8 5.5c-16.7 3.8-33 8-49 13.5l-.1 1.7q-1.05 12.45-1.8 24.9c6.6 6.6 13.9 12.8 21.7 18.6l.1-.1c9.3-14.2 19-28 27.4-38.8c2.5-3.1 4.9-5.9 7.2-8.5c-1.7-3.8-3.6-7.5-5.5-11.3m-195.9 1.2c-28.7-.1-49.28 6.3-51.95 30.9c-3.35 30.8 75.55 202 69.25 261.7c-2.9 27.8 42.5 25.5 58.3-2.8c11.6-20.8 13.1-48.2 11.6-74.1l-8-8.5c-46.8-49.3-78.6-121.9-76.4-207.2zm208.7 29.4c-.1.2-.2.3-.3.4c-8 10-17.4 23.5-26.6 37.4c-.1.2-.2.3-.3.5c11.6 7.3 24.3 13.9 37.8 19.4c-1.4-20.1-4.8-39.4-10.6-57.7m22.3 13.8c9.1 39.7 8.5 82.5 4.3 126.4c-3.8 38.5-74.2 55.5-97.3-.2c-8.3 58.5 10.2 88.8 37.3 127c14 19.6 52.3 24 64.8 4.2c27.1-43 18.5-85.7 12.7-134c-5-41.3-1.4-87.8-21.8-123.4m-87 19.2c-.2 10.4-.2 20.7.2 31c3.9-6.5 8.2-13.5 12.7-20.7c-4.4-3.3-8.8-6.7-12.9-10.3m27.8 20.5c-5.4 8.6-10.6 17-14.8 24.3c-4.4 7.5-7.9 14.1-10.2 18.5c1 8.1 2.3 16.2 4 24.2c13 62.3 65.2 32.3 66.5 17.9c2.1-21 3.2-41.4 2.9-61.1c-17.5-6.5-33.7-14.5-48.4-23.8m-72.7 7.8c-14.5 12.8-32.7 24.3-54.4 32.4c10 22.6 22.8 42.8 37.5 60.4c9.1-29 14.1-60.6 16.9-92.8" />
+    <path d="M12.78 11.97C12.27 8.54 10.86 2 7.53 2S2.8 8.54 2.28 11.97c-.21 1.45-.28 2.92-.12 4.38c.34 3.04 1.39 4.49 2.11 5.15c.37.33.84.5 1.33.5h3.87c.49 0 .96-.17 1.33-.5c.7-.66 1.75-2.11 2.11-5.15c.17-1.46.09-2.93-.13-4.38M7.53 4c.36-.13 1.06.73 1.74 2.31l-4.69 4.02C5.41 6.26 6.94 3.79 7.53 4m2.22 9H5.31a.96.96 0 0 1-.55-.19L10 8.33c.29 1.02.56 2.17.75 3.5c.09.61-.38 1.17-1 1.17m12.03-1.03C21.27 8.54 19.86 2 16.53 2c-1.49 0-2.59 1.32-3.4 3.08c.37.96.71 2.06 1 3.29l5.18 4.44c-.16.11-.34.19-.56.19h-3.83c.12 1.27.11 2.45-.03 3.59c-.27 2.28-.89 3.86-1.57 4.94c.36.31.81.47 1.28.47h3.87c.49 0 .96-.17 1.33-.5c.7-.66 1.75-2.11 2.11-5.15c.17-1.46.09-2.93-.13-4.38M14.8 6.31c.7-1.58 1.38-2.44 1.73-2.31c.6-.21 2.12 2.26 2.97 6.33z" />
   </>,
-  '0 0 512 512',
 )
 
 export const ICONOS_DEPORTE: Record<string, IconComponent> = {
   ballet: Ballet,
   barbell: Barbell,
   barre: Barre,
+  bike: Bike,
   boxeo: Boxeo,
   danza: Danza,
+  'flower-2': Flower2,
   funcional: Funcional,
+  medal: Medal,
   natacion: Natacion,
   padel: Padel,
   pickleball: Pickleball,
   pilates: Pilates,
+  users: Users,
   yoga: Yoga,
 }

@@ -33,7 +33,7 @@ export function custom(children: ReactNode): IconComponent {
 }
 
 /**
- * Icono relleno (Material Design Icons, Material Symbols, game-icons): las siluetas de esas familias
+ * Icono relleno (Material Design Icons y Material Symbols): las siluetas de esas familias
  * no se dibujan con trazo, así que llevan `fill` y no `stroke`. Con `size` y `color` se comporta
  * igual que `custom`.
  */
