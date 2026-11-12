@@ -143,10 +143,14 @@ describe('importar un CSV pasa por prepararNegocio', () => {
 
   it('importar sin cambiar nada no reescribe los archivos: ni un byte distinto', () => {
     // Una fila en blanco (solo nombre y plaza) por cada local, como un CSV que no trae nada nuevo.
-    const filas = dataset.places.map((place) => ({
-      name: place.name,
-      plaza: dataset.plazas.find((otra) => otra.id === place.plazaId)?.name,
-    }))
+    // Los que aún no tienen descripción se quedan fuera: el formulario la exige al guardar, y la escribe
+    // el propio negocio, así que no se inventa una para que la fila pase.
+    const filas = dataset.places
+      .filter((place) => place.description)
+      .map((place) => ({
+        name: place.name,
+        plaza: dataset.plazas.find((otra) => otra.id === place.plazaId)?.name,
+      }))
     const r = importar(filas)
     expect(r.ok, r.filas.flatMap((f) => f.problemas).join(' | ')).toBe(true)
     // Comparar el texto, no los objetos: un toEqual no ve el orden de las claves ni un `undefined`.
