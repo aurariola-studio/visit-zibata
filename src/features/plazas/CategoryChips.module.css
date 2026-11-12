@@ -9,12 +9,33 @@
   min-width: 0;
 }
 
+/*
+ * Con la cápsula del sector fija, el carril es otra zona y tiene su propio aire: 8 px entre ellas (lo
+ * mismo que entre dos cápsulas), y la flecha de retroceso, que aparece al desplazar, a otros 8 del
+ * carril. Pegadas se leían como un solo bloque, y la flecha parecía parte de la cápsula del sector.
+ */
+.rail[data-cabecera] {
+  gap: var(--space-2);
+}
+
 .lead {
   flex: none;
-  /* Los 12 px del relleno del carril, y -4 de margen para que el hueco hasta la primera cápsula sea el
-     de siempre (8): el desvanecido del carril empieza donde acaba esta. */
   padding: 4px 0 4px 12px;
-  margin-inline-end: -4px;
+}
+
+/* Sin relleno a la izquierda: el hueco hasta la primera cápsula ya lo pone el `gap`. Lo justo para que
+   el aro de foco no se corte contra el borde del carril. */
+.rail[data-cabecera] .chips {
+  padding-inline-start: 4px;
+}
+
+/* En su sitio de partida no hay nada que desvanecer a la izquierda: solo el borde derecho. */
+.rail[data-cabecera] .scroller[data-inicio] {
+  mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+}
+
+.rail[data-cabecera] .arrow[data-side="start"] {
+  left: var(--space-2);
 }
 
 .viewport {
