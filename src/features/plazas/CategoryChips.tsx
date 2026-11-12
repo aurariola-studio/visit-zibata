@@ -148,6 +148,7 @@ export function CategoryChips({
           ref={ref}
           className={styles.scroller}
           data-inicio={overflow.start ? undefined : ''}
+          data-fin={overflow.end ? undefined : ''}
           onScroll={sync}
         >
           <ul className={styles.chips} aria-label={label}>
