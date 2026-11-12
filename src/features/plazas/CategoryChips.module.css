@@ -29,11 +29,6 @@
   padding-inline-start: 4px;
 }
 
-/* En su sitio de partida no hay nada que desvanecer a la izquierda: solo el borde derecho. */
-.rail[data-cabecera] .scroller[data-inicio] {
-  mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
-}
-
 .rail[data-cabecera] .arrow[data-side="start"] {
   left: var(--space-2);
 }
@@ -44,17 +39,47 @@
   min-width: 0;
 }
 
+/*
+ * El desvanecido de los extremos sigue la curva de las cápsulas: un medio círculo en cada punta, y no un
+ * corte recto que deja ver un trozo de cápsula contra el borde. `--cap` es el radio (la mitad del alto del
+ * carril, cápsula y su aire); `--suave`, lo que tarda en apagarse desde el centro hasta el borde.
+ *
+ * Son tres capas que se suman: la punta izquierda, el centro y la punta derecha. Con el carril en su
+ * tope no hay nada que desvanecer en ese lado, y una capa sólida tapa la punta: `data-inicio` y
+ * `data-fin` (los pone el componente) las activan.
+ */
 .scroller {
+  --cap: calc(var(--control-h) / 2 + 4px);
+  --suave: 14px;
+  --punta-izq:
+    radial-gradient(
+      circle at 100% 50%,
+      black calc(var(--cap) - var(--suave)),
+      transparent var(--cap)
+    )
+    0 0 / var(--cap) 100% no-repeat;
+  --punta-der:
+    radial-gradient(circle at 0 50%, black calc(var(--cap) - var(--suave)), transparent var(--cap))
+    100% 0 / var(--cap) 100% no-repeat;
+  --centro: linear-gradient(black, black) var(--cap) 0 / calc(100% - 2 * var(--cap)) 100% no-repeat;
+  --solida-izq: linear-gradient(black, black) 0 0 / var(--cap) 100% no-repeat;
+  --solida-der: linear-gradient(black, black) 100% 0 / var(--cap) 100% no-repeat;
   overflow-x: auto;
   scrollbar-width: none;
   scroll-padding-inline: var(--space-4);
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 12px,
-    black calc(100% - 24px),
-    transparent
-  );
+  mask: var(--punta-izq), var(--centro), var(--punta-der);
+}
+
+.scroller[data-inicio] {
+  mask: var(--solida-izq), var(--centro), var(--punta-der);
+}
+
+.scroller[data-fin] {
+  mask: var(--punta-izq), var(--centro), var(--solida-der);
+}
+
+.scroller[data-inicio][data-fin] {
+  mask: none;
 }
 
 .scroller::-webkit-scrollbar {

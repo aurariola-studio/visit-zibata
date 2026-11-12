@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import categoriasJson from '../../data/commercial/categories.json' with { type: 'json' }
 
 /*
  * Cada giro tiene su propio icono. Un local puede llevar hasta tres giros y la tarjeta dibuja uno por
@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest'
  * la guía. Lo decidió el propietario, y esta prueba es la que lo fija: añadir un giro con un icono que ya
  * existe pone en rojo el catálogo, en vez de que la tarjeta lo disimule.
  */
-const { categories } = JSON.parse(readFileSync('data/commercial/categories.json', 'utf8')) as {
+const { categories } = categoriasJson as {
   categories: { id: string; giros: { id: string; icon: string }[] }[]
 }
 
