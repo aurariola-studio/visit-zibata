@@ -481,6 +481,7 @@ const NOMBRES_DEPORTE = new Set([
   'bike',
   'boxeo',
   'danza',
+  'estiramiento',
   'funcional',
   'natacion',
   'padel',
@@ -488,7 +489,6 @@ const NOMBRES_DEPORTE = new Set([
   'pelotas',
   'pilates',
   'yoga',
-  'yoga-postura',
 ])
 
 let deporte: Record<string, IconComponent> | undefined

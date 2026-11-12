@@ -39,6 +39,7 @@ export const ICONOS = [
   'cup-soda',
   'cupcake',
   'danza',
+  'estiramiento',
   'drumstick',
   'egg-fried',
   'elote',
@@ -93,7 +94,6 @@ export const ICONOS = [
   'wrap',
   'wine',
   'yoga',
-  'yoga-postura',
 ] as const
 
 export type Icono = (typeof ICONOS)[number]

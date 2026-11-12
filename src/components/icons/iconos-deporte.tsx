@@ -13,8 +13,8 @@ const Barbell = custom(
   </>,
 )
 
-/** Persona estirándose en el suelo. Tabler Icons (MIT). */
-const Pilates = custom(
+/** Persona estirándose: la categoría Yoga, Pilates y Barre. Tabler Icons (MIT). */
+const Estiramiento = custom(
   <>
     <path d="M15 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M5 20l5-.5l1-2m7 2.5v-5h-5.5L15 8.5l-5.5 1l1.5 2" />
   </>,
@@ -56,10 +56,10 @@ const Danza = solid(
   </>,
 )
 
-/** Bailarina con el brazo en alto. Material Design Icons (Apache 2.0). */
+/** Gimnasta en arabesco. Material Design Icons (Apache 2.0). */
 const Barre = solid(
   <>
-    <path d="M17 17h-2v6h-2v-6h-2.12l-1.54 1.93l2.37 2.36l-1.42 1.42l-2.36-2.37c-.35-.34-.55-.81-.58-1.3s.12-.98.43-1.36l.54-.68H7l2-4v-3c-.62.47-1.12 1.07-1.47 1.76c-.35.7-.53 1.46-.53 2.24H5a7 7 0 0 1 7-7c1.33 0 2.6-.53 3.54-1.46C16.47 4.6 17 3.33 17 2h2c0 1.32-.38 2.62-1.09 3.73A7 7 0 0 1 15 8.31V13zM14 4c0 .4-.12.78-.34 1.11s-.53.59-.89.74a2 2 0 0 1-2.18-.44c-.28-.28-.47-.63-.55-1.02s-.04-.79.11-1.15c.15-.37.41-.68.74-.9S11.6 2 12 2c.53 0 1.04.21 1.41.59c.38.37.59.88.59 1.41" />
+    <path d="M4 6c0-1.1.9-2 2-2s2 .9 2 2s-.9 2-2 2s-2-.9-2-2M1 9h6l7-5l1.31 1.5l-4.17 3H14L21.8 4L23 5.4L14.5 12L14 22h-2l-.5-10L8 11H1z" />
   </>,
 )
 
@@ -86,11 +86,13 @@ const Ballet = solid(
   </>,
 )
 
-/** Persona en postura de guerrero: la categoría Yoga, Pilates y Barre. Tabler Icons (MIT). */
-const YogaPostura = custom(
+/** Persona en una abdominal sobre la colchoneta. Iconmind (MIT); provisional, el propietario busca una en V. */
+const Pilates = custom(
   <>
-    <path d="M4 20h4l1.5-3m7.5 3l-1-5h-5l1-7" />
-    <path d="m4 10l4-1l4-1l4 1.5l4 1.5m-9.993-6a2 2 0 1 0 4 0a2 2 0 1 0-4 0" />
+    <path d="M2 7a3 3 0 1 0 6 0 3 3 0 1 0 -6 0" />
+    <path d="m8 10 5 5" />
+    <path d="m13 15 4 -4 4 4" />
+    <path d="M2 18h20" />
   </>,
 )
 
@@ -125,6 +127,7 @@ export const ICONOS_DEPORTE: Record<string, IconComponent> = {
   bike: Bike,
   boxeo: Boxeo,
   danza: Danza,
+  estiramiento: Estiramiento,
   funcional: Funcional,
   natacion: Natacion,
   padel: Padel,
@@ -132,5 +135,4 @@ export const ICONOS_DEPORTE: Record<string, IconComponent> = {
   pelotas: Pelotas,
   pilates: Pilates,
   yoga: Yoga,
-  'yoga-postura': YogaPostura,
 }
