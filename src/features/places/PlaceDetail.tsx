@@ -315,7 +315,7 @@ export function PlaceDetail({
             <PlacePicture
               photo={place.photos[0]}
               category={catalog.categoryOfGiro.get(place.giros[0] ?? '')}
-              icons={giros.map((giro) => giro.icon)}
+              icons={[...new Set(giros.map((giro) => giro.icon))]}
               sizes="88px"
               ratio="1 / 1"
               illustrationSize="sm"

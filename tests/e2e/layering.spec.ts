@@ -169,7 +169,9 @@ test.describe('capas y alineación @mapa', () => {
   test('la flecha de desplazamiento aparece sobre el mapa y va centrada con las pastillas', async ({
     page,
   }) => {
-    await openApp(page)
+    // Con una categoría puesta el carril es siempre el de las categorías: con dos sectores con locales la
+    // portada enseña solo los sectores (dos cápsulas) y ahí no hay nada que desplazar.
+    await openApp(page, { path: 'categoria/desayunos-y-cafe' })
     await waitForMap(page)
     test.skip(isMobile(page), 'Las flechas son un atajo de ratón; con el dedo basta el gesto.')
     // La barra de filtros tiene que quedar acotada al ancho de la pantalla: si crece hasta su ancho

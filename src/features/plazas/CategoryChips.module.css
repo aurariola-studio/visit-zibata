@@ -1,5 +1,25 @@
+/*
+ * Dos zonas: la cápsula del sector, fija a la izquierda, y el carril que se desplaza a su derecha. Las
+ * flechas y el desvanecido son del carril, no del conjunto: lo que se desplaza no pasa por debajo de
+ * la cápsula, que es lo que dice en qué sector se está.
+ */
 .rail {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.lead {
+  flex: none;
+  /* Los 12 px del relleno del carril, y -4 de margen para que el hueco hasta la primera cápsula sea el
+     de siempre (8): el desvanecido del carril empieza donde acaba esta. */
+  padding: 4px 0 4px 12px;
+  margin-inline-end: -4px;
+}
+
+.viewport {
   position: relative;
+  flex: 1;
   min-width: 0;
 }
 
