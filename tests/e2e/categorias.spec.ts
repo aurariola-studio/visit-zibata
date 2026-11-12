@@ -3,10 +3,14 @@ import {
   CATEGORIA_B,
   CATEGORIA_EN_ZONA,
   CATEGORIA_GRANDE,
+  entrarAlSectorGrande,
   esc,
   openApp,
   panel,
   placesInCategory,
+  RAIZ_DE_CATEGORIAS,
+  SECTOR_GRANDE,
+  VARIOS_SECTORES,
   waitForMap,
   ZONA_GRANDE,
 } from './helpers.ts'
@@ -41,7 +45,7 @@ test.describe('Páginas de categoría', () => {
   test('la cápsula es un enlace con la dirección de su página, y elegirla filtra sin recargar', async ({
     page,
   }) => {
-    await openApp(page)
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
     await waitForMap(page)
     const grande = cápsulas(page).getByRole('link', {
       name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`),
@@ -59,20 +63,28 @@ test.describe('Páginas de categoría', () => {
     )
     await expect(grande).toHaveAttribute('aria-current', 'true')
 
-    // Volver a pulsarla la quita, y la cápsula elegida apunta a la vista sin categoría.
-    await expect(grande).toHaveAttribute('href', /\/es$/)
+    // Volver a pulsarla la quita, y la cápsula elegida apunta a la vista sin categoría: la portada o,
+    // con varios sectores, el sector (quitar la categoría deja el sector, no sube de nivel).
+    const sinCategoria = new RegExp(`/es${RAIZ_DE_CATEGORIAS ? `/${RAIZ_DE_CATEGORIAS}` : ''}$`)
+    await expect(grande).toHaveAttribute('href', sinCategoria)
     await grande.click()
-    await expect(page).toHaveURL(/\/es$/)
-    await expect(cápsulas(page).getByRole('link', { name: /^Todo/ })).toHaveAttribute(
-      'aria-current',
-      'true',
-    )
+    await expect(page).toHaveURL(sinCategoria)
+    if (VARIOS_SECTORES) {
+      await expect(
+        page.getByRole('link', { name: new RegExp(`^${esc(SECTOR_GRANDE?.label.es ?? '')}\\.`) }),
+      ).toHaveAttribute('aria-current', 'true')
+    } else {
+      await expect(cápsulas(page).getByRole('link', { name: /^Todo/ })).toHaveAttribute(
+        'aria-current',
+        'true',
+      )
+    }
   })
 
   test('cambiar de categoría no llena el historial: atrás no recorre las cápsulas', async ({
     page,
   }) => {
-    await openApp(page)
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
     const antes = await page.evaluate(() => window.history.length)
     await cápsulas(page)
       .getByRole('link', { name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`) })
@@ -117,7 +129,7 @@ test.describe('Páginas de categoría', () => {
   })
 
   test('con Ctrl el enlace no se intercepta: apunta a una página que existe', async ({ page }) => {
-    await openApp(page)
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
     const grande = cápsulas(page).getByRole('link', {
       name: new RegExp(`^${esc(CATEGORIA_GRANDE.label)}`),
     })
@@ -136,21 +148,55 @@ test.describe('Páginas de categoría', () => {
       () => (window as unknown as { __clic: Promise<boolean> }).__clic,
     )
     expect(cancelado).toBe(false)
-    await expect(page).toHaveURL(/\/es$/)
+    await expect(page).toHaveURL(
+      new RegExp(`/es${RAIZ_DE_CATEGORIAS ? `/${RAIZ_DE_CATEGORIAS}` : ''}$`),
+    )
     const respuesta = await page.request.get(new URL(href ?? '', page.url()).href)
     expect(respuesta.status()).toBe(200)
   })
 })
 
 test.describe('Sectores', () => {
-  // Mientras solo "Comida y Bebida" tenga locales, la fila de sectores no existe: no hay otro sector a
-  // donde ir. Con locales de un segundo sector aparece sola; esta prueba fija que hoy no se ve.
+  // Con un solo sector con locales la fila de sectores no existe: no hay otro sector a donde ir. Con
+  // locales de un segundo sector aparece sola y el carril baja de nivel (ver docs/CATALOGO.md).
   test('con un solo sector con locales no hay fila de sectores, y las categorías siguen como siempre', async ({
     page,
   }) => {
+    test.skip(VARIOS_SECTORES, 'El dato ya tiene más de un sector con locales.')
     await openApp(page)
     await waitForMap(page)
     await expect(cápsulas(page)).toBeVisible()
     await expect(page.getByRole('list', { name: 'Sectores' })).toHaveCount(0)
+  })
+
+  test('con varios sectores, la portada enseña los sectores y dentro de uno su cápsula queda fija', async ({
+    page,
+  }) => {
+    test.skip(!VARIOS_SECTORES, 'Con un solo sector no hay nivel que bajar.')
+    await openApp(page)
+    await waitForMap(page)
+    const sectores = page.getByRole('list', { name: 'Sectores' })
+    await expect(sectores.getByRole('link')).not.toHaveCount(0)
+    await expect(cápsulas(page)).toHaveCount(0)
+
+    await entrarAlSectorGrande(page)
+    await expect(cápsulas(page)).toBeVisible()
+    // La cápsula del sector no es parte de la lista que se desplaza: se queda a la izquierda.
+    const cabecera = page.getByRole('link', {
+      name: new RegExp(`^${esc(SECTOR_GRANDE?.label.es ?? '')}\\.`),
+    })
+    await expect(cabecera).toHaveAttribute('aria-current', 'true')
+    await expect(
+      cápsulas(page).getByRole('link', {
+        name: new RegExp(`^${esc(SECTOR_GRANDE?.label.es ?? '')}\.`),
+      }),
+    ).toHaveCount(0)
+    const antes = await cabecera.boundingBox()
+    await cápsulas(page).evaluate((lista) => {
+      const carril = lista.parentElement
+      if (carril) carril.scrollLeft = carril.scrollWidth
+    })
+    const despues = await cabecera.boundingBox()
+    expect(despues?.x).toBe(antes?.x)
   })
 })

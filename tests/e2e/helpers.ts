@@ -35,8 +35,15 @@ interface DatasetPlaza {
   description: { es: string } | null
 }
 
+interface DatasetSector {
+  id: string
+  slug: { es: string; en: string }
+  label: { es: string }
+}
+
 interface DatasetCategory {
   id: string
+  sectorId?: string
   slug: { es: string; en: string }
   label: { es: string }
   synonyms: string[]
@@ -47,6 +54,7 @@ const dataset = {
   places: read<{ places: DatasetPlace[] }>('places.json').places,
   plazas: read<{ plazas: DatasetPlaza[] }>('plazas.json').plazas,
   categories: read<{ categories: DatasetCategory[] }>('categories.json').categories,
+  sectors: read<{ sectors?: DatasetSector[] }>('categories.json').sectors ?? [],
 }
 
 /** La categoría de cada giro, que es de donde sale en qué pastillas aparece un local. */
@@ -326,6 +334,43 @@ export const CATEGORIA_B: CategoriaDeEjemplo = unico(
   categoriasPorTamano()[1],
   'una segunda categoría',
 )
+
+/*
+ * Los sectores. Con dos o más con locales, la barra enseña primero los sectores y las categorías están
+ * dentro de uno; con uno solo, las categorías van directas. Las pruebas de categorías salen de las dos
+ * formas: entran al sector de la categoría grande cuando hace falta.
+ */
+const sectorDeCategoria = (categoriaId: string) =>
+  dataset.categories.find((categoria) => categoria.id === categoriaId)?.sectorId
+
+/** Los sectores que tienen al menos un local activo: los mismos que decide la barra. */
+export const SECTORES_CON_LOCALES: DatasetSector[] = dataset.sectors.filter((sector) =>
+  dataset.places.some(
+    (place) =>
+      place.active &&
+      place.giros[0] !== undefined &&
+      sectorDeCategoria(categoryOfGiro.get(place.giros[0]) ?? '') === sector.id,
+  ),
+)
+export const VARIOS_SECTORES = SECTORES_CON_LOCALES.length >= 2
+
+/** El sector de la categoría grande: dentro de él están sus cápsulas cuando hay varios sectores. */
+export const SECTOR_GRANDE: DatasetSector | undefined = dataset.sectors.find(
+  (sector) => sector.id === sectorDeCategoria(CATEGORIA_GRANDE.id),
+)
+
+/** La dirección desde la que se ven las cápsulas de las categorías (la portada, o el sector de la grande). */
+export const RAIZ_DE_CATEGORIAS =
+  VARIOS_SECTORES && SECTOR_GRANDE ? `sector/${SECTOR_GRANDE.slug.es}` : ''
+
+/** Entra al sector de la categoría grande desde donde se esté, si hace falta (con varios sectores). */
+export async function entrarAlSectorGrande(page: Page): Promise<void> {
+  if (!VARIOS_SECTORES || !SECTOR_GRANDE) return
+  await page
+    .getByRole('list', { name: 'Sectores' })
+    .getByRole('link', { name: new RegExp(`^${SECTOR_GRANDE.label.es}`) })
+    .click()
+}
 
 /* ------------------------------------------------------------------------------------------ búsqueda
  * Las pruebas de la búsqueda tampoco nombran un local ni una palabra: salen de rasgos del dato. Un
