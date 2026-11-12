@@ -4,7 +4,7 @@
  * entran en el paquete inicial, que tiene presupuesto. `CategoryIcon` los carga la primera vez que
  * pinta uno.
  */
-import { Bike, Flower2, Medal, Users } from 'lucide-react'
+import { Bike, PersonStanding, Volleyball } from 'lucide-react'
 import { custom, type IconComponent, solid } from './dibujar.tsx'
 
 /** Barra con sus discos: el gimnasio de pesas. Tabler Icons (MIT). */
@@ -94,13 +94,12 @@ export const ICONOS_DEPORTE: Record<string, IconComponent> = {
   bike: Bike,
   boxeo: Boxeo,
   danza: Danza,
-  'flower-2': Flower2,
   funcional: Funcional,
-  medal: Medal,
   natacion: Natacion,
   padel: Padel,
   pickleball: Pickleball,
   pilates: Pilates,
-  users: Users,
+  'person-standing': PersonStanding,
+  volleyball: Volleyball,
   yoga: Yoga,
 }

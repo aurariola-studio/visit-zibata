@@ -481,14 +481,13 @@ const NOMBRES_DEPORTE = new Set([
   'bike',
   'boxeo',
   'danza',
-  'flower-2',
   'funcional',
-  'medal',
   'natacion',
   'padel',
   'pickleball',
+  'person-standing',
   'pilates',
-  'users',
+  'volleyball',
   'yoga',
 ])
 

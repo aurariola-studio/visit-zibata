@@ -106,7 +106,7 @@ const KB = 1024
  * Design Icons y Material Symbols) sumaban 3,4 KB y dejaban el paquete en 131,5, por encima del límite. Ningún giro del sector
  * tiene locales todavía, así que se sacaron a su propio fragmento (`iconos-deporte-*.js`, 2,8 KB), que
  * `CategoryIcon` pide la primera vez que pinta uno y mientras tanto reserva la caja del icono. El
- * paquete queda en 129,4, con los cuatro de Lucide de sus categorías también diferidos. `proteina`, de Comida y con locales hoy, se queda dentro para que no parpadee.
+ * paquete queda en 129,4, con los tres de Lucide de este sector también diferidos. `proteina`, de Comida y con locales hoy, se queda dentro para que no parpadee.
  * Cuando el sector tenga locales y su icono salga en el primer pintado, habrá que decidir entre
  * precargar el fragmento y volver a meterlo, y eso se mide con la cuenta de entonces.
  */
