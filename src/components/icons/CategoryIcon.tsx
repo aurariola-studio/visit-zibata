@@ -34,7 +34,6 @@ import {
   ShoppingBasket,
   ShoppingCart,
   Shrimp,
-  Smile,
   Stethoscope,
   Store,
   UtensilsCrossed,
@@ -270,8 +269,21 @@ const Antojito = custom(
 )
 
 /** Una muela vista de frente: la corona con dos lóbulos arriba y dos raíces abajo. */
-const Tooth = custom(
-  <path d="M7.4 3.2c-2.2 0-3.9 1.7-3.9 4.1 0 1.9.8 3 1.4 4.8.6 1.8.5 4.4 1.3 6.9.3 1 .9 1.6 1.7 1.6 1.1 0 1.4-1.2 1.7-2.9.2-1.3.7-2.1 1.7-2.1s1.5.8 1.7 2.1c.3 1.7.6 2.9 1.7 2.9.8 0 1.4-.6 1.7-1.6.8-2.5.7-5.1 1.3-6.9.6-1.8 1.4-2.9 1.4-4.8 0-2.4-1.7-4.1-3.9-4.1-1.7 0-2.7.9-4.6.9S9.1 3.2 7.4 3.2Z" />,
+const DIENTE =
+  'M7.4 3.2c-2.2 0-3.9 1.7-3.9 4.1 0 1.9.8 3 1.4 4.8.6 1.8.5 4.4 1.3 6.9.3 1 .9 1.6 1.7 1.6 1.1 0 1.4-1.2 1.7-2.9.2-1.3.7-2.1 1.7-2.1s1.5.8 1.7 2.1c.3 1.7.6 2.9 1.7 2.9.8 0 1.4-.6 1.7-1.6.8-2.5.7-5.1 1.3-6.9.6-1.8 1.4-2.9 1.4-4.8 0-2.4-1.7-4.1-3.9-4.1-1.7 0-2.7.9-4.6.9S9.1 3.2 7.4 3.2Z'
+const Tooth = custom(<path d={DIENTE} />)
+
+/**
+ * Lo mismo con el aparato: un bracket en el centro de la corona y el alambre que la cruza, que sale a
+ * los dos lados. Es el diente de Dentista con lo que hace distinta a la Ortodoncia, y por eso comparte su
+ * silueta.
+ */
+const Ortodoncia = custom(
+  <>
+    <path d={DIENTE} />
+    {/* El bracket (un rectángulo de 4,4 × 3,4 centrado en x = 12) y el alambre, en un solo trazo. */}
+    <path d="M9.8 6.9h4.4v3.4H9.8ZM1.8 8.6h20.4" />
+  </>,
 )
 
 /** Memela vista desde arriba: la masa, la salsa irregular dentro y el queso encima. */
@@ -452,6 +464,7 @@ const ICONS: Record<string, IconComponent> = {
   memela: Memela,
   molcajete: Molcajete,
   nigiri: Nigiri,
+  ortodoncia: Ortodoncia,
   pan: Pan,
   papas: Papas,
   'papas-fritas': PapasFritas,
@@ -468,7 +481,6 @@ const ICONS: Record<string, IconComponent> = {
   'shopping-basket': ShoppingBasket,
   'shopping-cart': ShoppingCart,
   shrimp: Shrimp,
-  smile: Smile,
   stethoscope: Stethoscope,
   store: Store,
   taco: Taco,
