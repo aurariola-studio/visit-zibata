@@ -127,84 +127,87 @@ export function CategoryChips({
 
   return (
     <div className={styles.rail} data-variant={variant}>
-      <div ref={ref} className={styles.scroller} onScroll={sync}>
-        <ul className={styles.chips} aria-label={label}>
-          {lead && (
-            <li>
-              <a
-                className={styles.chip}
-                href={lead.href}
-                aria-current={lead.selected ? 'true' : undefined}
-                aria-label={`${lead.label}. ${lead.hint}`}
-                onClick={alPulsar(lead.onPress)}
-              >
-                <ChevronLeft aria-hidden="true" />
-                <CategoryIcon name={lead.icon} size={16} strokeWidth={2} />
-                {lead.label}
-              </a>
-            </li>
-          )}
-          {!hideAll && (
-            <li>
-              {/* El conteo va en su propio elemento: sin etiqueta accesible, NVDA lee "Todo19". */}
-              <a
-                className={styles.chip}
-                href={hrefFor(null)}
-                aria-current={activeId === null ? 'true' : undefined}
-                aria-label={totalCount === undefined ? undefined : `${allLabel} ${totalCount}`}
-                onClick={alPulsar(() => onChange(null))}
-              >
-                {allLabel}
-              </a>
-            </li>
-          )}
-          {categories.map((category) => {
-            const count = counts?.get(category.id)
-            const active = activeId === category.id
-            return (
-              <li key={category.id}>
+      {/* Fuera del carril: queda fijo mientras las categorías se desplazan. */}
+      {lead && (
+        <div className={styles.lead}>
+          <a
+            className={styles.chip}
+            href={lead.href}
+            aria-current={lead.selected ? 'true' : undefined}
+            aria-label={`${lead.label}. ${lead.hint}`}
+            onClick={alPulsar(lead.onPress)}
+          >
+            <ChevronLeft aria-hidden="true" />
+            <CategoryIcon name={lead.icon} size={16} strokeWidth={2} />
+            {lead.label}
+          </a>
+        </div>
+      )}
+      <div className={styles.viewport}>
+        <div ref={ref} className={styles.scroller} onScroll={sync}>
+          <ul className={styles.chips} aria-label={label}>
+            {!hideAll && (
+              <li>
+                {/* El conteo va en su propio elemento: sin etiqueta accesible, NVDA lee "Todo19". */}
                 <a
                   className={styles.chip}
-                  href={hrefFor(active ? null : category.id)}
-                  aria-current={active ? 'true' : undefined}
-                  aria-label={
-                    count === undefined ? undefined : `${localized(category.label)} ${count}`
-                  }
-                  onClick={alPulsar(() => onChange(active ? null : category.id))}
+                  href={hrefFor(null)}
+                  aria-current={activeId === null ? 'true' : undefined}
+                  aria-label={totalCount === undefined ? undefined : `${allLabel} ${totalCount}`}
+                  onClick={alPulsar(() => onChange(null))}
                 >
-                  <CategoryIcon name={category.icon} size={16} strokeWidth={2} />
-                  {localized(category.label)}
-                  {clearMark && active && <X aria-hidden="true" />}
+                  {allLabel}
                 </a>
               </li>
-            )
-          })}
-        </ul>
-      </div>
-      {/* Atajos para ratón: no aportan nada a quien navega con teclado o dedo, así que no entran en el
+            )}
+            {categories.map((category) => {
+              const count = counts?.get(category.id)
+              const active = activeId === category.id
+              return (
+                <li key={category.id}>
+                  <a
+                    className={styles.chip}
+                    href={hrefFor(active ? null : category.id)}
+                    aria-current={active ? 'true' : undefined}
+                    aria-label={
+                      count === undefined ? undefined : `${localized(category.label)} ${count}`
+                    }
+                    onClick={alPulsar(() => onChange(active ? null : category.id))}
+                  >
+                    <CategoryIcon name={category.icon} size={16} strokeWidth={2} />
+                    {localized(category.label)}
+                    {clearMark && active && <X aria-hidden="true" />}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        {/* Atajos para ratón: no aportan nada a quien navega con teclado o dedo, así que no entran en el
           orden de tabulación ni se anuncian. */}
-      <button
-        type="button"
-        className={styles.arrow}
-        data-side="start"
-        hidden={!overflow.start}
-        tabIndex={-1}
-        aria-hidden="true"
-        onClick={() => scrollBy(-1)}
-      >
-        <ChevronLeft />
-      </button>
-      <button
-        type="button"
-        className={styles.arrow}
-        data-side="end"
-        hidden={!overflow.end}
-        tabIndex={-1}
-        aria-hidden="true"
-        onClick={() => scrollBy(1)}
-      >
-        <ChevronRight />
-      </button>
+        <button
+          type="button"
+          className={styles.arrow}
+          data-side="start"
+          hidden={!overflow.start}
+          tabIndex={-1}
+          aria-hidden="true"
+          onClick={() => scrollBy(-1)}
+        >
+          <ChevronLeft />
+        </button>
+        <button
+          type="button"
+          className={styles.arrow}
+          data-side="end"
+          hidden={!overflow.end}
+          tabIndex={-1}
+          aria-hidden="true"
+          onClick={() => scrollBy(1)}
+        >
+          <ChevronRight />
+        </button>
+      </div>
     </div>
   )
 }

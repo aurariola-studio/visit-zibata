@@ -58,9 +58,10 @@ export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }:
   // Ancho real de la fila de giros: es lo que decide cuántas etiquetas caben. Cero hasta medir.
   const filaRef = useRef<HTMLSpanElement>(null)
   const anchoFila = useElementWidth(filaRef, 0)
-  // Todos los giros llevan icono, en su orden: el primero es el que define al local.
+  // Los giros llevan icono, en su orden: el primero es el que define al local. Si dos comparten icono
+  // (Dentista y Ortodoncia, el mismo diente) se dibuja una vez: dos iguales seguidos parecen un error.
   const giros = girosOf(place, catalog)
-  const iconos = giros.map((giro) => giro.icon)
+  const iconos = [...new Set(giros.map((giro) => giro.icon))]
   const idioma = useLocale()
   /*
    * Aquí solo hay una línea: se nombran los giros que caben en ella, siempre al menos uno, y el
@@ -146,8 +147,8 @@ export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }:
         <span className={styles.body}>
           <span className={styles.name}>{place.name}</span>
           <span ref={filaRef} className={styles.category} title={tituloCompleto}>
-            {giros.map((giro) => (
-              <CategoryIcon key={giro.id} name={giro.icon} size={14} strokeWidth={2} />
+            {iconos.map((icono) => (
+              <CategoryIcon key={icono} name={icono} size={14} strokeWidth={2} />
             ))}
             <span className={styles.categoryText}>{categoryLabel}</span>
             {resto > 0 && <span className={styles.mas}>+{resto}</span>}

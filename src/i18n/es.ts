@@ -237,6 +237,15 @@ export const es = {
   // Con dos o más giros que la etiqueta no dice, el título los nombra: es lo que la gente busca.
   'seo.category.title': '{label} en Zibatá, {giros}',
   'seo.category.places': 'Lugares de esta categoría',
+  // Las páginas de sector: salen solo cuando hay dos o más sectores con locales.
+  'seo.sectors': 'Sectores',
+  'seo.sector.name': '{label} en Zibatá',
+  'seo.sector.title': '{label} en Zibatá: {categorias}',
+  'seo.sector.description': {
+    one: '{label} en Zibatá: {categorias}. Un lugar con horario, contacto y cómo llegar.',
+    other:
+      '{label} en Zibatá: {categorias}. Los {count} lugares de la guía, con horarios, contacto y cómo llegar.',
+  },
   'seo.category.zones': 'Dónde están',
   'seo.category.zoneCount': { one: '{count} zona', other: '{count} zonas' },
 

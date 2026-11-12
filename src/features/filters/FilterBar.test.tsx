@@ -220,7 +220,9 @@ describe('FilterBar: el carril baja de nivel con dos sectores', () => {
     const { onSectorChange } = conSectores({ activeSectorId: 'salud' })
     const fila = within(screen.getByRole('list', { name: 'Categorías' }))
     expect(fila.queryByRole('link', { name: /^Todo/ })).not.toBeInTheDocument()
-    const salud = fila.getByRole('link', { name: /^Salud./ })
+    // Fuera de la lista: es la cápsula fija, no se desplaza con las categorías.
+    const salud = screen.getByRole('link', { name: /^Salud./ })
+    expect(fila.queryByRole('link', { name: /^Salud./ })).not.toBeInTheDocument()
     expect(salud).toHaveAttribute('aria-current', 'true')
     expect(salud).toHaveAccessibleName('Salud. Ver todos los sectores')
     // Elegido, pulsarlo sube al nivel de los sectores.

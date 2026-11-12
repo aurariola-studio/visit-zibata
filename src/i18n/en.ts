@@ -195,6 +195,15 @@ export const en = {
   'seo.category.hook.bar': 'the best Bar',
   'seo.category.title': '{label} in Zibatá, {giros}',
   'seo.category.places': 'Places in this category',
+  // Sector pages: only when two or more sectors have places.
+  'seo.sectors': 'Sectors',
+  'seo.sector.name': '{label} in Zibatá',
+  'seo.sector.title': '{label} in Zibatá: {categorias}',
+  'seo.sector.description': {
+    one: '{label} in Zibatá: {categorias}. One place, with hours, contact and directions.',
+    other:
+      '{label} in Zibatá: {categorias}. The {count} places in the guide, with hours, contact and directions.',
+  },
   'seo.category.zones': 'Where to find them',
   'seo.category.zoneCount': { one: '{count} area', other: '{count} areas' },
   'seo.backHome': 'See the map of Zibatá',
