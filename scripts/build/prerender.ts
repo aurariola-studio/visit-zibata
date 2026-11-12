@@ -36,6 +36,7 @@ import { categoriasDe, conCantidad, lugaresPorCategoria } from './categorias.ts'
 import { contenidoDeLista, contenidoDeLugar } from './contenido.ts'
 import { descripcionDeFicha, lugarDe, repetidos } from './metadatos.ts'
 import { robotsTxt } from './robots.ts'
+import { SEO_SECTOR } from './seo-sector.ts'
 import { bloque, listado, negocio } from './structured-data.ts'
 import { repartirVecinos } from './vecinos.ts'
 
@@ -234,7 +235,7 @@ export function pagesFor(
           ...(sectoresConPagina.length > 0
             ? [
                 {
-                  titulo: copy['seo.sectors'],
+                  titulo: SEO_SECTOR[locale].sectores,
                   enlaces: sectoresConPagina.map(enlaceDeSector),
                   sinFragmento: true,
                 },
@@ -374,12 +375,12 @@ export function pagesFor(
       categoriasDe(place, categoryOfGiro).some((categoria) => ids.has(categoria.id)),
     )
     const etiqueta = text(sector.label, locale)
-    const name = fill(copy['seo.sector.name'], { label: etiqueta })
+    const name = fill(SEO_SECTOR[locale].nombre, { label: etiqueta })
     const nombres = categorias.map((categoria) => text(categoria.label, locale))
     const zonas = activePlazas.filter((plaza) =>
       lugares.some((place) => place.plazaId === plaza.id),
     )
-    const resumen = fill(conCantidad(copy['seo.sector.description'], lugares.length, locale), {
+    const resumen = fill(conCantidad(SEO_SECTOR[locale].descripcion, lugares.length, locale), {
       label: etiqueta,
       categorias: lista(nombres, locale),
     })
@@ -387,7 +388,7 @@ export function pagesFor(
       href: route({ sectorSlug: sector.slug[locale] }),
       lastmod: masReciente(lugares),
       image,
-      title: fill(copy['seo.sector.title'], {
+      title: fill(SEO_SECTOR[locale].titulo, {
         label: etiqueta,
         categorias: nombres.slice(0, 3).join(', '),
       }),
