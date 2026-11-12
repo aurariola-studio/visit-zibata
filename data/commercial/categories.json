@@ -1487,7 +1487,7 @@
             "es": "Ortodoncia",
             "en": "Orthodontics"
           },
-          "icon": "tooth",
+          "icon": "smile",
           "synonyms": [
             "ortodoncia",
             "brackets",
@@ -1541,7 +1541,7 @@
             "es": "Radiología y Ultrasonido",
             "en": "Imaging"
           },
-          "icon": "microscope",
+          "icon": "bone",
           "synonyms": [
             "radiología",
             "rayos x",

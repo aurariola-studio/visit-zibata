@@ -126,7 +126,7 @@ export function CategoryChips({
   const { ref, overflow, sync, scrollBy } = useHorizontalScroll(categories, counts)
 
   return (
-    <div className={styles.rail} data-variant={variant}>
+    <div className={styles.rail} data-variant={variant} data-cabecera={lead ? '' : undefined}>
       {/* Fuera del carril: queda fijo mientras las categorías se desplazan. */}
       {lead && (
         <div className={styles.lead}>
@@ -144,7 +144,12 @@ export function CategoryChips({
         </div>
       )}
       <div className={styles.viewport}>
-        <div ref={ref} className={styles.scroller} onScroll={sync}>
+        <div
+          ref={ref}
+          className={styles.scroller}
+          data-inicio={overflow.start ? undefined : ''}
+          onScroll={sync}
+        >
           <ul className={styles.chips} aria-label={label}>
             {!hideAll && (
               <li>
