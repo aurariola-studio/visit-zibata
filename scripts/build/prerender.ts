@@ -389,7 +389,7 @@ export function pagesFor(
       image,
       title: fill(copy['seo.sector.title'], {
         label: etiqueta,
-        categorias: lista(nombres.slice(0, 3), locale),
+        categorias: nombres.slice(0, 3).join(', '),
       }),
       description: trim(resumen),
       jsonLd: listado(
