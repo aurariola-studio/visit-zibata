@@ -4,7 +4,7 @@
  * entran en el paquete inicial, que tiene presupuesto. `CategoryIcon` los carga la primera vez que
  * pinta uno.
  */
-import { Bike, PersonStanding, Volleyball } from 'lucide-react'
+import { Bike, Volleyball } from 'lucide-react'
 import { custom, type IconComponent, solid } from './dibujar.tsx'
 
 /** Barra con sus discos: el gimnasio de pesas. Tabler Icons (MIT). */
@@ -87,6 +87,14 @@ const Ballet = solid(
   </>,
 )
 
+/** Persona en postura de guerrero: la categoría Yoga, Pilates y Barre. Tabler Icons (MIT). */
+const YogaPostura = custom(
+  <>
+    <path d="M4 20h4l1.5-3m7.5 3l-1-5h-5l1-7" />
+    <path d="m4 10l4-1l4-1l4 1.5l4 1.5m-9.993-6a2 2 0 1 0 4 0a2 2 0 1 0-4 0" />
+  </>,
+)
+
 export const ICONOS_DEPORTE: Record<string, IconComponent> = {
   ballet: Ballet,
   barbell: Barbell,
@@ -99,7 +107,7 @@ export const ICONOS_DEPORTE: Record<string, IconComponent> = {
   padel: Padel,
   pickleball: Pickleball,
   pilates: Pilates,
-  'person-standing': PersonStanding,
   volleyball: Volleyball,
   yoga: Yoga,
+  'yoga-postura': YogaPostura,
 }

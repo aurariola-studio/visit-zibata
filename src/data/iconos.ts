@@ -69,7 +69,6 @@ export const ICONOS = [
   'papas',
   'papas-fritas',
   'pasta',
-  'person-standing',
   'pickleball',
   'pilates',
   'pill',
@@ -94,6 +93,7 @@ export const ICONOS = [
   'volleyball',
   'wine',
   'yoga',
+  'yoga-postura',
 ] as const
 
 export type Icono = (typeof ICONOS)[number]
