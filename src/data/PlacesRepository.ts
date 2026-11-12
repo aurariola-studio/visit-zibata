@@ -1,4 +1,4 @@
-import type { Category, Place, Plaza } from '../types/domain.ts'
+import type { Category, Place, Plaza, Sector } from '../types/domain.ts'
 
 /**
  * Acceso a datos comerciales. La UI solo depende de esta interfaz: hoy la implementa
@@ -14,6 +14,8 @@ export interface RetiredPlace {
 
 export interface PlacesRepository {
   getCategories(): Promise<Category[]>
+  /** Los sectores que agrupan las categorías. Opcional: sin ellos las categorías van sueltas, como siempre. */
+  getSectors?(): Promise<Sector[]>
   getPlazas(): Promise<Plaza[]>
   /** Todos los locales, activos e inactivos. */
   getPlaces(): Promise<Place[]>

@@ -6,7 +6,7 @@
  * aviso en consola en lugar de bloquear toda la guía. Las comprobaciones de seguridad (enlaces http(s),
  * teléfonos, rutas de fotos) usan las mismas reglas que los esquemas (`rules.ts`).
  */
-import type { Category, Place, Plaza } from '../types/domain.ts'
+import type { Category, Place, Plaza, Sector } from '../types/domain.ts'
 import {
   DAY_KEYS,
   E164_PATTERN,
@@ -21,7 +21,7 @@ import {
 } from './rules.ts'
 
 export interface RecordIssue {
-  dataset: 'categories' | 'plazas' | 'places' | 'redirects'
+  dataset: 'categories' | 'sectors' | 'plazas' | 'places' | 'redirects'
   id: string
   message: string
 }
@@ -244,6 +244,19 @@ function keepValid<T>(
   return { valid, issues }
 }
 
+const checkSector: Check = (value) => {
+  if (!isObject(value)) return 'no es un objeto'
+  return firstIssue([
+    field(value, 'id', isSlug, 'identificador no válido'),
+    field(value, 'slug', isLocalizedSlug, 'slug de URL no válido'),
+    field(value, 'label', isLocalizedText, 'etiqueta vacía'),
+    field(value, 'icon', isText, 'icono vacío'),
+    field(value, 'order', Number.isInteger, 'orden no válido'),
+  ])
+}
+
+export const validateSectors = (records: unknown[]) =>
+  keepValid<Sector>(records, 'sectors', checkSector)
 export const validateCategories = (records: unknown[]) =>
   keepValid<Category>(records, 'categories', checkCategory)
 export const validatePlazas = (records: unknown[]) =>

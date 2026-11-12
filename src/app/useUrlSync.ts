@@ -18,13 +18,16 @@ import {
   type UrlState,
   vistaDe,
 } from '../lib/url-state.ts'
-import type { Catalog, Category } from '../types/domain.ts'
+import type { Catalog, Category, Sector } from '../types/domain.ts'
 import { useAppDispatch, useAppState } from './AppStateContext.tsx'
 
 const BASE = import.meta.env.BASE_URL
 
 const categoryBySlug = (catalog: Catalog, locale: Locale, slug: string): Category | undefined =>
   catalog.categories.find((category) => category.slug[locale] === slug)
+
+const sectorBySlug = (catalog: Catalog, locale: Locale, slug: string): Sector | undefined =>
+  catalog.sectors.find((sector) => sector.slug[locale] === slug)
 
 const currentUrl = () => `${window.location.pathname}${window.location.search}`
 
@@ -64,6 +67,11 @@ export function useUrlSync(catalog: Catalog): void {
       const category = parsed.categorySlug
         ? categoryBySlug(catalog, parsed.locale, parsed.categorySlug)
         : undefined
+      // Con una categoría el sector sobra: ella ya lo implica.
+      const sector =
+        !category && parsed.sectorSlug
+          ? sectorBySlug(catalog, parsed.locale, parsed.sectorSlug)
+          : undefined
 
       if (explicit) {
         // La URL dice el idioma y manda: también al volver atrás desde el otro árbol.
@@ -81,6 +89,7 @@ export function useUrlSync(catalog: Catalog): void {
               plazaSlug: parsed.plazaSlug,
               placeSlug: parsed.placeSlug,
               categorySlug: category?.slug[active] ?? null,
+              sectorSlug: sector?.slug[active] ?? null,
               infoTopic: parsed.infoTopic,
             },
             BASE,
@@ -102,6 +111,7 @@ export function useUrlSync(catalog: Catalog): void {
               plazaSlug: null,
               placeSlug: null,
               categorySlug: category?.slug[localeRef.current] ?? null,
+              sectorSlug: sector?.slug[localeRef.current] ?? null,
               infoTopic: null,
             },
             BASE,
@@ -117,6 +127,7 @@ export function useUrlSync(catalog: Catalog): void {
             plazaSlug: null,
             placeSlug: null,
             categorySlug: category.slug[localeRef.current],
+            sectorSlug: null,
             infoTopic: null,
           },
           BASE,
@@ -128,6 +139,7 @@ export function useUrlSync(catalog: Catalog): void {
         plazaId: plaza?.active ? plaza.id : null,
         placeId: place?.id ?? null,
         categoryId: category?.id ?? null,
+        sectorId: sector?.id ?? null,
         missingLink,
         infoTopic: parsed.infoTopic,
       })
@@ -152,11 +164,13 @@ export function useUrlSync(catalog: Catalog): void {
     const category = state.activeCategoryId
       ? catalog.categoryById.get(state.activeCategoryId)
       : undefined
+    const sector = state.activeSectorId ? catalog.sectorById.get(state.activeSectorId) : undefined
     const next: UrlState = {
       locale,
       plazaSlug: plaza?.slug ?? null,
       placeSlug: place?.slug ?? null,
       categorySlug: category?.slug[locale] ?? null,
+      sectorSlug: category ? null : (sector?.slug[locale] ?? null),
       infoTopic: state.infoTopic,
     }
     const path = buildPath(next, BASE)
@@ -176,6 +190,7 @@ export function useUrlSync(catalog: Catalog): void {
     state.selectedPlazaId,
     state.selectedPlaceId,
     state.activeCategoryId,
+    state.activeSectorId,
     state.infoTopic,
   ])
 }

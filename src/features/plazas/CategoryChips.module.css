@@ -1,19 +1,85 @@
+/*
+ * Dos zonas: la cápsula del sector, fija a la izquierda, y el carril que se desplaza a su derecha. Las
+ * flechas y el desvanecido son del carril, no del conjunto: lo que se desplaza no pasa por debajo de
+ * la cápsula, que es lo que dice en qué sector se está.
+ */
 .rail {
-  position: relative;
+  display: flex;
+  align-items: center;
   min-width: 0;
 }
 
+/*
+ * Con la cápsula del sector fija, el carril es otra zona y tiene su propio aire: 8 px entre ellas (lo
+ * mismo que entre dos cápsulas), y la flecha de retroceso, que aparece al desplazar, a otros 8 del
+ * carril. Pegadas se leían como un solo bloque, y la flecha parecía parte de la cápsula del sector.
+ */
+.rail[data-cabecera] {
+  gap: var(--space-2);
+}
+
+.lead {
+  flex: none;
+  padding: 4px 0 4px 12px;
+}
+
+/* Sin relleno a la izquierda: el hueco hasta la primera cápsula ya lo pone el `gap`. Lo justo para que
+   el aro de foco no se corte contra el borde del carril. */
+.rail[data-cabecera] .chips {
+  padding-inline-start: 4px;
+}
+
+.rail[data-cabecera] .arrow[data-side="start"] {
+  left: var(--space-2);
+}
+
+.viewport {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * El desvanecido de los extremos sigue la curva de las cápsulas: un medio círculo en cada punta, y no un
+ * corte recto que deja ver un trozo de cápsula contra el borde. `--cap` es el radio (la mitad del alto del
+ * carril, cápsula y su aire); `--suave`, lo que tarda en apagarse desde el centro hasta el borde.
+ *
+ * Son tres capas que se suman: la punta izquierda, el centro y la punta derecha. Con el carril en su
+ * tope no hay nada que desvanecer en ese lado, y una capa sólida tapa la punta: `data-inicio` y
+ * `data-fin` (los pone el componente) las activan.
+ */
 .scroller {
+  --cap: calc(var(--control-h) / 2 + 4px);
+  --suave: 14px;
+  --punta-izq:
+    radial-gradient(
+      circle at 100% 50%,
+      black calc(var(--cap) - var(--suave)),
+      transparent var(--cap)
+    )
+    0 0 / var(--cap) 100% no-repeat;
+  --punta-der:
+    radial-gradient(circle at 0 50%, black calc(var(--cap) - var(--suave)), transparent var(--cap))
+    100% 0 / var(--cap) 100% no-repeat;
+  --centro: linear-gradient(black, black) var(--cap) 0 / calc(100% - 2 * var(--cap)) 100% no-repeat;
+  --solida-izq: linear-gradient(black, black) 0 0 / var(--cap) 100% no-repeat;
+  --solida-der: linear-gradient(black, black) 100% 0 / var(--cap) 100% no-repeat;
   overflow-x: auto;
   scrollbar-width: none;
   scroll-padding-inline: var(--space-4);
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 12px,
-    black calc(100% - 24px),
-    transparent
-  );
+  mask: var(--punta-izq), var(--centro), var(--punta-der);
+}
+
+.scroller[data-inicio] {
+  mask: var(--solida-izq), var(--centro), var(--punta-der);
+}
+
+.scroller[data-fin] {
+  mask: var(--punta-izq), var(--centro), var(--solida-der);
+}
+
+.scroller[data-inicio][data-fin] {
+  mask: none;
 }
 
 .scroller::-webkit-scrollbar {

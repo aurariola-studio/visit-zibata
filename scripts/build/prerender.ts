@@ -30,12 +30,13 @@ import {
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
-import type { Category, Place, Plaza } from '../../src/types/domain.ts'
+import type { Category, Place, Plaza, Sector } from '../../src/types/domain.ts'
 import { CSS_CARGADOR, CSS_SIN_JS, htmlCargador } from './cargador.ts'
 import { categoriasDe, conCantidad, lugaresPorCategoria } from './categorias.ts'
 import { contenidoDeLista, contenidoDeLugar } from './contenido.ts'
 import { descripcionDeFicha, lugarDe, repetidos } from './metadatos.ts'
 import { robotsTxt } from './robots.ts'
+import { SEO_SECTOR } from './seo-sector.ts'
 import { bloque, listado, negocio } from './structured-data.ts'
 import { repartirVecinos } from './vecinos.ts'
 
@@ -140,6 +141,8 @@ const escapeHtml = (value: string): string =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 export interface Dataset {
+  /** Ausente en un archivo anterior a los sectores: equivale a "sin sectores". */
+  sectors?: Sector[]
   categories: Category[]
   plazas: Plaza[]
   places: Place[]
@@ -170,7 +173,15 @@ export function pagesFor(
   const plazaById = new Map(data.plazas.map((plaza) => [plaza.id, plaza]))
   const route = (state: Partial<Parameters<typeof buildPath>[0]>) =>
     buildPath(
-      { locale, plazaSlug: null, placeSlug: null, categorySlug: null, infoTopic: null, ...state },
+      {
+        locale,
+        plazaSlug: null,
+        placeSlug: null,
+        categorySlug: null,
+        sectorSlug: null,
+        infoTopic: null,
+        ...state,
+      },
       base,
     )
   const activePlazas = data.plazas.filter((plaza) => plaza.active)
@@ -184,6 +195,14 @@ export function pagesFor(
   const categoriasConPagina = data.categories.filter(
     (categoria) => (porCategoria.get(categoria.id)?.length ?? 0) > 0,
   )
+  const sectoresConLocales = [...(data.sectors ?? [])]
+    .sort((a, b) => a.order - b.order)
+    .filter((sector) => categoriasConPagina.some((categoria) => categoria.sectorId === sector.id))
+  const sectoresConPagina = sectoresConLocales.length >= 2 ? sectoresConLocales : []
+  const enlaceDeSector = (sector: Sector) => ({
+    texto: text(sector.label, locale),
+    href: route({ sectorSlug: sector.slug[locale] }),
+  })
   const enlaceDeCategoria = (categoria: Category) => ({
     texto: text(categoria.label, locale),
     href: route({ categorySlug: categoria.slug[locale] }),
@@ -213,6 +232,15 @@ export function pagesFor(
           href: route({ plazaSlug: plaza.slug }),
         })),
         secciones: [
+          ...(sectoresConPagina.length > 0
+            ? [
+                {
+                  titulo: SEO_SECTOR[locale].sectores,
+                  enlaces: sectoresConPagina.map(enlaceDeSector),
+                  sinFragmento: true,
+                },
+              ]
+            : []),
           {
             titulo: copy['seo.categories'],
             enlaces: categoriasConPagina.map(enlaceDeCategoria),
@@ -323,6 +351,68 @@ export function pagesFor(
           }
         }),
         secciones: [
+          {
+            titulo: copy['seo.category.zones'],
+            enlaces: zonas.map((plaza) => ({
+              texto: text(plaza.name, locale),
+              href: route({ plazaSlug: plaza.slug }),
+            })),
+          },
+        ],
+        volver: { texto: copy['seo.backHome'], href: route({}) },
+      }),
+    })
+  }
+
+  /*
+   * Una página por sector, solo cuando la barra lo ofrece (dos o más sectores con locales). Lo que dice es
+   * lo que los datos saben: cuántos lugares, qué categorías, en qué zonas. Sin "los mejores".
+   */
+  for (const sector of sectoresConPagina) {
+    const categorias = categoriasConPagina.filter((categoria) => categoria.sectorId === sector.id)
+    const ids = new Set(categorias.map((categoria) => categoria.id))
+    const lugares = data.places.filter((place) =>
+      categoriasDe(place, categoryOfGiro).some((categoria) => ids.has(categoria.id)),
+    )
+    const etiqueta = text(sector.label, locale)
+    const name = fill(SEO_SECTOR[locale].nombre, { label: etiqueta })
+    const nombres = categorias.map((categoria) => text(categoria.label, locale))
+    const zonas = activePlazas.filter((plaza) =>
+      lugares.some((place) => place.plazaId === plaza.id),
+    )
+    const resumen = fill(conCantidad(SEO_SECTOR[locale].descripcion, lugares.length, locale), {
+      label: etiqueta,
+      categorias: lista(nombres, locale),
+    })
+    pages.push({
+      href: route({ sectorSlug: sector.slug[locale] }),
+      lastmod: masReciente(lugares),
+      image,
+      title: fill(SEO_SECTOR[locale].titulo, {
+        label: etiqueta,
+        categorias: nombres.slice(0, 3).join(', '),
+      }),
+      description: trim(resumen),
+      jsonLd: listado(
+        name,
+        lugares.map((place) => ({
+          name: place.name,
+          url: absolute(route({ placeSlug: place.slug })),
+        })),
+      ),
+      contenido: contenidoDeLista({
+        nombre: name,
+        descripcion: resumen,
+        tituloLista: copy['seo.category.places'],
+        enlaces: lugares.map((place) => {
+          const zona = plazaById.get(place.plazaId)
+          return {
+            texto: zona ? `${place.name} (${text(zona.name, locale)})` : place.name,
+            href: route({ placeSlug: place.slug }),
+          }
+        }),
+        secciones: [
+          { titulo: copy['seo.categories'], enlaces: categorias.map(enlaceDeCategoria) },
           {
             titulo: copy['seo.category.zones'],
             enlaces: zonas.map((plaza) => ({
@@ -599,7 +689,12 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
       const dist = output.dir ?? 'dist'
       const read = <T>(file: string): T => JSON.parse(readFileSync(file, 'utf8')) as T
       const data: Dataset = {
-        categories: read<{ categories: Category[] }>('data/commercial/categories.json').categories,
+        ...(() => {
+          const archivo = read<{ sectors?: Sector[]; categories: Category[] }>(
+            'data/commercial/categories.json',
+          )
+          return { sectors: archivo.sectors, categories: archivo.categories }
+        })(),
         plazas: read<{ plazas: Plaza[] }>('data/commercial/plazas.json').plazas,
         places: read<{ places: Place[] }>('data/commercial/places.json').places,
       }

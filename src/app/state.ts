@@ -11,6 +11,8 @@ export interface AppState {
   selectedPlazaId: string | null
   selectedPlaceId: string | null
   activeCategoryId: string | null
+  /** Un sector entero (su página). Con una categoría elegida vale `null`: la categoría ya lo implica. */
+  activeSectorId: string | null
   searchQuery: string
   favoritesOnly: boolean
   /** Solo lo abierto en este momento. */
@@ -32,6 +34,7 @@ export const initialAppState: AppState = {
   selectedPlazaId: null,
   selectedPlaceId: null,
   activeCategoryId: null,
+  activeSectorId: null,
   searchQuery: '',
   favoritesOnly: false,
   openNowOnly: false,
@@ -50,6 +53,7 @@ export type AppAction =
   | { type: 'closePlace' }
   | { type: 'closePanel' }
   | { type: 'setCategory'; categoryId: string | null }
+  | { type: 'setSector'; sectorId: string | null }
   | { type: 'setQuery'; query: string }
   | { type: 'toggleFavoritesOnly' }
   | { type: 'clearFilters' }
@@ -67,6 +71,7 @@ export type AppAction =
       plazaId: string | null
       placeId: string | null
       categoryId: string | null
+      sectorId: string | null
       missingLink: boolean
       infoTopic: InfoTopic | null
     }
@@ -105,7 +110,20 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         sheetExpanded: false,
       }
     case 'setCategory':
-      return { ...state, activeCategoryId: action.categoryId, selectedPlaceId: null }
+      // Elegir una categoría suelta el sector (la categoría ya lo implica); quitarla lo deja como estaba.
+      return {
+        ...state,
+        activeCategoryId: action.categoryId,
+        activeSectorId: action.categoryId === null ? state.activeSectorId : null,
+        selectedPlaceId: null,
+      }
+    case 'setSector':
+      return {
+        ...state,
+        activeSectorId: action.sectorId,
+        activeCategoryId: null,
+        selectedPlaceId: null,
+      }
     case 'setQuery':
       return {
         ...state,
@@ -120,6 +138,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         activeCategoryId: null,
+        activeSectorId: null,
         searchQuery: '',
         favoritesOnly: false,
         openNowOnly: false,
@@ -148,6 +167,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         selectedPlazaId: action.plazaId,
         selectedPlaceId: action.placeId,
         activeCategoryId: action.categoryId,
+        activeSectorId: action.sectorId,
         sheetExpanded: action.placeId !== null,
         missingLinkNotice: action.missingLink,
         infoTopic: null,

@@ -141,3 +141,16 @@ test.describe('Páginas de categoría', () => {
     expect(respuesta.status()).toBe(200)
   })
 })
+
+test.describe('Sectores', () => {
+  // Mientras solo "Comida y Bebida" tenga locales, la fila de sectores no existe: no hay otro sector a
+  // donde ir. Con locales de un segundo sector aparece sola; esta prueba fija que hoy no se ve.
+  test('con un solo sector con locales no hay fila de sectores, y las categorías siguen como siempre', async ({
+    page,
+  }) => {
+    await openApp(page)
+    await waitForMap(page)
+    await expect(cápsulas(page)).toBeVisible()
+    await expect(page.getByRole('list', { name: 'Sectores' })).toHaveCount(0)
+  })
+})

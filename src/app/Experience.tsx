@@ -42,7 +42,7 @@ import { useElementBottom } from '../hooks/useElementBottom.ts'
 import { useIsDesktop, useMediaQuery } from '../hooks/useMediaQuery.ts'
 import { useOnlineStatus } from '../hooks/useOnlineStatus.ts'
 import { t, useLocale } from '../i18n/index.ts'
-import { type InfoTopic, parsePath, rutaDeCategoria } from '../lib/url-state.ts'
+import { type InfoTopic, parsePath, rutaDeCategoria, rutaDeSector } from '../lib/url-state.ts'
 import type { Catalog, Place } from '../types/domain.ts'
 import { AppErrorBoundary } from './AppErrorBoundary.tsx'
 import { useAppDispatch } from './AppStateContext.tsx'
@@ -196,8 +196,32 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
     (categoryId: string | null) => {
       const category = categoryId ? catalog.categoryById.get(categoryId) : undefined
       const zona = state.selectedPlazaId ? catalog.plazaById.get(state.selectedPlazaId) : undefined
+      // Quitar la categoría dentro de un sector deja el sector, no la portada: es lo que hace el clic.
+      const sector =
+        !category && state.activeSectorId ? catalog.sectorById.get(state.activeSectorId) : undefined
+      if (sector)
+        return rutaDeSector(
+          sector.slug[locale],
+          zona?.slug ?? null,
+          locale,
+          import.meta.env.BASE_URL,
+        )
       return rutaDeCategoria(
         category?.slug[locale] ?? null,
+        zona?.slug ?? null,
+        locale,
+        import.meta.env.BASE_URL,
+      )
+    },
+    [catalog, locale, state.selectedPlazaId, state.activeSectorId],
+  )
+  /** Lo mismo para las pastillas de sector: su página, o el filtro de la zona abierta. */
+  const sectorHref = useCallback(
+    (sectorId: string | null) => {
+      const sector = sectorId ? catalog.sectorById.get(sectorId) : undefined
+      const zona = state.selectedPlazaId ? catalog.plazaById.get(state.selectedPlazaId) : undefined
+      return rutaDeSector(
+        sector?.slug[locale] ?? null,
         zona?.slug ?? null,
         locale,
         import.meta.env.BASE_URL,
@@ -245,6 +269,7 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
       target.plazaSlug !== null ||
       target.placeSlug !== null ||
       target.categorySlug !== null ||
+      target.sectorSlug !== null ||
       target.infoTopic !== null
     if (!isDeepLink && !hasSeenOnboarding()) dispatch({ type: 'showTutorial' })
   }, [dispatch])
@@ -271,6 +296,10 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
   )
   const setCategory = useCallback(
     (categoryId: string | null) => dispatch({ type: 'setCategory', categoryId }),
+    [dispatch],
+  )
+  const setSector = useCallback(
+    (sectorId: string | null) => dispatch({ type: 'setSector', sectorId }),
     [dispatch],
   )
   const clearFilters = useCallback(() => dispatch({ type: 'clearFilters' }), [dispatch])
@@ -565,6 +594,11 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
             </div>
           )}
           <FilterBar
+            sectors={experience.visibleSectors}
+            sectorCounts={experience.sectorCounts}
+            activeSectorId={experience.effectiveSectorId}
+            onSectorChange={setSector}
+            sectorHref={sectorHref}
             categories={experience.visibleCategories}
             categoryCounts={experience.categoryCounts}
             totalCount={experience.totalCount}

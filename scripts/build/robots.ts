@@ -1,8 +1,8 @@
 /**
  * El `robots.txt` del sitio.
  *
- * Permite rastrear todo, salvo una cosa: el filtro de categoría **dentro de una zona**
- * (`/es/zona/x?categoria=y`, `/en/area/x?category=y`). Ahí la categoría no es una página sino un estado de la
+ * Permite rastrear todo, salvo una cosa: el filtro de categoría o de sector **dentro de una zona**
+ * (`/es/zona/x?categoria=y`, `/es/zona/x?sector=y`, `/en/area/x?category=y`). Ahí la categoría no es una página sino un estado de la
  * zona, con el canónico de la zona, y las cápsulas de la interfaz enlazan a esas direcciones: sin esta
  * regla un rastreador que ejecuta JavaScript las sigue todas (unas cien casi idénticas a su zona).
  * Google dice que `robots.txt` es el método principal para esto y que el canónico solo lo reduce con el
@@ -25,6 +25,11 @@ export function robotsTxt(base: string, sitemapUrl?: string): string {
     (locale) =>
       `Disallow: ${raiz}${PREFIX[locale]}/${SEGMENTS[locale].plaza}/*?${SEGMENTS[locale].category}=`,
   )
+  // Lo mismo con el sector: dentro de una zona es un estado de ella, no una página.
+  const filtrosDeSector = (Object.keys(SEGMENTS) as Locale[]).map(
+    (locale) =>
+      `Disallow: ${raiz}${PREFIX[locale]}/${SEGMENTS[locale].plaza}/*?${SEGMENTS[locale].sector}=`,
+  )
   // Y la de antes del prefijo, que el Worker redirige: así un rastreador no pide una por una las cien
   // que tuvieron filtro.
   const legado = `Disallow: ${raiz}${SEGMENTS.es.plaza}/*?${SEGMENTS.es.category}=`
@@ -34,6 +39,7 @@ export function robotsTxt(base: string, sitemapUrl?: string): string {
     filtros[0] as string,
     legado,
     ...filtros.slice(1),
+    ...filtrosDeSector,
     ...(sitemapUrl ? [`Sitemap: ${sitemapUrl}`] : []),
     '',
   ].join('\n')

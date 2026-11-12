@@ -85,9 +85,25 @@ const KB = 1024
  * que el margen se acababa con uno o dos más. 40 deja sitio para unos veinte locales con el dato tal
  * como es hoy. Si vuelve a apretar, ahora sí toca partir el paquete por idioma, que no se hace porque
  * obligaría a recargar los datos al cambiar de idioma en caliente, y medir antes de subir otra vez.
+ *
+ * `initialJs`: de 128 a 130 (2026-11-12, decisión del propietario). El filtro por sector, los iconos de
+ * Salud y la cápsula fija dejaron el paquete en 128,1; se midió antes de subir y ya se había movido al
+ * build el texto de las páginas de sector (de 128,2 a 128,1). Se sube en vez de recortar para no mezclar
+ * una refactorización con la entrega del sector Salud.
+ *
+ * Lo que queda pendiente, y lo que debe hacerse para volver a 128: sacar del paquete inicial el texto que
+ * no se necesita al abrir la guía. Medido sobre el catálogo en español (6,9 KB gzip en total):
+ *
+ *     ~2,7 KB  `about`       las páginas de información: solo se leen al abrirlas
+ *     ~0,9 KB  `seo`         sobre todo del build
+ *     ~0,9 KB  `onboarding`  el tutorial de la primera visita
+ *
+ * Se cargarían bajo demanda y mientras llegan se pinta un esqueleto (skeleton) del tamaño del contenido, para
+ * que la página no salte. El costo es el de siempre: el texto de esos grupos pasa a ser asíncrono y el
+ * cambio de idioma en caliente tiene que volver a pedirlos. Empezar por `about`, que es el grupo grande.
  */
 const BUDGET = {
-  initialJs: 128,
+  initialJs: 130,
   // 11 y no 10: el estilo del contenido escrito que trae cada página (v4.16) dejó la medida en 9,9
   // de 10, y un margen de cien bytes hace que el siguiente cambio honesto rompa la compilación sin
   // que haya pasado nada. El tope sigue existiendo para cazar un crecimiento descuidado, no para
