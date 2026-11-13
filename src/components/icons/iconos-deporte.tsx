@@ -27,11 +27,16 @@ const Natacion = custom(
   </>,
 )
 
-/** Persona en sentadilla: el entrenamiento funcional. Hugeicons (MIT); el trazo de origen es de 1,5 y aquí va a 2 como los demás. */
+/**
+ * Persona en flexión de brazos: el entrenamiento funcional. Redibujada con trazo a partir de "Push ups"
+ * de froz (The Noun Project, CC0 1.0, vía Wikimedia Commons), más corta y con la cabeza rellena.
+ */
 const Funcional = custom(
   <>
-    <path d="M13 4.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0Z" />
-    <path d="m10.948 21l1.13-3.41c.404-1.215.606-1.823.304-2.244c-.301-.42-.94-.42-2.215-.42H8.933m0 0H7.925c-.948 0-1.423 0-1.725-.373c-.302-.374-.216-.793-.043-1.633c.29-1.406.872-3.153 1.935-4.341c.294-.328.44-.492.763-.56s.581.05 1.097.286l1.862.85l.783.358c.92.42 1.38.63 1.865.608s.924-.275 1.802-.779L18 8.345m-9.067 6.58c.241-1.315 1.155-4.312 2.88-5.77" />
+    <circle cx="4.6" cy="8.6" r="2.2" fill="currentColor" />
+    <path d="M8.4 11 20.4 17" />
+    <path d="M8.4 11 10.6 14.8 8 18" />
+    <path d="M3 20h17" />
   </>,
 )
 
