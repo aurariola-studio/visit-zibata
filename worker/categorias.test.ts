@@ -337,14 +337,14 @@ describe('una categoría nueva', () => {
     const cuerpo = clonar()
     cuerpo.categories.push({
       sectorId: 'comida-y-bebida',
-      label: { es: 'Gimnasios', en: 'Gyms' },
+      label: { es: 'Mascotas', en: 'Pets' },
       icon: iconoLibre,
       hue: 200,
       order: 999,
-      synonyms: ['gimnasio', 'gym'],
+      synonyms: ['mascota', 'pet'],
       giros: [
         {
-          label: { es: 'Gimnasio', en: 'Gym' },
+          label: { es: 'Mascota', en: 'Pet' },
           icon: iconoLibre,
           synonyms: ['pesas'],
           general: true,
@@ -353,8 +353,8 @@ describe('una categoría nueva', () => {
     })
     const preparado = prepararCategorias(dataset, crudo, cuerpo, HOY)
     if (!preparado.ok) throw new Error(preparado.problemas.join(' '))
-    const nueva = categoriaPorId(preparado.categorias, 'gimnasios')
-    expect(nueva.slug).toEqual({ es: 'gimnasios', en: 'gyms' })
+    const nueva = categoriaPorId(preparado.categorias, 'mascotas')
+    expect(nueva.slug).toEqual({ es: 'mascotas', en: 'pets' })
     expect(nueva.giros[0]?.general).toBe(true)
     expect(nueva.giros[0]?.icon).toBe(iconoLibre)
   })
@@ -382,38 +382,38 @@ describe('una categoría nueva y los slugs que otra abandonó', () => {
   if (!otra) throw new Error('el dataset necesita una categoría')
 
   it('no toma un slug que una categoría abandonó: su redirección lleva a la otra', () => {
-    const cuerpo = nuevaConNombre('Gimnasios', 'Gyms')
+    const cuerpo = nuevaConNombre('Mascotas', 'Pets')
     const libre = prepararCategorias(dataset, crudo, cuerpo, HOY)
-    expect(libre.ok && libre.categorias.find((c) => c.id === 'gimnasios')?.slug).toEqual({
-      es: 'gimnasios',
-      en: 'gyms',
+    expect(libre.ok && libre.categorias.find((c) => c.id === 'mascotas')?.slug).toEqual({
+      es: 'mascotas',
+      en: 'pets',
     })
     const reservado = prepararCategorias(
       dataset,
-      crudoCon([{ kind: 'category-slug', id: otra.id, lang: 'es', slug: 'gimnasios' }]),
+      crudoCon([{ kind: 'category-slug', id: otra.id, lang: 'es', slug: 'mascotas' }]),
       cuerpo,
       HOY,
     )
     if (!reservado.ok) throw new Error(reservado.problemas.join(' '))
-    // En español salta a "gimnasios-2"; en inglés, que nadie abandonó, sigue siendo "gyms".
-    expect(reservado.categorias.find((c) => c.label.es === 'Gimnasios')?.slug).toEqual({
-      es: 'gimnasios-2',
-      en: 'gyms',
+    // En español salta a "mascotas-2"; en inglés, que nadie abandonó, sigue siendo "pets".
+    expect(reservado.categorias.find((c) => c.label.es === 'Mascotas')?.slug).toEqual({
+      es: 'mascotas-2',
+      en: 'pets',
     })
   })
 
   it('cada idioma reserva los suyos', () => {
-    const cuerpo = nuevaConNombre('Gimnasios', 'Gyms')
+    const cuerpo = nuevaConNombre('Mascotas', 'Pets')
     const preparado = prepararCategorias(
       dataset,
-      crudoCon([{ kind: 'category-slug', id: otra.id, lang: 'en', slug: 'gyms' }]),
+      crudoCon([{ kind: 'category-slug', id: otra.id, lang: 'en', slug: 'pets' }]),
       cuerpo,
       HOY,
     )
     if (!preparado.ok) throw new Error(preparado.problemas.join(' '))
-    expect(preparado.categorias.find((c) => c.label.es === 'Gimnasios')?.slug).toEqual({
-      es: 'gimnasios',
-      en: 'gyms-2',
+    expect(preparado.categorias.find((c) => c.label.es === 'Mascotas')?.slug).toEqual({
+      es: 'mascotas',
+      en: 'pets-2',
     })
   })
 })

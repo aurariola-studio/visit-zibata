@@ -5,6 +5,7 @@
 import {
   Beef,
   Beer,
+  BicepsFlexed,
   Bone,
   CakeSlice,
   Candy,
@@ -14,7 +15,6 @@ import {
   Croissant,
   CupSoda,
   Drumstick,
-  Dumbbell,
   EggFried,
   Fish,
   Flame,
@@ -39,38 +39,8 @@ import {
   UtensilsCrossed,
   Wine,
 } from 'lucide-react'
-import type { ComponentType, ReactNode } from 'react'
-
-type IconComponent = ComponentType<LucideProps>
-
-/** Icono propio con la misma geometría de trazo que Lucide (24×24, trazo redondeado). */
-function custom(children: ReactNode): IconComponent {
-  return function CustomIcon({
-    size = 24,
-    strokeWidth = 2,
-    color = 'currentColor',
-    absoluteStrokeWidth: _,
-    ...rest
-  }) {
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke={color}
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-        {...rest}
-      >
-        {children}
-      </svg>
-    )
-  }
-}
+import { useEffect, useState } from 'react'
+import { custom, type IconComponent, solid } from './dibujar.tsx'
 
 const Taco = custom(
   <>
@@ -419,6 +389,13 @@ const Ramen = custom(
   </>,
 )
 
+/** Shaker o botella deportiva: vale igual para un batido que para un local de comida alta en proteína. Material Symbols (Apache 2.0). */
+const Proteina = solid(
+  <>
+    <path d="M9.825 22q-.775 0-1.35-.513t-.65-1.287l-.775-8.65q-.025-.25.088-.462t.337-.338q.2-.125.35-.3t.15-.425q0-.225-.1-.413t-.3-.312q-.25-.125-.375-.387t-.05-.538L7.8 5.75q.075-.35.35-.55t.625-.2H11.5V4H11q-.425 0-.712-.287T10 3t.288-.712T11 2h3q.425 0 .713.288T15 3t-.288.713T14 4h-.5v1h2.725q.35 0 .613.2t.337.55l.675 2.625q.075.275-.05.538t-.375.387q-.2.1-.312.275t-.113.4q0 .275.138.463t.362.312t.35.338t.1.462l-.775 8.625q-.075.775-.65 1.3t-1.35.525z" />
+  </>,
+)
+
 const ICONS: Record<string, IconComponent> = {
   acai: Acai,
   antojito: Antojito,
@@ -427,6 +404,7 @@ const ICONS: Record<string, IconComponent> = {
   baguette: Baguette,
   beef: Beef,
   beer: Beer,
+  'biceps-flexed': BicepsFlexed,
   birria: Birria,
   boba: Boba,
   bone: Bone,
@@ -444,7 +422,6 @@ const ICONS: Record<string, IconComponent> = {
   'cup-soda': CupSoda,
   cupcake: Cupcake,
   drumstick: Drumstick,
-  dumbbell: Dumbbell,
   'egg-fried': EggFried,
   elote: Elote,
   empanada: Empanada,
@@ -472,6 +449,7 @@ const ICONS: Record<string, IconComponent> = {
   pizza: Pizza,
   ramen: Ramen,
   popcorn: Popcorn,
+  proteina: Proteina,
   quesadilla: Quesadilla,
   salad: Salad,
   sandwich: Sandwich,
@@ -492,12 +470,61 @@ const ICONS: Record<string, IconComponent> = {
   wine: Wine,
 }
 
+/**
+ * Los iconos de Fitness y Deporte (`iconos-deporte.tsx`) se cargan aparte, la primera vez que se pinta
+ * uno. Hasta que llega el fragmento se reserva la caja del icono, para que nada se mueva al aparecer.
+ */
+const NOMBRES_DEPORTE = new Set([
+  'ballet',
+  'barbell',
+  'barre',
+  'bike',
+  'boxeo',
+  'danza',
+  'estiramiento',
+  'funcional',
+  'natacion',
+  'padel',
+  'pickleball',
+  'pelotas',
+  'pilates',
+  'yoga',
+])
+
+let deporte: Record<string, IconComponent> | undefined
+let cargaDeporte: Promise<void> | undefined
+
+function IconoDiferido({ name, ...props }: { name: string } & LucideProps) {
+  const [cargado, setCargado] = useState(deporte)
+  useEffect(() => {
+    if (cargado) return
+    cargaDeporte ??= import('./iconos-deporte.tsx').then((m) => {
+      deporte = m.ICONOS_DEPORTE
+    })
+    let vivo = true
+    // Si el fragmento no llega (sin red) el icono se queda en su caja vacía: la guía sigue entera.
+    cargaDeporte
+      .then(() => vivo && setCargado(deporte))
+      .catch(() => {
+        cargaDeporte = undefined
+      })
+    return () => {
+      vivo = false
+    }
+  }, [cargado])
+  const Icon = cargado?.[name]
+  if (Icon) return <Icon aria-hidden="true" focusable="false" {...props} />
+  const { size = 24 } = props
+  return <span aria-hidden="true" style={{ display: 'inline-block', width: size, height: size }} />
+}
+
 /** ¿Hay dibujo para este nombre? Una prueba lo exige a cada icono usado en los datos. */
 export function hasCategoryIcon(name: string): boolean {
-  return Object.hasOwn(ICONS, name)
+  return Object.hasOwn(ICONS, name) || NOMBRES_DEPORTE.has(name)
 }
 
 export function CategoryIcon({ name, ...props }: { name: string } & LucideProps) {
+  if (NOMBRES_DEPORTE.has(name)) return <IconoDiferido name={name} {...props} />
   // `hasOwn` y no `ICONS[name]` a secas: con un nombre como `constructor` el índice devolvería lo
   // heredado de `Object` y React intentaría pintarlo como componente.
   const Icon = Object.hasOwn(ICONS, name) ? (ICONS[name] ?? UtensilsCrossed) : UtensilsCrossed

@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "version": 1,
-  "updatedAt": "2026-09-14",
+  "updatedAt": "2026-11-12",
   "categories": [
     {
       "id": "desayunos-y-cafe",
@@ -847,7 +847,7 @@
             "es": "Alto en Proteína",
             "en": "High Protein"
           },
-          "icon": "dumbbell",
+          "icon": "proteina",
           "synonyms": [
             "proteína",
             "protein",
@@ -1550,6 +1550,279 @@
           ]
         }
       ]
+    },
+    {
+      "id": "gimnasios",
+      "slug": {
+        "es": "gimnasios",
+        "en": "gyms"
+      },
+      "sectorId": "fitness-y-deporte",
+      "label": {
+        "es": "Gimnasios",
+        "en": "Gyms"
+      },
+      "icon": "barbell",
+      "hue": 24,
+      "order": 300,
+      "synonyms": [
+        "gimnasio",
+        "gym",
+        "pesas",
+        "fitness",
+        "entrenamiento",
+        "crossfit",
+        "spinning",
+        "ciclismo indoor",
+        "bootcamp"
+      ],
+      "giros": [
+        {
+          "id": "gimnasio",
+          "label": {
+            "es": "Gimnasio",
+            "en": "Gym"
+          },
+          "icon": "barbell",
+          "synonyms": [
+            "gimnasio",
+            "gym",
+            "pesas",
+            "fitness",
+            "musculación"
+          ],
+          "general": true
+        },
+        {
+          "id": "entrenamiento-funcional",
+          "label": {
+            "es": "Entrenamiento Funcional",
+            "en": "Functional Training"
+          },
+          "icon": "funcional",
+          "synonyms": [
+            "funcional",
+            "bootcamp",
+            "hiit",
+            "crossfit",
+            "circuito",
+            "entrenamiento personal"
+          ]
+        },
+        {
+          "id": "ciclismo-indoor",
+          "label": {
+            "es": "Ciclismo Indoor",
+            "en": "Indoor Cycling"
+          },
+          "icon": "bike",
+          "synonyms": [
+            "ciclismo indoor",
+            "spinning",
+            "cycling",
+            "bici",
+            "cycle"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "yoga-pilates-y-barre",
+      "slug": {
+        "es": "yoga-pilates-y-barre",
+        "en": "yoga-pilates-and-barre"
+      },
+      "sectorId": "fitness-y-deporte",
+      "label": {
+        "es": "Yoga, Pilates y Barre",
+        "en": "Yoga, Pilates & Barre"
+      },
+      "icon": "estiramiento",
+      "hue": 70,
+      "order": 310,
+      "synonyms": [
+        "yoga",
+        "pilates",
+        "barre",
+        "reformer",
+        "estudio",
+        "clases"
+      ],
+      "giros": [
+        {
+          "id": "yoga",
+          "label": {
+            "es": "Yoga",
+            "en": "Yoga"
+          },
+          "icon": "yoga",
+          "synonyms": [
+            "yoga",
+            "meditación",
+            "hot yoga",
+            "vinyasa"
+          ]
+        },
+        {
+          "id": "pilates",
+          "label": {
+            "es": "Pilates",
+            "en": "Pilates"
+          },
+          "icon": "pilates",
+          "synonyms": [
+            "pilates",
+            "reformer",
+            "mat",
+            "pilates reformer"
+          ]
+        },
+        {
+          "id": "barre",
+          "label": {
+            "es": "Barre",
+            "en": "Barre"
+          },
+          "icon": "barre",
+          "synonyms": [
+            "barre",
+            "barra",
+            "ballet fitness"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "danza",
+      "slug": {
+        "es": "danza",
+        "en": "dance"
+      },
+      "sectorId": "fitness-y-deporte",
+      "label": {
+        "es": "Danza",
+        "en": "Dance"
+      },
+      "icon": "danza",
+      "hue": 340,
+      "order": 320,
+      "synonyms": [
+        "danza",
+        "baile",
+        "ballet",
+        "dance",
+        "academia de baile"
+      ],
+      "giros": [
+        {
+          "id": "danza",
+          "label": {
+            "es": "Danza",
+            "en": "Dance"
+          },
+          "icon": "danza",
+          "synonyms": [
+            "danza",
+            "baile",
+            "clases de baile",
+            "dance"
+          ],
+          "general": true
+        },
+        {
+          "id": "ballet",
+          "label": {
+            "es": "Ballet",
+            "en": "Ballet"
+          },
+          "icon": "ballet",
+          "synonyms": [
+            "ballet",
+            "danza clásica",
+            "puntas"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deportes",
+      "slug": {
+        "es": "deportes",
+        "en": "sports"
+      },
+      "sectorId": "fitness-y-deporte",
+      "label": {
+        "es": "Deportes",
+        "en": "Sports"
+      },
+      "icon": "pelotas",
+      "hue": 238,
+      "order": 330,
+      "synonyms": [
+        "deporte",
+        "deportes",
+        "cancha",
+        "raqueta",
+        "sports"
+      ],
+      "giros": [
+        {
+          "id": "boxeo",
+          "label": {
+            "es": "Boxeo",
+            "en": "Boxing"
+          },
+          "icon": "boxeo",
+          "synonyms": [
+            "boxeo",
+            "box",
+            "boxing",
+            "kickboxing"
+          ]
+        },
+        {
+          "id": "natacion",
+          "label": {
+            "es": "Natación",
+            "en": "Swimming"
+          },
+          "icon": "natacion",
+          "synonyms": [
+            "natación",
+            "alberca",
+            "nado",
+            "swimming",
+            "pool"
+          ]
+        },
+        {
+          "id": "padel",
+          "label": {
+            "es": "Pádel",
+            "en": "Padel"
+          },
+          "icon": "padel",
+          "synonyms": [
+            "pádel",
+            "padel",
+            "raqueta",
+            "cancha de pádel"
+          ]
+        },
+        {
+          "id": "pickleball",
+          "label": {
+            "es": "Pickleball",
+            "en": "Pickleball"
+          },
+          "icon": "pickleball",
+          "synonyms": [
+            "pickleball",
+            "pickle",
+            "cancha de pickleball"
+          ]
+        }
+      ]
     }
   ],
   "sectors": [
@@ -1578,6 +1851,19 @@
       },
       "icon": "heart-pulse",
       "order": 20
+    },
+    {
+      "id": "fitness-y-deporte",
+      "slug": {
+        "es": "fitness-y-deporte",
+        "en": "fitness-and-sports"
+      },
+      "label": {
+        "es": "Fitness y Deporte",
+        "en": "Fitness & Sports"
+      },
+      "icon": "biceps-flexed",
+      "order": 30
     }
   ]
 }
