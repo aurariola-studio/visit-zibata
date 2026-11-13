@@ -29,14 +29,14 @@ const Natacion = custom(
 
 /**
  * Persona en flexión de brazos: el entrenamiento funcional. Redibujada con trazo a partir de "Push ups"
- * de froz (The Noun Project, CC0 1.0, vía Wikimedia Commons), más corta y con la cabeza rellena.
+ * de froz (The Noun Project, CC0 1.0, vía Wikimedia Commons), más corta, en espejo y con la cabeza rellena y pequeña.
  */
 const Funcional = custom(
   <>
-    <circle cx="4.6" cy="8.6" r="2.2" fill="currentColor" />
-    <path d="M8.4 11 20.4 17" />
-    <path d="M8.4 11 10.6 14.8 8 18" />
-    <path d="M3 20h17" />
+    <circle cx="19.2" cy="10.2" r="0.9" fill="currentColor" />
+    <path d="M16.2 12.2 9.6 13.4 2.8 17.8" />
+    <path d="M16.2 12.2 13.8 15.2 16.6 17.8" />
+    <path d="M2.5 19.6h19" />
   </>,
 )
 
