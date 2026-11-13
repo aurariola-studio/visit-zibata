@@ -86,13 +86,14 @@ const Ballet = solid(
   </>,
 )
 
-/** Persona en una abdominal sobre la colchoneta. Iconmind (MIT); provisional, el propietario busca una en V. */
+/** Persona en V sobre la colchoneta, la postura del pilates. Dibujo propio, con el trazo de los demás. */
 const Pilates = custom(
   <>
-    <path d="M2 7a3 3 0 1 0 6 0 3 3 0 1 0 -6 0" />
-    <path d="m8 10 5 5" />
-    <path d="m13 15 4 -4 4 4" />
-    <path d="M2 18h20" />
+    <circle cx="6" cy="5" r="2.2" fill="currentColor" />
+    <path d="M5.4 10.2 11.4 18" />
+    <path d="M5.4 10.2 15.4 7.6" />
+    <path d="M11.4 18 20.8 11.2" />
+    <path d="M2.5 21h19" />
   </>,
 )
 
