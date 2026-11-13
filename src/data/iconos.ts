@@ -40,6 +40,7 @@ export const ICONOS = [
   'fish',
   'flame',
   'fruta',
+  'glasses',
   'hamburger',
   'hand-platter',
   'heart-pulse',

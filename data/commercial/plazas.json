@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-12",
+  "updatedAt": "2026-11-13",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -297,7 +297,9 @@
         "sana-corazon",
         "enzza-pizza-zibata",
         "farmacias-similares",
-        "medical-group-zibata"
+        "medical-group-zibata",
+        "dermasphere-studio",
+        "brodmann18"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -317,7 +319,8 @@
         "bar",
         "farmacias",
         "consultorios-y-clinicas",
-        "laboratorios-y-diagnostico"
+        "laboratorios-y-diagnostico",
+        "opticas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Paseo Zibatá\" y locales con esa dirección (El Hornero, Currucucú, Masaru…). Huella aproximada: el edificio aún no aparece en los datos abiertos.",
@@ -728,7 +731,10 @@
         "escarola",
         "donatto-pizza",
         "punta-cacao",
-        "farmacia-guadalajara"
+        "farmacia-guadalajara",
+        "zibamedic",
+        "saiens-zibata",
+        "dental-factory-kids-family"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -744,7 +750,10 @@
         "postres-y-dulces",
         "internacional",
         "bar",
-        "farmacias"
+        "farmacias",
+        "consultorios-y-clinicas",
+        "dentistas",
+        "laboratorios-y-diagnostico"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Zielo\" y locales con esa dirección (Escarola, Donatto Pizza, Margaritas); huella de Overture.",

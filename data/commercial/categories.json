@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "version": 1,
-  "updatedAt": "2026-09-14",
+  "updatedAt": "2026-11-12",
   "categories": [
     {
       "id": "desayunos-y-cafe",
@@ -1548,6 +1548,47 @@
             "ultrasonido",
             "imagen"
           ]
+        }
+      ]
+    },
+    {
+      "id": "opticas",
+      "slug": {
+        "es": "opticas",
+        "en": "opticians"
+      },
+      "sectorId": "salud",
+      "label": {
+        "es": "Ópticas",
+        "en": "Opticians"
+      },
+      "icon": "glasses",
+      "hue": 70,
+      "order": 240,
+      "synonyms": [
+        "óptica",
+        "lentes",
+        "anteojos",
+        "examen de la vista",
+        "optica",
+        "glasses",
+        "optician"
+      ],
+      "giros": [
+        {
+          "id": "optica",
+          "label": {
+            "es": "Óptica",
+            "en": "Optician"
+          },
+          "icon": "glasses",
+          "synonyms": [
+            "óptica",
+            "lentes",
+            "anteojos",
+            "examen de la vista"
+          ],
+          "general": true
         }
       ]
     }

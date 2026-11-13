@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-10-25",
+  "updatedAt": "2026-11-12",
   "places": [
     {
       "id": "carls-jr",
@@ -6546,25 +6546,25 @@
       "description": null,
       "hours": {
         "mon": [
-          "07:00-22:30"
+          "08:00-22:30"
         ],
         "tue": [
-          "07:00-22:30"
+          "08:00-22:30"
         ],
         "wed": [
-          "07:00-22:30"
+          "08:00-22:30"
         ],
         "thu": [
-          "07:00-22:30"
+          "08:00-22:30"
         ],
         "fri": [
-          "07:00-22:30"
+          "08:00-22:30"
         ],
         "sat": [
-          "07:00-22:30"
+          "08:00-22:30"
         ],
         "sun": [
-          "07:00-22:30"
+          "08:00-22:30"
         ]
       },
       "location": null,
@@ -6603,7 +6603,29 @@
     },
     {
       "description": null,
-      "hours": null,
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ]
+      },
       "location": null,
       "googleMapsUri": null,
       "googlePlaceId": null,
@@ -6630,7 +6652,7 @@
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-12",
         "sources": [
           "https://zibatahoy.com/listing/farmacia-guadalajara-zibata/",
           "https://www.google.com/maps/search/Farmacia+Guadalajara+Zibat%C3%A1"
@@ -6698,23 +6720,24 @@
       "description": null,
       "hours": {
         "mon": [
-          "07:30-20:30"
+          "07:00-21:00"
         ],
         "tue": [
-          "07:30-20:30"
+          "07:00-21:00"
         ],
         "wed": [
-          "07:30-20:30"
+          "07:00-21:00"
         ],
         "thu": [
-          "07:30-20:30"
+          "07:00-21:00"
         ],
         "fri": [
-          "07:30-20:30"
+          "07:00-21:00"
         ],
         "sat": [
-          "07:30-20:30"
-        ]
+          "07:30-21:00"
+        ],
+        "sun": []
       },
       "location": null,
       "googleMapsUri": null,
@@ -6732,7 +6755,7 @@
         "laboratorio-clinico"
       ],
       "links": {
-        "website": "https://centromedicounicca.com",
+        "website": null,
         "instagram": null,
         "facebook": "https://www.facebook.com/uniccazibata",
         "tiktok": null,
@@ -6744,9 +6767,10 @@
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-12",
         "sources": [
-          "https://zibatahoy.com/listing/medical-group-zibata/"
+          "https://zibatahoy.com/listing/medical-group-zibata/",
+          "https://www.google.com/maps/search/UNICCA+Zibat%C3%A1"
         ]
       }
     },
@@ -6792,23 +6816,29 @@
       "description": null,
       "hours": {
         "mon": [
-          "09:00-20:00"
+          "09:30-14:00",
+          "15:00-20:00"
         ],
         "tue": [
-          "09:00-20:00"
+          "09:30-14:00",
+          "15:00-20:00"
         ],
         "wed": [
-          "09:00-20:00"
+          "09:30-14:00",
+          "15:00-20:00"
         ],
         "thu": [
-          "09:00-20:00"
+          "09:30-14:00",
+          "15:00-20:00"
         ],
         "fri": [
-          "09:00-20:00"
+          "09:30-14:00",
+          "15:00-20:00"
         ],
         "sat": [
-          "09:00-13:00"
-        ]
+          "09:30-13:00"
+        ],
+        "sun": []
       },
       "location": null,
       "googleMapsUri": null,
@@ -6837,9 +6867,11 @@
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-12",
         "sources": [
-          "https://zibatahoy.com/es/listado/zibata-dental-micro-macro/"
+          "https://zibatahoy.com/es/listado/zibata-dental-micro-macro/",
+          "https://micromacrodental.com",
+          "https://www.google.com/maps/search/Micromacro+Dental+Zibat%C3%A1"
         ]
       }
     },
@@ -6895,6 +6927,295 @@
         "lastVerifiedAt": "2026-11-11",
         "sources": [
           "https://zibatahoy.com/listing/thedek/"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "09:00-14:00",
+          "16:00-19:30"
+        ],
+        "tue": [
+          "09:00-14:00",
+          "16:00-19:30"
+        ],
+        "wed": [
+          "09:00-14:00",
+          "16:00-19:30"
+        ],
+        "thu": [
+          "09:00-14:00",
+          "16:00-19:30"
+        ],
+        "fri": [
+          "09:00-14:00",
+          "16:00-19:30"
+        ],
+        "sat": [
+          "10:00-14:00",
+          "16:00-18:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524424150590",
+      "photos": [],
+      "active": true,
+      "id": "zibamedic",
+      "slug": "zibamedic",
+      "name": "Zibamedic",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "consulta-general"
+      ],
+      "links": {
+        "website": "https://zibamedic.wixsite.com/queretaro",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://zibamedic.wixsite.com/queretaro"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-15:00"
+        ],
+        "tue": [
+          "06:00-15:00"
+        ],
+        "wed": [
+          "06:00-15:00"
+        ],
+        "thu": [
+          "06:00-15:00"
+        ],
+        "fri": [
+          "06:00-15:00"
+        ],
+        "sat": [
+          "06:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524461399233",
+      "photos": [],
+      "active": true,
+      "id": "saiens-zibata",
+      "slug": "saiens-zibata",
+      "name": "SAIENS Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "laboratorio-clinico"
+      ],
+      "links": {
+        "website": "https://saiens.com.mx",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524461333196",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://saiens.com.mx"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "10:00-19:00"
+        ],
+        "tue": [
+          "10:00-19:00"
+        ],
+        "wed": [
+          "10:00-19:00"
+        ],
+        "thu": [
+          "10:00-19:00"
+        ],
+        "fri": [
+          "10:00-19:00"
+        ],
+        "sat": [
+          "09:00-16:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524426381324",
+      "photos": [],
+      "active": true,
+      "id": "dermasphere-studio",
+      "slug": "dermasphere-studio",
+      "name": "Dermasphere Studio",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "consulta-de-especialidad"
+      ],
+      "links": {
+        "website": "https://dermaspherestudio.com",
+        "instagram": "https://www.instagram.com/dermasphere_zibata/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524426381324",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://dermaspherestudio.com"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "tue": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "wed": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "thu": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "fri": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "sat": [
+          "09:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524461049316",
+      "photos": [],
+      "active": true,
+      "id": "dental-factory-kids-family",
+      "slug": "dental-factory-kids-family",
+      "name": "Dental Factory Kids & Family",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "dentista"
+      ],
+      "links": {
+        "website": "https://dentalfactory.com.mx",
+        "instagram": "https://www.instagram.com/dental_factoryop/",
+        "facebook": "https://www.facebook.com/Dentalfactoryop",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://dentalfactory.com.mx"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "10:30-19:30"
+        ],
+        "tue": [
+          "10:30-19:30"
+        ],
+        "wed": [
+          "10:30-19:30"
+        ],
+        "thu": [
+          "10:30-19:30"
+        ],
+        "fri": [
+          "10:30-19:30"
+        ],
+        "sat": [
+          "10:30-18:30"
+        ],
+        "sun": [
+          "10:30-17:30"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524424154198",
+      "photos": [],
+      "active": true,
+      "id": "brodmann18",
+      "slug": "brodmann18",
+      "name": "BRODMANN18",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "optica"
+      ],
+      "links": {
+        "website": "https://brodmann18.com",
+        "instagram": "https://www.instagram.com/brodmann18/",
+        "facebook": "https://www.facebook.com/BRODMANN18",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://brodmann18.com",
+          "https://www.google.com/maps/search/BRODMANN18+Zibat%C3%A1"
         ]
       }
     }
