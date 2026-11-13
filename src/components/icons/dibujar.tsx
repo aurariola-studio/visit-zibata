@@ -37,13 +37,11 @@ export function custom(children: ReactNode): IconComponent {
  * no se dibujan con trazo, así que llevan `fill` y no `stroke`. Con `size` y `color` se comporta
  * igual que `custom`.
  */
-export function solid(children: ReactNode, viewBox = '0 0 24 24', grosor?: number): IconComponent {
+export function solid(children: ReactNode, viewBox = '0 0 24 24'): IconComponent {
   return function SolidIcon({
     size = 24,
     color = 'currentColor',
     absoluteStrokeWidth: _,
-    // Quien pinta pasa un `strokeWidth` pensado para los iconos de trazo; el del relleno es el de `grosor`.
-    strokeWidth: _trazo,
     ...rest
   }) {
     return (
@@ -53,9 +51,6 @@ export function solid(children: ReactNode, viewBox = '0 0 24 24', grosor?: numbe
         height={size}
         viewBox={viewBox}
         fill={color}
-        stroke={grosor ? color : undefined}
-        strokeWidth={grosor}
-        strokeLinejoin={grosor ? 'round' : undefined}
         aria-hidden="true"
         {...rest}
       >
