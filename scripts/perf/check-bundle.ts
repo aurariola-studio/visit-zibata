@@ -104,9 +104,9 @@ const KB = 1024
  *
  * Sector Fitness y Deporte (2026-11-12): sus once iconos nuevos (Tabler, Hugeicons, Material
  * Design Icons y Material Symbols) sumaban 3,4 KB y dejaban el paquete en 131,5, por encima del límite. Ningún giro del sector
- * tiene locales todavía, así que se sacaron a su propio fragmento (`iconos-deporte-*.js`, 2,8 KB), que
+ * tiene locales todavía, así que se sacaron a su propio fragmento (`iconos-deporte-*.js`, 7,6 KB con las siluetas de Pilates y Ballet), que
  * `CategoryIcon` pide la primera vez que pinta uno y mientras tanto reserva la caja del icono. El
- * paquete queda en 129,4, con el de Lucide de este sector también diferido. `proteina`, de Comida y con locales hoy, se queda dentro para que no parpadee.
+ * paquete queda en 129,5, con el de Lucide de este sector también diferido. `proteina`, de Comida y con locales hoy, se queda dentro para que no parpadee.
  * Cuando el sector tenga locales y su icono salga en el primer pintado, habrá que decidir entre
  * precargar el fragmento y volver a meterlo, y eso se mide con la cuenta de entonces.
  */
