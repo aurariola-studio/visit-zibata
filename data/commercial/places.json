@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-10-25",
+  "updatedAt": "2026-11-12",
   "places": [
     {
       "id": "carls-jr",
@@ -6480,6 +6480,1181 @@
         "sources": [
           "https://maps.app.goo.gl/tWuJZtUW2y51sxWj7",
           "https://el-asadero.com/"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524421951595",
+      "photos": [],
+      "active": true,
+      "id": "anytime-fitness-zibata",
+      "slug": "anytime-fitness-zibata",
+      "name": "Anytime Fitness Zibatá",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "gimnasio"
+      ],
+      "links": {
+        "website": "https://www.anytimefitness.com.mx/club/MX-1026",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/anytimefitnesszibata",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.anytimefitness.com.mx/club/MX-1026"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-22:00"
+        ],
+        "tue": [
+          "06:00-22:00"
+        ],
+        "wed": [
+          "06:00-22:00"
+        ],
+        "thu": [
+          "06:00-22:00"
+        ],
+        "fri": [
+          "06:00-22:00"
+        ],
+        "sat": [
+          "08:00-15:00"
+        ],
+        "sun": [
+          "08:00-15:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524421114257",
+      "photos": [],
+      "active": true,
+      "id": "evogym-zibata",
+      "slug": "evogym-zibata",
+      "name": "EVOGYM Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "gimnasio"
+      ],
+      "links": {
+        "website": "https://evogym.com.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://evogym.com.mx/",
+          "https://www.google.com/maps/search/EVOGYM+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "tue": [
+          "05:00-22:00"
+        ],
+        "wed": [
+          "05:00-22:00"
+        ],
+        "thu": [
+          "05:00-22:00"
+        ],
+        "fri": [
+          "05:00-22:00"
+        ],
+        "sat": [
+          "07:00-16:00"
+        ],
+        "sun": [
+          "08:00-15:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524461325930",
+      "photos": [],
+      "active": true,
+      "id": "hallafit",
+      "slug": "hallafit",
+      "name": "Hallåfit",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "gimnasio"
+      ],
+      "links": {
+        "website": "https://linktr.ee/hallafit",
+        "instagram": "https://www.instagram.com/gym.hallafit/",
+        "facebook": null,
+        "tiktok": "https://www.tiktok.com/@gym.hallafit",
+        "whatsapp": "+524461325930",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://linktr.ee/hallafit",
+          "https://www.google.com/maps/search/Hall%C3%A5fit+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "tue": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "wed": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "thu": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "fri": [
+          "06:00-09:00",
+          "18:00-19:00"
+        ],
+        "sat": [
+          "08:00-10:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524426483856",
+      "photos": [],
+      "active": true,
+      "id": "flcn-bootcamp",
+      "slug": "flcn-bootcamp",
+      "name": "FLCN Bootcamp",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "entrenamiento-funcional"
+      ],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/flcn.mx/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.instagram.com/flcn.mx/",
+          "https://www.google.com/maps/search/FLCN+Bootcamp+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "sat": [
+          "07:00-12:00"
+        ],
+        "sun": [
+          "08:00-11:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422043390",
+      "photos": [],
+      "active": true,
+      "id": "true-instinct-hybrid-club",
+      "slug": "true-instinct-hybrid-club",
+      "name": "True Instinct Hybrid Club",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "entrenamiento-funcional",
+        "gimnasio"
+      ],
+      "links": {
+        "website": "https://www.trueinstinct.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.trueinstinct.mx/",
+          "https://www.google.com/maps/search/True+Instinct+Hybrid+Club+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-20:30"
+        ],
+        "tue": [
+          "06:00-21:30"
+        ],
+        "wed": [
+          "06:00-20:30"
+        ],
+        "thu": [
+          "06:00-21:30"
+        ],
+        "fri": [
+          "06:00-20:30"
+        ],
+        "sat": [
+          "07:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524423307489",
+      "photos": [],
+      "active": true,
+      "id": "triba-fitness-studio",
+      "slug": "triba-fitness-studio",
+      "name": "Triba Fitness Studio",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "entrenamiento-funcional"
+      ],
+      "links": {
+        "website": "http://triba.com.mx/",
+        "instagram": "https://www.instagram.com/triba_fitness/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "http://triba.com.mx/",
+          "https://www.google.com/maps/search/Triba+Fitness+Studio+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524421128923",
+      "photos": [],
+      "active": true,
+      "id": "the-rebbound-movement",
+      "slug": "the-rebbound-movement",
+      "name": "The Rebbound Movement",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "entrenamiento-funcional",
+        "pilates",
+        "barre"
+      ],
+      "links": {
+        "website": "https://therebboundmovement.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://therebboundmovement.com/",
+          "https://www.google.com/maps/search/The+Rebbound+Movement+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "tue": [
+          "07:00-09:00",
+          "18:00-20:00"
+        ],
+        "wed": [
+          "07:00-09:00",
+          "18:00-21:30"
+        ],
+        "thu": [
+          "07:00-09:00",
+          "18:00-20:00"
+        ],
+        "fri": [
+          "07:00-09:00",
+          "18:00-19:00"
+        ],
+        "sat": [
+          "09:00-11:30"
+        ],
+        "sun": [
+          "09:00-11:30"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422856471",
+      "photos": [],
+      "active": true,
+      "id": "seven-indoor-cycling-strength",
+      "slug": "seven-indoor-cycling-strength",
+      "name": "Seven Indoor Cycling & Strength",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "ciclismo-indoor",
+        "entrenamiento-funcional"
+      ],
+      "links": {
+        "website": "https://sevenstudio.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524422856471",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://sevenstudio.mx/",
+          "https://www.google.com/maps/search/Seven+Indoor+Cycling+%26+Strength+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "06:00-10:00",
+          "17:00-20:30"
+        ],
+        "sat": [
+          "09:00-12:00"
+        ],
+        "sun": [
+          "10:00-12:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524423679219",
+      "photos": [],
+      "active": true,
+      "id": "zayclo",
+      "slug": "zayclo",
+      "name": "ZÁYCLO",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "ciclismo-indoor"
+      ],
+      "links": {
+        "website": "http://thea-studios.com/",
+        "instagram": "https://www.instagram.com/zyclo_mx/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524423679219",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "http://thea-studios.com/",
+          "https://www.google.com/maps/search/Z%C3%81YCLO+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "07:00-21:00"
+        ],
+        "tue": [
+          "07:00-21:00"
+        ],
+        "wed": [
+          "07:00-21:00"
+        ],
+        "thu": [
+          "07:00-21:00"
+        ],
+        "fri": [
+          "07:00-13:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524461220564",
+      "photos": [],
+      "active": true,
+      "id": "loom-pilates-club",
+      "slug": "loom-pilates-club",
+      "name": "Loom Pilates Club",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "pilates"
+      ],
+      "links": {
+        "website": "https://nessty.mx/@loom-pilates-club",
+        "instagram": "https://www.instagram.com/loompilatesclub/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://nessty.mx/@loom-pilates-club",
+          "https://www.google.com/maps/search/Loom+Pilates+Club+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "06:00-12:00",
+          "17:00-19:00"
+        ],
+        "sat": [
+          "08:00-12:00"
+        ],
+        "sun": [
+          "09:00-13:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524421376422",
+      "photos": [],
+      "active": true,
+      "id": "knots-pilates",
+      "slug": "knots-pilates",
+      "name": "knots pilates",
+      "plazaId": "condesa",
+      "giros": [
+        "pilates"
+      ],
+      "links": {
+        "website": "https://www.nessty.mx/@knotspilates",
+        "instagram": "https://www.instagram.com/knotspilates/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.nessty.mx/@knotspilates",
+          "https://www.google.com/maps/search/knots+pilates+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-21:30"
+        ],
+        "tue": [
+          "06:00-21:30"
+        ],
+        "wed": [
+          "06:00-21:30"
+        ],
+        "thu": [
+          "06:00-21:30"
+        ],
+        "fri": [
+          "06:00-21:30"
+        ],
+        "sat": [
+          "09:00-11:45"
+        ],
+        "sun": [
+          "09:00-11:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "active": true,
+      "id": "centre-movement",
+      "slug": "centre-movement",
+      "name": "Centre Movement",
+      "plazaId": "plaza-loop",
+      "giros": [
+        "pilates"
+      ],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/centre.movement/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.instagram.com/centre.movement/",
+          "https://www.google.com/maps/search/Centre+Movement+Pilates+Mat+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "tue": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "wed": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "thu": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "fri": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524461335933",
+      "photos": [],
+      "active": true,
+      "id": "l-balans",
+      "slug": "l-balans",
+      "name": "L-Balans",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "pilates"
+      ],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.google.com/maps/search/L-Balans+Pilates+Reformer+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-21:00"
+        ],
+        "tue": [
+          "06:00-21:00"
+        ],
+        "wed": [
+          "06:00-21:00"
+        ],
+        "thu": [
+          "06:00-21:00"
+        ],
+        "fri": [
+          "06:00-21:00"
+        ],
+        "sat": [
+          "06:00-21:00"
+        ],
+        "sun": [
+          "06:00-21:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524427804461",
+      "photos": [],
+      "active": true,
+      "id": "devotion-heat-room",
+      "slug": "devotion-heat-room",
+      "name": "Devotion Heat Room",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "yoga",
+        "pilates"
+      ],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/share/17jWqRENsY/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.facebook.com/share/17jWqRENsY/",
+          "https://www.google.com/maps/search/Devotion+Heat+Room+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "07:00-12:00",
+          "16:30-21:00"
+        ],
+        "sat": [
+          "07:30-12:00"
+        ],
+        "sun": [
+          "07:30-12:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422700666",
+      "photos": [],
+      "active": true,
+      "id": "espacio-om",
+      "slug": "espacio-om",
+      "name": "Espacio OM",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "yoga"
+      ],
+      "links": {
+        "website": "https://www.espacio-om.com.mx/",
+        "instagram": "https://www.instagram.com/espacioomzibata/",
+        "facebook": "https://www.facebook.com/EspacioOmZibata",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.espacio-om.com.mx/",
+          "https://www.google.com/maps/search/Espacio+OM+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+525610056889",
+      "photos": [],
+      "active": true,
+      "id": "turnout-studio",
+      "slug": "turnout-studio",
+      "name": "Turnout Studio",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "barre"
+      ],
+      "links": {
+        "website": "https://turnoutstudio.com.mx/",
+        "instagram": "https://www.instagram.com/turnout.studio/",
+        "facebook": "https://www.facebook.com/TurnoutStudio",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://turnoutstudio.com.mx/"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "08:00-21:00"
+        ],
+        "tue": [
+          "08:00-21:00"
+        ],
+        "wed": [
+          "08:00-21:00"
+        ],
+        "thu": [
+          "08:00-21:00"
+        ],
+        "fri": [
+          "08:00-21:00"
+        ],
+        "sat": [
+          "08:00-18:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524427809463",
+      "photos": [],
+      "active": true,
+      "id": "grand-jete-dance-studio",
+      "slug": "grand-jete-dance-studio",
+      "name": "Grand Jeté Dance Studio",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "ballet",
+        "danza"
+      ],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/GrandJeteZibata/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.facebook.com/GrandJeteZibata/",
+          "https://www.google.com/maps/search/Grand+Jet%C3%A9+Dance+Studio+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "tue": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "wed": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "thu": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "fri": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "sat": [
+          "08:00-12:00"
+        ],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524772407465",
+      "photos": [],
+      "active": true,
+      "id": "black-box-zibata",
+      "slug": "black-box-zibata",
+      "name": "Black Box Zibatá",
+      "plazaId": "mol-jamadi",
+      "giros": [
+        "boxeo"
+      ],
+      "links": {
+        "website": "https://www.bboxgym.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.bboxgym.com/",
+          "https://www.google.com/maps/search/Black+Box+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": null,
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524461130327",
+      "photos": [],
+      "active": true,
+      "id": "swim-lab",
+      "slug": "swim-lab",
+      "name": "Swim Lab",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "natacion"
+      ],
+      "links": {
+        "website": "https://www.swimlabmexico.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://www.swimlabmexico.com/",
+          "https://www.google.com/maps/search/Swim+Lab+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-22:00"
+        ],
+        "tue": [
+          "06:00-22:00"
+        ],
+        "wed": [
+          "06:00-22:00"
+        ],
+        "thu": [
+          "06:00-22:00"
+        ],
+        "fri": [
+          "06:00-22:00"
+        ],
+        "sat": [
+          "06:00-22:00"
+        ],
+        "sun": [
+          "06:00-22:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524427100453",
+      "photos": [],
+      "active": true,
+      "id": "intercepta",
+      "slug": "intercepta",
+      "name": "Intercepta",
+      "plazaId": "intercepta",
+      "giros": [
+        "padel"
+      ],
+      "links": {
+        "website": "https://intercepta.mx/",
+        "instagram": "https://www.instagram.com/intercepta_qro/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524427100453",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://intercepta.mx/",
+          "https://www.google.com/maps/search/Intercepta+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "description": null,
+      "hours": {
+        "mon": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "tue": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "wed": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "thu": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "fri": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "sat": [
+          "08:00-14:00"
+        ],
+        "sun": [
+          "08:00-14:00"
+        ]
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+527291646562",
+      "photos": [],
+      "active": true,
+      "id": "pickspot",
+      "slug": "pickspot",
+      "name": "PickSpot",
+      "plazaId": "foodtrucks-pickleball",
+      "giros": [
+        "pickleball"
+      ],
+      "links": {
+        "website": "https://pickspot.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://pickspot.mx/",
+          "https://www.google.com/maps/search/PickSpot+Zibat%C3%A1"
         ]
       }
     }

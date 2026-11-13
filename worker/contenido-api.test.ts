@@ -1,7 +1,14 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
 import { atenderApi, type EntornoApi } from './api.ts'
 import type { Base } from './cuenta.ts'
+
+// El Worker lee las plazas del paquete: se le pone la zona apagada de prueba, que el dataset real no trae.
+vi.mock('../data/commercial/plazas.json', async (original) => {
+  const real = (await original()) as { default: { plazas: readonly unknown[] } }
+  const { conZonaApagada: con } = await import('./zona-apagada.fixture.ts')
+  return { ...real, default: con(real.default) }
+})
 
 /*
  * En desarrollo `PANEL_ABIERTO` salta Access y no hay testigo de GitHub, así que el contenido se

@@ -104,6 +104,8 @@ export const PLAZA_COLORS: Readonly<Record<string, string>> = {
   'mol-jamadi': '#3b1548',
   'campo-de-golf': '#02467d',
   'plaza-zielo': '#189ad2', // #53bdeb
+  intercepta: '#b3175f',
+  'foodtrucks-pickleball': '#8a7000',
 }
 
 function tonoDeZona(color: string): PlazaTone {
