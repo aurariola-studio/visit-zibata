@@ -98,6 +98,25 @@ const categoriasConPagina = (idioma: 'es' | 'en') =>
       .map((categoria) => categoria.slug[idioma]),
   )
 const categoriasConLocales = new Set([...categoriasConPagina('es'), ...categoriasConPagina('en')])
+/*
+ * Los sectores con página: dos o más con locales (los que enseña la barra). Con uno solo no hay página de
+ * sector, porque repetiría la portada.
+ */
+const sectoresDeDatos =
+  dato<{
+    sectors?: { id: string; slug: { es: string; en: string } }[]
+  }>('categories.json').sectors ?? []
+const sectoresConLocales = sectoresDeDatos.filter((sector) =>
+  categorias.some(
+    (categoria) =>
+      (categoria as { sectorId?: string }).sectorId === sector.id && localesDe(categoria) > 0,
+  ),
+)
+const sectoresConPagina = new Set(
+  sectoresConLocales.length >= 2
+    ? sectoresConLocales.flatMap((sector) => [sector.slug.es, sector.slug.en])
+    : [],
+)
 const zonas = dato<{ plazas: { id: string; slug: string; active: boolean }[] }>(
   'plazas.json',
 ).plazas
@@ -258,7 +277,10 @@ test.describe('Sitemap', () => {
       const lugar = /^\/(?:en\/place|es\/lugar)\/(.+)$/.exec(ruta)?.[1]
       const zona = /^\/(?:en\/area|es\/zona)\/(.+)$/.exec(ruta)?.[1]
       const categoria = /^\/(?:en\/category|es\/categoria)\/(.+)$/.exec(ruta)?.[1]
-      if (lugar) expect(activos.has(lugar), `${ruta} no es un local activo`).toBe(true)
+      const sector = /^\/(?:en|es)\/sector\/(.+)$/.exec(ruta)?.[1]
+      if (sector) {
+        expect(sectoresConPagina.has(sector), `${ruta} no es un sector con página`).toBe(true)
+      } else if (lugar) expect(activos.has(lugar), `${ruta} no es un local activo`).toBe(true)
       else if (zona) expect(zonasActivas.has(zona), `${ruta} no es una zona activa`).toBe(true)
       else if (categoria) {
         expect(categoriasConLocales.has(categoria), `${ruta} no llega al umbral`).toBe(true)

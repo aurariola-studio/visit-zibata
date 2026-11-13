@@ -112,9 +112,9 @@
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 8927,
-      "sha256": "ab54beec670f534fc37bebf148fe52a95bca0d64ddc4ad9918b27067346155ed",
-      "features": 24,
+      "bytes": 9245,
+      "sha256": "ca9a8e48d35f2b0893ba3fbbb964a28ba97b527363ef1ecd44bfff7a1064c0c2",
+      "features": 25,
       "synthesizedFor": [
         "paseo-zibata",
         "foodtrucks-pickleball",
@@ -122,7 +122,8 @@
         "campo-de-golf",
         "distrito-nandu",
         "plaza-luna",
-        "xenica"
+        "xenica",
+        "intercepta"
       ],
       "synthesisDetail": [
         {
@@ -157,6 +158,11 @@
         },
         {
           "plazaId": "xenica",
+          "replacedFootprints": 0,
+          "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
+        },
+        {
+          "plazaId": "intercepta",
           "replacedFootprints": 0,
           "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
         }

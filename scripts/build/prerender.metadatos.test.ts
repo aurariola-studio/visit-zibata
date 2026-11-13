@@ -460,7 +460,11 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
       expect(pagina.description, categoria.id).not.toMatch(
         /\b0 (zonas?|areas?)|\b1 (lugares|places|zonas|areas)\b/,
       )
-      expect(pagina.description, categoria.id).toMatch(/\b\d+ (lugares?|places?)\b/)
+      // Con un solo local la descripción habla en singular y no lleva cifra (ver crecimiento.test.ts).
+      const n = data.places.filter((p) => idsDe(p).has(categoria.id)).length
+      expect(pagina.description, categoria.id).toMatch(
+        n === 1 ? /el lugar|the one place/ : /\b\d+ (lugares?|places?)\b/,
+      )
     }
   })
 
@@ -525,6 +529,8 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     for (const categoria of conLocales) {
       const pagina = de(idioma, ruta(categoria.slug[idioma]))
       const n = data.places.filter((p) => idsDe(p).has(categoria.id)).length
+      // Con uno solo la descripción dice "el lugar" y no cuenta (ver crecimiento.test.ts).
+      if (n === 1) continue
       expect(pagina.description).toMatch(new RegExp(`(?<![0-9])${n} (lugares|places)`))
     }
   })

@@ -4,6 +4,7 @@ import {
   openApp,
   panel,
   plazaMarker,
+  RAIZ_DE_CATEGORIAS,
   waitForMap,
   waitForSheet,
   ZONA_B,
@@ -30,7 +31,8 @@ test.describe('Interacción táctil @mapa', () => {
   })
 
   test('las pastillas de categoría y el buscador responden al tacto', async ({ page }) => {
-    await openApp(page)
+    // Con varios sectores las categorías están dentro de uno: se entra por su dirección.
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
     const categories = page.getByRole('list', { name: 'Categorías' }).first()
     await categories.getByRole('link', { name: /Postres/ }).tap()
     await expect(categories.getByRole('link', { name: /Postres/ })).toHaveAttribute(

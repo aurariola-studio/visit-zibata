@@ -6,6 +6,13 @@ import { type CommercialDataset, syncPlazaDerivedFields } from '../src/data/rela
 import { CategoriesFileSchema, PlacesFileSchema, PlazasFileSchema } from '../src/data/schemas.ts'
 import { guardarPlaza, prepararPlaza } from './plazas.ts'
 
+// `guardarPlaza` lee las plazas del paquete: se le pone la zona apagada de prueba, que el dataset real no trae.
+vi.mock('../data/commercial/plazas.json', async (original) => {
+  const real = (await original()) as { default: { plazas: readonly unknown[] } }
+  const { conZonaApagada: con } = await import('./zona-apagada.fixture.ts')
+  return { ...real, default: con(real.default) }
+})
+
 /*
  * Nada aquí nombra una plaza real: se escoge una del propio dataset. Renombrar o desactivar una plaza
  * de la guía no puede poner en rojo estas pruebas.
