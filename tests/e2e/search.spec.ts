@@ -7,6 +7,7 @@ import {
   CON_ERROR,
   conPalabraQueEmpieza,
   elegirZona,
+  entrarAlSectorGrande,
   esc,
   LOCAL_BUSCABLE,
   openApp,
@@ -14,7 +15,9 @@ import {
   panel,
   placesInCategory,
   placesInPlaza,
+  RAIZ_DE_CATEGORIAS,
   TERMINOS_LITERALES,
+  VARIOS_SECTORES,
   ZONA_B,
   ZONA_GRANDE,
 } from './helpers.ts'
@@ -122,6 +125,7 @@ test.describe('Búsqueda y filtros', () => {
   }) => {
     await openApp(page)
     await elegirZona(page, ZONA_GRANDE.name)
+    await entrarAlSectorGrande(page)
     const topCategories = page.getByRole('list', { name: 'Categorías' }).first()
     const categoria = CATEGORIA_EN_ZONA
     await topCategories.getByRole('link', { name: new RegExp(esc(categoria.label)) }).click()
@@ -145,9 +149,12 @@ test.describe('Búsqueda y filtros', () => {
     await expect(
       topCategories.getByRole('link', { name: new RegExp(esc(categoria.label)) }),
     ).toHaveAccessibleName(`${categoria.label} ${desayunos}`)
-    await expect(topCategories.getByRole('link', { name: /^Todo/ })).toHaveAccessibleName(
-      `Todo ${placesInPlaza(ZONA_GRANDE.name)}`,
-    )
+    // Con varios sectores no hay "Todo": el sector mismo, a la izquierda, hace de "Todo" y no cuenta.
+    if (!VARIOS_SECTORES) {
+      await expect(topCategories.getByRole('link', { name: /^Todo/ })).toHaveAccessibleName(
+        `Todo ${placesInPlaza(ZONA_GRANDE.name)}`,
+      )
+    }
     await expect(page).toHaveURL(
       new RegExp(`/es/zona/${ZONA_GRANDE.slug}\\?categoria=${categoria.slug}$`),
     )
@@ -156,16 +163,21 @@ test.describe('Búsqueda y filtros', () => {
     await expect(page.getByRole('button', { name: 'Filtrar por zona' })).toContainText(
       'Todas las zonas',
     )
-    await expect(topCategories.getByRole('link', { name: /^Todo/ })).toHaveAttribute(
-      'aria-current',
-      'true',
-    )
+    if (VARIOS_SECTORES) {
+      // Limpiar quita también el sector: la barra vuelve al primer nivel.
+      await expect(page.getByRole('list', { name: 'Sectores' })).toBeVisible()
+    } else {
+      await expect(topCategories.getByRole('link', { name: /^Todo/ })).toHaveAttribute(
+        'aria-current',
+        'true',
+      )
+    }
   })
 
   test('una categoría sola muestra una sola lista, con la zona en cada tarjeta', async ({
     page,
   }) => {
-    await openApp(page)
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
     await page
       .getByRole('list', { name: 'Categorías' })
       .first()

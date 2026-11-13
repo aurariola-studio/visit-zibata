@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-04",
+  "updatedAt": "2026-11-13",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -93,7 +93,10 @@
         "la-lorenza-xentric-anahuac",
         "nutrisa-xentric-anahuac",
         "wake-cup-xentric-anahuac",
-        "henko-juice-bar"
+        "henko-juice-bar",
+        "farmacia-san-pablo",
+        "laboratorio-del-chopo",
+        "thedek"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -109,7 +112,11 @@
         "postres-y-dulces",
         "bebidas",
         "internacional",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "dentistas",
+        "laboratorios-y-diagnostico"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -288,7 +295,11 @@
         "reposteria-eddi-mena",
         "sweet-crepe-zibata",
         "sana-corazon",
-        "enzza-pizza-zibata"
+        "enzza-pizza-zibata",
+        "farmacias-similares",
+        "medical-group-zibata",
+        "dermasphere-studio",
+        "brodmann18"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -305,7 +316,11 @@
         "botanas",
         "postres-y-dulces",
         "bebidas",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "laboratorios-y-diagnostico",
+        "opticas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Paseo Zibatá\" y locales con esa dirección (El Hornero, Currucucú, Masaru…). Huella aproximada: el edificio aún no aparece en los datos abiertos.",
@@ -610,7 +625,9 @@
         "romelia-cafe",
         "la-michoacana-xentric-zibata",
         "kekas-fritas-el-xavi",
-        "sazon-de-nassar"
+        "sazon-de-nassar",
+        "farmacias-benavides",
+        "micromacro-dental"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -621,7 +638,10 @@
         "postres-y-dulces",
         "internacional",
         "casera",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "dentistas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección Paseo Tunas 18 (Cosi Fan Tutte, Trecielos, La Marmota, Honu Sushi…). Huella aproximada.",
@@ -710,7 +730,11 @@
         "los-del-mandil",
         "escarola",
         "donatto-pizza",
-        "punta-cacao"
+        "punta-cacao",
+        "farmacia-guadalajara",
+        "zibamedic",
+        "saiens-zibata",
+        "dental-factory-kids-family"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -725,7 +749,11 @@
         "panaderia-y-reposteria",
         "postres-y-dulces",
         "internacional",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "dentistas",
+        "laboratorios-y-diagnostico"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Zielo\" y locales con esa dirección (Escarola, Donatto Pizza, Margaritas); huella de Overture.",
