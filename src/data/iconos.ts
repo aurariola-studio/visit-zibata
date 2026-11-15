@@ -76,6 +76,7 @@ export const ICONOS = [
   'taco',
   'tooth',
   'torta',
+  'tube-lotion',
   'utensils-crossed',
   'waffle',
   'wrap',

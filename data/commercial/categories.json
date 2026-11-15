@@ -1436,8 +1436,23 @@
             "especialista",
             "especialidad",
             "pediatra",
-            "ginecólogo",
-            "dermatólogo"
+            "ginecólogo"
+          ]
+        },
+        {
+          "id": "dermatologia",
+          "label": {
+            "es": "Dermatología",
+            "en": "Dermatology"
+          },
+          "icon": "tube-lotion",
+          "synonyms": [
+            "dermatólogo",
+            "piel",
+            "cabello",
+            "tricología",
+            "skin",
+            "dermatologist"
           ]
         }
       ]

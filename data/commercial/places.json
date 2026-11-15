@@ -6484,36 +6484,6 @@
       }
     },
     {
-      "description": null,
-      "hours": {
-        "mon": [
-          "07:00-23:00"
-        ],
-        "tue": [
-          "07:00-23:00"
-        ],
-        "wed": [
-          "07:00-23:00"
-        ],
-        "thu": [
-          "07:00-23:00"
-        ],
-        "fri": [
-          "07:00-23:00"
-        ],
-        "sat": [
-          "07:00-23:00"
-        ],
-        "sun": [
-          "07:00-23:00"
-        ]
-      },
-      "location": null,
-      "googleMapsUri": null,
-      "googlePlaceId": null,
-      "phone": "+528000726722",
-      "photos": [],
-      "active": true,
       "id": "farmacia-san-pablo",
       "slug": "farmacia-san-pablo",
       "name": "Farmacia San Pablo",
@@ -6522,57 +6492,66 @@
         "farmacia",
         "consulta-general"
       ],
+      "description": {
+        "es": "💙 #SanPablo apasionados de la salud\n🍃 #SanPabloNatural te impulsa a estar #MejorYMejor\n💆‍♀ #SanPabloDermo salud en la piel",
+        "en": "💙 #SanPablo passionate about health\n🍃 #SanPabloNatural drives you to be #MejorYMejor\n💆‍♀ #SanPabloDermo healthy skin"
+      },
+      "hours": {
+        "mon": [
+          "07:00-23:00"
+        ],
+        "tue": [
+          "07:00-23:00"
+        ],
+        "wed": [
+          "07:00-23:00"
+        ],
+        "thu": [
+          "07:00-23:00"
+        ],
+        "fri": [
+          "07:00-23:00"
+        ],
+        "sat": [
+          "07:00-23:00"
+        ],
+        "sun": [
+          "07:00-23:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6785643,
+        "lng": -100.3140216
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/NVTs1KQZXjA3y9bb6",
+      "googlePlaceId": null,
+      "phone": "+528000726722",
+      "photos": [],
       "links": {
         "website": "https://www.farmaciasanpablo.com.mx/",
-        "instagram": null,
-        "facebook": null,
+        "instagram": "https://www.instagram.com/sanpablofarma/",
+        "facebook": "https://www.facebook.com/SanPabloFarma",
         "tiktok": null,
         "whatsapp": null,
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
           "https://zibatahoy.com/listing/farmacia-san-pablo-zibata/",
-          "https://www.google.com/maps/place/Farmacia+San+Pablo+Zibat%C3%A1/@20.6785643,-100.3140216,17z"
+          "https://www.google.com/maps/place/Farmacia+San+Pablo+Zibat%C3%A1/@20.6785643,-100.3140216,17z",
+          "https://maps.app.goo.gl/NVTs1KQZXjA3y9bb6",
+          "https://www.instagram.com/sanpablofarma/",
+          "https://www.facebook.com/SanPabloFarma"
         ]
       }
     },
     {
-      "description": null,
-      "hours": {
-        "mon": [
-          "08:00-22:30"
-        ],
-        "tue": [
-          "08:00-22:30"
-        ],
-        "wed": [
-          "08:00-22:30"
-        ],
-        "thu": [
-          "08:00-22:30"
-        ],
-        "fri": [
-          "08:00-22:30"
-        ],
-        "sat": [
-          "08:00-22:30"
-        ],
-        "sun": [
-          "08:00-22:30"
-        ]
-      },
-      "location": null,
-      "googleMapsUri": null,
-      "googlePlaceId": null,
-      "phone": "+528181260000",
-      "photos": [],
-      "active": true,
       "id": "farmacias-benavides",
       "slug": "farmacias-benavides",
       "name": "Farmacias Benavides",
@@ -6581,28 +6560,78 @@
         "farmacia",
         "consulta-general"
       ],
+      "description": {
+        "es": "💙 Expertos en Cuidarte",
+        "en": "💙 Experts in Caring for You"
+      },
+      "hours": {
+        "mon": [
+          "08:00-22:30"
+        ],
+        "tue": [
+          "08:00-22:30"
+        ],
+        "wed": [
+          "08:00-22:30"
+        ],
+        "thu": [
+          "08:00-22:30"
+        ],
+        "fri": [
+          "08:00-22:30"
+        ],
+        "sat": [
+          "08:00-22:30"
+        ],
+        "sun": [
+          "08:00-22:30"
+        ]
+      },
+      "location": {
+        "lat": 20.6832464,
+        "lng": -100.3252521
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/4AhX4yRGkNHn5hFi7",
+      "googlePlaceId": null,
+      "phone": "+528181260000",
+      "photos": [],
       "links": {
         "website": "https://www.benavides.com.mx/",
-        "instagram": null,
-        "facebook": null,
+        "instagram": "https://www.instagram.com/farmaciasbenavides/",
+        "facebook": "https://www.facebook.com/FarmaciasBenavides",
         "tiktok": null,
         "whatsapp": null,
         "rappi": null,
-        "uberEats": null,
+        "uberEats": "https://www.ubereats.com/mx/store/farmacias-benavides-zibata/qmXf2Af4WYiCyeQdM6cwyQ",
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
           "https://zibatahoy.com/listing/farmacias-benavides-zibata/",
-          "https://www.google.com/maps/search/Farmacias+Benavides+Paseo+Tunas+18a+Zibat%C3%A1"
+          "https://www.google.com/maps/search/Farmacias+Benavides+Paseo+Tunas+18a+Zibat%C3%A1",
+          "https://maps.app.goo.gl/4AhX4yRGkNHn5hFi7",
+          "https://www.ubereats.com/mx/store/farmacias-benavides-zibata/qmXf2Af4WYiCyeQdM6cwyQ",
+          "https://www.facebook.com/FarmaciasBenavides",
+          "https://www.instagram.com/farmaciasbenavides/"
         ]
       }
     },
     {
-      "description": null,
+      "id": "farmacia-guadalajara",
+      "slug": "farmacia-guadalajara",
+      "name": "Farmacia Guadalajara",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "farmacia"
+      ],
+      "description": {
+        "es": "Encuentra medicamentos, productos para el cuidado personal, bebés y más en Farmacias Guadalajara.",
+        "en": "Find medicine, personal care products, baby products and more at Farmacias Guadalajara."
+      },
       "hours": {
         "mon": [
           "00:00-24:00"
@@ -6626,19 +6655,14 @@
           "00:00-24:00"
         ]
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6748664,
+        "lng": -100.3225615
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/7k5ikfFYYr6HcsNw7",
       "googlePlaceId": null,
-      "phone": null,
+      "phone": "+523338181818",
       "photos": [],
-      "active": true,
-      "id": "farmacia-guadalajara",
-      "slug": "farmacia-guadalajara",
-      "name": "Farmacia Guadalajara",
-      "plazaId": "plaza-zielo",
-      "giros": [
-        "farmacia"
-      ],
       "links": {
         "website": "https://www.farmaciasguadalajara.com/",
         "instagram": null,
@@ -6646,21 +6670,34 @@
         "tiktok": null,
         "whatsapp": null,
         "rappi": null,
-        "uberEats": null,
+        "uberEats": "https://www.ubereats.com/mx/store/farmacias-guadalajara-zibata-el-marques-queretaro/c-aekooRUFOBfbbRJsMjmA",
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
           "https://zibatahoy.com/listing/farmacia-guadalajara-zibata/",
-          "https://www.google.com/maps/search/Farmacia+Guadalajara+Zibat%C3%A1"
+          "https://www.google.com/maps/search/Farmacia+Guadalajara+Zibat%C3%A1",
+          "https://maps.app.goo.gl/7k5ikfFYYr6HcsNw7",
+          "https://www.ubereats.com/mx/store/farmacias-guadalajara-zibata-el-marques-queretaro/c-aekooRUFOBfbbRJsMjmA"
         ]
       }
     },
     {
-      "description": null,
+      "id": "farmacias-similares",
+      "slug": "farmacias-similares",
+      "name": "Farmacias Similares",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "farmacia"
+      ],
+      "description": {
+        "es": "Cadena farmacéutica líder en México y América Latina. Trabajamos todos los días para ayudar a los que menos tienen.",
+        "en": "Leading pharmacy chain in Mexico and Latin America. We work every day to help those who have the least."
+      },
       "hours": {
         "mon": [
           "08:00-22:00"
@@ -6684,40 +6721,51 @@
           "09:00-21:00"
         ]
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6791076,
+        "lng": -100.3146856
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/AvTk4HUAw993cZuT9",
       "googlePlaceId": null,
-      "phone": null,
+      "phone": "+524461139222",
       "photos": [],
-      "active": true,
-      "id": "farmacias-similares",
-      "slug": "farmacias-similares",
-      "name": "Farmacias Similares",
-      "plazaId": "paseo-zibata",
-      "giros": [
-        "farmacia"
-      ],
       "links": {
         "website": "https://www.farmaciasdesimilares.com",
-        "instagram": null,
-        "facebook": null,
+        "instagram": "https://www.instagram.com/fsimilares",
+        "facebook": "https://www.facebook.com/farmaciassimilares/",
         "tiktok": null,
         "whatsapp": null,
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://zibatahoy.com/listing/farmacias-similares-zibata/"
+          "https://zibatahoy.com/listing/farmacias-similares-zibata/",
+          "https://maps.app.goo.gl/AvTk4HUAw993cZuT9",
+          "https://www.instagram.com/fsimilares",
+          "https://www.facebook.com/farmaciassimilares/"
         ]
       }
     },
     {
-      "description": null,
+      "id": "unicca-paseo-zibata",
+      "slug": "unicca-paseo-zibata",
+      "name": "UNICCA Paseo Zibatá",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "consulta-general",
+        "consulta-de-especialidad",
+        "laboratorio-clinico"
+      ],
+      "description": {
+        "es": "Centro Médico UNICCA Zibatá es un centro médico con más de 51 Especialidades Médicas, laboratorios, rayos x, ultrasonidos y muchos más servicios de salud.",
+        "en": "UNICCA Zibatá Medical Center is a medical center with more than 51 medical specialties, laboratories, X-rays, ultrasounds and many more health services."
+      },
       "hours": {
         "mon": [
           "07:00-21:00"
@@ -6744,19 +6792,9 @@
       "googlePlaceId": null,
       "phone": "+524428633014",
       "photos": [],
-      "active": true,
-      "id": "medical-group-zibata",
-      "slug": "medical-group-zibata",
-      "name": "Medical Group Zibatá",
-      "plazaId": "paseo-zibata",
-      "giros": [
-        "consulta-general",
-        "consulta-de-especialidad",
-        "laboratorio-clinico"
-      ],
       "links": {
         "website": null,
-        "instagram": null,
+        "instagram": "https://www.instagram.com/unicca.zibata/",
         "facebook": "https://www.facebook.com/uniccazibata",
         "tiktok": null,
         "whatsapp": null,
@@ -6764,28 +6802,64 @@
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
           "https://zibatahoy.com/listing/medical-group-zibata/",
-          "https://www.google.com/maps/search/UNICCA+Zibat%C3%A1"
+          "https://www.google.com/maps/search/UNICCA+Zibat%C3%A1",
+          "https://www.instagram.com/unicca.zibata/"
         ]
       }
     },
     {
-      "description": null,
+      "id": "unicca-centro-zibata",
+      "slug": "unicca-centro-zibata",
+      "name": "UNICCA Centro Zibatá",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "consulta-general",
+        "consulta-de-especialidad",
+        "laboratorio-clinico"
+      ],
+      "description": {
+        "es": "Centro Médico UNICCA Zibatá es un centro médico con más de 51 Especialidades Médicas, laboratorios, rayos x, ultrasonidos y muchos más servicios de salud.",
+        "en": "UNICCA Zibatá Medical Center is a medical center with more than 51 medical specialties, laboratories, X-rays, ultrasounds and many more health services."
+      },
       "hours": null,
       "location": {
-        "lat": 20.6782586,
-        "lng": -100.3138833
+        "lat": 20.6812918,
+        "lng": -100.3403446
       },
-      "googleMapsUri": "https://maps.app.goo.gl/tJJyCXcHGuahKcHj8",
+      "googleMapsUri": "https://maps.app.goo.gl/f3XvQKPQUWMtn4w4A",
       "googlePlaceId": null,
-      "phone": null,
+      "phone": "+524427200013",
       "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/unicca.zibata/",
+        "facebook": "https://www.facebook.com/uniccazibata",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
       "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-15",
+        "sources": [
+          "https://maps.app.goo.gl/f3XvQKPQUWMtn4w4A",
+          "https://www.facebook.com/uniccazibata",
+          "https://www.instagram.com/unicca.zibata/"
+        ]
+      }
+    },
+    {
       "id": "laboratorio-del-chopo",
       "slug": "laboratorio-del-chopo",
       "name": "Laboratorio Médico del Chopo",
@@ -6793,27 +6867,77 @@
       "giros": [
         "laboratorio-clinico"
       ],
+      "description": {
+        "es": "Más de 75 años brindando certeza, confianza, tranquilidad y seguridad a la salud de las familias en México con análisis clínicos y estudios especializados en nuestras más de 700 sucursales a nivel nacional. 🔬💙",
+        "en": "For more than 75 years, bringing certainty, trust, peace of mind and security to the health of families in Mexico with clinical analyses and specialized studies at our more than 700 branches nationwide. 🔬💙"
+      },
+      "hours": {
+        "mon": [
+          "07:00-15:00"
+        ],
+        "tue": [
+          "07:00-15:00"
+        ],
+        "wed": [
+          "07:00-15:00"
+        ],
+        "thu": [
+          "07:00-15:00"
+        ],
+        "fri": [
+          "07:00-15:00"
+        ],
+        "sat": [
+          "07:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6782586,
+        "lng": -100.3138833
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/cm3rZ7u2gKHM5xKPA",
+      "googlePlaceId": null,
+      "phone": "+525511044880",
+      "photos": [],
       "links": {
-        "website": "https://www.chopo.com.mx/",
-        "instagram": null,
-        "facebook": null,
-        "tiktok": null,
+        "website": "https://www.chopo.com.mx/sucursal-xentric-anahuac-paseo-de-las-pitahayas-1a-l-131",
+        "instagram": "https://www.instagram.com/labmedicochopo",
+        "facebook": "https://www.facebook.com/LabMedicoChopo",
+        "tiktok": "https://www.tiktok.com/@labmedicochopo",
         "whatsapp": null,
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://www.google.com/maps/place/Laboratorio+M%C3%A9dico+del+Chopo+Xentric+An%C3%A1huac/@20.6782649,-100.3139789,20z"
+          "https://www.google.com/maps/place/Laboratorio+M%C3%A9dico+del+Chopo+Xentric+An%C3%A1huac/@20.6782649,-100.3139789,20z",
+          "https://maps.app.goo.gl/cm3rZ7u2gKHM5xKPA",
+          "https://www.chopo.com.mx/sucursal-xentric-anahuac-paseo-de-las-pitahayas-1a-l-131",
+          "https://www.instagram.com/labmedicochopo",
+          "https://www.facebook.com/LabMedicoChopo",
+          "https://www.tiktok.com/@labmedicochopo"
         ]
       }
     },
     {
-      "description": null,
+      "id": "micromacro-dental",
+      "slug": "micromacro-dental",
+      "name": "Micromacro Dental",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "dentista",
+        "ortodoncia"
+      ],
+      "description": {
+        "es": "En micromacro tenemos como propósito brindarte soluciones para mejorar tu sonrisa, poniéndote en manos de los mejores profesionales para que tu experiencia sea grata, obtengas salud bucal y presencia estética.",
+        "en": "At micromacro our purpose is to bring you solutions to improve your smile, putting you in the hands of the best professionals so that your experience is pleasant and you gain oral health and an aesthetic appearance."
+      },
       "hours": {
         "mon": [
           "09:30-14:00",
@@ -6840,20 +6964,14 @@
         ],
         "sun": []
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6840515,
+        "lng": -100.3263097
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/grg9DfSvy89AmsF68",
       "googlePlaceId": null,
       "phone": "+524422957979",
       "photos": [],
-      "active": true,
-      "id": "micromacro-dental",
-      "slug": "micromacro-dental",
-      "name": "Micromacro Dental",
-      "plazaId": "xentric-zibata",
-      "giros": [
-        "dentista",
-        "ortodoncia"
-      ],
       "links": {
         "website": "https://micromacrodental.com",
         "instagram": null,
@@ -6864,19 +6982,32 @@
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
           "https://zibatahoy.com/es/listado/zibata-dental-micro-macro/",
           "https://micromacrodental.com",
-          "https://www.google.com/maps/search/Micromacro+Dental+Zibat%C3%A1"
+          "https://www.google.com/maps/search/Micromacro+Dental+Zibat%C3%A1",
+          "https://maps.app.goo.gl/grg9DfSvy89AmsF68"
         ]
       }
     },
     {
-      "description": null,
+      "id": "thedek",
+      "slug": "thedek",
+      "name": "Thedek",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "dentista",
+        "ortodoncia"
+      ],
+      "description": {
+        "es": "¡Descubre la odontología digital sin molestias y con resultados 100% estéticos!",
+        "en": "Discover digital dentistry without discomfort and with 100% aesthetic results!"
+      },
       "hours": {
         "mon": [
           "09:00-19:00"
@@ -6895,67 +7026,74 @@
         ],
         "sat": [
           "09:00-15:00"
-        ]
+        ],
+        "sun": []
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6781485,
+        "lng": -100.3135358
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/GD7a51D1fbKouzE28",
       "googlePlaceId": null,
       "phone": "+524428122380",
       "photos": [],
-      "active": true,
-      "id": "thedek",
-      "slug": "thedek",
-      "name": "Thedek",
-      "plazaId": "xentric-anahuac",
-      "giros": [
-        "dentista",
-        "ortodoncia"
-      ],
       "links": {
         "website": "https://thedek.mx/",
         "instagram": "https://www.instagram.com/thedekmx/",
         "facebook": "https://www.facebook.com/thedekmx",
-        "tiktok": null,
+        "tiktok": "https://www.tiktok.com/@_thedek_",
         "whatsapp": null,
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-11",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://zibatahoy.com/listing/thedek/"
+          "https://zibatahoy.com/listing/thedek/",
+          "https://maps.app.goo.gl/GD7a51D1fbKouzE28",
+          "https://www.tiktok.com/@_thedek_"
         ]
       }
     },
     {
-      "description": null,
+      "id": "zibamedic",
+      "slug": "zibamedic",
+      "name": "Zibamedic",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "consulta-general"
+      ],
+      "description": {
+        "es": "Atención médica de calidad 👩🏻‍⚕️👨🏻‍⚕️",
+        "en": "Quality medical care 👩🏻‍⚕️👨🏻‍⚕️"
+      },
       "hours": {
         "mon": [
-          "09:00-14:00",
-          "16:00-19:30"
+          "09:30-14:30",
+          "15:00-20:00"
         ],
         "tue": [
-          "09:00-14:00",
-          "16:00-19:30"
+          "09:30-14:30",
+          "15:00-20:00"
         ],
         "wed": [
-          "09:00-14:00",
-          "16:00-19:30"
+          "09:30-14:30",
+          "15:00-20:00"
         ],
         "thu": [
-          "09:00-14:00",
-          "16:00-19:30"
+          "09:30-14:30",
+          "15:00-20:00"
         ],
         "fri": [
-          "09:00-14:00",
-          "16:00-19:30"
+          "09:30-14:30",
+          "15:00-20:00"
         ],
         "sat": [
-          "10:00-14:00",
-          "16:00-18:00"
+          "10:00-14:45"
         ],
         "sun": []
       },
@@ -6964,35 +7102,40 @@
       "googlePlaceId": null,
       "phone": "+524424150590",
       "photos": [],
-      "active": true,
-      "id": "zibamedic",
-      "slug": "zibamedic",
-      "name": "Zibamedic",
-      "plazaId": "plaza-zielo",
-      "giros": [
-        "consulta-general"
-      ],
       "links": {
         "website": "https://zibamedic.wixsite.com/queretaro",
-        "instagram": null,
-        "facebook": null,
+        "instagram": "https://www.instagram.com/zibamedic",
+        "facebook": "https://www.facebook.com/p/Zibamedic-100028342045874",
         "tiktok": null,
         "whatsapp": null,
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://zibamedic.wixsite.com/queretaro"
+          "https://zibamedic.wixsite.com/queretaro",
+          "https://www.instagram.com/zibamedic",
+          "https://www.facebook.com/p/Zibamedic-100028342045874"
         ]
       }
     },
     {
-      "description": null,
+      "id": "saiens-zibata",
+      "slug": "saiens-zibata",
+      "name": "SAIENS Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "laboratorio-clinico"
+      ],
+      "description": {
+        "es": "Tus estudios de hoy, con resultados hoy mismo.",
+        "en": "Your tests today, with results today."
+      },
       "hours": {
         "mon": [
           "06:00-15:00"
@@ -7014,40 +7157,50 @@
         ],
         "sun": []
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6746806,
+        "lng": -100.3228599
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/6qpBsYJAL9AsfpoT6",
       "googlePlaceId": null,
       "phone": "+524461399233",
       "photos": [],
-      "active": true,
-      "id": "saiens-zibata",
-      "slug": "saiens-zibata",
-      "name": "SAIENS Zibatá",
-      "plazaId": "plaza-zielo",
-      "giros": [
-        "laboratorio-clinico"
-      ],
       "links": {
-        "website": "https://saiens.com.mx",
-        "instagram": null,
-        "facebook": null,
+        "website": "https://saiens.com.mx/sucursales/saiens-zibata/",
+        "instagram": "https://www.instagram.com/saienslab/",
+        "facebook": "https://www.facebook.com/SaiensLaboratorioClinico/",
         "tiktok": null,
-        "whatsapp": "+524461333196",
+        "whatsapp": "+524461334560",
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://saiens.com.mx"
+          "https://saiens.com.mx",
+          "https://maps.app.goo.gl/6qpBsYJAL9AsfpoT6",
+          "https://saiens.com.mx/sucursales/saiens-zibata/",
+          "https://www.instagram.com/saienslab/",
+          "https://www.facebook.com/SaiensLaboratorioClinico/"
         ]
       }
     },
     {
-      "description": null,
+      "id": "dermasphere-studio",
+      "slug": "dermasphere-studio",
+      "name": "Dermasphere Studio",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "dermatologia"
+      ],
+      "description": {
+        "es": "Dermatología de especialidad para tu piel, tu cabello y tus uñas.",
+        "en": "Specialty dermatology for your skin, your hair and your nails."
+      },
       "hours": {
         "mon": [
           "10:00-19:00"
@@ -7069,19 +7222,14 @@
         ],
         "sun": []
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6791872,
+        "lng": -100.314658
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/kh6HiaMSSKLh3GWE7",
       "googlePlaceId": null,
       "phone": "+524426381324",
       "photos": [],
-      "active": true,
-      "id": "dermasphere-studio",
-      "slug": "dermasphere-studio",
-      "name": "Dermasphere Studio",
-      "plazaId": "paseo-zibata",
-      "giros": [
-        "consulta-de-especialidad"
-      ],
       "links": {
         "website": "https://dermaspherestudio.com",
         "instagram": "https://www.instagram.com/dermasphere_zibata/",
@@ -7092,17 +7240,29 @@
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://dermaspherestudio.com"
+          "https://dermaspherestudio.com",
+          "https://maps.app.goo.gl/kh6HiaMSSKLh3GWE7"
         ]
       }
     },
     {
-      "description": null,
+      "id": "dental-factory-kids-family",
+      "slug": "dental-factory-kids-family",
+      "name": "Dental Factory Kids & Family",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "dentista"
+      ],
+      "description": {
+        "es": "Somos Dental Factory, líderes en odontología moderna. Nuestro compromiso es crear sonrisas saludables y radiantes. ¡Únete a nuestra familia dental hoy mismo.",
+        "en": "We are Dental Factory, leaders in modern dentistry. Our commitment is to create healthy, radiant smiles. Join our dental family today."
+      },
       "hours": {
         "mon": [
           "09:00-14:00",
@@ -7129,19 +7289,14 @@
         ],
         "sun": []
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6748664,
+        "lng": -100.3225615
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/FDBBviQVp62ZQ6bi7",
       "googlePlaceId": null,
       "phone": "+524461049316",
       "photos": [],
-      "active": true,
-      "id": "dental-factory-kids-family",
-      "slug": "dental-factory-kids-family",
-      "name": "Dental Factory Kids & Family",
-      "plazaId": "plaza-zielo",
-      "giros": [
-        "dentista"
-      ],
       "links": {
         "website": "https://dentalfactory.com.mx",
         "instagram": "https://www.instagram.com/dental_factoryop/",
@@ -7152,17 +7307,29 @@
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://dentalfactory.com.mx"
+          "https://dentalfactory.com.mx",
+          "https://maps.app.goo.gl/FDBBviQVp62ZQ6bi7"
         ]
       }
     },
     {
-      "description": null,
+      "id": "brodmann18",
+      "slug": "brodmann18",
+      "name": "BRODMANN18",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "optica"
+      ],
+      "description": {
+        "es": "Brindamos la mejor solución integral para cuidar la salud visual de nuestros pacientes con elegancia, tecnología y precisión.",
+        "en": "The best comprehensive solution for caring for our patients' eye health, with elegance, technology and precision."
+      },
       "hours": {
         "mon": [
           "10:30-19:30"
@@ -7183,22 +7350,17 @@
           "10:30-18:30"
         ],
         "sun": [
-          "10:30-17:30"
+          "10:30-18:30"
         ]
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6790599,
+        "lng": -100.3149091
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/sTTu9EsFEyvPAqDm8",
       "googlePlaceId": null,
       "phone": "+524424154198",
       "photos": [],
-      "active": true,
-      "id": "brodmann18",
-      "slug": "brodmann18",
-      "name": "BRODMANN18",
-      "plazaId": "paseo-zibata",
-      "giros": [
-        "optica"
-      ],
       "links": {
         "website": "https://brodmann18.com",
         "instagram": "https://www.instagram.com/brodmann18/",
@@ -7209,13 +7371,15 @@
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-15",
         "sources": [
           "https://brodmann18.com",
-          "https://www.google.com/maps/search/BRODMANN18+Zibat%C3%A1"
+          "https://www.google.com/maps/search/BRODMANN18+Zibat%C3%A1",
+          "https://maps.app.goo.gl/sTTu9EsFEyvPAqDm8"
         ]
       }
     }

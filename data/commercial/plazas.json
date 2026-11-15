@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-13",
+  "updatedAt": "2026-11-15",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -297,9 +297,9 @@
         "sana-corazon",
         "enzza-pizza-zibata",
         "farmacias-similares",
-        "medical-group-zibata",
         "dermasphere-studio",
-        "brodmann18"
+        "brodmann18",
+        "unicca-paseo-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -987,7 +987,8 @@
         "pio-poke-house",
         "lilo-bowl-bar",
         "starbucks-centro-zibata",
-        "marie-panaderia-artesanal"
+        "marie-panaderia-artesanal",
+        "unicca-centro-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -996,7 +997,9 @@
         "asiatica",
         "saludable",
         "panaderia-y-reposteria",
-        "bebidas"
+        "bebidas",
+        "consultorios-y-clinicas",
+        "laboratorios-y-diagnostico"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Centro Zibatá\" (shopping center) y Agave Grill; huella de Overture.",

@@ -37,6 +37,7 @@ import {
   Shrimp,
   Stethoscope,
   Store,
+  TubeLotion,
   UtensilsCrossed,
   Wine,
 } from 'lucide-react'
@@ -487,6 +488,7 @@ const ICONS: Record<string, IconComponent> = {
   store: Store,
   taco: Taco,
   tooth: Tooth,
+  'tube-lotion': TubeLotion,
   torta: Torta,
   'utensils-crossed': UtensilsCrossed,
   waffle: Waffle,
