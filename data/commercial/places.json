@@ -6725,7 +6725,7 @@
         "lat": 20.6791076,
         "lng": -100.3146856
       },
-      "googleMapsUri": "https://maps.app.goo.gl/AvTk4HUAw993cZuT9",
+      "googleMapsUri": "https://maps.app.goo.gl/cJtbgmrqZuHxtzR9A",
       "googlePlaceId": null,
       "phone": "+524461139222",
       "photos": [],
@@ -6745,8 +6745,8 @@
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-15",
         "sources": [
+          "https://maps.app.goo.gl/cJtbgmrqZuHxtzR9A",
           "https://zibatahoy.com/listing/farmacias-similares-zibata/",
-          "https://maps.app.goo.gl/AvTk4HUAw993cZuT9",
           "https://www.instagram.com/fsimilares",
           "https://www.facebook.com/farmaciassimilares/"
         ]
@@ -6764,12 +6764,34 @@
         "es": "Cadena farmacéutica líder en México y América Latina. Trabajamos todos los días para ayudar a los que menos tienen.",
         "en": "Leading pharmacy chain in Mexico and Latin America. We work every day to help those who have the least."
       },
-      "hours": null,
+      "hours": {
+        "mon": [
+          "08:00-22:00"
+        ],
+        "tue": [
+          "08:00-22:00"
+        ],
+        "wed": [
+          "08:00-22:00"
+        ],
+        "thu": [
+          "08:00-22:00"
+        ],
+        "fri": [
+          "08:00-22:00"
+        ],
+        "sat": [
+          "08:00-22:00"
+        ],
+        "sun": [
+          "09:00-21:00"
+        ]
+      },
       "location": {
         "lat": 20.6812808,
         "lng": -100.3403033
       },
-      "googleMapsUri": "https://www.google.com/maps/place/Farmacia+Similares/@20.6812,-100.3403,16z/data=!4m10!1m2!2m1!1sFarmacia+Similares+Centro+Zibat%C3%A1+Qro!3m6!1s0x85d35d000018d7b7:0x921b865d18930651!8m2!3d20.6812808!4d-100.3403033!16s%2Fg%2F11vz8lmrr3",
+      "googleMapsUri": "https://maps.app.goo.gl/txtgYzGnNBwKpGi29",
       "googlePlaceId": null,
       "phone": null,
       "photos": [],
@@ -6789,7 +6811,7 @@
         "confidence": "low",
         "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://www.google.com/maps/place/Farmacia+Similares/@20.6812,-100.3403,16z/data=!4m10!1m2!2m1!1sFarmacia+Similares+Centro+Zibat%C3%A1+Qro!3m6!1s0x85d35d000018d7b7:0x921b865d18930651!8m2!3d20.6812808!4d-100.3403033!16s%2Fg%2F11vz8lmrr3",
+          "https://maps.app.goo.gl/txtgYzGnNBwKpGi29",
           "https://www.instagram.com/fsimilares",
           "https://www.facebook.com/farmaciassimilares/"
         ]
@@ -6830,8 +6852,11 @@
         ],
         "sun": []
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6795136,
+        "lng": -100.3151707
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/Centro+M%C3%A9dico+UNICCA/@20.6795136,-100.3151707,17z/data=!4m6!3m5!1s0x85d35d04eea56dc3:0x12cfe4368df6a835!8m2!3d20.6795136!4d-100.3151707!16s%2Fg%2F11jgdqxtsc",
       "googlePlaceId": null,
       "phone": "+524428633014",
       "photos": [],
@@ -6851,6 +6876,7 @@
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-15",
         "sources": [
+          "https://www.google.com/maps/place/Centro+M%C3%A9dico+UNICCA/@20.6795136,-100.3151707,17z/data=!4m6!3m5!1s0x85d35d04eea56dc3:0x12cfe4368df6a835!8m2!3d20.6795136!4d-100.3151707!16s%2Fg%2F11jgdqxtsc",
           "https://zibatahoy.com/listing/medical-group-zibata/",
           "https://www.google.com/maps/search/UNICCA+Zibat%C3%A1",
           "https://www.instagram.com/unicca.zibata/"
@@ -7160,8 +7186,11 @@
         ],
         "sun": []
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6747698,
+        "lng": -100.3229571
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/Zibamedic/@20.6747698,-100.3229571,17z/data=!4m6!3m5!1s0x85d35da228c59ab3:0x6a9bffbd3b47395b!8m2!3d20.6747698!4d-100.3229571!16s%2Fg%2F11lg8f5jsr",
       "googlePlaceId": null,
       "phone": "+524424150590",
       "photos": [],
@@ -7181,6 +7210,7 @@
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-15",
         "sources": [
+          "https://www.google.com/maps/place/Zibamedic/@20.6747698,-100.3229571,17z/data=!4m6!3m5!1s0x85d35da228c59ab3:0x6a9bffbd3b47395b!8m2!3d20.6747698!4d-100.3229571!16s%2Fg%2F11lg8f5jsr",
           "https://zibamedic.wixsite.com/queretaro",
           "https://www.instagram.com/zibamedic",
           "https://www.facebook.com/p/Zibamedic-100028342045874"
