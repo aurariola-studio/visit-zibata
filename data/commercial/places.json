@@ -6753,6 +6753,49 @@
       }
     },
     {
+      "id": "farmacias-similares-centro-zibata",
+      "slug": "farmacias-similares-centro-zibata",
+      "name": "Farmacias Similares",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "farmacia"
+      ],
+      "description": {
+        "es": "Cadena farmacéutica líder en México y América Latina. Trabajamos todos los días para ayudar a los que menos tienen.",
+        "en": "Leading pharmacy chain in Mexico and Latin America. We work every day to help those who have the least."
+      },
+      "hours": null,
+      "location": {
+        "lat": 20.6812808,
+        "lng": -100.3403033
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/Farmacia+Similares/@20.6812,-100.3403,16z/data=!4m10!1m2!2m1!1sFarmacia+Similares+Centro+Zibat%C3%A1+Qro!3m6!1s0x85d35d000018d7b7:0x921b865d18930651!8m2!3d20.6812808!4d-100.3403033!16s%2Fg%2F11vz8lmrr3",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.farmaciasdesimilares.com",
+        "instagram": "https://www.instagram.com/fsimilares",
+        "facebook": "https://www.facebook.com/farmaciassimilares/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-15",
+        "sources": [
+          "https://www.google.com/maps/place/Farmacia+Similares/@20.6812,-100.3403,16z/data=!4m10!1m2!2m1!1sFarmacia+Similares+Centro+Zibat%C3%A1+Qro!3m6!1s0x85d35d000018d7b7:0x921b865d18930651!8m2!3d20.6812808!4d-100.3403033!16s%2Fg%2F11vz8lmrr3",
+          "https://www.instagram.com/fsimilares",
+          "https://www.facebook.com/farmaciassimilares/"
+        ]
+      }
+    },
+    {
       "id": "unicca-paseo-zibata",
       "slug": "unicca-paseo-zibata",
       "name": "UNICCA Paseo Zibatá",
@@ -6828,12 +6871,32 @@
         "es": "Centro Médico UNICCA Zibatá es un centro médico con más de 51 Especialidades Médicas, laboratorios, rayos x, ultrasonidos y muchos más servicios de salud.",
         "en": "UNICCA Zibatá Medical Center is a medical center with more than 51 medical specialties, laboratories, X-rays, ultrasounds and many more health services."
       },
-      "hours": null,
+      "hours": {
+        "mon": [
+          "07:00-21:00"
+        ],
+        "tue": [
+          "07:00-21:00"
+        ],
+        "wed": [
+          "07:00-21:00"
+        ],
+        "thu": [
+          "07:00-21:00"
+        ],
+        "fri": [
+          "07:00-21:00"
+        ],
+        "sat": [
+          "07:30-21:00"
+        ],
+        "sun": []
+      },
       "location": {
         "lat": 20.6812918,
         "lng": -100.3403446
       },
-      "googleMapsUri": "https://maps.app.goo.gl/f3XvQKPQUWMtn4w4A",
+      "googleMapsUri": "https://maps.app.goo.gl/obX1bSRjtcYCVFpK8",
       "googlePlaceId": null,
       "phone": "+524427200013",
       "photos": [],
@@ -6853,7 +6916,7 @@
         "confidence": "low",
         "lastVerifiedAt": "2026-11-15",
         "sources": [
-          "https://maps.app.goo.gl/f3XvQKPQUWMtn4w4A",
+          "https://maps.app.goo.gl/obX1bSRjtcYCVFpK8",
           "https://www.facebook.com/uniccazibata",
           "https://www.instagram.com/unicca.zibata/"
         ]

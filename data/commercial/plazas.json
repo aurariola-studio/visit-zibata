@@ -988,7 +988,8 @@
         "lilo-bowl-bar",
         "starbucks-centro-zibata",
         "marie-panaderia-artesanal",
-        "unicca-centro-zibata"
+        "unicca-centro-zibata",
+        "farmacias-similares-centro-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -998,6 +999,7 @@
         "saludable",
         "panaderia-y-reposteria",
         "bebidas",
+        "farmacias",
         "consultorios-y-clinicas",
         "laboratorios-y-diagnostico"
       ],
