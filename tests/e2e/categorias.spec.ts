@@ -88,7 +88,8 @@ test.describe('Páginas de categoría', () => {
     page,
   }) => {
     // La última del carril es la más lejana: con el carril en su principio quedaría fuera de la pantalla.
-    await openApp(page)
+    // Con varios sectores, las categorías se ven dentro de un sector.
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
     await waitForMap(page)
     const href = await cápsulas(page).getByRole('link').last().getAttribute('href')
     const slug = href?.split('/').pop()
