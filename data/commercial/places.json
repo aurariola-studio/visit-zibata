@@ -7387,10 +7387,10 @@
           "06:00-21:00"
         ],
         "sat": [
-          "06:00-21:00"
+          "09:00-13:00"
         ],
         "sun": [
-          "06:00-21:00"
+          "09:00-13:00"
         ],
         "byClasses": true
       },
@@ -7420,7 +7420,8 @@
         "sources": [
           "https://www.facebook.com/share/17jWqRENsY/",
           "https://www.google.com/maps/search/Devotion+Heat+Room+Zibat%C3%A1",
-          "https://maps.app.goo.gl/EYmvmerjdNmewt5S8"
+          "https://maps.app.goo.gl/EYmvmerjdNmewt5S8",
+          "https://devotion-mx.com/"
         ]
       }
     },
