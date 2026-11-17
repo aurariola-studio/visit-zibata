@@ -23,7 +23,6 @@ import { es } from '../../src/i18n/es.ts'
 import {
   etiquetaDeCategoria,
   etiquetaDeGiro,
-  ganchoDeCategoria,
   lista,
   type Traductor,
 } from '../../src/lib/categorias.ts'
@@ -287,9 +286,9 @@ export function pagesFor(
     const zonas = activePlazas.filter((plaza) =>
       lugares.some((place) => place.plazaId === plaza.id),
     )
-    // La descripción arranca con el gancho de la categoría y cuenta cuántos lugares hay.
+    // La descripción dice el nombre de la categoría y cuántos lugares hay.
     const resumen = fill(conCantidad(copy['seo.category.description'], lugares.length, locale), {
-      hook: ganchoDeCategoria(categoria, locale, traducir),
+      nombre: etiqueta,
     })
     /*
      * El título nombra lo que la gente busca cuando la etiqueta es más general ("Comida Rápida" se

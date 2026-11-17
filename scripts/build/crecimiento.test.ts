@@ -106,11 +106,11 @@ describe.each([
 describe.each([
   [
     'es',
-    'Encuentra lo mejor de Belleza de Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte.',
+    'Belleza en Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte, con horario, contacto y cómo llegar.',
   ],
   [
     'en',
-    'Find the best Beauty in Zibatá. Meet the one place the community has to offer, with hours, contact and directions.',
+    'Beauty in Zibatá. Meet the one place the community has to offer, with hours, contact and directions.',
   ],
 ] as const)('la descripción de una categoría con un solo local (%s)', (idioma, singular) => {
   const paginaDeCategoria = (datos: Dataset) =>

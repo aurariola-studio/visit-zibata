@@ -72,27 +72,6 @@ const NOMBRES = {
   internacional: 'seo.category.nombre.internacional',
 } as const satisfies Record<string, MessageKey>
 
-/** Con qué arranca la descripción: el artículo y el "mejor" que pide el género y el número. */
-const GANCHOS = {
-  'desayunos-y-cafe': 'seo.category.hook.desayunos-y-cafe',
-  'tacos-y-antojitos': 'seo.category.hook.tacos-y-antojitos',
-  mexicana: 'seo.category.hook.mexicana',
-  'carnes-y-parrilla': 'seo.category.hook.carnes-y-parrilla',
-  mariscos: 'seo.category.hook.mariscos',
-  hamburguesas: 'seo.category.hook.hamburguesas',
-  italiana: 'seo.category.hook.italiana',
-  asiatica: 'seo.category.hook.asiatica',
-  'entre-panes': 'seo.category.hook.entre-panes',
-  saludable: 'seo.category.hook.saludable',
-  'panaderia-y-reposteria': 'seo.category.hook.panaderia-y-reposteria',
-  botanas: 'seo.category.hook.botanas',
-  'postres-y-dulces': 'seo.category.hook.postres-y-dulces',
-  bebidas: 'seo.category.hook.bebidas',
-  internacional: 'seo.category.hook.internacional',
-  casera: 'seo.category.hook.casera',
-  bar: 'seo.category.hook.bar',
-} as const satisfies Record<string, MessageKey>
-
 /** La etiqueta completa de la categoría, la que va en el título y en el nombre de la página. */
 export function etiquetaDeCategoria(
   categoria: Category,
@@ -101,19 +80,6 @@ export function etiquetaDeCategoria(
 ): string {
   const clave = NOMBRES[categoria.id as keyof typeof NOMBRES]
   return clave ? traducir(clave) : (categoria.label[idioma] ?? categoria.label.es)
-}
-
-/** "los mejores Tacos y Antojitos", "la mejor Comida Italiana", "el mejor Bar". */
-export function ganchoDeCategoria(
-  categoria: Category,
-  idioma: 'es' | 'en',
-  traducir: Traductor,
-): string {
-  const clave = GANCHOS[categoria.id as keyof typeof GANCHOS]
-  // Una categoría sin gancho propio se lee con el genérico, que sirve para cualquiera.
-  return clave
-    ? traducir(clave)
-    : traducir('seo.category.hook', { nombre: etiquetaDeCategoria(categoria, idioma, traducir) })
 }
 
 /**

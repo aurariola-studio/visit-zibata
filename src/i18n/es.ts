@@ -195,9 +195,9 @@ export const es = {
    * página ya las enseña, y con un solo local la frase se alargaba para decir poco.
    */
   'seo.category.description': {
-    one: 'Encuentra {hook} de Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte. Con horario, contacto y cómo llegar.',
+    one: '{nombre} en Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte, con horario, contacto y cómo llegar.',
     other:
-      'Encuentra {hook} de Zibatá. Conoce los {count} lugares que la comunidad tiene para ofrecerte. Con horarios, contacto y cómo llegar.',
+      '{nombre} en Zibatá. Conoce los {count} lugares que la comunidad tiene para ofrecerte, con horarios, contacto y cómo llegar.',
   },
   /*
    * El filtro usa la etiqueta corta a propósito ("Italiana", "Saludable"); el título y la
@@ -209,28 +209,6 @@ export const es = {
   'seo.category.nombre.saludable': 'Comida Saludable',
   'seo.category.nombre.casera': 'Comida Casera',
   'seo.category.nombre.internacional': 'Comida Internacional',
-  /*
-   * Con qué arranca la descripción: el artículo y el "mejor" van con el género y el número de cada
-   * etiqueta. Las que no están aquí leen "lo mejor de", que sirve para cualquiera.
-   */
-  'seo.category.hook': 'lo mejor de {nombre}',
-  'seo.category.hook.desayunos-y-cafe': 'los mejores Desayunos y Café',
-  'seo.category.hook.tacos-y-antojitos': 'los mejores Tacos y Antojitos',
-  'seo.category.hook.mexicana': 'la mejor Comida Mexicana',
-  'seo.category.hook.carnes-y-parrilla': 'las mejores Carnes y Parrilla',
-  'seo.category.hook.mariscos': 'los mejores Mariscos',
-  'seo.category.hook.hamburguesas': 'la mejor Comida Rápida',
-  'seo.category.hook.italiana': 'la mejor Comida Italiana',
-  'seo.category.hook.asiatica': 'la mejor Comida Asiática',
-  'seo.category.hook.entre-panes': 'lo mejor Entre Panes',
-  'seo.category.hook.saludable': 'la mejor Comida Saludable',
-  'seo.category.hook.panaderia-y-reposteria': 'la mejor Panadería y Repostería',
-  'seo.category.hook.botanas': 'lo mejor Para Picar',
-  'seo.category.hook.postres-y-dulces': 'los mejores Postres y Dulces',
-  'seo.category.hook.bebidas': 'las mejores Bebidas',
-  'seo.category.hook.internacional': 'la mejor Comida Internacional',
-  'seo.category.hook.casera': 'la mejor Comida Casera',
-  'seo.category.hook.bar': 'el mejor Bar',
   // Con dos o más giros que la etiqueta no dice, el título los nombra: es lo que la gente busca.
   'seo.category.title': '{label} en Zibatá, {giros}',
   'seo.category.places': 'Lugares de esta categoría',
