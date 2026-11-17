@@ -71,13 +71,10 @@ const Estiramiento = custom(
   </>,
 )
 
-/** Plato de espagueti: la cocina italiana. Hugeicons (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
-const Italiana = custom(
-  <>
-    <path d="M21.29 13H2.71c-1.52 0-.22 2.24.46 2.58l2.36 1.18c.24.12.35.18.45.26c.88.78 1.04 2.14 2.15 2.74c.44.24.97.24 2.01.24h3.72c1.05 0 1.57 0 2.01-.24c1.11-.59 1.27-1.96 2.15-2.74c.1-.09.22-.14.45-.26l2.36-1.18c.69-.34 1.98-2.58.46-2.58" />
-    <path d="M15 13a6 6 0 0 0-12 0" />
-    <path d="M21 13c0-2.76-2.22-5-4.97-5c-.92 0-1.79.25-2.53.7M7 12.22C7 11 7.9 10 9 10s2 1 2 2.22V14M9 6.56c.43-1.77 2.33-2.87 4.24-2.47c1.91.4 3.11 2.15 2.68 3.92" />
-  </>,
+/** Tenedor con fideos a un lado: la cocina italiana. Web Hosting Hub Icons `pasta` (OFL 1.1). */
+const Italiana = solid(
+  <path d="m896.59 320l-257-52q-5 49-41 82.5t-86 33.5h-64V64h64q50 0 86 33.5t41 81.5l257-51q128 0 128 95q0 53-36 75t-92 22m-544 128q-13 0-22.5-9.5t-9.5-22.5V32q0-13 9.5-22.5t22.5-9.5t22.5 9.5t9.5 22.5v384q0 13-9.5 22.5t-22.5 9.5m-128 576q-13 0-22.5-9.5t-9.5-22.5V32q0-13 9.5-22.5t22.5-9.5t22.5 9.5t9.5 22.5v960q0 13-9.5 22.5t-22.5 9.5M.59 352q0-13 9.5-22.5t22.5-9.5h96v64h-96q-13 0-22.5-9.5T.59 352m0-128q0-13 9.5-22.5t22.5-9.5h96v64h-96q-13 0-22.5-9.5T.59 224m0-128q0-13 9.5-22.5t22.5-9.5h96v64h-96q-13 0-22.5-9.5T.59 96" />,
+  '0 0 1025 1024',
 )
 
 /** Molcajete con su tejolote: la cocina mexicana de siempre. Iconoven (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
