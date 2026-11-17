@@ -26,6 +26,7 @@ import type {
 import { AjustesEdificiosFileSchema } from '../../src/data/ajustes-edificios.ts'
 import { PlazasFileSchema } from '../../src/data/schemas.ts'
 import { reglaDeVolumen, VolumenesPlazaFileSchema } from '../../src/data/volumenes-plaza.ts'
+import { VolumenesPropiosFileSchema } from '../../src/data/volumenes-propios.ts'
 import { normalizeText } from '../../src/lib/text.ts'
 import { Ajustador } from './lib/ajustes.ts'
 import {
@@ -326,6 +327,40 @@ if (problemasDeAjustes.length > 0) {
   throw new Error(
     `${problemasDeAjustes.length} ajuste(s) de edificios sin aplicar (data/geographic/ajustes-edificios.json)`,
   )
+}
+
+// Zonas sin edificios abiertos que no son un solo bloque (canchas, foodtrucks): las piezas dibujadas a mano.
+const propios = existsSync(paths.volumenesPropios)
+  ? VolumenesPropiosFileSchema.parse(readJson(paths.volumenesPropios))
+  : { plazas: {} }
+for (const [plazaId, piezas] of Object.entries(propios.plazas)) {
+  const forma = plazaShapes.find(({ plaza }) => plaza.id === plazaId)
+  if (!forma) {
+    throw new Error(`volumenes-propios.json: la zona "${plazaId}" no existe o no tiene contorno`)
+  }
+  const lista = plazaBuildings.get(plazaId) ?? []
+  for (const pieza of piezas) {
+    const polygon = turf.polygon([pieza.anillo])
+    if (!turf.booleanPointInPolygon(turf.centroid(polygon), forma.shape)) {
+      throw new Error(
+        `volumenes-propios.json: "${pieza.nombre}" de "${plazaId}" queda fuera del contorno de la zona`,
+      )
+    }
+    lista.push({
+      type: 'Feature',
+      properties: {
+        id: nextId++,
+        height: pieza.height,
+        type: 'commercial',
+        src: 'synthetic',
+        alturaFija: true,
+        inside: true,
+        plazaId,
+      },
+      geometry: turf.rewind(polygon.geometry) as Polygon,
+    })
+  }
+  plazaBuildings.set(plazaId, lista)
 }
 
 // Plazas sin huellas (o con huellas incompletas): volumen generado a partir de su geometría.

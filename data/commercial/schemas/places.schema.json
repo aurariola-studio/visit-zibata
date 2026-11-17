@@ -125,6 +125,10 @@
                   "note": {
                     "type": "string",
                     "minLength": 1
+                  },
+                  "byClasses": {
+                    "type": "boolean",
+                    "const": true
                   }
                 },
                 "additionalProperties": false

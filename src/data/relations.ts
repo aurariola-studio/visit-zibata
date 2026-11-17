@@ -15,6 +15,7 @@ export type DatasetName =
   | 'redirects'
   | 'ajustes-edificios'
   | 'volumenes-plaza'
+  | 'volumenes-propios'
 
 export interface DataIssue {
   level: IssueLevel

@@ -342,32 +342,32 @@
       },
       "address": "Av. Paseo de las Pitahayas 24, locales 22 y 23, Zibatá",
       "coordinates": {
-        "lat": 20.6799,
-        "lng": -100.3158
+        "lat": 20.680052,
+        "lng": -100.316126
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -100.31588,
-              20.680137
+              -100.315766,
+              20.68015
             ],
             [
-              -100.315535,
-              20.679893
+              -100.316088,
+              20.679703
             ],
             [
-              -100.31572,
-              20.679663
+              -100.316486,
+              20.679954
             ],
             [
-              -100.316065,
-              20.679907
+              -100.316164,
+              20.680401
             ],
             [
-              -100.31588,
-              20.680137
+              -100.315766,
+              20.68015
             ]
           ]
         ]
@@ -380,7 +380,7 @@
         "deportes"
       ],
       "locationConfidence": "low",
-      "locationSource": "Ficha de Maps (Av. Paseo de las Pitahayas 24, locales 22 y 23) y pickspot.mx: frente a la Universidad Anáhuac y junto a Paseo Zibatá. La huella es la de la zona FoodTrucks Pickleball, por verificar en campo.",
+      "locationSource": "Ficha de Maps (Av. Paseo de las Pitahayas 24, locales 22 y 23), pickspot.mx y satélite: cuatro canchas de pickleball y foodtrucks en el lote contiguo. Las piezas están dibujadas a mano en data/geographic/volumenes-propios.json. Por verificar en campo.",
       "verification": {
         "status": "likely_active",
         "confidence": "low",
@@ -1282,32 +1282,32 @@
       "description": null,
       "address": "Calle Agave 6, Zibatá",
       "coordinates": {
-        "lat": 20.689815,
-        "lng": -100.329563
+        "lat": 20.690018,
+        "lng": -100.329255
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -100.329733,
-              20.690165
+              -100.32933,
+              20.690254
             ],
             [
-              -100.329189,
-              20.689656
+              -100.329004,
+              20.689948
             ],
             [
-              -100.329393,
-              20.689465
+              -100.32918,
+              20.689783
             ],
             [
-              -100.329937,
-              20.689974
+              -100.329507,
+              20.690088
             ],
             [
-              -100.329733,
-              20.690165
+              -100.32933,
+              20.690254
             ]
           ]
         ]
@@ -1320,7 +1320,7 @@
         "deportes"
       ],
       "locationConfidence": "medium",
-      "locationSource": "Ficha de Maps del negocio y su sitio (intercepta.mx): Calle Agave 6. No hay edificio en los datos abiertos: la huella es un rectángulo de 2403 m² sugerido por map:suggest-plaza, orientado a la vialidad. Por verificar en campo.",
+      "locationSource": "Ficha de Maps del negocio (Calle Agave 6) y satélite: tres canchas de pádel junto a la vialidad y una caseta. No hay edificio en los datos abiertos: las piezas están dibujadas a mano en data/geographic/volumenes-propios.json. Por verificar en campo.",
       "verification": {
         "status": "likely_active",
         "confidence": "medium",

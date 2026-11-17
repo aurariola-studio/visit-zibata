@@ -84,15 +84,15 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2511709,
-      "sha256": "964a31e82862a87dcbe3f790b826c44d8b547c0153798ab47079306e9ee25116",
+      "bytes": 2511659,
+      "sha256": "42c8f903aa3d078d318d3cb04ccfb3183a827ffd5c147288f0ed8566503fc9af",
       "tiles": 265,
       "bytesByZoom": {
         "12": 46047,
         "13": 245444,
-        "14": 519927,
-        "15": 716843,
-        "16": 982149
+        "14": 519909,
+        "15": 716830,
+        "16": 982130
       },
       "largestTile": {
         "z": 13,
@@ -105,36 +105,29 @@
         "landuse": 125,
         "water": 6,
         "waterway": 8,
-        "buildings": 16020,
+        "buildings": 16019,
         "labels": 20,
         "trees": 30015,
         "shrubs": 1580
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 9245,
-      "sha256": "ca9a8e48d35f2b0893ba3fbbb964a28ba97b527363ef1ecd44bfff7a1064c0c2",
-      "features": 25,
+      "bytes": 13062,
+      "sha256": "4c590d30d98ee78cf9ae4bfcdf3e9318989c8c05da55d68ba3df5fcc21872ee4",
+      "features": 36,
       "synthesizedFor": [
         "paseo-zibata",
-        "foodtrucks-pickleball",
         "xentric-zibata",
         "campo-de-golf",
         "distrito-nandu",
         "plaza-luna",
-        "xenica",
-        "intercepta"
+        "xenica"
       ],
       "synthesisDetail": [
         {
           "plazaId": "paseo-zibata",
           "replacedFootprints": 1,
           "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en volumenes-plaza.json)"
-        },
-        {
-          "plazaId": "foodtrucks-pickleball",
-          "replacedFootprints": 0,
-          "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
         },
         {
           "plazaId": "xentric-zibata",
@@ -158,11 +151,6 @@
         },
         {
           "plazaId": "xenica",
-          "replacedFootprints": 0,
-          "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
-        },
-        {
-          "plazaId": "intercepta",
           "replacedFootprints": 0,
           "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
         }
@@ -254,8 +242,8 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3886944,
-        "sha256": "1c706d2dcda7833c737fcd1b1257196f1479e8bcabcffe3c3c7fe055ace0080f"
+        "bytes": 3886344,
+        "sha256": "a36650c2e40fa0fa9cd2a6552fddf955cc0ffaebac13b84b641802d8864954b4"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 142120,

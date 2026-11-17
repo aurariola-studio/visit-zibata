@@ -71,8 +71,10 @@ const isHours = (value: unknown) =>
   Object.entries(value).every(([key, ranges]) =>
     key === 'note'
       ? isText(ranges)
-      : (DAY_KEYS as readonly string[]).includes(key) &&
-        arrayOf((range) => typeof range === 'string' && isValidTimeRange(range))(ranges),
+      : key === 'byClasses'
+        ? ranges === true
+        : (DAY_KEYS as readonly string[]).includes(key) &&
+          arrayOf((range) => typeof range === 'string' && isValidTimeRange(range))(ranges),
   )
 
 const isPositiveInteger = (value: unknown) => Number.isInteger(value) && (value as number) > 0

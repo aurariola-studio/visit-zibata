@@ -91,6 +91,7 @@ export const en = {
   'hours.closedAllDay': 'Closed',
   'hours.today': 'Today',
   'hours.none': 'No opening hours published.',
+  'hours.byClasses': 'Hours depend on the classes. Check availability before you go.',
   'hours.reviewed': 'Hours checked on {date}.',
 
   'day.mon': 'Monday',
