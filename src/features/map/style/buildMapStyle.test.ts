@@ -23,6 +23,16 @@ describe('estilo del mapa', () => {
     expect(ids(style)).toContain('outside-veil')
   })
 
+  it('las piezas dibujadas a mano van en su propia capa, de esquinas rectas, y las demás redondeadas', () => {
+    const style = buildMapStyle(base)
+    const capa = (id: string) => style.layers.find((layer) => layer.id === id)
+    expect(capa('plaza-buildings')?.layout).toMatchObject({
+      'fill-extrusion-rounded-corner-distance': 0.8,
+    })
+    expect(capa('plaza-buildings-rectos')).toBeDefined()
+    expect(capa('plaza-buildings-rectos')?.layout).toBeUndefined()
+  })
+
   it('con realismo cada capa apunta a una fuente que existe y los ids no se repiten', () => {
     const style = buildMapStyle({ ...base, realismo })
     const layerIds = ids(style)

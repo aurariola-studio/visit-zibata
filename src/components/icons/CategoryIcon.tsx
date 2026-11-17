@@ -5,6 +5,8 @@
 import {
   Beef,
   Beer,
+  BicepsFlexed,
+  Bone,
   CakeSlice,
   Candy,
   Cherry,
@@ -13,16 +15,19 @@ import {
   Croissant,
   CupSoda,
   Drumstick,
-  Dumbbell,
   EggFried,
   Fish,
   Flame,
+  Glasses,
   Hamburger,
   HandPlatter,
+  HeartPulse,
   IceCreamCone,
   LeafyGreen,
   type LucideProps,
   Martini,
+  Microscope,
+  Pill,
   Pizza,
   Popcorn,
   Salad,
@@ -30,42 +35,13 @@ import {
   ShoppingBasket,
   ShoppingCart,
   Shrimp,
+  Stethoscope,
   Store,
   UtensilsCrossed,
   Wine,
 } from 'lucide-react'
-import type { ComponentType, ReactNode } from 'react'
-
-type IconComponent = ComponentType<LucideProps>
-
-/** Icono propio con la misma geometría de trazo que Lucide (24×24, trazo redondeado). */
-function custom(children: ReactNode): IconComponent {
-  return function CustomIcon({
-    size = 24,
-    strokeWidth = 2,
-    color = 'currentColor',
-    absoluteStrokeWidth: _,
-    ...rest
-  }) {
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke={color}
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-        {...rest}
-      >
-        {children}
-      </svg>
-    )
-  }
-}
+import { useEffect, useState } from 'react'
+import { custom, type IconComponent, solid } from './dibujar.tsx'
 
 const Taco = custom(
   <>
@@ -263,6 +239,24 @@ const Antojito = custom(
   </>,
 )
 
+/** Una muela vista de frente: la corona con dos lóbulos arriba y dos raíces abajo. */
+const DIENTE =
+  'M7.4 3.2c-2.2 0-3.9 1.7-3.9 4.1 0 1.9.8 3 1.4 4.8.6 1.8.5 4.4 1.3 6.9.3 1 .9 1.6 1.7 1.6 1.1 0 1.4-1.2 1.7-2.9.2-1.3.7-2.1 1.7-2.1s1.5.8 1.7 2.1c.3 1.7.6 2.9 1.7 2.9.8 0 1.4-.6 1.7-1.6.8-2.5.7-5.1 1.3-6.9.6-1.8 1.4-2.9 1.4-4.8 0-2.4-1.7-4.1-3.9-4.1-1.7 0-2.7.9-4.6.9S9.1 3.2 7.4 3.2Z'
+const Tooth = custom(<path d={DIENTE} />)
+
+/**
+ * Lo mismo con el aparato: un bracket en el centro de la corona y el alambre que la cruza, que sale a
+ * los dos lados. Es el diente de Dentista con lo que hace distinta a la Ortodoncia, y por eso comparte su
+ * silueta.
+ */
+const Ortodoncia = custom(
+  <>
+    <path d={DIENTE} />
+    {/* El bracket (un rectángulo de 4,4 × 3,4 centrado en x = 12) y el alambre, en un solo trazo. */}
+    <path d="M9.8 6.9h4.4v3.4H9.8ZM1.8 8.6h20.4" />
+  </>,
+)
+
 /** Memela vista desde arriba: la masa, la salsa irregular dentro y el queso encima. */
 const Memela = custom(
   <>
@@ -396,6 +390,37 @@ const Ramen = custom(
   </>,
 )
 
+/** Shaker o botella deportiva: vale igual para un batido que para un local de comida alta en proteína. Material Symbols (Apache 2.0). */
+const Proteina = solid(
+  <>
+    <path d="M9.825 22q-.775 0-1.35-.513t-.65-1.287l-.775-8.65q-.025-.25.088-.462t.337-.338q.2-.125.35-.3t.15-.425q0-.225-.1-.413t-.3-.312q-.25-.125-.375-.387t-.05-.538L7.8 5.75q.075-.35.35-.55t.625-.2H11.5V4H11q-.425 0-.712-.287T10 3t.288-.712T11 2h3q.425 0 .713.288T15 3t-.288.713T14 4h-.5v1h2.725q.35 0 .613.2t.337.55l.675 2.625q.075.275-.05.538t-.375.387q-.2.1-.312.275t-.113.4q0 .275.138.463t.362.312t.35.338t.1.462l-.775 8.625q-.075.775-.65 1.3t-1.35.525z" />
+  </>,
+)
+
+/**
+ * Capas de la piel: Dermatología. Material Symbols `dermatology-outline-rounded` (Apache 2.0). Es una silueta
+ * rellena, no de trazo: lleva `fill` y no `stroke`.
+ */
+const Dermatology: IconComponent = ({
+  size = 24,
+  color = 'currentColor',
+  absoluteStrokeWidth: _,
+  strokeWidth: __,
+  ...rest
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    aria-hidden="true"
+    {...rest}
+  >
+    <path d="M3 21q-.425 0-.712-.288T2 20v-8q0-.825.588-1.412T4 10h4q.2 0 .388.075t.324.213t.213.324T9 11v1q0 1.25.875 2.125T12 15t2.125-.875T15 12v-1q0-.2.075-.388t.212-.325t.325-.212T16 10h4q.825 0 1.412.588T22 12v8q0 .425-.288.713T21 21zm1-2h16v-7h-3q0 2.075-1.463 3.538T12 17t-3.537-1.463T7 12H4zm8-6q-.425 0-.712-.288T11 12q0-2.725.625-5.375T14.35 2.25q.325-.275.725-.238t.675.363t.238.725t-.363.675q-1.75 1.475-2.187 3.7T13 12q0 .425-.288.713T12 13m-5.712 2.288q.212-.213.212-.538t-.213-.537T5.75 14t-.537.213T5 14.75t.213.538t.537.212t.538-.213m1 2.5q.212-.212.212-.537t-.213-.537t-.537-.213t-.537.213T6 17.25t.213.538t.537.212t.538-.213m11.5-2.5q.212-.212.212-.537t-.213-.537T18.25 14t-.537.213t-.213.537t.213.538t.537.212t.538-.213M4 19h16z" />
+  </svg>
+)
+
 const ICONS: Record<string, IconComponent> = {
   acai: Acai,
   antojito: Antojito,
@@ -404,8 +429,10 @@ const ICONS: Record<string, IconComponent> = {
   baguette: Baguette,
   beef: Beef,
   beer: Beer,
+  'biceps-flexed': BicepsFlexed,
   birria: Birria,
   boba: Boba,
+  bone: Bone,
   bowl: Bowl,
   'cake-slice': CakeSlice,
   candy: Candy,
@@ -420,12 +447,12 @@ const ICONS: Record<string, IconComponent> = {
   'cup-soda': CupSoda,
   cupcake: Cupcake,
   drumstick: Drumstick,
-  dumbbell: Dumbbell,
   'egg-fried': EggFried,
   elote: Elote,
   empanada: Empanada,
   fish: Fish,
   flame: Flame,
+  glasses: Glasses,
   fruta: Fruta,
   hamburger: Hamburger,
   'hand-platter': HandPlatter,
@@ -440,6 +467,7 @@ const ICONS: Record<string, IconComponent> = {
   memela: Memela,
   molcajete: Molcajete,
   nigiri: Nigiri,
+  ortodoncia: Ortodoncia,
   pan: Pan,
   papas: Papas,
   'papas-fritas': PapasFritas,
@@ -447,14 +475,21 @@ const ICONS: Record<string, IconComponent> = {
   pizza: Pizza,
   ramen: Ramen,
   popcorn: Popcorn,
+  proteina: Proteina,
   quesadilla: Quesadilla,
   salad: Salad,
   sandwich: Sandwich,
+  'heart-pulse': HeartPulse,
+  microscope: Microscope,
+  pill: Pill,
   'shopping-basket': ShoppingBasket,
   'shopping-cart': ShoppingCart,
   shrimp: Shrimp,
+  stethoscope: Stethoscope,
   store: Store,
   taco: Taco,
+  tooth: Tooth,
+  dermatology: Dermatology,
   torta: Torta,
   'utensils-crossed': UtensilsCrossed,
   waffle: Waffle,
@@ -462,12 +497,63 @@ const ICONS: Record<string, IconComponent> = {
   wine: Wine,
 }
 
+/**
+ * Los iconos de Fitness y Deporte (`iconos-deporte.tsx`) se cargan aparte, la primera vez que se pinta
+ * uno. Hasta que llega el fragmento se reserva la caja del icono, para que nada se mueva al aparecer.
+ */
+const NOMBRES_DEPORTE = new Set([
+  'artes-marciales',
+  'ballet',
+  'barbell',
+  'barre',
+  'bike',
+  'boxeo',
+  'danza',
+  'estiramiento',
+  'funcional',
+  'natacion',
+  'padel',
+  'pickleball',
+  'pelotas',
+  'pilates',
+  'taekwondo',
+  'yoga',
+])
+
+let deporte: Record<string, IconComponent> | undefined
+let cargaDeporte: Promise<void> | undefined
+
+function IconoDiferido({ name, ...props }: { name: string } & LucideProps) {
+  const [cargado, setCargado] = useState(deporte)
+  useEffect(() => {
+    if (cargado) return
+    cargaDeporte ??= import('./iconos-deporte.tsx').then((m) => {
+      deporte = m.ICONOS_DEPORTE
+    })
+    let vivo = true
+    // Si el fragmento no llega (sin red) el icono se queda en su caja vacía: la guía sigue entera.
+    cargaDeporte
+      .then(() => vivo && setCargado(deporte))
+      .catch(() => {
+        cargaDeporte = undefined
+      })
+    return () => {
+      vivo = false
+    }
+  }, [cargado])
+  const Icon = cargado?.[name]
+  if (Icon) return <Icon aria-hidden="true" focusable="false" {...props} />
+  const { size = 24 } = props
+  return <span aria-hidden="true" style={{ display: 'inline-block', width: size, height: size }} />
+}
+
 /** ¿Hay dibujo para este nombre? Una prueba lo exige a cada icono usado en los datos. */
 export function hasCategoryIcon(name: string): boolean {
-  return Object.hasOwn(ICONS, name)
+  return Object.hasOwn(ICONS, name) || NOMBRES_DEPORTE.has(name)
 }
 
 export function CategoryIcon({ name, ...props }: { name: string } & LucideProps) {
+  if (NOMBRES_DEPORTE.has(name)) return <IconoDiferido name={name} {...props} />
   // `hasOwn` y no `ICONS[name]` a secas: con un nombre como `constructor` el índice devolvería lo
   // heredado de `Object` y React intentaría pintarlo como componente.
   const Icon = Object.hasOwn(ICONS, name) ? (ICONS[name] ?? UtensilsCrossed) : UtensilsCrossed

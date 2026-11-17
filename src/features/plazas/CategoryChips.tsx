@@ -1,13 +1,32 @@
 /** Pastillas de categoría con conteo, reutilizadas en la barra de filtros y dentro de cada plaza. */
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { type MouseEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
 import { localized, t } from '../../i18n/index.ts'
 import type { Category } from '../../types/domain.ts'
 import styles from './CategoryChips.module.css'
 
+/** Lo mínimo que pinta una pastilla: sirve igual para una categoría que para un sector. */
+type Chip = Pick<Category, 'id' | 'label' | 'icon'>
+
+/**
+ * La cápsula que abre el carril cuando se está dentro de un sector: el sector mismo, con una flecha que
+ * dice que se viene de un nivel más alto. Elegida (ninguna categoría puesta) es el "Todo" del sector;
+ * pulsarla sube al nivel de los sectores. Con una categoría puesta queda neutra, y pulsarla vuelve a
+ * todo el sector.
+ */
+export interface LeadChip {
+  label: string
+  icon: string
+  selected: boolean
+  href: string
+  /** Lo que lee un lector de pantalla además del nombre: a dónde lleva pulsarla. */
+  hint: string
+  onPress: () => void
+}
+
 interface CategoryChipsProps {
-  categories: readonly Category[]
+  categories: readonly Chip[]
   counts?: ReadonlyMap<string, number>
   totalCount?: number
   activeId: string | null
@@ -18,6 +37,13 @@ interface CategoryChipsProps {
    */
   hrefFor: (categoryId: string | null) => string
   label: string
+  /** El texto de la pastilla que quita la selección. Por omisión, "Todo". */
+  allLabel?: string
+  /** Sin la pastilla "Todo": la cápsula de cabecera (o no tener ninguna elegida) ya significa todo. */
+  hideAll?: boolean
+  lead?: LeadChip
+  /** La elegida lleva una ✕: pulsarla la quita, y que lo diga ella misma evita explicarlo. */
+  clearMark?: boolean
   variant?: 'floating' | 'inline'
 }
 
@@ -28,7 +54,7 @@ interface CategoryChipsProps {
  * rueda vertical a desplazamiento lateral. El teclado ya funcionaba: al tabular el navegador acerca
  * cada pastilla.
  */
-function useHorizontalScroll(categories: readonly Category[], counts: unknown) {
+function useHorizontalScroll(categories: readonly Chip[], counts: unknown) {
   const ref = useRef<HTMLDivElement>(null)
   const [overflow, setOverflow] = useState({ start: false, end: false })
 
@@ -91,74 +117,103 @@ export function CategoryChips({
   onChange,
   hrefFor,
   label,
+  allLabel = t('filters.allCategories'),
+  hideAll = false,
+  lead,
+  clearMark = false,
   variant = 'inline',
 }: CategoryChipsProps) {
   const { ref, overflow, sync, scrollBy } = useHorizontalScroll(categories, counts)
 
   return (
-    <div className={styles.rail} data-variant={variant}>
-      <div ref={ref} className={styles.scroller} onScroll={sync}>
-        <ul className={styles.chips} aria-label={label}>
-          <li>
-            {/* El conteo va en su propio elemento: sin etiqueta accesible, NVDA lee "Todo19". */}
-            <a
-              className={styles.chip}
-              href={hrefFor(null)}
-              aria-current={activeId === null ? 'true' : undefined}
-              aria-label={
-                totalCount === undefined ? undefined : `${t('filters.allCategories')} ${totalCount}`
-              }
-              onClick={alPulsar(() => onChange(null))}
-            >
-              {t('filters.allCategories')}
-            </a>
-          </li>
-          {categories.map((category) => {
-            const count = counts?.get(category.id)
-            const active = activeId === category.id
-            return (
-              <li key={category.id}>
+    <div className={styles.rail} data-variant={variant} data-cabecera={lead ? '' : undefined}>
+      {/* Fuera del carril: queda fijo mientras las categorías se desplazan. */}
+      {lead && (
+        <div className={styles.lead}>
+          <a
+            className={styles.chip}
+            href={lead.href}
+            aria-current={lead.selected ? 'true' : undefined}
+            aria-label={`${lead.label}. ${lead.hint}`}
+            onClick={alPulsar(lead.onPress)}
+          >
+            <ChevronLeft aria-hidden="true" />
+            <CategoryIcon name={lead.icon} size={16} strokeWidth={2} />
+            {lead.label}
+          </a>
+        </div>
+      )}
+      <div className={styles.viewport}>
+        <div
+          ref={ref}
+          className={styles.scroller}
+          data-inicio={overflow.start ? undefined : ''}
+          data-fin={overflow.end ? undefined : ''}
+          onScroll={sync}
+        >
+          <ul className={styles.chips} aria-label={label}>
+            {!hideAll && (
+              <li>
+                {/* El conteo va en su propio elemento: sin etiqueta accesible, NVDA lee "Todo19". */}
                 <a
                   className={styles.chip}
-                  href={hrefFor(active ? null : category.id)}
-                  aria-current={active ? 'true' : undefined}
-                  aria-label={
-                    count === undefined ? undefined : `${localized(category.label)} ${count}`
-                  }
-                  onClick={alPulsar(() => onChange(active ? null : category.id))}
+                  href={hrefFor(null)}
+                  aria-current={activeId === null ? 'true' : undefined}
+                  aria-label={totalCount === undefined ? undefined : `${allLabel} ${totalCount}`}
+                  onClick={alPulsar(() => onChange(null))}
                 >
-                  <CategoryIcon name={category.icon} size={16} strokeWidth={2} />
-                  {localized(category.label)}
+                  {allLabel}
                 </a>
               </li>
-            )
-          })}
-        </ul>
-      </div>
-      {/* Atajos para ratón: no aportan nada a quien navega con teclado o dedo, así que no entran en el
+            )}
+            {categories.map((category) => {
+              const count = counts?.get(category.id)
+              const active = activeId === category.id
+              return (
+                <li key={category.id}>
+                  <a
+                    className={styles.chip}
+                    href={hrefFor(active ? null : category.id)}
+                    aria-current={active ? 'true' : undefined}
+                    aria-label={
+                      count === undefined ? undefined : `${localized(category.label)} ${count}`
+                    }
+                    onClick={alPulsar(() => onChange(active ? null : category.id))}
+                  >
+                    <CategoryIcon name={category.icon} size={16} strokeWidth={2} />
+                    {localized(category.label)}
+                    {clearMark && active && <X aria-hidden="true" />}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        {/* Atajos para ratón: no aportan nada a quien navega con teclado o dedo, así que no entran en el
           orden de tabulación ni se anuncian. */}
-      <button
-        type="button"
-        className={styles.arrow}
-        data-side="start"
-        hidden={!overflow.start}
-        tabIndex={-1}
-        aria-hidden="true"
-        onClick={() => scrollBy(-1)}
-      >
-        <ChevronLeft />
-      </button>
-      <button
-        type="button"
-        className={styles.arrow}
-        data-side="end"
-        hidden={!overflow.end}
-        tabIndex={-1}
-        aria-hidden="true"
-        onClick={() => scrollBy(1)}
-      >
-        <ChevronRight />
-      </button>
+        <button
+          type="button"
+          className={styles.arrow}
+          data-side="start"
+          hidden={!overflow.start}
+          tabIndex={-1}
+          aria-hidden="true"
+          onClick={() => scrollBy(-1)}
+        >
+          <ChevronLeft />
+        </button>
+        <button
+          type="button"
+          className={styles.arrow}
+          data-side="end"
+          hidden={!overflow.end}
+          tabIndex={-1}
+          aria-hidden="true"
+          onClick={() => scrollBy(1)}
+        >
+          <ChevronRight />
+        </button>
+      </div>
     </div>
   )
 }

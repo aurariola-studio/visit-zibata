@@ -30,10 +30,15 @@ export type Sector = z.infer<typeof SectorSchema>
 /** Datos comerciales listos para la UI: colecciones validadas + índices de acceso. */
 export interface Catalog {
   categories: Category[]
+  /** Los sectores que agrupan categorías, por su orden. Vacío si el archivo no los declara. */
+  sectors: Sector[]
   plazas: Plaza[]
   /** Solo locales activos, en el orden del dataset. */
   places: Place[]
   categoryById: ReadonlyMap<string, Category>
+  sectorById: ReadonlyMap<string, Sector>
+  /** El sector de cada categoría, por id de categoría. Una categoría sin sector no aparece. */
+  sectorOfCategory: ReadonlyMap<string, Sector>
   /** Cada giro por su id, y la categoría de la que cuelga: de ahí sale todo lo demás. */
   giroById: ReadonlyMap<string, Giro>
   categoryOfGiro: ReadonlyMap<string, Category>

@@ -80,6 +80,8 @@ export const HoursSchema = z.strictObject({
   sat: z.array(timeRange).optional(),
   sun: z.array(timeRange).optional(),
   note: nonEmptyText.optional(),
+  /** El local se organiza por clases: la ficha avisa, antes del horario, que hay que consultar su disponibilidad. */
+  byClasses: z.literal(true).optional(),
 })
 
 /**

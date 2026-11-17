@@ -8,7 +8,7 @@ import { localized, t } from '../../i18n/index.ts'
 import { registrar } from '../../lib/eventos.ts'
 import { focusPanelHeading } from '../../lib/focus.ts'
 import { plazaDirectionsUrl } from '../../lib/maps-url.ts'
-import type { Place, Plaza } from '../../types/domain.ts'
+import type { Place, Plaza, Sector } from '../../types/domain.ts'
 import { PlaceList } from '../places/PlaceList.tsx'
 import { CategoryChips } from './CategoryChips.tsx'
 import styles from './Panel.module.css'
@@ -23,6 +23,16 @@ interface PlazaPanelProps {
   activeCategoryId: string | null
   onCategoryChange: (categoryId: string | null) => void
   categoryHref: (categoryId: string | null) => string
+  /**
+   * Los sectores con lugares (vacío si hay uno solo) y lo que hace falta para elegirlos. Con dos o más
+   * sectores en esta zona, las pastillas bajan de nivel igual que en la barra de arriba: primero los
+   * sectores, y al elegir uno, sus categorías.
+   */
+  sectors?: readonly Sector[]
+  sectorCounts?: ReadonlyMap<string, number>
+  activeSectorId?: string | null
+  onSectorChange?: (sectorId: string | null) => void
+  sectorHref?: (sectorId: string | null) => string
   onClearFilters: () => void
   onOpenPlace: (place: Place) => void
   onClose: () => void
@@ -36,6 +46,11 @@ export function PlazaPanel({
   activeCategoryId,
   onCategoryChange,
   categoryHref,
+  sectors = [],
+  sectorCounts,
+  activeSectorId = null,
+  onSectorChange,
+  sectorHref,
   onClearFilters,
   onOpenPlace,
   onClose,
@@ -50,6 +65,22 @@ export function PlazaPanel({
   const categories = plaza.categories
     .map((id) => catalog.categoryById.get(id))
     .filter((category) => category !== undefined)
+  /*
+   * Con dos o más sectores en esta zona, un solo carril baja de nivel: primero los sectores y, al elegir
+   * uno, sus categorías con el sector a la izquierda. Mezclar las categorías de todos en una tira
+   * obligaba a recorrer Comida para llegar a Salud. Con un solo sector, no hay nada que subir.
+   */
+  const zoneSectors = sectors.filter((sector) =>
+    categories.some((category) => category.sectorId === sector.id),
+  )
+  const porSectores =
+    zoneSectors.length >= 2 && onSectorChange !== undefined && sectorHref !== undefined
+  const sector = porSectores ? zoneSectors.find((item) => item.id === activeSectorId) : undefined
+  const categoriasDelSector = sector
+    ? categories.filter((category) => category.sectorId === sector.id)
+    : categories
+  // Quitar la categoría dentro de un sector deja el sector, no la zona entera.
+  const quitaAlSector = (id: string | null) => id === null && sector !== undefined
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: el foco se mueve al título cada vez que cambia la plaza mostrada.
   useEffect(() => {
@@ -112,16 +143,47 @@ export function PlazaPanel({
         </p>
       </header>
 
-      {categories.length > 1 && (
+      {porSectores && !sector ? (
         <CategoryChips
-          categories={categories}
-          counts={categoryCounts}
-          totalCount={places.length}
-          activeId={activeCategoryId}
-          onChange={onCategoryChange}
-          hrefFor={categoryHref}
-          label={t('filters.categories')}
+          categories={zoneSectors}
+          counts={sectorCounts}
+          activeId={null}
+          onChange={(id) => onSectorChange?.(id)}
+          hrefFor={(id) => sectorHref?.(id) ?? ''}
+          label={t('filters.sectors')}
+          hideAll
         />
+      ) : (
+        (sector !== undefined || categories.length > 1) && (
+          <CategoryChips
+            categories={categoriasDelSector}
+            counts={categoryCounts}
+            totalCount={places.length}
+            activeId={activeCategoryId}
+            onChange={(id) =>
+              quitaAlSector(id) ? onSectorChange?.(activeSectorId) : onCategoryChange(id)
+            }
+            hrefFor={(id) =>
+              quitaAlSector(id) && sectorHref ? sectorHref(activeSectorId) : categoryHref(id)
+            }
+            label={t('filters.categories')}
+            hideAll={sector !== undefined}
+            clearMark={sector !== undefined}
+            lead={
+              sector && onSectorChange && sectorHref
+                ? {
+                    label: localized(sector.label),
+                    icon: sector.icon,
+                    selected: activeCategoryId === null,
+                    href: activeCategoryId === null ? sectorHref(null) : sectorHref(sector.id),
+                    hint:
+                      activeCategoryId === null ? t('filters.sectorBack') : t('filters.sectorAll'),
+                    onPress: () => onSectorChange(activeCategoryId === null ? null : sector.id),
+                  }
+                : undefined
+            }
+          />
+        )
       )}
 
       <div className={styles.sectionHeader}>

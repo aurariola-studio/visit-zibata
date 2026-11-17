@@ -8,6 +8,11 @@ import type { SearchIndex } from '../search/searchIndex.ts'
 export interface Filters {
   query: string
   categoryId: string | null
+  /**
+   * Un sector entero ("Salud"). Lo pone la página del sector; elegir una categoría lo deja en `null`
+   * porque la categoría ya lo implica, así que los dos no se contradicen.
+   */
+  sectorId: string | null
   /** Plaza activa: la seleccionada en el mapa o en el filtro de plazas. */
   plazaId: string | null
   favoritesOnly: boolean
@@ -28,6 +33,7 @@ export interface Filters {
 export const EMPTY_FILTERS: Filters = {
   query: '',
   categoryId: null,
+  sectorId: null,
   plazaId: null,
   favoritesOnly: false,
   openNowOnly: false,
@@ -48,13 +54,25 @@ export function categoriesOf(place: Place, catalog: Catalog): string[] {
   ]
 }
 
+/** Los sectores en los que aparece un local: los de sus categorías, sin repetir. */
+export function sectorsOf(place: Place, catalog: Catalog): string[] {
+  return [
+    ...new Set(
+      categoriesOf(place, catalog)
+        .map((id) => catalog.sectorOfCategory.get(id)?.id)
+        .filter((id): id is string => id !== undefined),
+    ),
+  ]
+}
+
 /** Filtros que reducen la lista (la plaza no cuenta: seleccionarla es navegar, no filtrar). */
 export function hasActiveFilters(
-  filters: Pick<Filters, 'query' | 'categoryId' | 'favoritesOnly' | 'openNowOnly'>,
+  filters: Pick<Filters, 'query' | 'categoryId' | 'sectorId' | 'favoritesOnly' | 'openNowOnly'>,
 ): boolean {
   return (
     searchTerms(filters.query).length > 0 ||
     filters.categoryId !== null ||
+    filters.sectorId !== null ||
     filters.favoritesOnly ||
     filters.openNowOnly
   )
@@ -85,6 +103,7 @@ export function applyFilters(
   const matching = candidates.filter(
     (place) =>
       (filters.categoryId === null || categoriesOf(place, catalog).includes(filters.categoryId)) &&
+      (filters.sectorId === null || sectorsOf(place, catalog).includes(filters.sectorId)) &&
       (filters.plazaId === null || place.plazaId === filters.plazaId) &&
       (!filters.favoritesOnly || favoriteIds.has(place.id)) &&
       (!filters.openNowOnly || (now !== undefined && estaAbierto(place, now))),
@@ -114,6 +133,15 @@ function positionOfCategory(place: Place, catalog: Catalog, categoryId: string):
 export function countByPlaza(places: readonly Place[]): Map<string, number> {
   const counts = new Map<string, number>()
   for (const place of places) counts.set(place.plazaId, (counts.get(place.plazaId) ?? 0) + 1)
+  return counts
+}
+
+/** Nº de lugares por sector dentro de un conjunto: un local de dos sectores cuenta en los dos. */
+export function countBySector(places: readonly Place[], catalog: Catalog): Map<string, number> {
+  const counts = new Map<string, number>()
+  for (const place of places)
+    for (const sector of sectorsOf(place, catalog))
+      counts.set(sector, (counts.get(sector) ?? 0) + 1)
   return counts
 }
 

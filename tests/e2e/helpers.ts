@@ -35,18 +35,26 @@ interface DatasetPlaza {
   description: { es: string } | null
 }
 
+interface DatasetSector {
+  id: string
+  slug: { es: string; en: string }
+  label: { es: string }
+}
+
 interface DatasetCategory {
   id: string
+  sectorId?: string
   slug: { es: string; en: string }
   label: { es: string }
   synonyms: string[]
   giros: { id: string; label: { es: string }; synonyms: string[] }[]
 }
 
-const dataset = {
+export const dataset = {
   places: read<{ places: DatasetPlace[] }>('places.json').places,
   plazas: read<{ plazas: DatasetPlaza[] }>('plazas.json').plazas,
   categories: read<{ categories: DatasetCategory[] }>('categories.json').categories,
+  sectors: read<{ sectors?: DatasetSector[] }>('categories.json').sectors ?? [],
 }
 
 /** La categoría de cada giro, que es de donde sale en qué pastillas aparece un local. */
@@ -243,13 +251,17 @@ export const LOCAL_BUSCABLE: DatasetPlace = unico(
   'ningún local activo con nombre que empiece por tres letras',
 )
 
-/** La zona activa más cercana a otra: dos marcadores que se acercan o se alejan con la cámara. */
-export const cercanaA = (zona: DatasetPlaza): DatasetPlaza => {
+/**
+ * La zona activa más lejana a otra: dos marcadores cuya separación en pantalla marca el zoom de la cámara.
+ * Con la más cercana, un marcador que se levanta para no pisar a otro (la distancia entre dos zonas a
+ * unos cien metros) desplaza la medición más que el propio zoom.
+ */
+export const lejanaDe = (zona: DatasetPlaza): DatasetPlaza => {
   const distancia = (a: DatasetPlaza, b: DatasetPlaza) =>
     Math.hypot(a.coordinates.lat - b.coordinates.lat, a.coordinates.lng - b.coordinates.lng)
   return unico(
     deMenorId(dataset.plazas.filter((plaza) => plaza.active && plaza.id !== zona.id)).sort(
-      (a, b) => distancia(a, zona) - distancia(b, zona),
+      (a, b) => distancia(b, zona) - distancia(a, zona),
     )[0],
     'otra zona activa',
   )
@@ -326,6 +338,79 @@ export const CATEGORIA_B: CategoriaDeEjemplo = unico(
   categoriasPorTamano()[1],
   'una segunda categoría',
 )
+
+/*
+ * Los sectores. Con dos o más con locales, la barra enseña primero los sectores y las categorías están
+ * dentro de uno; con uno solo, las categorías van directas. Las pruebas de categorías salen de las dos
+ * formas: entran al sector de la categoría grande cuando hace falta.
+ */
+const sectorDeCategoria = (categoriaId: string) =>
+  dataset.categories.find((categoria) => categoria.id === categoriaId)?.sectorId
+
+/** Los sectores que tienen al menos un local activo: los mismos que decide la barra. */
+export const SECTORES_CON_LOCALES: DatasetSector[] = dataset.sectors.filter((sector) =>
+  dataset.places.some(
+    (place) =>
+      place.active &&
+      place.giros[0] !== undefined &&
+      sectorDeCategoria(categoryOfGiro.get(place.giros[0]) ?? '') === sector.id,
+  ),
+)
+export const VARIOS_SECTORES = SECTORES_CON_LOCALES.length >= 2
+
+/** El sector de la categoría grande: dentro de él están sus cápsulas cuando hay varios sectores. */
+export const SECTOR_GRANDE: DatasetSector | undefined = dataset.sectors.find(
+  (sector) => sector.id === sectorDeCategoria(CATEGORIA_GRANDE.id),
+)
+
+/** La dirección desde la que se ven las cápsulas de las categorías (la portada, o el sector de la grande). */
+export const RAIZ_DE_CATEGORIAS =
+  VARIOS_SECTORES && SECTOR_GRANDE ? `sector/${SECTOR_GRANDE.slug.es}` : ''
+
+/** Entra al sector de la categoría grande desde donde se esté, si hace falta (con varios sectores). */
+export async function entrarAlSectorGrande(page: Page): Promise<void> {
+  if (!VARIOS_SECTORES || !SECTOR_GRANDE) return
+  // La barra de arriba es la primera lista de sectores; con una zona abierta, el panel trae otra igual.
+  await page
+    .getByRole('list', { name: 'Sectores' })
+    .first()
+    .getByRole('link', { name: new RegExp(`^${SECTOR_GRANDE.label.es}`) })
+    .click()
+}
+
+/** Los sectores que tienen locales en la zona grande, con las categorías de cada uno que esa zona tiene. */
+export const SECTORES_EN_ZONA_GRANDE: { sector: DatasetSector; categorias: string[] }[] =
+  SECTORES_CON_LOCALES.map((sector) => ({
+    sector,
+    categorias: [
+      ...new Set(
+        localesDe(ZONA_GRANDE)
+          .flatMap((place) => categoriesOf(place))
+          .filter((id) => sectorDeCategoria(id) === sector.id),
+      ),
+    ],
+  })).filter((entrada) => entrada.categorias.length > 0)
+
+/**
+ * Con una zona abierta que tiene varios sectores, el panel no mezcla sus categorías: pregunta primero por
+ * el sector. Elige el de la categoría dada (por omisión, la grande); si la zona solo tiene uno, no hay
+ * nada que elegir.
+ */
+export async function elegirSectorEnLaZona(
+  page: Page,
+  categoriaId: string = CATEGORIA_GRANDE.id,
+): Promise<void> {
+  const sector = dataset.sectors.find(
+    (candidato) => candidato.id === sectorDeCategoria(categoriaId),
+  )
+  if (!VARIOS_SECTORES || !sector) return
+  const enlace = panel(page)
+    .getByRole('list', { name: 'Sectores' })
+    .getByRole('link', { name: new RegExp(`^${sector.label.es}`) })
+  // El panel se pinta con la zona: se espera a su título antes de preguntar si trae la fila de sectores.
+  await panel(page).getByRole('heading', { level: 2 }).first().waitFor()
+  if ((await enlace.count()) > 0) await enlace.click()
+}
 
 /* ------------------------------------------------------------------------------------------ búsqueda
  * Las pruebas de la búsqueda tampoco nombran un local ni una palabra: salen de rasgos del dato. Un

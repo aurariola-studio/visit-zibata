@@ -1,3 +1,14 @@
 {
-  "ajustes": []
+  "ajustes": [
+    {
+      "accion": "ocultar",
+      "punto": {
+        "lat": 20.690049,
+        "lng": -100.329325
+      },
+      "overtureId": "bb2fe9fe-a92c-4b3d-bb07-93bb75a89f32",
+      "motivo": "Caseta de los datos abiertos encimada a una cancha de Intercepta: las canchas llevan sus propias piezas",
+      "creado": "2026-11-16"
+    }
+  ]
 }

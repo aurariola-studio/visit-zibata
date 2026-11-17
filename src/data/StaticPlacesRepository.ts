@@ -3,6 +3,7 @@
  * (import dinámico, con hash para caché inmutable). El build los valida con Zod; aquí se validan registro a
  * registro sin Zod (`runtimeValidation.ts`): un registro inválido se omite con un aviso en consola.
  */
+import type { Sector } from '../types/domain.ts'
 import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
 import {
   type RecordIssue,
@@ -11,6 +12,7 @@ import {
   validatePlaces,
   validatePlazas,
   validateRetired,
+  validateSectors,
 } from './runtimeValidation.ts'
 
 async function load<T>(
@@ -38,6 +40,7 @@ async function load<T>(
 
 export class StaticPlacesRepository implements PlacesRepository {
   private categories?: ReturnType<PlacesRepository['getCategories']>
+  private sectors?: Promise<Sector[]>
   private plazas?: ReturnType<PlacesRepository['getPlazas']>
   private places?: ReturnType<PlacesRepository['getPlaces']>
   private retired?: Promise<RetiredPlace[]>
@@ -50,6 +53,23 @@ export class StaticPlacesRepository implements PlacesRepository {
       validateCategories,
     )
     return this.categories
+  }
+
+  /** Los sectores viven en el mismo archivo que las categorías y son opcionales: sin ellos, lista vacía. */
+  getSectors() {
+    this.sectors ??= import('../../data/commercial/categories.json').then(
+      ({ default: json }) => {
+        const records = readCollection(json, 'sectors')
+        if (!records) return []
+        const { valid, issues } = validateSectors(records)
+        for (const issue of issues) {
+          console.warn(`[datos] categories.json sector [${issue.id}] omitido: ${issue.message}`)
+        }
+        return valid
+      },
+      () => [],
+    )
+    return this.sectors
   }
 
   getPlazas() {

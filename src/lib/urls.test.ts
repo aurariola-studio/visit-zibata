@@ -47,6 +47,7 @@ const VACIO = {
   plazaSlug: null,
   placeSlug: null,
   categorySlug: null,
+  sectorSlug: null,
   infoTopic: null,
 } satisfies Omit<UrlState, 'locale'>
 

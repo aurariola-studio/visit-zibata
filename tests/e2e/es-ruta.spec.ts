@@ -51,17 +51,20 @@ test.describe('El español con /es', () => {
     page,
   }) => {
     await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
-    // Las cápsulas de categoría se ven en todas las pantallas: "Todo" apunta a la portada y las demás, a su
-    // página o al filtro de la zona.
-    const cápsulas = page.getByRole('list', { name: 'Categorías' }).first().getByRole('link')
+    // Las cápsulas se ven en todas las pantallas: "Todo" apunta a la portada y las demás, a su página o al
+    // filtro de la zona. Con varios sectores en la zona, la primera lista es la de sectores.
+    const cápsulas = page
+      .getByRole('list', { name: /^(Categorías|Sectores)$/ })
+      .first()
+      .getByRole('link')
     await expect(cápsulas.first()).toBeVisible()
     const enlaces = await cápsulas.evaluateAll((links) =>
       links.map((link) => link.getAttribute('href') ?? ''),
     )
-    expect(enlaces.length).toBeGreaterThan(3)
+    expect(enlaces.length).toBeGreaterThan(1)
     for (const href of enlaces)
       expect(href).toMatch(
-        /\/es(?:\/zona\/[a-z0-9-]+)?(?:\/categoria\/[a-z0-9-]+|\?categoria=[a-z0-9-]+)?$/,
+        /\/es(?:\/zona\/[a-z0-9-]+)?(?:\/categoria\/[a-z0-9-]+|\?categoria=[a-z0-9-]+|\?sector=[a-z0-9-]+)?$/,
       )
 
     await page.getByRole('link', { name: /View the guide in English/ }).click()

@@ -550,11 +550,15 @@ const urlDe = (valor: string): string | null => (valor ? valor : null)
 /** Día ausente = no se sabe; lista vacía = cerrado. Una cadena vacía del formulario es "no se sabe". */
 function horarioDe(
   horario: Record<string, string[]> | null | undefined,
-  nota?: string,
-): Record<string, string[] | string> | null {
-  // La nota del horario no tiene campo en el formulario: se conserva, porque perderla es perder un dato.
-  if (!horario) return nota ? { note: nota } : null
-  const salida: Record<string, string[] | string> = nota ? { note: nota } : {}
+  conservar: { note?: string; byClasses?: true } = {},
+): Record<string, string[] | string | boolean> | null {
+  // La nota del horario y la marca de "por clases" no tienen campo en el formulario: se conservan,
+  // porque perderlas es perder un dato.
+  const fijo: Record<string, string | boolean> = {}
+  if (conservar.note) fijo.note = conservar.note
+  if (conservar.byClasses) fijo.byClasses = true
+  if (!horario) return Object.keys(fijo).length > 0 ? fijo : null
+  const salida: Record<string, string[] | string | boolean> = { ...fijo }
   for (const [dia, rangos] of Object.entries(horario)) {
     const limpios = rangos.map((rango) => rango.trim()).filter(Boolean)
     if (limpios.length > 0 || rangos.length === 0) salida[dia] = limpios
@@ -647,7 +651,10 @@ function construir(
     plazaId: entrada.plazaId,
     giros,
     description: { es: entrada.descripcionEs, en: entrada.descripcionEn },
-    hours: horarioDe(entrada.horario, existente?.hours?.note),
+    hours: horarioDe(entrada.horario, {
+      note: existente?.hours?.note,
+      byClasses: existente?.hours?.byClasses,
+    }),
     location:
       entrada.lat != null && entrada.lng != null ? { lat: entrada.lat, lng: entrada.lng } : null,
     googleMapsUri: urlDe(entrada.googleMapsUri),
