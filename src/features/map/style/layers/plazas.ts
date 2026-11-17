@@ -125,11 +125,19 @@ export function plazaBuildingLayers(tones: ReadonlyMap<string, PlazaTone>): Laye
           t.plaza.buildingDimmed,
           toneOf(tones, 'building'),
         ],
-        // Al pasar el cursor la plaza se eleva ligeramente.
+        /*
+         * Al pasar el cursor, o al abrir la plaza, se eleva ligeramente. La elevación no pasa de la mitad
+         * de la altura de la pieza: con 2,5 m fijos, una cancha de 0,6 m se veía de 3 m, un bloque, en
+         * cuanto la zona se abría.
+         */
         'fill-extrusion-height': growingHeight([
           '+',
           ['get', 'height'],
-          ['case', state('selected'), 2.5, state('hover'), 1.5, 0],
+          [
+            'min',
+            ['*', ['get', 'height'], 0.5],
+            ['case', state('selected'), 2.5, state('hover'), 1.5, 0],
+          ],
         ]),
         'fill-extrusion-vertical-gradient': true,
       },
