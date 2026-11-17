@@ -393,10 +393,7 @@ export function pagesFor(
       href: route({ sectorSlug: sector.slug[locale] }),
       lastmod: masReciente(lugares),
       image,
-      title: fill(SEO_SECTOR[locale].titulo, {
-        label: etiqueta,
-        categorias: nombres.slice(0, 3).join(', '),
-      }),
+      title: fill(SEO_SECTOR[locale].titulo, { label: etiqueta }),
       description: trim(resumen),
       jsonLd: listado(
         name,

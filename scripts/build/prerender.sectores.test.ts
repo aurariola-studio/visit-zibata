@@ -64,7 +64,7 @@ describe('las páginas de sector', () => {
     const pagina = pagesFor('es', datos(dosSectores), '/', absoluta).find(
       (p) => p.href === '/es/sector/salud',
     )
-    expect(pagina?.title).toBe('Salud en Zibatá, Dentistas')
+    expect(pagina?.title).toBe('Salud en Zibatá · Visit Zibatá')
     expect(pagina?.description).toContain('Dentistas')
     expect(pagina?.description).not.toMatch(/mejor/i)
     // Sin dos puntos ni el recuento de lugares: la descripción dice qué hay y qué trae cada ficha.

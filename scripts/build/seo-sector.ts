@@ -9,7 +9,8 @@ export const SEO_SECTOR = {
   es: {
     sectores: 'Sectores',
     nombre: '{label} en Zibatá',
-    titulo: '{label} en Zibatá, {categorias}',
+    // El título es el nombre y dónde, como el de las categorías: corto y el mismo en cada sector.
+    titulo: '{label} en Zibatá · Visit Zibatá',
     // Con más de tres categorías se nombran tres y "y más": la lista entera se comía la descripción.
     ymas: 'y más',
     descripcion: {
@@ -20,7 +21,7 @@ export const SEO_SECTOR = {
   en: {
     sectores: 'Sectors',
     nombre: '{label} in Zibatá',
-    titulo: '{label} in Zibatá, {categorias}',
+    titulo: '{label} in Zibatá · Visit Zibatá',
     ymas: 'and more',
     descripcion: {
       one: '{label} in Zibatá. {categorias}, with hours, contact and directions.',
