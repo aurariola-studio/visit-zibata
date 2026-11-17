@@ -86,6 +86,11 @@ const KB = 1024
  * como es hoy. Si vuelve a apretar, ahora sí toca partir el paquete por idioma, que no se hace porque
  * obligaría a recargar los datos al cambiar de idioma en caliente, y medir antes de subir otra vez.
  *
+ * De 40 a 46 (2026-11-16): con 124 locales, 21 de ellos de Fitness con descripción en los dos idiomas,
+ * la medición fue 40,1 KB, y los quince de Salud que esperan en otra rama suman unos 4,5 KB más. Es un
+ * parche, no una solución: el techo vuelve a apretar con cada sector y lo que toca es partir el paquete
+ * de datos (por sector o por idioma) en vez de subir otra vez.
+ *
  * `initialJs`: de 128 a 130 (2026-11-12, decisión del propietario). El filtro por sector, los iconos de
  * Salud y la cápsula fija dejaron el paquete en 128,1; se midió antes de subir y ya se había movido al
  * build el texto de las páginas de sector (de 128,2 a 128,1). Se sube en vez de recortar para no mezclar
@@ -119,7 +124,7 @@ const BUDGET = {
   initialCss: 11,
   mapJs: 320,
   mapCss: 15,
-  dataJs: 40,
+  dataJs: 46,
   // 2450 y no 2100 desde que la arboleda subió de densidad (v4.27): la separación media entre
   // árboles bajó de 19 a 15 metros, de 6 800 a 11 580 árboles, y el juego entero pasó de 2 095 a
   // 2 373 KB. Se sube este tope y **no** el de `largestTile`, que es el que mide lo que el
