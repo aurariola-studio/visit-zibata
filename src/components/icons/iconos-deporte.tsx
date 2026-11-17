@@ -124,15 +124,17 @@ const Pelotas = custom(
   </>,
 )
 
-/** Persona con una patada alta: la categoría Artes Marciales. Material Symbols `sports_martial_arts` (Apache 2.0). */
+/** Persona con una patada alta: la categoría Artes Marciales. Material Design Icons `martial-arts` (Apache 2.0). */
 const ArtesMarciales = solid(
-  <path d="m500-480-18 362q-1 16-12.5 27T438-80q-16 0-27.5-11T398-118l-18-322-127-73-14 52 61 107q8 14 3.5 30T285-300q-14 8-30 4t-24-18l-70-121q-4-7-5-15t1-16l43-156 230-132-82-82q-11-11-11.5-27.5T348-892q11-11 28-11t28 11l119 118q14 14 11.5 33.5T515-711l-99 57 48 42 300-245q11-10 26.5-8.5T818-850q9 11 8.5 25T816-800L500-480ZM200-680q-33 0-56.5-23.5T120-760q0-33 23.5-56.5T200-840q33 0 56.5 23.5T280-760q0 33-23.5 56.5T200-680Z" />,
-  '0 -960 960 960',
+  <path d="m19.8 2l-8.2 6.7l-1.21-1.04L14 5.58L9.41 1L8 2.41l2.74 2.74L5 8.46l-1.19 4.29L6.27 17L8 16l-2.03-3.5l.35-1.32L9.5 13l.5 9h2l.5-10L21 3.4zM5 3a2 2 0 1 1 0 4c-1.11 0-2-.89-2-2s.9-2 2-2" />,
 )
 
-/** Persona con una patada alta: Tae Kwon Do. Material Design Icons `karate` (Apache 2.0). Provisional: se parece a la de la categoría. */
-const Taekwondo = solid(
-  <path d="M19.8 2L11.6 8.7L10.39 7.66L14 5.58L9.41 1L8 2.41L10.74 5.15L5 8.46L3.81 12.75L6.27 17L8 16L5.97 12.5L6.32 11.18L9.5 13L10 22H12L12.5 12L21 3.4L19.8 2M5 3C6.11 3 7 3.9 7 5S6.11 7 5 7 3 6.11 3 5 3.9 3 5 3Z" />,
+/** La chaqueta del uniforme con su cinturón: Tae Kwon Do. IconOven `kimono` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
+const Taekwondo = custom(
+  <>
+    <path d="m3.62 5.5l3.51-2Q8 3 9 3h6q1 0 1.87.5l3.51 2q.87.5.87 1.5v4q0 1-1 1H18q-1 0-1 1v7.25q0 1-1 1H8q-1 0-1-1V13q0-1-1-1H3.75q-1 0-1-1V7q0-1 .87-1.5m5.63-2.25l4.5 8.75m1-8.75l-2.3 4.25M7 7v4.5M17 7v4.5" />
+    <path d="M7 12h10v3H7z" />
+  </>,
 )
 
 export const ICONOS_DEPORTE: Record<string, IconComponent> = {
