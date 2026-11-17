@@ -65,6 +65,46 @@ const ficha = (idioma: Idioma, slug: string) =>
 const textoDelDato = (place: Place, idioma: Idioma): string =>
   (idioma === 'en' ? place.description?.en : undefined) ?? place.description?.es ?? ''
 
+/*
+ * Los locales van y vienen: ninguna prueba nombra uno de verdad. Lo que una ficha concreta enseñaba
+ * (un nombre con ñ, dos locales con el mismo nombre, un texto que empieza con el nombre) se reproduce
+ * con locales inventados en zonas inventadas. Solo la taxonomía y la plantilla del primer local salen
+ * de los datos.
+ */
+const plazaPrueba = (id: string, nombre: string): Plaza =>
+  ({ ...(data.plazas[0] as Plaza), id, slug: id, name: nombre, active: true }) as unknown as Plaza
+const ZONA = plazaPrueba('zona-prueba', 'Zona Prueba')
+const lugarPrueba = (cambios: Record<string, unknown> = {}): Place =>
+  ({
+    ...(data.places[0] as Place),
+    id: 'local-prueba',
+    slug: 'local-prueba',
+    name: 'Local Prueba',
+    plazaId: ZONA.id,
+    giros: [GIROS[0]?.id],
+    description: null,
+    cierre: undefined,
+    ...cambios,
+  }) as unknown as Place
+const paginasDe = (idioma: Idioma, lugares: Place[], plazas: Plaza[] = [ZONA]) =>
+  pagesFor(idioma, { ...data, plazas, places: lugares }, '/', absoluta)
+const fichaDe = (idioma: Idioma, lugar: Place, plazas: Plaza[] = [ZONA]) => {
+  const pagina = paginasDe(idioma, [lugar], plazas).find((candidata) =>
+    candidata.href.endsWith(`/${lugar.slug}`),
+  )
+  if (!pagina) throw new Error(`No hay ficha de ${lugar.slug} en ${idioma}`)
+  return pagina
+}
+/** Los giros de la taxonomía real, de uno en uno por categoría: lo que cambia con el catálogo, no con los locales. */
+const GIROS = data.categories.flatMap((categoria) =>
+  categoria.giros.filter((giro) => !giro.general),
+)
+const giroDeCada = (n: number) =>
+  data.categories
+    .map((c) => c.giros.find((g) => !g.general))
+    .filter((g) => g !== undefined)
+    .slice(0, n)
+
 describe.each(idiomas)('metadatos de las páginas (%s)', (idioma) => {
   const todas = paginas[idioma]
   const fichas = visibles.map((place) => ficha(idioma, place.slug))
@@ -152,108 +192,100 @@ describe.each(idiomas)('metadatos de las páginas (%s)', (idioma) => {
   })
 
   it('los nombres con ñ, tildes y diéresis salen enteros', () => {
-    expect(ficha(idioma, 'nam-nam').title).toContain('Ñam Ñam Sushi')
-    expect(ficha(idioma, 'mykona-frozen-yogurt').title).toContain('Myköna Frozen Yogurt')
-    expect(ficha(idioma, 'birria-jauregui').title).toContain('Birria Jáuregui')
-    expect(ficha(idioma, 'marie-panaderia-artesanal').title).toContain('Marie Panadería Artesanal')
-    // Un giro con ç y acentos entra en una descripción compuesta sin deformarse.
-    expect(ficha(idioma, 'lilo-bowl-bar').description).toContain('Açaí')
+    for (const name of [
+      'Ñam Ñam Sushi',
+      'Myköna Frozen Yogurt',
+      'Birria Jáuregui',
+      'Panadería Ñandú',
+    ]) {
+      expect(fichaDe(idioma, lugarPrueba({ name })).title).toContain(name)
+    }
+    // Un giro con ç o con acentos entra en una descripción compuesta sin deformarse.
+    const conAcento = GIROS.find((giro) => /[áéíóúñüç]/i.test(giro.label[idioma] ?? ''))
+    if (conAcento) {
+      const lugar = lugarPrueba({ giros: [conAcento.id] })
+      expect(fichaDe(idioma, lugar).description).toContain(conAcento.label[idioma])
+    }
   })
 })
 
 describe('las fichas que antes salían iguales', () => {
-  const cadenas: [string, string][] = [
-    ['sinforosa', 'sinforosa-anahuac'],
-    ['luka-pokes', 'luka-anahuac'],
-    ['la-michoacana', 'la-michoacana-xentric-zibata'],
-    ['starbucks-centro-zibata', 'starbucks-anahuac'],
-  ]
-  const zonaDe = (slug: string, idioma: Idioma) => {
-    const place = data.places.find((candidato) => candidato.slug === slug)
-    const plaza = data.plazas.find((candidata) => candidata.id === place?.plazaId)
-    const nombre = plaza?.name as unknown
-    return typeof nombre === 'string' ? nombre : ((nombre as Record<string, string>)[idioma] ?? '')
+  const zonaUno = plazaPrueba('zona-uno', 'Zona Uno')
+  const zonaDos = plazaPrueba('zona-dos', 'Zona Dos')
+  const igual = {
+    name: 'Cadena Prueba',
+    description: { es: 'Café de especialidad.', en: 'Specialty coffee.' },
   }
+  const a = lugarPrueba({ ...igual, id: 'cadena-uno', slug: 'cadena-uno', plazaId: 'zona-uno' })
+  const b = lugarPrueba({ ...igual, id: 'cadena-dos', slug: 'cadena-dos', plazaId: 'zona-dos' })
 
   it.each(idiomas)(
-    'tienen título y descripción distintos y la zona en el título (%s)',
+    'dos locales con el mismo nombre y el mismo texto tienen título y descripción distintos y la zona en el título (%s)',
     (idioma) => {
-      for (const [a, b] of cadenas) {
-        const [fa, fb] = [ficha(idioma, a), ficha(idioma, b)]
-        expect(fa.title, `${a} y ${b}`).not.toBe(fb.title)
-        expect(fa.description, `${a} y ${b}`).not.toBe(fb.description)
-        expect(fa.title).toContain(zonaDe(a, idioma))
-        expect(fb.title).toContain(zonaDe(b, idioma))
-      }
+      const paginas = paginasDe(idioma, [a, b], [zonaUno, zonaDos])
+      const [fa, fb] = ['cadena-uno', 'cadena-dos'].map((slug) =>
+        paginas.find((pagina) => pagina.href.endsWith(`/${slug}`)),
+      )
+      expect(fa?.title).not.toBe(fb?.title)
+      expect(fa?.description).not.toBe(fb?.description)
+      expect(fa?.title).toContain('Zona Uno')
+      expect(fb?.title).toContain('Zona Dos')
     },
   )
 
-  it('los locales cuyo nombre no se repite conservan el título de siempre', () => {
-    expect(ficha('es', 'cafele').title).toBe('Cafele · Visit Zibatá')
-    expect(ficha('es', 'agave-grill').title).toBe('Agave Grill · Visit Zibatá')
-    expect(ficha('es', 'burger-fries').title).toBe('Burger & Fries Forever · Visit Zibatá')
+  it('un local cuyo nombre no se repite conserva el título de siempre', () => {
+    expect(fichaDe('es', lugarPrueba({ name: 'Café Prueba' })).title).toBe(
+      'Café Prueba · Visit Zibatá',
+    )
   })
 })
 
-describe('lo que se comprobó en las fichas concretas de la auditoría', () => {
-  it('cafele, que ya decía lo suficiente, lleva el contexto primero y luego su texto', () => {
-    expect(ficha('es', 'cafele').description).toMatch(
-      /^.*en MOL Pitahaya, Zibatá\. CAFELE es una cafetería/,
+describe('lo que se comprobó en fichas concretas de la auditoría, con locales inventados', () => {
+  const desc = (descripcion: string, name = 'Local Prueba') =>
+    fichaDe('es', lugarPrueba({ name, description: { es: descripcion, en: descripcion } }))
+      .description
+
+  it('una descripción que empieza con el nombre lleva el contexto primero, y luego su texto', () => {
+    expect(desc('LOCAL PRUEBA es una cafetería de barrio.')).toMatch(
+      /^.*en Zona Prueba, Zibatá\. LOCAL PRUEBA es una cafetería/,
     )
   })
 
-  it('una descripción que empezaba con el nombre lleva el contexto primero', () => {
-    expect(ficha('es', 'marie-panaderia-artesanal').description).toMatch(
-      /^.*en Centro Zibatá\. Pan dulce artesanal/,
+  it('una descripción que no empieza con el nombre también lleva el contexto primero', () => {
+    expect(desc('Pan dulce artesanal.')).toMatch(/^.*en Zona Prueba, Zibatá\. Pan dulce artesanal/)
+  })
+
+  it('un salto que separa dos ideas se une con " · " y uno que parte una frase, con un espacio', () => {
+    expect(desc('Urban Bistró\nComer rico y sentirte bien.')).toMatch(
+      /^.*en Zona Prueba, Zibatá\. Urban Bistró · Comer rico y sentirte bien\./,
     )
-    expect(ficha('es', 'huskys-ice-cream').description).toMatch(
-      /^.*en Xentric Anáhuac, Zibatá\. Helados artesanales/,
-    )
-    // Pero cuando el nombre es el sujeto de la frase, se queda después del contexto.
-    expect(ficha('es', 'cafele').description).toMatch(
-      /^.*en MOL Pitahaya, Zibatá\. CAFELE es una cafetería/,
-    )
-    expect(ficha('es', 'la-michoacana').description).toMatch(
-      /^.* en Paseo Zibatá\. La Michoacana es una marca/,
+    expect(
+      desc('Creemos que todos deben disfrutar\nde una buena hamburguesa sin pagar de más'),
+    ).toMatch(
+      /^.*en Zona Prueba, Zibatá\. Creemos que todos deben disfrutar de una buena hamburguesa/,
     )
   })
 
-  it('un salto que separa dos ideas se une con " · " y uno que parte una frase, con un espacio, después del contexto', () => {
-    expect(ficha('es', 'origenatural').description).toMatch(
-      /^.*en Xentric Anáhuac, Zibatá\. Urban Bistró · Comer rico y sentirte bien\./,
-    )
-    expect(ficha('es', 'la-880').description).toMatch(
-      /^.*en Xentric Anáhuac, Zibatá\. El lugar donde la música, la comida y las risas se mezclan · Alitas & Pisto/,
-    )
-    expect(ficha('es', 'burger-fries').description).toMatch(
-      /^.*en Plaza Loop Urban, Zibatá\. Creemos que todos deben disfrutar de una buena hamburguesa sin pagar de más/,
-    )
+  it('una descripción corta dice qué es y dónde está, con el contexto primero', () => {
+    expect(desc('Bowl Revolution.')).toMatch(/^.*en Zona Prueba, Zibatá\. Bowl Revolution\.$/)
   })
 
-  it('una descripción corta dice qué es y dónde está, con el contexto primero, aunque repita su giro', () => {
-    expect(ficha('es', 'lilo-bowl-bar').description).toMatch(
-      /^.*en Centro Zibatá\. Bowl Revolution\.$/,
-    )
-    // "Pizza artesanal." ya dice "pizza" y el contexto lo dice igual: la parte estandarizada no se omite.
-    expect(ficha('es', 'enzza-pizza-zibata').description).toBe(
-      'Pizza en Paseo Zibatá. Pizza artesanal.',
-    )
-  })
-
-  it('agave grill ya reabrió: no lleva aviso de cierre y usa la fecha de su verificación', () => {
-    const es = ficha('es', 'agave-grill')
-    expect(es.description.startsWith('Cerrado temporalmente')).toBe(false)
-    const agave = data.places.find((place) => place.slug === 'agave-grill')
-    expect(es.lastmod).toBe(agave?.verification?.lastVerifiedAt)
-    // Las que no cierran siguen con la fecha de su verificación.
-    const cafele = data.places.find((place) => place.slug === 'cafele')
-    expect(ficha('es', 'cafele').lastmod).toBe(cafele?.verification?.lastVerifiedAt)
+  it('un local que ya reabrió no lleva aviso de cierre y usa la fecha de su verificación', () => {
+    const base = data.places[0] as Place
+    const lugar = lugarPrueba({
+      verification: { ...base.verification, lastVerifiedAt: '2026-05-05' },
+    })
+    const pagina = fichaDe('es', lugar)
+    expect(pagina.description.startsWith('Cerrado temporalmente')).toBe(false)
+    expect(pagina.lastmod).toBe('2026-05-05')
   })
 
   it('el enlace de WhatsApp del HTML servido es una URL, no un teléfono suelto', () => {
-    const masaru = ficha('es', 'masaru').contenido ?? ''
-    expect(masaru).toContain('href="https://wa.me/524426028627"')
-    expect(masaru).not.toContain('href="+')
+    const base = data.places[0] as Place
+    const lugar = lugarPrueba({ links: { ...base.links, whatsapp: '+524400000000' } })
+    const html = fichaDe('es', lugar).contenido ?? ''
+    expect(html).toContain('href="https://wa.me/524400000000"')
+    expect(html).not.toContain('href="+')
   })
 })
 
@@ -332,39 +364,29 @@ describe('los giros que el filtro dice cortos se leen completos en la descripci�
 })
 
 describe('la descripción enumera todas las categorías del local', () => {
-  it('no se queda con las dos primeras: el tercer giro también se dice', () => {
-    /*
-     * origenatural tiene tres giros (saludable, desayunos, jugos) y su texto no nombra ninguno, así
-     * que la descripción los dice los tres. Antes se cortaba en dos y "Jugos y Smoothies" no
-     * aparecía nunca.
-     */
-    expect(ficha('es', 'origenatural').description).toMatch(
-      /^Comida Saludable, Desayunos y Jugos y Smoothies en Xentric Anáhuac, Zibatá\./,
-    )
-    // En inglés la lista usa la convención inglesa: coma de Oxford y "and".
-    expect(ficha('en', 'origenatural').description).toMatch(
-      /^Healthy food, Breakfast, and Juices & Smoothies at Xentric Anáhuac, Zibatá\./,
-    )
-  })
+  const tres = giroDeCada(3)
+  const lugar = lugarPrueba({ giros: tres.map((giro) => giro.id) })
 
-  it('los giros se nombran todos, también los que el texto del negocio ya dice', () => {
-    // El texto de romani-pizzas ya dice ensaladas y crepas, y el contexto las nombra igual.
-    expect(ficha('es', 'romani-pizzas').description).toMatch(
-      /^Comida Italiana, .* en Plaza Condesa, Zibatá\./,
-    )
-    expect(ficha('en', 'romani-pizzas').description).toMatch(
-      /^Italian food, .* at Plaza Condesa, Zibatá\./,
-    )
-  })
+  it.each(idiomas)(
+    'no se queda con las dos primeras: el tercer giro también se dice (%s)',
+    (idioma) => {
+      const { description } = fichaDe(idioma, lugar)
+      for (const giro of tres) expect(description).toContain(giro.label[idioma])
+    },
+  )
 
-  it('el cuerpo servido sin JavaScript usa las mismas etiquetas y la misma unión', () => {
+  it('el cuerpo servido sin JavaScript nombra los mismos giros que la descripción', () => {
     // Lo que leen los rastreadores y quien no tiene JS no puede decir menos que la descripción.
-    expect(ficha('es', 'origenatural').contenido ?? '').toContain(
-      '<p>Comida Saludable, Desayunos y Jugos y Smoothies</p>',
-    )
-    expect(ficha('en', 'origenatural').contenido ?? '').toContain(
-      '<p>Healthy food, Breakfast, and Juices &amp; Smoothies</p>',
-    )
+    for (const idioma of idiomas) {
+      const html = fichaDe(idioma, lugar).contenido ?? ''
+      for (const giro of tres) {
+        expect(html).toContain((giro.label[idioma] ?? giro.label.es).replace('&', '&amp;'))
+      }
+    }
+  })
+
+  it('en inglés la lista usa la coma de Oxford y "and"', () => {
+    expect(fichaDe('en', lugar).description).toMatch(/, and /)
   })
 })
 
@@ -601,6 +623,15 @@ describe('los locales ocultos', () => {
     const conOculto = { ...data, places: [...data.places, oculto] }
     const generadas = pagesFor('es', conOculto, '/', absoluta)
     expect(generadas.some((pagina) => pagina.href === '/es/lugar/oculto-de-prueba')).toBe(false)
+  })
+
+  it('tampoco cuentan en las páginas de categoría ni se enlazan desde ellas', () => {
+    const visible = lugarPrueba({ id: 'visible-de-prueba', slug: 'visible-de-prueba' })
+    const oculto = lugarPrueba({ id: 'oculto-de-prueba', slug: 'oculto-de-prueba', active: false })
+    const paginas = paginasDe('es', [visible, oculto])
+    const categoria = paginas.find((pagina) => /\/categoria\//.test(pagina.href))
+    expect(categoria?.contenido).toContain('visible-de-prueba')
+    expect(categoria?.contenido).not.toContain('oculto-de-prueba')
   })
 })
 
