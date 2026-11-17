@@ -380,9 +380,14 @@ export function pagesFor(
     const zonas = activePlazas.filter((plaza) =>
       lugares.some((place) => place.plazaId === plaza.id),
     )
+    // Tres categorías y "y más": con la lista entera la descripción se cortaba antes de decir qué ofrece la página.
+    const resumenDeCategorias =
+      nombres.length > 3
+        ? `${nombres.slice(0, 3).join(', ')} ${SEO_SECTOR[locale].ymas}`
+        : lista(nombres, locale)
     const resumen = fill(conCantidad(SEO_SECTOR[locale].descripcion, lugares.length, locale), {
       label: etiqueta,
-      categorias: lista(nombres, locale),
+      categorias: resumenDeCategorias,
     })
     pages.push({
       href: route({ sectorSlug: sector.slug[locale] }),

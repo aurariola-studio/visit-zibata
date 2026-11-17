@@ -9,21 +9,22 @@ export const SEO_SECTOR = {
   es: {
     sectores: 'Sectores',
     nombre: '{label} en Zibatá',
-    titulo: '{label} en Zibatá: {categorias}',
+    titulo: '{label} en Zibatá, {categorias}',
+    // Con más de tres categorías se nombran tres y "y más": la lista entera se comía la descripción.
+    ymas: 'y más',
     descripcion: {
-      one: '{label} en Zibatá: {categorias}. Un lugar con horario, contacto y cómo llegar.',
-      other:
-        '{label} en Zibatá: {categorias}. Los {count} lugares de la guía, con horarios, contacto y cómo llegar.',
+      one: '{label} en Zibatá. {categorias}, con horario, contacto y cómo llegar.',
+      other: '{label} en Zibatá. {categorias}, con horarios, contacto y cómo llegar.',
     },
   },
   en: {
     sectores: 'Sectors',
     nombre: '{label} in Zibatá',
-    titulo: '{label} in Zibatá: {categorias}',
+    titulo: '{label} in Zibatá, {categorias}',
+    ymas: 'and more',
     descripcion: {
-      one: '{label} in Zibatá: {categorias}. One place, with hours, contact and directions.',
-      other:
-        '{label} in Zibatá: {categorias}. The {count} places in the guide, with hours, contact and directions.',
+      one: '{label} in Zibatá. {categorias}, with hours, contact and directions.',
+      other: '{label} in Zibatá. {categorias}, with hours, contact and directions.',
     },
   },
 } as const

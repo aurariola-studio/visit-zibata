@@ -64,13 +64,33 @@ describe('las páginas de sector', () => {
     const pagina = pagesFor('es', datos(dosSectores), '/', absoluta).find(
       (p) => p.href === '/es/sector/salud',
     )
-    expect(pagina?.title).toBe('Salud en Zibatá: Dentistas')
+    expect(pagina?.title).toBe('Salud en Zibatá, Dentistas')
     expect(pagina?.description).toContain('Dentistas')
     expect(pagina?.description).not.toMatch(/mejor/i)
+    // Sin dos puntos ni el recuento de lugares: la descripción dice qué hay y qué trae cada ficha.
+    expect(pagina?.description).not.toContain(':')
+    expect(pagina?.description).not.toMatch(/lugares de la guía/i)
+    expect(pagina?.description).toContain('con horario, contacto y cómo llegar')
     const ld = JSON.stringify(pagina?.jsonLd)
     expect(ld).toContain('prueba-dentista')
     expect(ld).not.toContain(soloComida[0]?.slug ?? 'no-hay')
   })
+
+  it.each([
+    ['es', '/es/sector/comida-y-bebida', 'y más, con horarios, contacto y cómo llegar.'],
+    ['en', '/en/sector/food-and-drink', 'and more, with hours, contact and directions.'],
+  ] as const)(
+    'con muchas categorías nombra tres y "y más", y la descripción cabe entera en %s',
+    (idioma, href, cierre) => {
+      const pagina = pagesFor(idioma, datos(dosSectores), '/', absoluta).find(
+        (p) => p.href === href,
+      )
+      expect(pagina?.description?.endsWith(cierre)).toBe(true)
+      expect(pagina?.description?.length).toBeLessThanOrEqual(160)
+      expect(pagina?.description).not.toContain('…')
+      expect(pagina?.description).not.toContain(':')
+    },
+  )
 
   it('la portada enlaza a los sectores, para que no queden huérfanas', () => {
     const portada = pagesFor('es', datos(dosSectores), '/', absoluta)[0]
