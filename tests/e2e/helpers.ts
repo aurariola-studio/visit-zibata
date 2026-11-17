@@ -251,13 +251,17 @@ export const LOCAL_BUSCABLE: DatasetPlace = unico(
   'ningún local activo con nombre que empiece por tres letras',
 )
 
-/** La zona activa más cercana a otra: dos marcadores que se acercan o se alejan con la cámara. */
-export const cercanaA = (zona: DatasetPlaza): DatasetPlaza => {
+/**
+ * La zona activa más lejana a otra: dos marcadores cuya separación en pantalla marca el zoom de la cámara.
+ * Con la más cercana, un marcador que se levanta para no pisar a otro (la distancia entre dos zonas a
+ * unos cien metros) desplaza la medición más que el propio zoom.
+ */
+export const lejanaDe = (zona: DatasetPlaza): DatasetPlaza => {
   const distancia = (a: DatasetPlaza, b: DatasetPlaza) =>
     Math.hypot(a.coordinates.lat - b.coordinates.lat, a.coordinates.lng - b.coordinates.lng)
   return unico(
     deMenorId(dataset.plazas.filter((plaza) => plaza.active && plaza.id !== zona.id)).sort(
-      (a, b) => distancia(a, zona) - distancia(b, zona),
+      (a, b) => distancia(b, zona) - distancia(a, zona),
     )[0],
     'otra zona activa',
   )
