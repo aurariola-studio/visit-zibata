@@ -11,7 +11,7 @@
  * texto escondido a la vista (`visually-hidden`), así que no cambia nada de lo que se ve.
  */
 import { locale, t } from '../i18n/index.ts'
-import { etiquetaDeCategoria, lugaresPorCategoria } from '../lib/categorias.ts'
+import { etiquetaDeCategoria } from '../lib/categorias.ts'
 import { tituloDeCategoria } from '../lib/titulo-categoria.ts'
 import type { InfoTopic } from '../lib/url-state.ts'
 import type { Catalog } from '../types/domain.ts'
@@ -63,9 +63,6 @@ export function tituloDe(
   const categoria = state.activeCategoryId
     ? catalog.categoryById.get(state.activeCategoryId)
     : undefined
-  if (categoria) {
-    const lugares = lugaresPorCategoria(catalog.places, catalog.categoryOfGiro).get(categoria.id)
-    return tituloDeCategoria(categoria, lugares ?? [], locale, t)
-  }
+  if (categoria) return tituloDeCategoria(categoria, locale, t)
   return t('seo.home.title')
 }

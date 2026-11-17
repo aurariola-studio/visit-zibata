@@ -290,12 +290,7 @@ export function pagesFor(
     const resumen = fill(conCantidad(copy['seo.category.description'], lugares.length, locale), {
       nombre: etiqueta,
     })
-    /*
-     * El título nombra lo que la gente busca cuando la etiqueta es más general ("Comida Rápida" se
-     * busca como "hamburguesas" o "alitas"): los dos giros con más locales que la etiqueta no dice.
-     * Con menos de dos no se añade nada, porque un solo giro suelto sonaría a hueco.
-     */
-    const titulo = tituloDeCategoria(categoria, lugares, locale, traducir)
+    const titulo = tituloDeCategoria(categoria, locale, traducir)
     pages.push({
       href: route({ categorySlug: categoria.slug[locale] }),
       lastmod: masReciente(lugares),

@@ -3,28 +3,22 @@
  *
  * Lo usan el HTML servido (`scripts/build/prerender.ts`) y la pestaña del navegador cuando se navega
  * sin recargar. Tenerlo dos veces garantizaba que acabaran diciendo cosas distintas.
+ *
+ * Es siempre "{categoría} en Zibatá · Visit Zibatá": el nombre y dónde. Los giros ya no se nombran en el
+ * título (antes, "Comida Rápida en Zibatá, hamburguesas y alitas"): la descripción cuenta el resto, y un
+ * título corto es el mismo en todas las categorías.
  */
-import type { Locale } from '../i18n/index.ts'
-import type { Category, Place } from '../types/domain.ts'
-import { etiquetaDeCategoria, girosDeCategoria, lista, type Traductor } from './categorias.ts'
-
-/** Por encima de este largo, el buscador corta el título. */
-export const TOPE_TITULO = 65
+import type { Category } from '../types/domain.ts'
+import { etiquetaDeCategoria, type Traductor } from './categorias.ts'
 
 export function tituloDeCategoria(
   categoria: Category,
-  lugares: readonly Place[],
-  idioma: Locale,
+  idioma: 'es' | 'en',
   traducir: Traductor,
 ): string {
-  const etiqueta = etiquetaDeCategoria(categoria, idioma, traducir)
-  const giros = girosDeCategoria(categoria, lugares, idioma).slice(0, 2)
-  const conGiros = traducir('seo.title', {
-    name: traducir('seo.category.title', { label: etiqueta, giros: lista(giros, idioma) }),
+  return traducir('seo.title', {
+    name: traducir('seo.category.name', {
+      label: etiquetaDeCategoria(categoria, idioma, traducir),
+    }),
   })
-  const sinGiros = traducir('seo.title', {
-    name: traducir('seo.category.name', { label: etiqueta }),
-  })
-  // Solo si caben: cortado a media palabra sería peor que corto.
-  return giros.length >= 2 && conGiros.length <= TOPE_TITULO ? conGiros : sinGiros
 }

@@ -210,7 +210,6 @@ export const es = {
   'seo.category.nombre.casera': 'Comida Casera',
   'seo.category.nombre.internacional': 'Comida Internacional',
   // Con dos o más giros que la etiqueta no dice, el título los nombra: es lo que la gente busca.
-  'seo.category.title': '{label} en Zibatá, {giros}',
   'seo.category.places': 'Lugares de esta categoría',
   'seo.category.zones': 'Dónde están',
   'seo.category.zoneCount': { one: '{count} zona', other: '{count} zonas' },

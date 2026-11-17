@@ -172,7 +172,6 @@ export const en = {
   'seo.category.nombre.saludable': 'Healthy food',
   'seo.category.nombre.casera': 'Home cooking',
   'seo.category.nombre.internacional': 'International food',
-  'seo.category.title': '{label} in Zibatá, {giros}',
   'seo.category.places': 'Places in this category',
   'seo.category.zones': 'Where to find them',
   'seo.category.zoneCount': { one: '{count} area', other: '{count} areas' },

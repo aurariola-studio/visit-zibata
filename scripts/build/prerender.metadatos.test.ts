@@ -472,13 +472,17 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     }
   })
 
-  it('el título nombra lo que la gente busca cuando la etiqueta es general (hamburguesas, alitas)', () => {
+  it('el título es siempre "{categoría} en Zibatá · Visit Zibatá", sin los giros', () => {
     const rapida = data.categories.find((c) => c.slug.es === 'hamburguesas')
     const pagina = de(idioma, ruta(rapida?.slug[idioma] ?? ''))
-    expect(pagina.title).toMatch(idioma === 'es' ? /hamburguesas y alitas/ : /burgers and wings/)
-    // Y nunca nombra un giro con un solo local ("arepas", "memelas").
+    expect(pagina.title).toBe(
+      idioma === 'es'
+        ? 'Comida Rápida en Zibatá · Visit Zibatá'
+        : 'Fast Food in Zibatá · Visit Zibatá',
+    )
     for (const p of todas.filter((x) => x.href.startsWith(ruta('')))) {
-      expect(p.title, p.href).not.toMatch(/arepas|memelas|boba|carnitas/i)
+      expect(p.title, p.href).toMatch(/ (en|in) Zibatá · Visit Zibatá$/)
+      expect(p.title.length, p.href).toBeLessThanOrEqual(60)
     }
   })
 
