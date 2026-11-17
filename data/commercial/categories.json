@@ -1825,20 +1825,6 @@
       ],
       "giros": [
         {
-          "id": "boxeo",
-          "label": {
-            "es": "Boxeo",
-            "en": "Boxing"
-          },
-          "icon": "boxeo",
-          "synonyms": [
-            "boxeo",
-            "box",
-            "boxing",
-            "kickboxing"
-          ]
-        },
-        {
           "id": "natacion",
           "label": {
             "es": "Natación",
@@ -1904,6 +1890,20 @@
         "martial arts"
       ],
       "giros": [
+        {
+          "id": "boxeo",
+          "label": {
+            "es": "Boxeo",
+            "en": "Boxing"
+          },
+          "icon": "boxeo",
+          "synonyms": [
+            "boxeo",
+            "box",
+            "boxing",
+            "kickboxing"
+          ]
+        },
         {
           "id": "tae-kwon-do",
           "label": {

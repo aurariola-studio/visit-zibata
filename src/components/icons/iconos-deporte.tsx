@@ -28,12 +28,9 @@ const Natacion = custom(
   </>,
 )
 
-/** Persona en sentadilla: el entrenamiento funcional. Hugeicons (MIT); el trazo de origen es de 1,5 y aquí va a 2 como los demás. */
-const Funcional = custom(
-  <>
-    <path d="M13 4.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0Z" />
-    <path d="m10.948 21l1.13-3.41c.404-1.215.606-1.823.304-2.244c-.301-.42-.94-.42-2.215-.42H8.933m0 0H7.925c-.948 0-1.423 0-1.725-.373c-.302-.374-.216-.793-.043-1.633c.29-1.406.872-3.153 1.935-4.341c.294-.328.44-.492.763-.56s.581.05 1.097.286l1.862.85l.783.358c.92.42 1.38.63 1.865.608s.924-.275 1.802-.779L18 8.345m-9.067 6.58c.241-1.315 1.155-4.312 2.88-5.77" />
-  </>,
+/** Pesa rusa: el entrenamiento funcional. Material Design Icons `kettlebell` (Apache 2.0). */
+const Funcional = solid(
+  <path d="m16.2 10.7l.6-2.4c.1-.3.5-1.7-.3-2.9C15.9 4.5 14.7 4 13 4h-2c-1.7 0-2.9.5-3.5 1.4c-.8 1.2-.4 2.5-.3 2.9l.6 2.4C6.7 11.8 6 13.3 6 15c0 2.1 1.1 3.9 2.7 5h6.6c1.6-1.1 2.7-2.9 2.7-5c0-1.7-.7-3.2-1.8-4.3M9.6 9.5l-.5-1.7v-.1s-.2-.7.1-1.1Q9.5 6 11 6h2c.9 0 1.6.2 1.9.5c.3.4.1 1.1.1 1.1l-.5 1.9c-.8-.3-1.6-.5-2.5-.5s-1.7.2-2.4.5" />,
 )
 
 /** Persona meditando en loto. Material Design Icons (Apache 2.0). */
@@ -57,10 +54,12 @@ const Danza = solid(
   </>,
 )
 
-/** Gimnasta en arabesco. Material Design Icons (Apache 2.0). */
-const Barre = solid(
+/** Persona junto a la barra de ballet: Barre. IconOven `barre` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
+const Barre = custom(
   <>
-    <path d="M4 6c0-1.1.9-2 2-2s2 .9 2 2s-.9 2-2 2s-2-.9-2-2M1 9h6l7-5l1.31 1.5l-4.17 3H14L21.8 4L23 5.4L14.5 12L14 22h-2l-.5-10L8 11H1z" />
+    <path d="M2.75 10.25h7.5m-5.5 0v11" />
+    <circle cx="14.5" cy="4.75" r="2" />
+    <path d="M14.5 7.5v13.75m0-7.75l6.25-3.25m-6.25-1.5l-4.25 1.5m4.25-1.5l4.25-2.5" />
   </>,
 )
 

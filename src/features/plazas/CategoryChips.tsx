@@ -179,7 +179,7 @@ export function CategoryChips({
           >
             <ChevronLeft aria-hidden="true" />
             <CategoryIcon name={lead.icon} size={16} strokeWidth={2} />
-            {lead.label}
+            <span className={styles.leadNombre}>{lead.label}</span>
           </a>
         </div>
       )}

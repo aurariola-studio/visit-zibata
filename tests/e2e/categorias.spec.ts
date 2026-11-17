@@ -84,6 +84,26 @@ test.describe('Páginas de categoría', () => {
     }
   })
 
+  test('en pantalla angosta la cápsula del sector se queda en la flecha y el icono, sin perder su nombre accesible', async ({
+    page,
+  }) => {
+    test.skip(!VARIOS_SECTORES || !SECTOR_GRANDE, 'Sin varios sectores no hay cápsula de sector')
+    const nombre = SECTOR_GRANDE?.label.es ?? ''
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
+    await waitForMap(page)
+    // El nombre accesible ("Sector. Ver todos los sectores") es el mismo con el texto visible o sin él.
+    const cabecera = page.getByRole('link', { name: new RegExp(`^${esc(nombre)}\\.`) }).first()
+    await expect(cabecera).toBeVisible()
+    const texto = cabecera.getByText(nombre, { exact: true })
+    if ((page.viewportSize()?.width ?? 0) < 640) {
+      await expect(texto).toBeHidden()
+      // Solo la flecha y el icono: lo que cede ancho al carril de categorías.
+      expect((await cabecera.boundingBox())?.width ?? Number.POSITIVE_INFINITY).toBeLessThan(88)
+    } else {
+      await expect(texto).toBeVisible()
+    }
+  })
+
   test('una cápsula elegida lejos del borde queda a la vista dentro del carril', async ({
     page,
   }) => {
