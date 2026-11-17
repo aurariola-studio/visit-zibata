@@ -37,7 +37,6 @@ import {
   Shrimp,
   Stethoscope,
   Store,
-  TubeLotion,
   UtensilsCrossed,
   Wine,
 } from 'lucide-react'
@@ -421,6 +420,30 @@ const Ramen = custom(
   </>,
 )
 
+/**
+ * Capas de la piel: Dermatología. Material Symbols `dermatology-outline-rounded` (Apache 2.0). Es una silueta
+ * rellena, no de trazo: lleva `fill` y no `stroke`.
+ */
+const Dermatology: IconComponent = ({
+  size = 24,
+  color = 'currentColor',
+  absoluteStrokeWidth: _,
+  strokeWidth: __,
+  ...rest
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    aria-hidden="true"
+    {...rest}
+  >
+    <path d="M3 21q-.425 0-.712-.288T2 20v-8q0-.825.588-1.412T4 10h4q.2 0 .388.075t.324.213t.213.324T9 11v1q0 1.25.875 2.125T12 15t2.125-.875T15 12v-1q0-.2.075-.388t.212-.325t.325-.212T16 10h4q.825 0 1.412.588T22 12v8q0 .425-.288.713T21 21zm1-2h16v-7h-3q0 2.075-1.463 3.538T12 17t-3.537-1.463T7 12H4zm8-6q-.425 0-.712-.288T11 12q0-2.725.625-5.375T14.35 2.25q.325-.275.725-.238t.675.363t.238.725t-.363.675q-1.75 1.475-2.187 3.7T13 12q0 .425-.288.713T12 13m-5.712 2.288q.212-.213.212-.538t-.213-.537T5.75 14t-.537.213T5 14.75t.213.538t.537.212t.538-.213m1 2.5q.212-.212.212-.537t-.213-.537t-.537-.213t-.537.213T6 17.25t.213.538t.537.212t.538-.213m11.5-2.5q.212-.212.212-.537t-.213-.537T18.25 14t-.537.213t-.213.537t.213.538t.537.212t.538-.213M4 19h16z" />
+  </svg>
+)
+
 const ICONS: Record<string, IconComponent> = {
   acai: Acai,
   antojito: Antojito,
@@ -488,7 +511,7 @@ const ICONS: Record<string, IconComponent> = {
   store: Store,
   taco: Taco,
   tooth: Tooth,
-  'tube-lotion': TubeLotion,
+  dermatology: Dermatology,
   torta: Torta,
   'utensils-crossed': UtensilsCrossed,
   waffle: Waffle,
