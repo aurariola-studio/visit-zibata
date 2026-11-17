@@ -214,7 +214,7 @@ describe('lo que se comprobó en las fichas concretas de la auditoría', () => {
       /^.*en MOL Pitahaya, Zibatá\. CAFELE es una cafetería/,
     )
     expect(ficha('es', 'la-michoacana').description).toMatch(
-      /^En Paseo Zibatá\. La Michoacana es una marca/,
+      /^.* en Paseo Zibatá\. La Michoacana es una marca/,
     )
   })
 
@@ -230,12 +230,14 @@ describe('lo que se comprobó en las fichas concretas de la auditoría', () => {
     )
   })
 
-  it('una descripción corta dice dónde está y qué es, sin repetir su propio giro, con el contexto primero', () => {
+  it('una descripción corta dice qué es y dónde está, con el contexto primero, aunque repita su giro', () => {
     expect(ficha('es', 'lilo-bowl-bar').description).toMatch(
       /^.*en Centro Zibatá\. Bowl Revolution\.$/,
     )
-    // "Pizza artesanal." ya dice "pizza": solo se añade la zona.
-    expect(ficha('es', 'enzza-pizza-zibata').description).toBe('En Paseo Zibatá. Pizza artesanal.')
+    // "Pizza artesanal." ya dice "pizza" y el contexto lo dice igual: la parte estandarizada no se omite.
+    expect(ficha('es', 'enzza-pizza-zibata').description).toBe(
+      'Pizza en Paseo Zibatá. Pizza artesanal.',
+    )
   })
 
   it('agave grill ya reabrió: no lleva aviso de cierre y usa la fecha de su verificación', () => {
@@ -345,12 +347,14 @@ describe('la descripción enumera todas las categorías del local', () => {
     )
   })
 
-  it('los giros que el texto del negocio ya nombra no se repiten aunque se ofrezcan todos', () => {
-    // El texto de romani-pizzas ya dice ensaladas y crepas: la descripción solo añade la cocina.
+  it('los giros se nombran todos, también los que el texto del negocio ya dice', () => {
+    // El texto de romani-pizzas ya dice ensaladas y crepas, y el contexto las nombra igual.
     expect(ficha('es', 'romani-pizzas').description).toMatch(
-      /^Comida Italiana en Plaza Condesa, Zibatá\./,
+      /^Comida Italiana, .* en Plaza Condesa, Zibatá\./,
     )
-    expect(ficha('en', 'romani-pizzas').description).toMatch(/^Italian food at Plaza Condesa/)
+    expect(ficha('en', 'romani-pizzas').description).toMatch(
+      /^Italian food, .* at Plaza Condesa, Zibatá\./,
+    )
   })
 
   it('el cuerpo servido sin JavaScript usa las mismas etiquetas y la misma unión', () => {

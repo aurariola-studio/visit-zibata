@@ -364,9 +364,8 @@ export function pagesFor(
         contexto: {
           /*
            * Todos los giros, no los dos primeros: la descripción enumera lo que el local es, y un
-           * tercero ("Crepas" en un italiano) es tan suyo como el primero. El texto del negocio
-           * filtra los que ya nombra y la frase se recorta a 160 caracteres, así que la lista no se
-           * desborda: el contexto más largo del catálogo mide 47.
+           * tercero ("Crepas" en un italiano) es tan suyo como el primero. La frase se recorta a 160
+           * caracteres por el final del texto del negocio, así que la lista no se desborda.
            */
           giros: place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           lugar: lugarDe(nombrePlaza),
@@ -385,15 +384,14 @@ export function pagesFor(
       : fill(copy['seo.title'], { name: ficha.place.name }),
   )
 
-  const componer = (ficha: (typeof fichas)[number], conContexto: boolean): string =>
+  const componer = (ficha: (typeof fichas)[number]): string =>
     descripcionDeFicha({
       descripcion: ficha.descripcion,
       nombre: ficha.place.name,
       contexto: ficha.contexto,
       aviso: ficha.aviso,
-      conContexto,
     })
-  const descripciones = fichas.map((ficha) => componer(ficha, true))
+  const descripciones = fichas.map(componer)
 
   // A qué locales enlaza cada ficha: el mismo bloque de siempre, repartido entre todos (ver vecinos.ts).
   const placeById = new Map(data.places.map((place) => [place.id, place]))
