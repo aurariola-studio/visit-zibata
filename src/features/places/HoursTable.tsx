@@ -86,7 +86,12 @@ export function HoursTable({
 function fechaLarga(iso: string): string {
   const fecha = new Date(iso)
   if (Number.isNaN(fecha.getTime())) return iso
-  return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(
-    fecha,
-  )
+  // Una fecha sin hora ("2026-11-17") se lee como medianoche UTC: en México, formateada con la zona local,
+  // salía el día anterior ("16 de noviembre"). Se formatea en UTC para que diga el día que es.
+  return new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(fecha)
 }

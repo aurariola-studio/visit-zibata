@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { setLocale } from '../../i18n/index.ts'
 import { renderWithCatalog } from '../../test/render.tsx'
 import { HoursTable } from './HoursTable.tsx'
@@ -35,5 +35,17 @@ describe('HoursTable: aviso de clases', () => {
     await setLocale('en')
     await renderWithCatalog(<HoursTable hours={{ ...semana, byClasses: true }} />)
     expect(screen.getByText(/depend on the classes/i)).toBeInTheDocument()
+  })
+})
+
+describe('HoursTable: fecha de revisión', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('dice el día guardado, no el anterior, aunque la zona local sea de UTC menos seis', async () => {
+    vi.stubEnv('TZ', 'America/Mexico_City')
+    await renderWithCatalog(<HoursTable hours={semana} revisado="2026-11-17" />)
+    expect(screen.getByText('Horario revisado el 17 de noviembre de 2026.')).toBeInTheDocument()
   })
 })
