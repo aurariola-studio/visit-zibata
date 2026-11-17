@@ -59,7 +59,7 @@ export function tituloDe(
   const lugar = state.selectedPlaceId ? catalog.placeById.get(state.selectedPlaceId) : undefined
   if (lugar) return t('seo.title', { name: lugar.name })
   const zona = state.selectedPlazaId ? catalog.plazaById.get(state.selectedPlazaId) : undefined
-  if (zona) return t('seo.title', { name: zona.name })
+  if (zona) return t('seo.title.plaza', { name: zona.name })
   const categoria = state.activeCategoryId
     ? catalog.categoryById.get(state.activeCategoryId)
     : undefined

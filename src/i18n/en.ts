@@ -152,6 +152,7 @@ export const en = {
     'Find your next favourite place in Zibatá, with hours, contact and location in one place.',
   'seo.title': '{name} · Visit Zibatá',
   'seo.title.zone': '{name} in {plaza} · Visit Zibatá',
+  'seo.title.plaza': '{name}, places and directions · Visit Zibatá',
   'seo.place.fallback': '{giros} at {plaza}, Zibatá. Hours, contact and directions.',
   'seo.place.context': '{giros} at {lugar}.',
   'seo.place.contextLugar': 'At {lugar}.',

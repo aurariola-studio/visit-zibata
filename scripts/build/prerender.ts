@@ -239,7 +239,7 @@ export function pagesFor(
       href: route({ plazaSlug: plaza.slug }),
       lastmod: masReciente(deLaPlaza),
       image,
-      title: fill(copy['seo.title'], { name }),
+      title: fill(copy['seo.title.plaza'], { name }),
       description: trim(
         descripcionDeZona(text(plaza.description, locale), deLaPlaza.length, locale) ||
           fill(copy['seo.plaza.fallback'], { name }),

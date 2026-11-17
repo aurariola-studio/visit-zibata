@@ -175,6 +175,8 @@ export const es = {
   'seo.title': '{name} · Visit Zibatá',
   // Solo para los locales cuyo nombre se repite (dos sucursales de una misma cadena).
   'seo.title.zone': '{name} en {plaza} · Visit Zibatá',
+  // El título de una zona dice a qué se viene a su página: qué hay y cómo llegar.
+  'seo.title.plaza': '{name}, qué hay y cómo llegar · Visit Zibatá',
   'seo.place.fallback': '{giros} en {plaza}, Zibatá. Horario, contacto y cómo llegar.',
   // Lo que se añade a una descripción corta: solo los giros y la zona del propio local.
   'seo.place.context': '{giros} en {lugar}.',
