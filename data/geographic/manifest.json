@@ -84,21 +84,21 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2511659,
-      "sha256": "42c8f903aa3d078d318d3cb04ccfb3183a827ffd5c147288f0ed8566503fc9af",
+      "bytes": 2511620,
+      "sha256": "000eaa3b0701e13f9c01a35b24d4cf0eb4d3a46f6ab8302600010a48b6e4b24e",
       "tiles": 265,
       "bytesByZoom": {
         "12": 46047,
-        "13": 245444,
-        "14": 519909,
-        "15": 716830,
-        "16": 982130
+        "13": 245441,
+        "14": 519889,
+        "15": 716838,
+        "16": 982105
       },
       "largestTile": {
         "z": 13,
         "x": 1812,
         "y": 3615,
-        "bytes": 95828
+        "bytes": 95831
       },
       "features": {
         "roads": 4023,
@@ -112,8 +112,8 @@
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 13070,
-      "sha256": "99b28c6cc2ff9c7c1c3a314b13b1bb11f2181305a8c618b4055bf8895b01efee",
+      "bytes": 13245,
+      "sha256": "6962c565d904f304f61854724fff511bd9f93792798895f213628241bffbfdfb",
       "features": 36,
       "synthesizedFor": [
         "paseo-zibata",
@@ -243,7 +243,7 @@
       },
       "public/map/realismo/edificios.bin": {
         "bytes": 3886344,
-        "sha256": "a36650c2e40fa0fa9cd2a6552fddf955cc0ffaebac13b84b641802d8864954b4"
+        "sha256": "33ef70275b5e77c790ffd6b1f26a74437825a91e22fa88a0d8597507f3c3f14c"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 142120,

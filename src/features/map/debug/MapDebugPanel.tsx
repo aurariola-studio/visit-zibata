@@ -61,7 +61,7 @@ export default function MapDebugPanel({ map }: { map: MapLibreMap }) {
     const onMove = (event: MapMouseEvent) => {
       setCursor(`${event.lngLat.lng.toFixed(6)}, ${event.lngLat.lat.toFixed(6)}`)
       const hit = map.queryRenderedFeatures(event.point, {
-        layers: ['plaza-buildings', 'buildings', 'buildings-outside'],
+        layers: ['plaza-buildings', 'plaza-buildings-rectos', 'buildings', 'buildings-outside'],
       })[0]
       if (hit) {
         const p = hit.properties ?? {}

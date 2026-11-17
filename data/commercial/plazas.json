@@ -337,25 +337,25 @@
       "slug": "foodtrucks-pickleball",
       "name": "PickSpot Zibatá",
       "description": {
-        "es": "Canchas de pickleball y food trucks, junto a Paseo Zibatá.",
-        "en": "Pickleball courts and food trucks, next to Paseo Zibatá."
+        "es": "Canchas de pickleball y food trucks, frente a la Universidad Anáhuac y a un lado de la plaza comercial Paseo Zibatá.",
+        "en": "Pickleball courts and food trucks, across from Universidad Anáhuac and next to the Paseo Zibatá shopping plaza."
       },
       "address": "Av. Paseo de las Pitahayas 24, locales 22 y 23, Zibatá",
       "coordinates": {
-        "lat": 20.680052,
-        "lng": -100.316126
+        "lat": 20.680135,
+        "lng": -100.316257
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -100.315766,
-              20.68015
+              -100.316028,
+              20.680316
             ],
             [
-              -100.316088,
-              20.679703
+              -100.316351,
+              20.679869
             ],
             [
               -100.316486,
@@ -366,8 +366,8 @@
               20.680401
             ],
             [
-              -100.315766,
-              20.68015
+              -100.316028,
+              20.680316
             ]
           ]
         ]
@@ -380,7 +380,7 @@
         "deportes"
       ],
       "locationConfidence": "low",
-      "locationSource": "Ficha de Maps (Av. Paseo de las Pitahayas 24, locales 22 y 23), pickspot.mx y satélite: cuatro canchas de pickleball y foodtrucks en el lote contiguo. Las piezas están dibujadas a mano en data/geographic/volumenes-propios.json. Por verificar en campo.",
+      "locationSource": "Ficha de Maps (Av. Paseo de las Pitahayas 24, locales 22 y 23), pickspot.mx y satélite: cuatro canchas de pickleball y los foodtrucks del lote contiguo, acotados al ancho de las canchas. Las piezas están dibujadas a mano en data/geographic/volumenes-propios.json. Por verificar en campo.",
       "verification": {
         "status": "likely_active",
         "confidence": "low",
@@ -1279,7 +1279,10 @@
       "id": "intercepta",
       "slug": "intercepta",
       "name": "Intercepta Zibatá",
-      "description": null,
+      "description": {
+        "es": "Club de pádel en Zibatá, Querétaro",
+        "en": "Padel club in Zibatá, Querétaro"
+      },
       "address": "Calle Agave 6, Zibatá",
       "coordinates": {
         "lat": 20.690018,

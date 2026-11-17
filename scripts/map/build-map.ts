@@ -248,6 +248,8 @@ type BuildingProps = {
   src: string
   /** Metros fijados a mano: `build-mallas` los respeta tal cual, sin mezclarlos ni redondearlos a pisos. */
   alturaFija?: true
+  /** Pieza dibujada a mano (volumenes-propios.json): el estilo la pinta de esquinas rectas. */
+  recto?: true
   /** Dentro del contorno de Zibatá: el estilo atenúa el contexto exterior. */
   inside: boolean
 }
@@ -354,6 +356,7 @@ for (const [plazaId, piezas] of Object.entries(propios.plazas)) {
         type: 'commercial',
         src: 'synthetic',
         alturaFija: true,
+        recto: true,
         inside: true,
         plazaId,
       },

@@ -96,6 +96,46 @@ export function plazaBuildingLayers(tones: ReadonlyMap<string, PlazaTone>): Laye
     ['get', 'plazaId'],
     ['literal', [...tones.keys()]],
   ]
+  const recto: ExpressionSpecification = ['to-boolean', ['get', 'recto']]
+  /** La capa de volúmenes de las plazas activas. Las piezas dibujadas a mano van aparte porque el redondeo de esquinas es de toda la capa. */
+  const capaActiva = (
+    id: string,
+    filter: ExpressionSpecification,
+    redondeadas: boolean,
+  ): LayerSpecification => ({
+    id,
+    type: 'fill-extrusion',
+    source: SOURCE.plazaBuildings,
+    filter,
+    ...(redondeadas ? { layout: { 'fill-extrusion-rounded-corner-distance': 0.8 } } : {}),
+    paint: {
+      'fill-extrusion-color': [
+        'case',
+        state('selected'),
+        toneOf(tones, 'building', -0.28),
+        state('hover'),
+        toneOf(tones, 'building', -0.14),
+        state('dimmed'),
+        t.plaza.buildingDimmed,
+        toneOf(tones, 'building'),
+      ],
+      /*
+       * Al pasar el cursor, o al abrir la plaza, se eleva ligeramente. La elevación no pasa de la mitad
+       * de la altura de la pieza: con 2,5 m fijos, una cancha de 0,6 m se veía de 3 m, un bloque, en
+       * cuanto la zona se abría.
+       */
+      'fill-extrusion-height': growingHeight([
+        '+',
+        ['get', 'height'],
+        [
+          'min',
+          ['*', ['get', 'height'], 0.5],
+          ['case', state('selected'), 2.5, state('hover'), 1.5, 0],
+        ],
+      ]),
+      'fill-extrusion-vertical-gradient': true,
+    },
+  })
   return [
     {
       id: LAYER.plazaBuildingsInactive,
@@ -108,39 +148,7 @@ export function plazaBuildingLayers(tones: ReadonlyMap<string, PlazaTone>): Laye
         'fill-extrusion-vertical-gradient': true,
       },
     },
-    {
-      id: LAYER.plazaBuildings,
-      type: 'fill-extrusion',
-      source: SOURCE.plazaBuildings,
-      filter: isActive,
-      layout: { 'fill-extrusion-rounded-corner-distance': 0.8 },
-      paint: {
-        'fill-extrusion-color': [
-          'case',
-          state('selected'),
-          toneOf(tones, 'building', -0.28),
-          state('hover'),
-          toneOf(tones, 'building', -0.14),
-          state('dimmed'),
-          t.plaza.buildingDimmed,
-          toneOf(tones, 'building'),
-        ],
-        /*
-         * Al pasar el cursor, o al abrir la plaza, se eleva ligeramente. La elevación no pasa de la mitad
-         * de la altura de la pieza: con 2,5 m fijos, una cancha de 0,6 m se veía de 3 m, un bloque, en
-         * cuanto la zona se abría.
-         */
-        'fill-extrusion-height': growingHeight([
-          '+',
-          ['get', 'height'],
-          [
-            'min',
-            ['*', ['get', 'height'], 0.5],
-            ['case', state('selected'), 2.5, state('hover'), 1.5, 0],
-          ],
-        ]),
-        'fill-extrusion-vertical-gradient': true,
-      },
-    },
+    capaActiva(LAYER.plazaBuildings, ['all', isActive, ['!', recto]], true),
+    capaActiva(LAYER.plazaBuildingsRectos, ['all', isActive, recto], false),
   ]
 }
