@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-13",
+  "updatedAt": "2026-11-17",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -116,7 +116,8 @@
         "internacional",
         "bar",
         "gimnasios",
-        "yoga-pilates-y-barre"
+        "yoga-pilates-y-barre",
+        "danza"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -849,6 +850,7 @@
       "categories": [
         "desayunos-y-cafe",
         "panaderia-y-reposteria",
+        "gimnasios",
         "deportes"
       ],
       "locationConfidence": "medium",
