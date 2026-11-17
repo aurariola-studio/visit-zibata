@@ -6538,12 +6538,13 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.anytimefitness.com.mx/club/MX-1026",
-          "https://maps.app.goo.gl/ZqiYzGU2ZGshguSk9"
+          "https://maps.app.goo.gl/ZqiYzGU2ZGshguSk9",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -6602,13 +6603,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://evogym.com.mx/",
           "https://www.google.com/maps/search/EVOGYM+Zibat%C3%A1",
-          "https://maps.app.goo.gl/1EtMBtFo4FRVeXBa6"
+          "https://maps.app.goo.gl/1EtMBtFo4FRVeXBa6",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -6667,13 +6669,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://linktr.ee/hallafit",
           "https://www.google.com/maps/search/Hall%C3%A5fit+Zibat%C3%A1",
-          "https://maps.app.goo.gl/5PZqRHkN2RNwwhSM8"
+          "https://maps.app.goo.gl/5PZqRHkN2RNwwhSM8",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -6736,13 +6739,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.instagram.com/flcn.mx/",
           "https://www.google.com/maps/search/FLCN+Bootcamp+Zibat%C3%A1",
-          "https://maps.app.goo.gl/6AtpQqzbRPjhwLYV8"
+          "https://maps.app.goo.gl/6AtpQqzbRPjhwLYV8",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -6807,13 +6811,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.trueinstinct.mx/",
           "https://www.google.com/maps/search/True+Instinct+Hybrid+Club+Zibat%C3%A1",
-          "https://www.google.com/maps/place/True+Instinct+Hybrid+Club/@20.6792084,-100.31467,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35dcee9dc0b5b:0x559d9508de17d01b!8m2!3d20.6792084!4d-100.31467!16s%2Fg%2F11y_hrg36g"
+          "https://www.google.com/maps/place/True+Instinct+Hybrid+Club/@20.6792084,-100.31467,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35dcee9dc0b5b:0x559d9508de17d01b!8m2!3d20.6792084!4d-100.31467!16s%2Fg%2F11y_hrg36g",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -6871,13 +6876,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "http://triba.com.mx/",
           "https://www.google.com/maps/search/Triba+Fitness+Studio+Zibat%C3%A1",
-          "https://maps.app.goo.gl/5eqL3jowaiCJzgCLA"
+          "https://maps.app.goo.gl/5eqL3jowaiCJzgCLA",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -6942,13 +6948,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://therebboundmovement.com/",
           "https://www.google.com/maps/search/The+Rebbound+Movement+Zibat%C3%A1",
-          "https://maps.app.goo.gl/XTwWyNpavJgSsUKJ9"
+          "https://maps.app.goo.gl/XTwWyNpavJgSsUKJ9",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7014,13 +7021,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://sevenstudio.mx/",
           "https://www.google.com/maps/search/Seven+Indoor+Cycling+%26+Strength+Zibat%C3%A1",
-          "https://www.google.com/maps/place/Seven+Indoor+Cycling+%26+Strength/@20.6791077,-100.3146856,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35d7bab602e87:0x2d996e9ae2211057!8m2!3d20.6791077!4d-100.3146856!16s%2Fg%2F11rxf5_1_0"
+          "https://www.google.com/maps/place/Seven+Indoor+Cycling+%26+Strength/@20.6791077,-100.3146856,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35d7bab602e87:0x2d996e9ae2211057!8m2!3d20.6791077!4d-100.3146856!16s%2Fg%2F11rxf5_1_0",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7087,13 +7095,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "http://thea-studios.com/",
           "https://www.google.com/maps/search/Z%C3%81YCLO+Zibat%C3%A1",
-          "https://maps.app.goo.gl/ao3G7H2TopvdPqcRA"
+          "https://maps.app.goo.gl/ao3G7H2TopvdPqcRA",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7153,13 +7162,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://nessty.mx/@loom-pilates-club",
           "https://www.google.com/maps/search/Loom+Pilates+Club+Zibat%C3%A1",
-          "https://maps.app.goo.gl/upv6NvGE1yHbr6vL8"
+          "https://maps.app.goo.gl/upv6NvGE1yHbr6vL8",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7224,13 +7234,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.nessty.mx/@knotspilates",
           "https://www.google.com/maps/search/knots+pilates+Zibat%C3%A1",
-          "https://maps.app.goo.gl/vi1Uxn1uD8BgDeDSA"
+          "https://maps.app.goo.gl/vi1Uxn1uD8BgDeDSA",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7290,13 +7301,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.instagram.com/centre.movement/",
           "https://www.google.com/maps/search/Centre+Movement+Pilates+Mat+Zibat%C3%A1",
-          "https://maps.app.goo.gl/vWxy44EGM6QHJ18V7"
+          "https://maps.app.goo.gl/vWxy44EGM6QHJ18V7",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7350,11 +7362,12 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
-          "https://www.google.com/maps/search/L-Balans+Pilates+Reformer+Zibat%C3%A1"
+          "https://www.google.com/maps/search/L-Balans+Pilates+Reformer+Zibat%C3%A1",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7414,14 +7427,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.facebook.com/share/17jWqRENsY/",
           "https://www.google.com/maps/search/Devotion+Heat+Room+Zibat%C3%A1",
           "https://maps.app.goo.gl/EYmvmerjdNmewt5S8",
-          "https://devotion-mx.com/"
+          "https://devotion-mx.com/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7486,13 +7500,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.espacio-om.com.mx/",
           "https://www.google.com/maps/search/Espacio+OM+Zibat%C3%A1",
-          "https://maps.app.goo.gl/xCokdu7dKEmWE9LZ9"
+          "https://maps.app.goo.gl/xCokdu7dKEmWE9LZ9",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7556,12 +7571,13 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://turnoutstudio.com.mx/",
-          "https://maps.app.goo.gl/mhjGiuvLam3RA5JfA"
+          "https://maps.app.goo.gl/mhjGiuvLam3RA5JfA",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7620,13 +7636,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.facebook.com/GrandJeteZibata/",
           "https://www.google.com/maps/search/Grand+Jet%C3%A9+Dance+Studio+Zibat%C3%A1",
-          "https://maps.app.goo.gl/DMTrwSjokFUEMsWK9"
+          "https://maps.app.goo.gl/DMTrwSjokFUEMsWK9",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7690,13 +7707,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.bboxgym.com/",
           "https://www.google.com/maps/search/Black+Box+Zibat%C3%A1",
-          "https://maps.app.goo.gl/oiwNmWiw1Bv8KJGi6"
+          "https://maps.app.goo.gl/oiwNmWiw1Bv8KJGi6",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7754,13 +7772,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.swimlabmexico.com/",
           "https://www.google.com/maps/search/Swim+Lab+Zibat%C3%A1",
-          "https://maps.app.goo.gl/1Hd6AFw9wQJyq7VL6"
+          "https://maps.app.goo.gl/1Hd6AFw9wQJyq7VL6",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7820,13 +7839,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://intercepta.mx/",
           "https://www.google.com/maps/search/Intercepta+Zibat%C3%A1",
-          "https://maps.app.goo.gl/s1a7fECEzpJsFuMHA"
+          "https://maps.app.goo.gl/s1a7fECEzpJsFuMHA",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7890,13 +7910,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-12",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://pickspot.mx/",
           "https://www.google.com/maps/search/PickSpot+Zibat%C3%A1",
-          "https://maps.app.goo.gl/YuMHZAJ8vA4TnBwZ8"
+          "https://maps.app.goo.gl/YuMHZAJ8vA4TnBwZ8",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -7952,12 +7973,13 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-16",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://maps.app.goo.gl/fnQzkpses16H4B6w5",
-          "https://www.instagram.com/elprofmario_tkd/"
+          "https://www.instagram.com/elprofmario_tkd/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8017,15 +8039,16 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://zibatahoy.com/listing/farmacia-san-pablo-zibata/",
           "https://www.google.com/maps/place/Farmacia+San+Pablo+Zibat%C3%A1/@20.6785643,-100.3140216,17z",
           "https://maps.app.goo.gl/NVTs1KQZXjA3y9bb6",
           "https://www.instagram.com/sanpablofarma/",
-          "https://www.facebook.com/SanPabloFarma"
+          "https://www.facebook.com/SanPabloFarma",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8085,16 +8108,17 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://zibatahoy.com/listing/farmacias-benavides-zibata/",
           "https://www.google.com/maps/search/Farmacias+Benavides+Paseo+Tunas+18a+Zibat%C3%A1",
           "https://maps.app.goo.gl/4AhX4yRGkNHn5hFi7",
           "https://www.ubereats.com/mx/store/farmacias-benavides-zibata/qmXf2Af4WYiCyeQdM6cwyQ",
           "https://www.facebook.com/FarmaciasBenavides",
-          "https://www.instagram.com/farmaciasbenavides/"
+          "https://www.instagram.com/farmaciasbenavides/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8153,14 +8177,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://zibatahoy.com/listing/farmacia-guadalajara-zibata/",
           "https://www.google.com/maps/search/Farmacia+Guadalajara+Zibat%C3%A1",
           "https://maps.app.goo.gl/7k5ikfFYYr6HcsNw7",
-          "https://www.ubereats.com/mx/store/farmacias-guadalajara-zibata-el-marques-queretaro/c-aekooRUFOBfbbRJsMjmA"
+          "https://www.ubereats.com/mx/store/farmacias-guadalajara-zibata-el-marques-queretaro/c-aekooRUFOBfbbRJsMjmA",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8219,14 +8244,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://maps.app.goo.gl/cJtbgmrqZuHxtzR9A",
           "https://zibatahoy.com/listing/farmacias-similares-zibata/",
           "https://www.instagram.com/fsimilares",
-          "https://www.facebook.com/farmaciassimilares/"
+          "https://www.facebook.com/farmaciassimilares/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8285,13 +8311,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "low",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://maps.app.goo.gl/txtgYzGnNBwKpGi29",
           "https://www.instagram.com/fsimilares",
-          "https://www.facebook.com/farmaciassimilares/"
+          "https://www.facebook.com/farmaciassimilares/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8350,14 +8377,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.google.com/maps/place/Centro+M%C3%A9dico+UNICCA/@20.6795136,-100.3151707,17z/data=!4m6!3m5!1s0x85d35d04eea56dc3:0x12cfe4368df6a835!8m2!3d20.6795136!4d-100.3151707!16s%2Fg%2F11jgdqxtsc",
           "https://zibatahoy.com/listing/medical-group-zibata/",
           "https://www.google.com/maps/search/UNICCA+Zibat%C3%A1",
-          "https://www.instagram.com/unicca.zibata/"
+          "https://www.instagram.com/unicca.zibata/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8416,13 +8444,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "low",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://maps.app.goo.gl/obX1bSRjtcYCVFpK8",
           "https://www.facebook.com/uniccazibata",
-          "https://www.instagram.com/unicca.zibata/"
+          "https://www.instagram.com/unicca.zibata/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8479,16 +8508,17 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-16",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.google.com/maps/place/Laboratorio+M%C3%A9dico+del+Chopo+Xentric+An%C3%A1huac/@20.6782649,-100.3139789,20z",
           "https://maps.app.goo.gl/cm3rZ7u2gKHM5xKPA",
           "https://www.chopo.com.mx/sucursal-xentric-anahuac-paseo-de-las-pitahayas-1a-l-131",
           "https://www.instagram.com/labmedicochopo",
           "https://www.facebook.com/LabMedicoChopo",
-          "https://www.tiktok.com/@labmedicochopo"
+          "https://www.tiktok.com/@labmedicochopo",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8551,14 +8581,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://zibatahoy.com/es/listado/zibata-dental-micro-macro/",
           "https://micromacrodental.com",
           "https://www.google.com/maps/search/Micromacro+Dental+Zibat%C3%A1",
-          "https://maps.app.goo.gl/grg9DfSvy89AmsF68"
+          "https://maps.app.goo.gl/grg9DfSvy89AmsF68",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8616,13 +8647,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://zibatahoy.com/listing/thedek/",
           "https://maps.app.goo.gl/GD7a51D1fbKouzE28",
-          "https://www.tiktok.com/@_thedek_"
+          "https://www.tiktok.com/@_thedek_",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8684,14 +8716,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://www.google.com/maps/place/Zibamedic/@20.6747698,-100.3229571,17z/data=!4m6!3m5!1s0x85d35da228c59ab3:0x6a9bffbd3b47395b!8m2!3d20.6747698!4d-100.3229571!16s%2Fg%2F11lg8f5jsr",
           "https://zibamedic.wixsite.com/queretaro",
           "https://www.instagram.com/zibamedic",
-          "https://www.facebook.com/p/Zibamedic-100028342045874"
+          "https://www.facebook.com/p/Zibamedic-100028342045874",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8748,15 +8781,16 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://saiens.com.mx",
           "https://maps.app.goo.gl/6qpBsYJAL9AsfpoT6",
           "https://saiens.com.mx/sucursales/saiens-zibata/",
           "https://www.instagram.com/saienslab/",
-          "https://www.facebook.com/SaiensLaboratorioClinico/"
+          "https://www.facebook.com/SaiensLaboratorioClinico/",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8813,12 +8847,13 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://dermaspherestudio.com",
-          "https://maps.app.goo.gl/kh6HiaMSSKLh3GWE7"
+          "https://maps.app.goo.gl/kh6HiaMSSKLh3GWE7",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8880,12 +8915,13 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-16",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://dentalfactory.com.mx",
-          "https://maps.app.goo.gl/FDBBviQVp62ZQ6bi7"
+          "https://maps.app.goo.gl/FDBBviQVp62ZQ6bi7",
+          "campo:2026-11-17"
         ]
       }
     },
@@ -8944,13 +8980,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-15",
+        "lastVerifiedAt": "2026-11-17",
         "sources": [
           "https://brodmann18.com",
           "https://www.google.com/maps/search/BRODMANN18+Zibat%C3%A1",
-          "https://maps.app.goo.gl/sTTu9EsFEyvPAqDm8"
+          "https://maps.app.goo.gl/sTTu9EsFEyvPAqDm8",
+          "campo:2026-11-17"
         ]
       }
     }
