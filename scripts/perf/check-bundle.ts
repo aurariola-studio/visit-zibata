@@ -96,6 +96,10 @@ const KB = 1024
  * build el texto de las páginas de sector (de 128,2 a 128,1). Se sube en vez de recortar para no mezclar
  * una refactorización con la entrega del sector Salud.
  *
+ * 2026-11-17: con Salud, Fitness, las píldoras de zona por sector y los iconos nuevos de Comida el paquete
+ * llegó a 130,6 KB. En vez de subir el tope, los iconos de Dermatología, Dentista y Ortodoncia pasaron al
+ * fragmento diferido de `iconos-deporte.tsx` (129,9). El propietario decidió no tocar el tope por ahora.
+ *
  * Lo que queda pendiente, y lo que debe hacerse para volver a 128: sacar del paquete inicial el texto que
  * no se necesita al abrir la guía. Medido sobre el catálogo en español (6,9 KB gzip en total):
  *

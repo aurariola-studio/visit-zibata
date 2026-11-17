@@ -1,7 +1,8 @@
 /**
- * Iconos de Fitness y Deporte. Viven aparte de `CategoryIcon.tsx` porque pesan unos 3 KB comprimidos y
- * ningún giro de este sector tiene locales todavía: así no entran en el paquete inicial, que tiene
- * presupuesto. `CategoryIcon` los carga la primera vez que pinta uno.
+ * Los iconos que no hacen falta en la primera pantalla: los de Fitness y Deporte y los de Dentista y
+ * Dermatología, que solo se pintan dentro de una zona o una categoría. Viven aparte de `CategoryIcon.tsx`
+ * para no entrar en el paquete inicial, que tiene presupuesto (`npm run perf:budget`). `CategoryIcon` los
+ * carga la primera vez que pinta uno.
  */
 import { Bike } from 'lucide-react'
 import { custom, type IconComponent, solid } from './dibujar.tsx'
@@ -137,7 +138,33 @@ const Taekwondo = custom(
   </>,
 )
 
+/** Capas de la piel: Dermatología. Material Symbols `dermatology-outline-rounded` (Apache 2.0). Vive aquí, con el fragmento diferido, para no pesar en el paquete inicial. */
+const Dermatology = solid(
+  <path d="M3 21q-.425 0-.712-.288T2 20v-8q0-.825.588-1.412T4 10h4q.2 0 .388.075t.324.213t.213.324T9 11v1q0 1.25.875 2.125T12 15t2.125-.875T15 12v-1q0-.2.075-.388t.212-.325t.325-.212T16 10h4q.825 0 1.412.588T22 12v8q0 .425-.288.713T21 21zm1-2h16v-7h-3q0 2.075-1.463 3.538T12 17t-3.537-1.463T7 12H4zm8-6q-.425 0-.712-.288T11 12q0-2.725.625-5.375T14.35 2.25q.325-.275.725-.238t.675.363t.238.725t-.363.675q-1.75 1.475-2.187 3.7T13 12q0 .425-.288.713T12 13m-5.712 2.288q.212-.213.212-.538t-.213-.537T5.75 14t-.537.213T5 14.75t.213.538t.537.212t.538-.213m1 2.5q.212-.212.212-.537t-.213-.537t-.537-.213t-.537.213T6 17.25t.213.538t.537.212t.538-.213m11.5-2.5q.212-.212.212-.537t-.213-.537T18.25 14t-.537.213t-.213.537t.213.538t.537.212t.538-.213M4 19h16z" />,
+)
+
+/** Una muela vista de frente: la corona con dos lóbulos arriba y dos raíces abajo. */
+const DIENTE =
+  'M7.4 3.2c-2.2 0-3.9 1.7-3.9 4.1 0 1.9.8 3 1.4 4.8.6 1.8.5 4.4 1.3 6.9.3 1 .9 1.6 1.7 1.6 1.1 0 1.4-1.2 1.7-2.9.2-1.3.7-2.1 1.7-2.1s1.5.8 1.7 2.1c.3 1.7.6 2.9 1.7 2.9.8 0 1.4-.6 1.7-1.6.8-2.5.7-5.1 1.3-6.9.6-1.8 1.4-2.9 1.4-4.8 0-2.4-1.7-4.1-3.9-4.1-1.7 0-2.7.9-4.6.9S9.1 3.2 7.4 3.2Z'
+const Tooth = custom(<path d={DIENTE} />)
+
+/**
+ * Lo mismo con el aparato: un bracket en el centro de la corona y el alambre que la cruza, que sale a
+ * los dos lados. Es el diente de Dentista con lo que hace distinta a la Ortodoncia, y por eso comparte su
+ * silueta.
+ */
+const Ortodoncia = custom(
+  <>
+    <path d={DIENTE} />
+    {/* El bracket (un rectángulo de 4,4 × 3,4 centrado en x = 12) y el alambre, en un solo trazo. */}
+    <path d="M9.8 6.9h4.4v3.4H9.8ZM1.8 8.6h20.4" />
+  </>,
+)
+
 export const ICONOS_DEPORTE: Record<string, IconComponent> = {
+  ortodoncia: Ortodoncia,
+  tooth: Tooth,
+  dermatology: Dermatology,
   'artes-marciales': ArtesMarciales,
   ballet: Ballet,
   barbell: Barbell,

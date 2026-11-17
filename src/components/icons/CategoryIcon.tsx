@@ -8,7 +8,6 @@ import {
   BicepsFlexed,
   Bone,
   CakeSlice,
-  Candy,
   Cherry,
   Coffee,
   CookingPot,
@@ -43,10 +42,12 @@ import {
 import { useEffect, useState } from 'react'
 import { custom, type IconComponent, solid } from './dibujar.tsx'
 
+/** Taco con su relleno: Tacos y Antojitos y la taquería. Hugeicons (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Taco = custom(
   <>
-    <path d="M2.5 17.5a9.5 9.5 0 0 1 19 0Z" />
-    <path d="M5 12.2c.9-.9 1.8-.4 2.5-1.2.7-.8 1.8-.4 2.5-1s1.6-.6 2.3 0 1.8.2 2.5 1 1.6.3 2.5 1.2" />
+    <path d="M12 9c-4.32 0-8.01 2.94-9.47 7.07c-.53 1.5-.79 2.25-.18 3.09C2.95 20 3.94 20 5.92 20h12.16c1.98 0 2.97 0 3.57-.84c.61-.84.34-1.59-.18-3.09C20.01 11.94 16.32 9 12 9Z" />
+    <path d="M21.33 15a3.24 3.24 0 0 0-.24-4.22a3.3 3.3 0 0 1-.9-1.97c-.15-1.68-1.57-3.02-3.34-3.14l-.2-.01a4 4 0 0 1-2.15-.81c-1.44-1.11-3.54-1.11-4.98 0a4 4 0 0 1-2.15.81l-.2.02c-1.78.13-3.2 1.47-3.34 3.14a3.3 3.3 0 0 1-.9 1.98A3.24 3.24 0 0 0 2.67 15m3.46 2H6m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0Z" />
+    <path d="M8.13 14H8m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0Z" />
   </>,
 )
 
@@ -105,22 +106,18 @@ const Baguette = custom(
   </>,
 )
 
-/** Molcajete con su tejolote: la cocina mexicana de siempre, no un gorro de chef. */
+/** Molcajete con su tejolote: la cocina mexicana de siempre. Iconoven (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Molcajete = custom(
-  <>
-    <path d="M3.4 10.8h17.2a8.6 8.6 0 0 1-17.2 0Z" />
-    <path d="M6.9 17.7 5.7 20M17.1 17.7l1.2 2.3" />
-    <path d="m14.6 10.6 4.2-5.6" />
-  </>,
+  <path d="m11.49 9.57-.98-1.14q-.66-.75.14-1.34l4.83-3.58q.8-.59 1.46.17l.12.14q.66.76-.04 1.48l-4.17 4.3q-.7.72-1.36-.03M4.25 13.5h15.5a7.75 7.75 0 0 1-15.5 0" />,
 )
 
-/** Rebanada de pan de caja con sus hombros y el bolillo delante. */
+/** Sándwich: Entre Panes. Hugeicons (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Pan = custom(
   <>
-    <path d="M9.4 15.4V10.6c0-.7-.4-1.1-1-1.5a5.6 5.6 0 0 1 10.2 0c-.6.4-1 .8-1 1.5v4.8" />
-    <path d="M12.4 11.4h.01M15.4 10.6h.01" />
-    <ellipse cx="10.4" cy="17.4" rx="7.8" ry="3.4" />
-    <path d="m7.4 16.4 1-1.6M10.6 16.8l1-1.8M13.8 16.4l.9-1.6" />
+    <path d="M2.99 17c0 .93 0 1.4.15 1.77a2 2 0 0 0 1.08 1.08C4.59 20 5.06 20 5.99 20h12c.93 0 1.4 0 1.77-.15a2 2 0 0 0 1.08-1.08c.15-.37.15-.83.15-1.76" />
+    <path d="m3.02 13l-.42.66c-.29.45-.44.68-.49.82c-.43 1.07.38 2.23 1.49 2.15c.14-.01.4-.08.9-.22c.14-.04.21-.06.28-.07a2.9 2.9 0 0 1 1.46.04c.07.02.14.04.27.09l.48.17c.63.22.94.33 1.26.36q.25.03.5.01c.32-.02.64-.11 1.28-.3l.31-.09c.82-.24 1.22-.36 1.64-.36s.83.12 1.64.36l.31.09c.64.19.96.28 1.28.3q.25.02.5-.01c.32-.04.64-.14 1.26-.36l.48-.17c.14-.05.2-.07.27-.09c.48-.14.98-.15 1.46-.04c.07.02.14.04.28.08c.51.14.76.21.9.23c1.11.08 1.92-1.08 1.49-2.15c-.06-.14-.2-.37-.49-.82L20.96 13" />
+    <path d="M20.99 11.1c0-.64 0-.96-.09-1.26s-.25-.57-.59-1.1l-1.48-2.36c-.88-1.4-1.32-2.11-2.02-2.32c-.69-.22-1.42.11-2.89.78L5.42 8.72c-1.18.53-1.76.8-2.09 1.33c-.33.53-.33 1.21-.33 2.57V13h18z" />
+    <path d="M3.99 9.5h16.5" />
   </>,
 )
 
@@ -239,24 +236,6 @@ const Antojito = custom(
   </>,
 )
 
-/** Una muela vista de frente: la corona con dos lóbulos arriba y dos raíces abajo. */
-const DIENTE =
-  'M7.4 3.2c-2.2 0-3.9 1.7-3.9 4.1 0 1.9.8 3 1.4 4.8.6 1.8.5 4.4 1.3 6.9.3 1 .9 1.6 1.7 1.6 1.1 0 1.4-1.2 1.7-2.9.2-1.3.7-2.1 1.7-2.1s1.5.8 1.7 2.1c.3 1.7.6 2.9 1.7 2.9.8 0 1.4-.6 1.7-1.6.8-2.5.7-5.1 1.3-6.9.6-1.8 1.4-2.9 1.4-4.8 0-2.4-1.7-4.1-3.9-4.1-1.7 0-2.7.9-4.6.9S9.1 3.2 7.4 3.2Z'
-const Tooth = custom(<path d={DIENTE} />)
-
-/**
- * Lo mismo con el aparato: un bracket en el centro de la corona y el alambre que la cruza, que sale a
- * los dos lados. Es el diente de Dentista con lo que hace distinta a la Ortodoncia, y por eso comparte su
- * silueta.
- */
-const Ortodoncia = custom(
-  <>
-    <path d={DIENTE} />
-    {/* El bracket (un rectángulo de 4,4 × 3,4 centrado en x = 12) y el alambre, en un solo trazo. */}
-    <path d="M9.8 6.9h4.4v3.4H9.8ZM1.8 8.6h20.4" />
-  </>,
-)
-
 /** Memela vista desde arriba: la masa, la salsa irregular dentro y el queso encima. */
 const Memela = custom(
   <>
@@ -284,14 +263,12 @@ const Arepa = custom(
   </>,
 )
 
-/** Plato de pasta a la bolonesa: el estante italiano y su giro general. */
+/** Plato de espagueti: la cocina italiana. Hugeicons (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Italiana = custom(
   <>
-    <path d="M2.2 12.6h19.6a9.8 4.6 0 0 1-19.6 0Z" />
-    <path d="M5.4 11c1.5-1.9 3.3-1.4 4.6-.4 1.3 1 3 .8 4-.6" />
-    <path d="M6.8 8.4c1.7-1.7 3.5-1 4.8.4 1.3 1.4 3.1 1.2 4.3-.4" />
-    <circle cx="16.8" cy="11.2" r="1.7" />
-    <circle cx="12.4" cy="11.6" r="1.5" />
+    <path d="M21.29 13H2.71c-1.52 0-.22 2.24.46 2.58l2.36 1.18c.24.12.35.18.45.26c.88.78 1.04 2.14 2.15 2.74c.44.24.97.24 2.01.24h3.72c1.05 0 1.57 0 2.01-.24c1.11-.59 1.27-1.96 2.15-2.74c.1-.09.22-.14.45-.26l2.36-1.18c.69-.34 1.98-2.58.46-2.58" />
+    <path d="M15 13a6 6 0 0 0-12 0" />
+    <path d="M21 13c0-2.76-2.22-5-4.97-5c-.92 0-1.79.25-2.53.7M7 12.22C7 11 7.9 10 9 10s2 1 2 2.22V14M9 6.56c.43-1.77 2.33-2.87 4.24-2.47c1.91.4 3.11 2.15 2.68 3.92" />
   </>,
 )
 
@@ -397,28 +374,11 @@ const Proteina = solid(
   </>,
 )
 
-/**
- * Capas de la piel: Dermatología. Material Symbols `dermatology-outline-rounded` (Apache 2.0). Es una silueta
- * rellena, no de trazo: lleva `fill` y no `stroke`.
- */
-const Dermatology: IconComponent = ({
-  size = 24,
-  color = 'currentColor',
-  absoluteStrokeWidth: _,
-  strokeWidth: __,
-  ...rest
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill={color}
-    aria-hidden="true"
-    {...rest}
-  >
-    <path d="M3 21q-.425 0-.712-.288T2 20v-8q0-.825.588-1.412T4 10h4q.2 0 .388.075t.324.213t.213.324T9 11v1q0 1.25.875 2.125T12 15t2.125-.875T15 12v-1q0-.2.075-.388t.212-.325t.325-.212T16 10h4q.825 0 1.412.588T22 12v8q0 .425-.288.713T21 21zm1-2h16v-7h-3q0 2.075-1.463 3.538T12 17t-3.537-1.463T7 12H4zm8-6q-.425 0-.712-.288T11 12q0-2.725.625-5.375T14.35 2.25q.325-.275.725-.238t.675.363t.238.725t-.363.675q-1.75 1.475-2.187 3.7T13 12q0 .425-.288.713T12 13m-5.712 2.288q.212-.213.212-.538t-.213-.537T5.75 14t-.537.213T5 14.75t.213.538t.537.212t.538-.213m1 2.5q.212-.212.212-.537t-.213-.537t-.537-.213t-.537.213T6 17.25t.213.538t.537.212t.538-.213m11.5-2.5q.212-.212.212-.537t-.213-.537T18.25 14t-.537.213t-.213.537t.213.538t.537.212t.538-.213M4 19h16z" />
-  </svg>
+/** Galleta con mordida: Postres y Dulces. Material Design Icons (Apache 2.0). */
+const Galleta = solid(
+  <>
+    <path d="M12 3a9 9 0 0 0-9 9a9 9 0 0 0 9 9a9 9 0 0 0 9-9c0-.5-.04-1-.13-1.5C20.6 10 20 10 20 10h-2V9c0-1-1-1-1-1h-2V7c0-1-1-1-1-1h-1V4c0-1-1-1-1-1M9.5 6A1.5 1.5 0 0 1 11 7.5A1.5 1.5 0 0 1 9.5 9A1.5 1.5 0 0 1 8 7.5A1.5 1.5 0 0 1 9.5 6m-3 4A1.5 1.5 0 0 1 8 11.5A1.5 1.5 0 0 1 6.5 13A1.5 1.5 0 0 1 5 11.5A1.5 1.5 0 0 1 6.5 10m5 1a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5m5 2a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5M11 16a1.5 1.5 0 0 1 1.5 1.5A1.5 1.5 0 0 1 11 19a1.5 1.5 0 0 1-1.5-1.5A1.5 1.5 0 0 1 11 16" />
+  </>,
 )
 
 const ICONS: Record<string, IconComponent> = {
@@ -435,7 +395,7 @@ const ICONS: Record<string, IconComponent> = {
   bone: Bone,
   bowl: Bowl,
   'cake-slice': CakeSlice,
-  candy: Candy,
+  candy: Galleta,
   cecina: Cecina,
   cerdo: Cerdo,
   cherry: Cherry,
@@ -467,7 +427,6 @@ const ICONS: Record<string, IconComponent> = {
   memela: Memela,
   molcajete: Molcajete,
   nigiri: Nigiri,
-  ortodoncia: Ortodoncia,
   pan: Pan,
   papas: Papas,
   'papas-fritas': PapasFritas,
@@ -488,8 +447,6 @@ const ICONS: Record<string, IconComponent> = {
   stethoscope: Stethoscope,
   store: Store,
   taco: Taco,
-  tooth: Tooth,
-  dermatology: Dermatology,
   torta: Torta,
   'utensils-crossed': UtensilsCrossed,
   waffle: Waffle,
@@ -502,6 +459,9 @@ const ICONS: Record<string, IconComponent> = {
  * uno. Hasta que llega el fragmento se reserva la caja del icono, para que nada se mueva al aparecer.
  */
 const NOMBRES_DEPORTE = new Set([
+  'dermatology',
+  'ortodoncia',
+  'tooth',
   'artes-marciales',
   'ballet',
   'barbell',
