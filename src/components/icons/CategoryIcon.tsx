@@ -5,7 +5,6 @@
 import {
   Beef,
   BicepsFlexed,
-  Coffee,
   CookingPot,
   Croissant,
   CupSoda,
@@ -57,6 +56,12 @@ const Danza = solid(
   <>
     <path d="M14 3.5c0 .83-.67 1.5-1.5 1.5S11 4.33 11 3.5S11.67 2 12.5 2s1.5.67 1.5 1.5M8.5 5C7.67 5 7 5.67 7 6.5S7.67 8 8.5 8S10 7.33 10 6.5S9.33 5 8.5 5m5.5 7l-.78-2.25h2.96l2.16-1.08c.37-.17.52-.63.33-1a.737.737 0 0 0-1-.34l-.82.41l-.49-.84c-.29-.65-1-1.02-1.7-.86l-2.47.53c-.69.15-1.19.78-1.19 1.5v.7l-2.43 1.62h.01c-.08.07-.19.16-.25.28l-.89 1.77l-1.78.89c-.37.17-.52.64-.33 1.01a.753.753 0 0 0 1.01.33l2.22-1.11L9.6 11.5L11 13c-1 3-8 7-8 7s4 2 9 2s9-2 9-2s-5-4-7-8m2.85-.91l-.32.16h-1.2l.06.16c.52 1.03 1.28 2.09 2.11 3.03l-.53-3.41z" />
   </>,
+)
+
+/** Taza con vapor y un tazón: la categoría Desayunos y Café. Fluent UI System Icons (MDL2) `breakfast` (MIT). */
+const Desayuno = solid(
+  <path d="M1408 592q-26 0-45-19t-19-45q0-51 19-98t56-83l79-80q38-38 38-91q0-26 19-45t45-19t45 19t19 45q0 51-19 98t-56 83l-79 80q-38 38-38 91q0 26-19 45t-45 19m-384 0q-26 0-45-19t-19-45q0-51 19-98t56-83l79-80q38-38 38-91q0-26 19-45t45-19t45 19t19 45q0 51-19 98t-56 83l-79 80q-38 38-38 91q0 26-19 45t-45 19m832 176q40 0 75 15t61 41t41 61t15 75v384q0 40-15 75t-41 61t-61 41t-75 15h-57q-2 7-3 13t-4 12v39q0 66-25 124t-69 102t-102 69t-124 25h-384q-78 0-144-35t-110-93H334q-66 0-124-25t-102-68t-69-102t-25-125v-64h256q0-79 30-149t83-122t122-83t149-30q30 0 58 5t56 14V640h1024v128zM654 1152q-53 0-99 20t-82 55t-55 81t-20 100h370v-228q-26-13-54-20t-60-8m-320 512h441q-7-29-7-64v-64H153q10 28 28 51t41 41t52 26t60 10m463 67v1l1 2v-1zm867-131V768H896v832q0 40 15 75t41 61t61 41t75 15h384q40 0 75-15t61-41t41-61t15-75m256-256V960q0-26-19-45t-45-19h-64v512h64q26 0 45-19t19-45" />,
+  '0 0 2048 2048',
 )
 
 /** Persona estirándose: la categoría Yoga, Pilates y Barre. Tabler Icons (MIT). */
@@ -135,11 +140,11 @@ const ICONS: Record<string, IconComponent> = {
   'biceps-flexed': BicepsFlexed,
   candy: Galleta,
   chopsticks: Chopsticks,
-  coffee: Coffee,
   'cooking-pot': CookingPot,
   croissant: Croissant,
   'cup-soda': CupSoda,
   danza: Danza,
+  desayuno: Desayuno,
   estiramiento: Estiramiento,
   glasses: Glasses,
   hamburger: Hamburger,
@@ -191,6 +196,7 @@ const NOMBRES_DIFERIDOS = new Set([
   'cecina',
   'cerdo',
   'cherry',
+  'coffee',
   'crepa',
   'cupcake',
   'dermatology',

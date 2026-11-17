@@ -13,6 +13,7 @@ import {
   Bone,
   CakeSlice,
   Cherry,
+  Coffee,
   Cupcake,
   Drumstick,
   EggFried,
@@ -102,14 +103,9 @@ const Boba = solid(
   '0 0 32 32',
 )
 
-/** Tazón con ingredientes encima: poke y bowls. */
-const Bowl = custom(
-  <>
-    <path d="M3 13h18a9 8 0 0 1-18 0Z" />
-    <circle cx="8" cy="10" r="1.6" />
-    <circle cx="12.5" cy="8.6" r="2.1" />
-    <circle cx="16.8" cy="10.4" r="1.2" />
-  </>,
+/** Tazón de arroz con su montón de granos: Poke y bowls. Boxicons `bowl-rice` (MIT). */
+const Bowl = solid(
+  <path d="M21 10a3.6 3.6 0 0 0-1.8-3a3.66 3.66 0 0 0-3.63-3.13c-.34 0-.68.05-1.01.14C13.88 3.36 12.98 3 12.01 3s-1.87.37-2.55 1.01c-.33-.09-.67-.14-1.01-.14h-.07C6.56 3.91 5.06 5.26 4.82 7a3.58 3.58 0 0 0-1.8 3c-.55 0-1 .45-1 1c0 3.61 1.9 6.87 5 8.66V21c0 .55.45 1 1 1h8c.55 0 1-.45 1-1v-1.34c3.1-1.78 5-5.05 5-8.66c0-.55-.45-1-1-1ZM6.11 8.61l.81-.26l-.14-.84c0-.88.73-1.6 1.63-1.62c.95.02 1.72.79 1.72 1.75h2c0-.93-.35-1.77-.92-2.43c.24-.13.51-.2.79-.2c.57 0 1.1.28 1.41.76l.51.77l.81-.44c.25-.14.53-.21.82-.21c.92 0 1.67.73 1.67 1.62l-.14.84l.81.27c.62.21 1.03.76 1.09 1.39H5.02c.05-.63.47-1.19 1.09-1.39Zm9.45 9.56c-.34.17-.56.52-.56.9v.94H9v-.94c0-.38-.21-.73-.56-.9a7.93 7.93 0 0 1-4.38-6.16h15.88a7.94 7.94 0 0 1-4.38 6.16" />,
 )
 
 /** Guante de boxeo. Material Design Icons (Apache 2.0). */
@@ -172,16 +168,11 @@ const HotDog = solid(
   <path d="M21 5.77c-.15-.12-.28-.22-.41-.32l.03-.04c.78-.78.78-2.04 0-2.82s-2.04-.78-2.83 0l-.74.74a3.465 3.465 0 0 0-4.55.32L3.65 12.5a3.465 3.465 0 0 0-.32 4.55l-.74.74c-.79.79-.79 2.05 0 2.83c.78.78 2.04.78 2.82 0l.04-.03c.1.13.2.26.32.41c1.36 1.34 3.58 1.34 4.95 0l10.25-10.28A3.52 3.52 0 0 0 21 5.77M4.77 15.61a1.5 1.5 0 0 1 .29-1.71l8.84-8.84a1.5 1.5 0 0 1 1.71-.29zM19.56 9.3L9.3 19.56c-.58.59-1.53.59-2.12 0c-.58-.56-.58-1.56 0-2.12L17.44 7.18c.56-.58 1.56-.58 2.12 0c.59.59.59 1.54 0 2.12" />,
 )
 
-/** Hot cakes con su café: los discos van sueltos para que no se lean como un pan con carne. */
+/** Plato de desayuno visto desde arriba, con su huevo y su tocino: Brunch. UIX `breakfast-plate` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Hotcakes = custom(
   <>
-    <path d="M4.4 11h6v4.4a3 3 0 0 1-6 0Z" />
-    <path d="M4.4 12H3.2a1.7 1.7 0 0 0 0 3.4h1.2" />
-    <path d="M6.2 8.8c-.7-.8-.7-1.6 0-2.4" />
-    <ellipse cx="16.4" cy="12" rx="5.4" ry="1.8" />
-    <ellipse cx="16.4" cy="15.4" rx="5.4" ry="1.8" />
-    <ellipse cx="16.4" cy="18.8" rx="5.4" ry="1.8" />
-    <rect x="15.1" y="9.2" width="2.6" height="1.9" rx="0.6" />
+    <path d="M2.5 12a9.5 9.5 0 1 0 19 0a9.5 9.5 0 1 0-19 0" />
+    <path d="M8 8.5c2-.5 3.75 1 3.5 3c-.25 1.5.5 3-1 3.75S7.5 15.5 6 15s-1.75-2.5-1.25-4S6 8.75 8 8.5M8 12h.01m7.74-6za1.5 1.5 0 0 1 1.5 1.5v2.25a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5V7.5a1.5 1.5 0 0 1 1.5-1.5m0 7za1.5 1.5 0 0 1 1.5 1.5v2.25a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5V14.5a1.5 1.5 0 0 1 1.5-1.5" />
   </>,
 )
 
@@ -210,13 +201,6 @@ const Natacion = custom(
   </>,
 )
 
-/**
- * Una muela con el aparato: un bracket en el centro de la corona y el alambre que la cruza, que sale a
- * los dos lados. Dibujo propio, en espera de una alternativa de librería.
- */
-const DIENTE =
-  'M7.4 3.2c-2.2 0-3.9 1.7-3.9 4.1 0 1.9.8 3 1.4 4.8.6 1.8.5 4.4 1.3 6.9.3 1 .9 1.6 1.7 1.6 1.1 0 1.4-1.2 1.7-2.9.2-1.3.7-2.1 1.7-2.1s1.5.8 1.7 2.1c.3 1.7.6 2.9 1.7 2.9.8 0 1.4-.6 1.7-1.6.8-2.5.7-5.1 1.3-6.9.6-1.8 1.4-2.9 1.4-4.8 0-2.4-1.7-4.1-3.9-4.1-1.7 0-2.7.9-4.6.9S9.1 3.2 7.4 3.2Z'
-
 /** Sushi: un rollo de maki con su palillo y la salsa. Hugeicons `sushi-02` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Nigiri = custom(
   <>
@@ -226,11 +210,11 @@ const Nigiri = custom(
   </>,
 )
 
+/** Dentadura con sus brackets y el alambre: Ortodoncia. UIX `braces-smile` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Ortodoncia = custom(
   <>
-    <path d={DIENTE} />
-    {/* El bracket (un rectángulo de 4,4 × 3,4 centrado en x = 12) y el alambre, en un solo trazo. */}
-    <path d="M9.8 6.9h4.4v3.4H9.8ZM1.8 8.6h20.4" />
+    <path d="M2.5 7h19c0 6.5-4 10.5-9.5 10.5S2.5 13.5 2.5 7m2 4h15" />
+    <path d="M6.25 10.25zA.75.75 0 0 1 7 11a.75.75 0 0 1-.75.75a.75.75 0 0 1-.75-.75a.75.75 0 0 1 .75-.75m3.75 0za.75.75 0 0 1 .75.75a.75.75 0 0 1-.75.75a.75.75 0 0 1-.75-.75a.75.75 0 0 1 .75-.75m4 0za.75.75 0 0 1 .75.75a.75.75 0 0 1-.75.75a.75.75 0 0 1-.75-.75a.75.75 0 0 1 .75-.75m3.75 0za.75.75 0 0 1 .75.75a.75.75 0 0 1-.75.75A.75.75 0 0 1 17 11a.75.75 0 0 1 .75-.75" />
   </>,
 )
 
@@ -374,6 +358,7 @@ export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   cecina: Bacon,
   cerdo: Cerdo,
   cherry: Cherry,
+  coffee: Coffee,
   crepa: Crepa,
   cupcake: Cupcake,
   dermatology: Dermatology,

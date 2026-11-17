@@ -14,7 +14,7 @@
         "es": "Desayunos y Café",
         "en": "Breakfast & Coffee"
       },
-      "icon": "coffee",
+      "icon": "desayuno",
       "hue": 32,
       "schemaType": "CafeOrCoffeeShop",
       "order": 10,

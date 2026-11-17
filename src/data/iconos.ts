@@ -41,6 +41,7 @@ export const ICONOS = [
   'cupcake',
   'danza',
   'dermatology',
+  'desayuno',
   'estiramiento',
   'drumstick',
   'egg-fried',
