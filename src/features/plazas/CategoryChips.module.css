@@ -23,6 +23,17 @@
   padding: 4px 0 4px 12px;
 }
 
+/*
+ * En una pantalla angosta la cápsula del sector se queda en la flecha y su icono: con el nombre ocupaba
+ * la mitad del ancho y dejaba un carril corto, difícil de tomar para deslizarlo. El nombre sigue siendo
+ * el nombre accesible (viene del `aria-label` del enlace) y se lee igual en la hoja de resultados.
+ */
+@media (max-width: 639px) {
+  .leadNombre {
+    display: none;
+  }
+}
+
 /* Sin relleno a la izquierda: el hueco hasta la primera cápsula ya lo pone el `gap`. Lo justo para que
    el aro de foco no se corte contra el borde del carril. */
 .rail[data-cabecera] .chips {
