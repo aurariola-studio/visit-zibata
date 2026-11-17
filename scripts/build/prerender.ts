@@ -23,19 +23,20 @@ import { es } from '../../src/i18n/es.ts'
 import {
   etiquetaDeCategoria,
   etiquetaDeGiro,
-  ganchoDeCategoria,
   lista,
   type Traductor,
 } from '../../src/lib/categorias.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
-import type { Category, Place, Plaza } from '../../src/types/domain.ts'
+import type { Category, Place, Plaza, Sector } from '../../src/types/domain.ts'
 import { CSS_CARGADOR, CSS_SIN_JS, htmlCargador } from './cargador.ts'
 import { categoriasDe, conCantidad, lugaresPorCategoria } from './categorias.ts'
 import { contenidoDeLista, contenidoDeLugar } from './contenido.ts'
 import { descripcionDeFicha, lugarDe, repetidos } from './metadatos.ts'
 import { robotsTxt } from './robots.ts'
+import { SEO_SECTOR } from './seo-sector.ts'
+import { descripcionDeZona } from './seo-zona.ts'
 import { bloque, listado, negocio } from './structured-data.ts'
 import { repartirVecinos } from './vecinos.ts'
 
@@ -140,6 +141,8 @@ const escapeHtml = (value: string): string =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 export interface Dataset {
+  /** Ausente en un archivo anterior a los sectores: equivale a "sin sectores". */
+  sectors?: Sector[]
   categories: Category[]
   plazas: Plaza[]
   places: Place[]
@@ -170,7 +173,15 @@ export function pagesFor(
   const plazaById = new Map(data.plazas.map((plaza) => [plaza.id, plaza]))
   const route = (state: Partial<Parameters<typeof buildPath>[0]>) =>
     buildPath(
-      { locale, plazaSlug: null, placeSlug: null, categorySlug: null, infoTopic: null, ...state },
+      {
+        locale,
+        plazaSlug: null,
+        placeSlug: null,
+        categorySlug: null,
+        sectorSlug: null,
+        infoTopic: null,
+        ...state,
+      },
       base,
     )
   const activePlazas = data.plazas.filter((plaza) => plaza.active)
@@ -184,6 +195,14 @@ export function pagesFor(
   const categoriasConPagina = data.categories.filter(
     (categoria) => (porCategoria.get(categoria.id)?.length ?? 0) > 0,
   )
+  const sectoresConLocales = [...(data.sectors ?? [])]
+    .sort((a, b) => a.order - b.order)
+    .filter((sector) => categoriasConPagina.some((categoria) => categoria.sectorId === sector.id))
+  const sectoresConPagina = sectoresConLocales.length >= 2 ? sectoresConLocales : []
+  const enlaceDeSector = (sector: Sector) => ({
+    texto: text(sector.label, locale),
+    href: route({ sectorSlug: sector.slug[locale] }),
+  })
   const enlaceDeCategoria = (categoria: Category) => ({
     texto: text(categoria.label, locale),
     href: route({ categorySlug: categoria.slug[locale] }),
@@ -213,6 +232,15 @@ export function pagesFor(
           href: route({ plazaSlug: plaza.slug }),
         })),
         secciones: [
+          ...(sectoresConPagina.length > 0
+            ? [
+                {
+                  titulo: SEO_SECTOR[locale].sectores,
+                  enlaces: sectoresConPagina.map(enlaceDeSector),
+                  sinFragmento: true,
+                },
+              ]
+            : []),
           {
             titulo: copy['seo.categories'],
             enlaces: categoriasConPagina.map(enlaceDeCategoria),
@@ -238,9 +266,10 @@ export function pagesFor(
       href: route({ plazaSlug: plaza.slug }),
       lastmod: masReciente(deLaPlaza),
       image,
-      title: fill(copy['seo.title'], { name }),
+      title: fill(copy['seo.title.plaza'], { name }),
       description: trim(
-        text(plaza.description, locale) || fill(copy['seo.plaza.fallback'], { name }),
+        descripcionDeZona(text(plaza.description, locale), deLaPlaza.length, locale) ||
+          fill(copy['seo.plaza.fallback'], { name }),
       ),
       jsonLd: listado(
         name,
@@ -287,16 +316,11 @@ export function pagesFor(
     const zonas = activePlazas.filter((plaza) =>
       lugares.some((place) => place.plazaId === plaza.id),
     )
-    // La descripción arranca con el gancho de la categoría y cuenta cuántos lugares hay.
+    // La descripción dice el nombre de la categoría y cuántos lugares hay.
     const resumen = fill(conCantidad(copy['seo.category.description'], lugares.length, locale), {
-      hook: ganchoDeCategoria(categoria, locale, traducir),
+      nombre: etiqueta,
     })
-    /*
-     * El título nombra lo que la gente busca cuando la etiqueta es más general ("Comida Rápida" se
-     * busca como "hamburguesas" o "alitas"): los dos giros con más locales que la etiqueta no dice.
-     * Con menos de dos no se añade nada, porque un solo giro suelto sonaría a hueco.
-     */
-    const titulo = tituloDeCategoria(categoria, lugares, locale, traducir)
+    const titulo = tituloDeCategoria(categoria, locale, traducir)
     pages.push({
       href: route({ categorySlug: categoria.slug[locale] }),
       lastmod: masReciente(lugares),
@@ -323,6 +347,70 @@ export function pagesFor(
           }
         }),
         secciones: [
+          {
+            titulo: copy['seo.category.zones'],
+            enlaces: zonas.map((plaza) => ({
+              texto: text(plaza.name, locale),
+              href: route({ plazaSlug: plaza.slug }),
+            })),
+          },
+        ],
+        volver: { texto: copy['seo.backHome'], href: route({}) },
+      }),
+    })
+  }
+
+  /*
+   * Una página por sector, solo cuando la barra lo ofrece (dos o más sectores con locales). Lo que dice es
+   * lo que los datos saben: cuántos lugares, qué categorías, en qué zonas. Sin "los mejores".
+   */
+  for (const sector of sectoresConPagina) {
+    const categorias = categoriasConPagina.filter((categoria) => categoria.sectorId === sector.id)
+    const ids = new Set(categorias.map((categoria) => categoria.id))
+    const lugares = data.places.filter((place) =>
+      categoriasDe(place, categoryOfGiro).some((categoria) => ids.has(categoria.id)),
+    )
+    const etiqueta = text(sector.label, locale)
+    const name = fill(SEO_SECTOR[locale].nombre, { label: etiqueta })
+    const nombres = categorias.map((categoria) => text(categoria.label, locale))
+    const zonas = activePlazas.filter((plaza) =>
+      lugares.some((place) => place.plazaId === plaza.id),
+    )
+    // Tres categorías y "y más": con la lista entera la descripción se cortaba antes de decir qué ofrece la página.
+    const resumenDeCategorias =
+      nombres.length > 3
+        ? `${nombres.slice(0, 3).join(', ')} ${SEO_SECTOR[locale].ymas}`
+        : lista(nombres, locale)
+    const resumen = fill(conCantidad(SEO_SECTOR[locale].descripcion, lugares.length, locale), {
+      label: etiqueta,
+      categorias: resumenDeCategorias,
+    })
+    pages.push({
+      href: route({ sectorSlug: sector.slug[locale] }),
+      lastmod: masReciente(lugares),
+      image,
+      title: fill(SEO_SECTOR[locale].titulo, { label: etiqueta }),
+      description: trim(resumen),
+      jsonLd: listado(
+        name,
+        lugares.map((place) => ({
+          name: place.name,
+          url: absolute(route({ placeSlug: place.slug })),
+        })),
+      ),
+      contenido: contenidoDeLista({
+        nombre: name,
+        descripcion: resumen,
+        tituloLista: copy['seo.category.places'],
+        enlaces: lugares.map((place) => {
+          const zona = plazaById.get(place.plazaId)
+          return {
+            texto: zona ? `${place.name} (${text(zona.name, locale)})` : place.name,
+            href: route({ placeSlug: place.slug }),
+          }
+        }),
+        secciones: [
+          { titulo: copy['seo.categories'], enlaces: categorias.map(enlaceDeCategoria) },
           {
             titulo: copy['seo.category.zones'],
             enlaces: zonas.map((plaza) => ({
@@ -364,9 +452,8 @@ export function pagesFor(
         contexto: {
           /*
            * Todos los giros, no los dos primeros: la descripción enumera lo que el local es, y un
-           * tercero ("Crepas" en un italiano) es tan suyo como el primero. El texto del negocio
-           * filtra los que ya nombra y la frase se recorta a 160 caracteres, así que la lista no se
-           * desborda: el contexto más largo del catálogo mide 47.
+           * tercero ("Crepas" en un italiano) es tan suyo como el primero. La frase se recorta a 160
+           * caracteres por el final del texto del negocio, así que la lista no se desborda.
            */
           giros: place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           lugar: lugarDe(nombrePlaza),
@@ -385,15 +472,14 @@ export function pagesFor(
       : fill(copy['seo.title'], { name: ficha.place.name }),
   )
 
-  const componer = (ficha: (typeof fichas)[number], conContexto: boolean): string =>
+  const componer = (ficha: (typeof fichas)[number]): string =>
     descripcionDeFicha({
       descripcion: ficha.descripcion,
       nombre: ficha.place.name,
       contexto: ficha.contexto,
       aviso: ficha.aviso,
-      conContexto,
     })
-  const descripciones = fichas.map((ficha) => componer(ficha, true))
+  const descripciones = fichas.map(componer)
 
   // A qué locales enlaza cada ficha: el mismo bloque de siempre, repartido entre todos (ver vecinos.ts).
   const placeById = new Map(data.places.map((place) => [place.id, place]))
@@ -599,7 +685,12 @@ export function prerender(options: { base: string; siteUrl?: string }): Plugin {
       const dist = output.dir ?? 'dist'
       const read = <T>(file: string): T => JSON.parse(readFileSync(file, 'utf8')) as T
       const data: Dataset = {
-        categories: read<{ categories: Category[] }>('data/commercial/categories.json').categories,
+        ...(() => {
+          const archivo = read<{ sectors?: Sector[]; categories: Category[] }>(
+            'data/commercial/categories.json',
+          )
+          return { sectors: archivo.sectors, categories: archivo.categories }
+        })(),
         plazas: read<{ plazas: Plaza[] }>('data/commercial/plazas.json').plazas,
         places: read<{ places: Place[] }>('data/commercial/places.json').places,
       }

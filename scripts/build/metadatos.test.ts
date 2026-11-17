@@ -143,9 +143,9 @@ describe('recortar sin dejar el texto a media frase', () => {
   })
 })
 
-describe('el contexto de una descripción corta', () => {
+describe('el contexto de una descripción', () => {
   it('añade los giros y la zona del propio local', () => {
-    expect(contextoDe(contexto(['Poke', 'Sushi'], 'Centro Zibatá'), 'Bowl Revolution.')).toBe(
+    expect(contextoDe(contexto(['Poke', 'Sushi'], 'Centro Zibatá'))).toBe(
       'Poke y Sushi en Centro Zibatá.',
     )
   })
@@ -156,26 +156,20 @@ describe('el contexto de una descripción corta', () => {
       idioma,
       conGiros: '{giros}',
     })
-    expect(contextoDe(conIdioma('es'), 'Bowl.')).toBe('Poke, Sushi y Ramen')
-    expect(contextoDe(conIdioma('en'), 'Bowl.')).toBe('Poke, Sushi, and Ramen')
+    expect(contextoDe(conIdioma('es'))).toBe('Poke, Sushi y Ramen')
+    expect(contextoDe(conIdioma('en'))).toBe('Poke, Sushi, and Ramen')
   })
 
-  it('no repite un giro que la descripción ya dice', () => {
-    // enzza-pizza-zibata: "Pizza artesanal. Pizza en Paseo Zibatá." repetía la palabra.
-    expect(contextoDe(contexto(['Pizza'], 'Paseo Zibatá'), 'Pizza artesanal.')).toBe(
-      'En Paseo Zibatá.',
+  it('nombra siempre los giros, aunque el texto del negocio ya los diga', () => {
+    // La parte estandarizada es la misma en todas las fichas: lo que cambia es el texto del negocio.
+    expect(contextoDe(contexto(['Pizza'], 'Paseo Zibatá'))).toBe('Pizza en Paseo Zibatá.')
+    expect(contextoDe(contexto(['Poke', 'Sushi'], 'Centro Zibatá'))).toBe(
+      'Poke y Sushi en Centro Zibatá.',
     )
-    expect(
-      contextoDe(contexto(['Poke', 'Sushi'], 'Centro Zibatá'), 'Poke Bowls y Sushi Rolls.'),
-    ).toBe('En Centro Zibatá.')
-    // Sin importar acentos ni mayúsculas.
-    expect(contextoDe(contexto(['Café'], 'Plaza Zielo, Zibatá'), 'El mejor CAFE de la zona.')).toBe(
-      'En Plaza Zielo, Zibatá.',
-    )
-    // Pero sí nombra el giro que falta.
-    expect(contextoDe(contexto(['Tacos'], 'Plaza Condesa, Zibatá'), 'Taquería Y Parrillada.')).toBe(
-      'Tacos en Plaza Condesa, Zibatá.',
-    )
+  })
+
+  it('sin giros dice solo dónde está', () => {
+    expect(contextoDe(contexto([], 'Paseo Zibatá'))).toBe('En Paseo Zibatá.')
   })
 
   it('dice la zona una sola vez: "Paseo Zibatá" no lleva ", Zibatá" detrás', () => {
@@ -191,9 +185,9 @@ describe('la descripción de una ficha', () => {
     contexto: contexto(['Açaí', 'Jugos'], 'Centro Zibatá'),
   }
 
-  it('deja intacta la de un local que ya dice lo suficiente (cafele)', () => {
+  it('un texto largo también lleva el contexto delante, y se respeta si cabe (cafele)', () => {
     const cafele =
-      'CAFELE es una cafetería con un concepto único y amigable. Nuestra especialidad es el Café, además de ofrecerte alimentos y bebidas de la más alta calidad.'
+      'CAFELE es una cafetería con un concepto único y amigable. Nuestra especialidad es el Café.'
     expect(
       descripcionDeFicha({
         ...base,
@@ -201,7 +195,20 @@ describe('la descripción de una ficha', () => {
         descripcion: cafele,
         contexto: contexto(['Café'], 'MOL Pitahaya, Zibatá'),
       }),
-    ).toBe(cafele)
+    ).toBe(`Café en MOL Pitahaya, Zibatá. ${cafele}`)
+  })
+
+  it('si no cabe todo, se recorta el final del texto del negocio y el contexto queda entero', () => {
+    const larga =
+      'CAFELE es una cafetería con un concepto único y amigable. Nuestra especialidad es el Café, además de ofrecerte alimentos y bebidas de la más alta calidad.'
+    const meta = descripcionDeFicha({
+      ...base,
+      nombre: 'Cafele',
+      descripcion: larga,
+      contexto: contexto(['Café'], 'MOL Pitahaya, Zibatá'),
+    })
+    expect(meta.startsWith('Café en MOL Pitahaya, Zibatá. CAFELE es una cafetería')).toBe(true)
+    expect(meta.length).toBeLessThanOrEqual(LIMITE_DESCRIPCION)
   })
 
   it('completa una corta con los giros y la zona, sin tocar lo que dice el negocio', () => {
@@ -230,7 +237,7 @@ describe('la descripción de una ficha', () => {
     expect(meta.length).toBeLessThanOrEqual(LIMITE_DESCRIPCION)
   })
 
-  it('reserva sitio para el contexto cuando hay que distinguir dos fichas largas', () => {
+  it('dos fichas con el mismo texto largo se distinguen por el contexto', () => {
     // la-michoacana: dos sucursales con la misma descripción de 158 caracteres.
     const larga =
       'La Michoacana es una marca de origen mexicano, la cual ha tenido una gran trayectoria alrededor del mundo de los helados y paletas artesanales 100% naturales.'
@@ -239,20 +246,18 @@ describe('la descripción de una ficha', () => {
       nombre: 'La Michoacana',
       descripcion: larga,
       contexto: contexto(['Helados'], 'Paseo Zibatá'),
-      conContexto: true,
     })
     const b = descripcionDeFicha({
       ...base,
       nombre: 'La Michoacana',
       descripcion: larga,
       contexto: contexto(['Helados'], 'Xentric Zibatá'),
-      conContexto: true,
     })
     expect(a).not.toBe(b)
     expect(a.length).toBeLessThanOrEqual(LIMITE_DESCRIPCION)
     expect(b.length).toBeLessThanOrEqual(LIMITE_DESCRIPCION)
-    expect(a).toMatch(/^En Paseo Zibatá\./)
-    expect(b).toMatch(/^En Xentric Zibatá\./)
+    expect(a).toMatch(/^Helados en Paseo Zibatá\./)
+    expect(b).toMatch(/^Helados en Xentric Zibatá\./)
   })
 
   it('si el dato no trae descripción, dice al menos qué es y dónde está', () => {

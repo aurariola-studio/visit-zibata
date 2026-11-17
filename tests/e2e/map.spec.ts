@@ -1,8 +1,8 @@
 import { expect, type Page, test } from '@playwright/test'
 import {
-  cercanaA,
   elegirZona,
   esc,
+  lejanaDe,
   openApp,
   panel,
   placesInPlaza,
@@ -246,7 +246,7 @@ test.describe('Mapa @mapa', () => {
     await openApp(page, { path: `zona/${ZONA_B.slug}` })
     await waitForMap(page)
     await expect(panel(page).getByRole('heading', { level: 2, name: ZONA_B.name })).toBeVisible()
-    // Distancia en pantalla entre dos plazas: se reduce cuando la cámara vuelve a la vista general.
+    // Distancia en pantalla entre dos plazas lejanas: se reduce cuando la cámara vuelve a la vista general.
     const spread = () =>
       page.evaluate(
         ([nombreA, nombreB]) => {
@@ -259,7 +259,7 @@ test.describe('Mapa @mapa', () => {
           const b = anchor(nombreB ?? '')
           return Math.hypot(a.x - b.x, a.y - b.y)
         },
-        [ZONA_B.name, cercanaA(ZONA_B).name],
+        [ZONA_B.name, lejanaDe(ZONA_B).name],
       )
     await page.waitForTimeout(1000)
     const focused = await spread()

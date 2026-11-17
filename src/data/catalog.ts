@@ -1,5 +1,5 @@
 import { ZIBATA_EXTENT } from '../config/map.ts'
-import type { Catalog, Category, Place, Plaza } from '../types/domain.ts'
+import type { Catalog, Category, Place, Plaza, Sector } from '../types/domain.ts'
 import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
 import {
   type Bounds,
@@ -14,8 +14,11 @@ export function buildCatalog(
   allPlazas: Plaza[],
   allPlaces: Place[],
   retired: readonly RetiredPlace[] = [],
+  allSectors: readonly Sector[] = [],
 ): Catalog {
   const sortedCategories = [...categories].sort((a, b) => a.order - b.order)
+  const sectors = [...allSectors].sort((a, b) => a.order - b.order)
+  const sectorById = new Map(sectors.map((sector) => [sector.id, sector]))
   const activePlazas = new Set(allPlazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
   const places = allPlaces.filter((place) => place.active && activePlazas.has(place.plazaId))
 
@@ -50,9 +53,17 @@ export function buildCatalog(
 
   return {
     categories: sortedCategories,
+    sectors,
     plazas,
     places,
     categoryById: new Map(sortedCategories.map((c) => [c.id, c])),
+    sectorById,
+    sectorOfCategory: new Map(
+      sortedCategories.flatMap((category) => {
+        const sector = category.sectorId ? sectorById.get(category.sectorId) : undefined
+        return sector ? [[category.id, sector] as const] : []
+      }),
+    ),
     giroById,
     categoryOfGiro,
     plazaById: new Map(plazas.map((p) => [p.id, p])),
@@ -134,7 +145,9 @@ export async function loadCatalog(repository: PlacesRepository): Promise<Catalog
   for (const note of notes) console.warn(`[datos] ${note}`)
   // Los borrados solo afinan las recomendaciones: si su archivo falla, la guía sigue sin ellos.
   const retired = await (repository.getRetired?.() ?? Promise.resolve([])).catch(() => [])
-  const catalog = buildCatalog(dataset.categories, dataset.plazas, dataset.places, retired)
+  // Los sectores solo agrupan: si su archivo falla, las categorías siguen yendo sueltas.
+  const sectors = await (repository.getSectors?.() ?? Promise.resolve([])).catch(() => [])
+  const catalog = buildCatalog(dataset.categories, dataset.plazas, dataset.places, retired, sectors)
   if (catalog.categories.length === 0 || !catalog.plazas.some((plaza) => plaza.active)) {
     throw new DataLoadError('No hay datos comerciales válidos para mostrar', notes)
   }

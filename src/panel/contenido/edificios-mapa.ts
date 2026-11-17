@@ -73,6 +73,7 @@ const CAPA = {
 /** Las capas del estilo que dibujan edificios: las que se pueden pulsar. */
 const CAPAS_DE_EDIFICIOS = [
   LAYER.plazaBuildings,
+  LAYER.plazaBuildingsRectos,
   LAYER.plazaBuildingsInactive,
   LAYER.buildings,
   LAYER.buildingsOutside,

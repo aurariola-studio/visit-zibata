@@ -14,6 +14,9 @@ export const es = {
   'search.clear': 'Borrar búsqueda',
 
   'filters.categories': 'Categorías',
+  'filters.sectors': 'Sectores',
+  'filters.sectorBack': 'Ver todos los sectores',
+  'filters.sectorAll': 'Todas las categorías del sector',
   'filters.allCategories': 'Todo',
   'filters.plaza': 'Filtrar por zona',
   'filters.allPlazas': 'Todas las zonas',
@@ -92,6 +95,7 @@ export const es = {
   'hours.closedAllDay': 'Cerrado',
   'hours.today': 'Hoy',
   'hours.none': 'Sin horario publicado.',
+  'hours.byClasses': 'El horario depende de las clases. Consulta su disponibilidad antes de ir.',
   'hours.reviewed': 'Horario revisado el {date}.',
 
   'day.mon': 'Lunes',
@@ -175,6 +179,8 @@ export const es = {
   'seo.title': '{name} · Visit Zibatá',
   // Solo para los locales cuyo nombre se repite (dos sucursales de una misma cadena).
   'seo.title.zone': '{name} en {plaza} · Visit Zibatá',
+  // El título de una zona dice a qué se viene a su página: qué hay y cómo llegar.
+  'seo.title.plaza': '{name}, qué hay y cómo llegar · Visit Zibatá',
   'seo.place.fallback': '{giros} en {plaza}, Zibatá. Horario, contacto y cómo llegar.',
   // Lo que se añade a una descripción corta: solo los giros y la zona del propio local.
   'seo.place.context': '{giros} en {lugar}.',
@@ -195,9 +201,9 @@ export const es = {
    * página ya las enseña, y con un solo local la frase se alargaba para decir poco.
    */
   'seo.category.description': {
-    one: 'Encuentra {hook} de Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte. Con horario, contacto y cómo llegar.',
+    one: '{nombre} en Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte, con horario, contacto y cómo llegar.',
     other:
-      'Encuentra {hook} de Zibatá. Conoce los {count} lugares que la comunidad tiene para ofrecerte. Con horarios, contacto y cómo llegar.',
+      '{nombre} en Zibatá. Conoce los {count} lugares que la comunidad tiene para ofrecerte, con horarios, contacto y cómo llegar.',
   },
   /*
    * El filtro usa la etiqueta corta a propósito ("Italiana", "Saludable"); el título y la
@@ -209,30 +215,7 @@ export const es = {
   'seo.category.nombre.saludable': 'Comida Saludable',
   'seo.category.nombre.casera': 'Comida Casera',
   'seo.category.nombre.internacional': 'Comida Internacional',
-  /*
-   * Con qué arranca la descripción: el artículo y el "mejor" van con el género y el número de cada
-   * etiqueta. Las que no están aquí leen "lo mejor de", que sirve para cualquiera.
-   */
-  'seo.category.hook': 'lo mejor de {nombre}',
-  'seo.category.hook.desayunos-y-cafe': 'los mejores Desayunos y Café',
-  'seo.category.hook.tacos-y-antojitos': 'los mejores Tacos y Antojitos',
-  'seo.category.hook.mexicana': 'la mejor Comida Mexicana',
-  'seo.category.hook.carnes-y-parrilla': 'las mejores Carnes y Parrilla',
-  'seo.category.hook.mariscos': 'los mejores Mariscos',
-  'seo.category.hook.hamburguesas': 'la mejor Comida Rápida',
-  'seo.category.hook.italiana': 'la mejor Comida Italiana',
-  'seo.category.hook.asiatica': 'la mejor Comida Asiática',
-  'seo.category.hook.entre-panes': 'lo mejor Entre Panes',
-  'seo.category.hook.saludable': 'la mejor Comida Saludable',
-  'seo.category.hook.panaderia-y-reposteria': 'la mejor Panadería y Repostería',
-  'seo.category.hook.botanas': 'lo mejor Para Picar',
-  'seo.category.hook.postres-y-dulces': 'los mejores Postres y Dulces',
-  'seo.category.hook.bebidas': 'las mejores Bebidas',
-  'seo.category.hook.internacional': 'la mejor Comida Internacional',
-  'seo.category.hook.casera': 'la mejor Comida Casera',
-  'seo.category.hook.bar': 'el mejor Bar',
   // Con dos o más giros que la etiqueta no dice, el título los nombra: es lo que la gente busca.
-  'seo.category.title': '{label} en Zibatá, {giros}',
   'seo.category.places': 'Lugares de esta categoría',
   'seo.category.zones': 'Dónde están',
   'seo.category.zoneCount': { one: '{count} zona', other: '{count} zonas' },
@@ -393,7 +376,7 @@ export const es = {
 
   'about.credits': 'Datos y créditos',
   'about.creditsBody':
-    'Mapa propio con datos de OpenStreetMap, Overture Maps y ESA WorldCover, dibujado con MapLibre. Suelo y relieve con Copernicus DEM GLO-30 (© DLR e.V. y Airbus, provisto por la Unión Europea y la ESA, vía Mapterhorn) y "Contains modified Copernicus Sentinel data 2026". Alturas de los edificios estimadas con Open Buildings 2.5D (Google Research), no medidas. Iconos de Lucide y Simple Icons, banderas de circle-flags y logotipos de reparto de Wikimedia Commons.',
+    'Mapa propio con datos de OpenStreetMap, Overture Maps y ESA WorldCover, dibujado con MapLibre. Suelo y relieve con Copernicus DEM GLO-30 (© DLR e.V. y Airbus, provisto por la Unión Europea y la ESA, vía Mapterhorn) y "Contains modified Copernicus Sentinel data 2026". Alturas de los edificios estimadas con Open Buildings 2.5D (Google Research), no medidas. Iconos de Lucide, Tabler, Hugeicons, Iconoven, Material Design Icons, Material Symbols, Andrés Raxón y Simple Icons, banderas de circle-flags y logotipos de reparto de Wikimedia Commons.',
   'about.version': 'Versión {version}',
   'about.close': 'Cerrar',
 

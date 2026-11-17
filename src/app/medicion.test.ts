@@ -25,6 +25,7 @@ describe('qué acciones se cuentan', () => {
         plazaId: 'plaza-luna',
         placeId: 'tomassa',
         categoryId: 'bebidas',
+        sectorId: null,
         missingLink: false,
         infoTopic: null,
       },

@@ -89,6 +89,7 @@ describe('appReducer', () => {
       plazaId: null,
       placeId: null,
       categoryId: null,
+      sectorId: null,
       missingLink: true,
       infoTopic: null,
     })

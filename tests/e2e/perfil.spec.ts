@@ -114,8 +114,11 @@ test.describe('Tu Zibatá', () => {
     )
     await expect(zonas.getByText('Pronto').first()).toBeVisible()
     await expect(zonas).not.toContainText(inactivePlazas()[0]?.name.replace(/^Plaza\s+/, '') ?? '')
-    // Y un sello de relleno completa la última fila de la rejilla.
-    await expect(zonas.locator('[data-filler="true"]')).toHaveCount(1)
+    // Y los sellos de relleno completan la última fila de la rejilla (de cuatro columnas) cuando hay
+    // zonas por abrir: los que falten hasta el siguiente múltiplo de cuatro, que según cuántas zonas
+    // haya pueden ser ninguno.
+    const totalZonas = activePlazas().length + inactivePlazas().length
+    await expect(zonas.locator('[data-filler="true"]')).toHaveCount((4 - (totalZonas % 4)) % 4)
     const estrenadas = new Set(TRES_LOCALES.map((place) => place.plazaId))
     await expect(zonas.locator('[data-visited="true"]')).toHaveCount(estrenadas.size)
     await expect(hoja.getByText(`${estrenadas.size} de ${activePlazas().length}`)).toBeVisible()

@@ -72,27 +72,6 @@ const NOMBRES = {
   internacional: 'seo.category.nombre.internacional',
 } as const satisfies Record<string, MessageKey>
 
-/** Con qué arranca la descripción: el artículo y el "mejor" que pide el género y el número. */
-const GANCHOS = {
-  'desayunos-y-cafe': 'seo.category.hook.desayunos-y-cafe',
-  'tacos-y-antojitos': 'seo.category.hook.tacos-y-antojitos',
-  mexicana: 'seo.category.hook.mexicana',
-  'carnes-y-parrilla': 'seo.category.hook.carnes-y-parrilla',
-  mariscos: 'seo.category.hook.mariscos',
-  hamburguesas: 'seo.category.hook.hamburguesas',
-  italiana: 'seo.category.hook.italiana',
-  asiatica: 'seo.category.hook.asiatica',
-  'entre-panes': 'seo.category.hook.entre-panes',
-  saludable: 'seo.category.hook.saludable',
-  'panaderia-y-reposteria': 'seo.category.hook.panaderia-y-reposteria',
-  botanas: 'seo.category.hook.botanas',
-  'postres-y-dulces': 'seo.category.hook.postres-y-dulces',
-  bebidas: 'seo.category.hook.bebidas',
-  internacional: 'seo.category.hook.internacional',
-  casera: 'seo.category.hook.casera',
-  bar: 'seo.category.hook.bar',
-} as const satisfies Record<string, MessageKey>
-
 /** La etiqueta completa de la categoría, la que va en el título y en el nombre de la página. */
 export function etiquetaDeCategoria(
   categoria: Category,
@@ -101,19 +80,6 @@ export function etiquetaDeCategoria(
 ): string {
   const clave = NOMBRES[categoria.id as keyof typeof NOMBRES]
   return clave ? traducir(clave) : (categoria.label[idioma] ?? categoria.label.es)
-}
-
-/** "los mejores Tacos y Antojitos", "la mejor Comida Italiana", "el mejor Bar". */
-export function ganchoDeCategoria(
-  categoria: Category,
-  idioma: 'es' | 'en',
-  traducir: Traductor,
-): string {
-  const clave = GANCHOS[categoria.id as keyof typeof GANCHOS]
-  // Una categoría sin gancho propio se lee con el genérico, que sirve para cualquiera.
-  return clave
-    ? traducir(clave)
-    : traducir('seo.category.hook', { nombre: etiquetaDeCategoria(categoria, idioma, traducir) })
 }
 
 /**
@@ -154,46 +120,4 @@ export function conCantidad(mensaje: Mensaje, cantidad: number, idioma: string):
 /** "A, B y C" / "A, B, and C", en el idioma de la página. */
 export function lista(nombres: readonly string[], idioma: string): string {
   return new Intl.ListFormat(idioma, { style: 'long', type: 'conjunction' }).format(nombres)
-}
-
-/** Un giro con un solo local no representa a la categoría: no se nombra en el título. */
-export const MIN_LOCALES_POR_GIRO = 2
-
-const sinAcentos = (valor: string): string =>
-  valor
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
-/**
- * Los giros que de verdad hay en una categoría, de más a menos locales, sin los que la etiqueta ya
- * dice. Sirve para que el título nombre lo que la gente busca ("hamburguesas", "alitas") cuando la
- * etiqueta de la interfaz es más general ("Comida Rápida"). Todo sale de los datos.
- */
-export function girosDeCategoria(
-  categoria: Category,
-  places: readonly Place[],
-  idioma: 'es' | 'en',
-): string[] {
-  const etiqueta = sinAcentos(categoria.label[idioma] ?? categoria.label.es)
-  const cuenta = new Map<string, number>()
-  for (const place of places) {
-    for (const giro of new Set(place.giros)) {
-      cuenta.set(giro, (cuenta.get(giro) ?? 0) + 1)
-    }
-  }
-  return categoria.giros
-    .map((giro, orden) => ({
-      texto: giro.label[idioma] ?? giro.label.es,
-      veces: cuenta.get(giro.id) ?? 0,
-      orden,
-    }))
-    .filter(({ texto, veces }) => {
-      const normal = sinAcentos(texto)
-      return (
-        veces >= MIN_LOCALES_POR_GIRO && !etiqueta.includes(normal) && !normal.includes(etiqueta)
-      )
-    })
-    .sort((a, b) => b.veces - a.veces || a.orden - b.orden)
-    .map(({ texto }) => texto.toLocaleLowerCase(idioma))
 }
