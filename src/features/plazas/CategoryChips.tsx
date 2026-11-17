@@ -143,9 +143,9 @@ export function CategoryChips({
     const alinear = () => {
       const elegida = carril.querySelector<HTMLElement>('[aria-current="true"]')
       if (!elegida) return
-      // Dejar libre el desvanecido de cada borde (12 px a la izquierda, 24 a la derecha).
-      const izquierda = elegida.offsetLeft - 16
-      const derecha = elegida.offsetLeft + elegida.offsetWidth + 28
+      // Dejar libre el desvanecido de cada borde (36 px, `--desv` en el CSS) y un poco de aire.
+      const izquierda = elegida.offsetLeft - 40
+      const derecha = elegida.offsetLeft + elegida.offsetWidth + 40
       if (izquierda < carril.scrollLeft) carril.scrollLeft = Math.max(izquierda, 0)
       else if (derecha > carril.scrollLeft + carril.clientWidth)
         carril.scrollLeft = derecha - carril.clientWidth
