@@ -385,7 +385,7 @@ describe('la portada', () => {
 })
 
 describe('las zonas y la información no cambian de plantilla', () => {
-  it('conservan el título "{nombre} · Visit Zibatá" y su propia descripción', () => {
+  it('conservan el título "{nombre} · Visit Zibatá" y su propia descripción, con la cola estándar detrás', () => {
     // Cualquier zona activa con descripción propia que quepa entera: el prerender recorta a 160.
     const zona = data.plazas.find(
       (plaza) => plaza.active && plaza.description && plaza.description.es.length <= 160,
@@ -393,7 +393,10 @@ describe('las zonas y la información no cambian de plantilla', () => {
     if (!zona?.description) throw new Error('el dataset necesita una zona activa con descripción')
     const pagina = de('es', `/es/zona/${zona.slug}`)
     expect(pagina.title).toBe(`${zona.name} · Visit Zibatá`)
-    expect(pagina.description).toBe(zona.description.es)
+    // El texto de la zona va tal cual al principio; detrás, siempre la misma cola.
+    expect(pagina.description.startsWith(zona.description.es)).toBe(true)
+    expect(pagina.description).toMatch(/con horarios?, contacto y cómo llegar\.$/)
+    expect(pagina.description.length).toBeLessThanOrEqual(160)
   })
 })
 

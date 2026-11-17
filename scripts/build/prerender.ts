@@ -36,6 +36,7 @@ import { categoriasDe, conCantidad, lugaresPorCategoria } from './categorias.ts'
 import { contenidoDeLista, contenidoDeLugar } from './contenido.ts'
 import { descripcionDeFicha, lugarDe, repetidos } from './metadatos.ts'
 import { robotsTxt } from './robots.ts'
+import { descripcionDeZona } from './seo-zona.ts'
 import { bloque, listado, negocio } from './structured-data.ts'
 import { repartirVecinos } from './vecinos.ts'
 
@@ -240,7 +241,8 @@ export function pagesFor(
       image,
       title: fill(copy['seo.title'], { name }),
       description: trim(
-        text(plaza.description, locale) || fill(copy['seo.plaza.fallback'], { name }),
+        descripcionDeZona(text(plaza.description, locale), deLaPlaza.length, locale) ||
+          fill(copy['seo.plaza.fallback'], { name }),
       ),
       jsonLd: listado(
         name,
