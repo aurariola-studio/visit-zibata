@@ -35,9 +35,6 @@ const SIGNOS_FINALES = /[\s,;:|\u00b7(\-\u2013\u2014"'\u201c\u201d\u2018\u2019]+
 /** Tope de la descripción. Google no documenta un límite; es el que ya usaba el sitio. */
 export const LIMITE_DESCRIPCION = 160
 
-/** Por debajo de esto, la descripción del negocio no basta para saber qué es ni dónde está. */
-export const MINIMO_DESCRIPCION = 70
-
 /**
  * Palabras que no pueden quedar al final de un texto cortado: "…pasteles decorados y…" no dice nada.
  * Solo las de uso corriente en español e inglés.
@@ -184,16 +181,14 @@ const llenar = (plantilla: string, valores: Record<string, string>): string =>
   plantilla.replace(/\{(\w+)\}/g, (_, clave: string) => valores[clave] ?? '')
 
 /**
- * El contexto que se añade a una descripción corta: los giros y la zona del local. Un giro que la
- * descripción ya nombra no se repite ("Pizza artesanal. Pizza en Paseo Zibatá." no dice nada nuevo):
- * si no queda ninguno, solo se dice dónde está.
+ * El contexto de toda ficha: los giros y la zona del propio local. Va siempre, también cuando el texto del
+ * negocio ya nombra un giro: la parte estandarizada es la misma en cada página y lo que la distingue es el
+ * texto del negocio, que no se toca.
  */
-export function contextoDe(contexto: Contexto, base: string): string {
-  const dicho = forma(base)
-  const nuevos = contexto.giros.filter((giro) => !dicho.includes(forma(giro)))
-  return nuevos.length > 0
+export function contextoDe(contexto: Contexto): string {
+  return contexto.giros.length > 0
     ? llenar(contexto.conGiros, {
-        giros: lista(nuevos, contexto.idioma),
+        giros: lista(contexto.giros, contexto.idioma),
         lugar: contexto.lugar,
       })
     : llenar(contexto.soloLugar, { lugar: contexto.lugar })
@@ -206,24 +201,21 @@ export interface OpcionesDescripcion {
   contexto: Contexto
   /** El aviso de cierre temporal, si lo hay ("Cerrado temporalmente. Por remodelación."). */
   aviso?: string
-  /** Fuerza el contexto aunque la descripción sea larga: para separar dos fichas idénticas. */
-  conContexto?: boolean
   max?: number
 }
 
 /**
- * La descripción de una ficha. Delante, el aviso de cierre si lo hay; después, el texto del negocio
- * (sin su nombre repetido y en una sola línea); y detrás, el contexto, **solo** si el texto es corto
- * o si hace falta para distinguirla de otra.
+ * La descripción de una ficha. Delante, el aviso de cierre si lo hay; después, el contexto ("Pádel en
+ * Intercepta Zibatá."), y detrás el texto del negocio, sin su nombre repetido y en una sola línea. Si todo
+ * junto pasa del límite, lo que se recorta es el final del texto del negocio, en una frase completa si se
+ * puede: el contexto y el aviso nunca se cortan.
  */
 export function descripcionDeFicha(opciones: OpcionesDescripcion): string {
-  const { nombre, aviso, conContexto = false, max = LIMITE_DESCRIPCION } = opciones
+  const { nombre, aviso, max = LIMITE_DESCRIPCION } = opciones
   const base = quitarNombre(aplanarDescripcion(opciones.descripcion), nombre)
   const delante = aviso ? `${aviso} ` : ''
-  const corta = base.length < MINIMO_DESCRIPCION
-  const contexto = contextoDe(opciones.contexto, base)
+  const contexto = contextoDe(opciones.contexto)
   if (!base) return recortar(`${delante}${contexto}`, max)
-  if (!corta && !conContexto) return `${delante}${recortar(base, max - delante.length)}`
   /*
    * Dos de holgura y no uno: el espacio que separa el contexto del texto y el punto que `terminado`
    * añade al final. Con uno solo, una descripción que llega justa salía de 161.

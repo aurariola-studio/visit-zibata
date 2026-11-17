@@ -17,6 +17,8 @@ export const paths = {
   /** Ocultar un edificio o fijarle la altura, a mano (lo escribe el panel). Ver src/data/ajustes-edificios.ts. */
   ajustesEdificios: `${ROOT}data/geographic/ajustes-edificios.json`,
   volumenesPlaza: `${ROOT}data/geographic/volumenes-plaza.json`,
+  /** Piezas dibujadas a mano para zonas sin edificios abiertos. Ver src/data/volumenes-propios.ts. */
+  volumenesPropios: `${ROOT}data/geographic/volumenes-propios.json`,
   manifest: `${ROOT}data/geographic/manifest.json`,
   plazas: `${ROOT}data/commercial/plazas.json`,
   publicMap: `${ROOT}public/map`,

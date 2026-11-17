@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-04",
+  "updatedAt": "2026-11-17",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -93,7 +93,16 @@
         "la-lorenza-xentric-anahuac",
         "nutrisa-xentric-anahuac",
         "wake-cup-xentric-anahuac",
-        "henko-juice-bar"
+        "henko-juice-bar",
+        "flcn-bootcamp",
+        "loom-pilates-club",
+        "devotion-heat-room",
+        "espacio-om",
+        "turnout-studio",
+        "fundacion-kwan-moo-do-queretaro",
+        "farmacia-san-pablo",
+        "laboratorio-del-chopo",
+        "thedek"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -109,7 +118,15 @@
         "postres-y-dulces",
         "bebidas",
         "internacional",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "dentistas",
+        "laboratorios-y-diagnostico",
+        "gimnasios",
+        "yoga-pilates-y-barre",
+        "danza",
+        "artes-marciales"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -288,7 +305,13 @@
         "reposteria-eddi-mena",
         "sweet-crepe-zibata",
         "sana-corazon",
-        "enzza-pizza-zibata"
+        "enzza-pizza-zibata",
+        "true-instinct-hybrid-club",
+        "seven-indoor-cycling-strength",
+        "farmacias-similares",
+        "unicca-paseo-zibata",
+        "dermasphere-studio",
+        "brodmann18"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -305,7 +328,12 @@
         "botanas",
         "postres-y-dulces",
         "bebidas",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "laboratorios-y-diagnostico",
+        "opticas",
+        "gimnasios"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Paseo Zibatá\" y locales con esa dirección (El Hornero, Currucucú, Masaru…). Huella aproximada: el edificio aún no aparece en los datos abiertos.",
@@ -322,54 +350,59 @@
     {
       "id": "foodtrucks-pickleball",
       "slug": "foodtrucks-pickleball",
-      "name": "FoodTrucks Pickleball",
+      "name": "PickSpot Zibatá",
       "description": {
-        "es": "Food trucks junto a las canchas de pickleball, a un lado de Paseo Zibatá.",
-        "en": "Food trucks next to the pickleball courts, beside Paseo Zibatá."
+        "es": "Canchas de pickleball y food trucks, frente a la Universidad Anáhuac y a un lado de la plaza comercial Paseo Zibatá.",
+        "en": "Pickleball courts and food trucks, across from Universidad Anáhuac and next to the Paseo Zibatá shopping plaza."
       },
-      "address": null,
+      "address": "Av. Paseo de las Pitahayas 24, locales 22 y 23, Zibatá",
       "coordinates": {
-        "lat": 20.6799,
-        "lng": -100.3158
+        "lat": 20.680135,
+        "lng": -100.316257
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              -100.31588,
-              20.680137
+              -100.316028,
+              20.680316
             ],
             [
-              -100.315535,
-              20.679893
+              -100.316351,
+              20.679869
             ],
             [
-              -100.31572,
-              20.679663
+              -100.316486,
+              20.679954
             ],
             [
-              -100.316065,
-              20.679907
+              -100.316164,
+              20.680401
             ],
             [
-              -100.31588,
-              20.680137
+              -100.316028,
+              20.680316
             ]
           ]
         ]
       },
-      "active": false,
-      "placeIds": [],
-      "categories": [],
+      "active": true,
+      "placeIds": [
+        "pickspot"
+      ],
+      "categories": [
+        "deportes"
+      ],
       "locationConfidence": "low",
-      "locationSource": "Referencia pública de Pick Spot (pickspot.mx): frente a la Universidad Anáhuac y a un lado de Paseo Zibatá. Ubicación y huella por verificar en campo.",
+      "locationSource": "Ficha de Maps (Av. Paseo de las Pitahayas 24, locales 22 y 23), pickspot.mx y satélite: cuatro canchas de pickleball y los foodtrucks del lote contiguo, acotados al ancho de las canchas. Las piezas están dibujadas a mano en data/geographic/volumenes-propios.json. Por verificar en campo.",
       "verification": {
-        "status": "uncertain",
+        "status": "likely_active",
         "confidence": "low",
-        "lastVerifiedAt": "2026-09-14",
+        "lastVerifiedAt": "2026-11-12",
         "sources": [
-          "https://pickspot.mx/"
+          "https://pickspot.mx/",
+          "https://www.google.com/maps/search/PickSpot+Zibat%C3%A1"
         ]
       }
     },
@@ -447,7 +480,8 @@
         "bendito-bocado",
         "eme-cafe",
         "mykona-frozen-yogurt",
-        "enchilokos"
+        "enchilokos",
+        "knots-pilates"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -458,7 +492,8 @@
         "saludable",
         "botanas",
         "postres-y-dulces",
-        "casera"
+        "casera",
+        "yoga-pilates-y-barre"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Condesa Zibata\" y locales con esa dirección (Bendito Bocado, Romani Pizzas, Freestyle Pizza); huella de Overture.",
@@ -610,7 +645,11 @@
         "romelia-cafe",
         "la-michoacana-xentric-zibata",
         "kekas-fritas-el-xavi",
-        "sazon-de-nassar"
+        "sazon-de-nassar",
+        "anytime-fitness-zibata",
+        "swim-lab",
+        "farmacias-benavides",
+        "micromacro-dental"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -621,7 +660,12 @@
         "postres-y-dulces",
         "internacional",
         "casera",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "dentistas",
+        "gimnasios",
+        "deportes"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección Paseo Tunas 18 (Cosi Fan Tutte, Trecielos, La Marmota, Honu Sushi…). Huella aproximada.",
@@ -710,7 +754,15 @@
         "los-del-mandil",
         "escarola",
         "donatto-pizza",
-        "punta-cacao"
+        "punta-cacao",
+        "evogym-zibata",
+        "the-rebbound-movement",
+        "zayclo",
+        "grand-jete-dance-studio",
+        "farmacia-guadalajara",
+        "zibamedic",
+        "saiens-zibata",
+        "dental-factory-kids-family"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -725,7 +777,14 @@
         "panaderia-y-reposteria",
         "postres-y-dulces",
         "internacional",
-        "bar"
+        "bar",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "dentistas",
+        "laboratorios-y-diagnostico",
+        "gimnasios",
+        "yoga-pilates-y-barre",
+        "danza"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Zielo\" y locales con esa dirección (Escarola, Donatto Pizza, Margaritas); huella de Overture.",
@@ -748,7 +807,7 @@
         "es": "Plaza del desarrollo Paseo Pitahayas, a un costado del Parque Jamadi.",
         "en": "Plaza in the Paseo Pitahayas development, beside Parque Jamadi."
       },
-      "address": "Cerro del Huizache 49, Zibatá",
+      "address": "Cerro del Huizache 49, 76269 Zibatá, Qro.",
       "coordinates": {
         "lat": 20.67735,
         "lng": -100.335
@@ -815,11 +874,14 @@
       "active": true,
       "googleMapsUri": "https://maps.app.goo.gl/ijk5ygwvkhuFFSuf6",
       "placeIds": [
-        "cafele"
+        "cafele",
+        "black-box-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
-        "panaderia-y-reposteria"
+        "panaderia-y-reposteria",
+        "gimnasios",
+        "deportes"
       ],
       "locationConfidence": "medium",
       "locationSource": "Dirección de MOL Pitahaya (Cerro del Huizache 49) publicada por Atlas Desarrollos y de Cafele Zibatá; POIs de Overture Maps (release 2026-08-19.0) en Av. Huizache 49 (local 23); huella de Overture.",
@@ -959,7 +1021,12 @@
         "pio-poke-house",
         "lilo-bowl-bar",
         "starbucks-centro-zibata",
-        "marie-panaderia-artesanal"
+        "marie-panaderia-artesanal",
+        "hallafit",
+        "triba-fitness-studio",
+        "l-balans",
+        "farmacias-similares-centro-zibata",
+        "unicca-centro-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -968,7 +1035,12 @@
         "asiatica",
         "saludable",
         "panaderia-y-reposteria",
-        "bebidas"
+        "bebidas",
+        "farmacias",
+        "consultorios-y-clinicas",
+        "laboratorios-y-diagnostico",
+        "gimnasios",
+        "yoga-pilates-y-barre"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Centro Zibatá\" (shopping center) y Agave Grill; huella de Overture.",
@@ -1088,7 +1160,8 @@
         "burger-fries",
         "tacos-el-pata-zibata",
         "enoff-zibata",
-        "nomad-zibata"
+        "nomad-zibata",
+        "centre-movement"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -1096,7 +1169,8 @@
         "hamburguesas",
         "saludable",
         "panaderia-y-reposteria",
-        "bebidas"
+        "bebidas",
+        "yoga-pilates-y-barre"
       ],
       "locationConfidence": "high",
       "locationSource": "Huella del centro comercial \"PLAZA LOOP\" en OpenStreetMap (way/1545151019, shop=mall), incluida en la extracción Overpass de data/geographic/raw/osm.json.",
@@ -1231,6 +1305,65 @@
         "sources": [
           "https://xenica.mx/",
           "https://maps.app.goo.gl/2K2suM5iCjE9U13o6"
+        ]
+      }
+    },
+    {
+      "id": "intercepta",
+      "slug": "intercepta",
+      "name": "Intercepta Zibatá",
+      "description": {
+        "es": "Club de pádel en Zibatá, Querétaro.",
+        "en": "Padel club in Zibatá, Querétaro."
+      },
+      "address": "Calle Agave 6, Zibatá",
+      "coordinates": {
+        "lat": 20.690018,
+        "lng": -100.329255
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -100.32933,
+              20.690254
+            ],
+            [
+              -100.329004,
+              20.689948
+            ],
+            [
+              -100.32918,
+              20.689783
+            ],
+            [
+              -100.329507,
+              20.690088
+            ],
+            [
+              -100.32933,
+              20.690254
+            ]
+          ]
+        ]
+      },
+      "active": true,
+      "placeIds": [
+        "intercepta"
+      ],
+      "categories": [
+        "deportes"
+      ],
+      "locationConfidence": "medium",
+      "locationSource": "Ficha de Maps del negocio (Calle Agave 6) y satélite: tres canchas de pádel junto a la vialidad y una caseta. No hay edificio en los datos abiertos: las piezas están dibujadas a mano en data/geographic/volumenes-propios.json. Por verificar en campo.",
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-12",
+        "sources": [
+          "https://intercepta.mx/",
+          "https://www.google.com/maps/search/Intercepta+Zibat%C3%A1"
         ]
       }
     },

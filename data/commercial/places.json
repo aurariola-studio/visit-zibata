@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-10-25",
+  "updatedAt": "2026-11-12",
   "places": [
     {
       "id": "carls-jr",
@@ -6480,6 +6480,2514 @@
         "sources": [
           "https://maps.app.goo.gl/tWuJZtUW2y51sxWj7",
           "https://el-asadero.com/"
+        ]
+      }
+    },
+    {
+      "id": "anytime-fitness-zibata",
+      "slug": "anytime-fitness-zibata",
+      "name": "Anytime Fitness Zibatá",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "gimnasio"
+      ],
+      "description": {
+        "es": "¡Bienvenido a Anytime Fitness! Nuestro amable y profesional personal está capacitado para ayudarte durante tu entrenamiento, no importa cuánto apoyo necesites.",
+        "en": "Welcome to Anytime Fitness! Our friendly, professional staff is trained to help you through your workout, no matter how much support you need."
+      },
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6840534,
+        "lng": -100.3264007
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/ZqiYzGU2ZGshguSk9",
+      "googlePlaceId": null,
+      "phone": "+524421951595",
+      "photos": [],
+      "links": {
+        "website": "https://www.anytimefitness.com.mx/club/MX-1026",
+        "instagram": "https://www.instagram.com/anytimefitness.zibata/",
+        "facebook": "https://www.facebook.com/anytimefitnesszibata",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.anytimefitness.com.mx/club/MX-1026",
+          "https://maps.app.goo.gl/ZqiYzGU2ZGshguSk9",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "evogym-zibata",
+      "slug": "evogym-zibata",
+      "name": "EVOGYM Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "gimnasio"
+      ],
+      "description": {
+        "es": "Descubre el gimnasio de última generación que fusiona tecnología y bienestar. En EVOGYM, te ofrecemos una experiencia única para alcanzar tus objetivos fitness.",
+        "en": "Discover the state-of-the-art gym that blends technology and well-being. At EVOGYM, we offer a unique experience to reach your fitness goals."
+      },
+      "hours": {
+        "mon": [
+          "06:00-22:00"
+        ],
+        "tue": [
+          "06:00-22:00"
+        ],
+        "wed": [
+          "06:00-22:00"
+        ],
+        "thu": [
+          "06:00-22:00"
+        ],
+        "fri": [
+          "06:00-22:00"
+        ],
+        "sat": [
+          "08:00-15:00"
+        ],
+        "sun": [
+          "08:00-15:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6747409,
+        "lng": -100.322612
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/1EtMBtFo4FRVeXBa6",
+      "googlePlaceId": null,
+      "phone": "+524421114257",
+      "photos": [],
+      "links": {
+        "website": "https://evogym.com.mx/",
+        "instagram": "https://www.instagram.com/_evo__gym_/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://evogym.com.mx/",
+          "https://www.google.com/maps/search/EVOGYM+Zibat%C3%A1",
+          "https://maps.app.goo.gl/1EtMBtFo4FRVeXBa6",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "hallafit",
+      "slug": "hallafit",
+      "name": "Hallåfit",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "gimnasio"
+      ],
+      "description": {
+        "es": "Bienvenidos a HALLAFIT, tu gimnasio premium en Plaza Centro Zibatá, Querétaro. Ofrecemos equipo de última generación y un ambiente motivador. Únete a nuestra comunidad fitness y transforma tu estilo de vida.",
+        "en": "Welcome to HALLAFIT, your premium gym at Plaza Centro Zibatá, Querétaro. We offer state-of-the-art equipment and a motivating atmosphere. Join our fitness community and transform your lifestyle."
+      },
+      "hours": {
+        "mon": [
+          "05:00-22:00"
+        ],
+        "tue": [
+          "05:00-22:00"
+        ],
+        "wed": [
+          "05:00-22:00"
+        ],
+        "thu": [
+          "05:00-22:00"
+        ],
+        "fri": [
+          "05:00-22:00"
+        ],
+        "sat": [
+          "07:00-16:00"
+        ],
+        "sun": [
+          "08:00-15:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6813153,
+        "lng": -100.3407606
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/5PZqRHkN2RNwwhSM8",
+      "googlePlaceId": null,
+      "phone": "+524461325930",
+      "photos": [],
+      "links": {
+        "website": "https://linktr.ee/hallafit",
+        "instagram": "https://www.instagram.com/hallafit.qro/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524461325930",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://linktr.ee/hallafit",
+          "https://www.google.com/maps/search/Hall%C3%A5fit+Zibat%C3%A1",
+          "https://maps.app.goo.gl/5PZqRHkN2RNwwhSM8",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "flcn-bootcamp",
+      "slug": "flcn-bootcamp",
+      "name": "FLCN Bootcamp",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "entrenamiento-funcional"
+      ],
+      "description": {
+        "es": "🔥Fitness & Community\n💪🏻Funcional Training - Bootcamp",
+        "en": "🔥Fitness & Community\n💪🏻Functional Training - Bootcamp"
+      },
+      "hours": {
+        "mon": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "tue": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "wed": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "thu": [
+          "06:00-09:00",
+          "18:00-21:00"
+        ],
+        "fri": [
+          "06:00-09:00",
+          "18:00-19:00"
+        ],
+        "sat": [
+          "08:00-10:00"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6782829,
+        "lng": -100.3128837
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/6AtpQqzbRPjhwLYV8",
+      "googlePlaceId": null,
+      "phone": "+524426483856",
+      "photos": [],
+      "links": {
+        "website": "https://flcn.mx/",
+        "instagram": "https://www.instagram.com/flcn.mx/",
+        "facebook": "https://www.facebook.com/profile.php?id=61584819202542",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.instagram.com/flcn.mx/",
+          "https://www.google.com/maps/search/FLCN+Bootcamp+Zibat%C3%A1",
+          "https://maps.app.goo.gl/6AtpQqzbRPjhwLYV8",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "true-instinct-hybrid-club",
+      "slug": "true-instinct-hybrid-club",
+      "name": "True Instinct Hybrid Club",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "entrenamiento-funcional"
+      ],
+      "description": {
+        "es": "1er HYROX Training Club en Zibatá Qro. 📍",
+        "en": "1st HYROX Training Club in Zibatá, Qro. 📍"
+      },
+      "hours": {
+        "mon": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "06:00-13:00",
+          "17:00-21:00"
+        ],
+        "sat": [
+          "07:00-12:00"
+        ],
+        "sun": [
+          "08:00-11:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6792084,
+        "lng": -100.31467
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/True+Instinct+Hybrid+Club/@20.6792084,-100.31467,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35dcee9dc0b5b:0x559d9508de17d01b!8m2!3d20.6792084!4d-100.31467!16s%2Fg%2F11y_hrg36g",
+      "googlePlaceId": null,
+      "phone": "+524422043390",
+      "photos": [],
+      "links": {
+        "website": "https://www.trueinstinct.mx/",
+        "instagram": "https://www.instagram.com/trueinstinct_hybrid/",
+        "facebook": "https://www.facebook.com/p/True-Instinct-Hybrid-Club-61587519741203/",
+        "tiktok": "https://www.tiktok.com/@trueinstinct_hybrid",
+        "whatsapp": "+524422043390",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.trueinstinct.mx/",
+          "https://www.google.com/maps/search/True+Instinct+Hybrid+Club+Zibat%C3%A1",
+          "https://www.google.com/maps/place/True+Instinct+Hybrid+Club/@20.6792084,-100.31467,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35dcee9dc0b5b:0x559d9508de17d01b!8m2!3d20.6792084!4d-100.31467!16s%2Fg%2F11y_hrg36g",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "triba-fitness-studio",
+      "slug": "triba-fitness-studio",
+      "name": "Triba Fitness Studio",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "entrenamiento-funcional"
+      ],
+      "description": {
+        "es": "¡Bienvenida a Triba, la nueva comunidad fitness para mujeres!\nSomos un equipo de entrenadoras personales certificadas comprometidas en ayudarte a lograr tus objetivos fitness a través de entrenamientos personalizados y una comunidad que te respalda en cada paso del camino.",
+        "en": "Welcome to Triba, the new fitness community for women!\nWe are a team of certified personal trainers committed to helping you reach your fitness goals through personalized training and a community that supports you every step of the way."
+      },
+      "hours": {
+        "mon": [
+          "06:00-20:30"
+        ],
+        "tue": [
+          "06:00-21:30"
+        ],
+        "wed": [
+          "06:00-20:30"
+        ],
+        "thu": [
+          "06:00-21:30"
+        ],
+        "fri": [
+          "06:00-20:30"
+        ],
+        "sat": [
+          "07:00-14:00"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6813262,
+        "lng": -100.3407313
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/5eqL3jowaiCJzgCLA",
+      "googlePlaceId": null,
+      "phone": "+524423307489",
+      "photos": [],
+      "links": {
+        "website": "http://triba.com.mx/",
+        "instagram": "https://www.instagram.com/triba_fitness/",
+        "facebook": "https://www.facebook.com/tribafitnessqro/",
+        "tiktok": null,
+        "whatsapp": "+524423307489",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "http://triba.com.mx/",
+          "https://www.google.com/maps/search/Triba+Fitness+Studio+Zibat%C3%A1",
+          "https://maps.app.goo.gl/5eqL3jowaiCJzgCLA",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "the-rebbound-movement",
+      "slug": "the-rebbound-movement",
+      "name": "The Rebbound Movement",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "pilates",
+        "barre",
+        "entrenamiento-funcional"
+      ],
+      "description": {
+        "es": "Somos un estudio fitness enfocado en el trabajo integral no solo del cuerpo físico sino también de la mente y las emociones.",
+        "en": "We are a fitness studio focused on whole-person work: not only the physical body, but also the mind and the emotions."
+      },
+      "hours": {
+        "mon": [
+          "07:00-11:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "07:00-11:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "07:00-11:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "07:00-11:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "07:00-11:00",
+          "17:00-21:00"
+        ],
+        "sat": [
+          "08:00-11:00"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6750395,
+        "lng": -100.3225585
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/XTwWyNpavJgSsUKJ9",
+      "googlePlaceId": null,
+      "phone": "+524421128923",
+      "photos": [],
+      "links": {
+        "website": "https://boxmagic.cl/sport_page/TheRebboundMovement",
+        "instagram": "https://www.instagram.com/therebboundmovement.mx/",
+        "facebook": "https://www.facebook.com/TheRebboundMovement",
+        "tiktok": null,
+        "whatsapp": "+524421128923",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://therebboundmovement.com/",
+          "https://www.google.com/maps/search/The+Rebbound+Movement+Zibat%C3%A1",
+          "https://maps.app.goo.gl/XTwWyNpavJgSsUKJ9",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "seven-indoor-cycling-strength",
+      "slug": "seven-indoor-cycling-strength",
+      "name": "Seven Indoor Cycling & Strength",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "ciclismo-indoor",
+        "entrenamiento-funcional"
+      ],
+      "description": {
+        "es": "Motivation is a lie. Show up. [Cycling + Strength]",
+        "en": "Motivation is a lie. Show up. [Cycling + Strength]"
+      },
+      "hours": {
+        "mon": [
+          "07:00-09:00",
+          "18:00-21:30"
+        ],
+        "tue": [
+          "07:00-09:00",
+          "18:00-20:00"
+        ],
+        "wed": [
+          "07:00-09:00",
+          "18:00-21:30"
+        ],
+        "thu": [
+          "07:00-09:00",
+          "18:00-20:00"
+        ],
+        "fri": [
+          "07:00-09:00",
+          "18:00-19:00"
+        ],
+        "sat": [
+          "09:00-11:30"
+        ],
+        "sun": [
+          "09:00-11:30"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6791077,
+        "lng": -100.3146856
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/Seven+Indoor+Cycling+%26+Strength/@20.6791077,-100.3146856,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35d7bab602e87:0x2d996e9ae2211057!8m2!3d20.6791077!4d-100.3146856!16s%2Fg%2F11rxf5_1_0",
+      "googlePlaceId": null,
+      "phone": "+524422856471",
+      "photos": [],
+      "links": {
+        "website": "https://sevenstudio.mx/",
+        "instagram": "https://www.instagram.com/seven.mx_/",
+        "facebook": "https://www.facebook.com/sevencyclemx/",
+        "tiktok": null,
+        "whatsapp": "+524422856471",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://sevenstudio.mx/",
+          "https://www.google.com/maps/search/Seven+Indoor+Cycling+%26+Strength+Zibat%C3%A1",
+          "https://www.google.com/maps/place/Seven+Indoor+Cycling+%26+Strength/@20.6791077,-100.3146856,857m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85d35d7bab602e87:0x2d996e9ae2211057!8m2!3d20.6791077!4d-100.3146856!16s%2Fg%2F11rxf5_1_0",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "zayclo",
+      "slug": "zayclo",
+      "name": "ZÁYCLO",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "ciclismo-indoor",
+        "pilates",
+        "gimnasio"
+      ],
+      "description": {
+        "es": "Movimiento que transforma desde adentro.",
+        "en": "Movement that transforms from within."
+      },
+      "hours": {
+        "mon": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "06:00-10:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "06:00-10:00",
+          "17:00-20:30"
+        ],
+        "sat": [
+          "09:00-12:00"
+        ],
+        "sun": [
+          "10:00-12:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6750273,
+        "lng": -100.3225333
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/ao3G7H2TopvdPqcRA",
+      "googlePlaceId": null,
+      "phone": "+524423679219",
+      "photos": [],
+      "links": {
+        "website": "http://thea-studios.com/",
+        "instagram": "https://www.instagram.com/zyclo_mx/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524423679219",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "http://thea-studios.com/",
+          "https://www.google.com/maps/search/Z%C3%81YCLO+Zibat%C3%A1",
+          "https://maps.app.goo.gl/ao3G7H2TopvdPqcRA",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "loom-pilates-club",
+      "slug": "loom-pilates-club",
+      "name": "Loom Pilates Club",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "pilates"
+      ],
+      "description": {
+        "es": "PILATES REFORMER · SCULPT\nMove with purpose. Keep looming✨",
+        "en": "PILATES REFORMER · SCULPT\nMove with purpose. Keep looming✨"
+      },
+      "hours": {
+        "mon": [
+          "07:00-21:00"
+        ],
+        "tue": [
+          "07:00-21:00"
+        ],
+        "wed": [
+          "07:00-21:00"
+        ],
+        "thu": [
+          "07:00-21:00"
+        ],
+        "fri": [
+          "07:00-13:00"
+        ],
+        "sat": [
+          "09:00-13:00"
+        ],
+        "sun": [
+          "09:00-13:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6780793,
+        "lng": -100.3135633
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/upv6NvGE1yHbr6vL8",
+      "googlePlaceId": null,
+      "phone": "+524461220564",
+      "photos": [],
+      "links": {
+        "website": "https://linktr.ee/loompilatesclub",
+        "instagram": "https://www.instagram.com/loompilatesclub/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524461220564",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://nessty.mx/@loom-pilates-club",
+          "https://www.google.com/maps/search/Loom+Pilates+Club+Zibat%C3%A1",
+          "https://maps.app.goo.gl/upv6NvGE1yHbr6vL8",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "knots-pilates",
+      "slug": "knots-pilates",
+      "name": "Knots Pilates",
+      "plazaId": "condesa",
+      "giros": [
+        "pilates"
+      ],
+      "description": {
+        "es": "Sculpt & Strength Reformer Pilates. Movimientos lentos, transiciones rápidas y un método que sí te reta. SEE U IN BED <33",
+        "en": "Sculpt & Strength Reformer Pilates. Slow movements, quick transitions and a method that truly challenges you. SEE U IN BED <33"
+      },
+      "hours": {
+        "mon": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "06:00-12:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "06:00-12:00",
+          "17:00-19:00"
+        ],
+        "sat": [
+          "08:00-12:00"
+        ],
+        "sun": [
+          "09:00-13:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6809866,
+        "lng": -100.3167116
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/vi1Uxn1uD8BgDeDSA",
+      "googlePlaceId": null,
+      "phone": "+524421376422",
+      "photos": [],
+      "links": {
+        "website": "https://www.nessty.mx/@knotspilates",
+        "instagram": "https://www.instagram.com/knotspilates/",
+        "facebook": null,
+        "tiktok": "https://www.tiktok.com/@knotspilates",
+        "whatsapp": "+524421376422",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.nessty.mx/@knotspilates",
+          "https://www.google.com/maps/search/knots+pilates+Zibat%C3%A1",
+          "https://maps.app.goo.gl/vi1Uxn1uD8BgDeDSA",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "centre-movement",
+      "slug": "centre-movement",
+      "name": "Centre Movement",
+      "plazaId": "plaza-loop",
+      "giros": [
+        "pilates"
+      ],
+      "description": {
+        "es": "Movimiento con intención ⟡\nFusion Pilates | Funcional | Mobility | Sculpt",
+        "en": "Movement with intention ⟡\nFusion Pilates | Functional | Mobility | Sculpt"
+      },
+      "hours": {
+        "mon": [
+          "06:00-21:30"
+        ],
+        "tue": [
+          "06:00-21:30"
+        ],
+        "wed": [
+          "06:00-21:30"
+        ],
+        "thu": [
+          "06:00-21:30"
+        ],
+        "fri": [
+          "06:00-21:30"
+        ],
+        "sat": [
+          "09:00-11:45"
+        ],
+        "sun": [
+          "09:00-11:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.682554,
+        "lng": -100.3188108
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/vWxy44EGM6QHJ18V7",
+      "googlePlaceId": null,
+      "phone": "+524461100230",
+      "photos": [],
+      "links": {
+        "website": "https://linktr.ee/centre.movement",
+        "instagram": "https://www.instagram.com/centre.movement/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524461100230",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.instagram.com/centre.movement/",
+          "https://www.google.com/maps/search/Centre+Movement+Pilates+Mat+Zibat%C3%A1",
+          "https://maps.app.goo.gl/vWxy44EGM6QHJ18V7",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "l-balans",
+      "slug": "l-balans",
+      "name": "L-Balans",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "pilates"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "tue": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "wed": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "thu": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "fri": [
+          "06:00-10:00",
+          "18:00-21:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524461335933",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.google.com/maps/search/L-Balans+Pilates+Reformer+Zibat%C3%A1",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "devotion-heat-room",
+      "slug": "devotion-heat-room",
+      "name": "Devotion Heat Room",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "pilates"
+      ],
+      "description": {
+        "es": "En Devotion ZIBATA, nuestra misión es ofrecer un ambiente de entrenamiento único que combine la efectividad del pilates tradicional con la innovación del entrenamiento funcional. Queremos que cada cliente experimente una mejora en su bienestar físico y mental a través de nuestras clases en calor.",
+        "en": "At Devotion ZIBATA, our mission is to offer a unique training environment that combines the effectiveness of traditional pilates with the innovation of functional training. We want every client to experience an improvement in their physical and mental well-being through our heated classes."
+      },
+      "hours": {
+        "mon": [
+          "06:00-21:00"
+        ],
+        "tue": [
+          "06:00-21:00"
+        ],
+        "wed": [
+          "06:00-21:00"
+        ],
+        "thu": [
+          "06:00-21:00"
+        ],
+        "fri": [
+          "06:00-21:00"
+        ],
+        "sat": [
+          "09:00-13:00"
+        ],
+        "sun": [
+          "09:00-13:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6781897,
+        "lng": -100.3136649
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/EYmvmerjdNmewt5S8",
+      "googlePlaceId": null,
+      "phone": "+524427804461",
+      "photos": [],
+      "links": {
+        "website": "https://devotion-mx.com/",
+        "instagram": "https://www.instagram.com/devotion_heatroom/",
+        "facebook": "https://www.facebook.com/profile.php?id=61585234860347",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.facebook.com/share/17jWqRENsY/",
+          "https://www.google.com/maps/search/Devotion+Heat+Room+Zibat%C3%A1",
+          "https://maps.app.goo.gl/EYmvmerjdNmewt5S8",
+          "https://devotion-mx.com/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "espacio-om",
+      "slug": "espacio-om",
+      "name": "Espacio OM",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "yoga"
+      ],
+      "description": {
+        "es": "Te ayudamos a descubrir tu espacio interior 🧘🏼‍♂️\n☯️Yoga & Meditaciones",
+        "en": "We help you discover your inner space 🧘🏼‍♂️\n☯️Yoga & Meditation"
+      },
+      "hours": {
+        "mon": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "tue": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "wed": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "thu": [
+          "07:00-12:00",
+          "17:00-21:00"
+        ],
+        "fri": [
+          "07:00-12:00",
+          "16:30-21:00"
+        ],
+        "sat": [
+          "07:30-12:00"
+        ],
+        "sun": [
+          "07:30-12:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6779154,
+        "lng": -100.3134092
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/xCokdu7dKEmWE9LZ9",
+      "googlePlaceId": null,
+      "phone": "+524422700666",
+      "photos": [],
+      "links": {
+        "website": "https://www.espacio-om.com.mx/",
+        "instagram": "https://www.instagram.com/espacioomzibata/",
+        "facebook": "https://www.facebook.com/EspacioOmZibata",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.espacio-om.com.mx/",
+          "https://www.google.com/maps/search/Espacio+OM+Zibat%C3%A1",
+          "https://maps.app.goo.gl/xCokdu7dKEmWE9LZ9",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "turnout-studio",
+      "slug": "turnout-studio",
+      "name": "Turnout Studio",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "barre",
+        "danza"
+      ],
+      "description": {
+        "es": "Barre|Sculpt\n🩰 Mejora tu Alineación, Fuerza & Conexión con tu cuerpo",
+        "en": "Barre|Sculpt\n🩰 Improve your Alignment, Strength & Connection with your body"
+      },
+      "hours": {
+        "mon": [
+          "08:00-10:30",
+          "19:00-21:15"
+        ],
+        "tue": [
+          "08:00-10:30",
+          "19:00-21:15"
+        ],
+        "wed": [
+          "08:00-10:30",
+          "19:00-21:15"
+        ],
+        "thu": [
+          "08:00-10:30",
+          "19:00-21:15"
+        ],
+        "fri": [
+          "08:00-10:30",
+          "19:00-21:15"
+        ],
+        "sat": [
+          "08:00-10:30"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6783605,
+        "lng": -100.3141072
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/mhjGiuvLam3RA5JfA",
+      "googlePlaceId": null,
+      "phone": "+525610056889",
+      "photos": [],
+      "links": {
+        "website": "https://turnoutstudio.com.mx/",
+        "instagram": "https://www.instagram.com/turnout.studio/",
+        "facebook": "https://www.facebook.com/TurnoutStudio",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://turnoutstudio.com.mx/",
+          "https://maps.app.goo.gl/mhjGiuvLam3RA5JfA",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "grand-jete-dance-studio",
+      "slug": "grand-jete-dance-studio",
+      "name": "Grand Jeté Dance Studio",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "ballet",
+        "danza"
+      ],
+      "description": {
+        "es": "¡Bailamos para transformar el mundo!",
+        "en": "We dance to transform the world!"
+      },
+      "hours": {
+        "mon": [
+          "08:00-21:00"
+        ],
+        "tue": [
+          "08:00-21:00"
+        ],
+        "wed": [
+          "08:00-21:00"
+        ],
+        "thu": [
+          "08:00-21:00"
+        ],
+        "fri": [
+          "08:00-21:00"
+        ],
+        "sat": [
+          "08:00-18:00"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6747558,
+        "lng": -100.3228861
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/DMTrwSjokFUEMsWK9",
+      "googlePlaceId": null,
+      "phone": "+524427809463",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/grandjetestudio/",
+        "facebook": "https://www.facebook.com/GrandJeteZibata/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.facebook.com/GrandJeteZibata/",
+          "https://www.google.com/maps/search/Grand+Jet%C3%A9+Dance+Studio+Zibat%C3%A1",
+          "https://maps.app.goo.gl/DMTrwSjokFUEMsWK9",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "black-box-zibata",
+      "slug": "black-box-zibata",
+      "name": "Black Box Zibatá",
+      "plazaId": "mol-jamadi",
+      "giros": [
+        "boxeo",
+        "entrenamiento-funcional"
+      ],
+      "description": {
+        "es": "Somos una gran comunidad integrada por personas únicas y especiales en el que nos une un mismo espacio y un mismo tiempo.",
+        "en": "We are a great community of unique, special people, brought together by the same space and the same time."
+      },
+      "hours": {
+        "mon": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "tue": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "wed": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "thu": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "fri": [
+          "06:00-12:00",
+          "16:00-22:00"
+        ],
+        "sat": [
+          "08:00-12:00"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6768858,
+        "lng": -100.3349522
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/oiwNmWiw1Bv8KJGi6",
+      "googlePlaceId": null,
+      "phone": "+524772407465",
+      "photos": [],
+      "links": {
+        "website": "https://www.bboxgym.com/",
+        "instagram": "https://www.instagram.com/blackboxzibata/",
+        "facebook": "https://www.facebook.com/p/Black-Box-Zibat%C3%A1-61554758433055/",
+        "tiktok": "https://www.tiktok.com/@blackboxgym",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.bboxgym.com/",
+          "https://www.google.com/maps/search/Black+Box+Zibat%C3%A1",
+          "https://maps.app.goo.gl/oiwNmWiw1Bv8KJGi6",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "swim-lab",
+      "slug": "swim-lab",
+      "name": "Swim Lab",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "natacion"
+      ],
+      "description": {
+        "es": "Swim Lab ayuda a los niños a ganar confianza en el agua y desarrollar habilidades de natación a través de clases personalizadas con instructores certificados.\nTambién ayudamos a los adultos a mantenerse en forma y ser parte de una comunidad en crecimiento.",
+        "en": "Swim Lab helps children gain confidence in the water and develop swimming skills through personalized classes with certified instructors.\nWe also help adults stay fit and be part of a growing community."
+      },
+      "hours": {
+        "mon": [
+          "15:00-19:00"
+        ],
+        "tue": [
+          "15:00-19:00"
+        ],
+        "wed": [
+          "15:00-19:00"
+        ],
+        "thu": [
+          "15:00-19:00"
+        ],
+        "fri": [
+          "15:00-19:00"
+        ],
+        "sat": [
+          "10:00-13:00"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6834673,
+        "lng": -100.3262562
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/1Hd6AFw9wQJyq7VL6",
+      "googlePlaceId": null,
+      "phone": "+524461130327",
+      "photos": [],
+      "links": {
+        "website": "https://www.swimlabmexico.com/",
+        "instagram": "https://www.instagram.com/swimlabmexico/",
+        "facebook": "https://www.facebook.com/p/Swim-Lab-61562308213311/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.swimlabmexico.com/",
+          "https://www.google.com/maps/search/Swim+Lab+Zibat%C3%A1",
+          "https://maps.app.goo.gl/1Hd6AFw9wQJyq7VL6",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "intercepta",
+      "slug": "intercepta",
+      "name": "Intercepta",
+      "plazaId": "intercepta",
+      "giros": [
+        "padel"
+      ],
+      "description": {
+        "es": "Clases para todas las edades, renta de cancha y juego todas las mañanas en Querétaro.",
+        "en": "Classes for all ages, court rental and play every morning in Querétaro."
+      },
+      "hours": {
+        "mon": [
+          "06:00-22:00"
+        ],
+        "tue": [
+          "06:00-22:00"
+        ],
+        "wed": [
+          "06:00-22:00"
+        ],
+        "thu": [
+          "06:00-22:00"
+        ],
+        "fri": [
+          "06:00-22:00"
+        ],
+        "sat": [
+          "06:00-22:00"
+        ],
+        "sun": [
+          "06:00-22:00"
+        ],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6899614,
+        "lng": -100.3294068
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/s1a7fECEzpJsFuMHA",
+      "googlePlaceId": null,
+      "phone": "+524427100453",
+      "photos": [],
+      "links": {
+        "website": "https://intercepta.mx/",
+        "instagram": "https://www.instagram.com/intercepta_qro/",
+        "facebook": "https://www.facebook.com/interceptapadel/",
+        "tiktok": null,
+        "whatsapp": "+524427100453",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://intercepta.mx/",
+          "https://www.google.com/maps/search/Intercepta+Zibat%C3%A1",
+          "https://maps.app.goo.gl/s1a7fECEzpJsFuMHA",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "pickspot",
+      "slug": "pickspot",
+      "name": "PickSpot",
+      "plazaId": "foodtrucks-pickleball",
+      "giros": [
+        "pickleball"
+      ],
+      "description": {
+        "es": "Nuestras canchas son el lugar ideal para hacer ejercicio y disfrutar al máximo.",
+        "en": "Our courts are the ideal place to exercise and enjoy it to the fullest."
+      },
+      "hours": {
+        "mon": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "tue": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "wed": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "thu": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "fri": [
+          "07:00-13:00",
+          "16:00-22:00"
+        ],
+        "sat": [
+          "08:00-14:00"
+        ],
+        "sun": [
+          "08:00-14:00"
+        ]
+      },
+      "location": {
+        "lat": 20.680463,
+        "lng": -100.3159918
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/YuMHZAJ8vA4TnBwZ8",
+      "googlePlaceId": null,
+      "phone": "+527291646562",
+      "photos": [],
+      "links": {
+        "website": "https://pickspot.mx/",
+        "instagram": "https://www.instagram.com/pickspot_oficial/",
+        "facebook": "https://www.facebook.com/p/Pick-Spot-61572731271741/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://pickspot.mx/",
+          "https://www.google.com/maps/search/PickSpot+Zibat%C3%A1",
+          "https://maps.app.goo.gl/YuMHZAJ8vA4TnBwZ8",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "fundacion-kwan-moo-do-queretaro",
+      "slug": "fundacion-kwan-moo-do-queretaro",
+      "name": "Fundación Kwan Moo Do Querétaro",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "tae-kwon-do"
+      ],
+      "description": {
+        "es": "Escuela de formación marcial, comprometida con los valores y principios para un mejor desarrollo.",
+        "en": "Martial arts school committed to values and principles for better personal development."
+      },
+      "hours": {
+        "mon": [
+          "09:00-22:00"
+        ],
+        "tue": [
+          "09:00-22:00"
+        ],
+        "wed": [
+          "09:00-22:00"
+        ],
+        "thu": [
+          "09:00-22:00"
+        ],
+        "fri": [
+          "09:00-22:00"
+        ],
+        "sat": [],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6791173,
+        "lng": -100.3141332
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/fnQzkpses16H4B6w5",
+      "googlePlaceId": null,
+      "phone": "+524423447424",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/elprofmario_tkd/",
+        "facebook": "https://www.facebook.com/p/Guerreros-de-vidaFundaci%C3%B3n-Kwan-Moo-Do-Quer%C3%A9taro-61576685415956/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://maps.app.goo.gl/fnQzkpses16H4B6w5",
+          "https://www.instagram.com/elprofmario_tkd/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "farmacia-san-pablo",
+      "slug": "farmacia-san-pablo",
+      "name": "Farmacia San Pablo",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "farmacia",
+        "consulta-general"
+      ],
+      "description": {
+        "es": "💙 #SanPablo apasionados de la salud\n🍃 #SanPabloNatural te impulsa a estar #MejorYMejor\n💆‍♀ #SanPabloDermo salud en la piel",
+        "en": "💙 #SanPablo passionate about health\n🍃 #SanPabloNatural drives you to be #MejorYMejor\n💆‍♀ #SanPabloDermo healthy skin"
+      },
+      "hours": {
+        "mon": [
+          "07:00-23:00"
+        ],
+        "tue": [
+          "07:00-23:00"
+        ],
+        "wed": [
+          "07:00-23:00"
+        ],
+        "thu": [
+          "07:00-23:00"
+        ],
+        "fri": [
+          "07:00-23:00"
+        ],
+        "sat": [
+          "07:00-23:00"
+        ],
+        "sun": [
+          "07:00-23:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6785643,
+        "lng": -100.3140216
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/NVTs1KQZXjA3y9bb6",
+      "googlePlaceId": null,
+      "phone": "+528000726722",
+      "photos": [],
+      "links": {
+        "website": "https://www.farmaciasanpablo.com.mx/",
+        "instagram": "https://www.instagram.com/sanpablofarma/",
+        "facebook": "https://www.facebook.com/SanPabloFarma",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://zibatahoy.com/listing/farmacia-san-pablo-zibata/",
+          "https://www.google.com/maps/place/Farmacia+San+Pablo+Zibat%C3%A1/@20.6785643,-100.3140216,17z",
+          "https://maps.app.goo.gl/NVTs1KQZXjA3y9bb6",
+          "https://www.instagram.com/sanpablofarma/",
+          "https://www.facebook.com/SanPabloFarma",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "farmacias-benavides",
+      "slug": "farmacias-benavides",
+      "name": "Farmacias Benavides",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "farmacia",
+        "consulta-general"
+      ],
+      "description": {
+        "es": "💙 Expertos en Cuidarte",
+        "en": "💙 Experts in Caring for You"
+      },
+      "hours": {
+        "mon": [
+          "08:00-22:30"
+        ],
+        "tue": [
+          "08:00-22:30"
+        ],
+        "wed": [
+          "08:00-22:30"
+        ],
+        "thu": [
+          "08:00-22:30"
+        ],
+        "fri": [
+          "08:00-22:30"
+        ],
+        "sat": [
+          "08:00-22:30"
+        ],
+        "sun": [
+          "08:00-22:30"
+        ]
+      },
+      "location": {
+        "lat": 20.6832464,
+        "lng": -100.3252521
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/4AhX4yRGkNHn5hFi7",
+      "googlePlaceId": null,
+      "phone": "+528181260000",
+      "photos": [],
+      "links": {
+        "website": "https://www.benavides.com.mx/",
+        "instagram": "https://www.instagram.com/farmaciasbenavides/",
+        "facebook": "https://www.facebook.com/FarmaciasBenavides",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": "https://www.ubereats.com/mx/store/farmacias-benavides-zibata/qmXf2Af4WYiCyeQdM6cwyQ",
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://zibatahoy.com/listing/farmacias-benavides-zibata/",
+          "https://www.google.com/maps/search/Farmacias+Benavides+Paseo+Tunas+18a+Zibat%C3%A1",
+          "https://maps.app.goo.gl/4AhX4yRGkNHn5hFi7",
+          "https://www.ubereats.com/mx/store/farmacias-benavides-zibata/qmXf2Af4WYiCyeQdM6cwyQ",
+          "https://www.facebook.com/FarmaciasBenavides",
+          "https://www.instagram.com/farmaciasbenavides/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "farmacia-guadalajara",
+      "slug": "farmacia-guadalajara",
+      "name": "Farmacia Guadalajara",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "farmacia"
+      ],
+      "description": {
+        "es": "Encuentra medicamentos, productos para el cuidado personal, bebés y más en Farmacias Guadalajara.",
+        "en": "Find medicine, personal care products, baby products and more at Farmacias Guadalajara."
+      },
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6748664,
+        "lng": -100.3225615
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/7k5ikfFYYr6HcsNw7",
+      "googlePlaceId": null,
+      "phone": "+523338181818",
+      "photos": [],
+      "links": {
+        "website": "https://www.farmaciasguadalajara.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": "https://www.ubereats.com/mx/store/farmacias-guadalajara-zibata-el-marques-queretaro/c-aekooRUFOBfbbRJsMjmA",
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://zibatahoy.com/listing/farmacia-guadalajara-zibata/",
+          "https://www.google.com/maps/search/Farmacia+Guadalajara+Zibat%C3%A1",
+          "https://maps.app.goo.gl/7k5ikfFYYr6HcsNw7",
+          "https://www.ubereats.com/mx/store/farmacias-guadalajara-zibata-el-marques-queretaro/c-aekooRUFOBfbbRJsMjmA",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "farmacias-similares",
+      "slug": "farmacias-similares",
+      "name": "Farmacias Similares",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "farmacia"
+      ],
+      "description": {
+        "es": "Cadena farmacéutica líder en México y América Latina. Trabajamos todos los días para ayudar a los que menos tienen.",
+        "en": "Leading pharmacy chain in Mexico and Latin America. We work every day to help those who have the least."
+      },
+      "hours": {
+        "mon": [
+          "08:00-22:00"
+        ],
+        "tue": [
+          "08:00-22:00"
+        ],
+        "wed": [
+          "08:00-22:00"
+        ],
+        "thu": [
+          "08:00-22:00"
+        ],
+        "fri": [
+          "08:00-22:00"
+        ],
+        "sat": [
+          "08:00-22:00"
+        ],
+        "sun": [
+          "09:00-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6791076,
+        "lng": -100.3146856
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/cJtbgmrqZuHxtzR9A",
+      "googlePlaceId": null,
+      "phone": "+524461139222",
+      "photos": [],
+      "links": {
+        "website": "https://www.farmaciasdesimilares.com",
+        "instagram": "https://www.instagram.com/fsimilares",
+        "facebook": "https://www.facebook.com/farmaciassimilares/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://maps.app.goo.gl/cJtbgmrqZuHxtzR9A",
+          "https://zibatahoy.com/listing/farmacias-similares-zibata/",
+          "https://www.instagram.com/fsimilares",
+          "https://www.facebook.com/farmaciassimilares/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "farmacias-similares-centro-zibata",
+      "slug": "farmacias-similares-centro-zibata",
+      "name": "Farmacias Similares",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "farmacia"
+      ],
+      "description": {
+        "es": "Cadena farmacéutica líder en México y América Latina. Trabajamos todos los días para ayudar a los que menos tienen.",
+        "en": "Leading pharmacy chain in Mexico and Latin America. We work every day to help those who have the least."
+      },
+      "hours": {
+        "mon": [
+          "08:00-22:00"
+        ],
+        "tue": [
+          "08:00-22:00"
+        ],
+        "wed": [
+          "08:00-22:00"
+        ],
+        "thu": [
+          "08:00-22:00"
+        ],
+        "fri": [
+          "08:00-22:00"
+        ],
+        "sat": [
+          "08:00-22:00"
+        ],
+        "sun": [
+          "09:00-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6812808,
+        "lng": -100.3403033
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/txtgYzGnNBwKpGi29",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.farmaciasdesimilares.com",
+        "instagram": "https://www.instagram.com/fsimilares",
+        "facebook": "https://www.facebook.com/farmaciassimilares/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://maps.app.goo.gl/txtgYzGnNBwKpGi29",
+          "https://www.instagram.com/fsimilares",
+          "https://www.facebook.com/farmaciassimilares/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "unicca-paseo-zibata",
+      "slug": "unicca-paseo-zibata",
+      "name": "UNICCA Paseo Zibatá",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "consulta-general",
+        "consulta-de-especialidad",
+        "laboratorio-clinico"
+      ],
+      "description": {
+        "es": "Centro Médico UNICCA Zibatá es un centro médico con más de 51 Especialidades Médicas, laboratorios, rayos x, ultrasonidos y muchos más servicios de salud.",
+        "en": "UNICCA Zibatá Medical Center is a medical center with more than 51 medical specialties, laboratories, X-rays, ultrasounds and many more health services."
+      },
+      "hours": {
+        "mon": [
+          "07:00-21:00"
+        ],
+        "tue": [
+          "07:00-21:00"
+        ],
+        "wed": [
+          "07:00-21:00"
+        ],
+        "thu": [
+          "07:00-21:00"
+        ],
+        "fri": [
+          "07:00-21:00"
+        ],
+        "sat": [
+          "07:30-21:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6795136,
+        "lng": -100.3151707
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/Centro+M%C3%A9dico+UNICCA/@20.6795136,-100.3151707,17z/data=!4m6!3m5!1s0x85d35d04eea56dc3:0x12cfe4368df6a835!8m2!3d20.6795136!4d-100.3151707!16s%2Fg%2F11jgdqxtsc",
+      "googlePlaceId": null,
+      "phone": "+524428633014",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/unicca.zibata/",
+        "facebook": "https://www.facebook.com/uniccazibata",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.google.com/maps/place/Centro+M%C3%A9dico+UNICCA/@20.6795136,-100.3151707,17z/data=!4m6!3m5!1s0x85d35d04eea56dc3:0x12cfe4368df6a835!8m2!3d20.6795136!4d-100.3151707!16s%2Fg%2F11jgdqxtsc",
+          "https://zibatahoy.com/listing/medical-group-zibata/",
+          "https://www.google.com/maps/search/UNICCA+Zibat%C3%A1",
+          "https://www.instagram.com/unicca.zibata/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "unicca-centro-zibata",
+      "slug": "unicca-centro-zibata",
+      "name": "UNICCA Centro Zibatá",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "consulta-general",
+        "consulta-de-especialidad",
+        "laboratorio-clinico"
+      ],
+      "description": {
+        "es": "Centro Médico UNICCA Zibatá es un centro médico con más de 51 Especialidades Médicas, laboratorios, rayos x, ultrasonidos y muchos más servicios de salud.",
+        "en": "UNICCA Zibatá Medical Center is a medical center with more than 51 medical specialties, laboratories, X-rays, ultrasounds and many more health services."
+      },
+      "hours": {
+        "mon": [
+          "07:00-21:00"
+        ],
+        "tue": [
+          "07:00-21:00"
+        ],
+        "wed": [
+          "07:00-21:00"
+        ],
+        "thu": [
+          "07:00-21:00"
+        ],
+        "fri": [
+          "07:00-21:00"
+        ],
+        "sat": [
+          "07:30-21:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6812918,
+        "lng": -100.3403446
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/obX1bSRjtcYCVFpK8",
+      "googlePlaceId": null,
+      "phone": "+524427200013",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/unicca.zibata/",
+        "facebook": "https://www.facebook.com/uniccazibata",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://maps.app.goo.gl/obX1bSRjtcYCVFpK8",
+          "https://www.facebook.com/uniccazibata",
+          "https://www.instagram.com/unicca.zibata/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "laboratorio-del-chopo",
+      "slug": "laboratorio-del-chopo",
+      "name": "Laboratorio Médico del Chopo",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "laboratorio-clinico"
+      ],
+      "description": {
+        "es": "Más de 75 años brindando certeza, confianza, tranquilidad y seguridad a la salud de las familias en México con análisis clínicos y estudios especializados en nuestras más de 700 sucursales a nivel nacional. 🔬💙",
+        "en": "For more than 75 years, bringing certainty, trust, peace of mind and security to the health of families in Mexico with clinical analyses and specialized studies at our more than 700 branches nationwide. 🔬💙"
+      },
+      "hours": {
+        "mon": [
+          "07:00-15:00"
+        ],
+        "tue": [
+          "07:00-15:00"
+        ],
+        "wed": [
+          "07:00-15:00"
+        ],
+        "thu": [
+          "07:00-15:00"
+        ],
+        "fri": [
+          "07:00-15:00"
+        ],
+        "sat": [
+          "07:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6782586,
+        "lng": -100.3138833
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/cm3rZ7u2gKHM5xKPA",
+      "googlePlaceId": null,
+      "phone": "+525511044880",
+      "photos": [],
+      "links": {
+        "website": "https://www.chopo.com.mx/sucursal-xentric-anahuac-paseo-de-las-pitahayas-1a-l-131",
+        "instagram": "https://www.instagram.com/labmedicochopo",
+        "facebook": "https://www.facebook.com/LabMedicoChopo",
+        "tiktok": "https://www.tiktok.com/@labmedicochopo",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.google.com/maps/place/Laboratorio+M%C3%A9dico+del+Chopo+Xentric+An%C3%A1huac/@20.6782649,-100.3139789,20z",
+          "https://maps.app.goo.gl/cm3rZ7u2gKHM5xKPA",
+          "https://www.chopo.com.mx/sucursal-xentric-anahuac-paseo-de-las-pitahayas-1a-l-131",
+          "https://www.instagram.com/labmedicochopo",
+          "https://www.facebook.com/LabMedicoChopo",
+          "https://www.tiktok.com/@labmedicochopo",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "micromacro-dental",
+      "slug": "micromacro-dental",
+      "name": "Micromacro Dental",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "dentista",
+        "ortodoncia"
+      ],
+      "description": {
+        "es": "En micromacro tenemos como propósito brindarte soluciones para mejorar tu sonrisa, poniéndote en manos de los mejores profesionales para que tu experiencia sea grata, obtengas salud bucal y presencia estética.",
+        "en": "At micromacro our purpose is to bring you solutions to improve your smile, putting you in the hands of the best professionals so that your experience is pleasant and you gain oral health and an aesthetic appearance."
+      },
+      "hours": {
+        "mon": [
+          "09:30-14:00",
+          "15:00-20:00"
+        ],
+        "tue": [
+          "09:30-14:00",
+          "15:00-20:00"
+        ],
+        "wed": [
+          "09:30-14:00",
+          "15:00-20:00"
+        ],
+        "thu": [
+          "09:30-14:00",
+          "15:00-20:00"
+        ],
+        "fri": [
+          "09:30-14:00",
+          "15:00-20:00"
+        ],
+        "sat": [
+          "09:30-13:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6840515,
+        "lng": -100.3263097
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/grg9DfSvy89AmsF68",
+      "googlePlaceId": null,
+      "phone": "+524422957979",
+      "photos": [],
+      "links": {
+        "website": "https://micromacrodental.com",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524421734455",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://zibatahoy.com/es/listado/zibata-dental-micro-macro/",
+          "https://micromacrodental.com",
+          "https://www.google.com/maps/search/Micromacro+Dental+Zibat%C3%A1",
+          "https://maps.app.goo.gl/grg9DfSvy89AmsF68",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "thedek",
+      "slug": "thedek",
+      "name": "Thedek",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "dentista",
+        "ortodoncia"
+      ],
+      "description": {
+        "es": "¡Descubre la odontología digital sin molestias y con resultados 100% estéticos!",
+        "en": "Discover digital dentistry without discomfort and with 100% aesthetic results!"
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6781485,
+        "lng": -100.3135358
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/GD7a51D1fbKouzE28",
+      "googlePlaceId": null,
+      "phone": "+524428122380",
+      "photos": [],
+      "links": {
+        "website": "https://thedek.mx/",
+        "instagram": "https://www.instagram.com/thedekmx/",
+        "facebook": "https://www.facebook.com/thedekmx",
+        "tiktok": "https://www.tiktok.com/@_thedek_",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://zibatahoy.com/listing/thedek/",
+          "https://maps.app.goo.gl/GD7a51D1fbKouzE28",
+          "https://www.tiktok.com/@_thedek_",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "zibamedic",
+      "slug": "zibamedic",
+      "name": "Zibamedic",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "consulta-general"
+      ],
+      "description": {
+        "es": "Atención médica de calidad 👩🏻‍⚕️👨🏻‍⚕️",
+        "en": "Quality medical care 👩🏻‍⚕️👨🏻‍⚕️"
+      },
+      "hours": {
+        "mon": [
+          "09:30-14:30",
+          "15:00-20:00"
+        ],
+        "tue": [
+          "09:30-14:30",
+          "15:00-20:00"
+        ],
+        "wed": [
+          "09:30-14:30",
+          "15:00-20:00"
+        ],
+        "thu": [
+          "09:30-14:30",
+          "15:00-20:00"
+        ],
+        "fri": [
+          "09:30-14:30",
+          "15:00-20:00"
+        ],
+        "sat": [
+          "10:00-14:45"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6747698,
+        "lng": -100.3229571
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/Zibamedic/@20.6747698,-100.3229571,17z/data=!4m6!3m5!1s0x85d35da228c59ab3:0x6a9bffbd3b47395b!8m2!3d20.6747698!4d-100.3229571!16s%2Fg%2F11lg8f5jsr",
+      "googlePlaceId": null,
+      "phone": "+524424150590",
+      "photos": [],
+      "links": {
+        "website": "https://zibamedic.wixsite.com/queretaro",
+        "instagram": "https://www.instagram.com/zibamedic",
+        "facebook": "https://www.facebook.com/p/Zibamedic-100028342045874",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://www.google.com/maps/place/Zibamedic/@20.6747698,-100.3229571,17z/data=!4m6!3m5!1s0x85d35da228c59ab3:0x6a9bffbd3b47395b!8m2!3d20.6747698!4d-100.3229571!16s%2Fg%2F11lg8f5jsr",
+          "https://zibamedic.wixsite.com/queretaro",
+          "https://www.instagram.com/zibamedic",
+          "https://www.facebook.com/p/Zibamedic-100028342045874",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "saiens-zibata",
+      "slug": "saiens-zibata",
+      "name": "SAIENS Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "laboratorio-clinico"
+      ],
+      "description": {
+        "es": "Tus estudios de hoy, con resultados hoy mismo.",
+        "en": "Your tests today, with results today."
+      },
+      "hours": {
+        "mon": [
+          "06:00-15:00"
+        ],
+        "tue": [
+          "06:00-15:00"
+        ],
+        "wed": [
+          "06:00-15:00"
+        ],
+        "thu": [
+          "06:00-15:00"
+        ],
+        "fri": [
+          "06:00-15:00"
+        ],
+        "sat": [
+          "06:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6746806,
+        "lng": -100.3228599
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/6qpBsYJAL9AsfpoT6",
+      "googlePlaceId": null,
+      "phone": "+524461399233",
+      "photos": [],
+      "links": {
+        "website": "https://saiens.com.mx/sucursales/saiens-zibata/",
+        "instagram": "https://www.instagram.com/saienslab/",
+        "facebook": "https://www.facebook.com/SaiensLaboratorioClinico/",
+        "tiktok": null,
+        "whatsapp": "+524461334560",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://saiens.com.mx",
+          "https://maps.app.goo.gl/6qpBsYJAL9AsfpoT6",
+          "https://saiens.com.mx/sucursales/saiens-zibata/",
+          "https://www.instagram.com/saienslab/",
+          "https://www.facebook.com/SaiensLaboratorioClinico/",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "dermasphere-studio",
+      "slug": "dermasphere-studio",
+      "name": "Dermasphere Studio",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "dermatologia"
+      ],
+      "description": {
+        "es": "Dermatología de especialidad para tu piel, tu cabello y tus uñas.",
+        "en": "Specialty dermatology for your skin, your hair and your nails."
+      },
+      "hours": {
+        "mon": [
+          "10:00-19:00"
+        ],
+        "tue": [
+          "10:00-19:00"
+        ],
+        "wed": [
+          "10:00-19:00"
+        ],
+        "thu": [
+          "10:00-19:00"
+        ],
+        "fri": [
+          "10:00-19:00"
+        ],
+        "sat": [
+          "09:00-16:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6791872,
+        "lng": -100.314658
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/kh6HiaMSSKLh3GWE7",
+      "googlePlaceId": null,
+      "phone": "+524426381324",
+      "photos": [],
+      "links": {
+        "website": "https://dermaspherestudio.com",
+        "instagram": "https://www.instagram.com/dermasphere_zibata/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524426381324",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://dermaspherestudio.com",
+          "https://maps.app.goo.gl/kh6HiaMSSKLh3GWE7",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "dental-factory-kids-family",
+      "slug": "dental-factory-kids-family",
+      "name": "Dental Factory Kids & Family",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "dentista"
+      ],
+      "description": {
+        "es": "Somos Dental Factory, líderes en odontología moderna. Nuestro compromiso es crear sonrisas saludables y radiantes. ¡Únete a nuestra familia dental hoy mismo.",
+        "en": "We are Dental Factory, leaders in modern dentistry. Our commitment is to create healthy, radiant smiles. Join our dental family today."
+      },
+      "hours": {
+        "mon": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "tue": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "wed": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "thu": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "fri": [
+          "09:00-14:00",
+          "16:00-20:00"
+        ],
+        "sat": [
+          "09:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6748664,
+        "lng": -100.3225615
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/FDBBviQVp62ZQ6bi7",
+      "googlePlaceId": null,
+      "phone": "+524461049316",
+      "photos": [],
+      "links": {
+        "website": "https://dentalfactory.com.mx",
+        "instagram": "https://www.instagram.com/dental_factoryop/",
+        "facebook": "https://www.facebook.com/Dentalfactoryop",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://dentalfactory.com.mx",
+          "https://maps.app.goo.gl/FDBBviQVp62ZQ6bi7",
+          "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "brodmann18",
+      "slug": "brodmann18",
+      "name": "BRODMANN18",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "optica"
+      ],
+      "description": {
+        "es": "Brindamos la mejor solución integral para cuidar la salud visual de nuestros pacientes con elegancia, tecnología y precisión.",
+        "en": "The best comprehensive solution for caring for our patients' eye health, with elegance, technology and precision."
+      },
+      "hours": {
+        "mon": [
+          "10:30-19:30"
+        ],
+        "tue": [
+          "10:30-19:30"
+        ],
+        "wed": [
+          "10:30-19:30"
+        ],
+        "thu": [
+          "10:30-19:30"
+        ],
+        "fri": [
+          "10:30-19:30"
+        ],
+        "sat": [
+          "10:30-18:30"
+        ],
+        "sun": [
+          "10:30-18:30"
+        ]
+      },
+      "location": {
+        "lat": 20.6790599,
+        "lng": -100.3149091
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/sTTu9EsFEyvPAqDm8",
+      "googlePlaceId": null,
+      "phone": "+524424154198",
+      "photos": [],
+      "links": {
+        "website": "https://brodmann18.com",
+        "instagram": "https://www.instagram.com/brodmann18/",
+        "facebook": "https://www.facebook.com/BRODMANN18",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-17",
+        "sources": [
+          "https://brodmann18.com",
+          "https://www.google.com/maps/search/BRODMANN18+Zibat%C3%A1",
+          "https://maps.app.goo.gl/sTTu9EsFEyvPAqDm8",
+          "campo:2026-11-17"
         ]
       }
     }

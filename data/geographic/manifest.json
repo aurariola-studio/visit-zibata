@@ -84,40 +84,39 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2511124,
-      "sha256": "632d36244536828ec8c81018d70f1573d1e1f30a11a99d89446fccf938a34b55",
+      "bytes": 2511032,
+      "sha256": "946084f83727fab2f6f8ec67a070f559464aed3cc6afba624a124cd756472b88",
       "tiles": 265,
       "bytesByZoom": {
         "12": 46047,
-        "13": 245444,
-        "14": 519834,
-        "15": 716647,
-        "16": 981852
+        "13": 245441,
+        "14": 519796,
+        "15": 716641,
+        "16": 981807
       },
       "largestTile": {
         "z": 13,
         "x": 1812,
         "y": 3615,
-        "bytes": 95828
+        "bytes": 95831
       },
       "features": {
         "roads": 4023,
         "landuse": 125,
         "water": 6,
         "waterway": 8,
-        "buildings": 16020,
+        "buildings": 16019,
         "labels": 20,
         "trees": 29988,
         "shrubs": 1580
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 9264,
-      "sha256": "77275bd093ca431f69a9d6ddf52c67abf228eb5a7081cecca5f748e19891fcf7",
-      "features": 25,
+      "bytes": 13220,
+      "sha256": "d206c356ced16b4de37ea936b24190338275933f660935f283dac7305ae91579",
+      "features": 36,
       "synthesizedFor": [
         "paseo-zibata",
-        "foodtrucks-pickleball",
         "xentric-zibata",
         "campo-de-golf",
         "distrito-nandu",
@@ -130,11 +129,6 @@
           "plazaId": "paseo-zibata",
           "replacedFootprints": 1,
           "reason": "Huellas abiertas incompletas o que no representan el conjunto comercial (replaceExisting en volumenes-plaza.json)"
-        },
-        {
-          "plazaId": "foodtrucks-pickleball",
-          "replacedFootprints": 0,
-          "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
         },
         {
           "plazaId": "xentric-zibata",
@@ -254,8 +248,8 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3886944,
-        "sha256": "1c706d2dcda7833c737fcd1b1257196f1479e8bcabcffe3c3c7fe055ace0080f"
+        "bytes": 3886344,
+        "sha256": "33ef70275b5e77c790ffd6b1f26a74437825a91e22fa88a0d8597507f3c3f14c"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 141832,

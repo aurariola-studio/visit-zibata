@@ -47,7 +47,7 @@ export type InfoPagina = Exclude<InfoTopic, 'tutorial'>
  * tabla salen la expresión que valida el servidor de desarrollo, el recorte que separa una vista de
  * su filtro, las reglas de `robots.txt` y el patrón que comprueba el despliegue.
  */
-export const ROUTE_FAMILIES = ['place', 'plaza', 'category', 'info'] as const
+export const ROUTE_FAMILIES = ['place', 'plaza', 'category', 'sector', 'info'] as const
 export type RouteFamily = (typeof ROUTE_FAMILIES)[number]
 
 /**
@@ -55,8 +55,8 @@ export type RouteFamily = (typeof ROUTE_FAMILIES)[number]
  * español (es el identificador interno) y se escribe traducido.
  */
 export const SEGMENTS = {
-  es: { place: 'lugar', plaza: 'zona', category: 'categoria', info: 'info' },
-  en: { place: 'place', plaza: 'area', category: 'category', info: 'info' },
+  es: { place: 'lugar', plaza: 'zona', category: 'categoria', sector: 'sector', info: 'info' },
+  en: { place: 'place', plaza: 'area', category: 'category', sector: 'sector', info: 'info' },
 } as const satisfies Record<Locale, Record<RouteFamily, string>>
 
 const INFO_SLUGS = {
@@ -76,7 +76,10 @@ const TODOS_LOS_SEGMENTOS = [
 const PREFIJOS = [...new Set(Object.values(PREFIX))]
 /** El grupo va aparte del `/` a propósito: `(?:es|en)/` agrupa los dos prefijos, `(?:es|en/)?` no. */
 const PREFIJO = `(?:${PREFIJOS.join('|')})`
-const SEGMENTO_DE_CATEGORIA = [...new Set(Object.values(SEGMENTS).map((words) => words.category))]
+/** Lo que filtra una vista sin cambiarla: la categoría y el sector. */
+const SEGMENTO_DE_FILTRO = [
+  ...new Set(Object.values(SEGMENTS).flatMap((words) => [words.category, words.sector])),
+]
 
 /**
  * Las rutas que la aplicación sirve, sin la base. La usa el servidor de desarrollo para entregar
@@ -99,6 +102,8 @@ export interface UrlState {
   placeSlug: string | null
   /** El slug de la categoría en el idioma de la URL, no su id. */
   categorySlug: string | null
+  /** El slug del sector en el idioma de la URL. Con una categoría puesta vale `null`: ella ya lo implica. */
+  sectorSlug: string | null
   infoTopic: InfoTopic | null
 }
 
@@ -128,11 +133,13 @@ export function parsePath(pathname: string, search: string, base: string): UrlSt
   const words = SEGMENTS[locale]
   const params = new URLSearchParams(search)
   const category = params.get(words.category)
+  const sector = params.get(words.sector)
   const state: UrlState = {
     locale,
     plazaSlug: null,
     placeSlug: null,
     categorySlug: category && SLUG.test(category) ? category : null,
+    sectorSlug: !category && sector && SLUG.test(sector) ? sector : null,
     infoTopic: null,
   }
 
@@ -142,6 +149,7 @@ export function parsePath(pathname: string, search: string, base: string): UrlSt
     if (kind === words.place) state.placeSlug = slug
     // Una categoría sola es una página, con su ruta. Dentro de una zona sigue siendo `?categoria=`.
     if (kind === words.category) state.categorySlug = slug
+    if (kind === words.sector) state.sectorSlug = slug
     if (kind === words.info) {
       const topic = INFO_TOPICS.find((candidate) => INFO_SLUGS[locale][candidate] === slug)
       if (topic) state.infoTopic = topic
@@ -169,7 +177,9 @@ export function buildPath(state: UrlState, base: string): string {
   // Una categoría sola tiene una única dirección: su página. `?categoria=` se queda para el filtro de
   // una zona, que no es una página y cuyo canónico es el de la zona.
   else if (state.categorySlug) return `${inner}${words.category}/${state.categorySlug}`
-  return state.categorySlug ? `${path}?${words.category}=${state.categorySlug}` : path
+  else if (state.sectorSlug) return `${inner}${words.sector}/${state.sectorSlug}`
+  if (state.categorySlug) return `${path}?${words.category}=${state.categorySlug}`
+  return state.sectorSlug ? `${path}?${words.sector}=${state.sectorSlug}` : path
 }
 
 /**
@@ -180,7 +190,7 @@ export function buildPath(state: UrlState, base: string): string {
 export function vistaDe(path: string): string {
   const sinConsulta = path.split('?')[0] ?? path
   const sinCategoria = sinConsulta.replace(
-    new RegExp(`/(?:${SEGMENTO_DE_CATEGORIA.join('|')})/[a-z0-9-]+$`),
+    new RegExp(`/(?:${SEGMENTO_DE_FILTRO.join('|')})/[a-z0-9-]+$`),
     '',
   )
   // Sin barra final: `/es` y `/es/` son la misma vista (y `/` es la portada del formato anterior).
@@ -207,6 +217,7 @@ export function pathFromLegacyHash(hash: string, base: string): string | null {
     plazaSlug: kind === 'plaza' ? slug : null,
     placeSlug: kind === 'lugar' ? slug : null,
     categorySlug: category && SLUG.test(category) ? category : null,
+    sectorSlug: null,
     infoTopic: INFO_TOPICS.find((topic) => kind === 'info' && topic === slug) ?? null,
   }
   if (!state.plazaSlug && !state.placeSlug && !state.infoTopic) return null
@@ -226,7 +237,17 @@ export function pathFromLegacyHash(hash: string, base: string): string | null {
  * Sale más barato usar el elemento que lo trae puesto.
  */
 export const rutaDeLugar = (slug: string, locale: Locale, base: string): string =>
-  buildPath({ locale, placeSlug: slug, plazaSlug: null, categorySlug: null, infoTopic: null }, base)
+  buildPath(
+    {
+      locale,
+      placeSlug: slug,
+      plazaSlug: null,
+      categorySlug: null,
+      sectorSlug: null,
+      infoTopic: null,
+    },
+    base,
+  )
 
 /**
  * La dirección tras elegir una categoría desde donde se está: sola, es su página; dentro de una zona,
@@ -238,10 +259,39 @@ export const rutaDeCategoria = (
   plazaSlug: string | null,
   locale: Locale,
   base: string,
-): string => buildPath({ locale, placeSlug: null, plazaSlug, categorySlug, infoTopic: null }, base)
+): string =>
+  buildPath(
+    { locale, placeSlug: null, plazaSlug, categorySlug, sectorSlug: null, infoTopic: null },
+    base,
+  )
+
+/**
+ * La dirección tras elegir un sector, con la misma regla que la categoría: sola, es su página; dentro de
+ * una zona, el filtro de esa zona. Sin sector es la vista a secas.
+ */
+export const rutaDeSector = (
+  sectorSlug: string | null,
+  plazaSlug: string | null,
+  locale: Locale,
+  base: string,
+): string =>
+  buildPath(
+    { locale, placeSlug: null, plazaSlug, categorySlug: null, sectorSlug, infoTopic: null },
+    base,
+  )
 
 export const rutaDeZona = (slug: string, locale: Locale, base: string): string =>
-  buildPath({ locale, placeSlug: null, plazaSlug: slug, categorySlug: null, infoTopic: null }, base)
+  buildPath(
+    {
+      locale,
+      placeSlug: null,
+      plazaSlug: slug,
+      categorySlug: null,
+      sectorSlug: null,
+      infoTopic: null,
+    },
+    base,
+  )
 
 /**
  * Y la de una página de información, que también es una dirección de verdad.
@@ -256,6 +306,13 @@ export const rutaDeZona = (slug: string, locale: Locale, base: string): string =
  */
 export const rutaDeInfo = (topic: InfoTopic, locale: Locale, base: string): string =>
   buildPath(
-    { locale, placeSlug: null, plazaSlug: null, categorySlug: null, infoTopic: topic },
+    {
+      locale,
+      placeSlug: null,
+      plazaSlug: null,
+      categorySlug: null,
+      sectorSlug: null,
+      infoTopic: topic,
+    },
     base,
   )

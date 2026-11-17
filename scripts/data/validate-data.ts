@@ -9,6 +9,7 @@
  */
 import { existsSync, mkdirSync } from 'node:fs'
 import { parseArgs } from 'node:util'
+import * as turf from '@turf/turf'
 import { z } from 'zod'
 import { validarContornoDePlaza } from '../../src/data/geometria.ts'
 import {
@@ -37,6 +38,7 @@ import {
   loadPlazasFile,
   loadRedirectsFile,
   loadVolumenesPlaza,
+  loadVolumenesPropios,
   today,
   writeDataFile,
 } from './lib/dataset.ts'
@@ -138,6 +140,31 @@ try {
         id,
         message: 'Esa plaza no existe: quita su entrada de volumenes-plaza.json',
       })
+    }
+  }
+
+  // Las piezas dibujadas a mano: cada clave, una zona que existe, y cada pieza dentro de su contorno.
+  for (const [id, piezas] of Object.entries(loadVolumenesPropios().plazas)) {
+    const zona = dataset.plazas.find((plaza) => plaza.id === id)
+    if (!zona) {
+      issues.push({
+        level: 'error',
+        dataset: 'volumenes-propios',
+        id,
+        message: 'Esa plaza no existe: quita su entrada de volumenes-propios.json',
+      })
+      continue
+    }
+    for (const pieza of piezas) {
+      const centro = turf.centroid(turf.polygon([pieza.anillo]))
+      if (!turf.booleanPointInPolygon(centro, turf.feature(zona.geometry))) {
+        issues.push({
+          level: 'error',
+          dataset: 'volumenes-propios',
+          id,
+          message: `"${pieza.nombre}" queda fuera del contorno de la zona`,
+        })
+      }
     }
   }
 

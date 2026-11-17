@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -161,5 +161,102 @@ describe('el filtro de abiertos', () => {
       'aria-checked',
       'true',
     )
+  })
+})
+
+describe('FilterBar: el carril baja de nivel con dos sectores', () => {
+  const sectores = [
+    {
+      id: 'comida',
+      slug: { es: 'comida', en: 'food' },
+      label: { es: 'Comida y Bebida' },
+      icon: 'utensils-crossed',
+      order: 10,
+    },
+    {
+      id: 'salud',
+      slug: { es: 'salud', en: 'health' },
+      label: { es: 'Salud' },
+      icon: 'heart-pulse',
+      order: 20,
+    },
+  ]
+  const conSectores = (extra: Partial<ComponentProps<typeof FilterBar>> = {}) =>
+    setup({
+      sectors: sectores,
+      sectorCounts: new Map([
+        ['comida', 4],
+        ['salud', 2],
+      ]),
+      activeSectorId: null,
+      onSectorChange: vi.fn(),
+      sectorHref: (id) => (id ? `/es/sector/${id}` : '/es'),
+      ...extra,
+    })
+
+  it('sin sectores que elegir no dibuja nada nuevo: la guía queda como estaba', () => {
+    setup()
+    expect(screen.queryByRole('list', { name: 'Sectores' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Todo/ })).toBeInTheDocument()
+  })
+
+  it('arriba, el carril son los sectores: enlaces con su cuenta en el nombre, sin "Todo" ni ninguno elegido', () => {
+    conSectores()
+    expect(screen.queryByRole('list', { name: 'Categorías' })).not.toBeInTheDocument()
+    const fila = within(screen.getByRole('list', { name: 'Sectores' }))
+    expect(fila.queryByRole('link', { name: /Todo/ })).not.toBeInTheDocument()
+    const salud = fila.getByRole('link', { name: 'Salud 2' })
+    expect(salud).toHaveAttribute('href', '/es/sector/salud')
+    expect(salud).not.toHaveAttribute('aria-current')
+  })
+
+  it('pulsar un sector lo elige', async () => {
+    const { onSectorChange } = conSectores()
+    await userEvent.click(screen.getByRole('link', { name: 'Salud 2' }))
+    expect(onSectorChange).toHaveBeenCalledWith('salud')
+  })
+
+  it('dentro de un sector, el carril son sus categorías y el sector va primero, elegido: es su "Todo"', async () => {
+    const { onSectorChange } = conSectores({ activeSectorId: 'salud' })
+    const fila = within(screen.getByRole('list', { name: 'Categorías' }))
+    expect(fila.queryByRole('link', { name: /^Todo/ })).not.toBeInTheDocument()
+    // Fuera de la lista: es la cápsula fija, no se desplaza con las categorías.
+    const salud = screen.getByRole('link', { name: /^Salud./ })
+    expect(fila.queryByRole('link', { name: /^Salud./ })).not.toBeInTheDocument()
+    expect(salud).toHaveAttribute('aria-current', 'true')
+    expect(salud).toHaveAccessibleName('Salud. Ver todos los sectores')
+    // Elegido, pulsarlo sube al nivel de los sectores.
+    expect(salud).toHaveAttribute('href', '/es')
+    await userEvent.click(salud)
+    expect(onSectorChange).toHaveBeenCalledWith(null)
+  })
+
+  it('con una categoría puesta, el sector queda neutro y pulsarlo vuelve a todo el sector', async () => {
+    const { onSectorChange, onCategoryChange } = conSectores({
+      activeSectorId: 'salud',
+      activeCategoryId: 'pizza',
+    })
+    const salud = screen.getByRole('link', { name: /^Salud./ })
+    expect(salud).not.toHaveAttribute('aria-current')
+    expect(salud).toHaveAccessibleName('Salud. Todas las categorías del sector')
+    expect(salud).toHaveAttribute('href', '/es/sector/salud')
+    await userEvent.click(salud)
+    expect(onSectorChange).toHaveBeenCalledWith('salud')
+
+    // La categoría elegida lleva una ✕, y quitarla deja el sector (no la portada).
+    const pizza = screen.getByRole('link', { name: /Pizza/ })
+    expect(pizza).toHaveAttribute('aria-current', 'true')
+    expect(pizza).toHaveAttribute('href', '/es/sector/salud')
+    expect(pizza.querySelector('svg.lucide-x')).not.toBeNull()
+    await userEvent.click(pizza)
+    expect(onSectorChange).toHaveBeenLastCalledWith('salud')
+    expect(onCategoryChange).not.toHaveBeenCalled()
+  })
+
+  it('las categorías que no están elegidas no llevan ✕', () => {
+    conSectores({ activeSectorId: 'salud' })
+    expect(
+      screen.getByRole('list', { name: 'Categorías' }).querySelector('svg.lucide-x'),
+    ).toBeNull()
   })
 })

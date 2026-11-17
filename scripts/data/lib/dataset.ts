@@ -10,6 +10,7 @@ import {
   RedirectsFileSchema,
 } from '../../../src/data/schemas.ts'
 import { VolumenesPlazaFileSchema } from '../../../src/data/volumenes-plaza.ts'
+import { VolumenesPropiosFileSchema } from '../../../src/data/volumenes-propios.ts'
 
 export const ROOT = fileURLToPath(new URL('../../../', import.meta.url))
 
@@ -20,6 +21,7 @@ export const dataPaths = {
   redirects: `${ROOT}data/commercial/redirects.json`,
   ajustesEdificios: `${ROOT}data/geographic/ajustes-edificios.json`,
   volumenesPlaza: `${ROOT}data/geographic/volumenes-plaza.json`,
+  volumenesPropios: `${ROOT}data/geographic/volumenes-propios.json`,
   schemasDir: `${ROOT}data/commercial/schemas`,
   extent: `${ROOT}data/geographic/extent.json`,
   public: `${ROOT}public`,
@@ -64,6 +66,12 @@ export function loadAjustesEdificios(): z.infer<typeof AjustesEdificiosFileSchem
 
 export function loadVolumenesPlaza(): z.infer<typeof VolumenesPlazaFileSchema> {
   return parseFile(dataPaths.volumenesPlaza, VolumenesPlazaFileSchema)
+}
+
+export function loadVolumenesPropios(): z.infer<typeof VolumenesPropiosFileSchema> {
+  return existsSync(dataPaths.volumenesPropios)
+    ? parseFile(dataPaths.volumenesPropios, VolumenesPropiosFileSchema)
+    : { plazas: {} }
 }
 
 export function loadRedirectsFile(): RedirectsFile | null {

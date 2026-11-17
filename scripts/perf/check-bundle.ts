@@ -85,9 +85,42 @@ const KB = 1024
  * que el margen se acababa con uno o dos más. 40 deja sitio para unos veinte locales con el dato tal
  * como es hoy. Si vuelve a apretar, ahora sí toca partir el paquete por idioma, que no se hace porque
  * obligaría a recargar los datos al cambiar de idioma en caliente, y medir antes de subir otra vez.
+ *
+ * De 40 a 46 (2026-11-16): con 124 locales, 21 de ellos de Fitness con descripción en los dos idiomas,
+ * la medición fue 40,1 KB, y los quince de Salud que esperan en otra rama suman unos 4,5 KB más. Es un
+ * parche, no una solución: el techo vuelve a apretar con cada sector y lo que toca es partir el paquete
+ * de datos (por sector o por idioma) en vez de subir otra vez.
+ *
+ * `initialJs`: de 128 a 130 (2026-11-12, decisión del propietario). El filtro por sector, los iconos de
+ * Salud y la cápsula fija dejaron el paquete en 128,1; se midió antes de subir y ya se había movido al
+ * build el texto de las páginas de sector (de 128,2 a 128,1). Se sube en vez de recortar para no mezclar
+ * una refactorización con la entrega del sector Salud.
+ *
+ * 2026-11-17: con Salud, Fitness, las píldoras de zona por sector y los iconos nuevos de Comida el paquete
+ * llegó a 130,6 KB. En vez de subir el tope, los iconos de Dermatología, Dentista y Ortodoncia pasaron al
+ * fragmento diferido de `iconos-deporte.tsx` (129,9). El propietario decidió no tocar el tope por ahora.
+ *
+ * Lo que queda pendiente, y lo que debe hacerse para volver a 128: sacar del paquete inicial el texto que
+ * no se necesita al abrir la guía. Medido sobre el catálogo en español (6,9 KB gzip en total):
+ *
+ *     ~2,7 KB  `about`       las páginas de información: solo se leen al abrirlas
+ *     ~0,9 KB  `seo`         sobre todo del build
+ *     ~0,9 KB  `onboarding`  el tutorial de la primera visita
+ *
+ * Se cargarían bajo demanda y mientras llegan se pinta un esqueleto (skeleton) del tamaño del contenido, para
+ * que la página no salte. El costo es el de siempre: el texto de esos grupos pasa a ser asíncrono y el
+ * cambio de idioma en caliente tiene que volver a pedirlos. Empezar por `about`, que es el grupo grande.
+ *
+ * Sector Fitness y Deporte (2026-11-12): sus once iconos nuevos (Tabler, Hugeicons, Material
+ * Design Icons y Material Symbols) sumaban 3,4 KB y dejaban el paquete en 131,5, por encima del límite. Ningún giro del sector
+ * tiene locales todavía, así que se sacaron a su propio fragmento (`iconos-deporte-*.js`, 3,2 KB), que
+ * `CategoryIcon` pide la primera vez que pinta uno y mientras tanto reserva la caja del icono. El
+ * paquete queda en 129,4, con el de Lucide de este sector también diferido. `proteina`, de Comida y con locales hoy, se queda dentro para que no parpadee.
+ * Cuando el sector tenga locales y su icono salga en el primer pintado, habrá que decidir entre
+ * precargar el fragmento y volver a meterlo, y eso se mide con la cuenta de entonces.
  */
 const BUDGET = {
-  initialJs: 128,
+  initialJs: 130,
   // 11 y no 10: el estilo del contenido escrito que trae cada página (v4.16) dejó la medida en 9,9
   // de 10, y un margen de cien bytes hace que el siguiente cambio honesto rompa la compilación sin
   // que haya pasado nada. El tope sigue existiendo para cazar un crecimiento descuidado, no para
@@ -95,7 +128,7 @@ const BUDGET = {
   initialCss: 11,
   mapJs: 320,
   mapCss: 15,
-  dataJs: 40,
+  dataJs: 46,
   // 2450 y no 2100 desde que la arboleda subió de densidad (v4.27): la separación media entre
   // árboles bajó de 19 a 15 metros, de 6 800 a 11 580 árboles, y el juego entero pasó de 2 095 a
   // 2 373 KB. Se sube este tope y **no** el de `largestTile`, que es el que mide lo que el

@@ -214,7 +214,7 @@ describe('lo que se comprobó en las fichas concretas de la auditoría', () => {
       /^.*en MOL Pitahaya, Zibatá\. CAFELE es una cafetería/,
     )
     expect(ficha('es', 'la-michoacana').description).toMatch(
-      /^En Paseo Zibatá\. La Michoacana es una marca/,
+      /^.* en Paseo Zibatá\. La Michoacana es una marca/,
     )
   })
 
@@ -230,12 +230,14 @@ describe('lo que se comprobó en las fichas concretas de la auditoría', () => {
     )
   })
 
-  it('una descripción corta dice dónde está y qué es, sin repetir su propio giro, con el contexto primero', () => {
+  it('una descripción corta dice qué es y dónde está, con el contexto primero, aunque repita su giro', () => {
     expect(ficha('es', 'lilo-bowl-bar').description).toMatch(
       /^.*en Centro Zibatá\. Bowl Revolution\.$/,
     )
-    // "Pizza artesanal." ya dice "pizza": solo se añade la zona.
-    expect(ficha('es', 'enzza-pizza-zibata').description).toBe('En Paseo Zibatá. Pizza artesanal.')
+    // "Pizza artesanal." ya dice "pizza" y el contexto lo dice igual: la parte estandarizada no se omite.
+    expect(ficha('es', 'enzza-pizza-zibata').description).toBe(
+      'Pizza en Paseo Zibatá. Pizza artesanal.',
+    )
   })
 
   it('agave grill ya reabrió: no lleva aviso de cierre y usa la fecha de su verificación', () => {
@@ -345,12 +347,14 @@ describe('la descripción enumera todas las categorías del local', () => {
     )
   })
 
-  it('los giros que el texto del negocio ya nombra no se repiten aunque se ofrezcan todos', () => {
-    // El texto de romani-pizzas ya dice ensaladas y crepas: la descripción solo añade la cocina.
+  it('los giros se nombran todos, también los que el texto del negocio ya dice', () => {
+    // El texto de romani-pizzas ya dice ensaladas y crepas, y el contexto las nombra igual.
     expect(ficha('es', 'romani-pizzas').description).toMatch(
-      /^Comida Italiana en Plaza Condesa, Zibatá\./,
+      /^Comida Italiana, .* en Plaza Condesa, Zibatá\./,
     )
-    expect(ficha('en', 'romani-pizzas').description).toMatch(/^Italian food at Plaza Condesa/)
+    expect(ficha('en', 'romani-pizzas').description).toMatch(
+      /^Italian food, .* at Plaza Condesa, Zibatá\./,
+    )
   })
 
   it('el cuerpo servido sin JavaScript usa las mismas etiquetas y la misma unión', () => {
@@ -385,15 +389,18 @@ describe('la portada', () => {
 })
 
 describe('las zonas y la información no cambian de plantilla', () => {
-  it('conservan el título "{nombre} · Visit Zibatá" y su propia descripción', () => {
+  it('tienen su título "{nombre}, qué hay y cómo llegar" y su propia descripción, con la cola estándar detrás', () => {
     // Cualquier zona activa con descripción propia que quepa entera: el prerender recorta a 160.
     const zona = data.plazas.find(
       (plaza) => plaza.active && plaza.description && plaza.description.es.length <= 160,
     )
     if (!zona?.description) throw new Error('el dataset necesita una zona activa con descripción')
     const pagina = de('es', `/es/zona/${zona.slug}`)
-    expect(pagina.title).toBe(`${zona.name} · Visit Zibatá`)
-    expect(pagina.description).toBe(zona.description.es)
+    expect(pagina.title).toBe(`${zona.name}, qué hay y cómo llegar · Visit Zibatá`)
+    // El texto de la zona va tal cual al principio; detrás, siempre la misma cola.
+    expect(pagina.description.startsWith(zona.description.es)).toBe(true)
+    expect(pagina.description).toMatch(/con horarios?, contacto y cómo llegar\.$/)
+    expect(pagina.description.length).toBeLessThanOrEqual(160)
   })
 })
 
@@ -460,7 +467,11 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
       expect(pagina.description, categoria.id).not.toMatch(
         /\b0 (zonas?|areas?)|\b1 (lugares|places|zonas|areas)\b/,
       )
-      expect(pagina.description, categoria.id).toMatch(/\b\d+ (lugares?|places?)\b/)
+      // Con un solo local la descripción habla en singular y no lleva cifra (ver crecimiento.test.ts).
+      const n = data.places.filter((p) => idsDe(p).has(categoria.id)).length
+      expect(pagina.description, categoria.id).toMatch(
+        n === 1 ? /el lugar|the one place/ : /\b\d+ (lugares?|places?)\b/,
+      )
     }
   })
 
@@ -472,13 +483,17 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     }
   })
 
-  it('el título nombra lo que la gente busca cuando la etiqueta es general (hamburguesas, alitas)', () => {
+  it('el título es siempre "{categoría} en Zibatá · Visit Zibatá", sin los giros', () => {
     const rapida = data.categories.find((c) => c.slug.es === 'hamburguesas')
     const pagina = de(idioma, ruta(rapida?.slug[idioma] ?? ''))
-    expect(pagina.title).toMatch(idioma === 'es' ? /hamburguesas y alitas/ : /burgers and wings/)
-    // Y nunca nombra un giro con un solo local ("arepas", "memelas").
+    expect(pagina.title).toBe(
+      idioma === 'es'
+        ? 'Comida Rápida en Zibatá · Visit Zibatá'
+        : 'Fast Food in Zibatá · Visit Zibatá',
+    )
     for (const p of todas.filter((x) => x.href.startsWith(ruta('')))) {
-      expect(p.title, p.href).not.toMatch(/arepas|memelas|boba|carnitas/i)
+      expect(p.title, p.href).toMatch(/ (en|in) Zibatá · Visit Zibatá$/)
+      expect(p.title.length, p.href).toBeLessThanOrEqual(60)
     }
   })
 
@@ -525,6 +540,8 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     for (const categoria of conLocales) {
       const pagina = de(idioma, ruta(categoria.slug[idioma]))
       const n = data.places.filter((p) => idsDe(p).has(categoria.id)).length
+      // Con uno solo la descripción dice "el lugar" y no cuenta (ver crecimiento.test.ts).
+      if (n === 1) continue
       expect(pagina.description).toMatch(new RegExp(`(?<![0-9])${n} (lugares|places)`))
     }
   })
