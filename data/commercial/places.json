@@ -6962,6 +6962,10 @@
         "en": "Motivation is a lie. Show up. [Cycling + Strength]"
       },
       "hours": {
+        "mon": [
+          "07:00-09:00",
+          "18:00-21:30"
+        ],
         "tue": [
           "07:00-09:00",
           "18:00-20:00"
@@ -7288,6 +7292,13 @@
       }
     },
     {
+      "id": "l-balans",
+      "slug": "l-balans",
+      "name": "L-Balans",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "pilates"
+      ],
       "description": null,
       "hours": {
         "mon": [
@@ -7318,14 +7329,6 @@
       "googlePlaceId": null,
       "phone": "+524461335933",
       "photos": [],
-      "active": true,
-      "id": "l-balans",
-      "slug": "l-balans",
-      "name": "L-Balans",
-      "plazaId": "centro-zibata",
-      "giros": [
-        "pilates"
-      ],
       "links": {
         "website": null,
         "instagram": null,
@@ -7336,6 +7339,7 @@
         "uberEats": null,
         "didiFood": null
       },
+      "active": true,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
@@ -7876,6 +7880,66 @@
           "https://pickspot.mx/",
           "https://www.google.com/maps/search/PickSpot+Zibat%C3%A1",
           "https://maps.app.goo.gl/YuMHZAJ8vA4TnBwZ8"
+        ]
+      }
+    },
+    {
+      "id": "fundacion-kwan-moo-do-queretaro",
+      "slug": "fundacion-kwan-moo-do-queretaro",
+      "name": "Fundación Kwan Moo Do Querétaro",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "tae-kwon-do"
+      ],
+      "description": {
+        "es": "Escuela de formación marcial, comprometida con los valores y principios para un mejor desarrollo",
+        "en": "Martial arts school committed to values and principles for better personal development"
+      },
+      "hours": {
+        "mon": [
+          "09:00-22:00"
+        ],
+        "tue": [
+          "09:00-22:00"
+        ],
+        "wed": [
+          "09:00-22:00"
+        ],
+        "thu": [
+          "09:00-22:00"
+        ],
+        "fri": [
+          "09:00-22:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6791173,
+        "lng": -100.3141332
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/fnQzkpses16H4B6w5",
+      "googlePlaceId": null,
+      "phone": "+524423447424",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/elprofmario_tkd/",
+        "facebook": "https://www.facebook.com/p/Guerreros-de-vidaFundaci%C3%B3n-Kwan-Moo-Do-Quer%C3%A9taro-61576685415956/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-16",
+        "sources": [
+          "https://maps.app.goo.gl/fnQzkpses16H4B6w5",
+          "https://www.instagram.com/elprofmario_tkd/"
         ]
       }
     }

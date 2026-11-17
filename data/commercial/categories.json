@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-12",
+  "updatedAt": "2026-11-16",
   "categories": [
     {
       "id": "desayunos-y-cafe",
@@ -1820,6 +1820,45 @@
             "pickleball",
             "pickle",
             "cancha de pickleball"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "artes-marciales",
+      "slug": {
+        "es": "artes-marciales",
+        "en": "martial-arts"
+      },
+      "sectorId": "fitness-y-deporte",
+      "label": {
+        "es": "Artes Marciales",
+        "en": "Martial Arts"
+      },
+      "icon": "artes-marciales",
+      "hue": 10,
+      "order": 340,
+      "synonyms": [
+        "artes marciales",
+        "marcial",
+        "dojo",
+        "defensa personal",
+        "martial arts"
+      ],
+      "giros": [
+        {
+          "id": "tae-kwon-do",
+          "label": {
+            "es": "Tae Kwon Do",
+            "en": "Taekwondo"
+          },
+          "icon": "taekwondo",
+          "synonyms": [
+            "tae kwon do",
+            "taekwondo",
+            "tkd",
+            "kwan moo do",
+            "moo duk kwan"
           ]
         }
       ]

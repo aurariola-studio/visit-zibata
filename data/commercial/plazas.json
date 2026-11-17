@@ -98,7 +98,8 @@
         "loom-pilates-club",
         "devotion-heat-room",
         "espacio-om",
-        "turnout-studio"
+        "turnout-studio",
+        "fundacion-kwan-moo-do-queretaro"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -117,7 +118,8 @@
         "bar",
         "gimnasios",
         "yoga-pilates-y-barre",
-        "danza"
+        "danza",
+        "artes-marciales"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -777,7 +779,7 @@
         "es": "Plaza del desarrollo Paseo Pitahayas, a un costado del Parque Jamadi.",
         "en": "Plaza in the Paseo Pitahayas development, beside Parque Jamadi."
       },
-      "address": "Cerro del Huizache 49, Zibatá",
+      "address": "Cerro del Huizache 49, 76269 Zibatá, Qro.",
       "coordinates": {
         "lat": 20.67735,
         "lng": -100.335

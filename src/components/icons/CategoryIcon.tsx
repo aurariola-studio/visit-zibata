@@ -475,6 +475,7 @@ const ICONS: Record<string, IconComponent> = {
  * uno. Hasta que llega el fragmento se reserva la caja del icono, para que nada se mueva al aparecer.
  */
 const NOMBRES_DEPORTE = new Set([
+  'artes-marciales',
   'ballet',
   'barbell',
   'barre',
@@ -488,6 +489,7 @@ const NOMBRES_DEPORTE = new Set([
   'pickleball',
   'pelotas',
   'pilates',
+  'taekwondo',
   'yoga',
 ])
 
