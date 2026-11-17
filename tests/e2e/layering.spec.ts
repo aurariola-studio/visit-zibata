@@ -160,7 +160,11 @@ test.describe('capas y alineación @mapa', () => {
     await waitForMap(page)
     const region = panel(page)
     const heading = region.getByRole('heading', { level: 2 }).first()
-    const firstChip = region.getByRole('list', { name: 'Categorías' }).getByRole('link').first()
+    // Con varios sectores en la zona, la primera fila es la de sectores; con uno, la de categorías.
+    const firstChip = region
+      .getByRole('list', { name: /^(Categorías|Sectores)$/ })
+      .getByRole('link')
+      .first()
     await expect(firstChip).toBeVisible()
     const [headingBox, chipBox] = [await heading.boundingBox(), await firstChip.boundingBox()]
     expect(Math.abs((chipBox?.x ?? 0) - (headingBox?.x ?? 99))).toBeLessThanOrEqual(1)

@@ -452,6 +452,11 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
           activeCategoryId={state.activeCategoryId}
           onCategoryChange={setCategory}
           categoryHref={categoryHref}
+          sectors={experience.visibleSectors}
+          sectorCounts={experience.sectorCounts}
+          activeSectorId={experience.effectiveSectorId}
+          onSectorChange={setSector}
+          sectorHref={sectorHref}
           onClearFilters={clearFilters}
           onOpenPlace={openPlace}
           onClose={closePanel}

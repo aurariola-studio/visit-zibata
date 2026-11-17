@@ -3,6 +3,8 @@ import {
   CATEGORIA_B,
   CATEGORIA_EN_ZONA,
   CATEGORIA_GRANDE,
+  dataset,
+  elegirSectorEnLaZona,
   entrarAlSectorGrande,
   esc,
   openApp,
@@ -10,6 +12,7 @@ import {
   placesInCategory,
   RAIZ_DE_CATEGORIAS,
   SECTOR_GRANDE,
+  SECTORES_EN_ZONA_GRANDE,
   VARIOS_SECTORES,
   waitForMap,
   ZONA_GRANDE,
@@ -117,6 +120,7 @@ test.describe('Páginas de categoría', () => {
     await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
     // Una categoría que esa zona tiene de verdad: la de uno de sus locales.
     const categoria = CATEGORIA_EN_ZONA
+    await elegirSectorEnLaZona(page, categoria.id)
     const enlace = cápsulas(page).getByRole('link', { name: new RegExp(esc(categoria.label)) })
     await expect(enlace).toHaveAttribute(
       'href',
@@ -126,6 +130,32 @@ test.describe('Páginas de categoría', () => {
     await expect(page).toHaveURL(
       new RegExp(`/es/zona/${ZONA_GRANDE.slug}\\?categoria=${categoria.slug}$`),
     )
+  })
+
+  test('una zona con varios sectores pregunta primero por el sector y no mezcla sus categorías', async ({
+    page,
+  }) => {
+    test.skip(SECTORES_EN_ZONA_GRANDE.length < 2, 'la zona grande tiene un solo sector')
+    const [primero, segundo] = SECTORES_EN_ZONA_GRANDE
+    if (!primero || !segundo) return
+    await openApp(page, { path: `zona/${ZONA_GRANDE.slug}` })
+    const region = panel(page)
+    await expect(region.getByRole('list', { name: 'Sectores' })).toBeVisible()
+    await expect(region.getByRole('list', { name: 'Categorías' })).toHaveCount(0)
+
+    await region
+      .getByRole('list', { name: 'Sectores' })
+      .getByRole('link', { name: new RegExp(`^${esc(primero.sector.label.es)}`) })
+      .click()
+    const categorias = region.getByRole('list', { name: 'Categorías' })
+    await expect(categorias).toBeVisible()
+    // Solo las del sector elegido: ninguna de las categorías del otro.
+    for (const id of segundo.categorias) {
+      const etiqueta = dataset.categories.find((categoria) => categoria.id === id)?.label.es ?? id
+      await expect(
+        categorias.getByRole('link', { name: new RegExp(`^${esc(etiqueta)}`) }),
+      ).toHaveCount(0)
+    }
   })
 
   test('con Ctrl el enlace no se intercepta: apunta a una página que existe', async ({ page }) => {
@@ -188,7 +218,7 @@ test.describe('Sectores', () => {
     await expect(cabecera).toHaveAttribute('aria-current', 'true')
     await expect(
       cápsulas(page).getByRole('link', {
-        name: new RegExp(`^${esc(SECTOR_GRANDE?.label.es ?? '')}\.`),
+        name: new RegExp(`^${esc(SECTOR_GRANDE?.label.es ?? '')}.`),
       }),
     ).toHaveCount(0)
     const antes = await cabecera.boundingBox()

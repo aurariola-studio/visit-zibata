@@ -50,7 +50,7 @@ interface DatasetCategory {
   giros: { id: string; label: { es: string }; synonyms: string[] }[]
 }
 
-const dataset = {
+export const dataset = {
   places: read<{ places: DatasetPlace[] }>('places.json').places,
   plazas: read<{ plazas: DatasetPlaza[] }>('plazas.json').plazas,
   categories: read<{ categories: DatasetCategory[] }>('categories.json').categories,
@@ -370,10 +370,46 @@ export const RAIZ_DE_CATEGORIAS =
 /** Entra al sector de la categoría grande desde donde se esté, si hace falta (con varios sectores). */
 export async function entrarAlSectorGrande(page: Page): Promise<void> {
   if (!VARIOS_SECTORES || !SECTOR_GRANDE) return
+  // La barra de arriba es la primera lista de sectores; con una zona abierta, el panel trae otra igual.
   await page
     .getByRole('list', { name: 'Sectores' })
+    .first()
     .getByRole('link', { name: new RegExp(`^${SECTOR_GRANDE.label.es}`) })
     .click()
+}
+
+/** Los sectores que tienen locales en la zona grande, con las categorías de cada uno que esa zona tiene. */
+export const SECTORES_EN_ZONA_GRANDE: { sector: DatasetSector; categorias: string[] }[] =
+  SECTORES_CON_LOCALES.map((sector) => ({
+    sector,
+    categorias: [
+      ...new Set(
+        localesDe(ZONA_GRANDE)
+          .flatMap((place) => categoriesOf(place))
+          .filter((id) => sectorDeCategoria(id) === sector.id),
+      ),
+    ],
+  })).filter((entrada) => entrada.categorias.length > 0)
+
+/**
+ * Con una zona abierta que tiene varios sectores, el panel no mezcla sus categorías: pregunta primero por
+ * el sector. Elige el de la categoría dada (por omisión, la grande); si la zona solo tiene uno, no hay
+ * nada que elegir.
+ */
+export async function elegirSectorEnLaZona(
+  page: Page,
+  categoriaId: string = CATEGORIA_GRANDE.id,
+): Promise<void> {
+  const sector = dataset.sectors.find(
+    (candidato) => candidato.id === sectorDeCategoria(categoriaId),
+  )
+  if (!VARIOS_SECTORES || !sector) return
+  const enlace = panel(page)
+    .getByRole('list', { name: 'Sectores' })
+    .getByRole('link', { name: new RegExp(`^${sector.label.es}`) })
+  // El panel se pinta con la zona: se espera a su título antes de preguntar si trae la fila de sectores.
+  await panel(page).getByRole('heading', { level: 2 }).first().waitFor()
+  if ((await enlace.count()) > 0) await enlace.click()
 }
 
 /* ------------------------------------------------------------------------------------------ búsqueda
