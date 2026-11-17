@@ -156,19 +156,6 @@
           ]
         },
         {
-          "id": "memelas",
-          "label": {
-            "es": "Memelas",
-            "en": "Memelas"
-          },
-          "icon": "memela",
-          "synonyms": [
-            "memelas",
-            "memela",
-            "tlacoyos"
-          ]
-        },
-        {
           "id": "quesadillas",
           "label": {
             "es": "Quesadillas",

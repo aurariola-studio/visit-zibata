@@ -171,6 +171,9 @@ export function pagesFor(
     }
   }
   const plazaById = new Map(data.plazas.map((plaza) => [plaza.id, plaza]))
+  // Un local oculto no sale en listas, cuentas, fichas ni sitemap. (Que su zona esté oculta es otra cosa:
+  // la ficha desaparece, pero el local sigue contando en su categoría.)
+  const visibles = data.places.filter((place) => place.active)
   const route = (state: Partial<Parameters<typeof buildPath>[0]>) =>
     buildPath(
       {
@@ -191,7 +194,7 @@ export function pagesFor(
    * son un enlace de verdad en el HTML servido: la portada, cada zona y cada ficha. Sin esos enlaces
    * serían páginas huérfanas, que es lo que el sitemap solo no arregla.
    */
-  const porCategoria = lugaresPorCategoria(data.places, categoryOfGiro)
+  const porCategoria = lugaresPorCategoria(visibles, categoryOfGiro)
   const categoriasConPagina = data.categories.filter(
     (categoria) => (porCategoria.get(categoria.id)?.length ?? 0) > 0,
   )
@@ -261,7 +264,7 @@ export function pagesFor(
 
   for (const plaza of activePlazas) {
     const name = text(plaza.name, locale)
-    const deLaPlaza = data.places.filter((place) => place.plazaId === plaza.id)
+    const deLaPlaza = visibles.filter((place) => place.plazaId === plaza.id)
     pages.push({
       href: route({ plazaSlug: plaza.slug }),
       lastmod: masReciente(deLaPlaza),
@@ -367,7 +370,7 @@ export function pagesFor(
   for (const sector of sectoresConPagina) {
     const categorias = categoriasConPagina.filter((categoria) => categoria.sectorId === sector.id)
     const ids = new Set(categorias.map((categoria) => categoria.id))
-    const lugares = data.places.filter((place) =>
+    const lugares = visibles.filter((place) =>
       categoriasDe(place, categoryOfGiro).some((categoria) => ids.has(categoria.id)),
     )
     const etiqueta = text(sector.label, locale)
@@ -433,8 +436,8 @@ export function pagesFor(
    * seguir con ficha ni con entrada en el sitemap. El catálogo ya los filtra; el prerender no lo
    * hacía.
    */
-  const fichas = data.places
-    .filter((place) => place.active && plazaById.get(place.plazaId)?.active === true)
+  const fichas = visibles
+    .filter((place) => plazaById.get(place.plazaId)?.active === true)
     .map((place) => {
       const plaza = plazaById.get(place.plazaId)
       const giros = place.giros.map((id) => giroLabel.get(id) ?? id)
@@ -482,9 +485,9 @@ export function pagesFor(
   const descripciones = fichas.map(componer)
 
   // A qué locales enlaza cada ficha: el mismo bloque de siempre, repartido entre todos (ver vecinos.ts).
-  const placeById = new Map(data.places.map((place) => [place.id, place]))
+  const placeById = new Map(visibles.map((place) => [place.id, place]))
   const vecinosDe = repartirVecinos(
-    data.places.map((place) => ({
+    visibles.map((place) => ({
       id: place.id,
       plazaId: place.plazaId,
       categorias: [

@@ -1659,7 +1659,6 @@
       "name": "Las Memelas de la Rana",
       "plazaId": "paseo-zibata",
       "giros": [
-        "memelas",
         "cocina-mexicana",
         "antojitos-de-masa"
       ],
@@ -1706,7 +1705,7 @@
         "uberEats": "https://www.ubereats.com/mx/store/las-memelas-de-la-rana/sbugivNXTiGuurxuRbGbUQ",
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
         "status": "likely_active",
         "confidence": "high",

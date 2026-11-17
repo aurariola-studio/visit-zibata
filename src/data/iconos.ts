@@ -62,7 +62,6 @@ export const ICONOS = [
   'kebab',
   'leafy-green',
   'martini',
-  'memela',
   'microscope',
   'molcajete',
   'natacion',

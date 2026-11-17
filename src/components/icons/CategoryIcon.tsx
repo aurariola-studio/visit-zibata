@@ -3,6 +3,7 @@
  * componente. Nombres desconocidos usan un icono genérico, así una categoría nueva nunca rompe la UI.
  */
 import {
+  Bacon,
   Beef,
   Beer,
   BicepsFlexed,
@@ -12,6 +13,7 @@ import {
   Coffee,
   CookingPot,
   Croissant,
+  Cupcake,
   CupSoda,
   Drumstick,
   EggFried,
@@ -62,13 +64,10 @@ const Pasta = custom(
   </>,
 )
 
-/** Tazón con palillos: cocina asiática en general. */
-const Chopsticks = custom(
-  <>
-    <path d="M3 13h18a9 8 0 0 1-18 0Z" />
-    <path d="m11.5 10.5 7-7.5" />
-    <path d="m14.5 10.5 6-5.5" />
-  </>,
+/** Tazón con palillos: cocina asiática en general. Fluent UI System Icons `bowl-chopsticks` (MIT). */
+const Chopsticks = solid(
+  <path d="M2.732 1.078a.5.5 0 0 1 .69.154L7.092 7h1.815L5.578 1.77a.5.5 0 0 1 .844-.537L10.092 7H14.5a.5.5 0 0 1 .5.5V8A7 7 0 1 1 1 8v-.5a.5.5 0 0 1 .5-.5h4.407L2.578 1.77a.5.5 0 0 1 .154-.69M2.342 10h11.317A6 6 0 0 0 14 8H2c0 .701.12 1.375.341 2m.46 1A6 6 0 0 0 8 14c2.22 0 4.16-1.207 5.197-3z" />,
+  '0 0 16 16',
 )
 
 /** Tazón con ingredientes encima: poke y bowls. */
@@ -81,29 +80,28 @@ const Bowl = custom(
   </>,
 )
 
-/** Torta: bolillo abierto con relleno, distinto del sándwich de pan de caja. */
+/** Torta: hamburguesa de pan redondo con su relleno. Majesticons `burger-line` (MIT). */
 const Torta = custom(
   <>
-    <path d="M3 11c0-3 4-5.5 9-5.5s9 2.5 9 5.5Z" />
-    <path d="M3.5 14.5h17" />
-    <path d="M4 17.5c0 .8.7 1.5 1.5 1.5h13c.8 0 1.5-.7 1.5-1.5v-1H4Z" />
+    <path d="m15 15l3.379-3.379a2.12 2.12 0 0 1 1.5-.621H20a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2h4.515a6 6 0 0 1 4.242 1.757zM3 15h18v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" />
+    <path d="M12 4c-4.623 0-8.432 1.756-8.942 6c-.066.55.39 1 .942 1h16c.552 0 1.008-.45.942-1c-.51-4.244-4.319-6-8.942-6M7.001 8H7m5.002 0" />
   </>,
 )
 
-/** Waffle: rejilla dentro de un cuadrado redondeado. */
+/** Waffle: rejilla de cuadros dentro de un cuadrado redondeado. IconOven `waffle` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Waffle = custom(
   <>
-    <rect x="3.5" y="3.5" width="17" height="17" rx="4" />
-    <path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17" />
+    <rect width="17.5" height="17.5" x="3.25" y="3.25" rx="4" />
+    <rect width="4" height="4" x="6.25" y="6.25" rx="1" />
+    <rect width="4" height="4" x="13.75" y="6.25" rx="1" />
+    <rect width="4" height="4" x="6.25" y="13.75" rx="1" />
+    <rect width="4" height="4" x="13.75" y="13.75" rx="1" />
   </>,
 )
 
-/** Baguette: barra en diagonal con sus tres cortes, como sale del horno. */
+/** Baguette: barra en diagonal con sus tres cortes. Tabler Icons `baguette` (MIT). */
 const Baguette = custom(
-  <>
-    <path d="M4.9 19.1c-1.4-1.4-.6-4.4 1.8-6.8l5.6-5.6c2.4-2.4 5.4-3.2 6.8-1.8s.6 4.4-1.8 6.8l-5.6 5.6c-2.4 2.4-5.4 3.2-6.8 1.8Z" />
-    <path d="m7.4 14.7 1.9 1.9M10.6 11.5l1.9 1.9M13.8 8.3l1.9 1.9" />
-  </>,
+  <path d="m5.628 11.283l5.644-5.637c2.665-2.663 5.924-3.747 8.663-1.205l.188.181a2.987 2.987 0 0 1 0 4.228L8.836 20.124a3 3 0 0 1-4.089.135l-.143-.135C1.876 17.4 2.9 14.007 5.628 11.283M9.5 7.5L11 11m-4.5-.5L8 14m4.5-9.5L14 8" />,
 )
 
 /** Molcajete con su tejolote: la cocina mexicana de siempre. Iconoven (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
@@ -133,15 +131,6 @@ const Nigiri = custom(
   </>,
 )
 
-/** Panqué en su capacillo: la repostería por encargo. */
-const Cupcake = custom(
-  <>
-    <path d="M5.4 12.6h13.2l-1.4 6.2a2 2 0 0 1-2 1.6H8.8a2 2 0 0 1-2-1.6Z" />
-    <path d="M4.4 12.6a3.4 3.4 0 0 1 2.8-3.3 4.2 4.2 0 0 1 8.1-1.1 3.2 3.2 0 0 1 4.3 4.4Z" />
-    <path d="M10.2 15.2v3.4M13.8 15.2v3.4" />
-  </>,
-)
-
 /** Bowl con fruta y su cuchara: los bowls de açaí. */
 const Acai = custom(
   <>
@@ -162,15 +151,13 @@ const Jugo = custom(
   </>,
 )
 
-/** Vaso de boba con las perlas separadas, que antes se apelmazaban. */
-const Boba = custom(
+/** Vaso de té con perlas y popote. Fluent Emoji High Contrast `bubble-tea` (MIT). */
+const Boba = solid(
   <>
-    <path d="M6.8 8h10.4l-1.1 10.8a2 2 0 0 1-2 1.8h-4.2a2 2 0 0 1-2-1.8Z" />
-    <path d="M5.8 8h12.4" />
-    <path d="m13.6 8 2.6-4.8" />
-    <circle cx="10.2" cy="17.4" r="0.8" />
-    <circle cx="13.6" cy="17.4" r="0.8" />
+    <path d="M18.65 23.62a1.31 1.31 0 1 0 0-2.62a1.31 1.31 0 0 0 0 2.62m-3.99-1.31a1.31 1.31 0 1 1-2.62 0a1.31 1.31 0 0 1 2.62 0m2.91 3.3a1.31 1.31 0 1 1-2.62 0a1.31 1.31 0 0 1 2.62 0m-5.26 1.31a1.31 1.31 0 1 0 0-2.62a1.31 1.31 0 0 0 0 2.62" />
+    <path d="M17 2v5h8a1 1 0 1 1 0 2l-2 20c-.097.605-.5 1-1 1H10c-.5 0-.924-.437-1-1L7 9a1 1 0 0 1 0-2h8V2zm-7.765 9.25L10.91 28h10.18l.16-1.592a1.31 1.31 0 1 1 .137-1.374l1.378-13.784z" />
   </>,
+  '0 0 32 32',
 )
 
 /** Bolsa de papas fritas, sellada arriba y abajo. */
@@ -197,12 +184,11 @@ const Elote = custom(
   </>,
 )
 
-/** Bagel con sus semillas, en vez del anillo geométrico de antes. */
+/** Bagel con sus semillas. IconOven `donut` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Bagel = custom(
   <>
-    <circle cx="12" cy="12" r="8.8" />
-    <circle cx="12" cy="12" r="3.2" />
-    <path d="M8.4 6.6h.01M15.4 7.4h.01M17.4 13.4h.01M11.6 18h.01M6.4 14.8h.01" />
+    <circle cx="12" cy="12" r="9.25" />
+    <path d="M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6m-5.25.25l1-1m8-1.5L17 7.5m.25 6.5l-.5 1.25m-8.5.5l1 .75" />
   </>,
 )
 
@@ -236,15 +222,6 @@ const Antojito = custom(
   </>,
 )
 
-/** Memela vista desde arriba: la masa, la salsa irregular dentro y el queso encima. */
-const Memela = custom(
-  <>
-    <circle cx="12" cy="12" r="9.2" />
-    <path d="M18 12A3.09 3.09 0 0 1 16.6 15.6A3.09 3.09 0 0 1 13 17.5A3.09 3.09 0 0 1 9 16.8A3.09 3.09 0 0 1 6.4 13.9A3.09 3.09 0 0 1 6.4 10.1A3.09 3.09 0 0 1 9 7.2A3.09 3.09 0 0 1 13 6.5A3.09 3.09 0 0 1 16.6 8.4A3.09 3.09 0 0 1 18 12.0Z" />
-    <path d="M9.6 10.6h.01M12.4 9.8h.01M14.2 12h.01M10.4 13.8h.01M13.2 14.2h.01" />
-  </>,
-)
-
 /** Tortilla doblada: el doblez liso arriba y el queso saliendo por la curva. */
 const Quesadilla = custom(
   <g transform="rotate(-20 12 12)">
@@ -255,12 +232,13 @@ const Quesadilla = custom(
   </g>,
 )
 
-/** Arepa con el borde ondulado y las marcas del comal, que es lo que la hace arepa. */
-const Arepa = custom(
+/** Arepa: la masa redonda con su borde y sus marcas del comal. Fluent Emoji High Contrast `flatbread` (MIT). */
+const Arepa = solid(
   <>
-    <path d="M20.2 12A4.24 4.24 0 0 1 19.1 16.1A4.24 4.24 0 0 1 16.1 19.1A4.24 4.24 0 0 1 12 20.2A4.24 4.24 0 0 1 7.9 19.1A4.24 4.24 0 0 1 4.9 16.1A4.24 4.24 0 0 1 3.8 12A4.24 4.24 0 0 1 4.9 7.9A4.24 4.24 0 0 1 7.9 4.9A4.24 4.24 0 0 1 12 3.8A4.24 4.24 0 0 1 16.1 4.9A4.24 4.24 0 0 1 19.1 7.9A4.24 4.24 0 0 1 20.2 12Z" />
-    <path d="m7.8 14.6 4.4-4.4M10.4 16.4l5.2-5.2M13.6 17.2l3.8-3.8" />
+    <path d="m6.69 17.07l.18.18c.24.25.63.25.88 0l9.51-9.51c.24-.24.24-.64 0-.88l-.18-.18a.63.63 0 0 0-.88 0l-9.51 9.51c-.24.24-.24.64 0 .88m1.41 5.77c-.29.29-.29.77 0 1.06s.77.29 1.06 0L23.9 9.16c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0zm6.83 2.48l-.18-.18a.63.63 0 0 1 0-.88l9.51-9.51c.24-.24.64-.24.88 0l.18.18c.24.24.24.64 0 .88l-9.51 9.51c-.25.24-.64.24-.88 0" />
+    <path d="M15 1C7.268 1 1 7.268 1 15v2c0 7.732 6.268 14 14 14h2c7.732 0 14-6.268 14-14v-2c0-7.732-6.268-14-14-14zM3 15C3 8.373 8.373 3 15 3h2c6.627 0 12 5.373 12 12v2c0 6.627-5.373 12-12 12h-2C8.373 29 3 23.627 3 17z" />
   </>,
+  '0 0 32 32',
 )
 
 /** Plato de espagueti: la cocina italiana. Hugeicons (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
@@ -285,40 +263,19 @@ const Hotcakes = custom(
   </>,
 )
 
-/** Un cerdo: las carnitas son de cerdo y el dibujo lo dice sin rodeos. */
-const Cerdo = custom(
-  <>
-    <path d="M4.4 13c0-4.1 3.4-7 7.6-7s7.6 2.9 7.6 7-3.4 6.6-7.6 6.6S4.4 17.1 4.4 13Z" />
-    <path d="M5.6 8.4 4.2 4.4l4.2 1.8M18.4 8.4l1.4-4-4.2 1.8" />
-    <rect x="9" y="12.6" width="6" height="4.2" rx="2.1" />
-    <path d="M10.8 14.6h.01M13.2 14.6h.01" />
-    <path d="M8.4 10.4h.01M15.6 10.4h.01" />
-  </>,
+/** Un cerdo: las carnitas son de cerdo y el dibujo lo dice sin rodeos. Material Design Icons `pig-variant-outline` (Apache 2.0). */
+const Cerdo = solid(
+  <path d="M15 10c0-.55.45-1 1-1s1 .45 1 1s-.45 1-1 1s-1-.45-1-1m7-2.5v6.97l-2.82.94L17.5 21H12v-2h-2v2H4.5S2 12.54 2 9.5S4.46 4 7.5 4h5c.91-1.21 2.36-2 4-2a1.498 1.498 0 0 1 1.38 2.08c-.14.34-.26.73-.32 1.15l2.27 2.27zm-2 2h-1L15.5 6c0-.65.09-1.29.26-1.91c-.97.25-1.76.97-2.09 1.91H7.5C5.57 6 4 7.57 4 9.5c0 1.88 1.22 6.65 2 9.5h2v-2h6v2h2l1.56-5.15l2.44-.82z" />,
 )
 
-/** Lámina fina de cecina, de grosor parejo y con el veteado: así se vende, en hoja. */
-const Cecina = custom(
-  <>
-    <path d="M2.8 9.2c3-1.7 6.1 1.7 9.2 0s6.2-1.7 9.2 0v5.6c-3 1.7-6.1-1.7-9.2 0s-6.2 1.7-9.2 0Z" />
-    <path d="M6.6 11.6c1.8-.9 3.6.9 5.4 0M13.4 13.4c1.4-.7 2.8.5 4.2-.2" />
-  </>,
+/** Cartón de papas a la francesa. Material Design Icons `french-fries` (Apache 2.0). La bolsa de papas fritas es otro dibujo, el de Papas Preparadas. */
+const PapasFritas = solid(
+  <path d="M18 11V6h-3V4h-3V2H8v3H6v6H5l2 11h10l2-11zm-2.14 0c-.16.61-.46 1.16-.86 1.62v-4l2 1V11zM17 7v1.5l-2-1V7zm-5-2h2v3.5l-2 1zm0 5.62l2-1v3.83c-.59.35-1.27.55-2 .55zm-1 3.24c-.79-.21-1.5-.64-2-1.24v-3l2-1zM9 3h2v4.5L10 8V5H9zM7 6h2v2.5L8 9v2H7z" />,
 )
 
-/** Cono de papas a la francesa. La bolsa de papas fritas es otro dibujo, el de Papas Preparadas. */
-const PapasFritas = custom(
-  <>
-    <path d="M6.8 10.6h10.4l-1.1 9a1.5 1.5 0 0 1-1.5 1.3H9.4a1.5 1.5 0 0 1-1.5-1.3Z" />
-    <path d="M6.4 13.8h11.2" />
-    <path d="M9.6 10.6V5.4M12 10.6V3.4M14.4 10.6V5" />
-  </>,
-)
-
-/** Pan alargado con la mostaza de punta a punta: la onda es lo que sobrevive a 20 píxeles. */
-const HotDog = custom(
-  <>
-    <rect x="2.2" y="9" width="19.6" height="8" rx="4" />
-    <path d="M4.4 13c1.5-1.9 3-1.9 4.5 0s3 1.9 4.5 0 3-1.9 4.5 0" />
-  </>,
+/** Salchicha en su pan con la mostaza. Material Design Icons `food-hot-dog` (Apache 2.0). */
+const HotDog = solid(
+  <path d="M21 5.77c-.15-.12-.28-.22-.41-.32l.03-.04c.78-.78.78-2.04 0-2.82s-2.04-.78-2.83 0l-.74.74a3.465 3.465 0 0 0-4.55.32L3.65 12.5a3.465 3.465 0 0 0-.32 4.55l-.74.74c-.79.79-.79 2.05 0 2.83c.78.78 2.04.78 2.82 0l.04-.03c.1.13.2.26.32.41c1.36 1.34 3.58 1.34 4.95 0l10.25-10.28A3.52 3.52 0 0 0 21 5.77M4.77 15.61a1.5 1.5 0 0 1 .29-1.71l8.84-8.84a1.5 1.5 0 0 1 1.71-.29zM19.56 9.3L9.3 19.56c-.58.59-1.53.59-2.12 0c-.58-.56-.58-1.56 0-2.12L17.44 7.18c.56-.58 1.56-.58 2.12 0c.59.59.59 1.54 0 2.12" />,
 )
 
 /** Media luna con el repulgue en la curva, que es lo que la separa de la quesadilla. */
@@ -346,24 +303,17 @@ const Crepa = custom(
   </>,
 )
 
-/** Tazón de fruta, ahora que el açaí tiene el suyo. */
-const Fruta = custom(
-  <>
-    <path d="M3.6 12.8h16.8a8.4 8.4 0 0 1-16.8 0Z" />
-    <path d="M7.4 12.8a2.6 2.6 0 0 1 5.2 0" />
-    <circle cx="15.6" cy="10.6" r="2.2" />
-    <path d="M15.6 8.4c0-1.2 1-2 2.2-1.8" />
-  </>,
+/** Tazón de fruta. Carbon `fruit-bowl` (Apache 2.0). */
+const Fruta = solid(
+  <path d="M26 15a6 6 0 0 0-3.107-5.253A3.98 3.98 0 0 0 24 7h-2a2 2 0 0 1-2 2a6.004 6.004 0 0 0-5.995 5.892A7 7 0 0 1 12 10a3.996 3.996 0 0 0-3-3.858V4H7v2.142A3.996 3.996 0 0 0 4 10v5H2v1a14 14 0 0 0 28 0v-1Zm-6-4a4.005 4.005 0 0 1 4 4h-8a4.005 4.005 0 0 1 4-4M6 10a2 2 0 1 1 4 0a9 9 0 0 0 1.532 5H6Zm10 18A12.017 12.017 0 0 1 4.042 17h23.917A12.017 12.017 0 0 1 16 28" />,
+  '0 0 32 32',
 )
 
-/** Tazón de ramen con su huevo y el vapor. */
+/** Tazón de fideos con palillos y la onda del caldo. IconOven `noodles` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Ramen = custom(
   <>
-    <path d="M3.2 12.8h17.6a8.8 8.8 0 0 1-17.6 0Z" />
-    <path d="M5.8 10.6c1.4-1.7 3-1.2 4.2-.2 1.2 1 2.8.8 3.8-.6" />
-    <path d="M13.4 12.8a2.7 2.7 0 0 1 5.4 0" />
-    <circle cx="16.1" cy="11.6" r="0.9" />
-    <path d="M7.6 8c-.8-.9-.8-1.8 0-2.7" />
+    <path d="M4 10.75h16a.75.75 0 0 1 .75.8A8.75 8.75 0 0 1 16 18.7v1.55a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V18.7a8.75 8.75 0 0 1-4.75-7.15a.75.75 0 0 1 .75-.8m5.5 0L18.25 3m-5 7.75l7-5" />
+    <path d="M7 14.25c.9.75 1.6.75 2.5 0s1.6-.75 2.5 0s1.6.75 2.5 0s1.6-.75 2.5 0" />
   </>,
 )
 
@@ -374,11 +324,9 @@ const Proteina = solid(
   </>,
 )
 
-/** Galleta con mordida: Postres y Dulces. Material Design Icons (Apache 2.0). */
+/** Galleta con mordida y sus chispas, solo el contorno: Postres y Dulces. Material Design Icons `cookie-outline` (Apache 2.0). */
 const Galleta = solid(
-  <>
-    <path d="M12 3a9 9 0 0 0-9 9a9 9 0 0 0 9 9a9 9 0 0 0 9-9c0-.5-.04-1-.13-1.5C20.6 10 20 10 20 10h-2V9c0-1-1-1-1-1h-2V7c0-1-1-1-1-1h-1V4c0-1-1-1-1-1M9.5 6A1.5 1.5 0 0 1 11 7.5A1.5 1.5 0 0 1 9.5 9A1.5 1.5 0 0 1 8 7.5A1.5 1.5 0 0 1 9.5 6m-3 4A1.5 1.5 0 0 1 8 11.5A1.5 1.5 0 0 1 6.5 13A1.5 1.5 0 0 1 5 11.5A1.5 1.5 0 0 1 6.5 10m5 1a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5m5 2a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5M11 16a1.5 1.5 0 0 1 1.5 1.5A1.5 1.5 0 0 1 11 19a1.5 1.5 0 0 1-1.5-1.5A1.5 1.5 0 0 1 11 16" />
-  </>,
+  <path d="M20.87 10.5C20.6 10 20 10 20 10h-2V9c0-1-1-1-1-1h-2V7c0-1-1-1-1-1h-1V4c0-1-1-1-1-1a9 9 0 1 0 9 9c0-.5-.04-1-.13-1.5m-9.55 8.46c.68-.14 1.18-.74 1.18-1.46c0-.83-.67-1.5-1.5-1.5a1.498 1.498 0 0 0-.84 2.74c-2.62-.7-4.66-2.93-5.07-5.62C5 12.61 5 12.11 5 11.62c.07.77.71 1.38 1.5 1.38c.83 0 1.5-.67 1.5-1.5S7.33 10 6.5 10c-.68 0-1.25.46-1.43 1.08C5.47 8 7.91 5.5 11 5.07V6.5c0 .83.67 1.5 1.5 1.5h.5v.5c0 .83.67 1.5 1.5 1.5H16v.5c0 .83.67 1.5 1.5 1.5H19c0 4.08-3.5 7.36-7.68 6.96M9.5 9C8.67 9 8 8.33 8 7.5S8.67 6 9.5 6s1.5.67 1.5 1.5S10.33 9 9.5 9m3.5 3.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5m5 2c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5" />,
 )
 
 const ICONS: Record<string, IconComponent> = {
@@ -396,7 +344,7 @@ const ICONS: Record<string, IconComponent> = {
   bowl: Bowl,
   'cake-slice': CakeSlice,
   candy: Galleta,
-  cecina: Cecina,
+  cecina: Bacon,
   cerdo: Cerdo,
   cherry: Cherry,
   chopsticks: Chopsticks,
@@ -424,7 +372,6 @@ const ICONS: Record<string, IconComponent> = {
   kebab: Kebab,
   'leafy-green': LeafyGreen,
   martini: Martini,
-  memela: Memela,
   molcajete: Molcajete,
   nigiri: Nigiri,
   pan: Pan,

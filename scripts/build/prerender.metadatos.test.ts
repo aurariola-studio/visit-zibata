@@ -120,7 +120,7 @@ describe.each(idiomas)('metadatos de las páginas (%s)', (idioma) => {
   })
 
   it('el JSON-LD sigue diciendo lo que dice el negocio, sin contexto añadido ni saltos aplanados', () => {
-    for (const place of data.places) {
+    for (const place of visibles) {
       const esperado = textoDelDato(place, idioma)
       const descripcion = ficha(idioma, place.slug).jsonLd?.description
       if (descripcion !== undefined) expect(descripcion, place.slug).toBe(esperado)
@@ -418,11 +418,11 @@ describe('los enlaces entre fichas del HTML servido', () => {
       }
     }
     const solas = data.plazas
-      .map((plaza) => data.places.filter((place) => place.plazaId === plaza.id))
+      .map((plaza) => visibles.filter((place) => place.plazaId === plaza.id))
       .filter((locales) => locales.length === 1)
       .flat()
       .map((place) => `/es/lugar/${place.slug}`)
-    const conUno = data.places
+    const conUno = visibles
       .map((place) => `/es/lugar/${place.slug}`)
       .filter((href) => (entrantes.get(href) ?? 0) <= 1)
     // Antes del reparto eran 37: los ocho primeros de cada zona grande recibían todos los enlaces.
@@ -430,7 +430,7 @@ describe('los enlaces entre fichas del HTML servido', () => {
   })
 
   it('la ficha en español y la inglesa enlazan a los mismos locales', () => {
-    for (const place of data.places) {
+    for (const place of visibles) {
       const es = hrefs(ficha('es', place.slug).contenido).map((h) => h.replace('/es/lugar/', ''))
       const en = [
         ...(ficha('en', place.slug).contenido ?? '').matchAll(
@@ -451,10 +451,10 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     data.categories.flatMap((c) => c.giros.map((g) => [g.id, c.id] as const)),
   )
   const idsDe = (place: Place) => new Set(place.giros.map((g) => categoriaDeGiro.get(g)))
-  const conLocales = data.categories.filter((c) => data.places.some((p) => idsDe(p).has(c.id)))
+  const conLocales = data.categories.filter((c) => visibles.some((p) => idsDe(p).has(c.id)))
 
   it('hay una por cada categoría que tiene al menos un local', () => {
-    const conLocales = data.categories.filter((c) => data.places.some((p) => idsDe(p).has(c.id)))
+    const conLocales = data.categories.filter((c) => visibles.some((p) => idsDe(p).has(c.id)))
     expect(conLocales.length).toBeGreaterThan(0)
     expect(deCategoria.map((p) => p.href).sort()).toEqual(
       conLocales.map((c) => ruta(c.slug[idioma])).sort(),
@@ -468,7 +468,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
         /\b0 (zonas?|areas?)|\b1 (lugares|places|zonas|areas)\b/,
       )
       // Con un solo local la descripción habla en singular y no lleva cifra (ver crecimiento.test.ts).
-      const n = data.places.filter((p) => idsDe(p).has(categoria.id)).length
+      const n = visibles.filter((p) => idsDe(p).has(categoria.id)).length
       expect(pagina.description, categoria.id).toMatch(
         n === 1 ? /el lugar|the one place/ : /\b\d+ (lugares?|places?)\b/,
       )
@@ -505,7 +505,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
       ]
         .map((m) => m[1])
         .sort()
-      const esperados = data.places
+      const esperados = visibles
         .filter((p) => idsDe(p).has(categoria.id))
         .map((p) => p.slug)
         .sort()
@@ -539,7 +539,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
   it('la cifra de la descripción es el número de locales de la lista', () => {
     for (const categoria of conLocales) {
       const pagina = de(idioma, ruta(categoria.slug[idioma]))
-      const n = data.places.filter((p) => idsDe(p).has(categoria.id)).length
+      const n = visibles.filter((p) => idsDe(p).has(categoria.id)).length
       // Con uno solo la descripción dice "el lugar" y no cuenta (ver crecimiento.test.ts).
       if (n === 1) continue
       expect(pagina.description).toMatch(new RegExp(`(?<![0-9])${n} (lugares|places)`))
@@ -556,7 +556,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
     for (const categoria of data.categories.filter((c) => !conLocales.includes(c))) {
       expect(portada.contenido).not.toContain(`href="${ruta(categoria.slug[idioma])}"`)
     }
-    for (const place of data.places) {
+    for (const place of visibles) {
       const pagina = ficha(idioma, place.slug)
       for (const categoria of data.categories) {
         const destino = ruta(categoria.slug[idioma])
@@ -571,7 +571,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
         idioma === 'es' ? `/es/zona/${plaza.slug}` : `/en/area/${plaza.slug}`,
       )
       for (const categoria of data.categories) {
-        const hay = data.places.some((p) => p.plazaId === plaza.id && idsDe(p).has(categoria.id))
+        const hay = visibles.some((p) => p.plazaId === plaza.id && idsDe(p).has(categoria.id))
         expect(
           pagina.contenido?.includes(`href="${ruta(categoria.slug[idioma])}"`),
           `${plaza.slug} ${categoria.id}`,
