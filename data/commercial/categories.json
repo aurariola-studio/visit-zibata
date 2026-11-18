@@ -56,7 +56,7 @@
             "es": "Desayunos",
             "en": "Breakfast"
           },
-          "icon": "egg-fried",
+          "icon": "plato-desayuno",
           "synonyms": [
             "desayunar",
             "almuerzo",
@@ -72,7 +72,7 @@
             "es": "Brunch",
             "en": "Brunch"
           },
-          "icon": "hotcakes",
+          "icon": "egg-fried",
           "synonyms": [
             "brunch",
             "avocado toast",

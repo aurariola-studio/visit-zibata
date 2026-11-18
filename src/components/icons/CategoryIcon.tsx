@@ -206,7 +206,7 @@ const NOMBRES_DIFERIDOS = new Set([
   'fruta',
   'funcional',
   'hot-dog',
-  'hotcakes',
+  'plato-desayuno',
   'ice-cream',
   'jugo',
   'kebab',

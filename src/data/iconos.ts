@@ -56,7 +56,7 @@ export const ICONOS = [
   'hand-platter',
   'heart-pulse',
   'hot-dog',
-  'hotcakes',
+  'plato-desayuno',
   'ice-cream',
   'italiana',
   'jugo',

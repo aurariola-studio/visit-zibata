@@ -168,8 +168,8 @@ const HotDog = solid(
   <path d="M21 5.77c-.15-.12-.28-.22-.41-.32l.03-.04c.78-.78.78-2.04 0-2.82s-2.04-.78-2.83 0l-.74.74a3.465 3.465 0 0 0-4.55.32L3.65 12.5a3.465 3.465 0 0 0-.32 4.55l-.74.74c-.79.79-.79 2.05 0 2.83c.78.78 2.04.78 2.82 0l.04-.03c.1.13.2.26.32.41c1.36 1.34 3.58 1.34 4.95 0l10.25-10.28A3.52 3.52 0 0 0 21 5.77M4.77 15.61a1.5 1.5 0 0 1 .29-1.71l8.84-8.84a1.5 1.5 0 0 1 1.71-.29zM19.56 9.3L9.3 19.56c-.58.59-1.53.59-2.12 0c-.58-.56-.58-1.56 0-2.12L17.44 7.18c.56-.58 1.56-.58 2.12 0c.59.59.59 1.54 0 2.12" />,
 )
 
-/** Plato de desayuno visto desde arriba, con su huevo y su tocino: Brunch. UIX `breakfast-plate` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
-const Hotcakes = custom(
+/** Plato de desayuno visto desde arriba, con su huevo y su tocino: Desayunos. UIX `breakfast-plate` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
+const PlatoDesayuno = custom(
   <>
     <path d="M2.5 12a9.5 9.5 0 1 0 19 0a9.5 9.5 0 1 0-19 0" />
     <path d="M8 8.5c2-.5 3.75 1 3.5 3c-.25 1.5.5 3-1 3.75S7.5 15.5 6 15s-1.75-2.5-1.25-4S6 8.75 8 8.5M8 12h.01m7.74-6za1.5 1.5 0 0 1 1.5 1.5v2.25a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5V7.5a1.5 1.5 0 0 1 1.5-1.5m0 7za1.5 1.5 0 0 1 1.5 1.5v2.25a1.5 1.5 0 0 1-1.5 1.5a1.5 1.5 0 0 1-1.5-1.5V14.5a1.5 1.5 0 0 1 1.5-1.5" />
@@ -366,7 +366,7 @@ export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   fruta: Fruta,
   funcional: Funcional,
   'hot-dog': HotDog,
-  hotcakes: Hotcakes,
+  'plato-desayuno': PlatoDesayuno,
   'ice-cream': IceCreamCone,
   jugo: Jugo,
   kebab: Kebab,
