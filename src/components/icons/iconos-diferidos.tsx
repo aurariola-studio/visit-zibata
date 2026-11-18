@@ -143,11 +143,11 @@ const Elote = custom(
   </>,
 )
 
-/** Media luna con el repulgue en la curva, que es lo que la separa de la quesadilla. */
+/** Media luna con el repulgue ondulado, de empanada. IconOven `taco` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
 const Empanada = custom(
   <>
-    <path d="M3.8 17.8a8.2 8.2 0 0 1 16.4 0Z" />
-    <path d="m4.8 14.8 1.6 1.3M7.4 11.9l1.3 1.6M10.6 10.1l.8 1.9M14 10.2l-.7 1.9M17 12.1l-1.3 1.5M19.3 15l-1.6 1.2" />
+    <path d="M2.75 18a9.25 9.25 0 0 1 18.5 0a1 1 0 0 1-1 1H3.75a1 1 0 0 1-1-1" />
+    <path d="M6.48 18a1.47 1.47 0 0 1 .74-2.76a1.47 1.47 0 0 1 2.02-2.02a1.47 1.47 0 0 1 2.76-.74a1.47 1.47 0 0 1 2.76.74a1.47 1.47 0 0 1 2.02 2.02a1.47 1.47 0 0 1 .74 2.76" />
   </>,
 )
 
