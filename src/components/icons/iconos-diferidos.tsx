@@ -175,13 +175,11 @@ const PlatoDesayuno = custom(
   </>,
 )
 
-/** Vaso con popote y rodaja: los jugos y smoothies. */
+/** Caja de jugo con popote y una gota: Jugos. UIX `juice-box` (MIT). */
 const Jugo = custom(
   <>
-    <path d="M7.2 8.4h9.6l-1.1 10.4a2 2 0 0 1-2 1.8h-3.4a2 2 0 0 1-2-1.8Z" />
-    <path d="M6.6 11.8h10.8" />
-    <path d="m14.4 8.4 2.9-5.2" />
-    <path d="M8.6 5.4c1.3-1.4 3.4-1.4 4.7 0" />
+    <path d="M8.125 7.5h5.75a2.625 2.625 0 0 1 2.625 2.625v8.75a2.625 2.625 0 0 1-2.625 2.625h-5.75A2.625 2.625 0 0 1 5.5 18.875v-8.75A2.625 2.625 0 0 1 8.125 7.5M14 7.5V4l4.5-1.5" />
+    <path d="M11 11.25c1.5 2 2.75 3.5 2.75 4.75a2.75 2.75 0 0 1-5.5 0c0-1.25 1.25-2.75 2.75-4.75" />
   </>,
 )
 
