@@ -198,7 +198,7 @@ const NOMBRES_DIFERIDOS = new Set([
   'cupcake',
   'dermatology',
   'drumstick',
-  'egg-fried',
+  'brunch',
   'elote',
   'empanada',
   'fish',

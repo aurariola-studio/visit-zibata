@@ -44,7 +44,7 @@ export const ICONOS = [
   'desayuno',
   'estiramiento',
   'drumstick',
-  'egg-fried',
+  'brunch',
   'elote',
   'empanada',
   'fish',
