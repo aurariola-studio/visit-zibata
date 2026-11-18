@@ -243,12 +243,11 @@ const Padel = solid(
   </>,
 )
 
-/** Bolsa de papas fritas, sellada arriba y abajo. */
+/** Bolsa de papas sellada arriba y abajo, con su etiqueta. UIX `category-snacks` (MIT). El trazo de origen es de 1,5 y aquí va a 2. */
 const Papas = custom(
   <>
-    <path d="M7 7.2h10v10.2H7Z" />
-    <path d="m7 7.2-1.6-2.8h13.2L17 7.2M7 17.4l-1.6 2.8h13.2L17 17.4" />
-    <path d="M15 12.3A2.21 2.21 0 0 1 13.9 14.3A2.21 2.21 0 0 1 11.3 14.8A2.21 2.21 0 0 1 9.3 13.4A2.21 2.21 0 0 1 9.3 11.2A2.21 2.21 0 0 1 11.3 9.8A2.21 2.21 0 0 1 13.9 10.3A2.21 2.21 0 0 1 15 12.3Z" />
+    <path d="m4.5 4.5l1.5-2l1.5 2l1.5-2l1.5 2l1.5-2l1.5 2l1.5-2l1.5 2l1.5-2l1.5 2c2 4.5 2 10.5 0 15l-1.5 2l-1.5-2l-1.5 2l-1.5-2l-1.5 2l-1.5-2l-1.5 2l-1.5-2l-1.5 2l-1.5-2c-2-4.5-2-10.5 0-15" />
+    <path d="M7.5 12a4.5 3 0 1 0 9 0a4.5 3 0 1 0-9 0" />
   </>,
 )
 
