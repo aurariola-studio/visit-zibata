@@ -4,6 +4,7 @@
  */
 import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { liberarEsqueleto } from '../../components/ui/esqueleto.ts'
 import { t } from '../../i18n/index.ts'
 import styles from './OnboardingModal.module.css'
 import { type DemoKind, StepDemo } from './StepDemo.tsx'
@@ -26,6 +27,9 @@ export function OnboardingModal({ open, onClose }: OnboardingModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const primaryRef = useRef<HTMLButtonElement>(null)
   const [step, setStep] = useState(0)
+
+  // Si se vio el esqueleto, esta tarjeta entró sin animación; al cerrarse, la siguiente vuelve a tenerla.
+  useEffect(() => liberarEsqueleto, [])
 
   useEffect(() => {
     const dialog = dialogRef.current

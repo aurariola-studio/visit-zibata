@@ -226,6 +226,9 @@ test.describe('catálogo de interactuables', () => {
 
   test('una superficie apoyada en la esquina de otra resta su relleno', async ({ page }) => {
     await openApp(page, { path: 'info/tutorial' })
+    // Se mide la tarjeta real, no el esqueleto que la sustituye mientras llega su fragmento.
+    await expect(page.getByRole('dialog', { name: '¿Cómo me muevo por el mapa?' })).toBeVisible()
+    await expect(page.getByRole('status', { name: 'Cargando…' })).toHaveCount(0)
 
     /*
      * La concentricidad de Apple, y lo que Material pide en el fondo: dos curvas concéntricas con

@@ -97,8 +97,9 @@ reglas del proyecto sobre él:
 - **Fotos:** solo propias o con licencia. Nunca de Google ni de redes sociales.
 - **Ocultar no es borrar:** un local que cierra se marca como no visible y conserva su historial.
 
-Los textos de la interfaz están en `src/i18n/es.ts` y `src/i18n/en.ts`. Todo el procesamiento
-geográfico ocurre en `scripts/map`, en Node, y no en el navegador.
+Los textos de la interfaz están en `src/i18n/es.ts` y `src/i18n/en.ts`; los largos de las ventanas
+informativas y del tutorial, en `src/i18n/grupos`, y se cargan junto con la ventana que los muestra. Todo el
+procesamiento geográfico ocurre en `scripts/map`, en Node, y no en el navegador.
 
 ## El mapa
 

@@ -22,6 +22,7 @@ import {
   useViewportHeight,
 } from '../components/panel/BottomSheet.tsx'
 import { DesktopSidePanel } from '../components/panel/DesktopSidePanel.tsx'
+import { DialogSkeleton } from '../components/ui/DialogSkeleton.tsx'
 import { EmptyState } from '../components/ui/EmptyState.tsx'
 import { useCatalogState } from '../data/CatalogContext.tsx'
 import { GuideBar } from '../features/about/GuideBar.tsx'
@@ -41,7 +42,7 @@ import { SearchBar } from '../features/search/SearchBar.tsx'
 import { useElementBottom } from '../hooks/useElementBottom.ts'
 import { useIsDesktop, useMediaQuery } from '../hooks/useMediaQuery.ts'
 import { useOnlineStatus } from '../hooks/useOnlineStatus.ts'
-import { t, useLocale } from '../i18n/index.ts'
+import { cargarGrupo, t, useLocale } from '../i18n/index.ts'
 import { type InfoTopic, parsePath, rutaDeCategoria, rutaDeSector } from '../lib/url-state.ts'
 import type { Catalog, Place } from '../types/domain.ts'
 import { AppErrorBoundary } from './AppErrorBoundary.tsx'
@@ -82,14 +83,18 @@ const PlaceDetail = lazy(() =>
   import('../features/places/PlaceDetail.tsx').then((module) => ({ default: module.PlaceDetail })),
 )
 
+// Cada ventana pide sus textos junto con su código, en paralelo (ver `cargarGrupo` en i18n/index.ts).
 const InfoDialog = lazy(() =>
-  import('../features/about/InfoDialog.tsx').then((module) => ({ default: module.InfoDialog })),
+  Promise.all([import('../features/about/InfoDialog.tsx'), cargarGrupo('about')]).then(
+    ([module]) => ({ default: module.InfoDialog }),
+  ),
 )
 
 const OnboardingModal = lazy(() =>
-  import('../features/onboarding/OnboardingModal.tsx').then((module) => ({
-    default: module.OnboardingModal,
-  })),
+  Promise.all([
+    import('../features/onboarding/OnboardingModal.tsx'),
+    cargarGrupo('onboarding'),
+  ]).then(([module]) => ({ default: module.OnboardingModal })),
 )
 
 const appTitle = `${t('app.name')} · ${t('app.tagline')}`
@@ -659,7 +664,7 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
       )}
 
       {state.infoTopic && state.infoTopic !== 'tutorial' && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<DialogSkeleton tipo={state.infoTopic} />}>
           <InfoDialog
             topic={state.infoTopic}
             onClose={() => dispatch({ type: 'closeInfo' })}
@@ -675,7 +680,7 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
        * tiene ruta, y entonces el botón atrás lo cierra como a las otras tres ventanas.
        */}
       {(state.tutorialVisible || state.infoTopic === 'tutorial') && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<DialogSkeleton tipo="tutorial" />}>
           <OnboardingModal
             open
             onClose={() => {

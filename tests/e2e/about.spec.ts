@@ -93,6 +93,95 @@ test.describe('Información de la guía', () => {
     await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
   })
 
+  /*
+   * Los textos largos de estas ventanas viajan en un fragmento aparte que se pide junto con el
+   * diálogo (ver cargarGrupo en i18n/index.ts). Entrar directo por su dirección es el caso que lo
+   * exige: el diálogo abre sin que nadie haya tocado nada antes. Que no quede una clave a la vista
+   * ("about.privacyBody") es lo que se vigila.
+   */
+  for (const caso of [
+    {
+      idioma: 'es',
+      ruta: 'es/info/privacidad',
+      nombre: 'Privacidad y términos',
+      frase: 'no te pide crear una cuenta',
+    },
+    {
+      idioma: 'en',
+      ruta: 'en/info/privacy',
+      nombre: 'Privacy and terms',
+      frase: 'never asks you to create an account',
+    },
+    { idioma: 'es', ruta: 'es/info/acerca', nombre: 'Acerca de esta guía', frase: 'OpenStreetMap' },
+    { idioma: 'en', ruta: 'en/info/about', nombre: 'About this guide', frase: 'OpenStreetMap' },
+    {
+      idioma: 'es',
+      ruta: 'es/info/sugerir',
+      nombre: 'Sugiere un cambio o contáctanos',
+      frase: 'Escribe quien sea',
+    },
+    {
+      idioma: 'es',
+      ruta: 'es/info/tutorial',
+      nombre: '¿Cómo me muevo por el mapa?',
+      frase: 'Arrastra para recorrer Zibatá',
+    },
+    {
+      idioma: 'en',
+      ruta: 'en/info/tutorial',
+      nombre: 'How do I get around the map?',
+      frase: 'Drag to move around Zibatá',
+    },
+  ]) {
+    test(`la ventana ${caso.ruta} abre con su texto, sin claves a la vista`, async ({ page }) => {
+      await openApp(page, { path: caso.ruta })
+      const dialog = page.getByRole('dialog', { name: caso.nombre })
+      await expect(dialog).toBeVisible()
+      await expect(dialog).toContainText(caso.frase)
+      await expect(dialog).not.toContainText(/\b(about|onboarding)\.[a-zA-Z]+/)
+    })
+  }
+
+  /*
+   * Mientras llega el fragmento de la ventana se ve su esqueleto, no un hueco: desde que se toca el
+   * enlace hasta que llega, en una conexión lenta, no pasaba nada. Se retiene el fragmento un par de
+   * segundos para verlo, y se comprueba que cede el sitio a la ventana real y no se queda debajo.
+   */
+  for (const caso of [
+    { ruta: 'es/info/privacidad', fragmento: /InfoDialog-.*.js$/, nombre: 'Privacidad y términos' },
+    {
+      ruta: 'es/info/tutorial',
+      fragmento: /OnboardingModal-.*.js$/,
+      nombre: '¿Cómo me muevo por el mapa?',
+    },
+  ]) {
+    test(`${caso.ruta} muestra su esqueleto mientras carga y luego la ventana real`, async ({
+      page,
+    }) => {
+      // Se baja la respuesta entera y se entrega tras la demora: retener una petición abierta y
+      // continuarla después se quedaba colgado en el navegador del CI.
+      await page.route(caso.fragmento, async (route) => {
+        const respuesta = await route.fetch()
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await route.fulfill({ response: respuesta })
+      })
+      await openApp(page, { path: caso.ruta })
+      const esqueleto = page.getByRole('status', { name: 'Cargando…' })
+      await expect(esqueleto).toBeVisible()
+      await expect(page.getByRole('dialog', { name: caso.nombre })).toBeVisible({ timeout: 15_000 })
+      await expect(esqueleto).toHaveCount(0)
+    })
+  }
+
+  test('la primera visita abre el tutorial con su texto, sin claves a la vista', async ({
+    page,
+  }) => {
+    await openApp(page, { onboarding: true })
+    const dialog = page.getByRole('dialog', { name: '¿Cómo me muevo por el mapa?' })
+    await expect(dialog).toBeVisible()
+    await expect(dialog).not.toContainText(/\b(about|onboarding)\.[a-zA-Z]+/)
+  })
+
   test('el idioma se cambia desde la barra y se recuerda', async ({ page }) => {
     await openApp(page)
     /*

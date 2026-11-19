@@ -1,10 +1,14 @@
 // @vitest-environment jsdom
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { cargarGrupo } from '../../i18n/index.ts'
 import { InfoDialog } from './InfoDialog.tsx'
 
 describe('InfoDialog', () => {
+  // Sus textos largos viajan en un grupo que `Experience` pide junto con el diálogo.
+  beforeAll(() => cargarGrupo('about'))
+
   it('muestra una sola página y lleva a las otras dos', async () => {
     const onGoTo = vi.fn()
     render(<InfoDialog topic="privacidad" onClose={vi.fn()} onGoTo={onGoTo} />)

@@ -63,8 +63,6 @@ export const en = {
   'place.machineTranslation': 'Automatic translation',
   'place.showOriginal': 'View the Spanish original',
   'place.showTranslation': 'View the translation',
-  'place.location': 'Location',
-  'place.description': 'Description',
   'place.hours': 'Hours',
   'place.contact': 'Contact and socials',
   'place.call': 'Call',
@@ -120,7 +118,6 @@ export const en = {
 
   'visit.action': 'Log a visit',
   'visit.mark': 'Log a visit to {name}',
-  'visit.pickDay': 'Pick the day of the visit',
   'visit.been': { one: 'You’ve been once', other: 'You’ve been {count} times' },
   'visit.lastOne': ', the last one on {date}.',
   'visit.seeAll': 'See all',
@@ -134,7 +131,6 @@ export const en = {
   'favorites.remove': 'Remove from favourites',
   'favorites.filter': 'Favourites',
   'filters.openNow': 'Open now',
-  'filters.switches': 'Quick filters',
   'filters.openNowLabel': 'Open now, {name}',
   'filters.closedNowLabel': 'Closed now, {name}',
   'filters.unknownHoursLabel': 'No opening hours published, {name}',
@@ -146,41 +142,19 @@ export const en = {
   'closure.traspaso': 'Under new ownership.',
   'closure.since': 'Since {date}.',
   'closure.noReturn': 'No reopening date yet.',
-  'favorites.saved': 'Saved to favourites',
 
   'brand.by': 'A project by',
 
   'seo.home.title': 'Visit Zibatá · Your local guide',
-  'seo.imageAlt': 'Map of Zibatá with its plazas and businesses.',
-  'seo.home.description':
-    'Find your next favourite place in Zibatá, with hours, contact and location in one place.',
   'seo.title': '{name} · Visit Zibatá',
-  'seo.title.zone': '{name} in {plaza} · Visit Zibatá',
   'seo.title.plaza': '{name}, places and directions · Visit Zibatá',
-  'seo.place.fallback': '{giros} at {plaza}, Zibatá. Hours, contact and directions.',
-  'seo.place.context': '{giros} at {lugar}.',
-  'seo.place.contextLugar': 'At {lugar}.',
-  'seo.plaza.fallback': '{name}, Zibatá. What’s there, hours and directions.',
-  'seo.nearby': 'More in {plaza}',
-  'seo.whatsHere': 'What’s here',
-  'seo.zones': 'The areas of Zibatá',
-  'seo.categories': 'Categories',
   'seo.category.name': '{label} in Zibatá',
-  'seo.category.description': {
-    one: '{nombre} in Zibatá. Meet the one place the community has to offer, with hours, contact and directions.',
-    other:
-      '{nombre} in Zibatá. Meet the {count} places the community has to offer, with hours, contact and directions.',
-  },
   'seo.category.nombre.mexicana': 'Mexican food',
   'seo.category.nombre.italiana': 'Italian food',
   'seo.category.nombre.asiatica': 'Asian food',
   'seo.category.nombre.saludable': 'Healthy food',
   'seo.category.nombre.casera': 'Home cooking',
   'seo.category.nombre.internacional': 'International food',
-  'seo.category.places': 'Places in this category',
-  'seo.category.zones': 'Where to find them',
-  'seo.category.zoneCount': { one: '{count} area', other: '{count} areas' },
-  'seo.backHome': 'See the map of Zibatá',
 
   'share.action': 'Share',
   'share.place': 'Share {name}',
@@ -200,7 +174,6 @@ export const en = {
   'map.zoomIn': 'Zoom in',
   'map.zoomOut': 'Zoom out',
   'map.rotate': 'Rotate the map. Drag, or press to turn an eighth of a turn',
-  'map.resetNorth': 'Face north',
   'map.reset': 'Back to the Zibatá view',
   'map.locate': 'Show my location',
   'map.locateError': 'We couldn’t get your location.',
@@ -223,38 +196,10 @@ export const en = {
     'Something went wrong reading Zibatá’s information. Try again in a few seconds.',
   'data.retry': 'Try again',
   'data.loading': 'Loading places…',
-
-  'onboarding.step1.title': 'How do I get around the map?',
-  'onboarding.step1.body':
-    'Drag to move around Zibatá, pinch or scroll to zoom, and rotate with two fingers or a right click. Tap an area to see what is there, and use the corner buttons to zoom, rotate or return to the full view.',
-  'onboarding.step2.title': 'How do I search and filter?',
-  'onboarding.step2.body':
-    'Type what you are looking for or pick a category. Above you can also narrow by area or keep only what is open now, and remove any filter whenever you want.',
-  'onboarding.step3.title': 'What is on a place page?',
-  'onboarding.step3.body':
-    'Here you will find the opening hours, contact and socials, address and directions. You can also share the place with anyone.',
-  'onboarding.step4.title': 'What happens to what I save?',
-  'onboarding.step4.body':
-    'Tap the heart to save the place, mark the day you went and rate it with stars. You will also see how many people have saved it.',
-  'onboarding.step5.title': 'How do I suggest a change?',
-  'onboarding.step5.body':
-    'Did you see a wrong opening time, a phone number that no longer works or a place that has closed? Do you have a business in Zibatá you want to promote or update? Write to us from "Suggest a change or contact us". We would love to hear from you.',
+  // Accessible name of the dialog skeleton: the dialog's own text has not arrived yet.
+  'dialog.loading': 'Loading…',
   'onboarding.demo.place1': 'Café on the square',
-  'onboarding.demo.place2': 'Café by the park',
-  'onboarding.demo.place3': 'Pizzeria on the square',
-  'onboarding.demo.place4': "Grandma's café",
-  'onboarding.demo.place5': 'Breakfast of the day',
-  'onboarding.demo.place6': 'City café',
-  'onboarding.demo.query': 'coffee',
-  'onboarding.demo.description': 'A neighbourhood café with breakfast and fresh bread.',
   'onboarding.demo.message': 'I want to fix an opening time',
-  'onboarding.next': 'Next',
-  'onboarding.skip': 'Skip',
-  'onboarding.start': 'Start exploring',
-  'onboarding.close': 'Close',
-  'onboarding.progress': 'Step {current} of {total}',
-
-  'about.open': 'About this guide',
   'about.openShort': 'About',
   'about.title': 'About this guide',
   'about.fix': 'Suggest or contact',
@@ -262,47 +207,13 @@ export const en = {
   'about.tutorial': 'See the tutorial',
   'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'How to use the guide',
-  'about.tutorialLead':
-    'Five questions to get around the map, search, read a place page, keep your own marks and suggest a change.',
   'about.moreLabel': 'More about the guide',
   'about.independent': 'An independent guide to the area’s businesses and services.',
 
-  'about.aboutLead': 'A guide to what’s in Zibatá, so you can decide where to go.',
-  'about.aboutBody':
-    'It brings the places of the area together on one map with what you need to decide. What each one offers, where it is, when it opens and how to get there.',
-  'about.aboutSources':
-    'It is an independent guide, by the community and for the community, built from public information and updated whenever something changes.',
-
   'about.privacy': 'Privacy',
   'about.privacyTitle': 'Privacy and terms',
-  'about.privacyLead':
-    'This guide never asks you to create an account and uses no tracking cookies, and shares your data with no one. This page also covers the terms of use.',
-  'about.privacyCounts':
-    'To understand what users are interested in, we count how many times each page and place is opened, which links are followed, which filters are used, whether a search found results, and what kind of site visitors arrive from. We do not store what you type, your IP, or any identifier, and we neither sell nor share them. If your browser asks not to be tracked, we only count the page visit.',
-  'about.privacyBody':
-    'The places you open and the language are stored only in this browser. Your favourites, your ratings and the visits you log are stored here and also sent, so they are not lost and so the count of people who saved each place is true. They travel attached to a random identifier, with no email, no name and nothing that says who you are. Your ratings are never published, not even as an average; they help order the guide and never leave the server. That identifier lives only in this browser, so clearing the site data loses it and you start over. None of this needs an account and the guide works entirely without one. The visit counting identifies nobody. If you create one later, what you already had moves into it, you can delete it from your profile and the counting stays anonymous. If you write in "Suggest a change or contact us", what you write is stored so it can be acted on, along with the contact you leave if you choose to; that is not tied to any identifier. The data controller is Aurariola.com, in Querétaro, Mexico. We do not collect sensitive personal data. We use the information only to make the guide work (language, favourites, ratings, saved visits and anonymous visit counting) and to reply if you write to us. If you want to know what data we hold, correct it, cancel it or object to our use of it, send us a message through "Suggest a change or contact us" with your name, the right you are exercising and a description of the data; you can also delete what is stored in this browser from the browser settings. We will publish any changes to this notice on this page with the update date.',
-  'about.privacyLocation':
-    'Your location is used only when you press the locate button, to centre the map, and it is never stored or transmitted. The map and the fonts are served from this same site, and saving a place calls no one either, so using the guide makes no third-party requests at all. Links to Google Maps, social accounts or delivery apps open external sites, each with its own policy.',
-
-  'about.termsTitle': 'Terms of use',
-  'about.termsWhat':
-    'This guide is an independent project. It has no commercial relationship with any of the places listed. Nobody pays to be here, to rank higher or to be featured, and there is no advertising. A place being listed is not a recommendation or an endorsement, only that it exists in the area and there is enough information to describe it.',
-  'about.termsData':
-    'The information comes from public sources and from what each business corrects, and it is reviewed each season. Even so it can be out of date. Opening hours change, a phone number stops working, a place closes without notice. The guide is offered as it is, with no guarantee that every detail is accurate today. For anything that matters (the hours before heading out, a price, a booking), confirm it directly with the place.',
-  'about.termsFix':
-    'If something about your business is wrong, or you would rather not be listed, write through "Suggest a change or contact us" and it is corrected or removed in the next update. No explanation needed. Asking is enough.',
-  'about.termsContent':
-    'The text, the map and the code of this guide belong to whoever maintains it. Each business name, logo and trademark belongs to that business, and is used here only to identify it. Links to Google Maps, social accounts or delivery apps lead to third-party sites, and what happens there follows their own rules.',
 
   'about.contribute': 'Suggest a change or contact us',
-  'about.contributeLead':
-    'Is a place missing, is something incorrect or would you like to contact us?',
-  'about.contributeBody':
-    'Anyone can write, a neighbour, a customer or the business itself. Every correction helps, be it opening hours, a phone number, social accounts or the description. You can also exercise your ARCO rights or ask us anything.',
-  'about.contributeMeanwhile':
-    'What you write goes straight to whoever maintains the guide, with no third-party service in between. No account and no email needed. The contact field is optional and only serves to reply to you. The guide is reviewed each season, and anything a business asks to correct enters the next update.',
-
-  'suggest.title': 'Tell us what changes or write your message',
   'suggest.who': 'Who is writing?',
   'suggest.whoNeighbor': 'Neighbour',
   'suggest.whoOwner': 'Business',
@@ -322,11 +233,6 @@ export const en = {
   'suggest.trap': 'Leave this field empty',
   'suggest.note':
     'Your message is stored on the guide’s own server so it can be acted on. Nothing else. No account, no address.',
-
-  'about.credits': 'Data and credits',
-  'about.creditsBody':
-    'Our own map built from OpenStreetMap, Overture Maps and ESA WorldCover data, drawn with MapLibre. Ground and terrain use Copernicus DEM GLO-30 (© DLR e.V. and Airbus, provided by the European Union and ESA, via Mapterhorn) and "Contains modified Copernicus Sentinel data 2026". Building heights are estimated with Open Buildings 2.5D (Google Research), not measured. Icons from Lucide, Tabler, Hugeicons, Iconoven, Material Design Icons, Material Symbols, Andrés Raxón and Simple Icons, flags from circle-flags and delivery logos from Wikimedia Commons.',
-  'about.version': 'Version {version}',
   'about.close': 'Close',
 
   'profile.open': 'Your Zibatá',
@@ -357,7 +263,6 @@ export const en = {
   'locale.label': 'Language',
   'locale.shortEs': 'ES',
   'locale.shortEn': 'EN',
-  'locale.switchTo': 'View the guide in {language}',
 
   'debug.title': 'Map debugging',
 } satisfies Messages

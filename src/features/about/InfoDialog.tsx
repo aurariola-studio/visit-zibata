@@ -12,6 +12,7 @@ import { X } from 'lucide-react'
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Signature } from '../../components/brand/Signature.tsx'
+import { liberarEsqueleto } from '../../components/ui/esqueleto.ts'
 import { APP_VERSION } from '../../config/site.ts'
 import { t, useLocale } from '../../i18n/index.ts'
 import { alPulsarEnlace } from '../../lib/navegacion.ts'
@@ -22,6 +23,35 @@ import styles from './InfoDialog.module.css'
 const SuggestForm = lazy(() =>
   import('./SuggestForm.tsx').then((module) => ({ default: module.SuggestForm })),
 )
+
+/**
+ * El formulario de Sugerir tiene su propio fragmento y llega después de la hoja. Mientras tanto se
+ * reserva su sitio con sus mismos bloques (quién escribe, dos campos, el mensaje y el botón), para que
+ * la hoja no cambie de alto al llegar.
+ */
+function FormSkeleton() {
+  return (
+    <div className={styles.formEsqueleto} aria-hidden="true">
+      <span className={styles.formFila}>
+        <span className={styles.formRotulo} />
+        <span className={styles.formPildoras}>
+          <span className={styles.formPildora} />
+          <span className={styles.formPildora} />
+          <span className={styles.formPildora} />
+        </span>
+      </span>
+      <span className={styles.formFila}>
+        <span className={styles.formRotulo} />
+        <span className={styles.formCampo} />
+      </span>
+      <span className={styles.formFila}>
+        <span className={styles.formRotulo} />
+        <span className={styles.formArea} />
+      </span>
+      <span className={styles.formBoton} />
+    </div>
+  )
+}
 
 type TopicKey = 'about' | 'privacy' | 'contribute'
 
@@ -84,6 +114,9 @@ export function InfoDialog({ topic, onClose, onGoTo }: InfoDialogProps) {
   const closeRef = useRef<HTMLButtonElement>(null)
   const key = TOPIC[topic]
   const page = PAGE[key]
+
+  // Si se vio el esqueleto, esta hoja entró sin animación; al cerrarse, las siguientes vuelven a tenerla.
+  useEffect(() => liberarEsqueleto, [])
 
   useEffect(() => {
     closeRef.current?.focus()
@@ -157,7 +190,7 @@ export function InfoDialog({ topic, onClose, onGoTo }: InfoDialogProps) {
            * que la página tenga que explicar que el canal no existe.
            */}
           {key === 'contribute' ? (
-            <Suspense fallback={null}>
+            <Suspense fallback={<FormSkeleton />}>
               <SuggestForm />
             </Suspense>
           ) : (

@@ -110,16 +110,10 @@ const KB = 1024
  * `CategoryIcon` pide ese fragmento en cuanto hay un respiro tras el primer pintado para que las tarjetas no salgan en
  * blanco, y una prueba comprueba el reparto contra `categories.json`.
  *
- * Lo que queda pendiente, y lo que debe hacerse para volver a 128: sacar del paquete inicial el texto que
- * no se necesita al abrir la guía. Medido sobre el catálogo en español (6,9 KB gzip en total):
- *
- *     ~2,7 KB  `about`       las páginas de información: solo se leen al abrirlas
- *     ~0,9 KB  `seo`         sobre todo del build
- *     ~0,9 KB  `onboarding`  el tutorial de la primera visita
- *
- * Se cargarían bajo demanda y mientras llegan se pinta un esqueleto (skeleton) del tamaño del contenido, para
- * que la página no salte. El costo es el de siempre: el texto de esos grupos pasa a ser asíncrono y el
- * cambio de idioma en caliente tiene que volver a pedirlos. Empezar por `about`, que es el grupo grande.
+ * 2026-11-19: hecho lo que estaba pendiente para recuperar margen. El catálogo de textos se partió en grupos
+ * (`src/i18n/grupos`, ver docs/PLAN-PARTIR-CATALOGO.md): `about` y `onboarding` viajan con el diálogo que los
+ * muestra y `seo-build` solo lo lee el build. El paquete bajó de 128,0 a 125,1 KB (menos de los 4 KB estimados).
+ * El propietario decidió dejar el tope en 130, no bajarlo. Los esqueletos de las ventanas (+0,5 KB) salen de ahí.
  *
  * Sector Fitness y Deporte (2026-11-12): sus once iconos nuevos (Tabler, Hugeicons, Material
  * Design Icons y Material Symbols) sumaban 3,4 KB y dejaban el paquete en 131,5, por encima del límite. Ningún giro del sector
@@ -134,8 +128,10 @@ const BUDGET = {
   // 11 y no 10: el estilo del contenido escrito que trae cada página (v4.16) dejó la medida en 9,9
   // de 10, y un margen de cien bytes hace que el siguiente cambio honesto rompa la compilación sin
   // que haya pasado nada. El tope sigue existiendo para cazar un crecimiento descuidado, no para
-  // discutir decimales.
-  initialCss: 11,
+  // discutir decimales. De 11 a 11,5 (2026-11-19): los esqueletos de las ventanas (DialogSkeleton) tienen
+  // que estar en el arranque porque son lo que se ve mientras el resto llega, y pesan 0,4 KB. Antes se
+  // quitaron tres reglas muertas de Experience.module.css.
+  initialCss: 11.5,
   mapJs: 320,
   mapCss: 15,
   dataJs: 50,
