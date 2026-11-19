@@ -24,6 +24,7 @@ export function SearchBar({ value, onChange, inputRef: externalRef }: SearchBarP
       <form
         className={styles.search}
         role="search"
+        autoComplete="off"
         onSubmit={(event) => {
           event.preventDefault()
           inputRef.current?.blur()
@@ -39,10 +40,18 @@ export function SearchBar({ value, onChange, inputRef: externalRef }: SearchBarP
           className={styles.input}
           data-clearable={value.length > 0}
           type="search"
+          /*
+           * Safari en iPhone ignora `autocomplete="off"` y ofrecía "AutoFill Contact" (un teléfono) encima
+           * de la hoja de resultados. Decide por el nombre, el id y la etiqueta del campo, así que lleva un
+           * nombre que dice lo que es y `inputmode="search"`.
+           */
+          name="search"
+          inputMode="search"
           value={value}
           placeholder={t(narrow ? 'search.placeholderShort' : 'search.placeholder')}
           autoComplete="off"
           autoCorrect="off"
+          autoCapitalize="off"
           spellCheck={false}
           enterKeyHint="search"
           onChange={(event) => onChange(event.target.value)}
