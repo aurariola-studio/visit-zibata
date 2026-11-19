@@ -91,6 +91,7 @@ export const ICONOS = [
   'store',
   'taco',
   'taekwondo',
+  'te',
   'tooth',
   'torta',
   'utensils-crossed',

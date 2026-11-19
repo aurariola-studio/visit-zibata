@@ -102,7 +102,9 @@
         "fundacion-kwan-moo-do-queretaro",
         "farmacia-san-pablo",
         "laboratorio-del-chopo",
-        "thedek"
+        "thedek",
+        "picorito-snacks",
+        "la-pizzeria-de-diego"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -115,6 +117,7 @@
         "entre-panes",
         "saludable",
         "panaderia-y-reposteria",
+        "botanas",
         "postres-y-dulces",
         "bebidas",
         "internacional",
@@ -311,7 +314,9 @@
         "farmacias-similares",
         "unicca-paseo-zibata",
         "dermasphere-studio",
-        "brodmann18"
+        "brodmann18",
+        "harmonie-matcha-tea-house",
+        "ramen-express-paseo-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -389,9 +394,11 @@
       },
       "active": true,
       "placeIds": [
-        "pickspot"
+        "pickspot",
+        "trompochtitlan-zibata"
       ],
       "categories": [
+        "tacos-y-antojitos",
         "deportes"
       ],
       "locationConfidence": "low",
@@ -1229,9 +1236,12 @@
         "baguettia-plaza-luna",
         "smoothie-lab-plaza-luna",
         "la-brasa-nortena",
-        "el-asadero"
+        "el-asadero",
+        "antojeria-de-la-tia",
+        "los-margaritenos"
       ],
       "categories": [
+        "desayunos-y-cafe",
         "tacos-y-antojitos",
         "mexicana",
         "carnes-y-parrilla",
