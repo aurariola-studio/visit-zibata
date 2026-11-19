@@ -9068,7 +9068,9 @@
       "name": "Harmonie Matcha & Tea House",
       "plazaId": "paseo-zibata",
       "giros": [
-        "te-y-matcha"
+        "te-y-matcha",
+        "brunch",
+        "cafeteria"
       ],
       "description": {
         "es": "Matcha, Tés, Tisanas, Paninis, Açaí, Smoothies\nOrgánico & Natural 🌱🍵",
@@ -9304,7 +9306,7 @@
       "phone": "+524426804836",
       "photos": [],
       "links": {
-        "website": null,
+        "website": "https://uqrmecdn.s3.us-east-2.amazonaws.com/u/608858/1027644-2584236b155ea6b177067083bd43eac8a16aef2.pdf",
         "instagram": "https://www.instagram.com/pizzeriadediego/",
         "facebook": "https://www.facebook.com/pizzeriadediego/",
         "tiktok": null,
@@ -9324,6 +9326,7 @@
           "https://www.instagram.com/pizzeriadediego/",
           "https://www.rappi.com.mx/restaurantes/1930500500-pizzeria-de-diego",
           "https://www.ubereats.com/mx/store/pizzeria-de-diego-%7C-zibata/hFOp2P_STJ2AYKdvadPWVQ",
+          "https://uqrmecdn.s3.us-east-2.amazonaws.com/u/608858/1027644-2584236b155ea6b177067083bd43eac8a16aef2.pdf",
           "campo:2026-11-18"
         ]
       }

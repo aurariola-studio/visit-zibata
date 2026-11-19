@@ -91,6 +91,10 @@ const KB = 1024
  * parche, no una solución: el techo vuelve a apretar con cada sector y lo que toca es partir el paquete
  * de datos (por sector o por idioma) en vez de subir otra vez.
  *
+ * De 46 a 50 (2026-11-18): siete locales de Comida más el giro Té y Matcha dejaron la medición en 46,6 KB.
+ * Otro parche, decidido por el propietario. El arreglo de fondo sigue pendiente: `verification.sources` viaja
+ * al navegador y solo lo usa el panel (unos 4,3 KB comprimidos de los 36 del paquete de locales).
+ *
  * `initialJs`: de 128 a 130 (2026-11-12, decisión del propietario). El filtro por sector, los iconos de
  * Salud y la cápsula fija dejaron el paquete en 128,1; se midió antes de subir y ya se había movido al
  * build el texto de las páginas de sector (de 128,2 a 128,1). Se sube en vez de recortar para no mezclar
@@ -134,7 +138,7 @@ const BUDGET = {
   initialCss: 11,
   mapJs: 320,
   mapCss: 15,
-  dataJs: 46,
+  dataJs: 50,
   // 2450 y no 2100 desde que la arboleda subió de densidad (v4.27): la separación media entre
   // árboles bajó de 19 a 15 metros, de 6 800 a 11 580 árboles, y el juego entero pasó de 2 095 a
   // 2 373 KB. Se sube este tope y **no** el de `largestTile`, que es el que mide lo que el
