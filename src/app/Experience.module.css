@@ -26,16 +26,6 @@
   max-width: min(48rem, calc(100% - var(--controls-right, 5rem) - 3rem));
 }
 
-.mapFallback {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: #e2d9c9;
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-}
-
 .topbar {
   position: absolute;
   top: calc(var(--space-4) + var(--safe-top));
@@ -166,18 +156,6 @@
   background: radial-gradient(90% 60% at 50% 40%, var(--sand-25), transparent), var(--sand-100);
 }
 
-.loadingText {
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-}
-
-/* El panel de la ficha mientras llega su trozo: el mismo tono apagado que el aviso de arranque. */
-.panelLoading {
-  padding: var(--space-5) var(--space-4);
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-}
-
 /* Un fallo del panel no puede llevarse la pantalla entera: ocupa la hoja y el mapa sigue detrás. */
 .panelFailure {
   padding: var(--space-6) var(--space-5);
@@ -225,9 +203,7 @@
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
 
   /*
-
    * 44 px de alto.
-
    */
 
   border-radius: var(--radius-sm);

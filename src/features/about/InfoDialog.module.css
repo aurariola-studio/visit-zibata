@@ -49,9 +49,7 @@
   overflow: hidden;
 
   /*
-
    * 369 px de lado corto.
-
    */
 
   border-radius: var(--radius-xl);
@@ -217,9 +215,69 @@
   }
 }
 
+/*
+ * Si el esqueleto ya estaba a la vista, la hoja no vuelve a entrar: el velo se aclararía y volvería a
+ * oscurecer, y la hoja saltaría. La marca la pone `DialogSkeleton` (ver components/ui/esqueleto.ts).
+ */
+:global(:root[data-esqueleto]) .veil,
+:global(:root[data-esqueleto]) .sheet {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .veil,
   .sheet {
     animation: none;
   }
+}
+
+/*
+ * El hueco del formulario de Sugerir mientras llega su fragmento. Los bloques y su brillo son los de
+ * `PlaceSkeleton` (ya cargado); aquí solo van las medidas del formulario real (ver SuggestForm).
+ */
+.formEsqueleto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-1);
+}
+
+.formFila {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.formRotulo {
+  composes: bloque from "../places/PlaceSkeleton.module.css";
+  width: 40%;
+  height: 1.05rem;
+}
+
+.formPildoras {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.formPildora {
+  composes: bloque from "../places/PlaceSkeleton.module.css";
+  width: 5rem;
+  height: 2.25rem;
+  border-radius: var(--radius-pill);
+}
+
+.formCampo {
+  composes: bloque from "../places/PlaceSkeleton.module.css";
+  height: 2.75rem;
+}
+
+.formArea {
+  composes: bloque from "../places/PlaceSkeleton.module.css";
+  height: 7rem;
+}
+
+.formBoton {
+  composes: bloque from "../places/PlaceSkeleton.module.css";
+  width: 7rem;
+  height: 2.75rem;
 }

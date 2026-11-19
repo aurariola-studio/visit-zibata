@@ -18,8 +18,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import type { Plugin } from 'vite'
-import { en } from '../../src/i18n/en.ts'
-import { es } from '../../src/i18n/es.ts'
+import { enCompleto as en, esCompleto as es } from '../../src/i18n/completo.ts'
 import {
   etiquetaDeCategoria,
   etiquetaDeGiro,

@@ -12,7 +12,7 @@
  * pestaña de una categoría se calcula en el navegador con la misma regla que el HTML servido, y dos
  * copias de esta regla acabarían diciendo cosas distintas.
  */
-import type { MessageKey, Messages } from '../i18n/es.ts'
+import type { MessageKey, TodosLosMensajes } from '../i18n/es.ts'
 import type { Category, Giro, Place } from '../types/domain.ts'
 
 /** Las categorías de un local, sin repetir y en el orden en que aparecen sus giros. */
@@ -56,7 +56,7 @@ export type Traductor = (clave: ClaveTexto, vars?: Record<string, string>) => st
 
 /** Solo las claves que son texto: las de plural se resuelven con `conCantidad`. */
 type ClaveTexto = {
-  [K in MessageKey]: Messages[K] extends string ? K : never
+  [K in MessageKey]: TodosLosMensajes[K] extends string ? K : never
 }[MessageKey]
 
 /**

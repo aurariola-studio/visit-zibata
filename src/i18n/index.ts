@@ -26,6 +26,50 @@ const cargadores: Record<Locale, () => Promise<Messages>> = {
 }
 const cargados = new Map<Locale, Messages>([['es', es]])
 
+type Mensaje = string | { one: string; other: string }
+type Textos = Record<string, Mensaje>
+
+/**
+ * Los grupos son los textos que solo lee un componente de carga diferida (las ventanas informativas, el
+ * tutorial). Viajan con él en vez de con el paquete inicial. Las claves no cambian y `t()` tampoco:
+ * quien pide el componente pide también su grupo (`cargarGrupo`), los dos en paralelo, así que no hay
+ * una segunda espera ni un parpadeo. El mapa es explícito a propósito: el empaquetador no sigue una
+ * importación cuyo nombre se arma con una variable.
+ */
+export type Grupo = 'about' | 'onboarding'
+const gruposDeTextos: Record<Grupo, Record<Locale, () => Promise<Textos>>> = {
+  about: {
+    es: async () => (await import('./grupos/about.es.ts')).aboutEs,
+    en: async () => (await import('./grupos/about.en.ts')).aboutEn,
+  },
+  onboarding: {
+    es: async () => (await import('./grupos/onboarding.es.ts')).onboardingEs,
+    en: async () => (await import('./grupos/onboarding.en.ts')).onboardingEn,
+  },
+}
+/** Los grupos que alguien ya pidió: al cambiar de idioma hay que traer los mismos en el nuevo. */
+const gruposPedidos = new Set<Grupo>()
+const gruposCargados = new Map<string, Textos>()
+
+const leerGrupo = async (grupo: Grupo, idioma: Locale): Promise<void> => {
+  const clave = `${grupo}:${idioma}`
+  if (!gruposCargados.has(clave)) gruposCargados.set(clave, await gruposDeTextos[grupo][idioma]())
+}
+
+/**
+ * Deja listo el grupo de textos en el idioma activo. Llamarlo dos veces no cuesta.
+ *
+ * Si el idioma cambia mientras se espera, se vuelve a pedir en el nuevo: `setLocale` solo trae los
+ * grupos que ya estaban pedidos cuando empezó, y este podía no estar entre ellos.
+ */
+export async function cargarGrupo(grupo: Grupo): Promise<void> {
+  gruposPedidos.add(grupo)
+  const idioma = locale
+  await leerGrupo(grupo, idioma)
+  if (idioma !== locale) return cargarGrupo(grupo)
+  for (const listener of listeners) listener()
+}
+
 /**
  * Deja listo un idioma, y lo pone en uso si es el activo. Llamarlo dos veces no cuesta.
  *
@@ -93,7 +137,10 @@ const listeners = new Set<() => void>()
  */
 export async function setLocale(next: Locale): Promise<void> {
   if (next === locale) return
-  await cargarIdioma(next)
+  await Promise.all([
+    cargarIdioma(next),
+    ...[...gruposPedidos].map((grupo) => leerGrupo(grupo, next)),
+  ])
   locale = next
   messages = cargados.get(next) ?? es
   pluralRules = new Intl.PluralRules(next)
@@ -140,8 +187,25 @@ function format(message: Message, rules: Intl.PluralRules, vars?: Vars): string 
   return interpolate(rules.select(count) === 'one' ? message.one : message.other, vars)
 }
 
+function mensajeDe(key: MessageKey): Mensaje | undefined {
+  const base = (messages as Textos)[key]
+  if (base !== undefined) return base
+  for (const grupo of gruposPedidos) {
+    const texto = gruposCargados.get(`${grupo}:${locale}`)?.[key]
+    if (texto !== undefined) return texto
+  }
+  return undefined
+}
+
 export function t(key: MessageKey, vars?: Vars): string {
-  return format(messages[key], pluralRules, vars)
+  const mensaje = mensajeDe(key)
+  if (mensaje === undefined) {
+    // Un texto de grupo leído antes de pedir el grupo: es un olvido de quien escribió el componente.
+    if (import.meta.env.DEV)
+      console.warn(`i18n: la clave "${key}" es de un grupo que no se ha cargado`)
+    return key
+  }
+  return format(mensaje, pluralRules, vars)
 }
 
 /** Texto de datos (categorías, subcategorías) en el idioma activo, con español como respaldo. */

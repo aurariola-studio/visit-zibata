@@ -23,6 +23,11 @@
   animation: pop var(--duration-slow) var(--ease-out);
 }
 
+/* Si el esqueleto ya estaba a la vista, la tarjeta no vuelve a entrar (ver components/ui/esqueleto.ts). */
+:global(:root[data-esqueleto]) .dialog[open] {
+  animation: none;
+}
+
 @keyframes pop {
   from {
     opacity: 0;

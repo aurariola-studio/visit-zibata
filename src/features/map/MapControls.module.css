@@ -41,11 +41,8 @@
   overflow: hidden;
 
   /*
-
    * 40 px de lado corto. Llevó la esquina de un control, y la pila es una superficie: lo que
-
    * se pulsa son las teclas de dentro, que no llevan ninguna porque las recorta ella.
-
    */
 
   border-radius: var(--radius-sm);
@@ -102,9 +99,7 @@
   padding: var(--space-2) var(--space-3);
 
   /*
-
    * 34 px de alto.
-
    */
 
   border-radius: var(--radius-sm);

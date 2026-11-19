@@ -2,7 +2,17 @@
  * Textos de la interfaz en español (idioma inicial). Para añadir otro idioma crea `en.ts` con
  * `satisfies Messages` y regístralo en `src/i18n/index.ts`: TypeScript exigirá todas las claves.
  * Valores con `{variable}` se interpolan; los objetos { one, other } son plurales (Intl.PluralRules).
+ *
+ * Este es el catálogo que viaja en el paquete inicial: solo lleva lo que la interfaz necesita al
+ * arrancar. Los textos largos de las ventanas informativas y del tutorial viven en `grupos/`, y se
+ * piden junto con el componente que los muestra (ver `cargarGrupo` en `index.ts`). Un texto nuevo va
+ * aquí solo si lo lee algo que no es de carga diferida; si no, al grupo de quien lo lee. Ver
+ * docs/PLAN-PARTIR-CATALOGO.md.
  */
+import type { aboutEs } from './grupos/about.es.ts'
+import type { onboardingEs } from './grupos/onboarding.es.ts'
+import type { seoBuildEs } from './grupos/seo-build.es.ts'
+
 export const es = {
   'app.name': 'Visit Zibatá',
   'app.tagline': 'La guía local',
@@ -67,8 +77,6 @@ export const es = {
   'place.machineTranslation': 'Traducción automática',
   'place.showOriginal': 'Ver original en español',
   'place.showTranslation': 'Ver traducción',
-  'place.location': 'Ubicación',
-  'place.description': 'Descripción',
   'place.hours': 'Horario',
   'place.contact': 'Contacto y redes',
   'place.call': 'Llamar',
@@ -130,7 +138,6 @@ export const es = {
 
   'visit.action': 'Registrar visita',
   'visit.mark': 'Registrar visita a {name}',
-  'visit.pickDay': 'Elige el día de la visita',
   'visit.been': { one: 'Has venido una vez', other: 'Has venido {count} veces' },
   'visit.lastOne': ', la última el {date}.',
   'visit.seeAll': 'Ver todas',
@@ -144,8 +151,6 @@ export const es = {
   'favorites.remove': 'Quitar de favoritos',
   'favorites.filter': 'Favoritos',
   'filters.openNow': 'Abierto ahora',
-  // Nombre del grupo de interruptores para quien lo escucha; a la vista no lleva título.
-  'filters.switches': 'Filtros rápidos',
   // Para el punto de la tarjeta, que no lleva texto a la vista. Lo lee un lector de pantalla.
   'filters.openNowLabel': 'Abierto ahora, {name}',
   'filters.closedNowLabel': 'Cerrado ahora, {name}',
@@ -164,47 +169,19 @@ export const es = {
   'closure.since': 'Así desde el {date}.',
   // Mientras el negocio no dé fecha, la guía no la inventa, y lo dice en vez de callarlo.
   'closure.noReturn': 'Todavía no hay fecha de reapertura.',
-  'favorites.saved': 'Guardado en favoritos',
 
   'brand.by': 'Un proyecto de',
 
   /*
-   * Textos que solo salen en los metadatos de cada página prerenderizada: título de pestaña,
-   * resultado de búsqueda y vista previa al compartir. Nunca se ven dentro de la aplicación.
+   * Los textos de los metadatos que también usa la aplicación (la pestaña del navegador y el
+   * título de cada página). El resto, los que solo escribe el build en el HTML, están en
+   * `grupos/seo-build.es.ts`.
    */
   'seo.home.title': 'Visit Zibatá · Tu guía local',
-  'seo.imageAlt': 'Mapa de Zibatá con sus plazas y comercios.',
-  'seo.home.description':
-    'Encuentra tu próximo lugar favorito en Zibatá, con horarios, contacto y ubicación en un solo lugar.',
   'seo.title': '{name} · Visit Zibatá',
-  // Solo para los locales cuyo nombre se repite (dos sucursales de una misma cadena).
-  'seo.title.zone': '{name} en {plaza} · Visit Zibatá',
   // El título de una zona dice a qué se viene a su página: qué hay y cómo llegar.
   'seo.title.plaza': '{name}, qué hay y cómo llegar · Visit Zibatá',
-  'seo.place.fallback': '{giros} en {plaza}, Zibatá. Horario, contacto y cómo llegar.',
-  // Lo que se añade a una descripción corta: solo los giros y la zona del propio local.
-  'seo.place.context': '{giros} en {lugar}.',
-  'seo.place.contextLugar': 'En {lugar}.',
-  'seo.plaza.fallback': '{name}, Zibatá. Qué hay, horarios y cómo llegar.',
-  // Los cuatro siguientes solo salen en el HTML que se sirve antes de que arranque la aplicación
-  // (ver scripts/build/contenido.ts). Son texto de interfaz igual: los lee quien no tiene
-  // JavaScript, y los lee un buscador.
-  'seo.nearby': 'Más en {plaza}',
-  'seo.whatsHere': 'Qué hay aquí',
-  'seo.zones': 'Las zonas de Zibatá',
-  'seo.backHome': 'Ver el mapa de Zibatá',
-  // Las páginas de categoría: solo salen en el HTML servido y en los metadatos.
-  'seo.categories': 'Categorías',
   'seo.category.name': '{label} en Zibatá',
-  /*
-   * La descripción dice qué se encuentra y cuántos lugares hay. La cantidad de zonas no entra: la
-   * página ya las enseña, y con un solo local la frase se alargaba para decir poco.
-   */
-  'seo.category.description': {
-    one: '{nombre} en Zibatá. Conoce el lugar que la comunidad tiene para ofrecerte, con horario, contacto y cómo llegar.',
-    other:
-      '{nombre} en Zibatá. Conoce los {count} lugares que la comunidad tiene para ofrecerte, con horarios, contacto y cómo llegar.',
-  },
   /*
    * El filtro usa la etiqueta corta a propósito ("Italiana", "Saludable"); el título y la
    * descripción la dicen completa. Solo hace falta en las que son un adjetivo suelto.
@@ -215,10 +192,6 @@ export const es = {
   'seo.category.nombre.saludable': 'Comida Saludable',
   'seo.category.nombre.casera': 'Comida Casera',
   'seo.category.nombre.internacional': 'Comida Internacional',
-  // Con dos o más giros que la etiqueta no dice, el título los nombra: es lo que la gente busca.
-  'seo.category.places': 'Lugares de esta categoría',
-  'seo.category.zones': 'Dónde están',
-  'seo.category.zoneCount': { one: '{count} zona', other: '{count} zonas' },
 
   'share.action': 'Compartir',
   'share.place': 'Compartir {name}',
@@ -239,7 +212,6 @@ export const es = {
   'map.zoomIn': 'Acercar',
   'map.zoomOut': 'Alejar',
   'map.rotate': 'Girar el mapa. Arrastra, o pulsa para girar un octavo de vuelta',
-  'map.resetNorth': 'Orientar al norte',
   'map.reset': 'Volver a la vista de Zibatá',
   'map.locate': 'Mostrar mi ubicación',
   'map.locateError': 'No pudimos obtener tu ubicación.',
@@ -262,38 +234,11 @@ export const es = {
     'Ocurrió un problema al leer la información de Zibatá. Inténtalo de nuevo en unos segundos.',
   'data.retry': 'Reintentar',
   'data.loading': 'Cargando lugares…',
-
-  'onboarding.step1.title': '¿Cómo me muevo por el mapa?',
-  'onboarding.step1.body':
-    'Arrastra para recorrer Zibatá, pellizca o usa la rueda para acercarte, y gira con dos dedos o con clic derecho. Toca una zona para ver qué hay, y usa los botones de la esquina para acercar, girar o volver a la vista general.',
-  'onboarding.step2.title': '¿Cómo busco y filtro?',
-  'onboarding.step2.body':
-    'Escribe lo que buscas o elige una categoría. Arriba también puedes acotar por zona o dejar solo lo que está abierto ahora, y quitar cualquier filtro cuando quieras.',
-  'onboarding.step3.title': '¿Qué encuentro en la ficha?',
-  'onboarding.step3.body':
-    'Aquí encuentras el horario, el contacto y las redes, la dirección y cómo llegar. También puedes compartir la ficha con quien quieras.',
-  'onboarding.step4.title': '¿Qué pasa con lo que guardo?',
-  'onboarding.step4.body':
-    'Toca el corazón para guardar el lugar, marca el día en que fuiste y califica con estrellas. También verás cuántas personas lo han guardado.',
-  'onboarding.step5.title': '¿Cómo sugiero un cambio?',
-  'onboarding.step5.body':
-    '¿Viste un horario equivocado, un teléfono que ya no funciona o un lugar que cerró? ¿Tienes un local en Zibatá que quieres promocionar o actualizar? Escríbenos desde "Sugiere un cambio o contáctanos". Nos encantará leerte.',
+  // Nombre accesible del esqueleto de las ventanas: el texto de ellas todavía no ha llegado.
+  'dialog.loading': 'Cargando…',
+  // Del tutorial, pero también los lee SuggestForm: por eso están aquí y no en el grupo del tutorial.
   'onboarding.demo.place1': 'Café de la plaza',
-  'onboarding.demo.place2': 'Cafetería del parque',
-  'onboarding.demo.place3': 'Pizzería de la plaza',
-  'onboarding.demo.place4': 'Café de la Abuela',
-  'onboarding.demo.place5': 'Desayunos del Día',
-  'onboarding.demo.place6': 'Café de la Ciudad',
-  'onboarding.demo.query': 'café',
-  'onboarding.demo.description': 'Café de barrio con desayunos y pan del día.',
   'onboarding.demo.message': 'Quiero corregir un horario',
-  'onboarding.next': 'Siguiente',
-  'onboarding.skip': 'Saltar',
-  'onboarding.start': 'Empezar a explorar',
-  'onboarding.close': 'Cerrar',
-  'onboarding.progress': 'Paso {current} de {total}',
-
-  'about.open': 'Acerca de esta guía',
   'about.openShort': 'Acerca',
   'about.title': 'Acerca de esta guía',
   'about.fix': 'Sugiere o contacta',
@@ -301,16 +246,8 @@ export const es = {
   'about.tutorial': 'Ver el tutorial',
   'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'Cómo usar la guía',
-  'about.tutorialLead':
-    'Cinco preguntas para moverte por el mapa, buscar, leer una ficha, guardar lo tuyo y sugerir un cambio.',
   'about.moreLabel': 'Más sobre la guía',
   'about.independent': 'Guía independiente de establecimientos y servicios de la zona.',
-
-  'about.aboutLead': 'Una guía para saber qué hay en Zibatá y decidir adónde ir.',
-  'about.aboutBody':
-    'Reúne en un mapa los lugares de la zona con lo que hace falta para decidir. Qué ofrece cada uno, dónde está, a qué hora abre y cómo llegar.',
-  'about.aboutSources':
-    'Es una guía independiente, de la comunidad para la comunidad, hecha con información pública y actualizada cuando algo cambia.',
 
   /*
    * Dos nombres para la misma página, y es a propósito. "Privacidad" es la etiqueta corta de la
@@ -321,38 +258,8 @@ export const es = {
    */
   'about.privacy': 'Privacidad',
   'about.privacyTitle': 'Privacidad y términos',
-  'about.privacyLead':
-    'Esta guía no te pide crear una cuenta ni usa cookies de rastreo, y no comparte tus datos con nadie. Esta página también reúne los términos de uso.',
-  /*
-   * Desde la v4.8.0 la guía sí cuenta visitas, así que el aviso lo dice. El texto es deliberadamente
-   * concreto: una promesa vaga ("respetamos tu privacidad") no se puede comprobar, y esta sí, porque
-   * describe exactamente lo que guardan las tablas de la base (ver worker/esquema.sql): contadores por día.
-   */
-  'about.privacyCounts':
-    'Para saber los intereses del usuario, contamos cuántas veces se abre cada página y cada lugar, a qué enlaces se sale, qué filtros se usan, si una búsqueda encontró resultados y desde qué tipo de sitio se llega. No guardamos lo que escribes, tu IP ni ningún identificador, y no los vendemos ni los compartimos. Si tu navegador pide no ser rastreado, solo contamos la visita a la página.',
-  'about.privacyBody':
-    'Los lugares que abres y el idioma se guardan únicamente en este navegador. Tus favoritos, tus calificaciones y las visitas que marcas se guardan aquí y además se envían para que no se pierdan y para que el número de personas que guardaron cada lugar sea cierto. Viajan atados a un identificador al azar, sin correo, sin nombre y sin nada que diga quién eres. Tus calificaciones no se publican nunca, ni siquiera como promedio; sirven para ordenar la guía y no salen del servidor. Ese identificador vive solo en este navegador, así que si borras los datos del sitio se pierde y empiezas de cero. Nada de esto necesita una cuenta y la guía funciona entera sin ella. El conteo de visitas no identifica a nadie. Si algún día creas una, lo que ya tenías pasará a estar en ella, podrás borrarlo desde tu perfil y el conteo seguirá siendo anónimo. Si escribes en "Sugiere un cambio o contáctanos", lo que escribas se guarda para poder atenderlo, junto con el contacto que dejes si decides dejarlo; eso no va atado a ningún identificador. El responsable de estos datos es Aurariola.com, en Querétaro, México. No recabamos datos sensibles. Usamos la información solo para que la guía funcione (idioma, favoritos, calificaciones, visitas guardadas y conteo anónimo de visitas) y para responderte si nos escribes. Si quieres saber qué datos tenemos, corregirlos, cancelarlos u oponerte a que los usemos, envíanos un mensaje por "Sugiere un cambio o contáctanos" indicando tu nombre, qué derecho ejerces y una descripción de los datos; también puedes borrar lo guardado en este navegador desde la configuración del mismo. Publicaremos cualquier cambio a este aviso en esta página con la fecha de actualización.',
-  'about.privacyLocation':
-    'Tu ubicación se utiliza solo al pulsar el botón para centrar el mapa y no se guarda ni se transmite. El mapa y las tipografías se sirven desde este mismo sitio, y guardar un lugar tampoco llama a nadie de fuera, de modo que usar la guía no genera ni una petición a terceros. Los enlaces a Google Maps, redes sociales o reparto abren sitios externos, cada uno con su propia política.',
-
-  'about.termsTitle': 'Términos de uso',
-  'about.termsWhat':
-    'Esta guía es un proyecto independiente. No tiene relación comercial con ninguno de los lugares que aparecen. Nadie paga por estar, por salir más arriba ni por aparecer destacado, y no hay publicidad. Que un lugar esté aquí no es una recomendación ni un respaldo, solo que existe en la zona y hay datos suficientes para describirlo.',
-  'about.termsData':
-    'La información se reúne de fuentes públicas y de lo que corrige cada negocio, y se revisa por temporada. Aun así puede estar desactualizada. Los horarios cambian, un teléfono deja de servir y un local cierra sin avisar. La guía se ofrece tal como está, sin garantía de que cada dato sea exacto hoy. Para algo que importe (el horario antes de salir, un precio, una reserva), confírmalo directo con el lugar.',
-  'about.termsFix':
-    'Si un dato de tu negocio está mal, o prefieres no aparecer, escribe por "Sugiere un cambio o contáctanos" y se corrige o se quita en la siguiente actualización. No hace falta explicar por qué. Basta con pedirlo.',
-  'about.termsContent':
-    'Los textos, el mapa y el código de la guía son de quien la mantiene. El nombre, el logotipo y la marca de cada negocio son de ese negocio, y aquí se usan solo para identificarlo. Los enlaces a Google Maps, redes sociales o reparto llevan a sitios de terceros, y lo que ocurra ahí se rige por sus propias reglas.',
 
   'about.contribute': 'Sugiere un cambio o contáctanos',
-  'about.contributeLead': '¿Falta un lugar, hay un dato incorrecto o quieres escribirnos?',
-  'about.contributeBody':
-    'Escribe quien sea, vecino, cliente o el propio negocio. Toda corrección suma, sea un horario, un teléfono, las redes o la descripción. También puedes ejercer tus derechos ARCO o hacer cualquier consulta.',
-  'about.contributeMeanwhile':
-    'Lo que escribas llega directo a quien mantiene la guía, sin pasar por ningún servicio de terceros. No hace falta cuenta ni correo. El contacto es opcional y solo sirve para responderte. La guía se revisa por temporada, y lo que pida corregir un negocio entra en la siguiente actualización.',
-
-  'suggest.title': 'Cuéntanos qué cambia o escribe tu mensaje',
   'suggest.who': '¿Quién escribe?',
   'suggest.whoNeighbor': 'Vecino',
   'suggest.whoOwner': 'Negocio',
@@ -373,11 +280,6 @@ export const es = {
   'suggest.trap': 'No rellenes este campo',
   'suggest.note':
     'Tu mensaje se guarda en el servidor de la guía para poder atenderlo. Nada más. Ni cuenta ni dirección.',
-
-  'about.credits': 'Datos y créditos',
-  'about.creditsBody':
-    'Mapa propio con datos de OpenStreetMap, Overture Maps y ESA WorldCover, dibujado con MapLibre. Suelo y relieve con Copernicus DEM GLO-30 (© DLR e.V. y Airbus, provisto por la Unión Europea y la ESA, vía Mapterhorn) y "Contains modified Copernicus Sentinel data 2026". Alturas de los edificios estimadas con Open Buildings 2.5D (Google Research), no medidas. Iconos de Lucide, Tabler, Hugeicons, Iconoven, Material Design Icons, Material Symbols, Andrés Raxón y Simple Icons, banderas de circle-flags y logotipos de reparto de Wikimedia Commons.',
-  'about.version': 'Versión {version}',
   'about.close': 'Cerrar',
 
   'profile.open': 'Tu Zibatá',
@@ -408,12 +310,19 @@ export const es = {
   'locale.label': 'Idioma',
   'locale.shortEs': 'ES',
   'locale.shortEn': 'EN',
-  'locale.switchTo': 'Ver la guía en {language}',
 
   'debug.title': 'Depuración del mapa',
 } as const
 
-export type MessageKey = keyof typeof es
-export type Messages = {
-  [K in MessageKey]: (typeof es)[K] extends string ? string : { one: string; other: string }
+/** La forma de un catálogo: cada clave, un texto o un plural. `satisfies` la exige en el otro idioma. */
+export type Forma<T> = {
+  [K in keyof T]: T[K] extends string ? string : { one: string; other: string }
 }
+
+/** Lo que viaja en el paquete inicial. */
+export type Messages = Forma<typeof es>
+
+/** Todas las claves, estén en el paquete inicial o en un grupo: `t()` acepta cualquiera. */
+type Todas = typeof es & typeof aboutEs & typeof onboardingEs & typeof seoBuildEs
+export type MessageKey = keyof Todas
+export type TodosLosMensajes = Forma<Todas>

@@ -1,0 +1,203 @@
+/*
+ * El esqueleto de las ventanas: misma geometría que `InfoDialog` y `OnboardingModal`, bloque a bloque.
+ * Si cambia el ancho, la esquina o el alto de una de ellas, hay que cambiarlo aquí también.
+ *
+ * Los bloques y su brillo salen de `PlaceSkeleton`, que ya viaja en el arranque: no se repite el
+ * tono ni la animación, se componen. Este archivo también está en el arranque, porque es lo que se ve
+ * mientras el resto llega: cada regla de aquí pesa en `initialCss`.
+ */
+.bloque {
+  composes: bloque from "../../features/places/PlaceSkeleton.module.css";
+}
+
+.linea {
+  composes: bloque linea from "../../features/places/PlaceSkeleton.module.css";
+  /* En una columna que recorta, las líneas no encogen para caber: se cortan. */
+  flex: none;
+}
+
+/* Lo mismo que el velo de `InfoDialog`; `dvh` mide lo que de verdad se ve en un teléfono. */
+.velo {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  padding-top: calc(var(--space-4) + var(--safe-top));
+  padding-bottom: calc(var(--space-4) + var(--safe-bottom));
+  background: rgb(31 36 25 / 0.3);
+  backdrop-filter: blur(2px);
+  /* Un instante sin nada: si la ventana real llega antes, el esqueleto no llega a verse. */
+  animation: aparece var(--duration-base) var(--ease-out) 150ms backwards;
+}
+
+@keyframes aparece {
+  from {
+    opacity: 0;
+  }
+}
+
+.hoja {
+  width: min(32rem, 100%);
+  /* Acerca: 566 px de alto en escritorio. */
+  height: min(100%, 35.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow: hidden;
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-solid);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Sugerir lleva el formulario debajo: 645 px. */
+.hoja[data-tipo="sugerir"] {
+  height: min(100%, 40.5rem);
+}
+
+/* La de privacidad llena la hoja hasta donde llegue la pantalla, como su texto. */
+.hoja[data-tipo="privacidad"] {
+  height: 100%;
+}
+
+.cabecera,
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.titulo {
+  width: 60%;
+  height: 1.75rem;
+}
+
+/* Los 40 px de la cruz de cerrar. */
+.cerrar {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.texto,
+.copia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Las líneas llenan lo que queda de hoja y se desvanecen contra el borde, como el texto de la real. */
+.texto {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2rem), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 2rem), transparent);
+}
+
+.tarjeta {
+  width: min(30rem, 100%);
+  height: 36rem;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--sand-25);
+  box-shadow: var(--shadow-lg);
+}
+
+.paso {
+  width: 5rem;
+  height: 0.9rem;
+}
+
+/* La miniatura de cada paso: el mismo alto en todos, como en el tutorial. */
+.escena {
+  flex: none;
+  height: 14.5rem;
+  margin-bottom: var(--space-1);
+  border-radius: var(--radius-sm);
+}
+
+/* El texto reserva el alto del paso más largo, igual que en el tutorial. */
+.copia {
+  flex: none;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 9.5rem;
+}
+
+.puntos {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: var(--space-2);
+}
+
+.punto {
+  composes: bloque;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: var(--radius-pill);
+}
+
+/* El primero es el paso activo, más largo. */
+.punto:first-child {
+  width: 1.4rem;
+}
+
+.acciones {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.saltar {
+  width: 5rem;
+  height: 2.75rem;
+}
+
+.seguir {
+  flex: 1;
+  height: 2.75rem;
+}
+
+/* En el teléfono el tutorial es la hoja de abajo: ancha, pegada al borde y con la esquina de arriba. */
+@media (max-width: 639px) {
+  .velo[data-tipo="tutorial"] {
+    place-items: end center;
+    padding: 0;
+  }
+
+  .tarjeta {
+    width: 100%;
+    height: min(36rem, calc(100dvh - 0.5rem));
+    padding-bottom: calc(var(--space-5) + var(--safe-bottom));
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  /* Con el texto en una columna estrecha, Acerca mide 738 px y Sugerir llena la pantalla. */
+  .hoja[data-tipo="acerca"] {
+    height: min(100%, 46rem);
+  }
+
+  .hoja[data-tipo="sugerir"] {
+    height: 100%;
+  }
+
+  .escena {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 9rem;
+    margin-top: var(--space-2);
+  }
+
+  .copia {
+    height: auto;
+  }
+}

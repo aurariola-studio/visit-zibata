@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { en } from '../i18n/en.ts'
-import { es } from '../i18n/es.ts'
+import { enCompleto as en, esCompleto as es } from '../i18n/completo.ts'
 import { TITULOS_RESERVADOS } from './titulos-reservados.ts'
 
 const KEYS = [
