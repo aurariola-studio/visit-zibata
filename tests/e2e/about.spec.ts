@@ -158,9 +158,12 @@ test.describe('Información de la guía', () => {
     test(`${caso.ruta} muestra su esqueleto mientras carga y luego la ventana real`, async ({
       page,
     }) => {
+      // Se baja la respuesta entera y se entrega tras la demora: retener una petición abierta y
+      // continuarla después se quedaba colgado en el navegador del CI.
       await page.route(caso.fragmento, async (route) => {
+        const respuesta = await route.fetch()
         await new Promise((resolve) => setTimeout(resolve, 2000))
-        await route.continue()
+        await route.fulfill({ response: respuesta })
       })
       await openApp(page, { path: caso.ruta })
       const esqueleto = page.getByRole('status', { name: 'Cargando…' })
