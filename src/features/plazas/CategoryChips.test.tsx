@@ -39,8 +39,27 @@ describe('CategoryChips: la elegida queda a la vista', () => {
     conGeometria()
     const { container } = pintar(categoriesFixture[2]?.id ?? null)
     const carril = container.querySelector('ul')?.parentElement as HTMLElement
-    // La tercera categoría es el cuarto enlace (tras "Todo"): empieza en 330 y acaba en 430, más 28 de aire.
-    expect(carril.scrollLeft).toBe(430 + 28 - 300)
+    // La tercera categoría es el cuarto enlace (tras "Todo"): empieza en 330 y acaba en 430, más 40 que
+    // dejan libre el desvanecido (36 px) y un poco de aire.
+    expect(carril.scrollLeft).toBe(430 + 40 - 300)
+  })
+
+  it('si está más allá del borde izquierdo, el carril vuelve hasta dejarla dentro, con el mismo margen', () => {
+    conGeometria()
+    const { container, rerender } = pintar(null)
+    const carril = container.querySelector('ul')?.parentElement as HTMLElement
+    carril.scrollLeft = 500
+    rerender(
+      <CategoryChips
+        categories={categoriesFixture}
+        activeId={categoriesFixture[2]?.id ?? null}
+        onChange={vi.fn()}
+        hrefFor={() => '/'}
+        label="Categorías"
+      />,
+    )
+    // Empieza en 330; con 40 de margen, el carril queda en 290.
+    expect(carril.scrollLeft).toBe(330 - 40)
   })
 
   it('si ya se ve entera, no se mueve', () => {

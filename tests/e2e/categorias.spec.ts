@@ -104,6 +104,39 @@ test.describe('Páginas de categoría', () => {
     }
   })
 
+  test('el carril se desvanece en línea recta, solo por el lado que tiene más y por los dos en medio', async ({
+    page,
+  }) => {
+    await openApp(page, { path: RAIZ_DE_CATEGORIAS })
+    await waitForMap(page)
+    const carril = cápsulas(page).locator('xpath=..')
+    const desborda = await carril.evaluate((el) => el.scrollWidth > el.clientWidth + 1)
+    test.skip(!desborda, 'Con todas las cápsulas a la vista no hay nada que desvanecer')
+    const mover = (fraccion: number) =>
+      carril.evaluate((el, f) => {
+        el.scrollLeft = (el.scrollWidth - el.clientWidth) * f
+      }, fraccion)
+
+    // En el tope izquierdo no se apaga nada a ese lado; a la derecha, 36 px.
+    await expect(carril).toHaveCSS('--desv-izq', '0px')
+    await expect(carril).toHaveCSS('--desv-der', '36px')
+    // En medio, los dos lados.
+    await mover(0.5)
+    await expect(carril).toHaveCSS('--desv-izq', '36px')
+    await expect(carril).toHaveCSS('--desv-der', '36px')
+    // En el tope derecho, solo a la izquierda.
+    await mover(1)
+    await expect(carril).toHaveCSS('--desv-izq', '36px')
+    await expect(carril).toHaveCSS('--desv-der', '0px')
+    // Y es un degradado recto: sin círculos, que dejaban un corte vertical donde se juntaban con el centro.
+    const mascara = await carril.evaluate((el) => {
+      const estilo = getComputedStyle(el)
+      return estilo.maskImage || estilo.webkitMaskImage
+    })
+    expect(mascara).toContain('linear-gradient')
+    expect(mascara).not.toContain('radial-gradient')
+  })
+
   test('una cápsula elegida lejos del borde queda a la vista dentro del carril', async ({
     page,
   }) => {
