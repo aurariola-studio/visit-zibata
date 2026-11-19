@@ -100,6 +100,12 @@ const KB = 1024
  * llegó a 130,6 KB. En vez de subir el tope, los iconos de Dermatología, Dentista y Ortodoncia pasaron al
  * fragmento diferido de `iconos-deporte.tsx` (129,9). El propietario decidió no tocar el tope por ahora.
  *
+ * Más tarde ese día, con los iconos de librerías para 16 categorías y giros el paquete subió a 131,3. El propietario
+ * decidió el criterio: los iconos de sectores y categorías, que salen en la primera pantalla, se quedan en el paquete, y
+ * todos los de subcategorías (giros) van al fragmento diferido `iconos-diferidos.tsx`, sea cual sea su sector (127,3).
+ * `CategoryIcon` pide ese fragmento en cuanto hay un respiro tras el primer pintado para que las tarjetas no salgan en
+ * blanco, y una prueba comprueba el reparto contra `categories.json`.
+ *
  * Lo que queda pendiente, y lo que debe hacerse para volver a 128: sacar del paquete inicial el texto que
  * no se necesita al abrir la guía. Medido sobre el catálogo en español (6,9 KB gzip en total):
  *

@@ -14,7 +14,7 @@
         "es": "Desayunos y Café",
         "en": "Breakfast & Coffee"
       },
-      "icon": "coffee",
+      "icon": "desayuno",
       "hue": 32,
       "schemaType": "CafeOrCoffeeShop",
       "order": 10,
@@ -56,7 +56,7 @@
             "es": "Desayunos",
             "en": "Breakfast"
           },
-          "icon": "egg-fried",
+          "icon": "plato-desayuno",
           "synonyms": [
             "desayunar",
             "almuerzo",
@@ -72,7 +72,7 @@
             "es": "Brunch",
             "en": "Brunch"
           },
-          "icon": "hotcakes",
+          "icon": "brunch",
           "synonyms": [
             "brunch",
             "avocado toast",
@@ -153,19 +153,6 @@
           "synonyms": [
             "venezolana",
             "arepera"
-          ]
-        },
-        {
-          "id": "memelas",
-          "label": {
-            "es": "Memelas",
-            "en": "Memelas"
-          },
-          "icon": "memela",
-          "synonyms": [
-            "memelas",
-            "memela",
-            "tlacoyos"
           ]
         },
         {
