@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-12",
+  "updatedAt": "2026-11-18",
   "places": [
     {
       "id": "carls-jr",
@@ -7319,7 +7319,10 @@
       "giros": [
         "pilates"
       ],
-      "description": null,
+      "description": {
+        "es": "Your Pilates place in Zibatá 🤍\nReformer Pilates · movimiento · comunidad\nEntrena fuerte, muévete mejor y disfruta tu hora favorita.",
+        "en": "Your Pilates place in Zibatá 🤍\nReformer Pilates · movement · community\nTrain hard, move better and enjoy your favorite hour."
+      },
       "hours": {
         "mon": [
           "06:00-10:00",
@@ -7342,18 +7345,22 @@
           "18:00-21:00"
         ],
         "sat": [],
-        "sun": []
+        "sun": [],
+        "byClasses": true
       },
-      "location": null,
-      "googleMapsUri": null,
+      "location": {
+        "lat": 20.6812834,
+        "lng": -100.340758
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/YRTnbcoPL4y4hoPF7",
       "googlePlaceId": null,
       "phone": "+524461335933",
       "photos": [],
       "links": {
         "website": null,
-        "instagram": null,
+        "instagram": "https://www.instagram.com/lbalans_pilates/",
         "facebook": null,
-        "tiktok": null,
+        "tiktok": "https://www.tiktok.com/@lbalans_pilates",
         "whatsapp": null,
         "rappi": null,
         "uberEats": null,
@@ -7363,10 +7370,12 @@
       "verification": {
         "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-17",
+        "lastVerifiedAt": "2026-11-18",
         "sources": [
-          "https://www.google.com/maps/search/L-Balans+Pilates+Reformer+Zibat%C3%A1",
-          "campo:2026-11-17"
+          "https://maps.app.goo.gl/YRTnbcoPL4y4hoPF7",
+          "https://www.instagram.com/lbalans_pilates/",
+          "https://www.tiktok.com/@lbalans_pilates",
+          "campo:2026-11-18"
         ]
       }
     },
@@ -8227,7 +8236,7 @@
         "lat": 20.6791076,
         "lng": -100.3146856
       },
-      "googleMapsUri": "https://maps.app.goo.gl/cJtbgmrqZuHxtzR9A",
+      "googleMapsUri": "https://maps.app.goo.gl/AvTk4HUAw993cZuT9",
       "googlePlaceId": null,
       "phone": "+524461139222",
       "photos": [],
@@ -8247,7 +8256,7 @@
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-17",
         "sources": [
-          "https://maps.app.goo.gl/cJtbgmrqZuHxtzR9A",
+          "https://maps.app.goo.gl/AvTk4HUAw993cZuT9",
           "https://zibatahoy.com/listing/farmacias-similares-zibata/",
           "https://www.instagram.com/fsimilares",
           "https://www.facebook.com/farmaciassimilares/",
@@ -8987,6 +8996,468 @@
           "https://www.google.com/maps/search/BRODMANN18+Zibat%C3%A1",
           "https://maps.app.goo.gl/sTTu9EsFEyvPAqDm8",
           "campo:2026-11-17"
+        ]
+      }
+    },
+    {
+      "id": "antojeria-de-la-tia",
+      "slug": "antojeria-de-la-tia",
+      "name": "La Antojería de la Tía",
+      "plazaId": "plaza-luna",
+      "giros": [
+        "antojitos-de-masa",
+        "desayunos"
+      ],
+      "description": {
+        "es": "Antojitos que enamoran",
+        "en": "Antojitos that win your heart"
+      },
+      "hours": {
+        "mon": [],
+        "tue": [
+          "09:00-18:00"
+        ],
+        "wed": [
+          "09:00-18:00"
+        ],
+        "thu": [
+          "09:00-18:00"
+        ],
+        "fri": [
+          "09:00-21:00"
+        ],
+        "sat": [
+          "10:00-21:00"
+        ],
+        "sun": [
+          "10:00-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6851989,
+        "lng": -100.3253168
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/qRKMLisYhTiizxkB9",
+      "googlePlaceId": null,
+      "phone": "+524423532300",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-18",
+        "sources": [
+          "https://maps.app.goo.gl/qRKMLisYhTiizxkB9",
+          "campo:2026-11-18"
+        ]
+      }
+    },
+    {
+      "id": "harmonie-matcha-tea-house",
+      "slug": "harmonie-matcha-tea-house",
+      "name": "Harmonie Matcha & Tea House",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "te-y-matcha"
+      ],
+      "description": {
+        "es": "Matcha, Tés, Tisanas, Paninis, Açaí, Smoothies\nOrgánico & Natural 🌱🍵",
+        "en": "Matcha, teas, tisanes, paninis, açaí, smoothies\nOrganic & natural 🌱🍵"
+      },
+      "hours": {
+        "mon": [
+          "07:00-21:00"
+        ],
+        "tue": [
+          "07:00-21:00"
+        ],
+        "wed": [
+          "07:00-21:00"
+        ],
+        "thu": [
+          "07:00-21:00"
+        ],
+        "fri": [
+          "07:00-21:00"
+        ],
+        "sat": [
+          "07:00-21:00"
+        ],
+        "sun": [
+          "07:00-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6794169,
+        "lng": -100.3145535
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/P6o1McTrMP5XyQrq8",
+      "googlePlaceId": null,
+      "phone": "+524427727841",
+      "photos": [],
+      "links": {
+        "website": "https://harmoniestore.com/",
+        "instagram": "https://www.instagram.com/harmonie.matcha.tea.house/",
+        "facebook": "https://www.facebook.com/p/Harmonie-Matcha-Tea-House-61590464226846/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": "https://www.ubereats.com/mx/store/harmonie-matcha-%26-tea-house-zibata-mx/zGyLCEZ6SXKb09lU0jJVgQ",
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-18",
+        "sources": [
+          "https://maps.app.goo.gl/P6o1McTrMP5XyQrq8",
+          "https://harmoniestore.com/",
+          "https://www.instagram.com/harmonie.matcha.tea.house/",
+          "https://www.facebook.com/p/Harmonie-Matcha-Tea-House-61590464226846/",
+          "https://www.ubereats.com/mx/store/harmonie-matcha-%26-tea-house-zibata-mx/zGyLCEZ6SXKb09lU0jJVgQ",
+          "campo:2026-11-18"
+        ]
+      }
+    },
+    {
+      "id": "los-margaritenos",
+      "slug": "los-margaritenos",
+      "name": "Los Margariteños",
+      "plazaId": "plaza-luna",
+      "giros": [
+        "arepas",
+        "empanadas"
+      ],
+      "description": {
+        "es": "🟡🔵🔴#comidavenezolana\nLa fusión perfecta entre tradición y sabor",
+        "en": "🟡🔵🔴#comidavenezolana\nThe perfect fusion of tradition and flavor"
+      },
+      "hours": {
+        "mon": [
+          "09:00-23:00"
+        ],
+        "tue": [
+          "09:00-23:00"
+        ],
+        "wed": [
+          "09:00-23:00"
+        ],
+        "thu": [
+          "09:00-23:00"
+        ],
+        "fri": [
+          "09:00-23:00"
+        ],
+        "sat": [
+          "09:00-23:00"
+        ],
+        "sun": [
+          "09:00-23:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6850359,
+        "lng": -100.3251035
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/Lw7gTSPoTcEw32TUA",
+      "googlePlaceId": null,
+      "phone": "+524422696680",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/losmargaritenos/",
+        "facebook": "https://www.facebook.com/losmargaritenosmx/",
+        "tiktok": null,
+        "whatsapp": "+524422696680",
+        "rappi": "https://www.rappi.com.mx/restaurantes/1930242201-los-margaritenos",
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-18",
+        "sources": [
+          "https://maps.app.goo.gl/Lw7gTSPoTcEw32TUA",
+          "https://www.instagram.com/losmargaritenos/",
+          "https://www.facebook.com/losmargaritenosmx/",
+          "https://www.rappi.com.mx/restaurantes/1930242201-los-margaritenos",
+          "campo:2026-11-18"
+        ]
+      }
+    },
+    {
+      "id": "picorito-snacks",
+      "slug": "picorito-snacks",
+      "name": "Picorito Snacks",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "botanas",
+        "papas-preparadas"
+      ],
+      "description": {
+        "es": "Para cualquier antojo que tengan, tenemos papas salseadas, dorilocos, hielitos dulces y saldados con fruta, chicharrones preparados (conocidos como puercas 🐷), tacos 🌮 de fruta, manzanas cubiertas con chamoy y toppings, etc.",
+        "en": "For any craving you have, we have sauced chips, dorilocos, sweet ice pops and salted ones with fruit, prepared pork rinds (known as puercas 🐷), fruit tacos 🌮, chamoy-covered apples with toppings, and more."
+      },
+      "hours": {
+        "mon": [
+          "13:00-19:30"
+        ],
+        "tue": [
+          "13:00-19:30"
+        ],
+        "wed": [
+          "13:00-19:30"
+        ],
+        "thu": [
+          "13:00-19:30"
+        ],
+        "fri": [
+          "13:00-19:30"
+        ],
+        "sat": [
+          "12:00-17:30"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6778257,
+        "lng": -100.3133012
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/kTYyWMRFL5qZeBpY6",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/picorito.snacks/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-18",
+        "sources": [
+          "https://maps.app.goo.gl/kTYyWMRFL5qZeBpY6",
+          "https://www.instagram.com/picorito.snacks/",
+          "campo:2026-11-18"
+        ]
+      }
+    },
+    {
+      "id": "la-pizzeria-de-diego",
+      "slug": "la-pizzeria-de-diego",
+      "name": "La Pizzería de Diego",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "pizza"
+      ],
+      "description": {
+        "es": "Pizzería napolitana. Harina y tomates importados de Nápoles. Masa fermentada. Embutidos y quesos hechos por italianos en México.",
+        "en": "Neapolitan pizzeria. Flour and tomatoes imported from Naples. Fermented dough. Cured meats and cheeses made by Italians in Mexico."
+      },
+      "hours": {
+        "mon": [],
+        "tue": [
+          "13:30-21:30"
+        ],
+        "wed": [
+          "13:30-21:30"
+        ],
+        "thu": [
+          "13:30-21:30"
+        ],
+        "fri": [
+          "13:30-21:30"
+        ],
+        "sat": [
+          "13:30-21:30"
+        ],
+        "sun": [
+          "13:30-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6781897,
+        "lng": -100.3136649
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/gNhppmgVT8vPSUkFA",
+      "googlePlaceId": null,
+      "phone": "+524426804836",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/pizzeriadediego/",
+        "facebook": "https://www.facebook.com/pizzeriadediego/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": "https://www.rappi.com.mx/restaurantes/1930500500-pizzeria-de-diego",
+        "uberEats": "https://www.ubereats.com/mx/store/pizzeria-de-diego-%7C-zibata/hFOp2P_STJ2AYKdvadPWVQ",
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-18",
+        "sources": [
+          "https://maps.app.goo.gl/gNhppmgVT8vPSUkFA",
+          "https://www.facebook.com/pizzeriadediego/",
+          "https://www.instagram.com/pizzeriadediego/",
+          "https://www.rappi.com.mx/restaurantes/1930500500-pizzeria-de-diego",
+          "https://www.ubereats.com/mx/store/pizzeria-de-diego-%7C-zibata/hFOp2P_STJ2AYKdvadPWVQ",
+          "campo:2026-11-18"
+        ]
+      }
+    },
+    {
+      "id": "ramen-express-paseo-zibata",
+      "slug": "ramen-express-paseo-zibata",
+      "name": "Ramen Express Paseo Zibatá",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "ramen"
+      ],
+      "description": {
+        "es": "Market de comida típica de Korea, nos dedicamos a ofrecer exquisitos productos tradicionales con la mas alta calidad en ingredientes",
+        "en": "Market of traditional Korean food. We are dedicated to offering exquisite traditional products made with the highest quality ingredients."
+      },
+      "hours": {
+        "mon": [
+          "11:00-21:30"
+        ],
+        "tue": [
+          "11:00-21:30"
+        ],
+        "wed": [
+          "11:00-21:30"
+        ],
+        "thu": [
+          "11:00-21:30"
+        ],
+        "fri": [
+          "11:00-21:30"
+        ],
+        "sat": [
+          "11:00-21:30"
+        ],
+        "sun": [
+          "11:00-21:30"
+        ]
+      },
+      "location": {
+        "lat": 20.6793771,
+        "lng": -100.3149601
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/V91gCaMHnhFduLiU6",
+      "googlePlaceId": null,
+      "phone": "+524422944843",
+      "photos": [],
+      "links": {
+        "website": "https://ramenexpress.com.mx/",
+        "instagram": "https://www.instagram.com/ramenexpress.qro.zibata/",
+        "facebook": "https://www.facebook.com/p/Ramen-Express-Queretaro-61567912527543/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-18",
+        "sources": [
+          "https://maps.app.goo.gl/V91gCaMHnhFduLiU6",
+          "https://ramenexpress.com.mx/",
+          "https://www.instagram.com/ramenexpress.qro.zibata/",
+          "https://www.facebook.com/p/Ramen-Express-Queretaro-61567912527543/",
+          "campo:2026-11-18"
+        ]
+      }
+    },
+    {
+      "id": "trompochtitlan-zibata",
+      "slug": "trompochtitlan-zibata",
+      "name": "Trompochtitlán Zibatá",
+      "plazaId": "foodtrucks-pickleball",
+      "giros": [
+        "taqueria"
+      ],
+      "description": {
+        "es": "Trompos. Fuego. Sabor. Nada más.🔥\nDonde el arte del trompo se vuelve antojo.\nDesde 2020.",
+        "en": "Trompos. Fire. Flavor. Nothing more.🔥\nWhere the art of the trompo becomes a craving.\nSince 2020."
+      },
+      "hours": {
+        "mon": [
+          "17:00-23:00"
+        ],
+        "tue": [
+          "17:00-23:00"
+        ],
+        "wed": [
+          "17:00-23:00"
+        ],
+        "thu": [
+          "17:00-23:00"
+        ],
+        "fri": [
+          "17:00-23:00"
+        ],
+        "sat": [
+          "17:00-23:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.679764,
+        "lng": -100.3159441
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/PcPr5PU4ZQUWSZsd9",
+      "googlePlaceId": null,
+      "phone": "+525514834884",
+      "photos": [],
+      "links": {
+        "website": "https://trompochtitlan.com.mx/",
+        "instagram": "https://www.instagram.com/trompochtitlan/",
+        "facebook": "https://www.facebook.com/trompochtitlan/",
+        "tiktok": null,
+        "whatsapp": "+525568695687",
+        "rappi": null,
+        "uberEats": "https://www.ubereats.com/mx/store/trompochtitlan-zibata/Yl5lO44BXEu4A5fNaa15tg",
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-18",
+        "sources": [
+          "https://maps.app.goo.gl/PcPr5PU4ZQUWSZsd9",
+          "https://trompochtitlan.com.mx/",
+          "https://www.instagram.com/trompochtitlan/",
+          "https://www.facebook.com/trompochtitlan/",
+          "https://www.ubereats.com/mx/store/trompochtitlan-zibata/Yl5lO44BXEu4A5fNaa15tg",
+          "campo:2026-11-18"
         ]
       }
     }

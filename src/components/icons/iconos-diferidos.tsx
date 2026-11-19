@@ -356,6 +356,11 @@ const Yoga = solid(
   </>,
 )
 
+/** Taza con la bolsita de té colgando: Té y Matcha. Boxicons `cup-tea` (MIT). */
+const Te = solid(
+  <path d="M20 6h-3V5c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v12c0 1.65 1.35 3 3 3h9c1.65 0 3-1.35 3-3v-2h3c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m-5 11c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1V6h6v4l-1 1v4h4v-4l-1-1V6h3zm2-4V8h3v5z" />,
+)
+
 export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   acai: Acai,
   antojito: Antojito,
@@ -408,6 +413,7 @@ export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   salad: Salad,
   sandwich: Sandwich,
   taekwondo: Taekwondo,
+  te: Te,
   torta: Torta,
   waffle: Waffle,
   wine: Wine,

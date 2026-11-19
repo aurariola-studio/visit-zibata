@@ -223,6 +223,7 @@ const NOMBRES_DIFERIDOS = new Set([
   'salad',
   'sandwich',
   'taekwondo',
+  'te',
   'torta',
   'waffle',
   'wine',

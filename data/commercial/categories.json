@@ -1101,7 +1101,9 @@
         "bubble tea",
         "tapioca",
         "malteada",
-        "agua fresca"
+        "agua fresca",
+        "té",
+        "matcha"
       ],
       "giros": [
         {
@@ -1134,6 +1136,25 @@
             "té",
             "frappé",
             "malteadas"
+          ]
+        },
+        {
+          "id": "te-y-matcha",
+          "label": {
+            "es": "Té y Matcha",
+            "en": "Tea & Matcha"
+          },
+          "icon": "te",
+          "synonyms": [
+            "té",
+            "te",
+            "matcha",
+            "tisana",
+            "tisanas",
+            "infusión",
+            "casa de té",
+            "tea",
+            "tea house"
           ]
         }
       ]
