@@ -28,6 +28,16 @@ describe('SearchBar', () => {
     )
   })
 
+  it('no se parece a un campo de contacto para el autocompletado de iPhone', () => {
+    render(<Controlled />)
+    const campo = screen.getByRole('searchbox')
+    // Safari ignora autocomplete="off": decide por el nombre y el modo de entrada.
+    expect(campo).toHaveAttribute('name', 'search')
+    expect(campo).toHaveAttribute('inputmode', 'search')
+    expect(campo).toHaveAttribute('autocomplete', 'off')
+    expect(campo).toHaveAttribute('autocapitalize', 'off')
+  })
+
   it('notifica lo que se escribe', async () => {
     const onChange = vi.fn()
     render(<Controlled onChange={onChange} />)
