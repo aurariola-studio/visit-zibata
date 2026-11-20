@@ -117,7 +117,16 @@ export function conCantidad(mensaje: Mensaje, cantidad: number, idioma: string):
   return texto.replace(/\{count\}/g, String(cantidad))
 }
 
-/** "A, B y C" / "A, B, and C", en el idioma de la página. */
+/**
+ * "A, B y C" / "A, B, and C", en el idioma de la página.
+ *
+ * En español, si alguno de los nombres ya lleva una "y" ("Manicura y Pedicura"), la conjunción de la lista
+ * se confunde con la suya ("Peluquería, Manicura y Pedicura y Cejas y Pestañas"): entonces todo va
+ * separado por comas. En inglés los nombres usan "&" y no hay confusión.
+ */
 export function lista(nombres: readonly string[], idioma: string): string {
+  if (idioma.startsWith('es') && nombres.some((nombre) => nombre.includes(' y '))) {
+    return nombres.join(', ')
+  }
   return new Intl.ListFormat(idioma, { style: 'long', type: 'conjunction' }).format(nombres)
 }

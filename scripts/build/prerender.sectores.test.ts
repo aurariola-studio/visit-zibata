@@ -78,7 +78,11 @@ describe('las páginas de sector', () => {
 
   it.each([
     ['es', '/es/sector/comida-y-bebida', 'y más, con horarios, contacto y cómo llegar.'],
-    ['en', '/en/sector/food-and-drink', 'and more, with hours, contact and directions.'],
+    [
+      'en',
+      '/en/sector/food-and-drink',
+      'and more, with opening hours, contact details and location.',
+    ],
   ] as const)(
     'con muchas categorías nombra tres y "y más", y la descripción cabe entera en %s',
     (idioma, href, cierre) => {
