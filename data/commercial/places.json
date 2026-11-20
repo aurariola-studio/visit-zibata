@@ -9524,7 +9524,8 @@
           "https://maps.app.goo.gl/RzZr7o99veaEHkK86",
           "https://www.instagram.com/avynasalonzibata/",
           "https://www.facebook.com/p/AVYNA-Sal%C3%B3n-Zibat%C3%A1-61572378046749/",
-          "https://zibatahoy.com/listing/avyna-salon-de-belleza-zibata/"
+          "https://zibatahoy.com/listing/avyna-salon-de-belleza-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -9599,7 +9600,8 @@
           "https://barberiabarbuda.site.agendapro.com/mx",
           "https://www.instagram.com/barberiabarbuda/",
           "https://www.facebook.com/profile.php?id=61577232269549",
-          "https://zibatahoy.com/listing/barberia-barbuda-zibata/"
+          "https://zibatahoy.com/listing/barberia-barbuda-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -9673,7 +9675,8 @@
           "https://maps.app.goo.gl/xEZNPkiRkdDNYaKE7",
           "https://barberiabarbuda.site.agendapro.com/mx",
           "https://www.instagram.com/barbudabarberia_/",
-          "https://www.facebook.com/profile.php?id=61578694965196"
+          "https://www.facebook.com/profile.php?id=61578694965196",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -9710,7 +9713,8 @@
         ],
         "sun": [
           "10:00-18:00"
-        ]
+        ],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.6747698,
@@ -9740,7 +9744,8 @@
           "https://www.barberiaclub1978.com",
           "https://www.instagram.com/barberiaclub1978zibata/",
           "https://www.facebook.com/BarberiaClub1978Zibata/",
-          "https://zibatahoy.com/listing/barberia-club-1978-zibata-plaza-zielo/"
+          "https://zibatahoy.com/listing/barberia-club-1978-zibata-plaza-zielo/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -9809,7 +9814,8 @@
           "https://www.instagram.com/beoxyzibata",
           "https://www.facebook.com/beoxyzibata/",
           "https://www.tiktok.com/@beoxy.zibata",
-          "https://zibatahoy.com/listing/beoxy-xentric-zibata/"
+          "https://zibatahoy.com/listing/beoxy-xentric-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -9846,7 +9852,8 @@
         "sat": [
           "10:00-15:00"
         ],
-        "sun": []
+        "sun": [],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.678956,
@@ -9875,7 +9882,8 @@
           "https://maps.app.goo.gl/8GQti7YSG6PFLSBq9",
           "https://www.fresha.com/a/black-studio-beauty-nails-el-marques-av-paseo-de-las-pitahayas-13-local-21-plaza-paseo-76269-zibata-qro-j52s03o2",
           "https://www.instagram.com/blackstudioqro/",
-          "https://zibatahoy.com/listing/black-studio-beauty-nails-zibata/"
+          "https://zibatahoy.com/listing/black-studio-beauty-nails-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -9942,7 +9950,8 @@
           "https://www.instagram.com/blanc_nailsbar",
           "https://www.facebook.com/profile.php?id=61552307735605",
           "https://www.tiktok.com/@blanc.nailbar",
-          "https://zibatahoy.com/listing/blanc-nail-bar-plaza-centro-zibata/"
+          "https://zibatahoy.com/listing/blanc-nail-bar-plaza-centro-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10005,7 +10014,8 @@
         "sources": [
           "https://maps.app.goo.gl/ANtVUhrTJXJ3m1cz9",
           "https://www.instagram.com/casabnailbar/",
-          "https://www.facebook.com/casab.nailsbar/"
+          "https://www.facebook.com/casab.nailsbar/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10045,7 +10055,8 @@
         "sat": [
           "09:00-15:00"
         ],
-        "sun": []
+        "sun": [],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.674756,
@@ -10075,7 +10086,8 @@
           "https://www.fresha.com/a/cavile-zibata-avenida-paseo-de-las-pitahayas-26-us9l827e",
           "https://www.instagram.com/cavile.ns/",
           "https://www.facebook.com/cavilenailstudio/",
-          "https://zibatahoy.com/listing/cavile-nail-studio-zibata/"
+          "https://zibatahoy.com/listing/cavile-nail-studio-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10139,7 +10151,8 @@
         "sources": [
           "https://maps.app.goo.gl/FiwbWcx9nxi58dqx5",
           "https://www.instagram.com/erika_blazkez/",
-          "https://zibatahoy.com/listing/eb-salon-zibata/"
+          "https://zibatahoy.com/listing/eb-salon-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10206,7 +10219,8 @@
           "https://www.elpatron.com.mx/es/zibata",
           "https://www.instagram.com/elpatronbarberiaytonicos/",
           "https://www.facebook.com/ElPatronBarberiaYTonicosZibata/",
-          "https://zibatahoy.com/listing/el-patron-barberia-y-tonicos-zibata/"
+          "https://zibatahoy.com/listing/el-patron-barberia-y-tonicos-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10243,7 +10257,8 @@
         "sat": [
           "09:30-16:00"
         ],
-        "sun": []
+        "sun": [],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.6747433,
@@ -10273,7 +10288,8 @@
           "https://www.fresha.com/a/glow-zibata-zibata-avenida-paseo-de-las-pitahayas-bi7wag97",
           "https://www.instagram.com/glowbeautybarqro/",
           "https://www.facebook.com/GlowBeautyBarQro/",
-          "https://zibatahoy.com/listing/glow-beauty-bar-zibata/"
+          "https://zibatahoy.com/listing/glow-beauty-bar-zibata/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10339,7 +10355,8 @@
           "https://maps.app.goo.gl/WN6QAhHT4RV84qq67",
           "https://haut.com.mx/",
           "https://www.instagram.com/haut.clinical/",
-          "https://www.facebook.com/hautspaqro/"
+          "https://www.facebook.com/hautspaqro/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10375,7 +10392,8 @@
         "sat": [
           "10:00-17:00"
         ],
-        "sun": []
+        "sun": [],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.6747526,
@@ -10404,7 +10422,8 @@
           "https://maps.app.goo.gl/g4mJEoRVmBwbvGCE8",
           "https://agendapro.com/site/mx/hebrahairlabheadspa/505158",
           "https://www.instagram.com/hebrahairspa/",
-          "https://hebrahairspa.com/"
+          "https://hebrahairspa.com/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10466,7 +10485,8 @@
           "https://maps.app.goo.gl/LVmEhGiJrvP6947K7",
           "https://www.instagram.com/karlacisnerosbeautyartist/",
           "https://www.facebook.com/profile.php?id=61595535239337",
-          "https://www.tiktok.com/@karlacisnerosbeautyart"
+          "https://www.tiktok.com/@karlacisnerosbeautyart",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10533,7 +10553,8 @@
           "https://maps.app.goo.gl/CHcWNJ4voStMjLMFA",
           "https://syserv.mx/kingsbeardbarberia",
           "https://www.instagram.com/kingsbeard_barberia/",
-          "https://www.facebook.com/KharymShop/"
+          "https://www.facebook.com/KharymShop/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10602,7 +10623,8 @@
           "https://maps.app.goo.gl/6ukdSCTtb7XxUUUe9",
           "https://lusso.site.agendapro.com/mx",
           "https://www.instagram.com/lusso.hairboutique/",
-          "https://www.facebook.com/p/Lusso-Hair-Boutique-61556295508795/"
+          "https://www.facebook.com/p/Lusso-Hair-Boutique-61556295508795/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10644,7 +10666,8 @@
         "sat": [
           "10:00-15:00"
         ],
-        "sun": []
+        "sun": [],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.6781897,
@@ -10673,7 +10696,8 @@
           "https://maps.app.goo.gl/DMEzGDL3UAf4Gk2CA",
           "https://www.fresha.com/es/lvp/mandala-spa-beauty-center-zibata-0qDDZY",
           "https://www.facebook.com/profile.php?id=100063808702215",
-          "https://www.fresha.com/lvp/mandala-spa-beauty-center-zibata-0qDDZY"
+          "https://www.fresha.com/lvp/mandala-spa-beauty-center-zibata-0qDDZY",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10738,7 +10762,8 @@
         "sources": [
           "https://maps.app.goo.gl/WMEx7tfL5KV1LXsRA",
           "https://www.instagram.com/piu_bella.mx/",
-          "https://www.facebook.com/piubella.com.mx/"
+          "https://www.facebook.com/piubella.com.mx/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10801,7 +10826,8 @@
         "sources": [
           "https://maps.app.goo.gl/G2tYiAYttXGFPXrb7",
           "https://www.instagram.com/studio_renemarquez/",
-          "https://www.facebook.com/p/Studio-Ren%C3%A9-Marquez-100065491659569/"
+          "https://www.facebook.com/p/Studio-Ren%C3%A9-Marquez-100065491659569/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10870,7 +10896,8 @@
           "https://www.instagram.com/rob.beautylab/",
           "https://www.facebook.com/rob.beautylab/",
           "https://zibatahoy.com/listing/prettsy-nail-bar-beauty/",
-          "https://www.fresha.com/lvp/prettsy-nail-beauty-bar-avenida-paseo-de-las-pitahayas-zibata-JQkqwk"
+          "https://www.fresha.com/lvp/prettsy-nail-beauty-bar-avenida-paseo-de-las-pitahayas-zibata-JQkqwk",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10909,7 +10936,8 @@
         ],
         "sun": [
           "09:00-15:00"
-        ]
+        ],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.6851989,
@@ -10938,7 +10966,8 @@
           "https://maps.app.goo.gl/x47DYZmpzJmZyMDy7",
           "https://agendapro.com/site/mx/studioblazezibata/586226",
           "https://www.instagram.com/studio_blaze_zibata/",
-          "https://www.facebook.com/p/Studio-BLAZE-61587182575742/"
+          "https://www.facebook.com/p/Studio-BLAZE-61587182575742/",
+          "campo:2026-11-20"
         ]
       }
     },
@@ -10975,7 +11004,8 @@
         "sat": [
           "09:00-17:00"
         ],
-        "sun": []
+        "sun": [],
+        "byAppointment": true
       },
       "location": {
         "lat": 20.684188,
@@ -11005,7 +11035,8 @@
           "https://fresha.com/ar/a/vanille-spa-and-nails-santiago-de-queretaro-xentric-zibata-svihbtx3",
           "https://www.instagram.com/vanillespa.qro/",
           "https://www.facebook.com/vanillespa.qro/",
-          "https://zibatahoy.com/listing/vanille-spa-and-nails-xentric-zibata/"
+          "https://zibatahoy.com/listing/vanille-spa-and-nails-xentric-zibata/",
+          "campo:2026-11-20"
         ]
       }
     }

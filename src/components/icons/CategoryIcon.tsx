@@ -145,34 +145,12 @@ const PosteBarberia = custom(
   <path d="M7 6h10M7 22h10m-9 0V6a4 4 0 0 1 8 0v16M8 11.5l8-4M8 16l8-4m-8 8.5l8-4" />,
 )
 
-/**
- * Frasco de esmalte de uñas: Uñas. Icon Park `nail-polish` en su versión de dos tonos (Apache 2.0). El gris
- * del original es una máscara de luminancia, no un color pintado: el dibujo sale siempre del color del texto
- * y se ve igual en el tema oscuro.
- */
-const Esmalte = solid(
-  <>
-    <defs>
-      <mask id="esmalte-mascara">
-        <g fill="none">
-          <path
-            stroke="#fff"
-            strokeWidth="4"
-            d="M18.895 5.89A2 2 0 0 1 20.892 4h6.216a2 2 0 0 1 1.997 1.89l.778 14A2 2 0 0 1 27.886 22h-7.772a2 2 0 0 1-1.997-2.11z"
-          />
-          <path
-            fill="#555"
-            stroke="#fff"
-            strokeWidth="4"
-            d="M11 28a6 6 0 0 1 6-6h14a6 6 0 0 1 6 6v13a3 3 0 0 1-3 3H14a3 3 0 0 1-3-3z"
-          />
-          <circle cx="24" cy="33" r="3" fill="#fff" />
-        </g>
-      </mask>
-    </defs>
-    <path d="M0 0h48v48H0z" mask="url(#esmalte-mascara)" />
-  </>,
-  '0 0 48 48',
+/** Frasco de esmalte de uñas, solo el contorno: Uñas. Icon Park `nail-polish` (Apache 2.0); el original es de 48 y trazo 4, aquí va a la mitad. */
+const Esmalte = custom(
+  <g transform="scale(.5)" strokeWidth="4">
+    <path d="M18.895 5.89A2 2 0 0 1 20.892 4h6.216a2 2 0 0 1 1.997 1.89l.778 14A2 2 0 0 1 27.886 22h-7.772a2 2 0 0 1-1.997-2.11zM11 28a6 6 0 0 1 6-6h14a6 6 0 0 1 6 6v13a3 3 0 0 1-3 3H14a3 3 0 0 1-3-3z" />
+    <circle cx="24" cy="33" r="3" fill="currentColor" />
+  </g>,
 )
 
 /** Flor de loto con su pétalo central: Spa y Masajes. Material Design Icons `spa` en versión angular (Apache 2.0). */

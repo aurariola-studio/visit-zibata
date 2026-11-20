@@ -45,8 +45,10 @@ describe('HoursTable: aviso de cita', () => {
 
   it('con byAppointment avisa antes de la tabla y sin dos puntos', async () => {
     await renderWithCatalog(<HoursTable hours={{ ...semana, byAppointment: true }} />)
-    const aviso = screen.getByText(/se atiende con cita/i)
-    expect(aviso.textContent).toBe('Se atiende con cita. Consulta su disponibilidad antes de ir.')
+    const aviso = screen.getByText(/se recomienda reservar/i)
+    expect(aviso.textContent).toBe(
+      'Se recomienda reservar tu cita. Consulta su disponibilidad antes de ir.',
+    )
     expect(aviso.textContent).not.toContain(':')
     const tabla = document.querySelector('dl')
     expect(
@@ -56,15 +58,15 @@ describe('HoursTable: aviso de cita', () => {
 
   it('sin byAppointment no dice nada, y no se confunde con el de clases', async () => {
     await renderWithCatalog(<HoursTable hours={semana} />)
-    expect(screen.queryByText(/con cita/i)).toBeNull()
+    expect(screen.queryByText(/reservar/i)).toBeNull()
     await renderWithCatalog(<HoursTable hours={{ ...semana, byClasses: true }} />)
-    expect(screen.queryByText(/con cita/i)).toBeNull()
+    expect(screen.queryByText(/reservar/i)).toBeNull()
   })
 
   it('en inglés se dice en inglés', async () => {
     await setLocale('en')
     await renderWithCatalog(<HoursTable hours={{ ...semana, byAppointment: true }} />)
-    expect(screen.getByText(/by appointment only/i)).toBeInTheDocument()
+    expect(screen.getByText(/appointment is recommended/i)).toBeInTheDocument()
   })
 })
 

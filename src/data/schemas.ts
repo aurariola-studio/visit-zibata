@@ -83,7 +83,7 @@ export const HoursSchema = z.strictObject({
   note: nonEmptyText.optional(),
   /** El local se organiza por clases: la ficha avisa, antes del horario, que hay que consultar su disponibilidad. */
   byClasses: z.literal(true).optional(),
-  /** El local atiende con cita: la ficha avisa, antes del horario, que hay que consultar su disponibilidad. */
+  /** El local conviene visitarlo con cita: la ficha lo recomienda, antes del horario, y avisa de consultar su disponibilidad. */
   byAppointment: z.literal(true).optional(),
 })
 
