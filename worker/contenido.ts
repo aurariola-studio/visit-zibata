@@ -79,7 +79,7 @@ export const EntradaNegocioSchema = z.object({
   sitio: z.string().trim().max(500).optional().default(''),
   instagram: z.string().trim().max(500).optional().default(''),
   facebook: z.string().trim().max(500).optional().default(''),
-  whatsapp: z.string().trim().max(40).optional().default(''),
+  whatsapp: z.string().trim().max(300).optional().default(''),
   /*
    * TikTok y los enlaces de reparto no llevan valor por omisión, a diferencia de los de arriba: ausente
    * conserva el que ya había y vacío lo borra. Así un cliente que no los conoce no vacía los de 93 locales.
@@ -547,16 +547,21 @@ function telefonoDe(valor: string): string | null {
 
 const urlDe = (valor: string): string | null => (valor ? valor : null)
 
+/** WhatsApp es un teléfono o, en una cuenta de empresa, un enlace: el enlace no pasa por `telefonoDe`, que lo convertiría en un número roto. */
+const whatsappDe = (valor: string): string | null =>
+  valor.startsWith('https://') ? valor : telefonoDe(valor)
+
 /** Día ausente = no se sabe; lista vacía = cerrado. Una cadena vacía del formulario es "no se sabe". */
 function horarioDe(
   horario: Record<string, string[]> | null | undefined,
-  conservar: { note?: string; byClasses?: true } = {},
+  conservar: { note?: string; byClasses?: true; byAppointment?: true } = {},
 ): Record<string, string[] | string | boolean> | null {
-  // La nota del horario y la marca de "por clases" no tienen campo en el formulario: se conservan,
-  // porque perderlas es perder un dato.
+  // La nota del horario y las marcas de "por clases" y "con cita" no tienen campo en el formulario: se
+  // conservan, porque perderlas es perder un dato.
   const fijo: Record<string, string | boolean> = {}
   if (conservar.note) fijo.note = conservar.note
   if (conservar.byClasses) fijo.byClasses = true
+  if (conservar.byAppointment) fijo.byAppointment = true
   if (!horario) return Object.keys(fijo).length > 0 ? fijo : null
   const salida: Record<string, string[] | string | boolean> = { ...fijo }
   for (const [dia, rangos] of Object.entries(horario)) {
@@ -654,6 +659,7 @@ function construir(
     hours: horarioDe(entrada.horario, {
       note: existente?.hours?.note,
       byClasses: existente?.hours?.byClasses,
+      byAppointment: existente?.hours?.byAppointment,
     }),
     location:
       entrada.lat != null && entrada.lng != null ? { lat: entrada.lat, lng: entrada.lng } : null,
@@ -666,7 +672,7 @@ function construir(
       website: urlDe(entrada.sitio),
       instagram: urlDe(entrada.instagram),
       facebook: urlDe(entrada.facebook),
-      whatsapp: telefonoDe(entrada.whatsapp),
+      whatsapp: whatsappDe(entrada.whatsapp),
       // Ausente conserva el que ya había (el `...existente.links` de arriba); vacío lo borra.
       ...(entrada.tiktok !== undefined && { tiktok: urlDe(entrada.tiktok) }),
       ...(entrada.rappi !== undefined && { rappi: urlDe(entrada.rappi) }),

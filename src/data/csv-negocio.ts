@@ -64,6 +64,10 @@ export function normalizePhone(value: string | null): string | null {
   return value
 }
 
+/** WhatsApp: un número se normaliza; el enlace de una cuenta de empresa se deja como viene. */
+const whatsapp = (value: string | null) =>
+  value?.startsWith('https://') ? value : normalizePhone(value)
+
 /** "@handle" → URL completa de la red social. */
 export function normalizeSocial(
   network: 'instagram' | 'tiktok' | 'facebook',
@@ -231,7 +235,7 @@ export function filaAEntrada(row: CsvRow, dataset: CommercialDataset): FilaConve
     sitio: enlace(normalizeUrl(clean(row.website)), previos?.website),
     instagram: enlace(normalizeSocial('instagram', clean(row.instagram)), previos?.instagram),
     facebook: enlace(normalizeSocial('facebook', clean(row.facebook)), previos?.facebook),
-    whatsapp: enlace(normalizePhone(clean(row.whatsapp)), previos?.whatsapp),
+    whatsapp: enlace(whatsapp(clean(row.whatsapp)), previos?.whatsapp),
     googleMapsUri: clean(row.googleMapsUri) ?? existente?.googleMapsUri ?? '',
     lat,
     lng,

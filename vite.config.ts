@@ -302,6 +302,33 @@ function preloadCriticalFonts(): Plugin {
 }
 
 /**
+ * Las fuentes de la verificación de cada local no viajan en el paquete de la guía.
+ *
+ * `verification.sources` (las páginas y redes que respaldan un registro) solo las lee el panel y el
+ * validador, y los dos las traen del servidor o del archivo: la guía pública solo usa el estado y la
+ * fecha de revisión. Con 170 locales eran 4,7 KB comprimidos de un paquete de datos que tiene tope
+ * (`npm run perf:budget`). Solo en el build: en los tests y en desarrollo el archivo se lee entero,
+ * que es lo que validan los esquemas.
+ */
+function sinFuentesDeVerificacion(): Plugin {
+  return {
+    name: 'zibata-sin-fuentes-de-verificacion',
+    apply: 'build',
+    enforce: 'pre',
+    transform(codigo, id) {
+      if (!id.split('?')[0]?.endsWith('/data/commercial/places.json')) return null
+      const datos = JSON.parse(codigo) as {
+        places: { verification?: { sources?: string[] } }[]
+      }
+      for (const lugar of datos.places) {
+        if (lugar.verification) lugar.verification.sources = []
+      }
+      return { code: JSON.stringify(datos), map: null }
+    },
+  }
+}
+
+/**
  * En desarrollo, las rutas de la aplicación entregan `index.html`.
  *
  * En producción existe un archivo por ruta (lo genera el prerenderizado), pero aquí no, y el modo
@@ -353,6 +380,7 @@ export default defineConfig({
   appType: 'mpa',
   plugins: [
     react(),
+    sinFuentesDeVerificacion(),
     devRoutes(),
     socialMeta(),
     contentSecurityPolicy(),

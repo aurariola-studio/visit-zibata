@@ -52,6 +52,20 @@ const placeVariants: [string, unknown][] = [
   ['enlace data:', { ...place, links: { ...links, instagram: 'data:text/html,x' } }],
   ['enlace relativo', { ...place, links: { ...links, facebook: '/perfil' } }],
   ['whatsapp sin formato', { ...place, links: { ...links, whatsapp: '442 123' } }],
+  [
+    'whatsapp con enlace de empresa',
+    { ...place, links: { ...links, whatsapp: 'https://api.whatsapp.com/message/ABC123' } },
+  ],
+  [
+    'whatsapp con enlace de otro dominio',
+    { ...place, links: { ...links, whatsapp: 'https://example.com/message/ABC123' } },
+  ],
+  [
+    'whatsapp con enlace por http',
+    { ...place, links: { ...links, whatsapp: 'http://wa.me/message/ABC123' } },
+  ],
+  ['horario con cita', { ...place, hours: { mon: ['09:00-18:00'], byAppointment: true } }],
+  ['horario con cita falsa', { ...place, hours: { mon: ['09:00-18:00'], byAppointment: false } }],
   ['latitud imposible', { ...place, location: { lat: 120, lng: 0 } }],
   ['Maps de otro dominio', { ...place, googleMapsUri: 'https://example.com' }],
   ['Maps por http', { ...place, googleMapsUri: 'http://maps.google.com' }],

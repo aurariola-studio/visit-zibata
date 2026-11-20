@@ -196,11 +196,16 @@ export const TRES_LOCALES: [DatasetPlace, DatasetPlace, DatasetPlace] = [
   unico(localesDe(ZONA_C)[0], 'un local en la tercera zona'),
 ]
 
-/** Un local activo con enlace de WhatsApp, y el número en la forma de `wa.me` (solo dígitos). */
+/**
+ * Un local activo con WhatsApp, y el número en la forma de `wa.me` (solo dígitos). Solo los que dan un
+ * número: un negocio con WhatsApp Business puede dar un enlace, que no pasa por `wa.me`.
+ */
 export const LOCAL_CON_WHATSAPP: { place: DatasetPlace; numero: string } = (() => {
   const place = unico(
     deMenorId(
-      dataset.places.filter((candidato) => candidato.active && candidato.links?.whatsapp),
+      dataset.places.filter(
+        (candidato) => candidato.active && candidato.links?.whatsapp?.startsWith('+'),
+      ),
     )[0],
     'ningún local activo con WhatsApp',
   )

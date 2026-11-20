@@ -110,7 +110,7 @@ describe.each([
   ],
   [
     'en',
-    'Beauty in Zibatá. Meet the one place the community has to offer, with hours, contact and directions.',
+    'Beauty in Zibatá. Find the place the community has to offer, with opening hours, contact details and location.',
   ],
 ] as const)('la descripción de una categoría con un solo local (%s)', (idioma, singular) => {
   const paginaDeCategoria = (datos: Dataset) =>

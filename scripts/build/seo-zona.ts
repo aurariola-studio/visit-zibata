@@ -21,12 +21,13 @@ const COLA = {
   },
   en: {
     larga: {
-      one: 'Meet the one place the community has to offer, with hours, contact and directions.',
-      other: 'Meet the {count} places in the area, with hours, contact and directions.',
+      one: 'Find the place the community has to offer, with opening hours, contact details and location.',
+      other:
+        'Discover the {count} places in the area, with opening hours, contact details and location.',
     },
     corta: {
-      one: 'One place, with hours, contact and directions.',
-      other: '{count} places, with hours, contact and directions.',
+      one: 'One place, with opening hours, contact details and location.',
+      other: '{count} places, with opening hours, contact details and location.',
     },
   },
 } as const

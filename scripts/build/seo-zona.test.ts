@@ -15,7 +15,7 @@ describe('la descripción SEO de una zona', () => {
       'Club de pádel en Zibatá, Querétaro. Conoce el lugar que la comunidad tiene para ofrecerte, con horario, contacto y cómo llegar.',
     )
     expect(descripcionDeZona('Padel club in Zibatá, Querétaro.', 1, 'en')).toBe(
-      'Padel club in Zibatá, Querétaro. Meet the one place the community has to offer, with hours, contact and directions.',
+      'Padel club in Zibatá, Querétaro. Find the place the community has to offer, with opening hours, contact details and location.',
     )
   })
 

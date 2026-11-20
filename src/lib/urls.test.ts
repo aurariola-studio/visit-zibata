@@ -41,6 +41,11 @@ describe('Google Maps', () => {
     expect(whatsappUrl('+52 442 123 4567')).toBe('https://wa.me/524421234567')
     expect(telUrl('+52 (442) 123-4567')).toBe('tel:+524421234567')
   })
+
+  it('el enlace de WhatsApp Business se deja tal cual, no se convierte en un número', () => {
+    const enlace = 'https://api.whatsapp.com/message/ABC123XYZ'
+    expect(whatsappUrl(enlace)).toBe(enlace)
+  })
 })
 
 const VACIO = {

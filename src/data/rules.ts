@@ -18,6 +18,22 @@ export const TIME_RANGE_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)-([01]\d|2[0-3]|24(
 
 export const E164_PATTERN = /^\+[1-9]\d{9,14}$/
 
+/**
+ * Enlace de WhatsApp Business: un negocio con cuenta de empresa no siempre publica un número, publica un
+ * enlace (`api.whatsapp.com/message/…`, `wa.me/message/…`). Solo https y solo los dominios de WhatsApp: no
+ * es un campo de URL libre.
+ */
+export const WHATSAPP_HOST_PATTERN = /^(wa\.me|api\.whatsapp\.com|(www\.)?whatsapp\.com|wa\.link)$/i
+
+export function isWhatsappLink(value: string): boolean {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'https:' && WHATSAPP_HOST_PATTERN.test(url.hostname)
+  } catch {
+    return false
+  }
+}
+
 export const GOOGLE_PLACE_ID_PATTERN = /^[A-Za-z0-9_-]{10,}$/
 
 export const HEX_COLOR_PATTERN = /^#[0-9a-f]{6}$/i
@@ -55,6 +71,10 @@ export const SCHEMA_TYPES = [
   'MedicalClinic',
   'Dentist',
   'DiagnosticLab',
+  'HairSalon',
+  'NailSalon',
+  'DaySpa',
+  'BeautySalon',
 ] as const
 
 export const LOCATION_CONFIDENCE = ['high', 'medium', 'low'] as const

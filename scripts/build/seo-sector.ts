@@ -24,8 +24,8 @@ export const SEO_SECTOR = {
     titulo: '{label} in Zibatá · Visit Zibatá',
     ymas: 'and more',
     descripcion: {
-      one: '{label} in Zibatá. {categorias}, with hours, contact and directions.',
-      other: '{label} in Zibatá. {categorias}, with hours, contact and directions.',
+      one: '{label} in Zibatá. {categorias}, with opening hours, contact details and location.',
+      other: '{label} in Zibatá. {categorias}, with opening hours, contact details and location.',
     },
   },
 } as const

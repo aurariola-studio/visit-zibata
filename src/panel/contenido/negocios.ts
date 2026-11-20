@@ -270,8 +270,8 @@ export function pintarFormulario(negocio: Negocio | null): void {
             <input class="${controls.campo}" type="tel" name="telefono" value="${texto(negocio?.phone ?? '')}" placeholder="4421234567" />
           </label>
           <label class="campo-form">
-            <span>WhatsApp <span class="ayuda">10 dígitos o con +52</span></span>
-            <input class="${controls.campo}" type="tel" name="whatsapp" value="${texto(negocio?.links?.whatsapp ?? '')}" placeholder="4421234567" />
+            <span>WhatsApp <span class="ayuda">10 dígitos, con +52 o el enlace de WhatsApp Business</span></span>
+            <input class="${controls.campo}" type="text" name="whatsapp" value="${texto(negocio?.links?.whatsapp ?? '')}" placeholder="4421234567" />
           </label>
           <label class="campo-form">
             <span>Sitio web</span>

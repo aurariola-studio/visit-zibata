@@ -492,7 +492,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
       // Con un solo local la descripción habla en singular y no lleva cifra (ver crecimiento.test.ts).
       const n = visibles.filter((p) => idsDe(p).has(categoria.id)).length
       expect(pagina.description, categoria.id).toMatch(
-        n === 1 ? /el lugar|the one place/ : /\b\d+ (lugares?|places?)\b/,
+        n === 1 ? /el lugar|find the place/i : /\b\d+ (lugares?|places?)\b/,
       )
     }
   })

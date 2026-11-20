@@ -35,8 +35,10 @@ export function placeDirections(place: Place, plaza: Plaza): { url: string; toPl
   return { url: plazaDirectionsUrl(plaza), toPlace: false }
 }
 
-export function whatsappUrl(phone: string): string {
-  return `https://wa.me/${phone.replace(/\D/g, '')}`
+/** Un número pasa por `wa.me`; un enlace de WhatsApp Business ya es la dirección y se deja tal cual. */
+export function whatsappUrl(phoneOrLink: string): string {
+  if (/^https:\/\//i.test(phoneOrLink)) return phoneOrLink
+  return `https://wa.me/${phoneOrLink.replace(/\D/g, '')}`
 }
 
 export function telUrl(phone: string): string {

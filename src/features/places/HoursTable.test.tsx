@@ -38,6 +38,38 @@ describe('HoursTable: aviso de clases', () => {
   })
 })
 
+describe('HoursTable: aviso de cita', () => {
+  afterEach(async () => {
+    await setLocale('es')
+  })
+
+  it('con byAppointment avisa antes de la tabla y sin dos puntos', async () => {
+    await renderWithCatalog(<HoursTable hours={{ ...semana, byAppointment: true }} />)
+    const aviso = screen.getByText(/se recomienda reservar/i)
+    expect(aviso.textContent).toBe(
+      'Se recomienda reservar tu cita. Consulta su disponibilidad antes de ir.',
+    )
+    expect(aviso.textContent).not.toContain(':')
+    const tabla = document.querySelector('dl')
+    expect(
+      aviso.compareDocumentPosition(tabla as Node) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+  })
+
+  it('sin byAppointment no dice nada, y no se confunde con el de clases', async () => {
+    await renderWithCatalog(<HoursTable hours={semana} />)
+    expect(screen.queryByText(/reservar/i)).toBeNull()
+    await renderWithCatalog(<HoursTable hours={{ ...semana, byClasses: true }} />)
+    expect(screen.queryByText(/reservar/i)).toBeNull()
+  })
+
+  it('en inglés se dice en inglés', async () => {
+    await setLocale('en')
+    await renderWithCatalog(<HoursTable hours={{ ...semana, byAppointment: true }} />)
+    expect(screen.getByText(/appointment is recommended/i)).toBeInTheDocument()
+  })
+})
+
 describe('HoursTable: fecha de revisión', () => {
   afterEach(() => {
     vi.unstubAllEnvs()
