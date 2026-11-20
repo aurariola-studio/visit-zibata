@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-17",
+  "updatedAt": "2026-11-20",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -104,7 +104,10 @@
         "laboratorio-del-chopo",
         "thedek",
         "picorito-snacks",
-        "la-pizzeria-de-diego"
+        "la-pizzeria-de-diego",
+        "beoxy-zibata",
+        "mandala-spa-beauty-center",
+        "rob-nail-beauty-lab"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -129,7 +132,11 @@
         "gimnasios",
         "yoga-pilates-y-barre",
         "danza",
-        "artes-marciales"
+        "artes-marciales",
+        "peluqueria",
+        "unas",
+        "spa-y-masajes",
+        "piel-y-cuerpo"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -316,7 +323,9 @@
         "dermasphere-studio",
         "brodmann18",
         "harmonie-matcha-tea-house",
-        "ramen-express-paseo-zibata"
+        "ramen-express-paseo-zibata",
+        "barberia-barbuda-paseo-zibata",
+        "black-studio-beauty-nails"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -338,7 +347,11 @@
         "consultorios-y-clinicas",
         "laboratorios-y-diagnostico",
         "opticas",
-        "gimnasios"
+        "gimnasios",
+        "peluqueria",
+        "barberia",
+        "unas",
+        "cejas-y-pestanas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Paseo Zibatá\" y locales con esa dirección (El Hornero, Currucucú, Masaru…). Huella aproximada: el edificio aún no aparece en los datos abiertos.",
@@ -488,7 +501,9 @@
         "eme-cafe",
         "mykona-frozen-yogurt",
         "enchilokos",
-        "knots-pilates"
+        "knots-pilates",
+        "eb-salon",
+        "kings-beard-barberia"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -500,7 +515,9 @@
         "botanas",
         "postres-y-dulces",
         "casera",
-        "yoga-pilates-y-barre"
+        "yoga-pilates-y-barre",
+        "peluqueria",
+        "barberia"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Condesa Zibata\" y locales con esa dirección (Bendito Bocado, Romani Pizzas, Freestyle Pizza); huella de Overture.",
@@ -656,7 +673,10 @@
         "anytime-fitness-zibata",
         "swim-lab",
         "farmacias-benavides",
-        "micromacro-dental"
+        "micromacro-dental",
+        "avyna-salon-de-belleza",
+        "el-patron-barberia-y-tonicos",
+        "vanille-spa-and-nails"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -672,7 +692,12 @@
         "consultorios-y-clinicas",
         "dentistas",
         "gimnasios",
-        "deportes"
+        "deportes",
+        "peluqueria",
+        "barberia",
+        "unas",
+        "spa-y-masajes",
+        "cejas-y-pestanas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección Paseo Tunas 18 (Cosi Fan Tutte, Trecielos, La Marmota, Honu Sushi…). Huella aproximada.",
@@ -769,7 +794,13 @@
         "farmacia-guadalajara",
         "zibamedic",
         "saiens-zibata",
-        "dental-factory-kids-family"
+        "dental-factory-kids-family",
+        "barberia-club-1978-zibata",
+        "cavile-nail-studio",
+        "glow-beauty-bar-zibata",
+        "haut-zibata",
+        "hebra-hair-lab-head-spa",
+        "rene-marquez-studio-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -791,7 +822,13 @@
         "laboratorios-y-diagnostico",
         "gimnasios",
         "yoga-pilates-y-barre",
-        "danza"
+        "danza",
+        "peluqueria",
+        "barberia",
+        "unas",
+        "spa-y-masajes",
+        "piel-y-cuerpo",
+        "cejas-y-pestanas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Zielo\" y locales con esa dirección (Escarola, Donatto Pizza, Margaritas); huella de Overture.",
@@ -882,13 +919,15 @@
       "googleMapsUri": "https://maps.app.goo.gl/ijk5ygwvkhuFFSuf6",
       "placeIds": [
         "cafele",
-        "black-box-zibata"
+        "black-box-zibata",
+        "lusso-hair-boutique"
       ],
       "categories": [
         "desayunos-y-cafe",
         "panaderia-y-reposteria",
         "gimnasios",
-        "artes-marciales"
+        "artes-marciales",
+        "peluqueria"
       ],
       "locationConfidence": "medium",
       "locationSource": "Dirección de MOL Pitahaya (Cerro del Huizache 49) publicada por Atlas Desarrollos y de Cafele Zibatá; POIs de Overture Maps (release 2026-08-19.0) en Av. Huizache 49 (local 23); huella de Overture.",
@@ -1033,7 +1072,10 @@
         "triba-fitness-studio",
         "l-balans",
         "farmacias-similares-centro-zibata",
-        "unicca-centro-zibata"
+        "unicca-centro-zibata",
+        "barberia-barbuda-centro-zibata",
+        "blanc-nail-bar",
+        "piu-bella-studio-di-belleza"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -1047,7 +1089,10 @@
         "consultorios-y-clinicas",
         "laboratorios-y-diagnostico",
         "gimnasios",
-        "yoga-pilates-y-barre"
+        "yoga-pilates-y-barre",
+        "barberia",
+        "unas",
+        "piel-y-cuerpo"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Centro Zibatá\" (shopping center) y Agave Grill; huella de Overture.",
@@ -1238,7 +1283,10 @@
         "la-brasa-nortena",
         "el-asadero",
         "antojeria-de-la-tia",
-        "los-margaritenos"
+        "los-margaritenos",
+        "casa-b-nail-bar",
+        "karla-cisneros-beauty-artist",
+        "studio-blaze-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -1247,7 +1295,10 @@
         "carnes-y-parrilla",
         "entre-panes",
         "saludable",
-        "bebidas"
+        "bebidas",
+        "peluqueria",
+        "unas",
+        "maquillaje"
       ],
       "locationConfidence": "medium",
       "locationSource": "Punto del enlace del local Smoothie Lab de Google Maps aportado por el propietario de la guía (2026-09-20), leído de la redirección del enlace sin consultar contenido de Google. Huella aproximada: rectángulo orientado a la vialidad más cercana (npm run map:suggest-plaza), porque aún no hay huella construida en los datos abiertos.",

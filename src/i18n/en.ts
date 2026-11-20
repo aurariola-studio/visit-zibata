@@ -90,6 +90,7 @@ export const en = {
   'hours.today': 'Today',
   'hours.none': 'No opening hours published.',
   'hours.byClasses': 'Hours depend on the classes. Check availability before you go.',
+  'hours.byAppointment': 'By appointment only. Check availability before you go.',
   'hours.reviewed': 'Hours checked on {date}.',
 
   'day.mon': 'Monday',

@@ -129,6 +129,10 @@
                   "byClasses": {
                     "type": "boolean",
                     "const": true
+                  },
+                  "byAppointment": {
+                    "type": "boolean",
+                    "const": true
                   }
                 },
                 "additionalProperties": false
@@ -295,8 +299,16 @@
               "whatsapp": {
                 "anyOf": [
                   {
-                    "type": "string",
-                    "pattern": "^\\+[1-9]\\d{9,14}$"
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^\\+[1-9]\\d{9,14}$"
+                      },
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    ]
                   },
                   {
                     "type": "null"

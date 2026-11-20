@@ -31,6 +31,10 @@ const TIPOS_DE_NEGOCIO: Record<(typeof SCHEMA_TYPES)[number], string> = {
   MedicalClinic: 'Clínica o consultorio',
   Dentist: 'Dentista',
   DiagnosticLab: 'Laboratorio de diagnóstico',
+  HairSalon: 'Peluquería o barbería',
+  NailSalon: 'Salón de uñas',
+  DaySpa: 'Spa',
+  BeautySalon: 'Salón de belleza',
 }
 
 /** Las opciones del sector. Una categoría nueva arranca sin elegir: el sector se decide a propósito, no por omisión. */

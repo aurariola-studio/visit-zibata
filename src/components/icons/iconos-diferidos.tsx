@@ -361,6 +361,51 @@ const Te = solid(
   <path d="M20 6h-3V5c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v12c0 1.65 1.35 3 3 3h9c1.65 0 3-1.35 3-3v-2h3c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m-5 11c0 .55-.45 1-1 1H5c-.55 0-1-.45-1-1V6h6v4l-1 1v4h4v-4l-1-1V6h3zm2-4V8h3v5z" />,
 )
 
+/** Tazón con su brocha: el color de cabello. Iconoven `hair-dye` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
+const Tinte = custom(
+  <path d="m13 8.25l5.75-5.5m-5.67 6.58l-1.16-1.16q-.42-.42-.84 0L9.92 9.33q-.42.42 0 .84l1.16 1.16q.42.42.84 0l1.16-1.16q.42-.42 0-.84M2.75 14h14.5a7.25 7.25 0 0 1-14.5 0M6 17h8" />,
+)
+
+/** Secadora de pelo: Tratamientos Capilares. Jam Icons `hairdryer` (MIT). */
+const Secadora = solid(
+  <path d="M6 8.286h4.017l.584.571a4 4 0 0 0 1.991 1.062l1.096.224l2.364 6.495a1 1 0 1 0 1.88-.684l-2.333-6.407l.793-.892A4 4 0 0 0 10.6 3.143l-.584.571H6zm-2 0V3.714H2v4.572zm5.2 2H2a2 2 0 0 1-2-2V3.714a2 2 0 0 1 2-2h7.2a6 6 0 0 1 8.686 8.27l1.925 5.286a3 3 0 1 1-5.638 2.052l-1.982-5.444a6 6 0 0 1-2.99-1.592zM12 5h3a1 1 0 0 1 0 2h-3a1 1 0 0 1 0-2" />,
+)
+
+/** Tina con burbujas: Spa. Lucide Lab `bath-bubble` (ISC). */
+const BanoBurbujas = custom(
+  <>
+    <path d="M15 3h.01" />
+    <circle cx="11.5" cy="6.5" r=".5" />
+    <circle cx="16.5" cy="7.5" r=".5" />
+    <path d="M2 12h6m5 3H8v-3c0-.6.4-1 1-1h3c.6 0 1 .4 1 1Zm0-3h9" />
+    <path d="M4 12v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5M7 19v2m10-2v2" />
+  </>,
+)
+
+/** Persona boca abajo en una camilla y otra dándole masaje: Masajes. Tabler Icons `massage` (MIT). */
+const Masaje = custom(
+  <path d="M3 17a1 1 0 1 0 2 0a1 1 0 1 0-2 0M8 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M4 22l4-2v-3h12m-9 3h9M8 14l3-2l1-4c3 1 3 4 3 6" />,
+)
+
+/** Cara con destellos: Faciales. Material Symbols `face-retouching-natural` en contorno (Apache 2.0). */
+const CaraCuidada = solid(
+  <path d="M12 2q.975 0 2 .213t2 .637l-2.75 1.275q-.3-.05-.613-.088T12 4q-.35 0-.675.025t-.675.1q1.05 1.75 2.85 2.813T17.5 8h.35l.875 1.925q-2.25.275-4.7-.525T9.75 6.3q-.875 2.125-2.388 3.5T4 11.85q0 3.475 2.337 5.813T12 20q3.4 0 5.725-2.4T20 12q0-.35-.025-.613t-.075-.637l1.25-2.775q.45 1.05.65 2.025t.2 2q0 2-.763 3.813T19.137 19q-1.337 1.375-3.162 2.188T12 22q-2.05 0-3.875-.788t-3.188-2.15q-1.362-1.362-2.15-3.187T2 12q0-2.15.825-3.988t2.212-3.175Q6.425 3.5 8.226 2.75T12 2Zm-3 9.75q.525 0 .888.363t.362.887q0 .525-.363.888T9 14.25q-.525 0-.888-.363T7.75 13q0-.525.363-.888T9 11.75ZM14.325 6ZM15 11.75q.525 0 .888.363t.362.887q0 .525-.363.888T15 14.25q-.525 0-.888-.363T13.75 13q0-.525.363-.888T15 11.75ZM19.5 1l1.1 2.4L23 4.5l-2.4 1.1L19.5 8l-1.1-2.4L16 4.5l2.4-1.1L19.5 1ZM4.425 9.475Q5.7 8.75 6.65 7.6t1.425-2.575Q6.8 5.75 5.85 6.9T4.425 9.475Zm3.65-4.45Z" />,
+)
+
+/** Rastrillo de afeitar: Depilación. Lucide Lab `razor` (ISC). */
+const Rastrillo = custom(
+  <>
+    <path d="m22 11l-1.6 1.6c-.8.8-2 .8-2.8 0l-6.2-6.2c-.8-.8-.8-2 0-2.8L13 2m2.8 2.8l3.4 3.4" />
+    <path d="M17 12c-1.4 1.4-3.6 1.4-4.9 0s-1.4-3.6-.1-5" />
+    <path d="m11.1 10.1l-8.5 8.5a1.95 1.95 0 1 0 2.8 2.8l8.4-8.4" />
+  </>,
+)
+
+/** Silueta de torso y cintura: Tratamientos Corporales. MingCute `body-line` (Apache 2.0). */
+const Cuerpo = solid(
+  <path d="M18.035 13.913c-2.199.588-3.698 1.618-4.457 3.827c-.235.684-.374 1.398-.467 2.115l-.065.593c-.056.594-.005 1.192-.65 1.47l-.261.073a1 1 0 0 1-.763-.213c-.418-.337-.372-.845-.418-1.33l-.065-.593a12 12 0 0 0-.316-1.628c-.691-2.494-2.151-3.654-4.605-4.314c-.216 1.612.1 3.181.77 4.654q.27.59.603 1.144c.209.347.598.746.651 1.163c.033.261-.04.53-.201.738c-.414.534-1.17.48-1.587-.007c-.224-.261-.406-.579-.582-.873a12.5 12.5 0 0 1-1.497-3.666c-.312-1.385-.343-2.854.027-4.232c.194-.724.512-1.385.788-2.08c.435-1.098.786-2.234.997-3.397c.152-.835.235-1.684.222-2.533l-.041-.833c-.055-.621-.316-1.337.277-1.787a1 1 0 0 1 1.218.006c.219.17.327.398.379.664l.115.903l.052.982c.056 2.499-.614 4.961-1.576 7.247c2.528.73 4.283 1.86 5.417 4.299c1.135-2.441 2.89-3.57 5.42-4.3c-.962-2.285-1.632-4.748-1.576-7.246l.052-.982c.06-.611.046-1.416.72-1.699a.996.996 0 0 1 1.177.309c.366.472.139 1.075.092 1.604l-.042.833c-.012.849.071 1.698.222 2.533c.212 1.163.563 2.299.998 3.397c.276.695.594 1.356.788 2.08c.369 1.378.339 2.847.027 4.232a12.5 12.5 0 0 1-1.497 3.666c-.176.294-.358.612-.582.873c-.493.576-1.409.521-1.718-.218a1 1 0 0 1-.07-.513c.053-.417.442-.816.651-1.163q.334-.555.602-1.144c.671-1.473.986-3.042.771-4.654m-6.294-3.947a1 1 0 0 1-.607-.466c-.439-.76.29-1.69 1.127-1.466c.254.068.475.238.607.466c.439.76-.29 1.69-1.127 1.466" />,
+)
+
 export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   acai: Acai,
   antojito: Antojito,
@@ -368,6 +413,7 @@ export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   bagel: Bagel,
   baguette: Baguette,
   ballet: Ballet,
+  'bano-burbujas': BanoBurbujas,
   barre: Barre,
   beer: Beer,
   bike: Bike,
@@ -376,12 +422,15 @@ export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   bone: Bone,
   bowl: Bowl,
   boxeo: Boxeo,
+  brunch: Brunch,
   'cake-slice': CakeSlice,
+  'cara-cuidada': CaraCuidada,
   cecina: Bacon,
   cerdo: Cerdo,
   cherry: Cherry,
   coffee: Coffee,
   crepa: Crepa,
+  cuerpo: Cuerpo,
   cupcake: Cupcake,
   dermatology: Dermatology,
   drumstick: Drumstick,
@@ -392,28 +441,31 @@ export const ICONOS_DIFERIDOS: Record<string, IconComponent> = {
   fruta: Fruta,
   funcional: Funcional,
   'hot-dog': HotDog,
-  'plato-desayuno': PlatoDesayuno,
-  brunch: Brunch,
   'ice-cream': IceCreamCone,
   jugo: Jugo,
   kebab: Kebab,
+  masaje: Masaje,
   natacion: Natacion,
   nigiri: Nigiri,
   ortodoncia: Ortodoncia,
   padel: Padel,
-  papas: Papas,
   'papas-fritas': PapasFritas,
+  papas: Papas,
   pasta: Pasta,
   pickleball: Pickleball,
   pilates: Pilates,
   pizza: Pizza,
+  'plato-desayuno': PlatoDesayuno,
   proteina: Proteina,
   quesadilla: Quesadilla,
   ramen: Ramen,
+  rastrillo: Rastrillo,
   salad: Salad,
   sandwich: Sandwich,
+  secadora: Secadora,
   taekwondo: Taekwondo,
   te: Te,
+  tinte: Tinte,
   torta: Torta,
   waffle: Waffle,
   wine: Wine,

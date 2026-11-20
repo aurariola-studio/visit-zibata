@@ -104,6 +104,7 @@ export const es = {
   'hours.today': 'Hoy',
   'hours.none': 'Sin horario publicado.',
   'hours.byClasses': 'El horario depende de las clases. Consulta su disponibilidad antes de ir.',
+  'hours.byAppointment': 'Se atiende con cita. Consulta su disponibilidad antes de ir.',
   'hours.reviewed': 'Horario revisado el {date}.',
 
   'day.mon': 'Lunes',

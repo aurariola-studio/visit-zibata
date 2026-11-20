@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-16",
+  "updatedAt": "2026-11-20",
   "categories": [
     {
       "id": "desayunos-y-cafe",
@@ -1928,6 +1928,399 @@
           ]
         }
       ]
+    },
+    {
+      "id": "peluqueria",
+      "slug": {
+        "es": "peluqueria",
+        "en": "hair-salons"
+      },
+      "sectorId": "belleza-y-cuidado-personal",
+      "label": {
+        "es": "Peluquería",
+        "en": "Hair Salons"
+      },
+      "icon": "tijeras",
+      "hue": 300,
+      "schemaType": "HairSalon",
+      "order": 400,
+      "synonyms": [
+        "peluquería",
+        "estética",
+        "salón de belleza",
+        "estilista",
+        "cabello",
+        "pelo",
+        "corte de cabello"
+      ],
+      "giros": [
+        {
+          "id": "peluqueria",
+          "label": {
+            "es": "Peluquería",
+            "en": "Hair Salon"
+          },
+          "icon": "tijeras",
+          "synonyms": [
+            "peluquería",
+            "estética",
+            "salón",
+            "estilista",
+            "corte",
+            "cabello",
+            "pelo",
+            "peinado",
+            "hair salon"
+          ],
+          "general": true
+        },
+        {
+          "id": "color",
+          "label": {
+            "es": "Color",
+            "en": "Hair Color"
+          },
+          "icon": "tinte",
+          "synonyms": [
+            "color",
+            "tinte",
+            "balayage",
+            "mechas",
+            "highlights",
+            "rubios",
+            "decoloración"
+          ]
+        },
+        {
+          "id": "tratamientos-capilares",
+          "label": {
+            "es": "Tratamientos Capilares",
+            "en": "Hair Treatments"
+          },
+          "icon": "secadora",
+          "synonyms": [
+            "tratamientos capilares",
+            "keratina",
+            "alaciado",
+            "botox capilar",
+            "cuero cabelludo",
+            "hidratación capilar",
+            "oxigenación capilar"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "barberia",
+      "slug": {
+        "es": "barberia",
+        "en": "barbershops"
+      },
+      "sectorId": "belleza-y-cuidado-personal",
+      "label": {
+        "es": "Barbería",
+        "en": "Barbershops"
+      },
+      "icon": "poste-barberia",
+      "hue": 200,
+      "schemaType": "HairSalon",
+      "order": 410,
+      "synonyms": [
+        "barbería",
+        "barbero",
+        "barba",
+        "corte de hombre",
+        "afeitado"
+      ],
+      "giros": [
+        {
+          "id": "barberia",
+          "label": {
+            "es": "Barbería",
+            "en": "Barbershop"
+          },
+          "icon": "poste-barberia",
+          "synonyms": [
+            "barbería",
+            "barbero",
+            "barba",
+            "corte de hombre",
+            "afeitado",
+            "toalla caliente",
+            "barber"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "unas",
+      "slug": {
+        "es": "unas",
+        "en": "nails"
+      },
+      "sectorId": "belleza-y-cuidado-personal",
+      "label": {
+        "es": "Uñas",
+        "en": "Nails"
+      },
+      "icon": "esmalte",
+      "hue": 330,
+      "schemaType": "NailSalon",
+      "order": 420,
+      "synonyms": [
+        "uñas",
+        "manicura",
+        "pedicura",
+        "manicure",
+        "pedicure",
+        "nail bar",
+        "gelish",
+        "acrílico"
+      ],
+      "giros": [
+        {
+          "id": "manicura-y-pedicura",
+          "label": {
+            "es": "Manicura y Pedicura",
+            "en": "Manicure & Pedicure"
+          },
+          "icon": "esmalte",
+          "synonyms": [
+            "manicura",
+            "pedicura",
+            "manicure",
+            "pedicure",
+            "uñas",
+            "gelish",
+            "gel",
+            "acrílico",
+            "esmaltado",
+            "nail bar"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "spa-y-masajes",
+      "slug": {
+        "es": "spa-y-masajes",
+        "en": "spa-and-massage"
+      },
+      "sectorId": "belleza-y-cuidado-personal",
+      "label": {
+        "es": "Spa y Masajes",
+        "en": "Spa & Massage"
+      },
+      "icon": "spa",
+      "hue": 165,
+      "schemaType": "DaySpa",
+      "order": 430,
+      "synonyms": [
+        "spa",
+        "masaje",
+        "masajes",
+        "relajación",
+        "aromaterapia",
+        "head spa"
+      ],
+      "giros": [
+        {
+          "id": "spa",
+          "label": {
+            "es": "Spa",
+            "en": "Spa"
+          },
+          "icon": "bano-burbujas",
+          "synonyms": [
+            "spa",
+            "relajación",
+            "aromaterapia",
+            "head spa",
+            "ritual",
+            "bienestar"
+          ]
+        },
+        {
+          "id": "masajes",
+          "label": {
+            "es": "Masajes",
+            "en": "Massage"
+          },
+          "icon": "masaje",
+          "synonyms": [
+            "masaje",
+            "masajes",
+            "terapéutico",
+            "relajante",
+            "descontracturante"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "piel-y-cuerpo",
+      "slug": {
+        "es": "piel-y-cuerpo",
+        "en": "skin-and-body"
+      },
+      "sectorId": "belleza-y-cuidado-personal",
+      "label": {
+        "es": "Piel y Cuerpo",
+        "en": "Skin & Body"
+      },
+      "icon": "locion",
+      "hue": 18,
+      "schemaType": "BeautySalon",
+      "order": 440,
+      "synonyms": [
+        "piel",
+        "cuerpo",
+        "facial",
+        "depilación",
+        "tratamientos",
+        "estética",
+        "reductivos"
+      ],
+      "giros": [
+        {
+          "id": "faciales",
+          "label": {
+            "es": "Faciales",
+            "en": "Facials"
+          },
+          "icon": "cara-cuidada",
+          "synonyms": [
+            "facial",
+            "faciales",
+            "limpieza facial",
+            "rostro",
+            "antiacné",
+            "dermaplaning",
+            "radiofrecuencia"
+          ]
+        },
+        {
+          "id": "tratamientos-corporales",
+          "label": {
+            "es": "Tratamientos Corporales",
+            "en": "Body Treatments"
+          },
+          "icon": "cuerpo",
+          "synonyms": [
+            "corporal",
+            "tratamientos corporales",
+            "reductivos",
+            "reducción de medidas",
+            "presoterapia",
+            "aparatología"
+          ]
+        },
+        {
+          "id": "depilacion",
+          "label": {
+            "es": "Depilación",
+            "en": "Hair Removal"
+          },
+          "icon": "rastrillo",
+          "synonyms": [
+            "depilación",
+            "láser",
+            "láser diodo",
+            "ipl",
+            "cera",
+            "hilo",
+            "vello"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cejas-y-pestanas",
+      "slug": {
+        "es": "cejas-y-pestanas",
+        "en": "brows-and-lashes"
+      },
+      "sectorId": "belleza-y-cuidado-personal",
+      "label": {
+        "es": "Cejas y Pestañas",
+        "en": "Brows & Lashes"
+      },
+      "icon": "ceja",
+      "hue": 280,
+      "schemaType": "BeautySalon",
+      "order": 450,
+      "synonyms": [
+        "cejas",
+        "pestañas",
+        "laminado de cejas",
+        "lifting de pestañas",
+        "extensiones de pestañas",
+        "microblading"
+      ],
+      "giros": [
+        {
+          "id": "cejas-y-pestanas",
+          "label": {
+            "es": "Cejas y Pestañas",
+            "en": "Brows & Lashes"
+          },
+          "icon": "ceja",
+          "synonyms": [
+            "cejas",
+            "pestañas",
+            "laminado de cejas",
+            "lifting de pestañas",
+            "extensiones de pestañas",
+            "diseño de cejas",
+            "microblading"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "maquillaje",
+      "slug": {
+        "es": "maquillaje",
+        "en": "makeup"
+      },
+      "sectorId": "belleza-y-cuidado-personal",
+      "label": {
+        "es": "Maquillaje",
+        "en": "Makeup"
+      },
+      "icon": "labial",
+      "hue": 345,
+      "schemaType": "BeautySalon",
+      "order": 460,
+      "synonyms": [
+        "maquillaje",
+        "makeup",
+        "make up",
+        "maquillista",
+        "novias"
+      ],
+      "giros": [
+        {
+          "id": "maquillaje",
+          "label": {
+            "es": "Maquillaje",
+            "en": "Makeup"
+          },
+          "icon": "labial",
+          "synonyms": [
+            "maquillaje",
+            "makeup",
+            "make up",
+            "maquillista",
+            "novias",
+            "social"
+          ],
+          "general": true
+        }
+      ]
     }
   ],
   "sectors": [
@@ -1969,6 +2362,19 @@
       },
       "icon": "biceps-flexed",
       "order": 30
+    },
+    {
+      "id": "belleza-y-cuidado-personal",
+      "slug": {
+        "es": "belleza-y-cuidado-personal",
+        "en": "beauty-and-personal-care"
+      },
+      "label": {
+        "es": "Belleza y Cuidado Personal",
+        "en": "Beauty & Personal Care"
+      },
+      "icon": "espejo",
+      "order": 40
     }
   ]
 }

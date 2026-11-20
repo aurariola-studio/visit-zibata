@@ -16,6 +16,7 @@ import {
   isHttpUrl,
   isSafePhotoSrc,
   isValidTimeRange,
+  isWhatsappLink,
   LOCATION_CONFIDENCE,
   SLUG_PATTERN,
 } from './rules.ts'
@@ -71,7 +72,7 @@ const isHours = (value: unknown) =>
   Object.entries(value).every(([key, ranges]) =>
     key === 'note'
       ? isText(ranges)
-      : key === 'byClasses'
+      : key === 'byClasses' || key === 'byAppointment'
         ? ranges === true
         : (DAY_KEYS as readonly string[]).includes(key) &&
           arrayOf((range) => typeof range === 'string' && isValidTimeRange(range))(ranges),
@@ -101,7 +102,9 @@ const isLinks = (value: unknown) =>
   ['website', 'instagram', 'facebook', 'tiktok', 'rappi', 'uberEats', 'didiFood'].every((key) =>
     nullish(isUrl)(value[key]),
   ) &&
-  nullish(isPhone)(value.whatsapp)
+  nullish((valor) => isPhone(valor) || (typeof valor === 'string' && isWhatsappLink(valor)))(
+    value.whatsapp,
+  )
 
 const isPosition = (value: unknown) =>
   Array.isArray(value) && value.length === 2 && value.every(isFiniteNumber)

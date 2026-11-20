@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-18",
+  "updatedAt": "2026-11-20",
   "places": [
     {
       "id": "carls-jr",
@@ -9461,6 +9461,1551 @@
           "https://www.facebook.com/trompochtitlan/",
           "https://www.ubereats.com/mx/store/trompochtitlan-zibata/Yl5lO44BXEu4A5fNaa15tg",
           "campo:2026-11-18"
+        ]
+      }
+    },
+    {
+      "id": "avyna-salon-de-belleza",
+      "slug": "avyna-salon-de-belleza",
+      "name": "Avyna Salón de Belleza",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "peluqueria"
+      ],
+      "description": {
+        "es": "Salón De Belleza Profesional enfocado en sus clientes y en su satisfacción.",
+        "en": "Professional beauty salon focused on its clients and their satisfaction."
+      },
+      "hours": {
+        "mon": [
+          "11:00-19:00"
+        ],
+        "tue": [
+          "11:00-19:00"
+        ],
+        "wed": [
+          "11:00-19:00"
+        ],
+        "thu": [
+          "11:00-19:00"
+        ],
+        "fri": [
+          "11:00-19:00"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6835655,
+        "lng": -100.3259535
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/RzZr7o99veaEHkK86",
+      "googlePlaceId": null,
+      "phone": "+524461445248",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/avynasalonzibata/",
+        "facebook": "https://www.facebook.com/p/AVYNA-Sal%C3%B3n-Zibat%C3%A1-61572378046749/",
+        "tiktok": null,
+        "whatsapp": "+524461445248",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/RzZr7o99veaEHkK86",
+          "https://www.instagram.com/avynasalonzibata/",
+          "https://www.facebook.com/p/AVYNA-Sal%C3%B3n-Zibat%C3%A1-61572378046749/",
+          "https://zibatahoy.com/listing/avyna-salon-de-belleza-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "barberia-barbuda-centro-zibata",
+      "slug": "barberia-barbuda-centro-zibata",
+      "name": "Barbería Barbuda Centro Zibatá",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "barberia"
+      ],
+      "description": {
+        "es": "Somos una barbería holistica, donde nos ocupamos por la imagen física, mental, y espiritual.\n\nEn Barbuda ofrecemos cortes de cabello para hombres, niños y dama, además de ritual de afeitado tradicional con toalla caliente, aplicación de tinte y pigmentación de barba.",
+        "en": "We are a holistic barbershop, where we care for your physical, mental and spiritual image.\n\nAt Barbuda we offer haircuts for men, boys and women, as well as a traditional hot towel shave ritual, beard dyeing and beard pigmentation."
+      },
+      "hours": {
+        "mon": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "tue": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "wed": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "thu": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "fri": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "sat": [
+          "10:00-14:00",
+          "15:20-20:00"
+        ],
+        "sun": [
+          "10:00-14:00",
+          "15:20-20:00"
+        ],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6813145,
+        "lng": -100.3399826
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/2LtnvpWpDmvm9ZXK9",
+      "googlePlaceId": null,
+      "phone": "+524424588065",
+      "photos": [],
+      "links": {
+        "website": "https://barberiabarbuda.site.agendapro.com/mx",
+        "instagram": "https://www.instagram.com/barberiabarbuda/",
+        "facebook": "https://www.facebook.com/profile.php?id=61577232269549",
+        "tiktok": null,
+        "whatsapp": "+525625168954",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/2LtnvpWpDmvm9ZXK9",
+          "https://barberiabarbuda.site.agendapro.com/mx",
+          "https://www.instagram.com/barberiabarbuda/",
+          "https://www.facebook.com/profile.php?id=61577232269549",
+          "https://zibatahoy.com/listing/barberia-barbuda-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "barberia-barbuda-paseo-zibata",
+      "slug": "barberia-barbuda-paseo-zibata",
+      "name": "Barbería Barbuda Paseo Zibatá",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "barberia"
+      ],
+      "description": {
+        "es": "Somos una barbería holistica, donde nos ocupamos por la imagen física, mental, y espiritual.\n\nEn Barbuda ofrecemos cortes de cabello para hombres, niños y dama, además de ritual de afeitado tradicional con toalla caliente, aplicación de tinte y pigmentación de barba.",
+        "en": "We are a holistic barbershop, where we care for your physical, mental and spiritual image.\n\nAt Barbuda we offer haircuts for men, boys and women, as well as a traditional hot towel shave ritual, beard dyeing and beard pigmentation."
+      },
+      "hours": {
+        "mon": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "tue": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "wed": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "thu": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "fri": [
+          "11:00-14:00",
+          "15:20-21:00"
+        ],
+        "sat": [
+          "10:00-14:00",
+          "15:20-20:00"
+        ],
+        "sun": [
+          "10:00-14:00",
+          "15:20-20:00"
+        ],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6792027,
+        "lng": -100.3151301
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/xEZNPkiRkdDNYaKE7",
+      "googlePlaceId": null,
+      "phone": "+524424588065",
+      "photos": [],
+      "links": {
+        "website": "https://barberiabarbuda.site.agendapro.com/mx",
+        "instagram": "https://www.instagram.com/barbudabarberia_/",
+        "facebook": "https://www.facebook.com/profile.php?id=61578694965196",
+        "tiktok": null,
+        "whatsapp": "+525625168954",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/xEZNPkiRkdDNYaKE7",
+          "https://barberiabarbuda.site.agendapro.com/mx",
+          "https://www.instagram.com/barbudabarberia_/",
+          "https://www.facebook.com/profile.php?id=61578694965196"
+        ]
+      }
+    },
+    {
+      "id": "barberia-club-1978-zibata",
+      "slug": "barberia-club-1978-zibata",
+      "name": "Barbería Club 1978 Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "barberia"
+      ],
+      "description": {
+        "es": "Nuestro objetivo no es solamente cortarle el cabello o arreglarle la barba sino ... ¡Brindarle un espacio de relajación mientras nosotros trabajamos!",
+        "en": "Our goal is not only to cut your hair or trim your beard but ... to give you a space to relax while we work!"
+      },
+      "hours": {
+        "mon": [
+          "10:00-21:00"
+        ],
+        "tue": [
+          "10:00-21:00"
+        ],
+        "wed": [
+          "10:00-21:00"
+        ],
+        "thu": [
+          "10:00-21:00"
+        ],
+        "fri": [
+          "10:00-21:00"
+        ],
+        "sat": [
+          "10:00-18:00"
+        ],
+        "sun": [
+          "10:00-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6747698,
+        "lng": -100.3229571
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/1KfMeYwY33zdsfQPA",
+      "googlePlaceId": null,
+      "phone": "+524421078344",
+      "photos": [],
+      "links": {
+        "website": "https://www.barberiaclub1978.com",
+        "instagram": "https://www.instagram.com/barberiaclub1978zibata/",
+        "facebook": "https://www.facebook.com/BarberiaClub1978Zibata/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/1KfMeYwY33zdsfQPA",
+          "https://www.barberiaclub1978.com",
+          "https://www.instagram.com/barberiaclub1978zibata/",
+          "https://www.facebook.com/BarberiaClub1978Zibata/",
+          "https://zibatahoy.com/listing/barberia-club-1978-zibata-plaza-zielo/"
+        ]
+      }
+    },
+    {
+      "id": "beoxy-zibata",
+      "slug": "beoxy-zibata",
+      "name": "BeOxy Zibatá",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "faciales",
+        "depilacion",
+        "tratamientos-capilares"
+      ],
+      "description": {
+        "es": "El resultado no es casualidad, es estrategia. En BeOxy diseñamos protocolos personalizados con tecnología estética avanzada para transformar piel, cuerpo y cabello de forma progresiva, con valoración profesional y planes estructurados de 6 a 10 sesiones que permiten lograr resultados visibles.",
+        "en": "The result is no accident, it is strategy. At BeOxy we design personalized protocols with advanced aesthetic technology to progressively transform skin, body and hair, with a professional assessment and structured plans of 6 to 10 sessions that deliver visible results."
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "09:00-17:00"
+        ],
+        "sun": [],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6782586,
+        "lng": -100.3138833
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/QdPY2RZB5XGvc8sm9",
+      "googlePlaceId": null,
+      "phone": "+524425866659",
+      "photos": [],
+      "links": {
+        "website": "https://spazibata.mx",
+        "instagram": "https://www.instagram.com/beoxyzibata",
+        "facebook": "https://www.facebook.com/beoxyzibata/",
+        "tiktok": "https://www.tiktok.com/@beoxy.zibata",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/QdPY2RZB5XGvc8sm9",
+          "https://spazibata.mx",
+          "https://www.instagram.com/beoxyzibata",
+          "https://www.facebook.com/beoxyzibata/",
+          "https://www.tiktok.com/@beoxy.zibata",
+          "https://zibatahoy.com/listing/beoxy-xentric-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "black-studio-beauty-nails",
+      "slug": "black-studio-beauty-nails",
+      "name": "Black Studio Beauty & Nails",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "peluqueria",
+        "manicura-y-pedicura",
+        "cejas-y-pestanas"
+      ],
+      "description": {
+        "es": "Ofrecemos una variedad de servicios como cortes de cabello, tintes, tratamientos capilares, peinados, uñas de acrílico, aplicación de gel, manicure, pedicura, depilación con cera, limpiezas faciales y más. Todo en un ambiente relajante, con los mejores profesionales, para que te sientas renovado y radiante. ¡Ven y vive la experiencia de belleza que mereces!",
+        "en": "We offer a variety of services such as haircuts, hair coloring, hair treatments, styling, acrylic nails, gel application, manicure, pedicure, wax hair removal, facial cleansing and more. All in a relaxing atmosphere, with the best professionals, so you feel renewed and radiant. Come and live the beauty experience you deserve!"
+      },
+      "hours": {
+        "mon": [
+          "10:00-19:00"
+        ],
+        "tue": [
+          "10:00-19:00"
+        ],
+        "wed": [
+          "10:00-19:00"
+        ],
+        "thu": [
+          "10:00-19:00"
+        ],
+        "fri": [
+          "10:00-19:00"
+        ],
+        "sat": [
+          "10:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.678956,
+        "lng": -100.3145582
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/8GQti7YSG6PFLSBq9",
+      "googlePlaceId": null,
+      "phone": "+524425834700",
+      "photos": [],
+      "links": {
+        "website": "https://www.fresha.com/a/black-studio-beauty-nails-el-marques-av-paseo-de-las-pitahayas-13-local-21-plaza-paseo-76269-zibata-qro-j52s03o2",
+        "instagram": "https://www.instagram.com/blackstudioqro/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524425834700",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/8GQti7YSG6PFLSBq9",
+          "https://www.fresha.com/a/black-studio-beauty-nails-el-marques-av-paseo-de-las-pitahayas-13-local-21-plaza-paseo-76269-zibata-qro-j52s03o2",
+          "https://www.instagram.com/blackstudioqro/",
+          "https://zibatahoy.com/listing/black-studio-beauty-nails-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "blanc-nail-bar",
+      "slug": "blanc-nail-bar",
+      "name": "Blanc Nail Bar",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "manicura-y-pedicura"
+      ],
+      "description": {
+        "es": "Más que un salón. Un espacio pensado en ti.",
+        "en": "More than a salon. A space designed for you."
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": [],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6814338,
+        "lng": -100.3398921
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/neB4HcJm9VveMncU9",
+      "googlePlaceId": null,
+      "phone": "+524461699899",
+      "photos": [],
+      "links": {
+        "website": "https://linktr.ee/blanc_nailsbar",
+        "instagram": "https://www.instagram.com/blanc_nailsbar",
+        "facebook": "https://www.facebook.com/profile.php?id=61552307735605",
+        "tiktok": "https://www.tiktok.com/@blanc.nailbar",
+        "whatsapp": "+524461699899",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/neB4HcJm9VveMncU9",
+          "https://linktr.ee/blanc_nailsbar",
+          "https://www.instagram.com/blanc_nailsbar",
+          "https://www.facebook.com/profile.php?id=61552307735605",
+          "https://www.tiktok.com/@blanc.nailbar",
+          "https://zibatahoy.com/listing/blanc-nail-bar-plaza-centro-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "casa-b-nail-bar",
+      "slug": "casa-b-nail-bar",
+      "name": "Casa B Nail Bar",
+      "plazaId": "plaza-luna",
+      "giros": [
+        "manicura-y-pedicura"
+      ],
+      "description": {
+        "es": "Tu espacio de reconexión en Querétaro 🤍 | Nail Bar & Experiencia Sensorial | Protocolo Bioseguridad | No solo belleza, tu momento de pausa",
+        "en": "Your space for reconnection in Querétaro 🤍 | Nail Bar & Sensory Experience | Biosafety Protocol | Not just beauty, your moment to pause"
+      },
+      "hours": {
+        "mon": [
+          "09:30-18:30"
+        ],
+        "tue": [
+          "09:30-18:30"
+        ],
+        "wed": [
+          "09:30-18:30"
+        ],
+        "thu": [
+          "09:30-18:30"
+        ],
+        "fri": [
+          "09:30-18:30"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6851134,
+        "lng": -100.3251866
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/ANtVUhrTJXJ3m1cz9",
+      "googlePlaceId": null,
+      "phone": "+524428133440",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/casabnailbar/",
+        "facebook": "https://www.facebook.com/casab.nailsbar/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/ANtVUhrTJXJ3m1cz9",
+          "https://www.instagram.com/casabnailbar/",
+          "https://www.facebook.com/casab.nailsbar/"
+        ]
+      }
+    },
+    {
+      "id": "cavile-nail-studio",
+      "slug": "cavile-nail-studio",
+      "name": "Cavilé Nail Studio",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "manicura-y-pedicura"
+      ],
+      "description": {
+        "es": "En Cavile te invitamos a vivir una experiencia de bienestar en cada servicio.\nUn lugar donde la atención, el detalle y la tranquilidad se unen para recordarte que cuidar de ti también es una prioridad.",
+        "en": "At Cavile we invite you to live a wellness experience in every service.\nA place where care, detail and calm come together to remind you that taking care of yourself is also a priority."
+      },
+      "hours": {
+        "mon": [
+          "09:00-14:00",
+          "15:00-21:00"
+        ],
+        "tue": [
+          "09:00-14:00",
+          "15:00-19:00"
+        ],
+        "wed": [
+          "09:00-14:00",
+          "15:00-21:00"
+        ],
+        "thu": [
+          "09:00-14:00",
+          "15:00-19:00"
+        ],
+        "fri": [
+          "09:00-14:00",
+          "15:00-21:00"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.674756,
+        "lng": -100.3227147
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/1mEAmcPTbFWEafLQA",
+      "googlePlaceId": null,
+      "phone": "+524427125634",
+      "photos": [],
+      "links": {
+        "website": "https://www.fresha.com/a/cavile-zibata-avenida-paseo-de-las-pitahayas-26-us9l827e",
+        "instagram": "https://www.instagram.com/cavile.ns/",
+        "facebook": "https://www.facebook.com/cavilenailstudio/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/1mEAmcPTbFWEafLQA",
+          "https://www.fresha.com/a/cavile-zibata-avenida-paseo-de-las-pitahayas-26-us9l827e",
+          "https://www.instagram.com/cavile.ns/",
+          "https://www.facebook.com/cavilenailstudio/",
+          "https://zibatahoy.com/listing/cavile-nail-studio-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "eb-salon",
+      "slug": "eb-salon",
+      "name": "E|B Salón",
+      "plazaId": "condesa",
+      "giros": [
+        "peluqueria",
+        "color"
+      ],
+      "description": {
+        "es": "Hair Designer & Color Architect",
+        "en": "Hair Designer & Color Architect"
+      },
+      "hours": {
+        "mon": [
+          "11:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "10:00-16:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6807,
+        "lng": -100.3163098
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/FiwbWcx9nxi58dqx5",
+      "googlePlaceId": null,
+      "phone": "+524425837068",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/erika_blazkez/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/FiwbWcx9nxi58dqx5",
+          "https://www.instagram.com/erika_blazkez/",
+          "https://zibatahoy.com/listing/eb-salon-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "el-patron-barberia-y-tonicos",
+      "slug": "el-patron-barberia-y-tonicos",
+      "name": "El Patrón Barbería y Tónicos",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "barberia"
+      ],
+      "description": {
+        "es": "Diseño de imagen y vanguardia estética. Forja tu propio liderazgo.",
+        "en": "Image design and aesthetic avant-garde. Forge your own leadership."
+      },
+      "hours": {
+        "mon": [
+          "10:00-21:00"
+        ],
+        "tue": [
+          "10:00-21:00"
+        ],
+        "wed": [
+          "10:00-21:00"
+        ],
+        "thu": [
+          "10:00-21:00"
+        ],
+        "fri": [
+          "10:00-21:00"
+        ],
+        "sat": [
+          "10:00-19:00"
+        ],
+        "sun": [
+          "10:00-16:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6834506,
+        "lng": -100.325859
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/Vie5E8QtRgYnCNAv6",
+      "googlePlaceId": null,
+      "phone": "+524427820265",
+      "photos": [],
+      "links": {
+        "website": "https://www.elpatron.com.mx/es/zibata",
+        "instagram": "https://www.instagram.com/elpatronbarberiaytonicos/",
+        "facebook": "https://www.facebook.com/ElPatronBarberiaYTonicosZibata/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/Vie5E8QtRgYnCNAv6",
+          "https://www.elpatron.com.mx/es/zibata",
+          "https://www.instagram.com/elpatronbarberiaytonicos/",
+          "https://www.facebook.com/ElPatronBarberiaYTonicosZibata/",
+          "https://zibatahoy.com/listing/el-patron-barberia-y-tonicos-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "glow-beauty-bar-zibata",
+      "slug": "glow-beauty-bar-zibata",
+      "name": "Glow Beauty Bar",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "peluqueria",
+        "manicura-y-pedicura",
+        "cejas-y-pestanas"
+      ],
+      "description": {
+        "es": "En Glow, la belleza se transforma en una experiencia personalizada que resalta lo mejor de cada cliente. Este salón ofrece una amplia gama de tratamientos y servicios diseñados para satisfacer las necesidades individuales, todo en un ambiente acogedor y moderno.",
+        "en": "At Glow, beauty becomes a personalized experience that brings out the best in each client. This salon offers a wide range of treatments and services designed to meet individual needs, all in a welcoming and modern atmosphere."
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "09:30-16:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6747433,
+        "lng": -100.3230078
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/gj5MtQ5u8MATUZsS7",
+      "googlePlaceId": null,
+      "phone": "+524427980715",
+      "photos": [],
+      "links": {
+        "website": "https://www.fresha.com/a/glow-zibata-zibata-avenida-paseo-de-las-pitahayas-bi7wag97",
+        "instagram": "https://www.instagram.com/glowbeautybarqro/",
+        "facebook": "https://www.facebook.com/GlowBeautyBarQro/",
+        "tiktok": null,
+        "whatsapp": "+524427980715",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/gj5MtQ5u8MATUZsS7",
+          "https://www.fresha.com/a/glow-zibata-zibata-avenida-paseo-de-las-pitahayas-bi7wag97",
+          "https://www.instagram.com/glowbeautybarqro/",
+          "https://www.facebook.com/GlowBeautyBarQro/",
+          "https://zibatahoy.com/listing/glow-beauty-bar-zibata/"
+        ]
+      }
+    },
+    {
+      "id": "haut-zibata",
+      "slug": "haut-zibata",
+      "name": "Haut Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "depilacion",
+        "faciales",
+        "tratamientos-corporales"
+      ],
+      "description": {
+        "es": "Tratamientos de depilación láser diodo, cuidado facial, aparatología corporal con atención personalizada en Querétaro.",
+        "en": "Diode laser hair removal, facial care and body equipment treatments with personalized attention in Querétaro."
+      },
+      "hours": {
+        "mon": [
+          "10:00-19:00"
+        ],
+        "tue": [
+          "10:00-19:00"
+        ],
+        "wed": [
+          "10:00-19:00"
+        ],
+        "thu": [
+          "10:00-19:00"
+        ],
+        "fri": [
+          "10:00-19:00"
+        ],
+        "sat": [
+          "10:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.674756,
+        "lng": -100.3227147
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/WN6QAhHT4RV84qq67",
+      "googlePlaceId": null,
+      "phone": "+524421848318",
+      "photos": [],
+      "links": {
+        "website": "https://haut.com.mx/",
+        "instagram": "https://www.instagram.com/haut.clinical/",
+        "facebook": "https://www.facebook.com/hautspaqro/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/WN6QAhHT4RV84qq67",
+          "https://haut.com.mx/",
+          "https://www.instagram.com/haut.clinical/",
+          "https://www.facebook.com/hautspaqro/"
+        ]
+      }
+    },
+    {
+      "id": "hebra-hair-lab-head-spa",
+      "slug": "hebra-hair-lab-head-spa",
+      "name": "Hebra Hair Lab & Head Spa",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "tratamientos-capilares",
+        "spa"
+      ],
+      "description": {
+        "es": "Especialistas en diagnostico, recuperación, y mantenimiento del cuero cabelludo y cabello.\nVive esta experiencia unica en donde el cabello y cuero cabelludo encuentran equilibrio.🤎🧬🌱",
+        "en": "Specialists in diagnosis, recovery and maintenance of the scalp and hair.\nLive this unique experience where hair and scalp find balance.🤎🧬🌱"
+      },
+      "hours": {
+        "mon": [
+          "10:00-20:00"
+        ],
+        "tue": [
+          "10:00-20:00"
+        ],
+        "wed": [
+          "10:00-20:00"
+        ],
+        "thu": [
+          "10:00-20:00"
+        ],
+        "fri": [
+          "10:00-20:00"
+        ],
+        "sat": [
+          "10:00-17:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6747526,
+        "lng": -100.3227174
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/g4mJEoRVmBwbvGCE8",
+      "googlePlaceId": null,
+      "phone": "+524463880966",
+      "photos": [],
+      "links": {
+        "website": "https://agendapro.com/site/mx/hebrahairlabheadspa/505158",
+        "instagram": "https://www.instagram.com/hebrahairspa/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/g4mJEoRVmBwbvGCE8",
+          "https://agendapro.com/site/mx/hebrahairlabheadspa/505158",
+          "https://www.instagram.com/hebrahairspa/",
+          "https://hebrahairspa.com/"
+        ]
+      }
+    },
+    {
+      "id": "karla-cisneros-beauty-artist",
+      "slug": "karla-cisneros-beauty-artist",
+      "name": "Karla Cisneros Beauty Artist",
+      "plazaId": "plaza-luna",
+      "giros": [
+        "maquillaje"
+      ],
+      "description": {
+        "es": "Make Up Artist",
+        "en": "Make Up Artist"
+      },
+      "hours": {
+        "mon": [],
+        "tue": [
+          "09:00-18:00"
+        ],
+        "wed": [
+          "09:00-18:00"
+        ],
+        "thu": [
+          "09:00-18:00"
+        ],
+        "fri": [
+          "09:00-18:00"
+        ],
+        "sat": [
+          "09:00-18:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6851714,
+        "lng": -100.3252947
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/LVmEhGiJrvP6947K7",
+      "googlePlaceId": null,
+      "phone": "+524425948168",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/karlacisnerosbeautyartist/",
+        "facebook": "https://www.facebook.com/profile.php?id=61595535239337",
+        "tiktok": "https://www.tiktok.com/@karlacisnerosbeautyart",
+        "whatsapp": "https://api.whatsapp.com/message/IVEPP7J4G46DC1",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/LVmEhGiJrvP6947K7",
+          "https://www.instagram.com/karlacisnerosbeautyartist/",
+          "https://www.facebook.com/profile.php?id=61595535239337",
+          "https://www.tiktok.com/@karlacisnerosbeautyart"
+        ]
+      }
+    },
+    {
+      "id": "kings-beard-barberia",
+      "slug": "kings-beard-barberia",
+      "name": "King’s Beard Barbería",
+      "plazaId": "condesa",
+      "giros": [
+        "barberia"
+      ],
+      "description": {
+        "es": "Somos tu mejor opción, que esperas para sentirte como todo un rey.",
+        "en": "We are your best option, what are you waiting for to feel like a king."
+      },
+      "hours": {
+        "mon": [
+          "09:00-21:00"
+        ],
+        "tue": [
+          "09:00-21:00"
+        ],
+        "wed": [
+          "09:00-21:00"
+        ],
+        "thu": [
+          "09:00-21:00"
+        ],
+        "fri": [
+          "09:00-21:00"
+        ],
+        "sat": [
+          "08:00-19:00"
+        ],
+        "sun": [
+          "08:00-16:00"
+        ],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6810412,
+        "lng": -100.3166638
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/CHcWNJ4voStMjLMFA",
+      "googlePlaceId": null,
+      "phone": "+524461529186",
+      "photos": [],
+      "links": {
+        "website": "https://syserv.mx/kingsbeardbarberia",
+        "instagram": "https://www.instagram.com/kingsbeard_barberia/",
+        "facebook": "https://www.facebook.com/KharymShop/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/CHcWNJ4voStMjLMFA",
+          "https://syserv.mx/kingsbeardbarberia",
+          "https://www.instagram.com/kingsbeard_barberia/",
+          "https://www.facebook.com/KharymShop/"
+        ]
+      }
+    },
+    {
+      "id": "lusso-hair-boutique",
+      "slug": "lusso-hair-boutique",
+      "name": "LUSSO Hair Boutique",
+      "plazaId": "mol-jamadi",
+      "giros": [
+        "peluqueria",
+        "color",
+        "tratamientos-capilares"
+      ],
+      "description": {
+        "es": "Nos especializamos en cortes, color y tratamientos capilares con un enfoque en la excelencia, la elegancia y las últimas tendencias. Cada servicio está pensado para resaltar la belleza única de nuestros clientes, en un ambiente sofisticado y acogedor.",
+        "en": "We specialize in cuts, color and hair treatments with a focus on excellence, elegance and the latest trends. Every service is designed to highlight the unique beauty of our clients, in a sophisticated and welcoming atmosphere."
+      },
+      "hours": {
+        "mon": [
+          "09:00-20:00"
+        ],
+        "tue": [
+          "09:00-20:00"
+        ],
+        "wed": [
+          "09:00-20:00"
+        ],
+        "thu": [
+          "09:00-20:00"
+        ],
+        "fri": [
+          "09:00-20:00"
+        ],
+        "sat": [
+          "09:00-17:00"
+        ],
+        "sun": [
+          "09:00-17:00"
+        ],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6771403,
+        "lng": -100.3352795
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/6ukdSCTtb7XxUUUe9",
+      "googlePlaceId": null,
+      "phone": "+527227848503",
+      "photos": [],
+      "links": {
+        "website": "https://lusso.site.agendapro.com/mx",
+        "instagram": "https://www.instagram.com/lusso.hairboutique/",
+        "facebook": "https://www.facebook.com/p/Lusso-Hair-Boutique-61556295508795/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/6ukdSCTtb7XxUUUe9",
+          "https://lusso.site.agendapro.com/mx",
+          "https://www.instagram.com/lusso.hairboutique/",
+          "https://www.facebook.com/p/Lusso-Hair-Boutique-61556295508795/"
+        ]
+      }
+    },
+    {
+      "id": "mandala-spa-beauty-center",
+      "slug": "mandala-spa-beauty-center",
+      "name": "Mandala Spa & Beauty Center",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "faciales",
+        "tratamientos-corporales",
+        "masajes"
+      ],
+      "description": {
+        "es": "Mandala Spa te ofrece tratamientos faciales y corporales. Personal capacitado en el cuidado estético.",
+        "en": "Mandala Spa offers you facial and body treatments. Trained staff in aesthetic care."
+      },
+      "hours": {
+        "mon": [
+          "10:00-14:00",
+          "16:00-19:00"
+        ],
+        "tue": [
+          "10:00-14:00",
+          "16:00-19:00"
+        ],
+        "wed": [
+          "10:00-14:00",
+          "16:00-19:00"
+        ],
+        "thu": [
+          "10:00-14:00",
+          "16:00-19:00"
+        ],
+        "fri": [
+          "10:00-14:00",
+          "16:00-19:00"
+        ],
+        "sat": [
+          "10:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6781897,
+        "lng": -100.3136649
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/DMEzGDL3UAf4Gk2CA",
+      "googlePlaceId": null,
+      "phone": "+524425082135",
+      "photos": [],
+      "links": {
+        "website": "https://www.fresha.com/es/lvp/mandala-spa-beauty-center-zibata-0qDDZY",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/profile.php?id=100063808702215",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/DMEzGDL3UAf4Gk2CA",
+          "https://www.fresha.com/es/lvp/mandala-spa-beauty-center-zibata-0qDDZY",
+          "https://www.facebook.com/profile.php?id=100063808702215",
+          "https://www.fresha.com/lvp/mandala-spa-beauty-center-zibata-0qDDZY"
+        ]
+      }
+    },
+    {
+      "id": "piu-bella-studio-di-belleza",
+      "slug": "piu-bella-studio-di-belleza",
+      "name": "Piú Bella Studio di Belleza",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "tratamientos-corporales",
+        "faciales",
+        "depilacion"
+      ],
+      "description": {
+        "es": "💖 Belleza, relajación y bienestar en Zibatá, Qro.\n🧖🏻‍♀️ Tratamientos reductivos, faciales, masajes, depilación láser y más.",
+        "en": "💖 Beauty, relaxation and wellness in Zibatá, Qro.\n🧖🏻‍♀️ Reducing treatments, facials, massages, laser hair removal and more."
+      },
+      "hours": {
+        "mon": [
+          "10:00-18:00"
+        ],
+        "tue": [
+          "10:00-18:00"
+        ],
+        "wed": [
+          "10:00-18:00"
+        ],
+        "thu": [
+          "10:00-18:00"
+        ],
+        "fri": [
+          "10:00-18:00"
+        ],
+        "sat": [
+          "10:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6813187,
+        "lng": -100.3407375
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/WMEx7tfL5KV1LXsRA",
+      "googlePlaceId": null,
+      "phone": "+524424576347",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/piu_bella.mx/",
+        "facebook": "https://www.facebook.com/piubella.com.mx/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/WMEx7tfL5KV1LXsRA",
+          "https://www.instagram.com/piu_bella.mx/",
+          "https://www.facebook.com/piubella.com.mx/"
+        ]
+      }
+    },
+    {
+      "id": "rene-marquez-studio-zibata",
+      "slug": "rene-marquez-studio-zibata",
+      "name": "René Márquez Studio Zibatá",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "peluqueria"
+      ],
+      "description": {
+        "es": "Somos los mejores diseñadores de belleza en Querétaro, ofreciendo innovación y atención personalizada en cada uno de nuestros servicios dedicándonos a la belleza integral para hombres y mujeres.",
+        "en": "We are the best beauty designers in Querétaro, offering innovation and personalized attention in each of our services, dedicated to comprehensive beauty for men and women."
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "09:30-16:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6748799,
+        "lng": -100.3227878
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/G2tYiAYttXGFPXrb7",
+      "googlePlaceId": null,
+      "phone": "+524426886865",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/studio_renemarquez/",
+        "facebook": "https://www.facebook.com/p/Studio-Ren%C3%A9-Marquez-100065491659569/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/G2tYiAYttXGFPXrb7",
+          "https://www.instagram.com/studio_renemarquez/",
+          "https://www.facebook.com/p/Studio-Ren%C3%A9-Marquez-100065491659569/"
+        ]
+      }
+    },
+    {
+      "id": "rob-nail-beauty-lab",
+      "slug": "rob-nail-beauty-lab",
+      "name": "RÖB - Nail & Beauty Lab",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "manicura-y-pedicura",
+        "peluqueria",
+        "depilacion"
+      ],
+      "description": {
+        "es": "Salón de belleza, uñas, spa & beauty bar.",
+        "en": "Beauty salon, nails, spa & beauty bar."
+      },
+      "hours": {
+        "mon": [
+          "10:00-18:30"
+        ],
+        "tue": [
+          "10:00-18:30"
+        ],
+        "wed": [
+          "10:00-18:30"
+        ],
+        "thu": [
+          "10:00-18:30"
+        ],
+        "fri": [
+          "10:00-18:00"
+        ],
+        "sat": [
+          "10:00-15:00"
+        ],
+        "sun": [],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6781049,
+        "lng": -100.313569
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/VYwXDbKKezoZBstS9",
+      "googlePlaceId": null,
+      "phone": "+524422036240",
+      "photos": [],
+      "links": {
+        "website": "https://taplink.cc/rob.nailbarbeauty",
+        "instagram": "https://www.instagram.com/rob.beautylab/",
+        "facebook": "https://www.facebook.com/rob.beautylab/",
+        "tiktok": null,
+        "whatsapp": "+524422036240",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/VYwXDbKKezoZBstS9",
+          "https://taplink.cc/rob.nailbarbeauty",
+          "https://www.instagram.com/rob.beautylab/",
+          "https://www.facebook.com/rob.beautylab/",
+          "https://zibatahoy.com/listing/prettsy-nail-bar-beauty/",
+          "https://www.fresha.com/lvp/prettsy-nail-beauty-bar-avenida-paseo-de-las-pitahayas-zibata-JQkqwk"
+        ]
+      }
+    },
+    {
+      "id": "studio-blaze-zibata",
+      "slug": "studio-blaze-zibata",
+      "name": "Studio Blaze Zibatá",
+      "plazaId": "plaza-luna",
+      "giros": [
+        "peluqueria",
+        "color",
+        "tratamientos-capilares"
+      ],
+      "description": {
+        "es": "Ofrecemos cortes, color, tratamientos capilares, blowouts, planchados, semi recogidos y recogidos, además de depilación de ceja, bozo y patilla. Todos los efectos de color, cortes y tintes incluyen peinado. Atención profesional y resultados impecables.",
+        "en": "We offer cuts, color, hair treatments, blowouts, straightening, half updos and updos, as well as eyebrow, upper lip and sideburn hair removal. All color effects, cuts and dyes include styling. Professional service and impeccable results."
+      },
+      "hours": {
+        "mon": [
+          "09:00-20:00"
+        ],
+        "tue": [
+          "09:00-20:00"
+        ],
+        "wed": [
+          "09:00-20:00"
+        ],
+        "thu": [
+          "09:00-20:00"
+        ],
+        "fri": [
+          "09:00-20:00"
+        ],
+        "sat": [
+          "09:00-20:00"
+        ],
+        "sun": [
+          "09:00-15:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6851989,
+        "lng": -100.3253168
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/x47DYZmpzJmZyMDy7",
+      "googlePlaceId": null,
+      "phone": "+529933999417",
+      "photos": [],
+      "links": {
+        "website": "https://agendapro.com/site/mx/studioblazezibata/586226",
+        "instagram": "https://www.instagram.com/studio_blaze_zibata/",
+        "facebook": "https://www.facebook.com/p/Studio-BLAZE-61587182575742/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/x47DYZmpzJmZyMDy7",
+          "https://agendapro.com/site/mx/studioblazezibata/586226",
+          "https://www.instagram.com/studio_blaze_zibata/",
+          "https://www.facebook.com/p/Studio-BLAZE-61587182575742/"
+        ]
+      }
+    },
+    {
+      "id": "vanille-spa-and-nails",
+      "slug": "vanille-spa-and-nails",
+      "name": "Vanille Spa and Nails",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "manicura-y-pedicura",
+        "spa",
+        "cejas-y-pestanas"
+      ],
+      "description": {
+        "es": "Vanille Spa and Nails ofrece un escape sereno donde la belleza se encuentra con la relajación. Especializado en un cuidado exquisito de las uñas, lujosos tratamientos de spa y terapias rejuvenecedoras, este spa se dedica a ofrecer un santuario de paz para tu mente y tu cuerpo.",
+        "en": "Vanille Spa and Nails offers a serene escape where beauty meets relaxation. Specializing in exquisite nail care, luxurious spa treatments, and rejuvenating therapies, this spa is dedicated to providing a peaceful sanctuary for your mind and body."
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "09:00-17:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.684188,
+        "lng": -100.3263652
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/HmgUn4ugrHmQqnJ78",
+      "googlePlaceId": null,
+      "phone": "+524422279918",
+      "photos": [],
+      "links": {
+        "website": "https://fresha.com/ar/a/vanille-spa-and-nails-santiago-de-queretaro-xentric-zibata-svihbtx3",
+        "instagram": "https://www.instagram.com/vanillespa.qro/",
+        "facebook": "https://www.facebook.com/vanillespa.qro/",
+        "tiktok": null,
+        "whatsapp": "+524426576981",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-20",
+        "sources": [
+          "https://maps.app.goo.gl/HmgUn4ugrHmQqnJ78",
+          "https://fresha.com/ar/a/vanille-spa-and-nails-santiago-de-queretaro-xentric-zibata-svihbtx3",
+          "https://www.instagram.com/vanillespa.qro/",
+          "https://www.facebook.com/vanillespa.qro/",
+          "https://zibatahoy.com/listing/vanille-spa-and-nails-xentric-zibata/"
         ]
       }
     }

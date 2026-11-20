@@ -15,6 +15,7 @@ import {
   isSafePhotoSrc,
   isValidSource,
   isValidTimeRange,
+  isWhatsappLink,
   LOCATION_CONFIDENCE,
   RESEARCH_STATUS,
   SCHEMA_TYPES,
@@ -82,6 +83,8 @@ export const HoursSchema = z.strictObject({
   note: nonEmptyText.optional(),
   /** El local se organiza por clases: la ficha avisa, antes del horario, que hay que consultar su disponibilidad. */
   byClasses: z.literal(true).optional(),
+  /** El local atiende con cita: la ficha avisa, antes del horario, que hay que consultar su disponibilidad. */
+  byAppointment: z.literal(true).optional(),
 })
 
 /**
@@ -108,12 +111,18 @@ const e164Phone = z
   .string()
   .regex(E164_PATTERN, 'Usa formato internacional sin espacios, p. ej. "+524421234567"')
 
+/** Un negocio con WhatsApp Business puede dar un enlace en vez de un número; se acepta, pero solo de WhatsApp. */
+const whatsappContact = z.union([
+  e164Phone,
+  httpUrl.refine(isWhatsappLink, 'Usa un teléfono internacional o un enlace https de WhatsApp'),
+])
+
 export const LinksSchema = z.strictObject({
   website: httpUrl.nullish(),
   instagram: httpUrl.nullish(),
   facebook: httpUrl.nullish(),
   tiktok: httpUrl.nullish(),
-  whatsapp: e164Phone.nullish(),
+  whatsapp: whatsappContact.nullish(),
   // Reparto: el enlace lo da cada negocio; sin él no se dibuja botón (nunca uno que no lleve a nada).
   rappi: httpUrl.nullish(),
   uberEats: httpUrl.nullish(),

@@ -1,5 +1,33 @@
 import { describe, expect, it } from 'vitest'
-import { isGoogleMapsUrl, isSafePhotoSrc } from './rules.ts'
+import { isGoogleMapsUrl, isSafePhotoSrc, isWhatsappLink } from './rules.ts'
+
+describe('isWhatsappLink', () => {
+  it('acepta los enlaces de WhatsApp por https, también los de una cuenta de empresa', () => {
+    for (const bien of [
+      'https://api.whatsapp.com/message/IVEPP7J4G46DC1',
+      'https://api.whatsapp.com/send?phone=524422036240',
+      'https://wa.me/message/ABC123',
+      'https://wa.me/524422036240',
+      'https://wa.link/abc123',
+    ]) {
+      expect(isWhatsappLink(bien), bien).toBe(true)
+    }
+  })
+
+  it('rechaza lo que no es WhatsApp, lo que no es https y los dominios que solo lo parecen', () => {
+    for (const mal of [
+      'http://wa.me/message/ABC123',
+      'https://example.com/message/ABC123',
+      'https://wa.me.evil.example/x',
+      'https://evil.example/wa.me',
+      'javascript:alert(1)',
+      '+524422036240',
+      '',
+    ]) {
+      expect(isWhatsappLink(mal), mal).toBe(false)
+    }
+  })
+})
 
 describe('isSafePhotoSrc', () => {
   it('acepta una ruta relativa a public/ y una URL https', () => {

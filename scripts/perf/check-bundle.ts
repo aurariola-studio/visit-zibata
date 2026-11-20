@@ -134,6 +134,9 @@ const BUDGET = {
   initialCss: 11.5,
   mapJs: 320,
   mapCss: 15,
+  // 50, con 49,8 medidos (2026-11-20). Los 23 locales de Belleza y Cuidado Personal lo subieron a 54,5; el
+  // plugin `sinFuentesDeVerificacion` de `vite.config.ts` saca `verification.sources` del paquete de la
+  // guía y lo devolvió a 49,8. Sin margen: lo que sigue es partir el dataset por sector, no subir el número.
   dataJs: 50,
   // 2450 y no 2100 desde que la arboleda subió de densidad (v4.27): la separación media entre
   // árboles bajó de 19 a 15 metros, de 6 800 a 11 580 árboles, y el juego entero pasó de 2 095 a

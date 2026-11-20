@@ -44,6 +44,12 @@ export function HoursTable({
           {t('hours.byClasses')}
         </p>
       )}
+      {hours.byAppointment && (
+        <p className={styles.porClases}>
+          <Info aria-hidden="true" />
+          {t('hours.byAppointment')}
+        </p>
+      )}
       <dl className={styles.table}>
         {groups.map((group) => {
           const first = group.days[0]

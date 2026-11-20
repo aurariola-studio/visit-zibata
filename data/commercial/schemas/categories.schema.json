@@ -151,7 +151,11 @@
               "Pharmacy",
               "MedicalClinic",
               "Dentist",
-              "DiagnosticLab"
+              "DiagnosticLab",
+              "HairSalon",
+              "NailSalon",
+              "DaySpa",
+              "BeautySalon"
             ]
           },
           "order": {

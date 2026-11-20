@@ -34,7 +34,7 @@ export const MAXIMO_POR_PETICION = 100
  * catálogo se le acerca. Así no se queda en un número de otra época sin que nadie se entere, que es
  * lo que le pasó al 500 anterior con 101 locales: no frenó nunca nada.
  */
-export const MAXIMO_POR_CUENTA = 150
+export const MAXIMO_POR_CUENTA = 250
 
 /** La misma forma que tienen los slugs del catálogo. Lo que no encaje no llega al SQL. */
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/

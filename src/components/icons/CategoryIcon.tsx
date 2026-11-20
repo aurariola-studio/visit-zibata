@@ -127,25 +127,100 @@ const Tooth = custom(
   <path d="M12 5.5C10.926 4.914 9.417 4 8 4C5.9 4 4 5.247 4 9c0 4.899 1.056 8.41 2.671 10.537c.573.756 1.97.521 2.567-.236q.597-.758 1.262-2.801c.292-.771.892-1.504 1.5-1.5c.602 0 1.21.737 1.5 1.5q.665 2.043 1.262 2.8c.597.759 2 .993 2.567.237C18.944 17.41 20 13.9 20 9c0-3.74-1.908-5-4-5c-1.423 0-2.92.911-4 1.5m0 0L15 7" />,
 )
 
+/** Espejo de pie: el sector Belleza y Cuidado Personal. Iconoven `mirror` (MIT); el trazo de origen es de 1,5 y aquí va a 2. */
+const Espejo = custom(
+  <>
+    <rect width="12.5" height="15.5" x="5.75" y="2.75" rx="6.25" />
+    <path d="m9.25 9.25l3-3m-2.5 6.5l5-5M12 18.25v3m-3.5 0h7" />
+  </>,
+)
+
+/** Tijeras: Peluquería. Coolicons `scissors` (MIT). */
+const Tijeras = custom(
+  <path d="M8.121 15.879L21 3M8.121 8.121L12 12m3 3l6 6M3 6a3 3 0 1 0 6 0a3 3 0 0 0-6 0m0 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0" />,
+)
+
+/** Poste de barbería con sus rayas: Barbería. Lucide Lab `barber-pole` (ISC). */
+const PosteBarberia = custom(
+  <path d="M7 6h10M7 22h10m-9 0V6a4 4 0 0 1 8 0v16M8 11.5l8-4M8 16l8-4m-8 8.5l8-4" />,
+)
+
+/**
+ * Frasco de esmalte de uñas: Uñas. Icon Park `nail-polish` en su versión de dos tonos (Apache 2.0). El gris
+ * del original es una máscara de luminancia, no un color pintado: el dibujo sale siempre del color del texto
+ * y se ve igual en el tema oscuro.
+ */
+const Esmalte = solid(
+  <>
+    <defs>
+      <mask id="esmalte-mascara">
+        <g fill="none">
+          <path
+            stroke="#fff"
+            strokeWidth="4"
+            d="M18.895 5.89A2 2 0 0 1 20.892 4h6.216a2 2 0 0 1 1.997 1.89l.778 14A2 2 0 0 1 27.886 22h-7.772a2 2 0 0 1-1.997-2.11z"
+          />
+          <path
+            fill="#555"
+            stroke="#fff"
+            strokeWidth="4"
+            d="M11 28a6 6 0 0 1 6-6h14a6 6 0 0 1 6 6v13a3 3 0 0 1-3 3H14a3 3 0 0 1-3-3z"
+          />
+          <circle cx="24" cy="33" r="3" fill="#fff" />
+        </g>
+      </mask>
+    </defs>
+    <path d="M0 0h48v48H0z" mask="url(#esmalte-mascara)" />
+  </>,
+  '0 0 48 48',
+)
+
+/** Flor de loto con su pétalo central: Spa y Masajes. Material Design Icons `spa` en versión angular (Apache 2.0). */
+const Spa = solid(
+  <path d="M15.49 9.63c-.18-2.79-1.31-5.51-3.43-7.63a12.2 12.2 0 0 0-3.55 7.63c1.28.68 2.46 1.56 3.49 2.63c1.03-1.06 2.21-1.94 3.49-2.63m-6.5 2.65c-.14-.1-.3-.19-.45-.29c.15.11.31.19.45.29m6.42-.25c-.13.09-.27.16-.4.26c.13-.1.27-.17.4-.26M12 15.45C9.85 12.17 6.18 10 2 10c0 5.32 3.36 9.82 8.03 11.49c.63.23 1.29.4 1.97.51c.68-.12 1.33-.29 1.97-.51C18.64 19.82 22 15.32 22 10c-4.18 0-7.85 2.17-10 5.45" />,
+)
+
+/** Una ceja, solo el contorno: Cejas y Pestañas. MingCute `eyebrow-line` (Apache 2.0). */
+const Ceja = solid(
+  <path d="M19.995 14.018c-1.733-.202-3.489-.123-5.211.142a27 27 0 0 0-3.187.7q-1.075.303-2.129.675c-.796.279-1.583.586-2.365.904c-.499.204-.988.413-1.525.499c-1.732.279-3.55-.531-4.288-2.169a3.3 3.3 0 0 1-.288-1.368c.034-2.424 2.518-3.726 4.513-4.422c4.013-1.401 9.767-1.381 13.63.479c1.343.648 2.629 1.571 3.421 2.862c.063.102.343.559.401.776a1.01 1.01 0 0 1-.914 1.255c-.395.021-.78-.138-1.17-.205Zm-.517-2.054c-.735-.541-1.591-.916-2.454-1.2c-3.11-1.025-7.063-1.007-10.202-.102c-1.11.321-4.043 1.339-3.806 2.944c.122.829.957 1.356 1.746 1.39c.388.017.752-.077 1.111-.214c.983-.375 1.948-.79 2.942-1.138c3.388-1.186 7.055-2.001 10.663-1.68" />,
+)
+
+/** Labial y su base: Maquillaje. Icon Park `lipstick` (Apache 2.0); el original es de 48 y trazo 4, aquí va a la mitad. */
+const Labial = custom(
+  <g transform="scale(.5)" strokeWidth="4">
+    <path d="M29 24h12v20H29zM7 24h14v20H7zm3-12.545V24h8V4c-6.5 0-8 5.636-8 7.454M7 32h14" />
+  </g>,
+)
+
+/** Frasco de loción con su dosificador: Piel y Cuerpo. Boxicons `lotion` (MIT). */
+const Locion = solid(
+  <path d="M8 4h3v1h-1c-.55 0-1 .45-1 1v2H8c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2h-1V6c0-.55-.45-1-1-1h-1V4h5V2H8zm0 16v-4.96c1.66.11 2.62.49 3.63.89c1.14.46 2.32.93 4.37 1.04V20zm8-5.04c-1.66-.11-2.62-.49-3.63-.89c-1.14-.46-2.32-.93-4.37-1.04V10h8zM11 8V7h2v1z" />,
+)
+
 const ICONS: Record<string, IconComponent> = {
   'artes-marciales': ArtesMarciales,
   barbell: Barbell,
   beef: Beef,
   'biceps-flexed': BicepsFlexed,
   candy: Galleta,
+  ceja: Ceja,
   chopsticks: Chopsticks,
   'cooking-pot': CookingPot,
   croissant: Croissant,
   'cup-soda': CupSoda,
   danza: Danza,
   desayuno: Desayuno,
+  esmalte: Esmalte,
+  espejo: Espejo,
   estiramiento: Estiramiento,
   glasses: Glasses,
   hamburger: Hamburger,
   'hand-platter': HandPlatter,
   'heart-pulse': HeartPulse,
   italiana: Italiana,
+  labial: Labial,
   'leafy-green': LeafyGreen,
+  locion: Locion,
   martini: Martini,
   microscope: Microscope,
   molcajete: Molcajete,
@@ -153,12 +228,15 @@ const ICONS: Record<string, IconComponent> = {
   pelotas: Pelotas,
   pill: Pill,
   popcorn: Popcorn,
+  'poste-barberia': PosteBarberia,
   'shopping-basket': ShoppingBasket,
   'shopping-cart': ShoppingCart,
   shrimp: Shrimp,
+  spa: Spa,
   stethoscope: Stethoscope,
   store: Store,
   taco: Taco,
+  tijeras: Tijeras,
   tooth: Tooth,
   'utensils-crossed': UtensilsCrossed,
 }
@@ -229,6 +307,13 @@ const NOMBRES_DIFERIDOS = new Set([
   'wine',
   'wrap',
   'yoga',
+  'tinte',
+  'secadora',
+  'bano-burbujas',
+  'masaje',
+  'cara-cuidada',
+  'rastrillo',
+  'cuerpo',
 ])
 
 let diferidos: Record<string, IconComponent> | undefined

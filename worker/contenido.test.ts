@@ -529,6 +529,52 @@ describe('editar un negocio existente', () => {
     expect(sinDias.place.hours).toEqual({ note: 'Cierra en días festivos' })
   })
 
+  it('las marcas de cita y de clases no se pierden al guardar, con o sin días', () => {
+    const conMarcas: Place = {
+      ...existente,
+      hours: { mon: ['09:00-18:00'], byAppointment: true, byClasses: true },
+    }
+    const ds = {
+      ...dataset,
+      places: dataset.places.map((fila) => (fila.id === existente.id ? conMarcas : fila)),
+    }
+    const conDias = prepararNegocio(
+      ds,
+      crudo,
+      editar(conMarcas, { horario: { mon: ['10:00-19:00'] } }),
+      HOY,
+    )
+    if (!conDias.ok) throw new Error('no preparó')
+    expect(conDias.place.hours).toEqual({
+      mon: ['10:00-19:00'],
+      byAppointment: true,
+      byClasses: true,
+    })
+    const sinDias = prepararNegocio(ds, crudo, editar(conMarcas, { horario: null }), HOY)
+    if (!sinDias.ok) throw new Error('no preparó')
+    expect(sinDias.place.hours).toEqual({ byAppointment: true, byClasses: true })
+  })
+
+  it('un WhatsApp Business, que es un enlace y no un número, no se rompe al guardar', () => {
+    const enlace = 'https://api.whatsapp.com/message/ABC123XYZ'
+    const conEnlace: Place = { ...existente, links: { ...existente.links, whatsapp: enlace } }
+    const ds = {
+      ...dataset,
+      places: dataset.places.map((fila) => (fila.id === existente.id ? conEnlace : fila)),
+    }
+    const guardado = prepararNegocio(ds, crudo, editar(conEnlace, { whatsapp: enlace }), HOY)
+    if (!guardado.ok) throw new Error(guardado.problemas.join(' | '))
+    expect(guardado.place.links.whatsapp).toBe(enlace)
+    // Y un enlace que no es de WhatsApp se rechaza, no se guarda.
+    const ajeno = prepararNegocio(
+      ds,
+      crudo,
+      editar(conEnlace, { whatsapp: 'https://example.com/message/ABC' }),
+      HOY,
+    )
+    expect(ajeno.ok).toBe(false)
+  })
+
   it('conserva las fotos y el resto de enlaces que el formulario no toca', () => {
     const preparado = prepararNegocio(
       dataset,
