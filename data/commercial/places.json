@@ -1058,7 +1058,7 @@
     },
     {
       "id": "pizca-de-azucar-zibata",
-      "slug": "pizca-de-azucar-zibata",
+      "slug": "pizca-de-azucar",
       "name": "Pizca de Azúcar",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -4346,7 +4346,7 @@
     },
     {
       "id": "tacos-el-pata-zibata",
-      "slug": "tacos-el-pata-zibata",
+      "slug": "tacos-el-pata",
       "name": "Tacos el Pata",
       "plazaId": "plaza-loop",
       "giros": [
@@ -4650,7 +4650,7 @@
     },
     {
       "id": "karrusel-anahuac",
-      "slug": "karrusel-anahuac",
+      "slug": "karrusel",
       "name": "Karrusel",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -4710,7 +4710,7 @@
     },
     {
       "id": "tortas-la-guera-anahuac",
-      "slug": "tortas-la-guera-anahuac",
+      "slug": "tortas-la-guera",
       "name": "Tortas La Güera Queretana",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -4750,7 +4750,7 @@
     },
     {
       "id": "la-barra-verde-anahuac",
-      "slug": "la-barra-verde-anahuac",
+      "slug": "la-barra-verde",
       "name": "La Barra Verde",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -4792,7 +4792,7 @@
     },
     {
       "id": "oma-bakery-anahuac",
-      "slug": "oma-bakery-anahuac",
+      "slug": "oma-bakery",
       "name": "OMA Bakery",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -4832,7 +4832,7 @@
     },
     {
       "id": "diegos-house-anahuac",
-      "slug": "diegos-house-anahuac",
+      "slug": "diegos-house",
       "name": "Diego's House",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -4871,7 +4871,7 @@
     },
     {
       "id": "chilakiles-anahuac",
-      "slug": "chilakiles-anahuac",
+      "slug": "los-chikaliles",
       "name": "Los Chikaliles",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -4927,7 +4927,7 @@
     },
     {
       "id": "grunen-lush-anahuac",
-      "slug": "grunen-lush-anahuac",
+      "slug": "grunen-lush",
       "name": "Grünen Lush",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -5032,7 +5032,7 @@
     },
     {
       "id": "burgerthoven-zibata",
-      "slug": "burgerthoven-zibata",
+      "slug": "burgerthoven",
       "name": "Burgerthoven",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5098,7 +5098,7 @@
     },
     {
       "id": "mr-bagel-zibata",
-      "slug": "mr-bagel-zibata",
+      "slug": "mr-bagel",
       "name": "Mr. Bagel",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5167,7 +5167,7 @@
     },
     {
       "id": "castore-mx-zibata",
-      "slug": "castore-mx-zibata",
+      "slug": "castore-mx",
       "name": "Castore MX Game & Snack",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5604,7 +5604,7 @@
     },
     {
       "id": "sweet-crepe-zibata",
-      "slug": "sweet-crepe-zibata",
+      "slug": "sweet-crepe",
       "name": "Sweet Crepe",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -5723,7 +5723,7 @@
     },
     {
       "id": "enzza-pizza-zibata",
-      "slug": "enzza-pizza-zibata",
+      "slug": "enzza-pizza",
       "name": "Enzza Pizza",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -5977,7 +5977,7 @@
     },
     {
       "id": "enoff-zibata",
-      "slug": "enoff-zibata",
+      "slug": "enoff",
       "name": "Enoff",
       "plazaId": "plaza-loop",
       "giros": [
@@ -6042,7 +6042,7 @@
     },
     {
       "id": "nomad-zibata",
-      "slug": "nomad-zibata",
+      "slug": "nomad",
       "name": "NOMAD",
       "plazaId": "plaza-loop",
       "giros": [
@@ -10226,7 +10226,7 @@
     },
     {
       "id": "glow-beauty-bar-zibata",
-      "slug": "glow-beauty-bar-zibata",
+      "slug": "glow-beauty-bar",
       "name": "Glow Beauty Bar",
       "plazaId": "plaza-zielo",
       "giros": [
