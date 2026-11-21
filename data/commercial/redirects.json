@@ -37,6 +37,116 @@
       "kind": "place-slug",
       "id": "burger-fries",
       "slug": "burger-fries"
+    },
+    {
+      "kind": "place-slug",
+      "id": "pizca-de-azucar-zibata",
+      "slug": "pizca-de-azucar-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "tacos-el-pata-zibata",
+      "slug": "tacos-el-pata-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "burgerthoven-zibata",
+      "slug": "burgerthoven-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "mr-bagel-zibata",
+      "slug": "mr-bagel-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "castore-mx-zibata",
+      "slug": "castore-mx-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "sweet-crepe-zibata",
+      "slug": "sweet-crepe-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "enzza-pizza-zibata",
+      "slug": "enzza-pizza-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "enoff-zibata",
+      "slug": "enoff-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "nomad-zibata",
+      "slug": "nomad-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "glow-beauty-bar-zibata",
+      "slug": "glow-beauty-bar-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "karrusel-anahuac",
+      "slug": "karrusel-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "tortas-la-guera-anahuac",
+      "slug": "tortas-la-guera-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "la-barra-verde-anahuac",
+      "slug": "la-barra-verde-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "oma-bakery-anahuac",
+      "slug": "oma-bakery-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "diegos-house-anahuac",
+      "slug": "diegos-house-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "grunen-lush-anahuac",
+      "slug": "grunen-lush-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "chilakiles-anahuac",
+      "slug": "chilakiles-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "hoyo-19",
+      "slug": "hoyo-19"
+    },
+    {
+      "kind": "place-slug",
+      "id": "sinforosa",
+      "slug": "sinforosa"
+    },
+    {
+      "kind": "place-slug",
+      "id": "luka-pokes",
+      "slug": "luka-pokes"
+    },
+    {
+      "kind": "place-slug",
+      "id": "la-michoacana",
+      "slug": "la-michoacana"
+    },
+    {
+      "kind": "place-slug",
+      "id": "farmacias-similares",
+      "slug": "farmacias-similares"
     }
   ]
 }
