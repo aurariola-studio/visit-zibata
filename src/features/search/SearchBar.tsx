@@ -1,5 +1,6 @@
 import { Search, X } from 'lucide-react'
 import { type RefObject, useId, useRef } from 'react'
+import { useCargarDetalle } from '../../data/CatalogContext.tsx'
 import { useMediaQuery } from '../../hooks/useMediaQuery.ts'
 import { t } from '../../i18n/index.ts'
 import styles from './SearchBar.module.css'
@@ -18,6 +19,8 @@ export function SearchBar({ value, onChange, inputRef: externalRef }: SearchBarP
   // En un teléfono el campo comparte barra con la marca, el idioma y la información: el aviso largo
   // no cabe entero y un texto cortado se lee peor que uno corto.
   const narrow = useMediaQuery('(max-width: 560px)')
+  // Las descripciones entran en la búsqueda y llegan aparte: al enfocar el campo se piden ya, sin esperar al reposo.
+  const cargarDetalle = useCargarDetalle()
   return (
     <search className={styles.searchLandmark}>
       {/* biome-ignore lint/a11y/useSemanticElements: role explícito para lectores que aún no reconocen <search>. */}
@@ -54,6 +57,7 @@ export function SearchBar({ value, onChange, inputRef: externalRef }: SearchBarP
           autoCapitalize="off"
           spellCheck={false}
           enterKeyHint="search"
+          onFocus={cargarDetalle}
           onChange={(event) => onChange(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === 'Escape' && value) {

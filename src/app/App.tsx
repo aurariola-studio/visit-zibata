@@ -37,7 +37,7 @@ const initialState = {
 
 export function App() {
   return (
-    <CatalogProvider repository={repository}>
+    <CatalogProvider repository={repository} detalle={initialSheetExpanded ? 'ya' : 'en-reposo'}>
       <AppStateProvider initialState={initialState}>
         <Experience />
       </AppStateProvider>

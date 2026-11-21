@@ -30,9 +30,16 @@ const CatalogContext = createContext<CatalogContextValue | null>(null)
 export function CatalogProvider({
   repository,
   children,
+  detalle = 'ya',
 }: {
   repository: PlacesRepository
   children: ReactNode
+  /**
+   * Cuándo se pide el detalle de los locales. `ya` lo pide a la vez que el resumen (las pruebas, y quien entra
+   * por una ficha, que lo necesita enseguida); `en-reposo` espera a que la guía esté pintada y el navegador libre.
+   * En los dos casos se pide al instante cuando algo lo necesita: una ficha o el buscador.
+   */
+  detalle?: 'ya' | 'en-reposo'
 }) {
   const [state, setState] = useState<CatalogState>({ status: 'loading' })
   const [attempt, setAttempt] = useState(0)
@@ -58,9 +65,16 @@ export function CatalogProvider({
     }
   }, [repository, attempt])
 
-  // El detalle se pide a la vez que el resumen y no después: quien entra directo a una ficha lo tiene
-  // en cuanto llega, y la guía no espera por él.
-  useEffect(() => details.load(), [details])
+  // `ya`: a la vez que el resumen, no después. La guía no espera por él, pero quien entra directo a una ficha
+  // lo tiene en cuanto llega.
+  useEffect(() => {
+    if (detalle === 'ya') details.ensure()
+  }, [details, detalle])
+  // `en-reposo`: cuando el catálogo ya se pintó y el navegador está libre, para no competir con el mapa.
+  const catalogoListo = state.status === 'ready'
+  useEffect(() => {
+    if (detalle === 'en-reposo' && catalogoListo) return details.loadWhenIdle()
+  }, [details, detalle, catalogoListo])
 
   const retry = useCallback(() => {
     details.load()
@@ -83,9 +97,23 @@ export function useCatalog(): Catalog {
   return state.catalog
 }
 
-/** El detalle de los locales: `loading` hasta que llega, `error` si no pudo, y `ready` con todos por `id`. */
-export function usePlaceDetails(): DetailsState & { retry: () => void } {
+/**
+ * El detalle de los locales: `loading` hasta que llega, `error` si no pudo, y `ready` con todos por `id`. `ensure` lo
+ * pide si nunca se pidió; `load` lo pide y, tras un fallo, vuelve a pedirlo: es el reintento.
+ */
+export function usePlaceDetails(): DetailsState & { load: () => void; ensure: () => void } {
   const { details } = useCatalogState()
   const state = useSyncExternalStore(details.subscribe, details.getSnapshot)
-  return useMemo(() => ({ ...state, retry: details.load }), [state, details])
+  return useMemo(() => ({ ...state, load: details.load, ensure: details.ensure }), [state, details])
+}
+
+const NADA = () => {}
+
+/**
+ * Pide el detalle ya, y si falló antes lo reintenta. Para el buscador al enfocarse, que lo necesita antes de que
+ * llegue el reposo y puede vivir sin catálogo, como en una prueba suelta: sin proveedor no hace nada.
+ */
+export function useCargarDetalle(): () => void {
+  const valor = useContext(CatalogContext)
+  return valor ? valor.details.load : NADA
 }
