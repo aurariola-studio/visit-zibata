@@ -92,12 +92,12 @@ test.describe('Títulos sin desborde @mapa', () => {
 
   for (const lugar of longestPlaces(6)) {
     test(`ficha ${lugar.name}`, async ({ page }) => {
-      await openApp(page, { path: `lugar/${lugar.id}` })
+      await openApp(page, { path: `lugar/${lugar.slug}` })
       const titulo = panel(page).getByRole('heading', { level: 2, name: lugar.name })
       await expect(titulo).toBeVisible()
       await expect(titulo).toBeInViewport()
       await waitForSheet(page)
-      await sinDesborde(page, `lugar/${lugar.id}`)
+      await sinDesborde(page, `lugar/${lugar.slug}`)
     })
   }
 
