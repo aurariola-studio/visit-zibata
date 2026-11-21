@@ -337,7 +337,7 @@
     {
       "id": "origenatural",
       "slug": "origenatural",
-      "name": "Origen Natural",
+      "name": "Origenatural",
       "plazaId": "xentric-anahuac",
       "giros": [
         "saludable",
@@ -350,25 +350,25 @@
       },
       "hours": {
         "mon": [
-          "08:00-21:00"
+          "08:00-19:00"
         ],
         "tue": [
-          "08:00-21:00"
+          "08:00-19:00"
         ],
         "wed": [
-          "08:00-21:00"
+          "08:00-19:00"
         ],
         "thu": [
-          "08:00-21:00"
+          "08:00-19:00"
         ],
         "fri": [
-          "08:00-21:00"
+          "08:00-19:00"
         ],
         "sat": [
-          "08:00-18:00"
+          "08:00-17:00"
         ],
         "sun": [
-          "08:00-16:00"
+          "08:00-17:00"
         ]
       },
       "location": {
@@ -2807,7 +2807,7 @@
     },
     {
       "id": "burger-fries",
-      "slug": "burger-fries",
+      "slug": "burger-fries-forever",
       "name": "Burger & Fries Forever",
       "plazaId": "plaza-loop",
       "giros": [
