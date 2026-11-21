@@ -1,5 +1,6 @@
 /** Datos derivados del estado: resultados, conteos por plaza y qué muestra el panel. */
 import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
+import { usePlaceDetails } from '../data/CatalogContext.tsx'
 import { markedPlace } from '../data/catalog.ts'
 import { useFavorites } from '../features/favorites/useFavorites.ts'
 import {
@@ -19,20 +20,26 @@ import { createSearchIndex } from '../features/search/searchIndex.ts'
 import { estaAbierto } from '../lib/estado.ts'
 import { registrar } from '../lib/eventos.ts'
 import { searchTerms } from '../lib/text.ts'
-import type { Catalog, Place, Plaza } from '../types/domain.ts'
+import type { Catalog, PlaceSummary, Plaza } from '../types/domain.ts'
 import { useAppState } from './AppStateContext.tsx'
 
 export type PanelMode =
   | { kind: 'idle' }
   | { kind: 'explore' }
-  | { kind: 'results'; places: Place[] }
-  | { kind: 'plaza'; plaza: Plaza; places: Place[] }
-  | { kind: 'place'; place: Place; plaza: Plaza; fromResults: boolean }
+  | { kind: 'results'; places: PlaceSummary[] }
+  | { kind: 'plaza'; plaza: Plaza; places: PlaceSummary[] }
+  | { kind: 'place'; place: PlaceSummary; plaza: Plaza; fromResults: boolean }
 
 export function useExperience(catalog: Catalog) {
   const state = useAppState()
   const favorites = useFavorites()
-  const searchIndex = useMemo(() => createSearchIndex(catalog), [catalog])
+  const detalles = usePlaceDetails()
+  const descripciones = detalles.status === 'ready' ? detalles.byId : undefined
+  // Se rehace cuando llegan las descripciones: hasta entonces se busca por nombre, giro y plaza.
+  const searchIndex = useMemo(
+    () => createSearchIndex(catalog, descripciones),
+    [catalog, descripciones],
+  )
   const query = useDeferredValue(state.searchQuery)
   const hasQuery = searchTerms(query).length > 0
   /**

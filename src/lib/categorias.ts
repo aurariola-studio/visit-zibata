@@ -13,11 +13,11 @@
  * copias de esta regla acabarían diciendo cosas distintas.
  */
 import type { MessageKey, TodosLosMensajes } from '../i18n/es.ts'
-import type { Category, Giro, Place } from '../types/domain.ts'
+import type { Category, Giro, PlaceSummary } from '../types/domain.ts'
 
 /** Las categorías de un local, sin repetir y en el orden en que aparecen sus giros. */
 export function categoriasDe(
-  place: Place,
+  place: PlaceSummary,
   categoryOfGiro: ReadonlyMap<string, Category>,
 ): Category[] {
   const vistas = new Set<string>()
@@ -33,11 +33,11 @@ export function categoriasDe(
 }
 
 /** Los locales de cada categoría, en el orden del dataset. Una categoría sin locales no aparece. */
-export function lugaresPorCategoria(
-  places: readonly Place[],
+export function lugaresPorCategoria<P extends PlaceSummary>(
+  places: readonly P[],
   categoryOfGiro: ReadonlyMap<string, Category>,
-): Map<string, Place[]> {
-  const porCategoria = new Map<string, Place[]>()
+): Map<string, P[]> {
+  const porCategoria = new Map<string, P[]>()
   for (const place of places) {
     for (const categoria of categoriasDe(place, categoryOfGiro)) {
       const lista = porCategoria.get(categoria.id) ?? []

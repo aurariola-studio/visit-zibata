@@ -8,7 +8,7 @@ import { localized, t } from '../../i18n/index.ts'
 import { registrar } from '../../lib/eventos.ts'
 import { focusPanelHeading } from '../../lib/focus.ts'
 import { plazaDirectionsUrl } from '../../lib/maps-url.ts'
-import type { Place, Plaza, Sector } from '../../types/domain.ts'
+import type { PlaceSummary, Plaza, Sector } from '../../types/domain.ts'
 import { PlaceList } from '../places/PlaceList.tsx'
 import { CategoryChips } from './CategoryChips.tsx'
 import styles from './Panel.module.css'
@@ -16,7 +16,7 @@ import styles from './Panel.module.css'
 interface PlazaPanelProps {
   plaza: Plaza
   /** Lugares de la plaza que cumplen los filtros actuales. */
-  places: readonly Place[]
+  places: readonly PlaceSummary[]
   /** Lugares de la plaza por categoría con búsqueda y favoritos aplicados (los mismos que la barra superior). */
   categoryCounts: ReadonlyMap<string, number>
   filtersActive: boolean
@@ -34,7 +34,7 @@ interface PlazaPanelProps {
   onSectorChange?: (sectorId: string | null) => void
   sectorHref?: (sectorId: string | null) => string
   onClearFilters: () => void
-  onOpenPlace: (place: Place) => void
+  onOpenPlace: (place: PlaceSummary) => void
   onClose: () => void
 }
 

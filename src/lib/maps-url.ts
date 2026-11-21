@@ -4,7 +4,7 @@
  * en el sitio equivocado es peor que una que deja en la plaza correcta.
  * https://developers.google.com/maps/documentation/urls/get-started
  */
-import type { LatLng, Place, Plaza } from '../types/domain.ts'
+import type { LatLng, Plaza } from '../types/domain.ts'
 
 const DIRECTIONS = 'https://www.google.com/maps/dir/?api=1'
 
@@ -30,8 +30,11 @@ export function plazaDirectionsUrl(plaza: Plaza): string {
  * "Cómo llegar" desde la ficha de un local: a su puerta solo si su ubicación está verificada y es la
  * actual (el dataset solo trae `googleMapsUri` en ese caso); si no, a la plaza.
  */
-export function placeDirections(place: Place, plaza: Plaza): { url: string; toPlace: boolean } {
-  if (place.googleMapsUri) return { url: place.googleMapsUri, toPlace: true }
+export function placeDirections(
+  googleMapsUri: string | null | undefined,
+  plaza: Plaza,
+): { url: string; toPlace: boolean } {
+  if (googleMapsUri) return { url: googleMapsUri, toPlace: true }
   return { url: plazaDirectionsUrl(plaza), toPlace: false }
 }
 

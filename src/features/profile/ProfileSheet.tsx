@@ -22,7 +22,7 @@ import { markedPlace } from '../../data/catalog.ts'
 import { formatNumber, localized, t, useLocale } from '../../i18n/index.ts'
 import { alPulsarEnlace } from '../../lib/navegacion.ts'
 import { type InfoTopic, rutaDeInfo, rutaDeLugar } from '../../lib/url-state.ts'
-import type { Category, Place, Plaza } from '../../types/domain.ts'
+import type { Category, PlaceSummary, Plaza } from '../../types/domain.ts'
 import { placeIconName } from '../places/placeIcon.ts'
 import { categoryAffinity } from '../ranking/rankPlaces.ts'
 import styles from './ProfileButton.module.css'
@@ -66,7 +66,7 @@ interface Zone {
 
 /** Un lugar de los tuyos, con todo lo que decide su puesto y lo que se enseña en su renglón. */
 interface Ranked {
-  place: Place
+  place: PlaceSummary
   rating: number
   visits: number
   favorite: boolean
@@ -105,7 +105,7 @@ function useJourney(marks: Marks): Journey {
   const catalog = useCatalog()
   return useMemo(() => {
     const find = (id: string) => catalog.placeById.get(id)
-    const exists = (place: Place | undefined): place is Place => Boolean(place)
+    const exists = (place: PlaceSummary | undefined): place is PlaceSummary => Boolean(place)
     const visited = [...marks.visits.keys()].map(find).filter(exists)
 
     // Las zonas llevan su color del mapa: el sello verde de aquí es la misma plaza de allá.
@@ -320,7 +320,7 @@ function Podio({
   onOpenPlace,
 }: {
   journey: Journey
-  onOpenPlace: (place: Place) => void
+  onOpenPlace: (place: PlaceSummary) => void
 }) {
   const catalog = useCatalog()
   const idioma = useLocale()
@@ -448,7 +448,7 @@ function Gustos({ journey }: { journey: Journey }) {
 interface SheetProps {
   onClose: () => void
   onOpenInfo: (topic: InfoTopic) => void
-  onOpenPlace: (place: Place) => void
+  onOpenPlace: (place: PlaceSummary) => void
 }
 
 export function ProfileSheet({ onClose, onOpenInfo, onOpenPlace }: SheetProps) {

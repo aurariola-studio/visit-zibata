@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { Place } from '../types/domain.ts'
 import { sanitizeDataset } from './catalog.ts'
 import { PLACE_DETAIL_KEYS } from './placeFields.ts'
-import { joinPlaces, mergePlace, projectDetail, projectSummary } from './placeParts.ts'
+import { projectDetail, projectSummary } from './placeParts.ts'
 
 const limites = { west: -101, south: 20, east: -100, north: 21 }
 
@@ -37,16 +37,24 @@ describe('proyección de un local', () => {
     const resumen = projectSummary(lugar('uno'))
     const detalle = projectDetail(lugar('uno'))
     for (const clave of PLACE_DETAIL_KEYS) expect(resumen).not.toHaveProperty(clave)
-    expect(detalle).not.toHaveProperty('hours')
-    expect(detalle).not.toHaveProperty('giros')
-    expect(resumen.verification).toEqual({ status: 'active' })
-    expect(detalle.verification).toEqual({ confidence: 'high', lastVerifiedAt: '2026-11-20' })
+    for (const clave of ['hours', 'giros', 'location', 'photos', 'verification']) {
+      expect(detalle).not.toHaveProperty(clave)
+    }
+    expect(Object.keys(detalle).sort()).toEqual(['id', ...PLACE_DETAIL_KEYS].sort())
   })
 
-  it('las fuentes no viajan en ninguna de las dos piezas', () => {
+  it('de verification solo viajan el estado y la fecha de revisión', () => {
+    expect(projectSummary(lugar('uno')).verification).toEqual({
+      status: 'active',
+      lastVerifiedAt: '2026-11-20',
+    })
+  })
+
+  it('las fuentes y la confianza no viajan en ninguna de las dos piezas', () => {
     const texto = JSON.stringify([projectSummary(lugar('uno')), projectDetail(lugar('uno'))])
     expect(texto).not.toContain('sources')
     expect(texto).not.toContain('campo:')
+    expect(texto).not.toContain('confidence')
   })
 
   it('un local sin verificación ni cierre no inventa esas claves', () => {
@@ -54,42 +62,14 @@ describe('proyección de un local', () => {
     delete sinNada.verification
     expect(projectSummary(sinNada)).not.toHaveProperty('verification')
     expect(projectSummary(sinNada)).not.toHaveProperty('cierre')
-    expect(projectDetail(sinNada)).not.toHaveProperty('verification')
   })
 
   it('un cierre temporal viaja en el resumen, que es donde lo lee la tarjeta', () => {
     const cerrado = lugar('tres', { cierre: { motivo: 'vacaciones', desde: '2026-11-01' } })
     expect(projectSummary(cerrado).cierre).toEqual({ motivo: 'vacaciones', desde: '2026-11-01' })
   })
-})
 
-describe('unir resumen y detalle', () => {
-  it('juntos dan el local original, salvo las fuentes, que van vacías', () => {
-    const original = lugar('uno')
-    const unido = mergePlace(projectSummary(original), projectDetail(original))
-    expect(unido).toEqual({
-      ...original,
-      verification: { ...original.verification, sources: [] },
-    })
-  })
-
-  it('un detalle sin resumen se descarta con aviso', () => {
-    const { places, notes } = joinPlaces(
-      [projectSummary(lugar('uno'))],
-      [projectDetail(lugar('uno')), projectDetail(lugar('huerfano'))],
-    )
-    expect(places.map((place) => place.id)).toEqual(['uno'])
-    expect(notes).toEqual(['detalle [huerfano] omitido: no tiene resumen'])
-  })
-
-  it('un resumen sin detalle se carga sin descripción ni enlaces, con aviso', () => {
-    const { places, notes } = joinPlaces([projectSummary(lugar('uno'))], [])
-    expect(places[0]).toMatchObject({ id: 'uno', description: null, links: {}, phone: null })
-    expect(places[0]?.googleMapsUri).toBeNull()
-    expect(notes).toHaveLength(1)
-  })
-
-  it('el estado de verificación sale del resumen aunque el detalle falte', () => {
+  it('un local no publicable sigue fuera de la guía solo con su resumen: el estado viaja ahí', () => {
     const quitado = lugar('quitado', {
       verification: {
         status: 'removed',
@@ -98,32 +78,13 @@ describe('unir resumen y detalle', () => {
         sources: [],
       },
     })
-    const { places } = joinPlaces([projectSummary(quitado)], [])
-    expect(places[0]?.verification?.status).toBe('removed')
-  })
-
-  it('un local marcado como no publicable sigue fuera de la guía aunque su detalle falte o venga sin verificación', () => {
-    const quitado = lugar('quitado', {
-      verification: {
-        status: 'removed',
-        confidence: 'high',
-        lastVerifiedAt: '2026-11-20',
-        sources: [],
-      },
-    })
-    const bueno = lugar('bueno')
-    const detalleSinVerificacion = { ...projectDetail(quitado), verification: undefined }
-    const { places } = joinPlaces(
-      [projectSummary(quitado), projectSummary(bueno)],
-      [detalleSinVerificacion, projectDetail(bueno)],
-    )
     const { dataset, notes } = sanitizeDataset(
       {
         categories: [{ id: 'cat', giros: [{ id: 'giro-uno' }] }] as never,
         plazas: [
           { id: 'plaza-uno', slug: 'plaza-uno', coordinates: { lat: 20.5, lng: -100.5 } },
         ] as never,
-        places,
+        places: [projectSummary(quitado), projectSummary(lugar('bueno'))],
       },
       limites,
     )

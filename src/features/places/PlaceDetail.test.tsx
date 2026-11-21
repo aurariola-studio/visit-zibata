@@ -2,6 +2,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { projectDetail, projectSummary } from '../../data/placeParts.ts'
 import { setLocale } from '../../i18n/index.ts'
 import { makePlace, plazasFixture } from '../../test/fixtures.ts'
 import { renderWithCatalog } from '../../test/render.tsx'
@@ -10,9 +11,12 @@ import { PlaceDetail } from './PlaceDetail.tsx'
 
 const plaza = plazasFixture[0] as (typeof plazasFixture)[number]
 
+/** Un local entero, partido como llega a la guía: el resumen en el catálogo y el detalle aparte. */
+const partes = (place: Place) => ({ place: projectSummary(place), detail: projectDetail(place) })
+
 async function setup(place: Place) {
   const props = {
-    place,
+    ...partes(place),
     plaza,
     backLabel: 'Volver a Plaza Norte',
     onBack: vi.fn(),
@@ -50,13 +54,15 @@ describe('PlaceDetail', () => {
   it('excluye de los fragmentos de búsqueda el texto de interfaz, no lo que dice el local', async () => {
     const { container } = await renderWithCatalog(
       <PlaceDetail
-        place={makePlace({
-          id: 'cafe-aurora',
-          plazaId: plaza.id,
-          name: 'Café Aurora',
-          giros: ['cafeteria'],
-          description: { es: 'Café de especialidad.', en: 'Specialty coffee.' },
-        })}
+        {...partes(
+          makePlace({
+            id: 'cafe-aurora',
+            plazaId: plaza.id,
+            name: 'Café Aurora',
+            giros: ['cafeteria'],
+            description: { es: 'Café de especialidad.', en: 'Specialty coffee.' },
+          }),
+        )}
         plaza={plaza}
         backLabel="Volver a Plaza Norte"
         onBack={vi.fn()}

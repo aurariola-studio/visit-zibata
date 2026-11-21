@@ -11,7 +11,7 @@
  *  - `unknown`: no hay horario. La guía no sabe, y no es lo mismo que saber que está cerrado.
  *  - `temporal`: cerrado por obra, vacaciones o traspaso. La guía sí sabe, y bastante bien.
  */
-import type { Place } from '../types/domain.ts'
+import type { PlaceSummary } from '../types/domain.ts'
 import { getOpenStatus, type ZonedMoment } from './hours.ts'
 
 export type EstadoLugar = 'open' | 'closed' | 'unknown' | 'temporal'
@@ -23,11 +23,11 @@ export type EstadoLugar = 'open' | 'closed' | 'unknown' | 'temporal'
  * puesto, y precisamente por eso hay que taparlo. El horario no se borra porque volverá a valer
  * cuando reabra, y borrarlo perdería un dato verificado para no decir nada.
  */
-export function estadoDe(place: Place, now: ZonedMoment): EstadoLugar {
+export function estadoDe(place: PlaceSummary, now: ZonedMoment): EstadoLugar {
   if (place.cierre) return 'temporal'
   return getOpenStatus(place.hours ?? null, now).state
 }
 
 /** ¿Se puede ir ahora? Lo que de verdad pregunta el filtro y lo que pesa en el orden. */
-export const estaAbierto = (place: Place, now: ZonedMoment): boolean =>
+export const estaAbierto = (place: PlaceSummary, now: ZonedMoment): boolean =>
   estadoDe(place, now) === 'open'

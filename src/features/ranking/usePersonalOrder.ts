@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { markedPlace } from '../../data/catalog.ts'
-import type { Catalog, Place } from '../../types/domain.ts'
+import type { Catalog, PlaceSummary } from '../../types/domain.ts'
 import { placeSocialStats } from '../favorites/socialStats.ts'
 import { preferences } from './preferences.ts'
 import { rankPlaces } from './rankPlaces.ts'
@@ -11,10 +11,10 @@ import { rankPlaces } from './rankPlaces.ts'
  * bajo el dedo; el nuevo orden aparece la próxima vez que se abre.
  */
 export function usePersonalOrder(
-  places: readonly Place[],
+  places: readonly PlaceSummary[],
   catalog: Catalog,
   contextKey: string,
-): readonly Place[] {
+): readonly PlaceSummary[] {
   // biome-ignore lint/correctness/useExhaustiveDependencies: la foto de señales se renueva solo al cambiar de lista, a propósito.
   const signals = useMemo(() => preferences.read(), [contextKey])
   return useMemo(

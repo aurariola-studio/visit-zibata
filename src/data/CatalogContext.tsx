@@ -1,7 +1,17 @@
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from 'react'
 import type { Catalog } from '../types/domain.ts'
 import { loadCatalog } from './catalog.ts'
 import type { PlacesRepository } from './PlacesRepository.ts'
+import { createDetailsStore, type DetailsState, type DetailsStore } from './placeDetails.ts'
 
 export type CatalogState =
   | { status: 'loading' }
@@ -11,6 +21,8 @@ export type CatalogState =
 interface CatalogContextValue {
   state: CatalogState
   retry: () => void
+  /** El detalle de los locales, que llega aparte del catálogo (ver `placeDetails.ts`). */
+  details: DetailsStore
 }
 
 const CatalogContext = createContext<CatalogContextValue | null>(null)
@@ -24,6 +36,7 @@ export function CatalogProvider({
 }) {
   const [state, setState] = useState<CatalogState>({ status: 'loading' })
   const [attempt, setAttempt] = useState(0)
+  const details = useMemo(() => createDetailsStore(repository), [repository])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: `attempt` fuerza una nueva carga al reintentar.
   useEffect(() => {
@@ -45,8 +58,16 @@ export function CatalogProvider({
     }
   }, [repository, attempt])
 
-  const retry = useCallback(() => setAttempt((n) => n + 1), [])
-  return <CatalogContext value={{ state, retry }}>{children}</CatalogContext>
+  // El detalle se pide a la vez que el resumen y no después: quien entra directo a una ficha lo tiene
+  // en cuanto llega, y la guía no espera por él.
+  useEffect(() => details.load(), [details])
+
+  const retry = useCallback(() => {
+    details.load()
+    setAttempt((n) => n + 1)
+  }, [details])
+  const value = useMemo(() => ({ state, retry, details }), [state, retry, details])
+  return <CatalogContext value={value}>{children}</CatalogContext>
 }
 
 export function useCatalogState(): CatalogContextValue {
@@ -60,4 +81,11 @@ export function useCatalog(): Catalog {
   const { state } = useCatalogState()
   if (state.status !== 'ready') throw new Error('El catálogo aún no está disponible')
   return state.catalog
+}
+
+/** El detalle de los locales: `loading` hasta que llega, `error` si no pudo, y `ready` con todos por `id`. */
+export function usePlaceDetails(): DetailsState & { retry: () => void } {
+  const { details } = useCatalogState()
+  const state = useSyncExternalStore(details.subscribe, details.getSnapshot)
+  return useMemo(() => ({ ...state, retry: details.load }), [state, details])
 }

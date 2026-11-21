@@ -8,7 +8,7 @@ import { localized, t, useLocale } from '../../i18n/index.ts'
 import { lista } from '../../lib/categorias.ts'
 import { estadoDe } from '../../lib/estado.ts'
 import { rutaDeLugar } from '../../lib/url-state.ts'
-import type { Place } from '../../types/domain.ts'
+import type { PlaceSummary } from '../../types/domain.ts'
 import { FavoriteButton } from '../favorites/FavoriteButton.tsx'
 import { caracteresQueCaben } from './lineaDeGiros.ts'
 import { useZonedNow } from './OpenStatus.tsx'
@@ -25,8 +25,8 @@ const ETIQUETA = {
 } as const
 
 interface PlaceCardProps {
-  place: Place
-  onOpen: (place: Place) => void
+  place: PlaceSummary
+  onOpen: (place: PlaceSummary) => void
   /** Muestra la plaza (útil en resultados de búsqueda que mezclan plazas). */
   showPlaza?: boolean
   /** Una fila más baja, para listas de muestra donde tienen que caber varias. */

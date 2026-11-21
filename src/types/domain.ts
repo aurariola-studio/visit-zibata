@@ -2,7 +2,6 @@ import type { z } from 'zod'
 import type {
   PLACE_DETAIL_KEYS,
   PLACE_SUMMARY_KEYS,
-  VERIFICATION_DETAIL_KEYS,
   VERIFICATION_SUMMARY_KEYS,
 } from '../data/placeFields.ts'
 import type {
@@ -36,10 +35,8 @@ type PlaceVerification = NonNullable<Place['verification']>
 export type PlaceSummary = Pick<Place, (typeof PLACE_SUMMARY_KEYS)[number]> & {
   verification?: Pick<PlaceVerification, (typeof VERIFICATION_SUMMARY_KEYS)[number]>
 }
-/** Lo que solo lee la ficha y el buscador; se une a su resumen por `id`. */
-export type PlaceDetailData = Pick<Place, 'id' | (typeof PLACE_DETAIL_KEYS)[number]> & {
-  verification?: Pick<PlaceVerification, (typeof VERIFICATION_DETAIL_KEYS)[number]>
-}
+/** Lo que solo lee la ficha y el buscador; se empareja con su resumen por `id`. */
+export type PlaceDetailData = Pick<Place, 'id' | (typeof PLACE_DETAIL_KEYS)[number]>
 export type PlazaGeometry = z.infer<typeof PlazaGeometrySchema>
 export type Plaza = z.infer<typeof PlazaSchema>
 export type Giro = z.infer<typeof GiroSchema>
@@ -53,7 +50,7 @@ export interface Catalog {
   sectors: Sector[]
   plazas: Plaza[]
   /** Solo locales activos, en el orden del dataset. */
-  places: Place[]
+  places: PlaceSummary[]
   categoryById: ReadonlyMap<string, Category>
   sectorById: ReadonlyMap<string, Sector>
   /** El sector de cada categoría, por id de categoría. Una categoría sin sector no aparece. */
@@ -63,13 +60,13 @@ export interface Catalog {
   categoryOfGiro: ReadonlyMap<string, Category>
   plazaById: ReadonlyMap<string, Plaza>
   plazaBySlug: ReadonlyMap<string, Plaza>
-  placeById: ReadonlyMap<string, Place>
+  placeById: ReadonlyMap<string, PlaceSummary>
   /**
    * Los giros y la plaza de lo que ya no se muestra: un local oculto, en una plaza inactiva o borrado
    * desde el panel. Lo que alguien marcó ahí sigue diciendo qué le gusta aunque el local no esté.
    */
   retiredById: ReadonlyMap<string, Pick<Place, 'giros' | 'plazaId'>>
-  placeBySlug: ReadonlyMap<string, Place>
+  placeBySlug: ReadonlyMap<string, PlaceSummary>
   /** Locales activos agrupados por plaza. */
-  placesByPlaza: ReadonlyMap<string, Place[]>
+  placesByPlaza: ReadonlyMap<string, PlaceSummary[]>
 }

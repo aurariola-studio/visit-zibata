@@ -15,14 +15,14 @@ import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from 
 import { BrandIcon, type BrandName } from '../../components/icons/BrandIcons.tsx'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
 import { DEFAULT_PLAZA_TONE, plazaTones, plazaVars } from '../../config/palette.ts'
-import { useCatalog } from '../../data/CatalogContext.tsx'
+import { useCatalog, usePlaceDetails } from '../../data/CatalogContext.tsx'
 import { locale, localized, t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
 import { etiquetaDeGiro, lista } from '../../lib/categorias.ts'
 import { registrar, salidaDe } from '../../lib/eventos.ts'
 import { focusPanelHeading } from '../../lib/focus.ts'
 import { placeDirections, telUrl, whatsappUrl } from '../../lib/maps-url.ts'
-import type { LocalizedText, Place, Plaza } from '../../types/domain.ts'
+import type { LocalizedText, PlaceDetailData, PlaceSummary, Plaza } from '../../types/domain.ts'
 import { FavoriteButton } from '../favorites/FavoriteButton.tsx'
 import { SocialStats } from '../favorites/SocialStats.tsx'
 import { RatingStars } from '../ratings/RatingStars.tsx'
@@ -40,7 +40,7 @@ import { ShareButton } from './ShareButton.tsx'
  * El horario no se esconde ni se tacha: sigue debajo tal cual. Tacharlo daría a entender que se
  * perdió el dato, y no se perdió; volverá a valer cuando reabra.
  */
-function AvisoDeCierre({ cierre }: { cierre: NonNullable<Place['cierre']> }) {
+function AvisoDeCierre({ cierre }: { cierre: NonNullable<PlaceSummary['cierre']> }) {
   return (
     <section className={styles.cierre} aria-labelledby="closure-title">
       <TriangleAlert aria-hidden="true" />
@@ -76,7 +76,13 @@ export interface PlaceDetailDemo {
 }
 
 interface PlaceDetailProps {
-  place: Place
+  place: PlaceSummary
+  /**
+   * Lo del detalle de este lugar (descripción, enlaces, teléfono, ruta a la puerta). Sin esto la ficha lo
+   * toma del catálogo, adonde llega aparte del resumen; solo lo pasa la demostración del tutorial, que
+   * muestra un lugar que no está en los datos.
+   */
+  detail?: PlaceDetailData
   plaza: Plaza
   backLabel: string
   onBack: () => void
@@ -128,8 +134,47 @@ function Description({ text }: { text: LocalizedText }) {
   )
 }
 
+/** Un lugar del que el detalle llegó pero no trae su registro: se muestra con lo del resumen y nada más. */
+const SIN_DETALLE: Omit<PlaceDetailData, 'id'> = {
+  description: null,
+  links: {},
+  phone: null,
+  googleMapsUri: null,
+  googlePlaceId: null,
+}
+
+/**
+ * Lo que de la ficha todavía no llegó. Nada de esto lleva texto propio salvo la frase para quien usa un lector
+ * de pantalla, que se anuncia una sola vez; los bloques son decoración.
+ */
+function DescripcionPendiente() {
+  return (
+    <div className={styles.lineasPendientes} role="status">
+      <span className="visually-hidden">{t('place.detailsLoading')}</span>
+      <span className={`${styles.pendiente} ${styles.lineaPendiente}`} aria-hidden="true" />
+      <span className={`${styles.pendiente} ${styles.lineaPendiente}`} aria-hidden="true" />
+      <span
+        className={`${styles.pendiente} ${styles.lineaPendiente}`}
+        data-ancho="medio"
+        aria-hidden="true"
+      />
+    </div>
+  )
+}
+
+function ContactoPendiente() {
+  return (
+    <div className={styles.contactoPendiente} aria-hidden="true">
+      {[0, 1, 2].map((indice) => (
+        <span key={indice} className={`${styles.pendiente} ${styles.enlacePendiente}`} />
+      ))}
+    </div>
+  )
+}
+
 export function PlaceDetail({
   place,
+  detail,
   plaza,
   backLabel,
   onBack,
@@ -138,8 +183,22 @@ export function PlaceDetail({
   demo,
 }: PlaceDetailProps) {
   const catalog = useCatalog()
+  const detalles = usePlaceDetails()
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const directions = placeDirections(place, plaza)
+  /*
+   * El detalle llega aparte del resumen. Hasta que llega, la ficha se pinta con lo que ya hay y marca con un
+   * esqueleto lo que falta; si el detalle ya llegó pero este lugar no trae registro (porque no pasó la
+   * validación), la ficha se queda con el resumen y no espera nada.
+   */
+  const estado =
+    detail || detalles.status === 'ready'
+      ? 'listo'
+      : detalles.status === 'loading'
+        ? 'cargando'
+        : 'error'
+  const datos =
+    detail ?? (detalles.status === 'ready' ? detalles.byId.get(place.id) : undefined) ?? SIN_DETALLE
+  const directions = placeDirections(datos.googleMapsUri, plaza)
   /**
    * Los giros del local en una sola línea, en su orden y con el icono de cada uno. La ficha es la
    * vista que los enseña completos; la tarjeta recorta por ancho y cuenta el resto.
@@ -179,8 +238,8 @@ export function PlaceDetail({
     />
   )
   const links: ContactLink[] = []
-  const { phone } = place
-  const { whatsapp, website, instagram, facebook, tiktok, rappi, uberEats, didiFood } = place.links
+  const { phone } = datos
+  const { whatsapp, website, instagram, facebook, tiktok, rappi, uberEats, didiFood } = datos.links
   if (phone) {
     links.push({
       key: 'phone',
@@ -267,7 +326,7 @@ export function PlaceDetail({
   }
 
   const hasExtraInfo = Boolean(
-    place.description || place.hours || links.length > 0 || place.photos.length > 0,
+    datos.description || place.hours || links.length > 0 || place.photos.length > 0,
   )
 
   /*
@@ -369,29 +428,37 @@ export function PlaceDetail({
        * `section`, y no cambia nada de lo que se ve ni de lo que lee un lector de pantalla.
        */}
       <div className={styles.salidas} data-nosnippet="">
-        <a
-          className={styles.directions}
-          href={directions.url}
-          onClick={() => registrar('salida', place.id, 'maps')}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-describedby="directions-hint"
-          aria-label={
-            directions.toPlace
-              ? t('place.directionsToPlace', { name: place.name })
-              : t('place.directionsToPlaza', { plaza: plaza.name })
-          }
-        >
-          <Navigation aria-hidden="true" />
-          {/*
-           * Siempre "Cómo llegar", también cuando el destino es la zona porque el local no publicó
-           * su punto. "Cómo llegar a la zona" no cabe en un renglón y partía el botón en dos, que
-           * al lado de "Compartir" se lee como un error. Lo que se quita de la vista no se pierde:
-           * el destino completo sigue en la etiqueta accesible, de donde nunca se fue.
-           */}
-          {t('place.directions')}
-          <ArrowUpRight aria-hidden="true" className={styles.external} />
-        </a>
+        {/*
+         * Hasta que llega el detalle no se sabe si el local publicó su punto: el enlace iría a la zona y, al
+         * llegar, cambiaría de destino bajo el dedo. Un botón que miente es peor que un hueco de arena.
+         */}
+        {estado === 'cargando' ? (
+          <span className={`${styles.pendiente} ${styles.direccionPendiente}`} aria-hidden="true" />
+        ) : (
+          <a
+            className={styles.directions}
+            href={directions.url}
+            onClick={() => registrar('salida', place.id, 'maps')}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-describedby="directions-hint"
+            aria-label={
+              directions.toPlace
+                ? t('place.directionsToPlace', { name: place.name })
+                : t('place.directionsToPlaza', { plaza: plaza.name })
+            }
+          >
+            <Navigation aria-hidden="true" />
+            {/*
+             * Siempre "Cómo llegar", también cuando el destino es la zona porque el local no publicó
+             * su punto. "Cómo llegar a la zona" no cabe en un renglón y partía el botón en dos, que
+             * al lado de "Compartir" se lee como un error. Lo que se quita de la vista no se pierde:
+             * el destino completo sigue en la etiqueta accesible, de donde nunca se fue.
+             */}
+            {t('place.directions')}
+            <ArrowUpRight aria-hidden="true" className={styles.external} />
+          </a>
+        )}
         <span id="directions-hint" className="visually-hidden">
           {t('place.directionsHint')}
         </span>
@@ -428,13 +495,24 @@ export function PlaceDetail({
         />
       </section>
 
-      {place.description && <Description text={place.description} />}
+      {estado === 'cargando' && <DescripcionPendiente />}
+      {estado === 'error' && (
+        <div className={styles.detalleError} role="alert">
+          <p>{t('place.detailsError')}</p>
+          <button type="button" className={styles.reintentar} onClick={detalles.retry}>
+            {t('data.retry')}
+          </button>
+        </div>
+      )}
+      {datos.description && <Description text={datos.description} />}
 
       <HoursTable
         hours={place.hours}
         cerrado={place.cierre !== undefined}
         revisado={place.verification?.lastVerifiedAt}
       />
+
+      {estado === 'cargando' && <ContactoPendiente />}
 
       {links.length > 0 && (
         <section className={styles.contact} aria-label={t('place.contact')} data-nosnippet="">
@@ -462,7 +540,9 @@ export function PlaceDetail({
         </section>
       )}
 
-      {!hasExtraInfo && <p className={styles.missing}>{t('place.missingInfo')}</p>}
+      {estado === 'listo' && !hasExtraInfo && (
+        <p className={styles.missing}>{t('place.missingInfo')}</p>
+      )}
     </article>
   )
 }

@@ -9,7 +9,7 @@
 import Fuse, { type IFuseOptions } from 'fuse.js'
 import { localized } from '../../i18n/index.ts'
 import { searchTerms, wordText } from '../../lib/text.ts'
-import type { Catalog, Place } from '../../types/domain.ts'
+import type { Catalog, PlaceDetailData, PlaceSummary } from '../../types/domain.ts'
 import { allGiroIds } from '../places/placeIcon.ts'
 
 interface SearchDocument {
@@ -45,7 +45,11 @@ export interface SearchIndex {
   search(query: string): string[] | null
 }
 
-function toDocument(place: Place, catalog: Catalog): SearchDocument {
+function toDocument(
+  place: PlaceSummary,
+  catalog: Catalog,
+  detail: PlaceDetailData | undefined,
+): SearchDocument {
   // Todos los giros del local se buscan, no solo el primero: "pizza" encuentra a la parrilla que
   // hace pizzas. Y con ellos, sus categorías: "italiana" encuentra las pizzerías.
   const ids = allGiroIds(place)
@@ -61,7 +65,7 @@ function toDocument(place: Place, catalog: Catalog): SearchDocument {
     categorySynonyms: categorias.flatMap((c) => c.synonyms),
     giros: giros.map((giro) => localized(giro.label)).join(' '),
     giroSynonyms: giros.flatMap((giro) => giro.synonyms),
-    description: [place.description?.es, place.description?.en].filter(Boolean).join(' '),
+    description: [detail?.description?.es, detail?.description?.en].filter(Boolean).join(' '),
   }
 }
 
@@ -72,8 +76,17 @@ function toDocument(place: Place, catalog: Catalog): SearchDocument {
  */
 const SIN_GIRO = 99
 
-export function createSearchIndex(catalog: Catalog): SearchIndex {
-  const documents = catalog.places.map((place) => toDocument(place, catalog))
+/**
+ * `details` es la descripción de cada local, que llega aparte del catálogo. Mientras no está, el índice busca por
+ * nombre, giro y plaza; cuando llega, se vuelve a crear con las descripciones en los dos idiomas.
+ */
+export function createSearchIndex(
+  catalog: Catalog,
+  details?: ReadonlyMap<string, PlaceDetailData>,
+): SearchIndex {
+  const documents = catalog.places.map((place) =>
+    toDocument(place, catalog, details?.get(place.id)),
+  )
   const fuse = new Fuse(documents, OPTIONS)
   /*
    * La etiqueta de cada giro de un local, en su orden, como texto normalizado. El orden es la

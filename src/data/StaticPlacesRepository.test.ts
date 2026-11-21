@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import lugaresJson from '../../data/commercial/places.json' with { type: 'json' }
 import type { Place } from '../types/domain.ts'
 import { PLACE_DETAIL_KEYS, PLACE_SUMMARY_KEYS } from './placeFields.ts'
+import { projectDetail, projectSummary } from './placeParts.ts'
 import { StaticPlacesRepository } from './StaticPlacesRepository.ts'
 
 // Con los datos reales, recorridos uno por uno: no se nombra ningún negocio concreto.
@@ -44,17 +45,9 @@ describe('StaticPlacesRepository: los locales viajan en dos paquetes', () => {
     expect(texto).not.toContain('"sources"')
   })
 
-  it('getPlaces() devuelve cada local como estaba en places.json, con las fuentes vacías', async () => {
-    const aviso = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const unidos = await new StaticPlacesRepository().getPlaces()
-    expect(aviso).not.toHaveBeenCalled()
-    aviso.mockRestore()
-    expect(unidos).toHaveLength(originales.length)
-    for (const [indice, original] of originales.entries()) {
-      expect(unidos[indice]).toEqual({
-        ...original,
-        ...(original.verification && { verification: { ...original.verification, sources: [] } }),
-      })
-    }
+  it('cada paquete es la proyección de places.json y nada más: lo que genera el plugin es lo que define placeParts', async () => {
+    const repositorio = new StaticPlacesRepository()
+    expect(await repositorio.getPlaceSummaries()).toEqual(originales.map(projectSummary))
+    expect(await repositorio.getPlaceDetails()).toEqual(originales.map(projectDetail))
   })
 })
