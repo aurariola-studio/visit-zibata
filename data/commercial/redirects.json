@@ -1,6 +1,37 @@
 {
   "$schema": "./schemas/redirects.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-07",
-  "redirects": []
+  "updatedAt": "2026-11-21",
+  "redirects": [
+    {
+      "kind": "place-slug",
+      "id": "oakberry-xentric-anahuac",
+      "slug": "oakberry-xentric-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "la-lorenza-xentric-anahuac",
+      "slug": "la-lorenza-xentric-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "nutrisa-xentric-anahuac",
+      "slug": "nutrisa-xentric-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "wake-cup-xentric-anahuac",
+      "slug": "wake-cup-xentric-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "baguettia-plaza-luna",
+      "slug": "baguettia-plaza-luna"
+    },
+    {
+      "kind": "place-slug",
+      "id": "smoothie-lab-plaza-luna",
+      "slug": "smoothie-lab-plaza-luna"
+    }
+  ]
 }
