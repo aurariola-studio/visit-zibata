@@ -8,7 +8,9 @@ import { HUELLA_CARGADOR, HUELLA_SIN_JS } from './scripts/build/cargador.ts'
 import { mapTiles } from './scripts/build/map-tiles.ts'
 import { HUELLA_ESTILO_404, html404 } from './scripts/build/pagina-404.ts'
 import { prerender } from './scripts/build/prerender.ts'
+import { projectDetail, projectSummary } from './src/data/placeParts.ts'
 import { APP_ROUTE } from './src/lib/url-state.ts'
+import type { Place } from './src/types/domain.ts'
 
 // BASE_PATH permite publicar en un subdirectorio (GitHub Pages: "/<repo>/") sin acoplar el código a
 // un hosting concreto. En local y en hostings en raíz es "/".
@@ -302,28 +304,35 @@ function preloadCriticalFonts(): Plugin {
 }
 
 /**
- * Las fuentes de la verificación de cada local no viajan en el paquete de la guía.
+ * `data/commercial/places.json` llega al navegador en dos paquetes, no en uno (ver `src/data/placeFields.ts`).
  *
- * `verification.sources` (las páginas y redes que respaldan un registro) solo las lee el panel y el
- * validador, y los dos las traen del servidor o del archivo: la guía pública solo usa el estado y la
- * fecha de revisión. Con 170 locales eran 4,7 KB comprimidos de un paquete de datos que tiene tope
- * (`npm run perf:budget`). Solo en el build: en los tests y en desarrollo el archivo se lee entero,
- * que es lo que validan los esquemas.
+ * - `virtual:zibata-places-resumen`: lo que pintan las tarjetas, el mapa, los filtros y el orden.
+ * - `virtual:zibata-places-detalle`: lo que solo lee la ficha y el buscador.
+ *
+ * El archivo sigue siendo uno solo y la única fuente: el panel, el worker, el prerender y los scripts lo leen
+ * entero. Esto solo decide qué parte de cada local viaja en cada paquete. Las fuentes de la verificación
+ * (`verification.sources`, que solo usan el panel y el validador) no están en ninguno de los dos.
+ *
+ * Sin `apply: 'build'`: el repositorio también corre en desarrollo y en las pruebas, que leen estos mismos módulos.
  */
-function sinFuentesDeVerificacion(): Plugin {
+const PAQUETES_DE_LOCALES: Record<string, (lugar: Place) => unknown> = {
+  'virtual:zibata-places-resumen': projectSummary,
+  'virtual:zibata-places-detalle': projectDetail,
+}
+
+function paquetesDeLocales(): Plugin {
+  const archivo = resolve('data/commercial/places.json')
   return {
-    name: 'zibata-sin-fuentes-de-verificacion',
-    apply: 'build',
-    enforce: 'pre',
-    transform(codigo, id) {
-      if (!id.split('?')[0]?.endsWith('/data/commercial/places.json')) return null
-      const datos = JSON.parse(codigo) as {
-        places: { verification?: { sources?: string[] } }[]
-      }
-      for (const lugar of datos.places) {
-        if (lugar.verification) lugar.verification.sources = []
-      }
-      return { code: JSON.stringify(datos), map: null }
+    name: 'zibata-paquetes-de-locales',
+    resolveId(id) {
+      return id in PAQUETES_DE_LOCALES ? `\0${id}` : null
+    },
+    load(id) {
+      const proyeccion = id.startsWith('\0') ? PAQUETES_DE_LOCALES[id.slice(1)] : undefined
+      if (!proyeccion) return null
+      this.addWatchFile(archivo)
+      const { places } = JSON.parse(readFileSync(archivo, 'utf8')) as { places: Place[] }
+      return `export default ${JSON.stringify({ places: places.map(proyeccion) })}`
     },
   }
 }
@@ -380,7 +389,7 @@ export default defineConfig({
   appType: 'mpa',
   plugins: [
     react(),
-    sinFuentesDeVerificacion(),
+    paquetesDeLocales(),
     devRoutes(),
     socialMeta(),
     contentSecurityPolicy(),
@@ -401,6 +410,17 @@ export default defineConfig({
       input: {
         index: 'index.html',
         panel: 'panel.html',
+      },
+      output: {
+        /*
+         * Los dos paquetes de locales salen como `places-resumen-*.js` y `places-detalle-*.js`. Rollup los
+         * llamaría `_virtual_zibata-places-*`, y el presupuesto (`scripts/perf/check-bundle.ts`) los mide por
+         * nombre: uno que no encaje en ningún patrón no se contaría en ningún tope.
+         */
+        chunkFileNames: (trozo) => {
+          const paquete = /zibata-places-(resumen|detalle)$/.exec(trozo.facadeModuleId ?? '')
+          return paquete ? `assets/places-${paquete[1]}-[hash].js` : 'assets/[name]-[hash].js'
+        },
       },
     },
     // MapLibre (~800 KB min) vive en su propio chunk diferido; el aviso por defecto no aporta.

@@ -134,10 +134,16 @@ const BUDGET = {
   initialCss: 11.5,
   mapJs: 320,
   mapCss: 15,
-  // 50, con 49,8 medidos (2026-11-20). Los 23 locales de Belleza y Cuidado Personal lo subieron a 54,5; el
-  // plugin `sinFuentesDeVerificacion` de `vite.config.ts` saca `verification.sources` del paquete de la
-  // guía y lo devolvió a 49,8. Sin margen: lo que sigue es partir el dataset por sector, no subir el número.
-  dataJs: 50,
+  // Los datos de arranque: categorías, plazas y el RESUMEN de los locales (ver `src/data/placeFields.ts`). Era
+  // 50 con 49,8 medidos y sin margen; partido el paquete por campo quedan unos 23 de 30 (2026-11-20, decisión
+  // del propietario). Ojo: esto mide archivos, no cuándo se piden. Hasta que el catálogo lea solo el resumen
+  // (fase 3 de `docs/PLAN-PARTIR-DATOS.md`) la guía sigue bajando también el detalle al arrancar, así que la
+  // ganancia en la primera carga todavía no existe aunque el número ya la muestre.
+  dataJs: 30,
+  // El DETALLE de los locales (descripción, enlaces, teléfono, ruta a la puerta): lo que solo lee la ficha y el
+  // buscador. Hoy unos 28 de 45; cada local suma unos 0,16 KB, así que da para unos cien más antes de tener
+  // que partirlo por sector o plaza.
+  dataDetailJs: 45,
   // 2450 y no 2100 desde que la arboleda subió de densidad (v4.27): la separación media entre
   // árboles bajó de 19 a 15 metros, de 6 800 a 11 580 árboles, y el juego entero pasó de 2 095 a
   // 2 373 KB. Se sube este tope y **no** el de `largestTile`, que es el que mide lo que el
@@ -167,6 +173,14 @@ const referenced = (ext: string) =>
 const sum = (names: string[]) =>
   names.reduce((total, name) => total + gz(`${DIST}assets/${name}`), 0)
 const matching = (pattern: RegExp) => assets.filter((name) => pattern.test(name))
+/**
+ * Los trozos de datos y el tope que los cuenta. Los nombres los fija `chunkFileNames` en `vite.config.ts`: si
+ * Rollup los llamara de otra forma, el trozo no entraría en ninguna suma y el tope pasaría sin medirlo.
+ */
+const DATOS_DE_ARRANQUE = /^(categories|plazas|places-resumen)-.*\.js$/
+const DATOS_DE_DETALLE = /^places-detalle-.*\.js$/
+/** Todo lo que parece un trozo de datos, venga o no con un nombre que esperemos. */
+const PARECE_DATOS = /^(categories|plazas|places|_?virtual_zibata-places)[-_].*\.js$/
 /** El chunk que carga `MapView` con `import('./realismo/install.ts')`. */
 const REALISMO_CHUNK = /^install-.*\.js$/
 
@@ -207,7 +221,8 @@ const measured = {
   initialCss: sum(referenced('.css')),
   mapJs: sum(matching(/^MapView-.*\.js$/)),
   mapCss: sum(matching(/^MapView-.*\.css$/)),
-  dataJs: sum(matching(/^(categories|plazas|places)-.*\.js$/)),
+  dataJs: sum(matching(DATOS_DE_ARRANQUE)),
+  dataDetailJs: sum(matching(DATOS_DE_DETALLE)),
   tiles: teselas.total,
   largestTile: teselas.mayor,
   realismoJs: sum(matching(REALISMO_CHUNK)),
@@ -226,6 +241,26 @@ for (const [key, limit] of Object.entries(BUDGET) as [keyof typeof BUDGET, numbe
 if (referenced('.js').length === 0) {
   console.error('✗ No se encontró el JS inicial en dist/index.html')
   failed = true
+}
+// Cada trozo de datos tiene que existir una vez, y ningún trozo de datos puede quedar sin tope: uno con otro
+// nombre (`places-*`, o el `_virtual_*` que le daría Rollup) no entraría en ninguna suma.
+for (const [nombre, patron] of [
+  ['categories', /^categories-.*\.js$/],
+  ['plazas', /^plazas-.*\.js$/],
+  ['places-resumen', /^places-resumen-.*\.js$/],
+  ['places-detalle', DATOS_DE_DETALLE],
+] as const) {
+  const hallados = matching(patron).length
+  if (hallados !== 1) {
+    console.error(`✗ Se esperaba un trozo de datos "${nombre}" en dist/assets y hay ${hallados}`)
+    failed = true
+  }
+}
+for (const nombre of matching(PARECE_DATOS)) {
+  if (!DATOS_DE_ARRANQUE.test(nombre) && !DATOS_DE_DETALLE.test(nombre)) {
+    console.error(`✗ El trozo de datos ${nombre} no entra en ningún presupuesto`)
+    failed = true
+  }
 }
 // Si el chunk se renombrara, la suma daría 0 y el límite pasaría sin medir nada.
 if (matching(REALISMO_CHUNK).length === 0) {
