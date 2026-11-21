@@ -4967,7 +4967,7 @@
     },
     {
       "id": "oakberry-xentric-anahuac",
-      "slug": "oakberry-xentric-anahuac",
+      "slug": "oakberry",
       "name": "OAKBERRY Açaí Bowls",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5231,7 +5231,7 @@
     },
     {
       "id": "la-lorenza-xentric-anahuac",
-      "slug": "la-lorenza-xentric-anahuac",
+      "slug": "la-lorenza",
       "name": "La Lorenza",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5294,7 +5294,7 @@
     },
     {
       "id": "nutrisa-xentric-anahuac",
-      "slug": "nutrisa-xentric-anahuac",
+      "slug": "nutrisa",
       "name": "Nutrisa",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5357,7 +5357,7 @@
     },
     {
       "id": "wake-cup-xentric-anahuac",
-      "slug": "wake-cup-xentric-anahuac",
+      "slug": "wake-cup",
       "name": "Wake Cup Panadería y Cafetería",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -6228,7 +6228,7 @@
     },
     {
       "id": "baguettia-plaza-luna",
-      "slug": "baguettia-plaza-luna",
+      "slug": "baguettia",
       "name": "Baguettia",
       "plazaId": "plaza-luna",
       "giros": [
@@ -6291,7 +6291,7 @@
     },
     {
       "id": "smoothie-lab-plaza-luna",
-      "slug": "smoothie-lab-plaza-luna",
+      "slug": "smoothie-lab",
       "name": "Smoothie Lab",
       "plazaId": "plaza-luna",
       "giros": [
