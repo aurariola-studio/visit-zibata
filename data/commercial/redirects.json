@@ -122,6 +122,11 @@
       "kind": "place-slug",
       "id": "chilakiles-anahuac",
       "slug": "chilakiles-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "hoyo-19",
+      "slug": "hoyo-19"
     }
   ]
 }
