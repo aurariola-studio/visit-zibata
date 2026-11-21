@@ -68,3 +68,37 @@ export const GRUPOS: Record<string, Grupo> = {
     archivos: ['responsive', 'medicion', 'camara', 'touch', 'resilience', 'panel-mapa'],
   },
 }
+
+/**
+ * El humo del despliegue: los archivos que corren contra el build que se publica (escritorio, una base).
+ *
+ * La suite entera ya corrió en el pull request. El humo existe porque al fusionar con squash el commit que llega a
+ * `main` es nuevo y puede ser una combinación que nadie probó junta; basta con comprobar lo que un artefacto roto
+ * rompe primero. Primero, lo que mira el HTML que se sirve (SEO, metadatos, rutas, CSP, sin JavaScript, trozos de
+ * carga) y, después, los recorridos básicos (una ficha, el buscador, el detalle, abierto ahora, el orden).
+ *
+ * Es una lista y no "el proyecto de escritorio" a propósito. Antes el humo era `--project=desktop`, pensado como
+ * siete minutos, y creció solo con cada archivo nuevo hasta pasar de media hora y rozar el tope del trabajo (40
+ * minutos). Aquí cada archivo entra a mano. Si el humo vuelve a pasar de unos diez minutos, es la
+ * señal de que se coló algo que no es humo.
+ *
+ * Quedan fuera, y corren completos en el pull request: el mapa y sus capas, el realismo, los títulos sin desborde, el
+ * catálogo de interfaz, la tipografía, el panel y la accesibilidad. `scripts/ci/grupos-e2e.test.ts` comprueba que
+ * esta lista nombra archivos que existen y que el despliegue la usa.
+ */
+export const HUMO: string[] = [
+  'seo-regresion',
+  'metadatos',
+  'es-ruta',
+  'security',
+  'sin-javascript',
+  'fragmentos',
+  'carga',
+  'lugar-borrado',
+  'keyboard-links',
+  'places',
+  'search',
+  'detalle',
+  'abierto-ahora',
+  'ranking',
+]

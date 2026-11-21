@@ -116,9 +116,11 @@ volúmenes de las plazas. El resultado derivado se prepara solo al correr `dev`,
 ## Publicación
 
 Cada push a `main` ejecuta el workflow de despliegue de GitHub Actions: instalación, búsqueda de secretos,
-validación de datos, lint, tipos, pruebas, build, presupuesto de peso y humo E2E, y solo entonces
-`wrangler deploy`. Si un paso falla, no se publica nada. Las pull requests corren el CI completo,
-incluida la suite E2E.
+validación de datos, lint, tipos, pruebas, build, presupuesto de peso y un humo E2E, y solo entonces
+`wrangler deploy`. Si un paso falla, no se publica nada. Un push que solo toca archivos `.md` o `LICENSE` no
+despliega, porque no cambia lo que se publica; se puede forzar a mano con `workflow_dispatch`. El humo es una
+lista corta de pruebas sobre el build que se publica (`HUMO` en `tests/e2e/grupos.ts`); la suite E2E completa la
+corren las pull requests.
 
 `npm run build` genera `dist/`, que también sirve cualquier servidor de archivos estáticos. En un
 subdirectorio: `BASE_PATH=/subdirectorio/ npm run build`. Basta con que el servidor devuelva 404 para
