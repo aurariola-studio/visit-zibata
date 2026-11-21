@@ -6485,7 +6485,7 @@
     {
       "id": "anytime-fitness-zibata",
       "slug": "anytime-fitness",
-      "name": "Anytime Fitness Zibatá",
+      "name": "Anytime Fitness",
       "plazaId": "xentric-zibata",
       "giros": [
         "gimnasio"
@@ -6550,7 +6550,7 @@
     {
       "id": "evogym-zibata",
       "slug": "evogym",
-      "name": "EVOGYM Zibatá",
+      "name": "EVOGYM",
       "plazaId": "plaza-zielo",
       "giros": [
         "gimnasio"
@@ -7658,7 +7658,7 @@
     {
       "id": "black-box-zibata",
       "slug": "black-box",
-      "name": "Black Box Zibatá",
+      "name": "Black Box",
       "plazaId": "mol-jamadi",
       "giros": [
         "boxeo",
@@ -8739,7 +8739,7 @@
     {
       "id": "saiens-zibata",
       "slug": "saiens",
-      "name": "SAIENS Zibatá",
+      "name": "SAIENS",
       "plazaId": "plaza-zielo",
       "giros": [
         "laboratorio-clinico"
@@ -9334,7 +9334,7 @@
     {
       "id": "ramen-express-paseo-zibata",
       "slug": "ramen-express",
-      "name": "Ramen Express Paseo Zibatá",
+      "name": "Ramen Express",
       "plazaId": "paseo-zibata",
       "giros": [
         "ramen"
@@ -9401,7 +9401,7 @@
     {
       "id": "trompochtitlan-zibata",
       "slug": "trompochtitlan",
-      "name": "Trompochtitlán Zibatá",
+      "name": "Trompochtitlán",
       "plazaId": "foodtrucks-pickleball",
       "giros": [
         "taqueria"
@@ -9683,7 +9683,7 @@
     {
       "id": "barberia-club-1978-zibata",
       "slug": "barberia-club-1978",
-      "name": "Barbería Club 1978 Zibatá",
+      "name": "Barbería Club 1978",
       "plazaId": "plaza-zielo",
       "giros": [
         "barberia"
@@ -9752,7 +9752,7 @@
     {
       "id": "beoxy-zibata",
       "slug": "beoxy",
-      "name": "BeOxy Zibatá",
+      "name": "BeOxy",
       "plazaId": "xentric-anahuac",
       "giros": [
         "faciales",
@@ -10296,7 +10296,7 @@
     {
       "id": "haut-zibata",
       "slug": "haut",
-      "name": "Haut Zibatá",
+      "name": "Haut",
       "plazaId": "plaza-zielo",
       "giros": [
         "depilacion",
@@ -10770,7 +10770,7 @@
     {
       "id": "rene-marquez-studio-zibata",
       "slug": "rene-marquez-studio",
-      "name": "René Márquez Studio Zibatá",
+      "name": "René Márquez Studio",
       "plazaId": "plaza-zielo",
       "giros": [
         "peluqueria"
@@ -10904,7 +10904,7 @@
     {
       "id": "studio-blaze-zibata",
       "slug": "studio-blaze",
-      "name": "Studio Blaze Zibatá",
+      "name": "Studio Blaze",
       "plazaId": "plaza-luna",
       "giros": [
         "peluqueria",
