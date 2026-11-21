@@ -96,6 +96,11 @@ reglas del proyecto sobre él:
   plataformas; una visita con fecha vale como respaldo.
 - **Fotos:** solo propias o con licencia. Nunca de Google ni de redes sociales.
 - **Ocultar no es borrar:** un local que cierra se marca como no visible y conserva su historial.
+- **Los datos de un local viajan en dos paquetes.** `places.json` es una sola fuente, pero al navegador llega
+  partido en un resumen (lo que pintan las tarjetas, el mapa y los filtros) y un detalle (descripción,
+  enlaces, teléfono y ruta a la puerta) que se pide después: en reposo, o al instante si alguien abre una ficha
+  o busca. Un campo nuevo de un local se asigna a uno de los dos en `src/data/placeFields.ts`, y una prueba lo
+  exige. Así cada sector nuevo pesa poco en el arranque.
 
 Los textos de la interfaz están en `src/i18n/es.ts` y `src/i18n/en.ts`; los largos de las ventanas
 informativas y del tutorial, en `src/i18n/grupos`, y se cargan junto con la ventana que los muestra. Todo el
