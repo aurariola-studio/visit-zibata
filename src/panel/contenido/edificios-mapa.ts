@@ -21,6 +21,8 @@ import type { Plaza } from '../../types/domain.ts'
  *
  *  - un volumen sintético (`src: synthetic`): `build-map` lo pone en lugar de las huellas reales de esa plaza, y
  *    un ajuste sobre él no cambiaría nada (el build lo da por error);
+ *  - un edificio dibujado a mano (`src: propio`, el `sueltos` de volumenes-propios.json): `map:build` resuelve los
+ *    ajustes contra el crudo de Overture, donde ese edificio no existe, y el build fallaría;
  *  - más de un edificio en el punto pulsado;
  *  - un edificio que ya tiene un ajuste (dos sobre la misma huella son un error del build): se quita desde la lista;
  *  - un edificio sin un punto interior a más de 1 m del borde: la geometría de las teselas se recorta y se
@@ -28,6 +30,20 @@ import type { Plaza } from '../../types/domain.ts'
  *
  * El mapa no es operable con el teclado: para eso están las coordenadas que se pueden escribir.
  */
+
+/**
+ * Por qué no se ofrece ajustar un edificio según de dónde sale su geometría; `null` si sí se puede. Los ajustes se
+ * resuelven contra las huellas abiertas, así que solo valen para las que vienen de ahí.
+ */
+export function rechazoPorOrigen(origenes: readonly unknown[]): string | null {
+  if (origenes.includes('synthetic')) {
+    return 'Ese es un volumen generado, no una huella real: esa plaza sustituye sus huellas por él, y ajustarlo no cambiaría nada.'
+  }
+  if (origenes.includes('propio')) {
+    return 'Ese edificio está dibujado a mano en volumenes-propios.json: su contorno y su altura se cambian ahí, no con un ajuste.'
+  }
+  return null
+}
 
 export interface EdificioElegido {
   punto: { lat: number; lng: number }
@@ -196,11 +212,10 @@ export async function abrirMapaDeEdificios(
       opciones.alRechazar('Hay más de un edificio en ese punto. Acerca el mapa y pulsa otra vez.')
       return
     }
-    if (encontrados.some((f) => f.properties?.src === 'synthetic')) {
+    const rechazo = rechazoPorOrigen(encontrados.map((f) => f.properties?.src))
+    if (rechazo) {
       marcarElegido(null)
-      opciones.alRechazar(
-        'Ese es un volumen generado, no una huella real: esa plaza sustituye sus huellas por él, y ajustarlo no cambiaría nada.',
-      )
+      opciones.alRechazar(rechazo)
       return
     }
 

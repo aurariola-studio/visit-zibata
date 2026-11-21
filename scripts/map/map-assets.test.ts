@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs'
+import * as turf from '@turf/turf'
+import type { Polygon } from 'geojson'
 import { describe, expect, it } from 'vitest'
 
 /**
@@ -32,6 +34,33 @@ describe('mapa generado al día con el dataset', () => {
     // quedaría un hueco). Cualquier otro id huérfano sigue siendo un mapa desactualizado.
     const ids = new Set(plazas.plazas.map((plaza) => plaza.id))
     expect([...withVolume].filter((id) => !ids.has(id) && !borradas.has(id))).toEqual([])
+  })
+
+  it('cada edificio suelto (volumenes-propios.json) está en los edificios base: teselas, mallas y árboles lo ven', () => {
+    const propios = read<{
+      sueltos?: { id: string; height: number; anillo: [number, number][] }[]
+    }>('../../data/geographic/volumenes-propios.json')
+    const base = read<{
+      features: { properties: { src: string; height: number }; geometry: Polygon }[]
+    }>('../../data/geographic/raw/edificios-base.geojson')
+    const propiosEnElMapa = base.features.filter((f) => f.properties.src === 'propio')
+    const sueltos = propios.sueltos ?? []
+    // Ni uno de menos (se perdería en silencio) ni uno de más (un fantasma de una versión anterior).
+    expect(propiosEnElMapa, 'ejecuta `npm run map:build`').toHaveLength(sueltos.length)
+    for (const suelto of sueltos) {
+      const centro = turf.centroid(turf.polygon([suelto.anillo]))
+      const enElMapa = propiosEnElMapa.find((f) => turf.booleanPointInPolygon(centro, f.geometry))
+      expect(enElMapa, `"${suelto.id}" no está en edificios-base.geojson`).toBeDefined()
+      expect(enElMapa?.properties.height, suelto.id).toBe(suelto.height)
+    }
+  })
+
+  it('un edificio suelto no es una zona: ninguna zona lleva su identificador', () => {
+    const propios = read<{ sueltos?: { id: string }[] }>(
+      '../../data/geographic/volumenes-propios.json',
+    )
+    const ids = new Set(plazas.plazas.map((plaza) => plaza.id))
+    expect((propios.sueltos ?? []).filter((suelto) => ids.has(suelto.id))).toEqual([])
   })
 
   it('una plaza borrada ya no existe en el dataset: si una vive, su huella sobra', () => {

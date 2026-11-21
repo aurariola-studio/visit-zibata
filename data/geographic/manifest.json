@@ -84,15 +84,15 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2511620,
-      "sha256": "000eaa3b0701e13f9c01a35b24d4cf0eb4d3a46f6ab8302600010a48b6e4b24e",
+      "bytes": 2511011,
+      "sha256": "e7c681b84621d3748b62de1f86ead02f36275f0e3f7ce9c595e13f315d3b2ef2",
       "tiles": 265,
       "bytesByZoom": {
         "12": 46047,
-        "13": 245441,
-        "14": 519889,
-        "15": 716838,
-        "16": 982105
+        "13": 245515,
+        "14": 519809,
+        "15": 716606,
+        "16": 981725
       },
       "largestTile": {
         "z": 13,
@@ -105,15 +105,15 @@
         "landuse": 125,
         "water": 6,
         "waterway": 8,
-        "buildings": 16019,
+        "buildings": 16020,
         "labels": 20,
-        "trees": 30015,
+        "trees": 29973,
         "shrubs": 1580
       }
     },
     "public/map/plaza-buildings.geojson": {
       "bytes": 12883,
-      "sha256": "b7a41009d82f00bc377e5cede551ebc401397b4b16abed9163e68971b26ea4e8",
+      "sha256": "f756fdfe4afd4b4982b5090e9caaa7621c497342db1566795780c1e6af6237a7",
       "features": 35,
       "synthesizedFor": [
         "paseo-zibata",
@@ -153,6 +153,21 @@
           "plazaId": "xenica",
           "replacedFootprints": 0,
           "reason": "Sin huellas de edificio abiertas (Overture: OSM, Microsoft, Google) dentro de la plaza"
+        }
+      ]
+    },
+    "data/geographic/volumenes-propios.json": {
+      "bytes": 7059,
+      "sha256": "d0d74ed9e9a775a5fe442196ec4c79344af28b6232042c9dfee25b94e33032fe",
+      "sueltos": [
+        {
+          "id": "h-e-b",
+          "nombre": "H-E-B",
+          "height": 9,
+          "fuente": "Contorno trazado sobre el techo visible en Sentinel-2 (2026-10-20): el edificio no está en OpenStreetMap ni en Overture. Av. Paseo de las Pitahayas 23, Zibatá; punto de OpenStreetMap (nodo 13994367601); verificado en sitio el 2026-11-10.",
+          "alturaNota": "Estimación provisional de 9 m: ninguna fuente la respalda, porque los datos abiertos no traen el edificio.",
+          "creado": "2026-11-21",
+          "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando H-E-B pase a ser una zona."
         }
       ]
     },
@@ -242,12 +257,12 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3886344,
-        "sha256": "33ef70275b5e77c790ffd6b1f26a74437825a91e22fa88a0d8597507f3c3f14c"
+        "bytes": 3887124,
+        "sha256": "44683a51685fc0e496322a2b3d4ccf6d63f4502abfc000580fb7dad40c91c6de"
       },
       "public/map/realismo/arboles.bin": {
-        "bytes": 142120,
-        "sha256": "04e8e7a26aa1e2a7fd10e97bcf05f166652fc1d8a6dd19918d4660550378b833"
+        "bytes": 141672,
+        "sha256": "9f8e17f52a654228dc796ee0a5a4333872adf35f75edd4b8f2371926c3c5bce7"
       }
     }
   }
