@@ -37,7 +37,7 @@ export type PlaceSummary = Pick<Place, (typeof PLACE_SUMMARY_KEYS)[number]> & {
   verification?: Pick<PlaceVerification, (typeof VERIFICATION_SUMMARY_KEYS)[number]>
 }
 /** Lo que solo lee la ficha y el buscador; se une a su resumen por `id`. */
-export type PlaceDetail = Pick<Place, 'id' | (typeof PLACE_DETAIL_KEYS)[number]> & {
+export type PlaceDetailData = Pick<Place, 'id' | (typeof PLACE_DETAIL_KEYS)[number]> & {
   verification?: Pick<PlaceVerification, (typeof VERIFICATION_DETAIL_KEYS)[number]>
 }
 export type PlazaGeometry = z.infer<typeof PlazaGeometrySchema>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Place, PlaceDetail, PlaceSummary } from '../types/domain.ts'
+import type { Place, PlaceDetailData, PlaceSummary } from '../types/domain.ts'
 import {
   PLACE_DETAIL_KEYS,
   PLACE_SUMMARY_KEYS,
@@ -34,7 +34,7 @@ describe('reparto de los campos de un local', () => {
   it('un local entero sirve de resumen y de detalle, y el resumen no trae lo del detalle', () => {
     const lugar = {} as Place
     const resumen: PlaceSummary = lugar
-    const detalle: PlaceDetail = lugar
+    const detalle: PlaceDetailData = lugar
     expect([resumen, detalle]).toHaveLength(2)
     // @ts-expect-error la descripción es del detalle: leerla de un resumen no compila
     const _descripcion = ({} as PlaceSummary).description
