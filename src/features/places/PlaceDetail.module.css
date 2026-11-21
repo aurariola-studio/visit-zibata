@@ -434,3 +434,75 @@
   align-items: flex-start;
   gap: var(--space-3);
 }
+
+/*
+ * Lo que de la ficha viene del detalle y todavía no llegó: "Cómo llegar", la descripción y los enlaces de
+ * contacto. Lo demás (nombre, giros, horario, estado) sale del resumen y se pinta al instante.
+ *
+ * Son bloques de arena con la forma de lo que van a ser, los mismos tonos y esquinas que el esqueleto de la
+ * ficha (`PlaceSkeleton`). Entran con 150 ms de retardo, igual que los esqueletos de las ventanas: si el
+ * detalle llega antes, no se llega a ver nada. Sin movimiento propio.
+ */
+.pendiente {
+  background: var(--sand-100);
+  border-radius: var(--radius-control);
+  animation: aparece var(--duration-base) var(--ease-out) 150ms backwards;
+}
+
+@keyframes aparece {
+  from {
+    opacity: 0;
+  }
+}
+
+/* "Cómo llegar": el alto de todo lo que se pulsa, en el mismo sitio que el botón. */
+.direccionPendiente {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--control-h);
+}
+
+.lineasPendientes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.lineaPendiente {
+  height: 0.8rem;
+}
+
+.lineaPendiente[data-ancho="medio"] {
+  width: 60%;
+}
+
+.contactoPendiente {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Cada enlace de contacto mide 44 px (ver `.links li`). */
+.enlacePendiente {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+/*
+ * El detalle no llegó. Es lo único que falla: el resto de la ficha ya está y el mapa sigue. El aviso ocupa el
+ * sitio de la descripción y lleva su salida, que es volver a pedirlo.
+ */
+.detalleError {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.reintentar {
+  composes: base boton secundario from "../../styles/controls.module.css";
+}

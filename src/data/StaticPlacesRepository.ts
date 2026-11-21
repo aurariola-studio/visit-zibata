@@ -5,7 +5,6 @@
  */
 import type { PlaceDetailData, PlaceSummary, Sector } from '../types/domain.ts'
 import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
-import { joinPlaces } from './placeParts.ts'
 import {
   type RecordIssue,
   readCollection,
@@ -44,7 +43,6 @@ export class StaticPlacesRepository implements PlacesRepository {
   private categories?: ReturnType<PlacesRepository['getCategories']>
   private sectors?: Promise<Sector[]>
   private plazas?: ReturnType<PlacesRepository['getPlazas']>
-  private places?: ReturnType<PlacesRepository['getPlaces']>
   private summaries?: Promise<PlaceSummary[]>
   private details?: Promise<PlaceDetailData[]>
   private retired?: Promise<RetiredPlace[]>
@@ -125,23 +123,5 @@ export class StaticPlacesRepository implements PlacesRepository {
       throw error
     })
     return this.details
-  }
-
-  /**
-   * Los locales enteros: resumen y detalle unidos por `id`. Por ahora la guía espera a los dos; cuando la
-   * ficha pueda pintarse con el resumen solo, el catálogo pasará a leer `getPlaceSummaries()`.
-   */
-  getPlaces() {
-    this.places ??= Promise.all([this.getPlaceSummaries(), this.getPlaceDetails()])
-      .then(([summaries, details]) => {
-        const { places, notes } = joinPlaces(summaries, details)
-        for (const note of notes) console.warn(`[datos] places ${note}`)
-        return places
-      })
-      .catch((error: unknown) => {
-        this.places = undefined
-        throw error
-      })
-    return this.places
   }
 }

@@ -81,6 +81,8 @@ export const en = {
     other: 'Already a favorite of {count} people',
   },
   'place.missingInfo': 'We don’t have any more information about this place yet.',
+  'place.detailsLoading': 'Loading the place details…',
+  'place.detailsError': 'We couldn’t load this place’s description or links.',
 
   'hours.open': 'Open',
   'hours.openNow': 'Open now',

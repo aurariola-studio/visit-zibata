@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { buildCatalog } from '../../data/catalog.ts'
+import { projectDetail } from '../../data/placeParts.ts'
 import {
   catalogFixture,
   categoriesFixture,
@@ -9,7 +10,9 @@ import {
 } from '../../test/fixtures.ts'
 import { createSearchIndex } from './searchIndex.ts'
 
-const index = createSearchIndex(catalogFixture())
+// La descripción llega aparte del catálogo (ver `placeDetails.ts`): el índice la recibe como segundo argumento.
+const detalles = new Map(placesFixture.map((lugar) => [lugar.id, projectDetail(lugar)]))
+const index = createSearchIndex(catalogFixture(), detalles)
 
 describe('createSearchIndex', () => {
   it('devuelve null con consultas vacías o de una letra', () => {
@@ -55,6 +58,31 @@ describe('createSearchIndex', () => {
     expect(index.search('panaderia')).toContain('panaderia-trigo')
     expect(index.search('plaza sur')).toContain('panaderia-trigo')
     expect(index.search('masa madre')).toContain('panaderia-trigo')
+  })
+
+  it('mientras el detalle no llega busca por nombre, giro y plaza, y al llegar también por la descripción en los dos idiomas', () => {
+    const sinDetalle = createSearchIndex(catalogFixture())
+    expect(sinDetalle.search('panaderia')).toContain('panaderia-trigo')
+    expect(sinDetalle.search('masa madre') ?? []).not.toContain('panaderia-trigo')
+    expect(index.search('masa madre')).toContain('panaderia-trigo')
+  })
+
+  it('una palabra que solo está en la descripción en inglés también se encuentra', () => {
+    const bilingue = makePlace({
+      id: 'pan-de-centeno',
+      plazaId: 'plaza-norte',
+      name: 'Horno Uno',
+      giros: ['panaderia'],
+      description: { es: 'Pan artesanal.', en: 'Handmade sourdough bread.' },
+    })
+    const catalogo = buildCatalog(categoriesFixture, plazasFixture, [...placesFixture, bilingue])
+    const sinDetalle = createSearchIndex(catalogo)
+    const conDetalle = createSearchIndex(
+      catalogo,
+      new Map([[bilingue.id, projectDetail(bilingue)]]),
+    )
+    expect(sinDetalle.search('sourdough') ?? []).not.toContain('pan-de-centeno')
+    expect(conDetalle.search('sourdough')).toContain('pan-de-centeno')
   })
 
   it('con coincidencias literales no añade parecidos lejanos ("pan" no trae "plaza")', () => {

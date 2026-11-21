@@ -3,7 +3,6 @@ import type { Place, PlaceDetailData, PlaceSummary } from '../types/domain.ts'
 import {
   PLACE_DETAIL_KEYS,
   PLACE_SUMMARY_KEYS,
-  VERIFICATION_DETAIL_KEYS,
   VERIFICATION_NOT_SHIPPED_KEYS,
   VERIFICATION_SUMMARY_KEYS,
 } from './placeFields.ts'
@@ -22,11 +21,7 @@ describe('reparto de los campos de un local', () => {
   })
 
   it('cada campo de verification viaja en una pieza, o se declara que no viaja', () => {
-    const todas = [
-      ...VERIFICATION_SUMMARY_KEYS,
-      ...VERIFICATION_DETAIL_KEYS,
-      ...VERIFICATION_NOT_SHIPPED_KEYS,
-    ].sort()
+    const todas = [...VERIFICATION_SUMMARY_KEYS, ...VERIFICATION_NOT_SHIPPED_KEYS].sort()
     expect(todas).toEqual(claves(VerificationSchema))
     expect(new Set(todas).size).toBe(todas.length)
   })

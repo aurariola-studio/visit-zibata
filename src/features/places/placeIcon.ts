@@ -6,15 +6,15 @@
  * cuenta el resto ("+N"), así que la posición ya dice qué manda sin una jerarquía aparte que
  * explicar.
  */
-import type { Catalog, Giro, Place } from '../../types/domain.ts'
+import type { Catalog, Giro, PlaceSummary } from '../../types/domain.ts'
 
 /** Los giros del local, en su orden, resueltos contra el catálogo. */
-export function girosOf(place: Place, catalog: Catalog): Giro[] {
+export function girosOf(place: PlaceSummary, catalog: Catalog): Giro[] {
   return resolve(place.giros, catalog)
 }
 
 /** Los giros del local tal como los guarda el dato: lo que filtra, busca y ordena. */
-export function allGiroIds(place: Pick<Place, 'giros'>): string[] {
+export function allGiroIds(place: Pick<PlaceSummary, 'giros'>): string[] {
   return [...place.giros]
 }
 
@@ -23,7 +23,7 @@ export function allGiroIds(place: Pick<Place, 'giros'>): string[] {
  * categoría, así que una hamburguesería enseña la hamburguesa y una parrilla que hace pizzas enseña
  * la llama, no el promedio de nada.
  */
-export function placeIconName(place: Place, catalog: Catalog): string {
+export function placeIconName(place: PlaceSummary, catalog: Catalog): string {
   return girosOf(place, catalog)[0]?.icon ?? 'utensils-crossed'
 }
 

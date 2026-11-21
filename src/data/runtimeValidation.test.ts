@@ -185,11 +185,12 @@ describe('sanitizeDataset y loadCatalog', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const repository: PlacesRepository = {
       getCategories: async () => categoriesFixture,
+      getPlaceDetails: async () => [],
       getPlazas: async () => [
         ...plazasFixture,
         makePlaza({ id: 'fuera', coordinates: { lat: 0, lng: 0 } }),
       ],
-      getPlaces: async () => [
+      getPlaceSummaries: async () => [
         ...placesFixture,
         makePlace({ id: 'nuevo', plazaId: 'plaza-norte' }),
         makePlace({ id: 'huerfano', plazaId: 'fuera' }),
@@ -211,8 +212,9 @@ describe('sanitizeDataset y loadCatalog', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const repository: PlacesRepository = {
       getCategories: async () => categoriesFixture,
+      getPlaceDetails: async () => [],
       getPlazas: async () => [makePlaza({ id: 'fuera', coordinates: { lat: 0, lng: 0 } })],
-      getPlaces: async () => [],
+      getPlaceSummaries: async () => [],
     }
     await expect(loadCatalog(repository)).rejects.toThrow('No hay datos comerciales válidos')
     warn.mockRestore()
@@ -222,6 +224,7 @@ describe('sanitizeDataset y loadCatalog', () => {
 describe('lo que ya no se muestra sigue enseñando gustos', () => {
   const base = {
     getCategories: async () => categoriesFixture,
+    getPlaceDetails: async () => [],
     getPlazas: async () => plazasFixture,
   }
   const oculto = makePlace({
@@ -234,7 +237,7 @@ describe('lo que ya no se muestra sigue enseñando gustos', () => {
   it('un local oculto conserva sus giros y su plaza; uno visible, no', async () => {
     const catalog = await loadCatalog({
       ...base,
-      getPlaces: async () => [...placesFixture, oculto],
+      getPlaceSummaries: async () => [...placesFixture, oculto],
     })
     expect(catalog.placeById.has('oculto')).toBe(false)
     expect(markedPlace(catalog, 'oculto')).toEqual({ giros: ['pizza'], plazaId: 'plaza-norte' })
@@ -248,7 +251,7 @@ describe('lo que ya no se muestra sigue enseñando gustos', () => {
   it('un local borrado entra por su huella en redirects.json', async () => {
     const catalog = await loadCatalog({
       ...base,
-      getPlaces: async () => placesFixture,
+      getPlaceSummaries: async () => placesFixture,
       getRetired: async () => [{ id: 'borrado', giros: ['sushi'], plazaId: 'plaza-norte' }],
     })
     expect(catalog.placeById.has('borrado')).toBe(false)
@@ -259,7 +262,7 @@ describe('lo que ya no se muestra sigue enseñando gustos', () => {
   it('si el archivo de borrados falla, la guía carga igual', async () => {
     const catalog = await loadCatalog({
       ...base,
-      getPlaces: async () => placesFixture,
+      getPlaceSummaries: async () => placesFixture,
       getRetired: async () => {
         throw new Error('sin red')
       },

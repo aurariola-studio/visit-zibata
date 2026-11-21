@@ -95,6 +95,8 @@ export const es = {
     other: 'Ya es favorito de {count} personas',
   },
   'place.missingInfo': 'Aún no tenemos más información de este lugar.',
+  'place.detailsLoading': 'Cargando los datos del lugar…',
+  'place.detailsError': 'No pudimos cargar la descripción ni los enlaces de este lugar.',
 
   'hours.open': 'Abierto',
   'hours.openNow': 'Abierto ahora',

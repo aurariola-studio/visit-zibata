@@ -44,7 +44,7 @@ import { useIsDesktop, useMediaQuery } from '../hooks/useMediaQuery.ts'
 import { useOnlineStatus } from '../hooks/useOnlineStatus.ts'
 import { cargarGrupo, t, useLocale } from '../i18n/index.ts'
 import { type InfoTopic, parsePath, rutaDeCategoria, rutaDeSector } from '../lib/url-state.ts'
-import type { Catalog, Place } from '../types/domain.ts'
+import type { Catalog, PlaceSummary } from '../types/domain.ts'
 import { AppErrorBoundary } from './AppErrorBoundary.tsx'
 import { useAppDispatch } from './AppStateContext.tsx'
 import styles from './Experience.module.css'
@@ -286,7 +286,7 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
   }, [dispatch, state.missingLinkNotice])
 
   const openPlace = useCallback(
-    (place: Place) =>
+    (place: PlaceSummary) =>
       dispatch({
         type: 'selectPlace',
         placeId: place.id,

@@ -1,5 +1,5 @@
 import { ZIBATA_EXTENT } from '../config/map.ts'
-import type { Catalog, Category, Place, Plaza, Sector } from '../types/domain.ts'
+import type { Catalog, Category, PlaceSummary, Plaza, Sector } from '../types/domain.ts'
 import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
 import {
   type Bounds,
@@ -9,10 +9,13 @@ import {
 } from './relations.ts'
 import { PUBLISHABLE_STATUS } from './rules.ts'
 
+/** Lo que carga el navegador: el mismo conjunto de datos, con los locales en resumen. */
+export type BrowserDataset = Omit<CommercialDataset, 'places'> & { places: PlaceSummary[] }
+
 export function buildCatalog(
   categories: Category[],
   allPlazas: Plaza[],
-  allPlaces: Place[],
+  allPlaces: PlaceSummary[],
   retired: readonly RetiredPlace[] = [],
   allSectors: readonly Sector[] = [],
 ): Catalog {
@@ -22,7 +25,7 @@ export function buildCatalog(
   const activePlazas = new Set(allPlazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
   const places = allPlaces.filter((place) => place.active && activePlazas.has(place.plazaId))
 
-  const placesByPlaza = new Map<string, Place[]>()
+  const placesByPlaza = new Map<string, PlaceSummary[]>()
   const plazas = allPlazas.map((plaza) => {
     const ofPlaza = places.filter((p) => p.plazaId === plaza.id)
     // Respeta el orden curado de `placeIds`; un local que falte en la lista va al final.
@@ -44,7 +47,7 @@ export function buildCatalog(
   // Lo que no se muestra pero se marcó alguna vez: los ocultos conservan sus datos y los borrados
   // dejan su huella en `redirects.json`. Un local que sí se muestra no entra (manda el real).
   const shown = new Set(places.map((place) => place.id))
-  const retiredById = new Map<string, Pick<Place, 'giros' | 'plazaId'>>([
+  const retiredById = new Map<string, Pick<PlaceSummary, 'giros' | 'plazaId'>>([
     ...retired.map(({ id, giros, plazaId }) => [id, { giros, plazaId }] as const),
     ...allPlaces
       .filter((place) => !shown.has(place.id))
@@ -81,9 +84,9 @@ export function buildCatalog(
  * `npm run data:validate` trata todo esto como error en build; aquí solo protege al usuario.
  */
 export function sanitizeDataset(
-  dataset: CommercialDataset,
+  dataset: BrowserDataset,
   bounds: Bounds,
-): { dataset: CommercialDataset; notes: string[] } {
+): { dataset: BrowserDataset; notes: string[] } {
   const notes: string[] = []
   const slugs = new Set<string>()
   const uniqueSlug = (slug: string) => !slugs.has(slug) && Boolean(slugs.add(slug))
@@ -100,7 +103,7 @@ export function sanitizeDataset(
   const plazaIds = new Set(plazas.map((plaza) => plaza.id))
   const giroIds = new Set(dataset.categories.flatMap((c) => c.giros.map((giro) => giro.id)))
 
-  const places: Place[] = []
+  const places: PlaceSummary[] = []
   for (const place of dataset.places) {
     // Los giros que no existen se ignoran; si no queda ninguno, el local no se puede colocar.
     const giros = place.giros.filter((giro) => giroIds.has(giro))
@@ -135,7 +138,7 @@ export async function loadCatalog(repository: PlacesRepository): Promise<Catalog
   const [categories, plazas, places] = await Promise.all([
     repository.getCategories(),
     repository.getPlazas(),
-    repository.getPlaces(),
+    repository.getPlaceSummaries(),
   ])
   const [west, south, east, north] = ZIBATA_EXTENT.areaBbox
   const { dataset, notes } = sanitizeDataset(
@@ -161,6 +164,6 @@ export async function loadCatalog(repository: PlacesRepository): Promise<Catalog
 export function markedPlace(
   catalog: Catalog,
   id: string,
-): Pick<Place, 'giros' | 'plazaId'> | undefined {
+): Pick<PlaceSummary, 'giros' | 'plazaId'> | undefined {
   return catalog.placeById.get(id) ?? catalog.retiredById.get(id)
 }

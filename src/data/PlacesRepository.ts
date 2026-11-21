@@ -1,4 +1,4 @@
-import type { Category, Place, Plaza, Sector } from '../types/domain.ts'
+import type { Category, PlaceDetailData, PlaceSummary, Plaza, Sector } from '../types/domain.ts'
 
 /**
  * Acceso a datos comerciales. La UI solo depende de esta interfaz: hoy la implementa
@@ -17,8 +17,10 @@ export interface PlacesRepository {
   /** Los sectores que agrupan las categorías. Opcional: sin ellos las categorías van sueltas, como siempre. */
   getSectors?(): Promise<Sector[]>
   getPlazas(): Promise<Plaza[]>
-  /** Todos los locales, activos e inactivos. */
-  getPlaces(): Promise<Place[]>
+  /** Todos los locales, activos e inactivos, con lo que pintan las tarjetas, el mapa y los filtros. */
+  getPlaceSummaries(): Promise<PlaceSummary[]>
+  /** Lo que solo lee la ficha y el buscador, de todos los locales. Llega aparte del resumen. */
+  getPlaceDetails(): Promise<PlaceDetailData[]>
   /** Los locales borrados desde el panel. Opcional: sin ellos la guía funciona igual. */
   getRetired?(): Promise<RetiredPlace[]>
 }

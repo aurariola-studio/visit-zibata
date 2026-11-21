@@ -21,6 +21,10 @@ describe('enlaces "Cómo llegar" del dataset publicado', () => {
     plazas.plazas as Plaza[],
     places.places as Place[],
   )
+  // El enlace a la puerta del local es del detalle, que el catálogo no trae: se toma del dato completo.
+  const googleMapsUriDe = new Map(
+    (places.places as Place[]).map((lugar) => [lugar.id, lugar.googleMapsUri]),
+  )
   const [west, south, east, north] = extent.areaBbox as [number, number, number, number]
 
   it('cada lugar visible lleva a su plaza con un enlace de Google Maps válido', () => {
@@ -61,10 +65,11 @@ describe('enlaces "Cómo llegar" del dataset publicado', () => {
   it('un local solo lleva a su propia puerta si su ubicación está verificada', () => {
     for (const place of catalog.places) {
       const plaza = catalog.plazaById.get(place.plazaId) as Plaza
-      const { url, toPlace } = placeDirections(place, plaza)
-      if (place.googleMapsUri) {
+      const googleMapsUri = googleMapsUriDe.get(place.id)
+      const { url, toPlace } = placeDirections(googleMapsUri, plaza)
+      if (googleMapsUri) {
         expect(toPlace, place.id).toBe(true)
-        expect(url, place.id).toBe(place.googleMapsUri)
+        expect(url, place.id).toBe(googleMapsUri)
         // Una ubicación propia cae en su plaza, no a kilómetros: si no, el enlace es de otra
         // sucursal. Se mide contra el punto de la plaza porque su polígono es aproximado.
         expect(place.location, place.id).not.toBeNull()
@@ -76,6 +81,6 @@ describe('enlaces "Cómo llegar" del dataset publicado', () => {
         expect(url, place.id).toBe(plazaDirectionsUrl(plaza))
       }
     }
-    expect(catalog.places.some((place) => place.googleMapsUri)).toBe(true)
+    expect(catalog.places.some((place) => googleMapsUriDe.get(place.id))).toBe(true)
   })
 })

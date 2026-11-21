@@ -9,13 +9,13 @@
 import { SearchX, X } from 'lucide-react'
 import { EmptyState } from '../../components/ui/EmptyState.tsx'
 import { t } from '../../i18n/index.ts'
-import type { Place } from '../../types/domain.ts'
+import type { PlaceSummary } from '../../types/domain.ts'
 import { PlaceList } from '../places/PlaceList.tsx'
 import styles from './Panel.module.css'
 
 interface ResultsPanelProps {
-  places: readonly Place[]
-  onOpenPlace: (place: Place) => void
+  places: readonly PlaceSummary[]
+  onOpenPlace: (place: PlaceSummary) => void
   onClearFilters: () => void
   /** La zona que acota la búsqueda, si hay una elegida. */
   plazaName?: string

@@ -6,7 +6,7 @@ import { lazy, Suspense, useRef, useState } from 'react'
 import { ProfileIcon } from '../../components/icons/ProfileIcon.tsx'
 import { t } from '../../i18n/index.ts'
 import type { InfoTopic } from '../../lib/url-state.ts'
-import type { Place } from '../../types/domain.ts'
+import type { PlaceSummary } from '../../types/domain.ts'
 import styles from './ProfileButton.module.css'
 import { useMarks } from './useMarks.ts'
 
@@ -20,7 +20,7 @@ export function ProfileButton({
   onOpenPlace,
 }: {
   onOpenInfo: (topic: InfoTopic) => void
-  onOpenPlace: (place: Place) => void
+  onOpenPlace: (place: PlaceSummary) => void
 }) {
   const [open, setOpen] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)

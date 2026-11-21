@@ -84,7 +84,7 @@ function findDuplicates(values: readonly string[]): string[] {
 
 /** Categorías de los locales activos de una plaza, en el orden de la taxonomía. */
 export function deriveCategoryIds(
-  placesOfPlaza: readonly Place[],
+  placesOfPlaza: readonly Pick<Place, 'active' | 'giros'>[],
   categories: readonly Category[],
 ): string[] {
   const categoryOfGiro = new Map(

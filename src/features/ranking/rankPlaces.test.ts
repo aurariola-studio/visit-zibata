@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { makePlace } from '../../test/fixtures.ts'
-import type { Place } from '../../types/domain.ts'
+import type { PlaceSummary } from '../../types/domain.ts'
 import { categoryAffinity, type PreferenceSignals, rankPlaces } from './rankPlaces.ts'
 
 const NOW = Date.parse('2026-09-21T12:00:00Z')
 const DAY = 86_400_000
 
 // Lista curada ficticia: dos cafés, dos taquerías, dos sushis y dos pizzerías.
-const places: Place[] = [
+const places: PlaceSummary[] = [
   makePlace({ id: 'pizza-a', plazaId: 'p1', giros: ['pizza'] }),
   makePlace({ id: 'cafe-a', plazaId: 'p1', giros: ['panaderia'] }),
   makePlace({ id: 'tacos-a', plazaId: 'p1', giros: ['taqueria'] }),
@@ -33,7 +33,7 @@ const none: PreferenceSignals = {
   interactions: new Map(),
   visits: new Map(),
 }
-const ids = (list: Place[]) => list.map((place) => place.id)
+const ids = (list: PlaceSummary[]) => list.map((place) => place.id)
 
 describe('rankPlaces', () => {
   it('sin señales respeta el orden curado de la guía', () => {
@@ -184,7 +184,7 @@ describe('rankPlaces', () => {
 
 describe('abierto ahora', () => {
   // NOW es 2026-09-21T12:00:00Z, que en Querétaro son las 06:00 de un lunes.
-  const conHorario = (id: string, franjas: string[]): Place =>
+  const conHorario = (id: string, franjas: string[]): PlaceSummary =>
     makePlace({
       id,
       plazaId: 'p1',

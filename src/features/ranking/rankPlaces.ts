@@ -24,7 +24,7 @@
  */
 import { estadoDe } from '../../lib/estado.ts'
 import { getZonedMoment } from '../../lib/hours.ts'
-import type { Place } from '../../types/domain.ts'
+import type { PlaceSummary } from '../../types/domain.ts'
 import { allGiroIds } from '../places/placeIcon.ts'
 
 export interface PlaceInteraction {
@@ -61,7 +61,7 @@ export interface RankOptions {
    * Busca un lugar por id (las señales pueden venir de lugares fuera de la lista actual, u ocultos o
    * borrados: de esos basta con los giros).
    */
-  placeById: (id: string) => Pick<Place, 'giros' | 'plazaId'> | undefined
+  placeById: (id: string) => Pick<PlaceSummary, 'giros' | 'plazaId'> | undefined
   /** La categoría de un giro: la afinidad se aprende por giro y se agrega por categoría. */
   categoryOfGiro: (giroId: string) => string | undefined
   /** Cada cuántas posiciones entra un lugar sin explorar. */
@@ -167,7 +167,7 @@ export function hasSignals(signals: PreferenceSignals): boolean {
  */
 export function categoryAffinity(
   signals: PreferenceSignals,
-  placeById: (id: string) => Pick<Place, 'giros' | 'plazaId'> | undefined,
+  placeById: (id: string) => Pick<PlaceSummary, 'giros' | 'plazaId'> | undefined,
   now: number,
   categoryOfGiro: (giroId: string) => string | undefined,
 ): Map<string, number> {
@@ -189,16 +189,16 @@ export function categoryAffinity(
 }
 
 export function rankPlaces(
-  places: readonly Place[],
+  places: readonly PlaceSummary[],
   signals: PreferenceSignals,
   { now, placeById, categoryOfGiro, exploreEvery = 4, community }: RankOptions,
-): Place[] {
+): PlaceSummary[] {
   if (places.length < 2) return [...places]
 
   // Un solo cálculo de la hora local para toda la lista: `getZonedMoment` monta un Intl.DateTimeFormat
   // y hacerlo por lugar cuesta más que todo lo demás junto.
   const momento = getZonedMoment(new Date(now))
-  const apertura = (place: Place) => APERTURA[estadoDe(place, momento)]
+  const apertura = (place: PlaceSummary) => APERTURA[estadoDe(place, momento)]
 
   /*
    * Sin nada que esta persona haya marcado, el orden sigue siendo el curado de la guía y lo único
@@ -280,7 +280,7 @@ export function rankPlaces(
   const unexplored = scored
     .filter((entry) => entry.deserveChance)
     .sort((a, b) => b.explore - a.explore)
-  const result: Place[] = []
+  const result: PlaceSummary[] = []
   const used = new Set<string>()
   let cursor = 0
   while (result.length < places.length) {

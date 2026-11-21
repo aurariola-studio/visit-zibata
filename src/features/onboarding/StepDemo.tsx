@@ -11,7 +11,7 @@ import { useCatalog } from '../../data/CatalogContext.tsx'
 import { useMediaQuery } from '../../hooks/useMediaQuery.ts'
 import { t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
-import type { Catalog, Place, Plaza } from '../../types/domain.ts'
+import type { Catalog, PlaceDetailData, PlaceSummary, Plaza } from '../../types/domain.ts'
 import { SuggestForm } from '../about/SuggestForm.tsx'
 import { PlaceCard } from '../places/PlaceCard.tsx'
 import { PlaceDetail } from '../places/PlaceDetail.tsx'
@@ -23,10 +23,10 @@ import styles from './StepDemo.module.css'
 export type DemoKind = 'map' | 'search' | 'detail' | 'marks' | 'suggest'
 
 interface DemoData {
-  place: Place
+  place: PlaceSummary
   plaza: Plaza
   /** Los cuatro resultados de ejemplo del paso de buscar. */
-  results: [Place, Place, Place, Place, Place]
+  results: [PlaceSummary, PlaceSummary, PlaceSummary, PlaceSummary, PlaceSummary]
 }
 
 export function StepDemo({ kind }: { kind: DemoKind }) {
@@ -148,25 +148,38 @@ function buildDemo(catalog: Catalog): DemoData | null {
 }
 
 function genericPlace(
-  base: Place,
-  demo: { id: string; name: string; giros: string[]; plazaId: string; hours: Place['hours'] },
-): Place {
-  const clone: Place = {
+  base: PlaceSummary,
+  demo: {
+    id: string
+    name: string
+    giros: string[]
+    plazaId: string
+    hours: PlaceSummary['hours']
+  },
+): PlaceSummary {
+  const clone: PlaceSummary = {
     ...base,
     ...demo,
     slug: demo.id,
-    description: { es: t('onboarding.demo.description'), en: t('onboarding.demo.description') },
     location: null,
-    googleMapsUri: null,
-    googlePlaceId: null,
-    phone: null,
     photos: [],
-    links: { website: 'https://example.com', instagram: 'https://instagram.com/' },
     active: true,
   }
   delete clone.cierre
   delete clone.verification
   return clone
+}
+
+/** Lo del detalle de un lugar de la demostración: lo que la ficha real tomaría del catálogo. */
+function detalleDemo(id: string): PlaceDetailData {
+  return {
+    id,
+    description: { es: t('onboarding.demo.description'), en: t('onboarding.demo.description') },
+    links: { website: 'https://example.com', instagram: 'https://instagram.com/' },
+    phone: null,
+    googleMapsUri: null,
+    googlePlaceId: null,
+  }
 }
 
 function MapDemo() {
@@ -199,7 +212,7 @@ function SearchDemo({
   zone,
 }: {
   catalog: Catalog
-  results: [Place, Place, Place, Place, Place]
+  results: [PlaceSummary, PlaceSummary, PlaceSummary, PlaceSummary, PlaceSummary]
   zone: string
 }) {
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -229,7 +242,7 @@ function SearchAnimation({
   reduced,
 }: {
   catalog: Catalog
-  results: [Place, Place, Place, Place, Place]
+  results: [PlaceSummary, PlaceSummary, PlaceSummary, PlaceSummary, PlaceSummary]
   zone: string
   reduced: boolean
 }) {
@@ -319,7 +332,7 @@ function DetailDemo({
   plaza,
   marks = false,
 }: {
-  place: Place
+  place: PlaceSummary
   plaza: Plaza
   marks?: boolean
 }) {
@@ -445,6 +458,7 @@ function DetailDemo({
       >
         <PlaceDetail
           place={place}
+          detail={detalleDemo(place.id)}
           plaza={plaza}
           backLabel={t('place.backToPlaza', { plaza: plaza.name })}
           onBack={() => {}}

@@ -35,6 +35,7 @@ export const GRUPOS: Record<string, Grupo> = {
       'abierto-ahora',
       'calificacion',
       'lugar-borrado',
+      'detalle',
     ],
   },
   interfaz: {

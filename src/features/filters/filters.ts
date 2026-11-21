@@ -1,7 +1,7 @@
 import { estaAbierto } from '../../lib/estado.ts'
 import type { ZonedMoment } from '../../lib/hours.ts'
 import { searchTerms } from '../../lib/text.ts'
-import type { Catalog, Place } from '../../types/domain.ts'
+import type { Catalog, PlaceSummary } from '../../types/domain.ts'
 import { allGiroIds } from '../places/placeIcon.ts'
 import type { SearchIndex } from '../search/searchIndex.ts'
 
@@ -44,7 +44,7 @@ export const EMPTY_FILTERS: Filters = {
  * de la lista se ve menos, pero es igual de cierto: si Castore hace ramen, tiene que salir al
  * filtrar Asiática.
  */
-export function categoriesOf(place: Place, catalog: Catalog): string[] {
+export function categoriesOf(place: PlaceSummary, catalog: Catalog): string[] {
   return [
     ...new Set(
       allGiroIds(place)
@@ -55,7 +55,7 @@ export function categoriesOf(place: Place, catalog: Catalog): string[] {
 }
 
 /** Los sectores en los que aparece un local: los de sus categorías, sin repetir. */
-export function sectorsOf(place: Place, catalog: Catalog): string[] {
+export function sectorsOf(place: PlaceSummary, catalog: Catalog): string[] {
   return [
     ...new Set(
       categoriesOf(place, catalog)
@@ -91,14 +91,14 @@ export function applyFilters(
   filters: Filters,
   favoriteIds: ReadonlySet<string> = new Set(),
   now?: ZonedMoment,
-): Place[] {
+): PlaceSummary[] {
   const ranked = searchIndex.search(filters.query)
   const candidates =
     ranked === null
       ? catalog.places
       : ranked
           .map((id) => catalog.placeById.get(id))
-          .filter((place): place is Place => place !== undefined)
+          .filter((place): place is PlaceSummary => place !== undefined)
 
   const matching = candidates.filter(
     (place) =>
@@ -123,21 +123,24 @@ export function applyFilters(
 }
 
 /** Posición del primer giro del local que cae en esa categoría. */
-function positionOfCategory(place: Place, catalog: Catalog, categoryId: string): number {
+function positionOfCategory(place: PlaceSummary, catalog: Catalog, categoryId: string): number {
   const giros = allGiroIds(place)
   for (const [index, giro] of giros.entries())
     if (catalog.categoryOfGiro.get(giro)?.id === categoryId) return index
   return giros.length
 }
 
-export function countByPlaza(places: readonly Place[]): Map<string, number> {
+export function countByPlaza(places: readonly PlaceSummary[]): Map<string, number> {
   const counts = new Map<string, number>()
   for (const place of places) counts.set(place.plazaId, (counts.get(place.plazaId) ?? 0) + 1)
   return counts
 }
 
 /** Nº de lugares por sector dentro de un conjunto: un local de dos sectores cuenta en los dos. */
-export function countBySector(places: readonly Place[], catalog: Catalog): Map<string, number> {
+export function countBySector(
+  places: readonly PlaceSummary[],
+  catalog: Catalog,
+): Map<string, number> {
   const counts = new Map<string, number>()
   for (const place of places)
     for (const sector of sectorsOf(place, catalog))
@@ -146,7 +149,10 @@ export function countBySector(places: readonly Place[], catalog: Catalog): Map<s
 }
 
 /** Nº de lugares por categoría dentro de un conjunto (para las pastillas de filtro). */
-export function countByCategory(places: readonly Place[], catalog: Catalog): Map<string, number> {
+export function countByCategory(
+  places: readonly PlaceSummary[],
+  catalog: Catalog,
+): Map<string, number> {
   const counts = new Map<string, number>()
   for (const place of places)
     for (const category of categoriesOf(place, catalog))

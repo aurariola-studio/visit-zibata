@@ -9,14 +9,14 @@
  */
 import { useMemo, useRef } from 'react'
 import { estadoDe } from '../../lib/estado.ts'
-import type { Place } from '../../types/domain.ts'
+import type { PlaceSummary } from '../../types/domain.ts'
 import { useZonedNow } from './OpenStatus.tsx'
 import { PlaceCard } from './PlaceCard.tsx'
 import styles from './PlaceList.module.css'
 
 interface PlaceListProps {
-  places: readonly Place[]
-  onOpen: (place: Place) => void
+  places: readonly PlaceSummary[]
+  onOpen: (place: PlaceSummary) => void
   showPlaza?: boolean
   label?: string
   /**
