@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-20",
+  "updatedAt": "2026-11-21",
   "places": [
     {
       "id": "carls-jr",
@@ -381,7 +381,7 @@
       "photos": [],
       "links": {
         "website": null,
-        "instagram": "https://www.instagram.com/origenatural_zibata/",
+        "instagram": "https://www.instagram.com/origenatural.qro/",
         "facebook": "https://www.facebook.com/origenaturalzibata/",
         "tiktok": null,
         "whatsapp": null,
@@ -395,7 +395,7 @@
         "confidence": "medium",
         "lastVerifiedAt": "2026-09-14",
         "sources": [
-          "https://www.instagram.com/origenatural_zibata/",
+          "https://www.instagram.com/origenatural.qro/",
           "https://www.facebook.com/origenaturalzibata/",
           "https://www.tripadvisor.com/Restaurant_Review-g479232-d25335613-Reviews-Origen_Natural_Zibata-Queretaro_City_Central_Mexico_and_Gulf_Coast.html",
           "https://www.rappi.com.mx/restaurantes/1930062980-origenatural",
