@@ -32,6 +32,11 @@
       "kind": "place-slug",
       "id": "smoothie-lab-plaza-luna",
       "slug": "smoothie-lab-plaza-luna"
+    },
+    {
+      "kind": "place-slug",
+      "id": "burger-fries",
+      "slug": "burger-fries"
     }
   ]
 }
