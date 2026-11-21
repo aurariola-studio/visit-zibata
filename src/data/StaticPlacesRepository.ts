@@ -3,13 +3,15 @@
  * (import dinámico, con hash para caché inmutable). El build los valida con Zod; aquí se validan registro a
  * registro sin Zod (`runtimeValidation.ts`): un registro inválido se omite con un aviso en consola.
  */
-import type { Sector } from '../types/domain.ts'
+import type { PlaceDetailData, PlaceSummary, Sector } from '../types/domain.ts'
 import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
+import { joinPlaces } from './placeParts.ts'
 import {
   type RecordIssue,
   readCollection,
   validateCategories,
-  validatePlaces,
+  validatePlaceDetails,
+  validatePlaceSummaries,
   validatePlazas,
   validateRetired,
   validateSectors,
@@ -43,6 +45,8 @@ export class StaticPlacesRepository implements PlacesRepository {
   private sectors?: Promise<Sector[]>
   private plazas?: ReturnType<PlacesRepository['getPlazas']>
   private places?: ReturnType<PlacesRepository['getPlaces']>
+  private summaries?: Promise<PlaceSummary[]>
+  private details?: Promise<PlaceDetailData[]>
   private retired?: Promise<RetiredPlace[]>
 
   getCategories() {
@@ -92,13 +96,52 @@ export class StaticPlacesRepository implements PlacesRepository {
     return this.retired
   }
 
-  getPlaces() {
-    this.places ??= load(
-      'places.json',
+  /**
+   * Lo que pintan las tarjetas, el mapa y los filtros. Un paquete aparte del detalle (ver `placeFields.ts`).
+   * Si la descarga falla, la próxima llamada vuelve a pedirlo en lugar de quedarse con el fallo.
+   */
+  getPlaceSummaries() {
+    this.summaries ??= load(
+      'places-resumen',
       'places',
-      () => import('../../data/commercial/places.json'),
-      validatePlaces,
-    )
+      () => import('virtual:zibata-places-resumen'),
+      validatePlaceSummaries,
+    ).catch((error: unknown) => {
+      this.summaries = undefined
+      throw error
+    })
+    return this.summaries
+  }
+
+  /** Lo que solo lee la ficha y el buscador: descripción, enlaces, teléfono y la ruta a la puerta. */
+  getPlaceDetails() {
+    this.details ??= load(
+      'places-detalle',
+      'places',
+      () => import('virtual:zibata-places-detalle'),
+      validatePlaceDetails,
+    ).catch((error: unknown) => {
+      this.details = undefined
+      throw error
+    })
+    return this.details
+  }
+
+  /**
+   * Los locales enteros: resumen y detalle unidos por `id`. Por ahora la guía espera a los dos; cuando la
+   * ficha pueda pintarse con el resumen solo, el catálogo pasará a leer `getPlaceSummaries()`.
+   */
+  getPlaces() {
+    this.places ??= Promise.all([this.getPlaceSummaries(), this.getPlaceDetails()])
+      .then(([summaries, details]) => {
+        const { places, notes } = joinPlaces(summaries, details)
+        for (const note of notes) console.warn(`[datos] places ${note}`)
+        return places
+      })
+      .catch((error: unknown) => {
+        this.places = undefined
+        throw error
+      })
     return this.places
   }
 }

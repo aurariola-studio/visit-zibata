@@ -6,7 +6,14 @@
  * aviso en consola en lugar de bloquear toda la guía. Las comprobaciones de seguridad (enlaces http(s),
  * teléfonos, rutas de fotos) usan las mismas reglas que los esquemas (`rules.ts`).
  */
-import type { Category, Place, Plaza, Sector } from '../types/domain.ts'
+import type {
+  Category,
+  Place,
+  PlaceDetailData,
+  PlaceSummary,
+  Plaza,
+  Sector,
+} from '../types/domain.ts'
 import {
   DAY_KEYS,
   E164_PATTERN,
@@ -122,7 +129,8 @@ const isGeometry = (value: unknown) =>
 const firstIssue = (checks: (string | null)[]): string | null =>
   checks.find((issue) => issue !== null) ?? null
 
-const checkPlace: Check = (value) => {
+/** Lo del resumen de un local: lo que pintan las tarjetas, el mapa y los filtros (ver `placeFields.ts`). */
+const checkPlaceSummary: Check = (value) => {
   if (!isObject(value)) return 'no es un objeto'
   return firstIssue([
     field(value, 'id', isSlug, 'identificador no válido'),
@@ -135,9 +143,19 @@ const checkPlace: Check = (value) => {
       (list) => Array.isArray(list) && list.length > 0 && list.length <= 3 && list.every(isSlug),
       'giros no válidos (de uno a tres)',
     ),
-    field(value, 'description', nullable(isLocalizedText), 'descripción no válida'),
     field(value, 'hours', nullable(isHours), 'horario no válido'),
     field(value, 'location', nullable(isLatLng), 'coordenadas no válidas'),
+    field(value, 'photos', arrayOf(isPhoto), 'fotografía no válida'),
+    field(value, 'active', (active) => typeof active === 'boolean', 'active debe ser booleano'),
+  ])
+}
+
+/** Lo del detalle: lo que solo lee la ficha y el buscador. Se une al resumen por `id`. */
+const checkPlaceDetail: Check = (value) => {
+  if (!isObject(value)) return 'no es un objeto'
+  return firstIssue([
+    field(value, 'id', isSlug, 'identificador no válido'),
+    field(value, 'description', nullable(isLocalizedText), 'descripción no válida'),
     field(
       value,
       'googleMapsUri',
@@ -151,11 +169,11 @@ const checkPlace: Check = (value) => {
       'identificador de Google Place no válido',
     ),
     field(value, 'phone', nullable(isPhone), 'teléfono no válido'),
-    field(value, 'photos', arrayOf(isPhoto), 'fotografía no válida'),
     field(value, 'links', isLinks, 'enlace no válido'),
-    field(value, 'active', (active) => typeof active === 'boolean', 'active debe ser booleano'),
   ])
 }
+
+const checkPlace: Check = (value) => checkPlaceSummary(value) ?? checkPlaceDetail(value)
 
 const checkPlaza: Check = (value) => {
   if (!isObject(value)) return 'no es un objeto'
@@ -266,6 +284,11 @@ export const validateCategories = (records: unknown[]) =>
   keepValid<Category>(records, 'categories', checkCategory)
 export const validatePlazas = (records: unknown[]) =>
   keepValid<Plaza>(records, 'plazas', checkPlaza)
+export const validatePlaceSummaries = (records: unknown[]) =>
+  keepValid<PlaceSummary>(records, 'places', checkPlaceSummary)
+export const validatePlaceDetails = (records: unknown[]) =>
+  keepValid<PlaceDetailData>(records, 'places', checkPlaceDetail)
+/** El local entero, de una vez: lo usan las pruebas, que parten de un local completo. */
 export const validatePlaces = (records: unknown[]) =>
   keepValid<Place>(records, 'places', checkPlace)
 
