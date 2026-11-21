@@ -18,7 +18,13 @@ import {
  */
 const DETALLE = /\/assets\/places-detalle-[\w-]+\.js$/
 
-/** Retiene el paquete del detalle hasta que la prueba lo suelte. */
+/**
+ * Retiene el paquete del detalle hasta que la prueba lo suelte.
+ *
+ * Quien lo usa abre la guía con `waitUntil: 'commit'`: con una petición retenida, esperar al evento `load` ata la
+ * prueba a si el navegador cuenta esa petición como parte de la carga. En WebKit, en un corredor lento, `page.goto`
+ * llegó a agotar sus 90 s por eso (no se reprodujo en local). Las expectativas que siguen esperan por su cuenta.
+ */
 async function retenerDetalle(page: Page): Promise<() => void> {
   let soltar: () => void = () => {}
   const puerta = new Promise<void>((resolve) => {
@@ -38,7 +44,7 @@ test.describe('El detalle de los locales llega aparte', () => {
     page,
   }) => {
     const soltar = await retenerDetalle(page)
-    await openApp(page, { path: `lugar/${LOCAL_COMPLETO.slug}` })
+    await openApp(page, { path: `lugar/${LOCAL_COMPLETO.slug}`, waitUntil: 'commit' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: LOCAL_COMPLETO.name })).toBeVisible()
 
@@ -66,7 +72,7 @@ test.describe('El detalle de los locales llega aparte', () => {
   test('las tarjetas, las zonas y la ficha se usan sin esperar al detalle', async ({ page }) => {
     const soltar = await retenerDetalle(page)
     const zona = plazaDe(LOCAL_COMPLETO)
-    await openApp(page, { path: `zona/${zona.slug}` })
+    await openApp(page, { path: `zona/${zona.slug}`, waitUntil: 'commit' })
     const region = panel(page)
     await expect(region.getByRole('heading', { level: 2, name: zona.name })).toBeVisible()
     // La tarjeta sale del resumen: con el detalle retenido ya está en la lista y se puede abrir.
@@ -100,7 +106,7 @@ test.describe('El detalle de los locales llega aparte', () => {
     if (!elegido) return
 
     const soltar = await retenerDetalle(page)
-    await openApp(page)
+    await openApp(page, { waitUntil: 'commit' })
     const buscador = page.getByRole('searchbox', { name: 'Buscar lugares' })
     const region = panel(page)
     const ficha = region.getByRole('link', { name: `Ver detalles de ${elegido.place.name}` })

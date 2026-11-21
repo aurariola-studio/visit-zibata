@@ -639,11 +639,18 @@ export function rutaConIdioma(path: string): string {
  * `path` va relativo a la base (`zona/condesa`, no `/zona/condesa`), que es lo que hace que la
  * suite valga igual publicada en la raíz que en un subdirectorio.
  */
-export async function openApp(page: Page, { path = '', onboarding = false } = {}): Promise<void> {
+export async function openApp(
+  page: Page,
+  {
+    path = '',
+    onboarding = false,
+    waitUntil = 'load',
+  }: { path?: string; onboarding?: boolean; waitUntil?: 'load' | 'commit' } = {},
+): Promise<void> {
   if (!onboarding) {
     await page.addInitScript(() => window.localStorage.setItem('zibata:onboarding-visto', '1'))
   }
-  await page.goto(`./${rutaConIdioma(path)}`)
+  await page.goto(`./${rutaConIdioma(path)}`, { waitUntil })
 }
 
 /** Espera a que el mapa haya cargado (los marcadores de plazas solo aparecen con el mapa listo). */
