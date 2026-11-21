@@ -136,9 +136,10 @@ const BUDGET = {
   mapCss: 15,
   // Los datos de arranque: categorías, plazas y el RESUMEN de los locales (ver `src/data/placeFields.ts`). Era
   // 50 con 49,8 medidos y sin margen; partido el paquete por campo quedan unos 23 de 30 (2026-11-20, decisión
-  // del propietario). Ojo: esto mide archivos, no cuándo se piden. Hasta que el catálogo lea solo el resumen
-  // (fase 3 de `docs/PLAN-PARTIR-DATOS.md`) la guía sigue bajando también el detalle al arrancar, así que la
-  // ganancia en la primera carga todavía no existe aunque el número ya la muestre.
+  // del propietario). Ojo: esto mide archivos, no cuándo se piden. El catálogo se construye solo con el resumen y
+  // el detalle se pide después, en reposo o cuando algo lo necesita (fases 3 y 4 de `docs/PLAN-PARTIR-DATOS.md`),
+  // de modo que este tope sí es lo que pesa el arranque de datos. Medido el 2026-11-21 contra la versión de un
+  // solo paquete: de 47 a 22 KB de datos antes de poder usar la guía.
   dataJs: 30,
   // El DETALLE de los locales (descripción, enlaces, teléfono, ruta a la puerta): lo que solo lee la ficha y el
   // buscador. Hoy unos 28 de 45; cada local suma unos 0,16 KB, así que da para unos cien más antes de tener
