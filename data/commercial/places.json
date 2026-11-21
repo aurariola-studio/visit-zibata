@@ -1186,7 +1186,7 @@
     },
     {
       "id": "sinforosa",
-      "slug": "sinforosa",
+      "slug": "sinforosa-paseo-zibata",
       "name": "Sinforosa Café",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -1588,7 +1588,7 @@
     },
     {
       "id": "luka-pokes",
-      "slug": "luka-pokes",
+      "slug": "luka-paseo-zibata",
       "name": "Luka",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -1968,7 +1968,7 @@
     },
     {
       "id": "la-michoacana",
-      "slug": "la-michoacana",
+      "slug": "la-michoacana-paseo-zibata",
       "name": "La Michoacana",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -8199,7 +8199,7 @@
     },
     {
       "id": "farmacias-similares",
-      "slug": "farmacias-similares",
+      "slug": "farmacias-similares-paseo-zibata",
       "name": "Farmacias Similares",
       "plazaId": "paseo-zibata",
       "giros": [

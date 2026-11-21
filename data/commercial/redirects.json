@@ -127,6 +127,26 @@
       "kind": "place-slug",
       "id": "hoyo-19",
       "slug": "hoyo-19"
+    },
+    {
+      "kind": "place-slug",
+      "id": "sinforosa",
+      "slug": "sinforosa"
+    },
+    {
+      "kind": "place-slug",
+      "id": "luka-pokes",
+      "slug": "luka-pokes"
+    },
+    {
+      "kind": "place-slug",
+      "id": "la-michoacana",
+      "slug": "la-michoacana"
+    },
+    {
+      "kind": "place-slug",
+      "id": "farmacias-similares",
+      "slug": "farmacias-similares"
     }
   ]
 }

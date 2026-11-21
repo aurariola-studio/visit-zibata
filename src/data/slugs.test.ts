@@ -52,6 +52,25 @@ describe('direcciones de los locales', () => {
     ).toEqual([])
   })
 
+  it('si un negocio tiene varias sucursales, todas llevan la zona en su dirección (ninguna es la "limpia")', () => {
+    // La zona de la Universidad Anáhuac se abrevia `-anahuac`; las demás van con su id.
+    const sufijoDeZona = (plazaId: string) =>
+      plazaId === 'anahuac-queretaro' ? 'anahuac' : plazaId
+    const porNombre = new Map<string, typeof lugares>()
+    for (const lugar of lugares) {
+      const clave = palabras(lugar.name).join(' ')
+      porNombre.set(clave, [...(porNombre.get(clave) ?? []), lugar])
+    }
+    const sinZona = [...porNombre.values()]
+      .filter((grupo) => grupo.length > 1)
+      .flat()
+      .filter((lugar) => !lugar.slug.endsWith(`-${sufijoDeZona(lugar.plazaId)}`))
+    expect(
+      sinZona.map((lugar) => lugar.slug),
+      'Con varias sucursales todas llevan el sufijo de su zona: cambia la dirección de la que no lo lleva (slug nuevo y fila place-slug)',
+    ).toEqual([])
+  })
+
   it('cada dirección antigua de redirects.json apunta a un local que existe', () => {
     const ids = new Set(lugares.map((lugar) => lugar.id))
     const colgadas = redirectsJson.redirects
