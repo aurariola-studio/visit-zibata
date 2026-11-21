@@ -138,3 +138,87 @@ test.describe('El detalle de los locales llega aparte', () => {
     expect(pedidos).toBeGreaterThanOrEqual(2)
   })
 })
+
+/**
+ * Cuándo se pide el paquete del detalle. Se deja para el reposo del navegador, tras pintar la guía, para no competir
+ * con el mapa por la red; si algo lo necesita antes (una ficha, el buscador), se pide al instante.
+ */
+test.describe('El detalle de los locales se pide en reposo', () => {
+  /** Cuenta las peticiones del paquete del detalle. */
+  async function contarPedidos(page: Page): Promise<() => number> {
+    let pedidos = 0
+    await page.route(DETALLE, async (route) => {
+      pedidos += 1
+      await route.continue()
+    })
+    return () => pedidos
+  }
+
+  /** Un navegador que nunca encuentra un respiro: solo lo que necesita el detalle puede pedirlo. */
+  const sinReposo = () =>
+    Object.assign(window, { requestIdleCallback: () => 0, cancelIdleCallback: () => {} })
+
+  test('no se pide mientras nada lo necesite, y enfocar el buscador lo pide al instante', async ({
+    page,
+  }) => {
+    await page.addInitScript(sinReposo)
+    const pedidos = await contarPedidos(page)
+    await openApp(page)
+    const buscador = page.getByRole('searchbox', { name: 'Buscar lugares' })
+    await expect(buscador).toBeEnabled()
+    await page.waitForTimeout(2500)
+    expect(pedidos()).toBe(0)
+
+    await buscador.focus()
+    await expect.poll(pedidos).toBe(1)
+  })
+
+  test('abrir una ficha desde la lista lo pide al instante', async ({ page }) => {
+    await page.addInitScript(sinReposo)
+    const pedidos = await contarPedidos(page)
+    const zona = plazaDe(LOCAL_COMPLETO)
+    await openApp(page, { path: `zona/${zona.slug}` })
+    const region = panel(page)
+    await expect(region.getByRole('heading', { level: 2, name: zona.name })).toBeVisible()
+    await page.waitForTimeout(1500)
+    expect(pedidos()).toBe(0)
+
+    await region.getByRole('link', { name: `Ver detalles de ${LOCAL_COMPLETO.name}` }).click()
+    await expect.poll(pedidos).toBe(1)
+    await expect(region.getByRole('link', { name: /Cómo llegar/ })).toBeVisible()
+  })
+
+  test('entrar por una ficha lo pide a la vez que el resumen', async ({ page }) => {
+    await page.addInitScript(sinReposo)
+    const pedidos = await contarPedidos(page)
+    await openApp(page, { path: `lugar/${LOCAL_COMPLETO.slug}` })
+    await expect(panel(page).getByRole('link', { name: /Cómo llegar/ })).toBeVisible()
+    expect(pedidos()).toBe(1)
+  })
+
+  test('si nadie lo necesita, llega solo cuando el navegador queda libre', async ({ page }) => {
+    const pedidos = await contarPedidos(page)
+    await openApp(page)
+    await expect(page.getByRole('searchbox', { name: 'Buscar lugares' })).toBeEnabled()
+    await expect.poll(pedidos, { timeout: 15_000 }).toBe(1)
+  })
+
+  test('con el ahorro de datos activado no se pide solo, pero sí al abrir una ficha', async ({
+    page,
+  }) => {
+    await page.addInitScript(() =>
+      Object.defineProperty(navigator, 'connection', { value: { saveData: true } }),
+    )
+    const pedidos = await contarPedidos(page)
+    const zona = plazaDe(LOCAL_COMPLETO)
+    await openApp(page, { path: `zona/${zona.slug}` })
+    const region = panel(page)
+    await expect(region.getByRole('heading', { level: 2, name: zona.name })).toBeVisible()
+    // Más que el tope de espera del reposo (4 s): si se pidiera por su cuenta, ya habría salido.
+    await page.waitForTimeout(5500)
+    expect(pedidos()).toBe(0)
+
+    await region.getByRole('link', { name: `Ver detalles de ${LOCAL_COMPLETO.name}` }).click()
+    await expect.poll(pedidos).toBe(1)
+  })
+})

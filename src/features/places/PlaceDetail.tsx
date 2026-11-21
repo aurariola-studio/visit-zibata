@@ -190,6 +190,11 @@ export function PlaceDetail({
    * esqueleto lo que falta; si el detalle ya llegó pero este lugar no trae registro (porque no pasó la
    * validación), la ficha se queda con el resumen y no espera nada.
    */
+  // Si el detalle todavía no se pidió (la guía lo deja para el reposo), abrir una ficha lo pide ya.
+  const { ensure: pedirDetalle } = detalles
+  useEffect(() => {
+    if (!detail) pedirDetalle()
+  }, [detail, pedirDetalle])
   const estado =
     detail || detalles.status === 'ready'
       ? 'listo'
@@ -499,7 +504,7 @@ export function PlaceDetail({
       {estado === 'error' && (
         <div className={styles.detalleError} role="alert">
           <p>{t('place.detailsError')}</p>
-          <button type="button" className={styles.reintentar} onClick={detalles.retry}>
+          <button type="button" className={styles.reintentar} onClick={detalles.load}>
             {t('data.retry')}
           </button>
         </div>
