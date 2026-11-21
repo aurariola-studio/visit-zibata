@@ -1,74 +1,94 @@
 import { describe, expect, it } from 'vitest'
 import lugaresJson from '../../data/commercial/places.json' with { type: 'json' }
-import plazasJson from '../../data/commercial/plazas.json' with { type: 'json' }
 import redirectsJson from '../../data/commercial/redirects.json' with { type: 'json' }
 
 /**
- * La convención de las direcciones de los locales (docs/DATOS.md): una sola sucursal lleva el nombre limpio, y la zona
- * va como sufijo solo cuando hay otra sucursal. Esta prueba existe porque la primera investigación pegó la zona o la
- * ciudad a muchos slugs que no la necesitaban (`wake-cup-xentric-anahuac`, `burgerthoven-zibata`), y se limpiaron a
- * mano en dos tandas: sin una prueba, el siguiente local nuevo con ese sufijo se colaría sin que nadie lo viera.
+ * La dirección de un local sigue al nombre completo que el negocio se da (docs/DATOS.md):
  *
- * Recorre los datos reales y no nombra ningún negocio.
+ *  - el nombre sin acentos ni apóstrofos y sin "y" ni "and": "Romani Pizzas y Ensaladas" es `romani-pizzas-ensaladas`;
+ *  - "Zibatá" no va en el link, y se va con la zona que lo precede ("Paseo", "Centro", "Xentric"): "Ramen Express Paseo
+ *    Zibatá" es `ramen-express`;
+ *  - con varias sucursales, todas llevan el sufijo de su zona (`sinforosa-cafe-paseo-zibata` y `sinforosa-cafe-anahuac`).
+ *
+ * La primera investigación había pegado la zona o la ciudad a muchos slugs que no la necesitaban, y había quitado el descriptor
+ * a otros (`rometta` para "Rometta Gastrobar"). Se corrigieron a mano en tres tandas: sin esta prueba, el siguiente local nuevo
+ * con una dirección que no sigue la regla se colaría sin que nadie lo viera.
+ *
+ * Recorre los datos reales y no nombra ningún negocio, salvo en las excepciones, que son datos.
  */
 const lugares = lugaresJson.places
-const zonas = plazasJson.plazas.map((plaza) => plaza.id)
+
+/** El nombre lleva un signo que es parte de su logotipo, no una separación de palabras: se declara aquí y se explica. */
+const EXCEPCIONES: Record<string, string> = {
+  // "E|B": la barra es del logotipo; `e-b-salon` se leería como tres palabras.
+  'eb-salon': 'eb-salon',
+}
+
+const CONECTORES = new Set(['y', 'and'])
+const ZONAS_DEL_NOMBRE = new Set(['paseo', 'centro', 'xentric'])
 
 const sinAcentos = (texto: string) =>
   texto
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase()
-const palabras = (texto: string) =>
-  sinAcentos(texto)
+
+/** La base de la dirección: el nombre completo, sin acentos, apóstrofos, conectores ni la ubicación "Zibatá". */
+function baseDe(nombre: string): string {
+  let palabras = sinAcentos(nombre)
+    .replace(/['’`]/g, '')
     .split(/[^a-z0-9]+/)
     .filter(Boolean)
+  const i = palabras.indexOf('zibata')
+  if (i >= 0) {
+    const desde = i > 0 && ZONAS_DEL_NOMBRE.has(palabras[i - 1] ?? '') ? i - 1 : i
+    palabras = [...palabras.slice(0, desde), ...palabras.slice(i + 1)]
+  }
+  return palabras.filter((palabra) => !CONECTORES.has(palabra)).join('-')
+}
 
-/** El sufijo de ubicación de un slug, si lo lleva: la ciudad, la zona abreviada o el id de una zona. */
-const SUFIJO = new RegExp(`-(${['zibata', 'anahuac', 'queretaro', ...zonas].join('|')})$`)
+/** La zona de la Universidad Anáhuac se abrevia `-anahuac`; las demás van con su id. */
+const sufijoDeZona = (plazaId: string) => (plazaId === 'anahuac-queretaro' ? 'anahuac' : plazaId)
+
+const sucursalesPorBase = new Map<string, number>()
+for (const lugar of lugares) {
+  const base = baseDe(lugar.name)
+  sucursalesPorBase.set(base, (sucursalesPorBase.get(base) ?? 0) + 1)
+}
+
+const esperada = (lugar: (typeof lugares)[number]): string => {
+  const excepcion = EXCEPCIONES[lugar.slug]
+  if (excepcion) return excepcion
+  const base = baseDe(lugar.name)
+  return (sucursalesPorBase.get(base) ?? 0) > 1 ? `${base}-${sufijoDeZona(lugar.plazaId)}` : base
+}
 
 describe('direcciones de los locales', () => {
-  it('un local de una sola sucursal no lleva la zona o la ciudad pegada a su dirección', () => {
-    const sobrantes = lugares.filter((lugar) => {
-      const sufijo = SUFIJO.exec(lugar.slug)?.[1]
-      if (!sufijo) return false
-      // El nombre del propio negocio ya lleva la ubicación ("... Zibatá", "... Centro Zibatá"): la dirección le sigue.
-      const delNombre = new Set(palabras(lugar.name))
-      if (sufijo.split('-').every((parte) => delNombre.has(parte))) return false
-      // Hay otra sucursal con el mismo nombre o con la misma base: el sufijo es lo que las distingue.
-      const base = lugar.slug.replace(SUFIJO, '')
-      const hermana = lugares.some(
-        (otro) =>
-          otro.id !== lugar.id &&
-          (otro.slug === base ||
-            otro.slug.startsWith(`${base}-`) ||
-            palabras(otro.name).join(' ') === palabras(lugar.name).join(' ')),
-      )
-      return !hermana
-    })
+  it('la dirección de cada local sigue al nombre que el negocio se da', () => {
+    const desviados = lugares
+      .filter((lugar) => lugar.slug !== esperada(lugar))
+      .map((lugar) => `${lugar.slug} (debería ser ${esperada(lugar)})`)
     expect(
-      sobrantes.map((lugar) => lugar.slug),
-      'Quita el sufijo con el cambio de dirección (slug nuevo y fila place-slug en redirects.json); el id no cambia',
+      desviados,
+      'Cambia la dirección del local (slug nuevo y fila place-slug en redirects.json, el id no cambia) o, si el nombre lleva un signo de logotipo, declara la excepción',
     ).toEqual([])
   })
 
-  it('si un negocio tiene varias sucursales, todas llevan la zona en su dirección (ninguna es la "limpia")', () => {
-    // La zona de la Universidad Anáhuac se abrevia `-anahuac`; las demás van con su id.
-    const sufijoDeZona = (plazaId: string) =>
-      plazaId === 'anahuac-queretaro' ? 'anahuac' : plazaId
-    const porNombre = new Map<string, typeof lugares>()
-    for (const lugar of lugares) {
-      const clave = palabras(lugar.name).join(' ')
-      porNombre.set(clave, [...(porNombre.get(clave) ?? []), lugar])
+  it('las excepciones se aplican a un local que existe y de verdad se apartan de la regla', () => {
+    for (const [slug, esperado] of Object.entries(EXCEPCIONES)) {
+      const lugar = lugares.find((otro) => otro.slug === slug)
+      expect(lugar, `la excepción ${slug} no corresponde a ningún local`).toBeDefined()
+      if (!lugar) continue
+      const base = baseDe(lugar.name)
+      const reglaSola =
+        (sucursalesPorBase.get(base) ?? 0) > 1 ? `${base}-${sufijoDeZona(lugar.plazaId)}` : base
+      expect(reglaSola, `la excepción ${slug} ya la daría la regla: sobra`).not.toBe(esperado)
     }
-    const sinZona = [...porNombre.values()]
-      .filter((grupo) => grupo.length > 1)
-      .flat()
-      .filter((lugar) => !lugar.slug.endsWith(`-${sufijoDeZona(lugar.plazaId)}`))
-    expect(
-      sinZona.map((lugar) => lugar.slug),
-      'Con varias sucursales todas llevan el sufijo de su zona: cambia la dirección de la que no lo lleva (slug nuevo y fila place-slug)',
-    ).toEqual([])
+  })
+
+  it('una dirección de local no se repite', () => {
+    const slugs = lugares.map((lugar) => lugar.slug)
+    expect(slugs.filter((slug, i) => slugs.indexOf(slug) !== i)).toEqual([])
   })
 
   it('cada dirección antigua de redirects.json apunta a un local que existe', () => {

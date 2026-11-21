@@ -147,6 +147,231 @@
       "kind": "place-slug",
       "id": "farmacias-similares",
       "slug": "farmacias-similares"
+    },
+    {
+      "kind": "place-slug",
+      "id": "boba-station",
+      "slug": "boba-station"
+    },
+    {
+      "kind": "place-slug",
+      "id": "rometta",
+      "slug": "rometta"
+    },
+    {
+      "kind": "place-slug",
+      "id": "la-880",
+      "slug": "la-880"
+    },
+    {
+      "kind": "place-slug",
+      "id": "lion-reef",
+      "slug": "lion-reef"
+    },
+    {
+      "kind": "place-slug",
+      "id": "tacos-los-tarascos",
+      "slug": "tacos-los-tarascos"
+    },
+    {
+      "kind": "place-slug",
+      "id": "sinforosa",
+      "slug": "sinforosa-paseo-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "sylvius",
+      "slug": "sylvius"
+    },
+    {
+      "kind": "place-slug",
+      "id": "currucucu",
+      "slug": "currucucu"
+    },
+    {
+      "kind": "place-slug",
+      "id": "masaru",
+      "slug": "masaru"
+    },
+    {
+      "kind": "place-slug",
+      "id": "tomassa",
+      "slug": "tomassa"
+    },
+    {
+      "kind": "place-slug",
+      "id": "al-grano",
+      "slug": "al-grano"
+    },
+    {
+      "kind": "place-slug",
+      "id": "nam-nam",
+      "slug": "nam-nam"
+    },
+    {
+      "kind": "place-slug",
+      "id": "carly-tacos-de-pescado",
+      "slug": "carly-tacos-de-pescado"
+    },
+    {
+      "kind": "place-slug",
+      "id": "arepanas",
+      "slug": "arepanas"
+    },
+    {
+      "kind": "place-slug",
+      "id": "romani-pizzas",
+      "slug": "romani-pizzas"
+    },
+    {
+      "kind": "place-slug",
+      "id": "casa-vieja",
+      "slug": "casa-vieja"
+    },
+    {
+      "kind": "place-slug",
+      "id": "bocuze",
+      "slug": "bocuze"
+    },
+    {
+      "kind": "place-slug",
+      "id": "honu-sushi",
+      "slug": "honu-sushi"
+    },
+    {
+      "kind": "place-slug",
+      "id": "la-marmota",
+      "slug": "la-marmota"
+    },
+    {
+      "kind": "place-slug",
+      "id": "margaritas",
+      "slug": "margaritas"
+    },
+    {
+      "kind": "place-slug",
+      "id": "santa-clara",
+      "slug": "santa-clara"
+    },
+    {
+      "kind": "place-slug",
+      "id": "escarola",
+      "slug": "escarola"
+    },
+    {
+      "kind": "place-slug",
+      "id": "hoyo-19",
+      "slug": "diezynueve"
+    },
+    {
+      "kind": "place-slug",
+      "id": "pio-poke-house",
+      "slug": "pio-poke-house"
+    },
+    {
+      "kind": "place-slug",
+      "id": "tortas-la-guera-anahuac",
+      "slug": "tortas-la-guera"
+    },
+    {
+      "kind": "place-slug",
+      "id": "oakberry-xentric-anahuac",
+      "slug": "oakberry"
+    },
+    {
+      "kind": "place-slug",
+      "id": "castore-mx-zibata",
+      "slug": "castore-mx"
+    },
+    {
+      "kind": "place-slug",
+      "id": "wake-cup-xentric-anahuac",
+      "slug": "wake-cup"
+    },
+    {
+      "kind": "place-slug",
+      "id": "sazon-de-nassar",
+      "slug": "sazon-de-nassar"
+    },
+    {
+      "kind": "place-slug",
+      "id": "sinforosa-anahuac",
+      "slug": "sinforosa-anahuac"
+    },
+    {
+      "kind": "place-slug",
+      "id": "anytime-fitness-zibata",
+      "slug": "anytime-fitness-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "evogym-zibata",
+      "slug": "evogym-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "black-box-zibata",
+      "slug": "black-box-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "laboratorio-del-chopo",
+      "slug": "laboratorio-del-chopo"
+    },
+    {
+      "kind": "place-slug",
+      "id": "saiens-zibata",
+      "slug": "saiens-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "antojeria-de-la-tia",
+      "slug": "antojeria-de-la-tia"
+    },
+    {
+      "kind": "place-slug",
+      "id": "ramen-express-paseo-zibata",
+      "slug": "ramen-express-paseo-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "trompochtitlan-zibata",
+      "slug": "trompochtitlan-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "barberia-club-1978-zibata",
+      "slug": "barberia-club-1978-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "beoxy-zibata",
+      "slug": "beoxy-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "el-patron-barberia-y-tonicos",
+      "slug": "el-patron-barberia-y-tonicos"
+    },
+    {
+      "kind": "place-slug",
+      "id": "haut-zibata",
+      "slug": "haut-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "rene-marquez-studio-zibata",
+      "slug": "rene-marquez-studio-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "studio-blaze-zibata",
+      "slug": "studio-blaze-zibata"
+    },
+    {
+      "kind": "place-slug",
+      "id": "vanille-spa-and-nails",
+      "slug": "vanille-spa-and-nails"
     }
   ]
 }

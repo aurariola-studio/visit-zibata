@@ -270,7 +270,7 @@
     },
     {
       "id": "boba-station",
-      "slug": "boba-station",
+      "slug": "boba-station-tapioca-bar",
       "name": "Boba Station Tapioca Bar",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -606,7 +606,7 @@
     },
     {
       "id": "rometta",
-      "slug": "rometta",
+      "slug": "rometta-gastrobar",
       "name": "Rometta Gastrobar",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -742,7 +742,7 @@
     },
     {
       "id": "la-880",
-      "slug": "la-880",
+      "slug": "la-880-alitas-pisto",
       "name": "La 880 Alitas y Pisto",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -809,7 +809,7 @@
     },
     {
       "id": "lion-reef",
-      "slug": "lion-reef",
+      "slug": "lion-reef-sea-bar",
       "name": "Lion Reef Sea & Bar",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -1003,7 +1003,7 @@
     },
     {
       "id": "tacos-los-tarascos",
-      "slug": "tacos-los-tarascos",
+      "slug": "los-tarascos-taqueria",
       "name": "Los Tarascos Taquería",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -1186,7 +1186,7 @@
     },
     {
       "id": "sinforosa",
-      "slug": "sinforosa-paseo-zibata",
+      "slug": "sinforosa-cafe-paseo-zibata",
       "name": "Sinforosa Café",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -1457,7 +1457,7 @@
     },
     {
       "id": "sylvius",
-      "slug": "sylvius",
+      "slug": "sylvius-cocktail-cocina",
       "name": "Sylvius Cocktail & Cocina",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -1519,7 +1519,7 @@
     },
     {
       "id": "currucucu",
-      "slug": "currucucu",
+      "slug": "currucucu-cocina-artesanal-mexicana",
       "name": "Currucucú Cocina Artesanal Mexicana",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -1835,7 +1835,7 @@
     },
     {
       "id": "masaru",
-      "slug": "masaru",
+      "slug": "masaru-sushi-beer",
       "name": "Masaru Sushi & Beer",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -1902,7 +1902,7 @@
     },
     {
       "id": "tomassa",
-      "slug": "tomassa",
+      "slug": "tomassa-almacen-de-pastas",
       "name": "Tomassa Almacén de Pastas",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -2010,7 +2010,7 @@
     },
     {
       "id": "al-grano",
-      "slug": "al-grano",
+      "slug": "al-grano-maiz-snacks",
       "name": "Al Grano Maíz & Snacks",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -2412,7 +2412,7 @@
     },
     {
       "id": "nam-nam",
-      "slug": "nam-nam",
+      "slug": "nam-nam-sushi",
       "name": "Ñam Ñam Sushi",
       "plazaId": "condesa",
       "giros": [
@@ -2477,7 +2477,7 @@
     },
     {
       "id": "carly-tacos-de-pescado",
-      "slug": "carly-tacos-de-pescado",
+      "slug": "tacos-carly",
       "name": "Tacos Carly",
       "plazaId": "condesa",
       "giros": [
@@ -2545,7 +2545,7 @@
     },
     {
       "id": "arepanas",
-      "slug": "arepanas",
+      "slug": "arepanas-mx",
       "name": "Arepanas Mx",
       "plazaId": "condesa",
       "giros": [
@@ -2609,7 +2609,7 @@
     },
     {
       "id": "romani-pizzas",
-      "slug": "romani-pizzas",
+      "slug": "romani-pizzas-ensaladas",
       "name": "Romani Pizzas y Ensaladas",
       "plazaId": "condesa",
       "giros": [
@@ -2676,7 +2676,7 @@
     },
     {
       "id": "casa-vieja",
-      "slug": "casa-vieja",
+      "slug": "taqueria-casa-vieja",
       "name": "Taquería Casa Vieja",
       "plazaId": "condesa",
       "giros": [
@@ -2873,7 +2873,7 @@
     },
     {
       "id": "bocuze",
-      "slug": "bocuze",
+      "slug": "bocuze-bistro-cafe",
       "name": "Bocuze Bistró Café",
       "plazaId": "xentric-zibata",
       "giros": [
@@ -3009,7 +3009,7 @@
     },
     {
       "id": "honu-sushi",
-      "slug": "honu-sushi",
+      "slug": "honu-sushi-oriental",
       "name": "Honu Sushi & Oriental",
       "plazaId": "xentric-zibata",
       "giros": [
@@ -3079,7 +3079,7 @@
     },
     {
       "id": "la-marmota",
-      "slug": "la-marmota",
+      "slug": "la-marmota-wings-beer",
       "name": "La Marmota Wings and Beer",
       "plazaId": "xentric-zibata",
       "giros": [
@@ -3348,7 +3348,7 @@
     },
     {
       "id": "margaritas",
-      "slug": "margaritas",
+      "slug": "bistro-margaritas-by-kaos",
       "name": "Bistró Margaritas by Kaos",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -3417,7 +3417,7 @@
     },
     {
       "id": "santa-clara",
-      "slug": "santa-clara",
+      "slug": "helados-santa-clara",
       "name": "Helados Santa Clara",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -3617,7 +3617,7 @@
     },
     {
       "id": "escarola",
-      "slug": "escarola",
+      "slug": "escarola-food-health",
       "name": "Escarola Food & Health",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -3817,7 +3817,7 @@
     },
     {
       "id": "hoyo-19",
-      "slug": "diezynueve",
+      "slug": "diezynueve-golf-bar",
       "name": "DiezyNueve Golf Bar",
       "plazaId": "campo-de-golf",
       "giros": [
@@ -3952,7 +3952,7 @@
     },
     {
       "id": "pio-poke-house",
-      "slug": "pio-poke-house",
+      "slug": "pio-poke-house-rolls",
       "name": "Pio Poke House & Rolls",
       "plazaId": "centro-zibata",
       "giros": [
@@ -4710,7 +4710,7 @@
     },
     {
       "id": "tortas-la-guera-anahuac",
-      "slug": "tortas-la-guera",
+      "slug": "tortas-la-guera-queretana",
       "name": "Tortas La Güera Queretana",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -4967,7 +4967,7 @@
     },
     {
       "id": "oakberry-xentric-anahuac",
-      "slug": "oakberry",
+      "slug": "oakberry-acai-bowls",
       "name": "OAKBERRY Açaí Bowls",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5167,7 +5167,7 @@
     },
     {
       "id": "castore-mx-zibata",
-      "slug": "castore-mx",
+      "slug": "castore-mx-game-snack",
       "name": "Castore MX Game & Snack",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5357,7 +5357,7 @@
     },
     {
       "id": "wake-cup-xentric-anahuac",
-      "slug": "wake-cup",
+      "slug": "wake-cup-panaderia-cafeteria",
       "name": "Wake Cup Panadería y Cafetería",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -5544,7 +5544,7 @@
     },
     {
       "id": "sazon-de-nassar",
-      "slug": "sazon-de-nassar",
+      "slug": "el-sazon-de-nassar",
       "name": "El Sazón de Nassar",
       "plazaId": "xentric-zibata",
       "giros": [
@@ -6149,7 +6149,7 @@
     },
     {
       "id": "sinforosa-anahuac",
-      "slug": "sinforosa-anahuac",
+      "slug": "sinforosa-cafe-anahuac",
       "name": "Sinforosa Café",
       "plazaId": "anahuac-queretaro",
       "giros": [
@@ -6484,7 +6484,7 @@
     },
     {
       "id": "anytime-fitness-zibata",
-      "slug": "anytime-fitness-zibata",
+      "slug": "anytime-fitness",
       "name": "Anytime Fitness Zibatá",
       "plazaId": "xentric-zibata",
       "giros": [
@@ -6549,7 +6549,7 @@
     },
     {
       "id": "evogym-zibata",
-      "slug": "evogym-zibata",
+      "slug": "evogym",
       "name": "EVOGYM Zibatá",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -7657,7 +7657,7 @@
     },
     {
       "id": "black-box-zibata",
-      "slug": "black-box-zibata",
+      "slug": "black-box",
       "name": "Black Box Zibatá",
       "plazaId": "mol-jamadi",
       "giros": [
@@ -8465,7 +8465,7 @@
     },
     {
       "id": "laboratorio-del-chopo",
-      "slug": "laboratorio-del-chopo",
+      "slug": "laboratorio-medico-del-chopo",
       "name": "Laboratorio Médico del Chopo",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -8738,7 +8738,7 @@
     },
     {
       "id": "saiens-zibata",
-      "slug": "saiens-zibata",
+      "slug": "saiens",
       "name": "SAIENS Zibatá",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -9001,7 +9001,7 @@
     },
     {
       "id": "antojeria-de-la-tia",
-      "slug": "antojeria-de-la-tia",
+      "slug": "la-antojeria-de-la-tia",
       "name": "La Antojería de la Tía",
       "plazaId": "plaza-luna",
       "giros": [
@@ -9333,7 +9333,7 @@
     },
     {
       "id": "ramen-express-paseo-zibata",
-      "slug": "ramen-express-paseo-zibata",
+      "slug": "ramen-express",
       "name": "Ramen Express Paseo Zibatá",
       "plazaId": "paseo-zibata",
       "giros": [
@@ -9400,7 +9400,7 @@
     },
     {
       "id": "trompochtitlan-zibata",
-      "slug": "trompochtitlan-zibata",
+      "slug": "trompochtitlan",
       "name": "Trompochtitlán Zibatá",
       "plazaId": "foodtrucks-pickleball",
       "giros": [
@@ -9682,7 +9682,7 @@
     },
     {
       "id": "barberia-club-1978-zibata",
-      "slug": "barberia-club-1978-zibata",
+      "slug": "barberia-club-1978",
       "name": "Barbería Club 1978 Zibatá",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -9751,7 +9751,7 @@
     },
     {
       "id": "beoxy-zibata",
-      "slug": "beoxy-zibata",
+      "slug": "beoxy",
       "name": "BeOxy Zibatá",
       "plazaId": "xentric-anahuac",
       "giros": [
@@ -10158,7 +10158,7 @@
     },
     {
       "id": "el-patron-barberia-y-tonicos",
-      "slug": "el-patron-barberia-y-tonicos",
+      "slug": "el-patron-barberia-tonicos",
       "name": "El Patrón Barbería y Tónicos",
       "plazaId": "xentric-zibata",
       "giros": [
@@ -10295,7 +10295,7 @@
     },
     {
       "id": "haut-zibata",
-      "slug": "haut-zibata",
+      "slug": "haut",
       "name": "Haut Zibatá",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -10769,7 +10769,7 @@
     },
     {
       "id": "rene-marquez-studio-zibata",
-      "slug": "rene-marquez-studio-zibata",
+      "slug": "rene-marquez-studio",
       "name": "René Márquez Studio Zibatá",
       "plazaId": "plaza-zielo",
       "giros": [
@@ -10903,7 +10903,7 @@
     },
     {
       "id": "studio-blaze-zibata",
-      "slug": "studio-blaze-zibata",
+      "slug": "studio-blaze",
       "name": "Studio Blaze Zibatá",
       "plazaId": "plaza-luna",
       "giros": [
@@ -10973,7 +10973,7 @@
     },
     {
       "id": "vanille-spa-and-nails",
-      "slug": "vanille-spa-and-nails",
+      "slug": "vanille-spa-nails",
       "name": "Vanille Spa and Nails",
       "plazaId": "xentric-zibata",
       "giros": [
