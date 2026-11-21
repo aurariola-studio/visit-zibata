@@ -1,5 +1,5 @@
 {
-  "$comment": "Piezas dibujadas a mano para zonas sin edificios en los datos abiertos que no son un solo bloque (canchas, foodtrucks). Una zona con piezas aquí no recibe el prisma de volumenes-plaza.json. Ver src/data/volumenes-propios.ts.",
+  "$comment": "Volúmenes dibujados a mano. `plazas`: piezas de zonas sin edificios en los datos abiertos que no son un solo bloque (canchas, foodtrucks); una zona con piezas aquí no recibe el prisma de volumenes-plaza.json. `sueltos`: edificios que están en el mapa sin ser una zona; map:build falla si los datos abiertos ya traen su huella, y ese es el aviso para retirarlos. Ver src/data/volumenes-propios.ts.",
   "plazas": {
     "intercepta": [
       {
@@ -317,5 +317,42 @@
         ]
       }
     ]
-  }
+  },
+  "sueltos": [
+    {
+      "id": "h-e-b",
+      "nombre": "H-E-B",
+      "height": 9,
+      "anillo": [
+        [
+          -100.325892,
+          20.675524
+        ],
+        [
+          -100.325748,
+          20.675388
+        ],
+        [
+          -100.324961,
+          20.675388
+        ],
+        [
+          -100.324961,
+          20.676446
+        ],
+        [
+          -100.325892,
+          20.676446
+        ],
+        [
+          -100.325892,
+          20.675524
+        ]
+      ],
+      "fuente": "Contorno trazado sobre el techo visible en Sentinel-2 (2026-10-20): el edificio no está en OpenStreetMap ni en Overture. Av. Paseo de las Pitahayas 23, Zibatá; punto de OpenStreetMap (nodo 13994367601); verificado en sitio el 2026-11-10.",
+      "alturaNota": "Estimación provisional de 9 m: ninguna fuente la respalda, porque los datos abiertos no traen el edificio.",
+      "creado": "2026-11-21",
+      "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando H-E-B pase a ser una zona."
+    }
+  ]
 }

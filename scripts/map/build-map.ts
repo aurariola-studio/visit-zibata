@@ -43,6 +43,7 @@ import { polygonsOf, roundPositions } from './lib/geo.ts'
 import { type OverpassResponse, overpassToFeatures } from './lib/osm.ts'
 import { loadConfig, paths, readJson, writeJson } from './lib/paths.ts'
 import { Compression, TileType, writePmtiles } from './lib/pmtiles-writer.ts'
+import { poligonoDe, problemasDeSueltos } from './lib/sueltos.ts'
 import { buildVectorTiles, type LayerInput } from './lib/tiles.ts'
 import {
   MEZCLA_ARBUSTO,
@@ -245,6 +246,7 @@ type BuildingProps = {
   height: number
   minHeight?: number
   type: BuildingType
+  /** `osm`, `microsoft`, `google` u `other` si viene de datos abiertos; `propio` si es un edificio suelto (volumenes-propios.json); `synthetic` si es el volumen de una zona. */
   src: string
   /** Metros fijados a mano: `build-mallas` los respeta tal cual, sin mezclarlos ni redondearlos a pisos. */
   alturaFija?: true
@@ -364,6 +366,37 @@ for (const [plazaId, piezas] of Object.entries(propios.plazas)) {
     })
   }
   plazaBuildings.set(plazaId, lista)
+}
+
+// Edificios que están en el mapa sin ser una zona (volumenes-propios.json, `sueltos`). Entran entre los edificios
+// base: de ahí leen las teselas, `edificios-base.geojson` (las mallas del realismo) y los obstáculos de los árboles.
+const sueltos = propios.sueltos ?? []
+const problemasDeSueltosCrudos = problemasDeSueltos(sueltos, {
+  huellas: rawBuildings.features,
+  zonas: plazaShapes.map(({ plaza, shape }) => ({ id: plaza.id, shape })),
+})
+if (problemasDeSueltosCrudos.length > 0) {
+  for (const problema of problemasDeSueltosCrudos) console.error(`✗ ${problema}`)
+  throw new Error(
+    `${problemasDeSueltosCrudos.length} edificio(s) suelto(s) sin poder dibujar (data/geographic/volumenes-propios.json)`,
+  )
+}
+for (const suelto of sueltos) {
+  const geometry = poligonoDe(suelto)
+  const feature: Feature<Polygon, BuildingProps> = {
+    type: 'Feature',
+    properties: {
+      id: nextId++,
+      height: suelto.height,
+      type: 'commercial',
+      src: 'propio',
+      alturaFija: true,
+      inside: turf.booleanPointInPolygon(turf.centroid(geometry), boundary),
+    },
+    geometry,
+  }
+  baseBuildings.push(feature)
+  buildingArea.set(feature, turf.area(geometry))
 }
 
 // Plazas sin huellas (o con huellas incompletas): volumen generado a partir de su geometría.
@@ -841,6 +874,20 @@ writeJson(paths.manifest, {
       features: plazaBuildingCount,
       synthesizedFor: synthesized,
       synthesisDetail,
+    },
+    'data/geographic/volumenes-propios.json': {
+      bytes: bytes(paths.volumenesPropios),
+      sha256: sha256(paths.volumenesPropios),
+      // Los edificios que el mapa dibuja sin ser una zona, con lo que hay que saber para retirarlos.
+      sueltos: sueltos.map(({ id, nombre, height, fuente, alturaNota, creado, retirarCuando }) => ({
+        id,
+        nombre,
+        height,
+        fuente,
+        alturaNota,
+        creado,
+        retirarCuando,
+      })),
     },
     'data/geographic/extent.json': {
       bbox: boundaryBbox,

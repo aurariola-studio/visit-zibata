@@ -27,6 +27,7 @@ import {
   RedirectsFileSchema,
 } from '../../src/data/schemas.ts'
 import { variantPath } from '../../src/lib/image-variants.ts'
+import { problemasDeSueltos } from '../map/lib/sueltos.ts'
 import {
   DatasetError,
   dataPaths,
@@ -166,6 +167,14 @@ try {
         })
       }
     }
+  }
+
+  // Los edificios sueltos: sin huellas abiertas aquí (el crudo no siempre está), pero con las demás guardas.
+  const sueltos = loadVolumenesPropios().sueltos ?? []
+  for (const mensaje of problemasDeSueltos(sueltos, {
+    zonas: dataset.plazas.map((plaza) => ({ id: plaza.id, shape: turf.feature(plaza.geometry) })),
+  })) {
+    issues.push({ level: 'error', dataset: 'volumenes-propios', id: 'sueltos', message: mensaje })
   }
 
   for (const place of dataset.places) {
