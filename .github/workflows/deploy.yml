@@ -24,6 +24,11 @@ name: Deploy
 on:
   push:
     branches: [main]
+    # Un cambio que solo toca documentación no cambia lo que se publica: no hace falta esperar media hora para
+    # volver a publicar lo mismo. `workflow_dispatch` sigue ahí para forzarlo.
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
   workflow_dispatch:
 
 permissions:
@@ -83,15 +88,24 @@ jobs:
         run: npm run build
       - name: Presupuesto de rendimiento
         run: npm run perf:budget
-      # Humo, no la suite entera: ci.yml ya corrió los 264 tests en las dos bases sobre este mismo
-      # código. Repetirlos aquí añadía media hora a cada publicación sin cubrir nada nuevo, y una
+      # Humo, no la suite entera: ci.yml ya corrió toda la suite en las dos bases sobre este mismo
+      # código. Repetirla aquí añadía media hora a cada publicación sin cubrir nada nuevo, y una
       # prueba sensible al tiempo llegó a tumbar un despliegue que ya había pasado dos veces.
       #
       # Pero algo tiene que correr: al fusionar con squash, el commit que llega a main es un commit
       # nuevo que nunca existió en el pull request. Esto comprueba ese artefacto exacto, el que se
-      # va a publicar, en un recorrido de unos siete minutos.
+      # va a publicar.
+      #
+      # Es una lista (`HUMO` en tests/e2e/grupos.ts) y no `--project=desktop` a secas: así se definió
+      # primero, como "unos siete minutos", y creció con cada archivo nuevo hasta pasar de media hora y
+      # rozar el tope de 40 minutos del trabajo.
       - name: Humo contra el build que se publica
-        run: npx playwright test --project=desktop
+        # La lista se calcula aparte, como en ci.yml: dentro de `$(...)` un fallo del script daría una lista
+        # vacía y Playwright correría TODAS las pruebas de escritorio sin avisar, que es justo lo que se evita.
+        run: |
+          archivos="$(node scripts/ci/archivos-del-humo.ts)"
+          test -n "$archivos"
+          npx playwright test --project=desktop $archivos
       - name: Informe de Playwright
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7

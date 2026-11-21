@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process'
 import { readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { GRUPOS } from '../../tests/e2e/grupos.ts'
+import { GRUPOS, HUMO } from '../../tests/e2e/grupos.ts'
 
 /**
  * Los grupos E2E reparten los archivos entre los trabajos del CI. El fallo que esto evita no hace
@@ -82,6 +82,36 @@ describe('grupos de pruebas E2E', () => {
     expect(salida.split(' ')).toEqual(
       (GRUPOS.fichas?.archivos ?? []).map((nombre) => `tests/e2e/${nombre}.spec.ts`),
     )
+  })
+
+  it('el humo del despliegue nombra archivos que existen, sin repetir y sin quedar vacío', () => {
+    expect(HUMO.length).toBeGreaterThan(0)
+    expect(HUMO.filter((nombre) => !especificaciones.includes(nombre))).toEqual([])
+    expect(HUMO.filter((nombre, i) => HUMO.indexOf(nombre) !== i)).toEqual([])
+  })
+
+  it('el despliegue corre el humo por su lista y no el proyecto de escritorio entero', () => {
+    const flujo = readFileSync('.github/workflows/deploy.yml', 'utf8')
+    const inicio = flujo.indexOf('name: Humo contra el build que se publica')
+    expect(inicio).toBeGreaterThan(-1)
+    const resto = flujo.slice(inicio)
+    const fin = resto.indexOf('\n      - name:', 1)
+    const paso = fin === -1 ? resto : resto.slice(0, fin)
+    expect(paso).toContain('--project=desktop')
+    // La lista se calcula aparte y se comprueba que no esté vacía: dentro de `$(...)` un fallo del script daría una
+    // lista vacía y Playwright correría todo el proyecto, que es lo que llevó el despliegue a rozar el tope de 40 minutos.
+    expect(paso).toMatch(/archivos="\$\(node scripts\/ci\/archivos-del-humo\.ts\)"/)
+    expect(paso).toContain('test -n "$archivos"')
+    expect(paso).toMatch(/playwright test --project=desktop \$archivos\b/)
+    // Y sin la forma de antes, `--project=desktop` solo.
+    expect(paso).not.toMatch(/playwright test --project=desktop\s*(\n|$)/)
+  })
+
+  it('el script del humo entrega las rutas de su lista', () => {
+    const salida = execFileSync('node', ['scripts/ci/archivos-del-humo.ts'], {
+      encoding: 'utf8',
+    }).trim()
+    expect(salida.split(' ')).toEqual(HUMO.map((nombre) => `tests/e2e/${nombre}.spec.ts`))
   })
 
   it('el script rechaza un grupo que no existe', () =>
