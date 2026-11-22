@@ -5,7 +5,6 @@ import {
   LOCAL,
   LOCAL_CON_WHATSAPP,
   LOCAL_UNICO,
-  plazaDe,
   rutaConIdioma,
   ZONA_B,
 } from './helpers.ts'
@@ -98,15 +97,17 @@ test.describe('Metadatos del HTML publicado', () => {
     }
   })
 
-  test('dos locales de una misma cadena tienen título y descripción distintos', async ({
+  test('dos sucursales de una misma cadena tienen título y descripción distintos', async ({
     request,
   }) => {
     const [a, b] = await Promise.all([
       cabecera(request, `lugar/${CADENA[0].slug}`),
       cabecera(request, `lugar/${CADENA[1].slug}`),
     ])
-    expect(a.title[0]).toBe(`${CADENA[0].name} en ${plazaDe(CADENA[0]).name} · Visit Zibatá`)
-    expect(b.title[0]).toBe(`${CADENA[1].name} en ${plazaDe(CADENA[1]).name} · Visit Zibatá`)
+    // La zona ya va en el nombre de cada sucursal: el título es el nombre y nada más.
+    expect(a.title[0]).toBe(`${CADENA[0].name} · Visit Zibatá`)
+    expect(b.title[0]).toBe(`${CADENA[1].name} · Visit Zibatá`)
+    expect(a.title[0]).not.toBe(b.title[0])
     expect(a.description[0]).not.toBe(b.description[0])
     // Y un local cuyo nombre no se repite conserva su título de siempre.
     expect((await cabecera(request, `lugar/${LOCAL_UNICO.slug}`)).title[0]).toBe(

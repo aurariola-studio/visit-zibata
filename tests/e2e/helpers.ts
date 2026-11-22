@@ -225,19 +225,24 @@ export const CON_ESPECIALES: DatasetPlace[] = (() => {
   })
 })()
 
-/** Dos locales activos con el mismo nombre en zonas distintas (una cadena): sus títulos llevan la zona. */
+/**
+ * Dos sucursales activas de una misma cadena en zonas distintas. El nombre de cada una ya lleva su zona
+ * ("Starbucks Centro Zibatá", "Starbucks Anáhuac"), así que se reconocen por lo que queda al quitársela.
+ */
 export const CADENA: [DatasetPlace, DatasetPlace] = (() => {
   const activos = deMenorId(dataset.places.filter((place) => place.active))
+  const sinZona = (nombre: string) =>
+    nombre.replace(/ (Paseo Zibatá|Centro Zibatá|Xentric Zibatá|Anáhuac)$/, '')
   for (const place of activos) {
     const otro = activos.find(
       (candidato) =>
         candidato.id !== place.id &&
-        candidato.name === place.name &&
+        sinZona(candidato.name) === sinZona(place.name) &&
         candidato.plazaId !== place.plazaId,
     )
     if (otro) return [place, otro]
   }
-  throw new Error('El dataset no tiene dos locales con el mismo nombre en zonas distintas')
+  throw new Error('El dataset no tiene dos sucursales de una misma cadena en zonas distintas')
 })()
 
 /** Un local activo cuyo nombre no se repite en toda la guía: su título es solo `{nombre} · Visit Zibatá`. */
