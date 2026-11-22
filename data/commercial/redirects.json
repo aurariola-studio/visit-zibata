@@ -140,11 +140,6 @@
     },
     {
       "kind": "place-slug",
-      "id": "la-michoacana",
-      "slug": "la-michoacana"
-    },
-    {
-      "kind": "place-slug",
       "id": "farmacias-similares",
       "slug": "farmacias-similares"
     },
@@ -372,6 +367,11 @@
       "kind": "place-slug",
       "id": "vanille-spa-and-nails",
       "slug": "vanille-spa-and-nails"
+    },
+    {
+      "kind": "place-slug",
+      "id": "la-michoacana-xentric-zibata",
+      "slug": "la-michoacana-xentric-zibata"
     }
   ]
 }

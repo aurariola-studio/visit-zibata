@@ -8,7 +8,11 @@ import redirectsJson from '../../data/commercial/redirects.json' with { type: 'j
  *  - el nombre sin acentos ni apóstrofos y sin "y" ni "and": "Romani Pizzas y Ensaladas" es `romani-pizzas-ensaladas`;
  *  - "Zibatá" no va en el link, y se va con la zona que lo precede ("Paseo", "Centro", "Xentric"): "Ramen Express Paseo
  *    Zibatá" es `ramen-express`;
- *  - con varias sucursales, todas llevan el sufijo de su zona (`sinforosa-cafe-paseo-zibata` y `sinforosa-cafe-anahuac`).
+ *  - con varias sucursales, todas llevan el sufijo de su zona (`sinforosa-cafe-paseo-zibata` y `sinforosa-cafe-anahuac`);
+ *  - el nombre sigue la misma idea: lleva la zona ("Starbucks Centro Zibatá", "Starbucks Anáhuac") solo si el negocio tiene varias
+ *    sucursales, y entonces todas la llevan. Una sucursal única no lleva "Zibatá" ni la zona.
+ *
+ * Solo cuentan los locales visibles: uno cerrado y oculto no hace "varias" a las demás.
  *
  * La primera investigación había pegado la zona o la ciudad a muchos slugs que no la necesitaban, y había quitado el descriptor
  * a otros (`rometta` para "Rometta Gastrobar"). Se corrigieron a mano en tres tandas: sin esta prueba, el siguiente local nuevo
@@ -16,7 +20,16 @@ import redirectsJson from '../../data/commercial/redirects.json' with { type: 'j
  *
  * Recorre los datos reales y no nombra ningún negocio, salvo en las excepciones, que son datos.
  */
-const lugares = lugaresJson.places
+const todos = lugaresJson.places
+const lugares = todos.filter((lugar) => lugar.active)
+
+/** Cómo se escribe cada zona al final de un nombre con varias sucursales. */
+const ETIQUETA_DE_ZONA: Record<string, string> = {
+  'paseo-zibata': 'Paseo Zibatá',
+  'centro-zibata': 'Centro Zibatá',
+  'xentric-zibata': 'Xentric Zibatá',
+  'anahuac-queretaro': 'Anáhuac',
+}
 
 /** El nombre lleva un signo que es parte de su logotipo, no una separación de palabras: se declara aquí y se explica. */
 const EXCEPCIONES: Record<string, string> = {
@@ -44,6 +57,7 @@ function baseDe(nombre: string): string {
     const desde = i > 0 && ZONAS_DEL_NOMBRE.has(palabras[i - 1] ?? '') ? i - 1 : i
     palabras = [...palabras.slice(0, desde), ...palabras.slice(i + 1)]
   }
+  if (palabras.length > 1 && palabras[palabras.length - 1] === 'anahuac') palabras.pop()
   return palabras.filter((palabra) => !CONECTORES.has(palabra)).join('-')
 }
 
@@ -86,13 +100,41 @@ describe('direcciones de los locales', () => {
     }
   })
 
+  it('el nombre lleva la zona solo si el negocio tiene varias sucursales, y entonces todas', () => {
+    const mal: string[] = []
+    for (const lugar of lugares) {
+      const varias = (sucursalesPorBase.get(baseDe(lugar.name)) ?? 0) > 1
+      const etiqueta = ETIQUETA_DE_ZONA[lugar.plazaId]
+      if (varias && !etiqueta) {
+        mal.push(`${lugar.name}: falta la etiqueta de la zona ${lugar.plazaId} en ETIQUETA_DE_ZONA`)
+      } else if (varias && !lugar.name.endsWith(` ${etiqueta}`)) {
+        mal.push(`${lugar.name} (debería terminar en "${etiqueta}")`)
+      } else if (
+        !varias &&
+        (sinAcentos(lugar.name).includes('zibata') ||
+          (etiqueta && lugar.name.endsWith(` ${etiqueta}`)))
+      ) {
+        mal.push(`${lugar.name} (sucursal única: sin Zibatá ni zona en el nombre)`)
+      }
+    }
+    expect(mal).toEqual([])
+  })
+
   it('una dirección de local no se repite', () => {
-    const slugs = lugares.map((lugar) => lugar.slug)
+    const slugs = todos.map((lugar) => lugar.slug)
     expect(slugs.filter((slug, i) => slugs.indexOf(slug) !== i)).toEqual([])
   })
 
+  it('una dirección antigua no tapa la de un local visible', () => {
+    const vigentes = new Set(lugares.map((lugar) => lugar.slug))
+    const tapadas = redirectsJson.redirects
+      .filter((fila) => fila.kind === 'place-slug' && 'slug' in fila)
+      .filter((fila) => vigentes.has(fila.slug))
+    expect(tapadas).toEqual([])
+  })
+
   it('cada dirección antigua de redirects.json apunta a un local que existe', () => {
-    const ids = new Set(lugares.map((lugar) => lugar.id))
+    const ids = new Set(todos.map((lugar) => lugar.id))
     const colgadas = redirectsJson.redirects
       .filter((fila) => fila.kind === 'place-slug')
       .filter((fila) => !ids.has(fila.id))

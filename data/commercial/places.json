@@ -1187,7 +1187,7 @@
     {
       "id": "sinforosa",
       "slug": "sinforosa-cafe-paseo-zibata",
-      "name": "Sinforosa Café",
+      "name": "Sinforosa Café Paseo Zibatá",
       "plazaId": "paseo-zibata",
       "giros": [
         "brunch",
@@ -1589,7 +1589,7 @@
     {
       "id": "luka-pokes",
       "slug": "luka-paseo-zibata",
-      "name": "Luka",
+      "name": "Luka Paseo Zibatá",
       "plazaId": "paseo-zibata",
       "giros": [
         "poke"
@@ -1997,7 +1997,7 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
         "status": "likely_active",
         "confidence": "medium",
@@ -3216,7 +3216,7 @@
     },
     {
       "id": "la-michoacana-xentric-zibata",
-      "slug": "la-michoacana-xentric-zibata",
+      "slug": "la-michoacana",
       "name": "La Michoacana",
       "plazaId": "xentric-zibata",
       "giros": [
@@ -4087,7 +4087,7 @@
     {
       "id": "starbucks-centro-zibata",
       "slug": "starbucks-centro-zibata",
-      "name": "Starbucks",
+      "name": "Starbucks Centro Zibatá",
       "plazaId": "centro-zibata",
       "giros": [
         "cafeteria"
@@ -6112,7 +6112,7 @@
     {
       "id": "luka-anahuac",
       "slug": "luka-anahuac",
-      "name": "Luka",
+      "name": "Luka Anáhuac",
       "plazaId": "anahuac-queretaro",
       "giros": [
         "poke"
@@ -6150,7 +6150,7 @@
     {
       "id": "sinforosa-anahuac",
       "slug": "sinforosa-cafe-anahuac",
-      "name": "Sinforosa Café",
+      "name": "Sinforosa Café Anáhuac",
       "plazaId": "anahuac-queretaro",
       "giros": [
         "brunch",
@@ -6190,7 +6190,7 @@
     {
       "id": "starbucks-anahuac",
       "slug": "starbucks-anahuac",
-      "name": "Starbucks",
+      "name": "Starbucks Anáhuac",
       "plazaId": "anahuac-queretaro",
       "giros": [
         "cafeteria",
@@ -8200,7 +8200,7 @@
     {
       "id": "farmacias-similares",
       "slug": "farmacias-similares-paseo-zibata",
-      "name": "Farmacias Similares",
+      "name": "Farmacias Similares Paseo Zibatá",
       "plazaId": "paseo-zibata",
       "giros": [
         "farmacia"
@@ -8267,7 +8267,7 @@
     {
       "id": "farmacias-similares-centro-zibata",
       "slug": "farmacias-similares-centro-zibata",
-      "name": "Farmacias Similares",
+      "name": "Farmacias Similares Centro Zibatá",
       "plazaId": "centro-zibata",
       "giros": [
         "farmacia"
