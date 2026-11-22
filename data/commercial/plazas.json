@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-20",
+  "updatedAt": "2026-11-22",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -844,8 +844,8 @@
       }
     },
     {
-      "id": "mol-jamadi",
-      "slug": "mol-jamadi",
+      "id": "mol-pitahaya",
+      "slug": "mol-pitahaya",
       "name": "MOL Pitahaya",
       "description": {
         "es": "Plaza del desarrollo Paseo Pitahayas, a un costado del Parque Jamadi.",

@@ -101,7 +101,7 @@ export const PLAZA_COLORS: Readonly<Record<string, string>> = {
   condesa: '#248411', // #2ca115
   'plaza-loop': '#4b2fb5',
   'plaza-luna': '#021f4f',
-  'mol-jamadi': '#3b1548',
+  'mol-pitahaya': '#3b1548',
   'campo-de-golf': '#02467d',
   'plaza-zielo': '#189ad2', // #53bdeb
   intercepta: '#b3175f',
