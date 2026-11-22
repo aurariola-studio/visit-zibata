@@ -9147,25 +9147,25 @@
       },
       "hours": {
         "mon": [
-          "09:00-23:00"
+          "11:00-23:00"
         ],
         "tue": [
-          "09:00-23:00"
+          "11:00-23:00"
         ],
         "wed": [
-          "09:00-23:00"
+          "11:00-23:00"
         ],
         "thu": [
-          "09:00-23:00"
+          "11:00-23:00"
         ],
         "fri": [
-          "09:00-23:00"
+          "11:00-23:00"
         ],
         "sat": [
-          "09:00-23:00"
+          "09:00-22:00"
         ],
         "sun": [
-          "09:00-23:00"
+          "09:00-22:00"
         ]
       },
       "location": {
@@ -9190,7 +9190,7 @@
       "verification": {
         "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-18",
+        "lastVerifiedAt": "2026-11-21",
         "sources": [
           "https://maps.app.goo.gl/Lw7gTSPoTcEw32TUA",
           "https://www.instagram.com/losmargaritenos/",

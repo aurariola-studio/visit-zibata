@@ -168,7 +168,8 @@ test.describe('Información de la guía', () => {
       await openApp(page, { path: caso.ruta })
       const esqueleto = page.getByRole('status', { name: 'Cargando…' })
       await expect(esqueleto).toBeVisible()
-      await expect(page.getByRole('dialog', { name: caso.nombre })).toBeVisible({ timeout: 15_000 })
+      // El diálogo espera a que arranque la guía: en un runner lento a los 15 s seguía en "Cargando Zibatá…".
+      await expect(page.getByRole('dialog', { name: caso.nombre })).toBeVisible({ timeout: 40_000 })
       await expect(esqueleto).toHaveCount(0)
     })
   }
