@@ -4,9 +4,9 @@
  * Optimiza fotografías propias (nunca descargadas de Google ni de redes sociales) y las registra en
  * data/commercial/places.json.
  *
- * Entrada:  data/commercial/photos-src/<slug-del-lugar>/<nombre>.(jpg|jpeg|png|webp|avif|tif)
- *           (opcional) <nombre>.txt con el texto alternativo y, en una segunda línea, el crédito.
- * Salida:   public/images/places/<slug>/<nombre>.webp y .avif (máx. 1600 px)
+ * Entrada:  data/commercial/photos-src/<id-del-lugar>/<archivo>.(jpg|jpeg|png|webp|avif|tif), una sola por lugar
+ *           (opcional) <archivo>.txt con el texto alternativo y, en una segunda línea, el crédito.
+ * Salida:   public/images/places/<id>/portada.webp y .avif (máx. 1600 px): el nombre es siempre "portada".
  *           + variantes -480 (miniatura) y -960 en ambos formatos.
  * Las fotos ya registradas conservan su texto alternativo y crédito.
  */
@@ -15,7 +15,7 @@ import { basename, extname } from 'node:path'
 import { parseArgs } from 'node:util'
 import sharp from 'sharp'
 import { syncPlazaDerivedFields, validateRelations } from '../../src/data/relations.ts'
-import { slugify } from '../../src/lib/text.ts'
+import { NOMBRE_DE_PORTADA } from '../../src/data/rules.ts'
 import type { Photo } from '../../src/types/domain.ts'
 import {
   dataPaths,
@@ -65,12 +65,18 @@ for (const folder of folders) {
   const files = readdirSync(`${values.source}/${folder}`).filter((file) =>
     EXTENSIONS.has(extname(file).toLowerCase()),
   )
+  if (files.length > 1) {
+    console.warn(
+      `⚠ "${folder}" tiene ${files.length} fotos y la guía muestra solo la de portada: deja una`,
+    )
+    continue
+  }
   const outDir = `${values.output}/${folder}`
   mkdirSync(outDir, { recursive: true })
 
   const photos: Photo[] = [...place.photos]
   for (const file of files.sort()) {
-    const name = slugify(basename(file, extname(file)))
+    const name = NOMBRE_DE_PORTADA
     const input = `${values.source}/${folder}/${file}`
     const image = sharp(input).rotate() // respeta la orientación EXIF
     const { width = 0, height = 0 } = await image.metadata()

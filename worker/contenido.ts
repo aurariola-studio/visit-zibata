@@ -32,7 +32,7 @@ import {
   validateRelations,
   validateTranslations,
 } from '../src/data/relations.ts'
-import { FIELD_SOURCE_PATTERN } from '../src/data/rules.ts'
+import { FIELD_SOURCE_PATTERN, NOMBRE_DE_PORTADA } from '../src/data/rules.ts'
 import {
   CategoriesFileSchema,
   PlaceSchema,
@@ -248,14 +248,16 @@ export function prepararFoto(
     return { ok: false, problemas: ['El archivo no es una imagen WebP, JPEG o PNG.'] }
   }
 
-  const base = slugDe(entrada.archivo.replace(/\.[^.]+$/, '')) || 'foto'
-  const usados = new Set(place.photos.map((foto) => foto.src))
-  let nombre = `${base}.${formato}`
-  let numero = 2
-  while (usados.has(`images/places/${place.id}/${nombre}`)) {
-    nombre = `${base}-${numero++}.${formato}`
+  // Una sola foto por local, siempre con el mismo nombre: el del archivo que mandó la persona no cuenta.
+  if (place.photos.length > 0) {
+    return {
+      ok: false,
+      problemas: [
+        'Este negocio ya tiene su foto de portada. Quítala, guarda el negocio y sube la nueva.',
+      ],
+    }
   }
-  const src = `images/places/${place.id}/${nombre}`
+  const src = `images/places/${place.id}/${NOMBRE_DE_PORTADA}.${formato}`
   const foto: Photo = {
     src,
     alt: entrada.alt,

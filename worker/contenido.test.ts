@@ -998,19 +998,20 @@ describe('preparar una foto', () => {
     const preparado = prepararFoto(dataset, crudo, fotoEntrada(), HOY)
     expect(preparado.ok).toBe(true)
     if (!preparado.ok) return
-    expect(preparado.foto.src).toBe(`images/places/${existente.id}/terraza-principal.webp`)
+    // El nombre del archivo que mandó la persona no cuenta: la portada siempre se llama igual.
+    expect(preparado.foto.src).toBe(`images/places/${existente.id}/portada.webp`)
     const lugares = preparado.lugares as { places: Place[] }
     expect(lugares.places.find((fila) => fila.id === existente.id)?.photos.at(-1)?.alt).toBe(
       'Terraza',
     )
   })
 
-  it('no pisa una foto que ya usa ese nombre', () => {
+  it('rechaza una segunda foto: la guía muestra solo la de portada', () => {
     const conFoto: Place = {
       ...existente,
       photos: [
         {
-          src: `images/places/${existente.id}/terraza-principal.webp`,
+          src: `images/places/${existente.id}/portada.webp`,
           alt: 'Vieja',
           width: 10,
           height: 10,
@@ -1022,8 +1023,9 @@ describe('preparar una foto', () => {
       places: dataset.places.map((fila) => (fila.id === existente.id ? conFoto : fila)),
     }
     const preparado = prepararFoto(conFotos, crudo, fotoEntrada(), HOY)
-    if (!preparado.ok) throw new Error('no preparó')
-    expect(preparado.foto.src.endsWith('terraza-principal-2.webp')).toBe(true)
+    expect(preparado.ok).toBe(false)
+    if (preparado.ok) return
+    expect(preparado.problemas.join(' ')).toContain('ya tiene su foto de portada')
   })
 
   it('rechaza lo que no es una imagen', () => {

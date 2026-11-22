@@ -1560,7 +1560,20 @@
       "googleMapsUri": "https://maps.app.goo.gl/49roj2wwje1mSPvs8",
       "googlePlaceId": null,
       "phone": "+524421424545",
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/currucucu/portada.webp",
+          "alt": "Logo de Currucucú Cocina Artesanal Mexicana",
+          "width": 1080,
+          "height": 1080,
+          "variants": [
+            480,
+            960
+          ],
+          "placeholder": "#f8f8f8",
+          "credit": "Cortesía de Currucucú"
+        }
+      ],
       "links": {
         "website": "https://drive.google.com/file/d/1h052lhuQPm7nvKPQhhDOICwVeNlr08Iu/view",
         "instagram": "https://www.instagram.com/currucucumx/",
@@ -9175,7 +9188,20 @@
       "googleMapsUri": "https://maps.app.goo.gl/Lw7gTSPoTcEw32TUA",
       "googlePlaceId": null,
       "phone": "+524422696680",
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/los-margaritenos/portada.webp",
+          "alt": "Logo de Los Margariteños",
+          "width": 1080,
+          "height": 1080,
+          "variants": [
+            480,
+            960
+          ],
+          "placeholder": "#f8e8d8",
+          "credit": "Cortesía de Los Margariteños"
+        }
+      ],
       "links": {
         "website": null,
         "instagram": "https://www.instagram.com/losmargaritenos/",

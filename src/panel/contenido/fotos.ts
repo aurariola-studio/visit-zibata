@@ -18,42 +18,31 @@ export function pintarFotosFormulario(): void {
             <span>Texto alternativo</span>
             <input class="${controls.campo}" type="text" data-alt-foto="${indice}" value="${texto(foto.alt)}" maxlength="300" />
           </label>
-          <p class="meta">${indice === 0 ? 'Portada' : `Foto ${indice + 1}`}${foto.credit ? ` · ${texto(foto.credit)}` : ''}</p>
+          <p class="meta">Portada${foto.credit ? ` · ${texto(foto.credit)}` : ''}</p>
         </div>
         <div class="foto-acciones">
-          ${indice > 0 ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-foto-portada="${indice}">Portada</button>` : ''}
-          ${indice > 0 ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-foto-subir="${indice}">Subir</button>` : ''}
-          ${indice < fotos.length - 1 ? `<button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-foto-bajar="${indice}">Bajar</button>` : ''}
           <button type="button" class="${controls.base} ${controls.boton} ${controls.fantasma}" data-foto-quitar="${indice}">Quitar</button>
         </div>
       </li>`,
     )
     .join('')
 
-  const subir = vista.formularioActual.id
-    ? `<label class="subir-foto ${controls.base} ${controls.boton} ${controls.secundario}">
-        ${vista.subiendoFoto ? 'Subiendo…' : 'Añadir foto'}
-        <input class="visualmente" type="file" accept="image/*" multiple data-subir-foto${vista.subiendoFoto ? ' disabled' : ''} />
+  // Una sola foto por local, la de portada: se ve en el círculo de la tarjeta y de la ficha.
+  const subir = !vista.formularioActual.id
+    ? '<p class="ayuda">Guarda el negocio una vez para poder añadir su foto.</p>'
+    : fotos.length > 0
+      ? '<p class="ayuda">Para cambiarla, quítala, guarda el negocio y sube la nueva.</p>'
+      : `<label class="subir-foto ${controls.base} ${controls.boton} ${controls.secundario}">
+        ${vista.subiendoFoto ? 'Subiendo…' : 'Añadir la foto de portada'}
+        <input class="visualmente" type="file" accept="image/*" data-subir-foto${vista.subiendoFoto ? ' disabled' : ''} />
       </label>`
-    : '<p class="ayuda">Guarda el negocio una vez para poder añadir fotos.</p>'
 
   zona.innerHTML = `
-    ${fotos.length > 0 ? `<ul class="fotos-editor">${lista}</ul>` : '<p class="vacio">Todavía no hay fotos: la ficha usa la ilustración de su categoría.</p>'}
+    ${fotos.length > 0 ? `<ul class="fotos-editor">${lista}</ul>` : '<p class="vacio">Todavía no hay foto: la ficha usa la ilustración de su categoría.</p>'}
     <div class="fotos-subir">
       ${subir}
-      <p class="ayuda" data-foto-estado role="status">WebP o JPEG, máximo 1600 px de lado. Se guardan en la PR, no en producción.</p>
+      <p class="ayuda" data-foto-estado role="status">Se ve en un círculo. WebP o JPEG, máximo 1600 px de lado. Se guarda en la PR, no en producción.</p>
     </div>`
-}
-
-function moverFoto(indice: number, destino: number): void {
-  if (!vista.formularioActual) return
-  const fotos = vista.formularioActual.fotos
-  if (destino < 0 || destino >= fotos.length) return
-  const [foto] = fotos.splice(indice, 1)
-  if (!foto) return
-  fotos.splice(destino, 0, foto)
-  vista.formularioActual.sucio = true
-  pintarFotosFormulario()
 }
 
 function quitarFoto(indice: number): void {
@@ -210,23 +199,6 @@ async function subirFotos(archivos: FileList): Promise<void> {
 
 /** Clics dentro del diálogo que son de las fotos. Devuelve si lo atendió. */
 export function alPulsarFoto(objetivo: HTMLElement): boolean {
-  const portada = objetivo.closest<HTMLElement>('[data-foto-portada]')
-  if (portada?.dataset.fotoPortada) {
-    moverFoto(Number(portada.dataset.fotoPortada), 0)
-    return true
-  }
-  const subirFoto = objetivo.closest<HTMLElement>('[data-foto-subir]')
-  if (subirFoto?.dataset.fotoSubir) {
-    const indice = Number(subirFoto.dataset.fotoSubir)
-    moverFoto(indice, indice - 1)
-    return true
-  }
-  const bajarFoto = objetivo.closest<HTMLElement>('[data-foto-bajar]')
-  if (bajarFoto?.dataset.fotoBajar) {
-    const indice = Number(bajarFoto.dataset.fotoBajar)
-    moverFoto(indice, indice + 1)
-    return true
-  }
   const quitarFotoBoton = objetivo.closest<HTMLElement>('[data-foto-quitar]')
   if (quitarFotoBoton?.dataset.fotoQuitar) {
     quitarFoto(Number(quitarFotoBoton.dataset.fotoQuitar))
