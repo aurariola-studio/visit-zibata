@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isGoogleMapsUrl, isSafePhotoSrc, isWhatsappLink } from './rules.ts'
+import { isGoogleMapsUrl, isSafePhotoSrc, isWhatsappLink, problemaDeFotos } from './rules.ts'
 
 describe('isWhatsappLink', () => {
   it('acepta los enlaces de WhatsApp por https, también los de una cuenta de empresa', () => {
@@ -87,5 +87,25 @@ describe('isGoogleMapsUrl', () => {
     ]) {
       expect(isGoogleMapsUrl(mal), mal).toBe(false)
     }
+  })
+})
+
+describe('problemaDeFotos', () => {
+  it('acepta ninguna foto y la de portada con su nombre', () => {
+    expect(problemaDeFotos('x', [])).toBeNull()
+    for (const formato of ['webp', 'jpg', 'png']) {
+      expect(problemaDeFotos('x', [`images/places/x/portada.${formato}`])).toBeNull()
+    }
+  })
+
+  it('rechaza otro nombre, la carpeta de otro local y una URL externa', () => {
+    expect(problemaDeFotos('x', ['images/places/x/fachada.webp'])).toContain('portada.webp')
+    expect(problemaDeFotos('x', ['images/places/y/portada.webp'])).toContain('portada.webp')
+    expect(problemaDeFotos('x', ['https://cdn.example.com/portada.webp'])).toContain('portada.webp')
+  })
+
+  it('rechaza más de una foto', () => {
+    const dos = ['images/places/x/portada.webp', 'images/places/x/portada-2.webp']
+    expect(problemaDeFotos('x', dos)).toContain('solo la foto de portada')
   })
 })

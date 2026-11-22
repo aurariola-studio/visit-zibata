@@ -141,3 +141,24 @@ export function isSafePhotoSrc(value: string): boolean {
   if (/["'<>\\\s`]/.test(trimmed)) return false
   return trimmed.length > 0 && (/^https:\/\//.test(trimmed) || !/^([a-z]+:|\/)/i.test(trimmed))
 }
+
+/**
+ * La guía muestra una sola foto por local, la de portada: el círculo de la tarjeta y de la ficha. Por ahora no hay galería.
+ * Siempre se llama así, para que la ruta no dependa de cómo la nombró quien la mandó.
+ */
+export const NOMBRE_DE_PORTADA = 'portada'
+const FORMATOS_DE_PORTADA = ['webp', 'jpg', 'png']
+
+/** Lo que está mal en las fotos de un local, o `null`. Lo usan la validación de datos y el panel. */
+export function problemaDeFotos(id: string, srcs: readonly string[]): string | null {
+  if (srcs.length > 1) return 'La guía muestra solo la foto de portada: una por local'
+  const [src] = srcs
+  if (src === undefined) return null
+  if (
+    FORMATOS_DE_PORTADA.some(
+      (formato) => src === `images/places/${id}/${NOMBRE_DE_PORTADA}.${formato}`,
+    )
+  )
+    return null
+  return `La foto de portada se llama images/places/${id}/${NOMBRE_DE_PORTADA}.webp (o .jpg, .png), no ${src}`
+}

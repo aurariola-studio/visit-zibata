@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-21",
+  "updatedAt": "2026-11-22",
   "places": [
     {
       "id": "carls-jr",
@@ -9175,7 +9175,20 @@
       "googleMapsUri": "https://maps.app.goo.gl/Lw7gTSPoTcEw32TUA",
       "googlePlaceId": null,
       "phone": "+524422696680",
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/los-margaritenos/portada.webp",
+          "alt": "Logo de Los Margariteños",
+          "width": 1080,
+          "height": 1080,
+          "variants": [
+            480,
+            960
+          ],
+          "placeholder": "#f8e8d8",
+          "credit": "Cortesía de Los Margariteños"
+        }
+      ],
       "links": {
         "website": null,
         "instagram": "https://www.instagram.com/losmargaritenos/",

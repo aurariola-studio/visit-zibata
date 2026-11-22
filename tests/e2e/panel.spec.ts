@@ -157,10 +157,7 @@ const contenido = {
         uberEats: 'https://www.ubereats.com/mx/store/cafe-de-prueba/abc',
         didiFood: null,
       },
-      photos: [
-        { src: '/prueba/fachada.webp', alt: 'Fachada' },
-        { src: '/prueba/interior.webp', alt: 'Interior' },
-      ],
+      photos: [{ src: '/prueba/fachada.webp', alt: 'Fachada' }],
       active: true,
       verification: {
         status: 'likely_active',
@@ -771,21 +768,20 @@ test.describe('Panel', () => {
     await expect(elegidos.first()).toContainText('Servicios')
   })
 
-  test('las fotos de un negocio cambian de portada y se quitan', async ({ page }) => {
+  test('la foto de portada de un negocio se quita y deja subir otra', async ({ page }) => {
     await abrirPanel(page)
     await irA(page, 'negocios', 'Negocios')
     await page.getByRole('button', { name: 'Editar Café de Prueba' }).click()
     const dialogo = page.locator('#editor')
     const alts = dialogo.locator('[data-alt-foto]')
-    await expect(alts).toHaveCount(2)
-    await expect(alts.first()).toHaveValue('Fachada')
-
-    await dialogo.locator('[data-foto-portada="1"]').click()
-    await expect(alts.first()).toHaveValue('Interior')
-
-    await dialogo.locator('[data-foto-quitar="0"]').click()
     await expect(alts).toHaveCount(1)
     await expect(alts.first()).toHaveValue('Fachada')
+    // Con la foto puesta no hay dónde subir otra: solo se puede quitar.
+    await expect(dialogo.locator('[data-subir-foto]')).toHaveCount(0)
+
+    await dialogo.locator('[data-foto-quitar="0"]').click()
+    await expect(alts).toHaveCount(0)
+    await expect(dialogo.locator('[data-subir-foto]')).toHaveCount(1)
   })
 
   test('el horario del lunes se copia a los demás días', async ({ page }) => {

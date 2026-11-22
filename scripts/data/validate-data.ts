@@ -20,6 +20,7 @@ import {
   validateRelations,
   validateTranslations,
 } from '../../src/data/relations.ts'
+import { problemaDeFotos } from '../../src/data/rules.ts'
 import {
   CategoriesFileSchema,
   PlacesFileSchema,
@@ -178,6 +179,13 @@ try {
   }
 
   for (const place of dataset.places) {
+    const problemaDeFoto = problemaDeFotos(
+      place.id,
+      place.photos.map((photo) => photo.src),
+    )
+    if (problemaDeFoto) {
+      issues.push({ level: 'error', dataset: 'places', id: place.id, message: problemaDeFoto })
+    }
     for (const photo of place.photos) {
       if (/^https:\/\//.test(photo.src)) continue
       if (!existsSync(`${dataPaths.public}/${photo.src}`)) {
