@@ -1560,7 +1560,20 @@
       "googleMapsUri": "https://maps.app.goo.gl/49roj2wwje1mSPvs8",
       "googlePlaceId": null,
       "phone": "+524421424545",
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/currucucu/portada.webp",
+          "alt": "Logo de Currucucú Cocina Artesanal Mexicana",
+          "width": 1080,
+          "height": 1080,
+          "variants": [
+            480,
+            960
+          ],
+          "placeholder": "#f8f8f8",
+          "credit": "Cortesía de Currucucú"
+        }
+      ],
       "links": {
         "website": "https://drive.google.com/file/d/1h052lhuQPm7nvKPQhhDOICwVeNlr08Iu/view",
         "instagram": "https://www.instagram.com/currucucumx/",
