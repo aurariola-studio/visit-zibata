@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-21",
+  "updatedAt": "2026-11-22",
   "places": [
     {
       "id": "carls-jr",
@@ -4452,7 +4452,7 @@
       },
       "googleMapsUri": "https://maps.app.goo.gl/QJ2zQDmpnqb9T7U28",
       "googlePlaceId": null,
-      "phone": "+524423679219",
+      "phone": null,
       "photos": [],
       "links": {
         "website": "https://www.puntacacao.mx/contacto/",
