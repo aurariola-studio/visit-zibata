@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-22",
+  "updatedAt": "2026-11-23",
   "places": [
     {
       "id": "carls-jr",
@@ -11063,6 +11063,1051 @@
           "https://www.facebook.com/vanillespa.qro/",
           "https://zibatahoy.com/listing/vanille-spa-and-nails-xentric-zibata/",
           "campo:2026-11-20"
+        ]
+      }
+    },
+    {
+      "id": "asturiano-centro-zibata",
+      "slug": "asturiano-centro-zibata",
+      "name": "Asturiano Centro Zibatá",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": {
+        "es": "Tiendas de Conveniencia.\nDías más divertidos y personas más felices.",
+        "en": "Convenience Stores.\nMore fun days and happier people."
+      },
+      "hours": {
+        "mon": [
+          "08:00-23:00"
+        ],
+        "tue": [
+          "08:00-23:00"
+        ],
+        "wed": [
+          "08:00-23:00"
+        ],
+        "thu": [
+          "08:00-23:00"
+        ],
+        "fri": [
+          "08:00-23:00"
+        ],
+        "sat": [
+          "08:00-23:00"
+        ],
+        "sun": [
+          "08:00-23:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6811647,
+        "lng": -100.3400586
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d005e38b9f3:0xf9320869d9450192",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.tiendaselasturiano.com/",
+        "instagram": "https://www.instagram.com/asturianoalamano/",
+        "facebook": "https://www.facebook.com/asturianoalamano",
+        "tiktok": "https://www.tiktok.com/@asturianoalamano",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d005e38b9f3:0xf9320869d9450192",
+          "https://www.tiendaselasturiano.com/",
+          "https://www.instagram.com/asturianoalamano/",
+          "https://www.facebook.com/asturianoalamano",
+          "https://www.tiktok.com/@asturianoalamano"
+        ]
+      }
+    },
+    {
+      "id": "asturiano-xentric-anahuac",
+      "slug": "asturiano-xentric-anahuac",
+      "name": "Asturiano Xentric Anáhuac",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": {
+        "es": "Tiendas de Conveniencia.\nDías más divertidos y personas más felices.",
+        "en": "Convenience Stores.\nMore fun days and happier people."
+      },
+      "hours": {
+        "mon": [
+          "07:00-23:00"
+        ],
+        "tue": [
+          "07:00-24:00"
+        ],
+        "wed": [
+          "07:00-24:00"
+        ],
+        "thu": [
+          "07:00-24:00"
+        ],
+        "fri": [
+          "07:00-24:00"
+        ],
+        "sat": [
+          "07:00-24:00"
+        ],
+        "sun": [
+          "07:00-24:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6778765,
+        "lng": -100.313201
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d28fe32b325:0x4df86e03d69eb761",
+      "googlePlaceId": null,
+      "phone": "+524421910309",
+      "photos": [],
+      "links": {
+        "website": "https://www.tiendaselasturiano.com/",
+        "instagram": "https://www.instagram.com/asturianoalamano/",
+        "facebook": "https://www.facebook.com/asturianoalamano",
+        "tiktok": "https://www.tiktok.com/@asturianoalamano",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d28fe32b325:0x4df86e03d69eb761",
+          "https://www.tiendaselasturiano.com/",
+          "https://www.instagram.com/asturianoalamano/",
+          "https://www.facebook.com/asturianoalamano",
+          "https://www.tiktok.com/@asturianoalamano"
+        ]
+      }
+    },
+    {
+      "id": "ecobuy",
+      "slug": "ecobuy",
+      "name": "Ecobuy",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "a-granel",
+        "limpieza",
+        "higiene-personal"
+      ],
+      "description": {
+        "es": "Tienda zero waste. Ofrecemos productos alimenticios, de limpieza y de higiene personal.",
+        "en": "Zero waste store. We offer food, cleaning and personal care products."
+      },
+      "hours": {
+        "mon": [
+          "08:00-20:00"
+        ],
+        "tue": [
+          "08:00-20:00"
+        ],
+        "wed": [
+          "08:00-20:00"
+        ],
+        "thu": [
+          "08:00-20:00"
+        ],
+        "fri": [
+          "08:00-20:00"
+        ],
+        "sat": [
+          "08:00-20:00"
+        ],
+        "sun": [
+          "10:00-16:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6747626,
+        "lng": -100.3228557
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/yvFDztVKz7QLTNmx7",
+      "googlePlaceId": null,
+      "phone": "+524422487516",
+      "photos": [],
+      "links": {
+        "website": "https://www.ecobuy.com.mx/",
+        "instagram": "https://www.instagram.com/ecobuy.tienda/",
+        "facebook": "https://www.facebook.com/ecobuytienda/",
+        "tiktok": "https://www.tiktok.com/@ecobuy.zerowaste",
+        "whatsapp": "+524422044059",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/yvFDztVKz7QLTNmx7",
+          "https://www.ecobuy.com.mx/",
+          "https://www.instagram.com/ecobuy.tienda/",
+          "https://www.facebook.com/ecobuytienda/",
+          "https://www.tiktok.com/@ecobuy.zerowaste"
+        ]
+      }
+    },
+    {
+      "id": "el-huerto",
+      "slug": "el-huerto",
+      "name": "El Huerto",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "fruteria"
+      ],
+      "description": {
+        "es": "Frutas, Verduras y Más 🍃",
+        "en": "Fruits, Vegetables and More 🍃"
+      },
+      "hours": {
+        "mon": [
+          "09:00-20:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-20:00"
+        ],
+        "thu": [
+          "09:00-20:00"
+        ],
+        "fri": [
+          "09:00-20:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "09:00-17:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6781897,
+        "lng": -100.3136649
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/LYxTJH4g8qFJYFxC9",
+      "googlePlaceId": null,
+      "phone": "+524621096799",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/elhuertozibata/",
+        "facebook": "https://www.facebook.com/p/El-Huerto-100064737649082/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/LYxTJH4g8qFJYFxC9",
+          "https://www.instagram.com/elhuertozibata/",
+          "https://www.facebook.com/p/El-Huerto-100064737649082/"
+        ]
+      }
+    },
+    {
+      "id": "fruteria-las-delicias",
+      "slug": "fruteria-las-delicias",
+      "name": "Frutería Las Delicias",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "fruteria"
+      ],
+      "description": {
+        "es": "Frutas y verduras de la mejor calidad🍏",
+        "en": "Top quality fruits and vegetables🍏"
+      },
+      "hours": {
+        "mon": [
+          "08:00-21:00"
+        ],
+        "tue": [
+          "08:00-21:00"
+        ],
+        "wed": [
+          "08:00-21:00"
+        ],
+        "thu": [
+          "08:00-21:00"
+        ],
+        "fri": [
+          "08:00-21:00"
+        ],
+        "sat": [
+          "08:00-21:00"
+        ],
+        "sun": [
+          "08:00-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.683469,
+        "lng": -100.3258469
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/scx791VeQyhPZdC38",
+      "googlePlaceId": null,
+      "phone": "+525551388396",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/scx791VeQyhPZdC38"
+        ]
+      }
+    },
+    {
+      "id": "meatgo",
+      "slug": "meatgo",
+      "name": "MeatGo",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "carniceria"
+      ],
+      "description": {
+        "es": "Somos una empresa familiar, enfocada en los servicios de carnicería.",
+        "en": "We are a family business focused on butcher services."
+      },
+      "hours": {
+        "mon": [
+          "08:30-18:00"
+        ],
+        "tue": [
+          "08:30-18:00"
+        ],
+        "wed": [
+          "08:30-18:00"
+        ],
+        "thu": [
+          "08:30-18:00"
+        ],
+        "fri": [
+          "08:30-18:00"
+        ],
+        "sat": [
+          "09:00-18:00"
+        ],
+        "sun": [
+          "10:00-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6746915,
+        "lng": -100.3225852
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/TXUpHX5HwkMf2FvJA",
+      "googlePlaceId": null,
+      "phone": "+524423191675",
+      "photos": [],
+      "links": {
+        "website": "http://meatgo.mx/",
+        "instagram": "https://www.instagram.com/meatgoqro/",
+        "facebook": "https://www.facebook.com/meatgoqro/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/TXUpHX5HwkMf2FvJA",
+          "http://meatgo.mx/",
+          "https://www.instagram.com/meatgoqro/",
+          "https://www.facebook.com/meatgoqro/"
+        ]
+      }
+    },
+    {
+      "id": "mercado-coronel-centro-zibata",
+      "slug": "mercado-coronel-centro-zibata",
+      "name": "Mercado Coronel Centro Zibatá",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "abarrotes",
+        "cremeria"
+      ],
+      "description": {
+        "es": "Hermanos Coronel Cremería es una empresa orgullosamente queretana, con más de 30 años de experiencia en la elaboración y comercialización de productos alimenticios de alta calidad. Nos especializamos en ofrecer quesos frescos, tortillas con 100% maíz nixtamalizado y una amplia variedad de productos que combinan sabor tradicional con precios justos.",
+        "en": "Hermanos Coronel Cremería is a proudly Querétaro-born company with more than 30 years of experience making and selling high-quality food products. We specialize in fresh cheeses, tortillas made with 100% nixtamalized corn and a wide variety of products that combine traditional flavor with fair prices."
+      },
+      "hours": {
+        "mon": [
+          "07:00-20:00"
+        ],
+        "tue": [
+          "07:00-20:00"
+        ],
+        "wed": [
+          "07:00-20:00"
+        ],
+        "thu": [
+          "07:00-20:00"
+        ],
+        "fri": [
+          "07:00-20:00"
+        ],
+        "sat": [
+          "07:00-20:00"
+        ],
+        "sun": [
+          "08:00-16:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6812306,
+        "lng": -100.3401974
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/kgXk23PxRzAfXUcj7",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://cremeriahermanoscoronel.com.mx/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/CremeriaHermanosCoronel",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/kgXk23PxRzAfXUcj7",
+          "https://cremeriahermanoscoronel.com.mx/",
+          "https://www.facebook.com/CremeriaHermanosCoronel"
+        ]
+      }
+    },
+    {
+      "id": "mercado-coronel-xentric-zibata",
+      "slug": "mercado-coronel-xentric-zibata",
+      "name": "Mercado Coronel Xentric Zibatá",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "abarrotes",
+        "cremeria"
+      ],
+      "description": {
+        "es": "Hermanos Coronel Cremería es una empresa orgullosamente queretana, con más de 30 años de experiencia en la elaboración y comercialización de productos alimenticios de alta calidad. Nos especializamos en ofrecer quesos frescos, tortillas con 100% maíz nixtamalizado y una amplia variedad de productos que combinan sabor tradicional con precios justos.",
+        "en": "Hermanos Coronel Cremería is a proudly Querétaro-born company with more than 30 years of experience making and selling high-quality food products. We specialize in fresh cheeses, tortillas made with 100% nixtamalized corn and a wide variety of products that combine traditional flavor with fair prices."
+      },
+      "hours": {
+        "mon": [
+          "07:00-20:00"
+        ],
+        "tue": [
+          "07:00-20:00"
+        ],
+        "wed": [
+          "07:00-20:00"
+        ],
+        "thu": [
+          "07:00-20:00"
+        ],
+        "fri": [
+          "07:00-20:00"
+        ],
+        "sat": [
+          "07:00-20:00"
+        ],
+        "sun": [
+          "07:00-16:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6834846,
+        "lng": -100.3257801
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/9srCW9p9mh28RvAz8",
+      "googlePlaceId": null,
+      "phone": "+524422950900",
+      "photos": [],
+      "links": {
+        "website": "https://cremeriahermanoscoronel.com.mx/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/CremeriaHermanosCoronel",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/9srCW9p9mh28RvAz8",
+          "https://cremeriahermanoscoronel.com.mx/",
+          "https://www.facebook.com/CremeriaHermanosCoronel"
+        ]
+      }
+    },
+    {
+      "id": "mexicava",
+      "slug": "mexicava",
+      "name": "Mexicava",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "licoreria",
+        "bar"
+      ],
+      "description": {
+        "es": "- 8 líneas de cerveza artesanal.\n- Los mejores precios y la mejor selección en cerveza, vino y destilados.\n- Pizza y botana.",
+        "en": "- 8 craft beer lines.\n- The best prices and the best selection of beer, wine and spirits.\n- Pizza and snacks."
+      },
+      "hours": {
+        "mon": [
+          "13:00-21:00"
+        ],
+        "tue": [
+          "13:00-21:00"
+        ],
+        "wed": [
+          "13:00-21:00"
+        ],
+        "thu": [
+          "13:00-02:00"
+        ],
+        "fri": [
+          "13:00-02:00"
+        ],
+        "sat": [
+          "13:00-02:00"
+        ],
+        "sun": [
+          "12:00-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6834254,
+        "lng": -100.3258481
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/GeLNqL6AYKQQpLg2A",
+      "googlePlaceId": null,
+      "phone": "+524428072313",
+      "photos": [],
+      "links": {
+        "website": "https://linktr.ee/mexicava",
+        "instagram": "https://instagram.com/mexicava_zibata",
+        "facebook": "https://www.facebook.com/profile.php?id=61555686951668",
+        "tiktok": null,
+        "whatsapp": "+524428072313",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/GeLNqL6AYKQQpLg2A",
+          "https://linktr.ee/mexicava",
+          "https://instagram.com/mexicava_zibata",
+          "https://www.facebook.com/profile.php?id=61555686951668"
+        ]
+      }
+    },
+    {
+      "id": "oxxo-mol-pitahaya",
+      "slug": "oxxo-mol-pitahaya",
+      "name": "Oxxo MOL Pitahaya",
+      "plazaId": "mol-pitahaya",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": {
+        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
+        "en": "There is always an OXXO nearby to make your household shopping easy."
+      },
+      "hours": {
+        "mon": [
+          "07:00-23:45"
+        ],
+        "tue": [
+          "07:00-23:45"
+        ],
+        "wed": [
+          "07:00-23:45"
+        ],
+        "thu": [
+          "07:00-23:45"
+        ],
+        "fri": [
+          "07:00-23:45"
+        ],
+        "sat": [
+          "07:00-23:45"
+        ],
+        "sun": [
+          "07:00-23:45"
+        ]
+      },
+      "location": {
+        "lat": 20.6774508,
+        "lng": -100.335418
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35de09dd62929:0x9e310be2c6b77602",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.oxxo.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35de09dd62929:0x9e310be2c6b77602",
+          "https://www.oxxo.com/"
+        ]
+      }
+    },
+    {
+      "id": "oxxo-paseo-zibata",
+      "slug": "oxxo-paseo-zibata",
+      "name": "Oxxo Paseo Zibatá",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": {
+        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
+        "en": "There is always an OXXO nearby to make your household shopping easy."
+      },
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6788373,
+        "lng": -100.314529
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35db503b19267:0x65dc5a9998f1f70c",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.oxxo.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35db503b19267:0x65dc5a9998f1f70c",
+          "https://www.oxxo.com/"
+        ]
+      }
+    },
+    {
+      "id": "oxxo-plaza-zielo",
+      "slug": "oxxo-plaza-zielo",
+      "name": "Oxxo Plaza Zielo",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": {
+        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
+        "en": "There is always an OXXO nearby to make your household shopping easy."
+      },
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6747627,
+        "lng": -100.3228557
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7b1e16f0b3:0x2a35d978b7cfcbd9",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.oxxo.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7b1e16f0b3:0x2a35d978b7cfcbd9",
+          "https://www.oxxo.com/"
+        ]
+      }
+    },
+    {
+      "id": "oxxo-xentric-zibata",
+      "slug": "oxxo-xentric-zibata",
+      "name": "Oxxo Xentric Zibatá",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": {
+        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
+        "en": "There is always an OXXO nearby to make your household shopping easy."
+      },
+      "hours": {
+        "mon": [
+          "07:00-22:00"
+        ],
+        "tue": [
+          "07:00-22:00"
+        ],
+        "wed": [
+          "07:00-22:00"
+        ],
+        "thu": [
+          "07:00-22:00"
+        ],
+        "fri": [
+          "07:00-22:00"
+        ],
+        "sat": [
+          "07:00-22:00"
+        ],
+        "sun": [
+          "07:00-22:00"
+        ]
+      },
+      "location": {
+        "lat": 20.683515,
+        "lng": -100.325918
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d0dc41d0831:0x2f16ea3a491dd27c",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.oxxo.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d0dc41d0831:0x2f16ea3a491dd27c",
+          "https://www.oxxo.com/"
+        ]
+      }
+    },
+    {
+      "id": "querekarne",
+      "slug": "querekarne",
+      "name": "Querekarne",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "carniceria"
+      ],
+      "description": {
+        "es": "🥩 Cortes selectos con marmoleo perfecto.\n👨‍🍳 ¡Te asamos tus cortes al momento y SIN COSTO!",
+        "en": "🥩 Select cuts with perfect marbling.\n👨‍🍳 We grill your cuts on the spot at no cost!"
+      },
+      "hours": {
+        "mon": [
+          "09:00-18:00"
+        ],
+        "tue": [
+          "09:00-18:00"
+        ],
+        "wed": [
+          "09:00-18:00"
+        ],
+        "thu": [
+          "09:00-18:00"
+        ],
+        "fri": [
+          "09:00-18:00"
+        ],
+        "sat": [
+          "09:00-18:00"
+        ],
+        "sun": [
+          "10:00-17:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6780659,
+        "lng": -100.3135225
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/QmypekajCUi2W3kFA",
+      "googlePlaceId": null,
+      "phone": "+524423202175",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/querekarne.oficial/",
+        "facebook": "https://www.facebook.com/p/Querekarne-100068161111623/",
+        "tiktok": null,
+        "whatsapp": "+524423202175",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/QmypekajCUi2W3kFA",
+          "https://www.instagram.com/querekarne.oficial/",
+          "https://www.facebook.com/p/Querekarne-100068161111623/"
+        ]
+      }
+    },
+    {
+      "id": "sabego-meat-market",
+      "slug": "sabego-meat-market",
+      "name": "Sabego Meat Market",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "carniceria"
+      ],
+      "description": {
+        "es": "Meat me!🥩 🍗 🍖🐟",
+        "en": "Meat me!🥩 🍗 🍖🐟"
+      },
+      "hours": {
+        "mon": [
+          "09:00-18:00"
+        ],
+        "tue": [
+          "09:00-18:00"
+        ],
+        "wed": [
+          "09:00-18:00"
+        ],
+        "thu": [
+          "09:00-18:00"
+        ],
+        "fri": [
+          "09:00-18:00"
+        ],
+        "sat": [
+          "08:00-18:00"
+        ],
+        "sun": [
+          "10:00-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6836421,
+        "lng": -100.3257654
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/hf77YceF9qJz9hXm6",
+      "googlePlaceId": null,
+      "phone": "+524421962140",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/sabego_meatmarketqro/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524424490512",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": false,
+      "verification": {
+        "status": "uncertain",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/hf77YceF9qJz9hXm6",
+          "https://www.instagram.com/sabego_meatmarketqro/"
+        ]
+      }
+    },
+    {
+      "id": "cremeria-super-luna",
+      "slug": "cremeria-super-luna",
+      "name": "Cremería Súper Luna",
+      "plazaId": "plaza-luna",
+      "giros": [
+        "abarrotes",
+        "cremeria"
+      ],
+      "description": {
+        "es": "Todo lo que necesitas para tu día a día, más cerca y más práctico 🛒💛\nTenemos abarrotes, lácteos, quesos, botanas, dulces, bebidas y mucho más.",
+        "en": "Everything you need for your day to day, closer and more practical 🛒💛\nWe have groceries, dairy, cheeses, snacks, candy, drinks and much more."
+      },
+      "hours": {
+        "mon": [
+          "08:00-21:00"
+        ],
+        "tue": [
+          "08:00-21:00"
+        ],
+        "wed": [
+          "08:00-21:00"
+        ],
+        "thu": [
+          "08:00-21:00"
+        ],
+        "fri": [
+          "08:00-21:00"
+        ],
+        "sat": [
+          "08:00-21:00"
+        ],
+        "sun": [
+          "08:30-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6851828,
+        "lng": -100.3252709
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/9hi3mNVz9EzxMH3J6",
+      "googlePlaceId": null,
+      "phone": "+524428956669",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-23",
+        "sources": [
+          "https://maps.app.goo.gl/9hi3mNVz9EzxMH3J6"
         ]
       }
     }

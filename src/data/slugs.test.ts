@@ -29,6 +29,9 @@ const ETIQUETA_DE_ZONA: Record<string, string> = {
   'centro-zibata': 'Centro Zibatá',
   'xentric-zibata': 'Xentric Zibatá',
   'anahuac-queretaro': 'Anáhuac',
+  'xentric-anahuac': 'Xentric Anáhuac',
+  'plaza-zielo': 'Plaza Zielo',
+  'mol-pitahaya': 'MOL Pitahaya',
 }
 
 /** El nombre lleva un signo que es parte de su logotipo, no una separación de palabras: se declara aquí y se explica. */
@@ -46,6 +49,15 @@ const sinAcentos = (texto: string) =>
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase()
 
+/** Las zonas de ETIQUETA_DE_ZONA como lista de palabras, la más larga primero ("Xentric Anáhuac" antes que "Anáhuac"). */
+const PALABRAS_DE_ZONA = Object.values(ETIQUETA_DE_ZONA)
+  .map((etiqueta) =>
+    sinAcentos(etiqueta)
+      .split(/[^a-z0-9]+/)
+      .filter(Boolean),
+  )
+  .sort((a, b) => b.length - a.length)
+
 /** La base de la dirección: el nombre completo, sin acentos, apóstrofos, conectores ni la ubicación "Zibatá". */
 function baseDe(nombre: string): string {
   let palabras = sinAcentos(nombre)
@@ -57,7 +69,14 @@ function baseDe(nombre: string): string {
     const desde = i > 0 && ZONAS_DEL_NOMBRE.has(palabras[i - 1] ?? '') ? i - 1 : i
     palabras = [...palabras.slice(0, desde), ...palabras.slice(i + 1)]
   }
-  if (palabras.length > 1 && palabras[palabras.length - 1] === 'anahuac') palabras.pop()
+  // Una zona al final del nombre ("Anáhuac", "Xentric Anáhuac", "Plaza Zielo", "MOL Pitahaya") tampoco va en la base.
+  for (const zona of PALABRAS_DE_ZONA) {
+    const desde = palabras.length - zona.length
+    if (desde > 0 && zona.every((palabra, j) => palabras[desde + j] === palabra)) {
+      palabras = palabras.slice(0, desde)
+      break
+    }
+  }
   return palabras.filter((palabra) => !CONECTORES.has(palabra)).join('-')
 }
 

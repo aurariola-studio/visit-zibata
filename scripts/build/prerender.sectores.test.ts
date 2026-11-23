@@ -29,11 +29,14 @@ const datos = (places: Place[]): Dataset => ({
   places,
 })
 
-// Solo los de comida: lo que pasa hoy con un único sector con locales.
-const soloComida = reales.filter((place) => {
-  const categoria = archivo.categories.find((c) => c.giros.some((g) => g.id === place.giros[0]))
-  return categoria?.sectorId === 'comida-y-bebida'
-})
+// Solo los de comida: lo que pasa hoy con un único sector con locales. Un local con un giro de otro
+// sector (un café con panadería) también cuenta en ese sector, así que se pide que todos sean de comida.
+const soloComida = reales.filter((place) =>
+  place.giros.every((giro) => {
+    const categoria = archivo.categories.find((c) => c.giros.some((g) => g.id === giro))
+    return categoria?.sectorId === 'comida-y-bebida'
+  }),
+)
 const dosSectores = [...soloComida, conSalud('prueba-dentista', 'dentista')]
 
 describe('las páginas de sector', () => {

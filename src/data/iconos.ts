@@ -114,6 +114,15 @@ export const ICONOS = [
   'cara-cuidada',
   'rastrillo',
   'cuerpo',
+  'tienda',
+  'tienda-abierta',
+  'carne',
+  'naranja',
+  'copa-de-vino',
+  'leche',
+  'frasco',
+  'spray',
+  'jabon',
 ] as const
 
 export type Icono = (typeof ICONOS)[number]
