@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
+import { calleDeLaPlaza } from '../../src/lib/direccion.ts'
 import { LOCAL_COMPLETO, openApp, panel, plazaDe, ZONA_B } from './helpers.ts'
 
 /**
@@ -93,7 +94,8 @@ test.describe('Fragmentos de búsqueda', () => {
       [
         LOCAL_COMPLETO.name,
         zonaDelLocal.name,
-        zonaDelLocal.address,
+        // La ficha completa la dirección de la plaza con el interior del local: la calle y el número siguen ahí.
+        calleDeLaPlaza(zonaDelLocal.address),
         LOCAL_COMPLETO.description?.es.slice(0, 25),
       ].filter((texto): texto is string => Boolean(texto)),
     )
