@@ -127,6 +127,19 @@ describe('datos estructurados de un local', () => {
     expect(datos).toMatchObject({ '@type': 'Restaurant', name: 'x', url: base.url })
   })
 
+  it('con interior, el marcado dice la misma dirección que la ficha', () => {
+    const place = hacerLugar({ unit: { locales: ['136'] } })
+    const datos = negocio({
+      ...base,
+      place,
+      category: categoria('mexicana'),
+      direccion: 'Av. Paseo de las Pitahayas 9-B, Local 136, Zibatá',
+    })
+    expect(datos).toMatchObject({
+      address: { streetAddress: 'Av. Paseo de las Pitahayas 9-B, Local 136, Zibatá' },
+    })
+  })
+
   it('la dirección de la zona es la del local, con la localidad del propio proyecto', () => {
     const place = hacerLugar({ location: { lat: 20.68, lng: -100.31 } })
     expect(negocio({ ...base, place, category: categoria('mexicana') })).toMatchObject({

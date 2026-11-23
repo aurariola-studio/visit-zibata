@@ -844,21 +844,34 @@ describe('editar un negocio existente', () => {
     expect(preparado.place.cierre).toEqual({ motivo: 'vacaciones', desde: '2026-10-20' })
   })
 
-  it('el local dentro de la plaza se guarda, se conserva si el formulario no lo trae y se quita vacío', () => {
-    const conLocal: Place = { ...existente, unit: 'Local 226' }
-    const dataConLocal = {
+  it('el interior del local se guarda, se conserva si el formulario no lo trae y se quita con null', () => {
+    const conInterior: Place = { ...existente, unit: { planta: 'baja', locales: ['226'] } }
+    const dataConInterior = {
       ...dataset,
-      places: dataset.places.map((fila) => (fila.id === existente.id ? conLocal : fila)),
+      places: dataset.places.map((fila) => (fila.id === existente.id ? conInterior : fila)),
     }
-    const guardar = (base: Place, cambios: Record<string, unknown>) => {
-      const preparado = prepararNegocio(dataConLocal, crudo, editar(base, cambios), HOY)
+    const guardar = (cambios: Record<string, unknown>) => {
+      const preparado = prepararNegocio(dataConInterior, crudo, editar(existente, cambios), HOY)
       if (!preparado.ok) throw new Error('no preparó')
       return preparado.place.unit
     }
-    // Un formulario o un CSV que no sabe del local no se lo lleva por delante.
-    expect(guardar(conLocal, {})).toBe('Local 226')
-    expect(guardar(existente, { local: 'Planta Baja, Local 136' })).toBe('Planta Baja, Local 136')
-    expect(guardar(conLocal, { local: '' })).toBeUndefined()
+    // Un formulario o un CSV que no sabe del interior no se lo lleva por delante.
+    expect(guardar({})).toEqual({ planta: 'baja', locales: ['226'] })
+    expect(guardar({ interior: { edificio: 'A', locales: ['137', '138'] } })).toEqual({
+      edificio: 'A',
+      locales: ['137', '138'],
+    })
+    expect(guardar({ interior: null })).toBeUndefined()
+  })
+
+  it('rechaza un interior que no sigue el formato', () => {
+    const preparado = prepararNegocio(
+      dataset,
+      crudo,
+      editar(existente, { interior: { locales: ['local 12'] } }),
+      HOY,
+    )
+    expect(preparado.ok).toBe(false)
   })
 
   it('rechaza un cierre temporal que empieza en el futuro', () => {

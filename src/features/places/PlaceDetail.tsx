@@ -19,6 +19,7 @@ import { useCatalog, usePlaceDetails } from '../../data/CatalogContext.tsx'
 import { locale, localized, t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
 import { etiquetaDeGiro, lista } from '../../lib/categorias.ts'
+import { direccionDeLocal } from '../../lib/direccion.ts'
 import { registrar, salidaDe } from '../../lib/eventos.ts'
 import { focusPanelHeading } from '../../lib/focus.ts'
 import { placeDirections, telUrl, whatsappUrl } from '../../lib/maps-url.ts'
@@ -204,6 +205,8 @@ export function PlaceDetail({
   const datos =
     detail ?? (detalles.status === 'ready' ? detalles.byId.get(place.id) : undefined) ?? SIN_DETALLE
   const directions = placeDirections(datos.googleMapsUri, plaza)
+  // La calle de la plaza y el interior del local, igual que lo dice el cuerpo sin JavaScript y el marcado.
+  const direccion = direccionDeLocal(plaza.address, datos.unit, t, locale)
   /**
    * Los giros del local en una sola línea, en su orden y con el icono de cada uno. La ficha es la
    * vista que los enseña completos; la tarjeta recorta por ancho y cuenta el resto.
@@ -408,8 +411,7 @@ export function PlaceDetail({
           <MapPin aria-hidden="true" />
           <span>
             {plaza.name}
-            {datos.unit && `, ${datos.unit}`}
-            {plaza.address && <span className={styles.address}>{plaza.address}</span>}
+            {direccion && <span className={styles.address}>{direccion}</span>}
           </span>
         </p>
       </header>

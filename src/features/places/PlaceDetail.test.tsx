@@ -51,20 +51,37 @@ describe('PlaceDetail', () => {
     expect(directions).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
-  it('el local dentro de la plaza va junto al nombre de la plaza, y sin dato no se pinta nada', async () => {
+  it('la dirección es la de la plaza con el interior del local, y sin interior es solo la de la plaza', async () => {
+    const conCalle = { ...plaza, address: 'Av. Paseo de las Pitahayas 55, Zibatá' }
     const { unmount } = await renderWithCatalog(
       <PlaceDetail
-        {...partes(makePlace({ id: 'con-local', plazaId: plaza.id, unit: 'Local 226' }))}
-        plaza={plaza}
+        {...partes(
+          makePlace({
+            id: 'con-local',
+            plazaId: plaza.id,
+            unit: { planta: 'baja', locales: ['136'] },
+          }),
+        )}
+        plaza={conCalle}
         backLabel="Volver"
         onBack={vi.fn()}
         onClose={vi.fn()}
       />,
     )
-    expect(screen.getByText('Plaza Norte, Local 226', { exact: false })).toBeInTheDocument()
+    expect(
+      screen.getByText('Av. Paseo de las Pitahayas 55, Planta Baja, Local 136, Zibatá'),
+    ).toBeInTheDocument()
     unmount()
-    await setup(makePlace({ id: 'sin-local', plazaId: plaza.id }))
-    expect(screen.queryByText(/Local \d/)).not.toBeInTheDocument()
+    await renderWithCatalog(
+      <PlaceDetail
+        {...partes(makePlace({ id: 'sin-local', plazaId: plaza.id }))}
+        plaza={conCalle}
+        backLabel="Volver"
+        onBack={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    )
+    expect(screen.getByText('Av. Paseo de las Pitahayas 55, Zibatá')).toBeInTheDocument()
   })
 
   it('excluye de los fragmentos de búsqueda el texto de interfaz, no lo que dice el local', async () => {

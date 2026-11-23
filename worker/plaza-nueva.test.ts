@@ -210,10 +210,10 @@ describe('la procedencia: no se inventa', () => {
     expect(fila.description).toBeNull()
     expect(fila.address).toBeNull()
     const con = filaNueva(
-      preparar({ descripcionEs: 'Plaza de prueba.', direccion: 'Calle Falsa 1' }),
+      preparar({ descripcionEs: 'Plaza de prueba.', direccion: 'Calle Falsa 1, Zibatá' }),
     )
     expect(con.description).toEqual({ es: 'Plaza de prueba.' })
-    expect(con.address).toBe('Calle Falsa 1')
+    expect(con.address).toBe('Calle Falsa 1, Zibatá')
   })
 })
 

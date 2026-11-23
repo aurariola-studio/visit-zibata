@@ -988,7 +988,11 @@
         "uberEats": null,
         "didiFood": null
       },
-      "unit": "Local 226",
+      "unit": {
+        "locales": [
+          "226"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -7930,6 +7934,12 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "22",
+          "23"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -11258,6 +11268,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "12"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -11325,6 +11340,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "119"
+        ]
       },
       "active": true,
       "verification": {
@@ -11524,6 +11544,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "116"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -11591,6 +11616,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "120"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -11657,6 +11687,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "219"
+        ]
       },
       "active": true,
       "verification": {
@@ -11985,6 +12020,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "120"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -12050,6 +12090,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "118"
+        ]
       },
       "active": false,
       "verification": {

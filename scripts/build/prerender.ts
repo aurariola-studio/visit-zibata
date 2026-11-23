@@ -25,6 +25,7 @@ import {
   lista,
   type Traductor,
 } from '../../src/lib/categorias.ts'
+import { direccionDeLocal } from '../../src/lib/direccion.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
@@ -501,6 +502,8 @@ export function pagesFor(
   )
 
   fichas.forEach(({ place, plaza, giros }, indice) => {
+    // La misma dirección para el marcado y para el cuerpo sin JavaScript (ver src/lib/direccion.ts).
+    const direccion = direccionDeLocal(plaza?.address, place.unit, traducir, locale)
     pages.push({
       href: route({ placeSlug: place.slug }),
       // La última vez que el dato cambió de verdad: la verificación o, si es más reciente, el cierre.
@@ -519,6 +522,7 @@ export function pagesFor(
         url: absolute(route({ placeSlug: place.slug })),
         plazaUrl: plaza?.active ? absolute(route({ plazaSlug: plaza.slug })) : undefined,
         image: absolute(image),
+        direccion,
         locale,
       }),
       contenido: contenidoDeLugar({
@@ -543,7 +547,7 @@ export function pagesFor(
         plaza: plaza?.active
           ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
           : undefined,
-        direccion: plaza?.address ?? undefined,
+        direccion: direccion ?? undefined,
         descripcion: text(place.description, locale) || undefined,
         dias: DIAS.map((dia) => ({
           dia: copy[`day.${dia}`],

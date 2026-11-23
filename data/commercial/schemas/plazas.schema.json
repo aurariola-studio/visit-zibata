@@ -59,7 +59,8 @@
             "anyOf": [
               {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "pattern": "^[^,]+ (?:[0-9]+[A-Za-z]?(?:-[A-Za-z0-9]+)?|s\\/n), Zibatá$"
               },
               {
                 "type": "null"

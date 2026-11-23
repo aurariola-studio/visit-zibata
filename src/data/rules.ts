@@ -162,3 +162,9 @@ export function problemaDeFotos(id: string, srcs: readonly string[]): string | n
     return null
   return `La foto de portada se llama images/places/${id}/${NOMBRE_DE_PORTADA}.webp (o .jpg, .png), no ${src}`
 }
+
+/** La dirección de una plaza: una calle, su número (o "s/n") y la localidad. Ver `PlazaSchema.address`. */
+export const PLAZA_ADDRESS = /^[^,]+ (?:[0-9]+[A-Za-z]?(?:-[A-Za-z0-9]+)?|s\/n), Zibatá$/
+
+/** Las plantas que distingue la guía, de abajo hacia arriba. "Segundo piso" es `alta`. */
+export const UNIT_FLOORS = ['sotano', 'baja', 'alta'] as const

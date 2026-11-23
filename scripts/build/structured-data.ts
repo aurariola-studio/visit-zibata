@@ -81,6 +81,8 @@ export interface DatosDelLugar {
   plazaUrl: string | undefined
   /** Imagen de vista previa absoluta. */
   image: string | undefined
+  /** La dirección del local (la de su plaza y el interior), de `direccionDeLocal`. Sin ella, la de la plaza. */
+  direccion?: string | null
   locale: Locale
 }
 
@@ -88,7 +90,7 @@ export interface DatosDelLugar {
 export function negocio(datos: DatosDelLugar): Record<string, unknown> {
   const { place, plaza, category, giros, url, image, locale } = datos
   const tipo = category?.schemaType ?? 'LocalBusiness'
-  const direccion = plaza?.address
+  const direccion = datos.direccion ?? plaza?.address
 
   // `sameAs` son los perfiles oficiales del propio negocio, que es justo lo que el campo espera.
   // Los enlaces de reparto no van: son de la plataforma, no del local.

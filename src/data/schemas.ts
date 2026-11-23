@@ -17,10 +17,12 @@ import {
   isValidTimeRange,
   isWhatsappLink,
   LOCATION_CONFIDENCE,
+  PLAZA_ADDRESS,
   RESEARCH_STATUS,
   SCHEMA_TYPES,
   SLUG_PATTERN,
   TIME_RANGE_PATTERN,
+  UNIT_FLOORS,
 } from './rules.ts'
 
 export {
@@ -143,6 +145,34 @@ export const VerificationSchema = z.strictObject({
 
 const googleMapsUrl = httpUrl.refine(isGoogleMapsUrl, 'Debe ser un enlace https de Google Maps')
 
+/**
+ * Dónde está un local dentro de su plaza, en partes y no en una frase, para que todas las fichas lo digan igual:
+ * "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138, Zibatá". La calle y el número no
+ * se repiten aquí: son los de la plaza, y una dirección que no coincide con la de su plaza es una de las dos mal.
+ *
+ * El orden de las claves es el orden en que se dice y el que sigue el archivo. Los locales son los rótulos tal
+ * como los pone el negocio ("226", "110-A", "L-131"), en mayúsculas; un rango ("24 a 27") se escribe entero.
+ * No hay referencias libres ("a un costado de..."): habría que traducirlas.
+ */
+export const UnitSchema = z
+  .strictObject({
+    edificio: z
+      .string()
+      .regex(/^[A-Z0-9]{1,3}$/, 'El edificio es una a tres letras o números en mayúsculas')
+      .optional(),
+    planta: z.enum(UNIT_FLOORS).optional(),
+    locales: z
+      .array(
+        z
+          .string()
+          .regex(/^[A-Z]{0,2}-?[0-9]{1,3}(-?[A-Z])?$/, 'Un local es como 226, 110-A o L-131'),
+      )
+      .min(1)
+      .max(8)
+      .optional(),
+  })
+  .refine((unit) => Object.keys(unit).length > 0, 'El local no puede ir vacío')
+
 export const PlaceSchema = z.strictObject({
   id: slug,
   slug: slug,
@@ -176,13 +206,8 @@ export const PlaceSchema = z.strictObject({
   phone: e164Phone.nullable(),
   photos: z.array(PhotoSchema),
   links: LinksSchema,
-  /**
-   * El local dentro de su plaza, tal como lo rotula el negocio ("Local 226", "Planta Baja, Local 136").
-   * La dirección de la calle es la de la plaza (`plaza.address`) y la comparten todos sus locales, así
-   * que el número va aquí. Texto libre en español, como la dirección. Solo se carga lo que el negocio
-   * o el propietario confirmaron; sin dato, no se pinta nada.
-   */
-  unit: z.string().trim().min(1).max(60).optional(),
+  /** Dónde está dentro de su plaza. La calle y el número son los de la plaza (`plaza.address`). */
+  unit: UnitSchema.optional(),
   active: z.boolean(),
   /**
    * Cerrado temporalmente: por obra, vacaciones o cambio de dueño.
@@ -214,7 +239,14 @@ export const PlazaSchema = z.strictObject({
   slug: slug,
   name: nonEmptyText,
   description: LocalizedTextSchema.nullable(),
-  address: nonEmptyText.nullable(),
+  /**
+   * Calle y número, y "Zibatá" al final: "Av. Paseo de las Pitahayas 55, Zibatá". Sin código postal, sin colonia
+   * y sin locales (esos son de cada negocio, en `unit`). Las fichas de sus locales parten de esta línea, y
+   * `direccionDeLocal` cuenta con que termina así.
+   */
+  address: nonEmptyText
+    .regex(PLAZA_ADDRESS, 'La dirección es calle y número, y termina en ", Zibatá"')
+    .nullable(),
   coordinates: LatLngSchema,
   geometry: PlazaGeometrySchema,
   active: z.boolean(),

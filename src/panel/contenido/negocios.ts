@@ -207,8 +207,19 @@ export function pintarFormulario(negocio: Negocio | null): void {
             <span class="ayuda" data-plaza-aviso></span>
           </label>
           <label class="campo-form">
-            <span>Local <span class="ayuda">como lo rotula el negocio, por ejemplo Local 226</span></span>
-            <input class="${controls.campo}" type="text" name="local" value="${texto(negocio?.unit ?? '')}" maxlength="60" />
+            <span>Edificio <span class="ayuda">de una a tres letras o números, como A</span></span>
+            <input class="${controls.campo}" type="text" name="edificio" value="${texto(negocio?.unit?.edificio ?? '')}" maxlength="3" />
+          </label>
+          <label class="campo-form">
+            <span>Planta</span>
+            <select class="${controls.campo}" name="planta">
+              <option value="">Sin planta</option>
+              ${PLANTAS.map(([clave, rotulo]) => `<option value="${clave}"${negocio?.unit?.planta === clave ? ' selected' : ''}>${rotulo}</option>`).join('')}
+            </select>
+          </label>
+          <label class="campo-form">
+            <span>Locales <span class="ayuda">como los rotula el negocio, separados por coma: 137, 138 o 110-A</span></span>
+            <input class="${controls.campo}" type="text" name="locales" value="${texto((negocio?.unit?.locales ?? []).join(', '))}" maxlength="60" />
           </label>
         </div>
       </section>
@@ -495,6 +506,29 @@ function anadirGiro(id: string): void {
   pintarGirosFormulario()
 }
 
+/** Las plantas del formulario, con el rótulo que lleva la ficha en español. */
+const PLANTAS: [string, string][] = [
+  ['sotano', 'Sótano'],
+  ['baja', 'Planta Baja'],
+  ['alta', 'Planta Alta'],
+]
+
+/** El edificio, la planta y los locales del formulario; `null` si no se puso nada (quita el interior que hubiera). */
+function interiorDe(formulario: HTMLFormElement) {
+  const edificio = valorDe(formulario, 'edificio').toUpperCase()
+  const planta = valorDe(formulario, 'planta')
+  const locales = valorDe(formulario, 'locales')
+    .toUpperCase()
+    .split(/[\s,;]+/)
+    .filter(Boolean)
+  if (!edificio && !planta && locales.length === 0) return null
+  return {
+    ...(edificio && { edificio }),
+    ...(planta && { planta }),
+    ...(locales.length > 0 && { locales }),
+  }
+}
+
 function valorDe(formulario: HTMLFormElement, nombre: string): string {
   const campo = formulario.elements.namedItem(nombre)
   if (campo instanceof RadioNodeList) return campo.value.trim()
@@ -623,7 +657,7 @@ function leerFormulario(formulario: HTMLFormElement): {
     descripcionEs,
     descripcionEn,
     telefono: valorDe(formulario, 'telefono'),
-    local: valorDe(formulario, 'local'),
+    interior: interiorDe(formulario),
     sitio: valorDe(formulario, 'sitio'),
     instagram: valorDe(formulario, 'instagram'),
     facebook: valorDe(formulario, 'facebook'),
