@@ -23,7 +23,7 @@ export const categoriesFixture: Category[] = [
       {
         id: 'panaderia',
         label: { es: 'Panadería' },
-        icon: 'croissant',
+        icon: 'bolillo',
         synonyms: ['pan', 'bakery'],
       },
     ],

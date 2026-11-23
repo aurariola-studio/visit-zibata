@@ -2589,7 +2589,7 @@
         "es": "Panaderías",
         "en": "Bakeries"
       },
-      "icon": "croissant",
+      "icon": "bolillo",
       "hue": 38,
       "schemaType": "Bakery",
       "order": 550,
@@ -2608,7 +2608,7 @@
             "es": "Panadería",
             "en": "Bakery"
           },
-          "icon": "croissant",
+          "icon": "bolillo",
           "synonyms": [
             "pan",
             "bakery",
