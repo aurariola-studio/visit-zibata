@@ -64,6 +64,7 @@ export const en = {
   'place.unit.floor.alta': 'Upper floor',
   'place.unit.local': 'Unit',
   'place.unit.locales': 'Units',
+  'place.unit.island': 'Island',
   'place.onlyYou': 'Only you',
   'place.directionsHint': 'Opens Google Maps in a new tab',
   'place.machineTranslation': 'Automatic translation',

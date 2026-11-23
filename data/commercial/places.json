@@ -1230,6 +1230,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2425,6 +2428,9 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1923481549-la-gaspacheria",
         "uberEats": "https://www.ubereats.com/mx/store/la-gaspacheria-tradicional/nUmQV6hdW0uIyNkzjQkdrg",
         "didiFood": null
+      },
+      "unit": {
+        "isla": "5"
       },
       "active": true,
       "verification": {
@@ -4782,6 +4788,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4843,6 +4852,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4881,6 +4893,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -4924,6 +4939,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4966,6 +4984,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "isla": true
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -5004,6 +5025,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -5061,6 +5085,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -5100,6 +5127,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -6284,6 +6314,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -6324,6 +6357,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -6362,6 +6398,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -6682,6 +6721,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "201"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -6746,6 +6790,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "63"
+        ]
       },
       "active": true,
       "verification": {
@@ -6812,6 +6861,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "planta": "sotano"
       },
       "active": true,
       "verification": {
@@ -6882,6 +6934,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "204"
+        ]
       },
       "active": true,
       "verification": {
@@ -6955,6 +7012,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "58"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7019,6 +7081,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "201"
+        ]
       },
       "active": true,
       "verification": {
@@ -7091,6 +7158,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "53"
+        ]
       },
       "active": true,
       "verification": {
@@ -7165,6 +7237,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "47"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7238,6 +7315,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "47"
+        ]
       },
       "active": true,
       "verification": {
@@ -7378,6 +7460,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "110-A"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7444,6 +7531,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "11"
+        ]
       },
       "active": true,
       "verification": {
@@ -7513,6 +7605,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "203"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7579,6 +7676,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "203"
+        ]
       },
       "active": true,
       "verification": {
@@ -7925,6 +8027,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "121"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -8197,6 +8304,13 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "A",
+        "locales": [
+          "137",
+          "138"
+        ]
       },
       "active": true,
       "verification": {
@@ -8667,6 +8781,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "L-131"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -8806,6 +8925,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "216"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -8874,6 +8998,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "45"
+        ]
       },
       "active": true,
       "verification": {
@@ -9005,6 +9134,12 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "45"
+        ]
       },
       "active": true,
       "verification": {
@@ -9138,6 +9273,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "16"
+        ]
       },
       "active": true,
       "verification": {
@@ -9418,6 +9558,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "112"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -9549,6 +9694,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "59"
+        ]
       },
       "active": true,
       "verification": {

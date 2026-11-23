@@ -78,6 +78,7 @@ export const es = {
   'place.unit.floor.alta': 'Planta Alta',
   'place.unit.local': 'Local',
   'place.unit.locales': 'Locales',
+  'place.unit.island': 'Isla',
   'place.onlyYou': 'Solo para ti',
   'place.directionsHint': 'Abre Google Maps en una pestaña nueva',
   'place.machineTranslation': 'Traducción automática',

@@ -147,7 +147,7 @@ const googleMapsUrl = httpUrl.refine(isGoogleMapsUrl, 'Debe ser un enlace https 
 
 /**
  * Dónde está un local dentro de su plaza, en partes y no en una frase, para que todas las fichas lo digan igual:
- * "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138, Zibatá". La calle y el número no
+ * "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138, Zibatá" (el edificio es su nombre o letra: "Edificio Liderazgo"). La calle y el número no
  * se repiten aquí: son los de la plaza, y una dirección que no coincide con la de su plaza es una de las dos mal.
  *
  * El orden de las claves es el orden en que se dice y el que sigue el archivo. Los locales son los rótulos tal
@@ -158,7 +158,10 @@ export const UnitSchema = z
   .strictObject({
     edificio: z
       .string()
-      .regex(/^[A-Z0-9]{1,3}$/, 'El edificio es una a tres letras o números en mayúsculas')
+      .regex(
+        /^[\p{L}0-9][\p{L}0-9 ]{0,29}$/u,
+        'El edificio es su nombre o letra, sin signos (Liderazgo, A)',
+      )
       .optional(),
     planta: z.enum(UNIT_FLOORS).optional(),
     locales: z
@@ -169,6 +172,10 @@ export const UnitSchema = z
       )
       .min(1)
       .max(8)
+      .optional(),
+    /** Un puesto en medio del pasillo: `true` es "Isla" a secas y un número es "Isla 5". */
+    isla: z
+      .union([z.literal(true), z.string().regex(/^[0-9]{1,3}$/, 'Una isla es su número')])
       .optional(),
   })
   .refine((unit) => Object.keys(unit).length > 0, 'El local no puede ir vacío')

@@ -179,7 +179,8 @@ const isUnit = (value: unknown) =>
   isObject(value) &&
   (value.edificio === undefined || isText(value.edificio)) &&
   (value.planta === undefined || (UNIT_FLOORS as readonly unknown[]).includes(value.planta)) &&
-  (value.locales === undefined || arrayOf(isText)(value.locales))
+  (value.locales === undefined || arrayOf(isText)(value.locales)) &&
+  (value.isla === undefined || value.isla === true || isText(value.isla))
 
 const checkPlace: Check = (value) => checkPlaceSummary(value) ?? checkPlaceDetail(value)
 

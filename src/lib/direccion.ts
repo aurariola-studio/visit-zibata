@@ -16,6 +16,7 @@ type Clave =
   | 'place.unit.building'
   | 'place.unit.local'
   | 'place.unit.locales'
+  | 'place.unit.island'
 type Traducir = (clave: Clave) => string
 
 /** Las partes que se añaden a la calle de la plaza: edificio, planta y locales, ya en el idioma. */
@@ -28,6 +29,10 @@ export function interiorDeLocal(unit: Place['unit'], traducir: Traducir, idioma:
     const lista = new Intl.ListFormat(idioma, { style: 'long', type: 'conjunction' })
     const palabra = traducir(unit.locales.length > 1 ? 'place.unit.locales' : 'place.unit.local')
     partes.push(`${palabra} ${lista.format(unit.locales)}`)
+  }
+  if (unit.isla) {
+    const isla = traducir('place.unit.island')
+    partes.push(unit.isla === true ? isla : `${isla} ${unit.isla}`)
   }
   return partes
 }

@@ -207,8 +207,8 @@ export function pintarFormulario(negocio: Negocio | null): void {
             <span class="ayuda" data-plaza-aviso></span>
           </label>
           <label class="campo-form">
-            <span>Edificio <span class="ayuda">de una a tres letras o números, como A</span></span>
-            <input class="${controls.campo}" type="text" name="edificio" value="${texto(negocio?.unit?.edificio ?? '')}" maxlength="3" />
+            <span>Edificio <span class="ayuda">su nombre o letra: Liderazgo, A</span></span>
+            <input class="${controls.campo}" type="text" name="edificio" value="${texto(negocio?.unit?.edificio ?? '')}" maxlength="30" />
           </label>
           <label class="campo-form">
             <span>Planta</span>
@@ -220,6 +220,10 @@ export function pintarFormulario(negocio: Negocio | null): void {
           <label class="campo-form">
             <span>Locales <span class="ayuda">como los rotula el negocio, separados por coma: 137, 138 o 110-A</span></span>
             <input class="${controls.campo}" type="text" name="locales" value="${texto((negocio?.unit?.locales ?? []).join(', '))}" maxlength="60" />
+          </label>
+          <label class="campo-form">
+            <span>Isla <span class="ayuda">su número, o sí si es una isla sin número</span></span>
+            <input class="${controls.campo}" type="text" name="isla" value="${texto(negocio?.unit?.isla === true ? 'sí' : (negocio?.unit?.isla ?? ''))}" maxlength="3" />
           </label>
         </div>
       </section>
@@ -515,17 +519,20 @@ const PLANTAS: [string, string][] = [
 
 /** El edificio, la planta y los locales del formulario; `null` si no se puso nada (quita el interior que hubiera). */
 function interiorDe(formulario: HTMLFormElement) {
-  const edificio = valorDe(formulario, 'edificio').toUpperCase()
+  const edificio = valorDe(formulario, 'edificio')
   const planta = valorDe(formulario, 'planta')
   const locales = valorDe(formulario, 'locales')
     .toUpperCase()
     .split(/[\s,;]+/)
     .filter(Boolean)
-  if (!edificio && !planta && locales.length === 0) return null
+  const textoIsla = valorDe(formulario, 'isla').toLowerCase()
+  const isla = /^(s[ií]|x)$/.test(textoIsla) ? true : textoIsla
+  if (!edificio && !planta && locales.length === 0 && !isla) return null
   return {
     ...(edificio && { edificio }),
     ...(planta && { planta }),
     ...(locales.length > 0 && { locales }),
+    ...(isla && { isla }),
   }
 }
 

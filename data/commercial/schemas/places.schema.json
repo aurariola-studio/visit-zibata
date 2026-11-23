@@ -356,7 +356,7 @@
             "properties": {
               "edificio": {
                 "type": "string",
-                "pattern": "^[A-Z0-9]{1,3}$"
+                "pattern": "^[\\p{L}0-9][\\p{L}0-9 ]{0,29}$"
               },
               "planta": {
                 "type": "string",
@@ -374,6 +374,18 @@
                   "type": "string",
                   "pattern": "^[A-Z]{0,2}-?[0-9]{1,3}(-?[A-Z])?$"
                 }
+              },
+              "isla": {
+                "anyOf": [
+                  {
+                    "type": "boolean",
+                    "const": true
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9]{1,3}$"
+                  }
+                ]
               }
             },
             "additionalProperties": false

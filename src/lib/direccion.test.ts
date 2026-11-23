@@ -34,6 +34,22 @@ describe('la dirección de un local', () => {
     )
   })
 
+  it('el edificio puede ser un nombre, y una isla se dice con o sin número', () => {
+    const calle = 'Circuito Universidades I km 7, Zibatá'
+    expect(direccionDeLocal(calle, { edificio: 'Liderazgo' }, enEs, 'es')).toBe(
+      'Circuito Universidades I km 7, Edificio Liderazgo, Zibatá',
+    )
+    expect(direccionDeLocal(calle, { isla: true }, enEs, 'es')).toBe(
+      'Circuito Universidades I km 7, Isla, Zibatá',
+    )
+    expect(direccionDeLocal(CALLE, { isla: '5' }, enEs, 'es')).toBe(
+      'Av. Paseo de las Pitahayas 55, Isla 5, Zibatá',
+    )
+    expect(direccionDeLocal(calle, { edificio: 'Liderazgo' }, enEn, 'en')).toBe(
+      'Circuito Universidades I km 7, Building Liderazgo, Zibatá',
+    )
+  })
+
   it('en inglés se dice con las palabras del inglés', () => {
     expect(
       direccionDeLocal(CALLE, { planta: 'alta', locales: ['110-A', 'L-131'] }, enEn, 'en'),
