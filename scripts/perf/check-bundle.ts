@@ -122,9 +122,21 @@ const KB = 1024
  * paquete queda en 129,4, con el de Lucide de este sector también diferido. `proteina`, de Comida y con locales hoy, se queda dentro para que no parpadee.
  * Cuando el sector tenga locales y su icono salga en el primer pintado, habrá que decidir entre
  * precargar el fragmento y volver a meterlo, y eso se mide con la cuenta de entonces.
+ *
+ * 2026-11-23 (decisión del propietario: una estructura que no haya que rehacer con cada categoría): TODOS los
+ * dibujos de iconos (sectores, categorías y giros) salieron del paquete inicial a un solo fragmento,
+ * `registro-de-iconos-*.js`, que `CategoryIcon` pide en cuanto arranca, en paralelo con los datos del catálogo.
+ * Esto revierte el criterio del 2026-11-17 (los de la primera pantalla se quedan dentro), que era un parche de
+ * presupuesto: ningún icono se puede pintar antes de que llegue el catálogo, que ya es un `import()`, así que
+ * tenerlos dentro solo costaba peso. `initialJs` bajó de 129,4 a 119,6 KB y deja de depender de cuántas
+ * categorías haya. El peso de los dibujos pasa a `iconosJs`, con su propio tope. Si ese tope aprieta, el
+ * siguiente paso es partir el registro por sector (un fragmento por sector, que se pide con el sector activo),
+ * no subir el número.
  */
 const BUDGET = {
   initialJs: 130,
+  // Los dibujos de todos los iconos (ver la nota de 2026-11-23). Medido: 23,7 KB; unos 0,2 KB por icono nuevo.
+  iconosJs: 26,
   // 11 y no 10: el estilo del contenido escrito que trae cada página (v4.16) dejó la medida en 9,9
   // de 10, y un margen de cien bytes hace que el siguiente cambio honesto rompa la compilación sin
   // que haya pasado nada. El tope sigue existiendo para cazar un crecimiento descuidado, no para
@@ -182,6 +194,8 @@ const DATOS_DE_ARRANQUE = /^(categories|plazas|places-resumen)-.*\.js$/
 const DATOS_DE_DETALLE = /^places-detalle-.*\.js$/
 /** Todo lo que parece un trozo de datos, venga o no con un nombre que esperemos. */
 const PARECE_DATOS = /^(categories|plazas|places|_?virtual_zibata-places)[-_].*\.js$/
+/** El registro de dibujos de iconos que carga `CategoryIcon` con `import('./registro-de-iconos.tsx')`. */
+const ICONOS_CHUNK = /^registro-de-iconos-.*\.js$/
 /** El chunk que carga `MapView` con `import('./realismo/install.ts')`. */
 const REALISMO_CHUNK = /^install-.*\.js$/
 
@@ -220,6 +234,7 @@ function medirRealismo(dir: string): number {
 const measured = {
   initialJs: sum(referenced('.js')),
   initialCss: sum(referenced('.css')),
+  iconosJs: sum(matching(ICONOS_CHUNK)),
   mapJs: sum(matching(/^MapView-.*\.js$/)),
   mapCss: sum(matching(/^MapView-.*\.css$/)),
   dataJs: sum(matching(DATOS_DE_ARRANQUE)),
@@ -262,6 +277,14 @@ for (const nombre of matching(PARECE_DATOS)) {
     console.error(`✗ El trozo de datos ${nombre} no entra en ningún presupuesto`)
     failed = true
   }
+}
+// Si el chunk de iconos se renombrara, la suma daría 0 y el límite pasaría sin medir nada.
+if (matching(ICONOS_CHUNK).length !== 1) {
+  console.error(
+    '✗ Se esperaba un chunk de iconos (registro-de-iconos-*.js) en dist/assets y hay ' +
+      matching(ICONOS_CHUNK).length,
+  )
+  failed = true
 }
 // Si el chunk se renombrara, la suma daría 0 y el límite pasaría sin medir nada.
 if (matching(REALISMO_CHUNK).length === 0) {

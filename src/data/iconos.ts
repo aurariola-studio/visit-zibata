@@ -1,7 +1,7 @@
 /**
  * Los nombres de icono que existen en la guía.
  *
- * `CategoryIcon.tsx` tiene el dibujo de cada uno; esta lista es la que pueden usar los datos y el
+ * `registro-de-iconos.tsx` tiene el dibujo de cada uno (`CategoryIcon.tsx` solo lo pide); esta lista es la que pueden usar los datos y el
  * editor del panel. Se mantiene aparte del componente a propósito: el Worker y el panel necesitan
  * los nombres sin arrastrar React ni los SVG al paquete del Worker.
  *

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { hasCategoryIcon } from '../components/icons/CategoryIcon.tsx'
+import { hasCategoryIcon } from '../components/icons/registro-de-iconos.tsx'
 import { ICONOS } from './iconos.ts'
 
 describe('los nombres de icono', () => {
