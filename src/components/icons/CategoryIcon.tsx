@@ -5,7 +5,6 @@
 import {
   BicepsFlexed,
   CookingPot,
-  Croissant,
   Cupcake,
   CupSoda,
   Glasses,
@@ -62,6 +61,11 @@ const Danza = solid(
 const Desayuno = solid(
   <path d="M1408 592q-26 0-45-19t-19-45q0-51 19-98t56-83l79-80q38-38 38-91q0-26 19-45t45-19t45 19t19 45q0 51-19 98t-56 83l-79 80q-38 38-38 91q0 26-19 45t-45 19m-384 0q-26 0-45-19t-19-45q0-51 19-98t56-83l79-80q38-38 38-91q0-26 19-45t45-19t45 19t19 45q0 51-19 98t-56 83l-79 80q-38 38-38 91q0 26-19 45t-45 19m832 176q40 0 75 15t61 41t41 61t15 75v384q0 40-15 75t-41 61t-61 41t-75 15h-57q-2 7-3 13t-4 12v39q0 66-25 124t-69 102t-102 69t-124 25h-384q-78 0-144-35t-110-93H334q-66 0-124-25t-102-68t-69-102t-25-125v-64h256q0-79 30-149t83-122t122-83t149-30q30 0 58 5t56 14V640h1024v128zM654 1152q-53 0-99 20t-82 55t-55 81t-20 100h370v-228q-26-13-54-20t-60-8m-320 512h441q-7-29-7-64v-64H153q10 28 28 51t41 41t52 26t60 10m463 67v1l1 2v-1zm867-131V768H896v832q0 40 15 75t41 61t61 41t75 15h384q40 0 75-15t61-41t41-61t15-75m256-256V960q0-26-19-45t-45-19h-64v512h64q26 0 45-19t19-45" />,
   '0 0 2048 2048',
+)
+
+/** Bolillo con sus cortes: la categoría Panaderías y su giro Panadería. TDesign `bread` (MIT). */
+const Bolillo = custom(
+  <path d="m13.188 4.683l3.068 3.069m-3.068-3.07c-.723-.722-.815-1.01.593-1.527c3.934-1.44 8.422 2.84 7.391 6.9c-.598 2.357-2.214 4.812-4.209 6.889c-2.076 1.994-4.531 3.61-6.889 4.209c-4.06 1.03-8.34-3.458-6.899-7.391c.516-1.408.804-1.317 1.527-.594m8.486-8.485c-2.28-2.279-6.862 1.623-4.71 3.776m0 0l3.536 3.535M8.478 8.46c-2.152-2.153-6.054 2.43-3.776 4.709m0 0l3.07 3.069" />,
 )
 
 /** Persona estirándose: la categoría Yoga, Pilates y Barre. Tabler Icons (MIT). */
@@ -213,12 +217,12 @@ const ICONS: Record<string, IconComponent> = {
   barbell: Barbell,
   'biceps-flexed': BicepsFlexed,
   candy: Galleta,
+  bolillo: Bolillo,
   carne: Carne,
   ceja: Ceja,
   chopsticks: Chopsticks,
   'cooking-pot': CookingPot,
   'copa-de-vino': CopaDeVino,
-  croissant: Croissant,
   cupcake: Cupcake,
   'cup-soda': CupSoda,
   danza: Danza,
