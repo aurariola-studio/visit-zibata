@@ -68,7 +68,7 @@ const categoryOfGiro = new Map(
 export function placesInPlaza(name: string): number {
   const plaza = dataset.plazas.find((candidate) => candidate.name === name)
   if (!plaza) throw new Error(`No hay ninguna plaza llamada "${name}" en el dataset`)
-  return dataset.places.filter((place) => place.plazaId === plaza.id).length
+  return dataset.places.filter((place) => place.plazaId === plaza.id && place.active).length
 }
 
 export const activePlazas = () => dataset.plazas.filter((plaza) => plaza.active)
