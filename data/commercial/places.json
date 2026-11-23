@@ -5165,15 +5165,15 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
-        "confidence": "medium",
-        "lastVerifiedAt": "2026-09-14",
+        "status": "closed",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://restaurantguru.com/Mr-Bagel-Santiago-de-Queretaro",
           "https://www.facebook.com/Mr.BagelMx/",
-          "campo:2026-09-22"
+          "campo:2026-11-23"
         ]
       }
     },
