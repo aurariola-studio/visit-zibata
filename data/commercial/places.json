@@ -4562,8 +4562,7 @@
       "name": "Marie Panadería Artesanal",
       "plazaId": "centro-zibata",
       "giros": [
-        "panaderia",
-        "reposteria"
+        "panaderia"
       ],
       "description": {
         "es": "Marie Panadería Artesanal. Pan dulce artesanal delicioso, pan de caja con masa madre, pan de hotdog y hamburguesa para tu negocio y pasteles decorados y personalizados.",
@@ -4809,7 +4808,7 @@
       "name": "OMA Bakery",
       "plazaId": "anahuac-queretaro",
       "giros": [
-        "panaderia",
+        "reposteria",
         "pasteleria",
         "desayunos"
       ],
