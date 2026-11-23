@@ -87,8 +87,9 @@ const categorias = dato<{
 const girosDe = (lugar: { giros: string[] }) => lugar.giros
 /** Cuántos locales tiene una categoría, con la misma regla que el filtro de la aplicación. */
 const localesDe = (categoria: (typeof categorias)[number]): number =>
-  lugares.filter((lugar) =>
-    girosDe(lugar).some((giro) => categoria.giros.some((g) => g.id === giro)),
+  lugares.filter(
+    (lugar) =>
+      lugar.active && girosDe(lugar).some((giro) => categoria.giros.some((g) => g.id === giro)),
   ).length
 /** Las categorías con al menos un local: son las que tienen página y entran en el sitemap. */
 const categoriasConPagina = (idioma: 'es' | 'en') =>

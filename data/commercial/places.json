@@ -1330,8 +1330,8 @@
       "plazaId": "paseo-zibata",
       "giros": [
         "cafeteria",
-        "panaderia",
-        "brunch"
+        "brunch",
+        "panaderia"
       ],
       "description": {
         "es": "D’Lu - Cafetería con alma francesa.\nLife is better together",
@@ -3766,8 +3766,8 @@
       "plazaId": "mol-pitahaya",
       "giros": [
         "cafeteria",
-        "panaderia",
-        "desayunos"
+        "desayunos",
+        "panaderia"
       ],
       "description": {
         "es": "CAFELE es una cafetería con un concepto único y amigable. Nuestra especialidad es el Café, además de ofrecerte alimentos y bebidas de la más alta calidad.",
@@ -11119,9 +11119,9 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
@@ -11129,7 +11129,8 @@
           "https://www.tiendaselasturiano.com/",
           "https://www.instagram.com/asturianoalamano/",
           "https://www.facebook.com/asturianoalamano",
-          "https://www.tiktok.com/@asturianoalamano"
+          "https://www.tiktok.com/@asturianoalamano",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11186,9 +11187,9 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
@@ -11196,7 +11197,8 @@
           "https://www.tiendaselasturiano.com/",
           "https://www.instagram.com/asturianoalamano/",
           "https://www.facebook.com/asturianoalamano",
-          "https://www.tiktok.com/@asturianoalamano"
+          "https://www.tiktok.com/@asturianoalamano",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11257,7 +11259,7 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
@@ -11265,7 +11267,8 @@
           "https://www.ecobuy.com.mx/",
           "https://www.instagram.com/ecobuy.tienda/",
           "https://www.facebook.com/ecobuytienda/",
-          "https://www.tiktok.com/@ecobuy.zerowaste"
+          "https://www.tiktok.com/@ecobuy.zerowaste",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11324,13 +11327,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://maps.app.goo.gl/LYxTJH4g8qFJYFxC9",
           "https://www.instagram.com/elhuertozibata/",
-          "https://www.facebook.com/p/El-Huerto-100064737649082/"
+          "https://www.facebook.com/p/El-Huerto-100064737649082/",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11389,11 +11393,12 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
-          "https://maps.app.goo.gl/scx791VeQyhPZdC38"
+          "https://maps.app.goo.gl/scx791VeQyhPZdC38",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11452,14 +11457,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://maps.app.goo.gl/TXUpHX5HwkMf2FvJA",
           "http://meatgo.mx/",
           "https://www.instagram.com/meatgoqro/",
-          "https://www.facebook.com/meatgoqro/"
+          "https://www.facebook.com/meatgoqro/",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11519,13 +11525,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://maps.app.goo.gl/kgXk23PxRzAfXUcj7",
           "https://cremeriahermanoscoronel.com.mx/",
-          "https://www.facebook.com/CremeriaHermanosCoronel"
+          "https://www.facebook.com/CremeriaHermanosCoronel",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11585,13 +11592,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://maps.app.goo.gl/9srCW9p9mh28RvAz8",
           "https://cremeriahermanoscoronel.com.mx/",
-          "https://www.facebook.com/CremeriaHermanosCoronel"
+          "https://www.facebook.com/CremeriaHermanosCoronel",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11651,14 +11659,15 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://maps.app.goo.gl/GeLNqL6AYKQQpLg2A",
           "https://linktr.ee/mexicava",
           "https://instagram.com/mexicava_zibata",
-          "https://www.facebook.com/profile.php?id=61555686951668"
+          "https://www.facebook.com/profile.php?id=61555686951668",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11715,14 +11724,15 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35de09dd62929:0x9e310be2c6b77602",
-          "https://www.oxxo.com/"
+          "https://www.oxxo.com/",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11779,14 +11789,15 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35db503b19267:0x65dc5a9998f1f70c",
-          "https://www.oxxo.com/"
+          "https://www.oxxo.com/",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11843,14 +11854,15 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7b1e16f0b3:0x2a35d978b7cfcbd9",
-          "https://www.oxxo.com/"
+          "https://www.oxxo.com/",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11907,14 +11919,15 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d0dc41d0831:0x2f16ea3a491dd27c",
-          "https://www.oxxo.com/"
+          "https://www.oxxo.com/",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -11973,13 +11986,14 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://maps.app.goo.gl/QmypekajCUi2W3kFA",
           "https://www.instagram.com/querekarne.oficial/",
-          "https://www.facebook.com/p/Querekarne-100068161111623/"
+          "https://www.facebook.com/p/Querekarne-100068161111623/",
+          "campo:2026-11-23"
         ]
       }
     },
@@ -12103,11 +12117,12 @@
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
         "lastVerifiedAt": "2026-11-23",
         "sources": [
-          "https://maps.app.goo.gl/9hi3mNVz9EzxMH3J6"
+          "https://maps.app.goo.gl/9hi3mNVz9EzxMH3J6",
+          "campo:2026-11-23"
         ]
       }
     }

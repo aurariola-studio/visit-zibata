@@ -140,7 +140,6 @@
         "unas",
         "spa-y-masajes",
         "piel-y-cuerpo",
-        "conveniencia",
         "carnicerias",
         "fruterias",
         "panaderias"
@@ -360,7 +359,6 @@
         "barberia",
         "unas",
         "cejas-y-pestanas",
-        "conveniencia",
         "panaderias"
       ],
       "locationConfidence": "high",
@@ -714,7 +712,6 @@
         "spa-y-masajes",
         "cejas-y-pestanas",
         "abarrotes",
-        "conveniencia",
         "fruterias",
         "licorerias"
       ],
@@ -852,7 +849,6 @@
         "piel-y-cuerpo",
         "cejas-y-pestanas",
         "abarrotes",
-        "conveniencia",
         "carnicerias"
       ],
       "locationConfidence": "high",
@@ -953,7 +949,6 @@
         "gimnasios",
         "artes-marciales",
         "peluqueria",
-        "conveniencia",
         "panaderias"
       ],
       "locationConfidence": "medium",
@@ -1122,7 +1117,6 @@
         "unas",
         "piel-y-cuerpo",
         "abarrotes",
-        "conveniencia",
         "panaderias"
       ],
       "locationConfidence": "high",
