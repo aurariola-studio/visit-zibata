@@ -271,7 +271,7 @@
         "es": "Carnes y Parrilla",
         "en": "Grill & Steak"
       },
-      "icon": "beef",
+      "icon": "filete",
       "hue": 350,
       "schemaType": "Restaurant",
       "order": 35,
@@ -293,7 +293,7 @@
             "es": "Asador y Cortes",
             "en": "Grill & Steak"
           },
-          "icon": "beef",
+          "icon": "filete",
           "synonyms": [
             "cortes",
             "rib eye",

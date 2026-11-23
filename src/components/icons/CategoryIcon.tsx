@@ -3,7 +3,6 @@
  * componente. Nombres desconocidos usan un icono genérico, así una categoría nueva nunca rompe la UI.
  */
 import {
-  Beef,
   BicepsFlexed,
   CookingPot,
   Croissant,
@@ -153,6 +152,11 @@ const Esmalte = custom(
   </g>,
 )
 
+/** Un filete con su hueso: la categoría Carnes y Parrilla. Material Design Icons `food-steak` (Apache 2.0). */
+const Filete = solid(
+  <path d="M11.9 2C8 2 4.9 5.4 5 9.3c.1 2.6 1.6 4.8 3.7 5.9c1.4.7 2.3 2.1 2.3 3.6v.2c0 1.7 1.3 3 3 3c4 0 5-5 5-13c0 0 0-7-7.1-7M14 20c-.6 0-1-.4-1-1v-.2c0-2.2-1.3-4.3-3.3-5.4C8.1 12.6 7.1 11 7 9.2c0-1.3.5-2.7 1.4-3.7S10.6 4 11.8 4C16.7 4 17 8.2 17 9c0 9.9-1.7 11-3 11m1.8-12.4l-7.5 2.7Q8 9.85 8 9.1c0-.7.2-1.3.5-2l5.2-1.9c1.2.6 1.8 1.5 2.1 2.4m-2.9 7.5l2.8-1c-.1 1.5-.4 2.6-.6 3.3l-1.3.5c0-1-.3-1.9-.9-2.8M16 9.2c0 1.2 0 2.3-.1 3.2l-4 1.5c-.5-.5-1.1-1-1.8-1.3c-.4-.2-.8-.5-1.1-.8z" />,
+)
+
 /** Flor de loto con su pétalo central: Spa y Masajes. Material Design Icons `spa` en versión angular (Apache 2.0). */
 const Spa = solid(
   <path d="M15.49 9.63c-.18-2.79-1.31-5.51-3.43-7.63a12.2 12.2 0 0 0-3.55 7.63c1.28.68 2.46 1.56 3.49 2.63c1.03-1.06 2.21-1.94 3.49-2.63m-6.5 2.65c-.14-.1-.3-.19-.45-.29c.15.11.31.19.45.29m6.42-.25c-.13.09-.27.16-.4.26c.13-.1.27-.17.4-.26M12 15.45C9.85 12.17 6.18 10 2 10c0 5.32 3.36 9.82 8.03 11.49c.63.23 1.29.4 1.97.51c.68-.12 1.33-.29 1.97-.51C18.64 19.82 22 15.32 22 10c-4.18 0-7.85 2.17-10 5.45" />,
@@ -178,7 +182,6 @@ const Locion = solid(
 const ICONS: Record<string, IconComponent> = {
   'artes-marciales': ArtesMarciales,
   barbell: Barbell,
-  beef: Beef,
   'biceps-flexed': BicepsFlexed,
   candy: Galleta,
   ceja: Ceja,
@@ -191,6 +194,7 @@ const ICONS: Record<string, IconComponent> = {
   esmalte: Esmalte,
   espejo: Espejo,
   estiramiento: Estiramiento,
+  filete: Filete,
   glasses: Glasses,
   hamburger: Hamburger,
   'hand-platter': HandPlatter,
