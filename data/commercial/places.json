@@ -1029,7 +1029,20 @@
       "googleMapsUri": "https://maps.app.goo.gl/cG19MA1XsYQcbBKH8",
       "googlePlaceId": null,
       "phone": "+524463740135",
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/birria-los-esposos/portada.webp",
+          "alt": "Logo de Birria Los Esposos",
+          "width": 1000,
+          "height": 1000,
+          "variants": [
+            480,
+            960
+          ],
+          "placeholder": "#a80808",
+          "credit": "Cortesía de Birria Los Esposos"
+        }
+      ],
       "links": {
         "website": "https://birrialosesposos.com/",
         "instagram": "https://www.instagram.com/birrialosesposos/",
@@ -5362,15 +5375,15 @@
         "uberEats": null,
         "didiFood": null
       },
-      "active": true,
+      "active": false,
       "verification": {
-        "status": "likely_active",
-        "confidence": "medium",
-        "lastVerifiedAt": "2026-09-14",
+        "status": "closed",
+        "confidence": "high",
+        "lastVerifiedAt": "2026-11-23",
         "sources": [
           "https://restaurantguru.com/Mr-Bagel-Santiago-de-Queretaro",
           "https://www.facebook.com/Mr.BagelMx/",
-          "campo:2026-09-22"
+          "campo:2026-11-23"
         ]
       }
     },
