@@ -8731,6 +8731,14 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "24",
+          "25",
+          "26",
+          "27"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -9928,6 +9936,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "215"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -10002,6 +10015,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "213"
+        ]
       },
       "active": true,
       "verification": {
@@ -11087,7 +11105,7 @@
       "id": "mandala-spa-beauty-center",
       "slug": "mandala-spa-beauty-center",
       "name": "Mandala Spa & Beauty Center",
-      "plazaId": "xentric-anahuac",
+      "plazaId": "paseo-zibata",
       "giros": [
         "faciales",
         "tratamientos-corporales",
@@ -11124,11 +11142,8 @@
         "sun": [],
         "byAppointment": true
       },
-      "location": {
-        "lat": 20.6781897,
-        "lng": -100.3136649
-      },
-      "googleMapsUri": "https://maps.app.goo.gl/DMEzGDL3UAf4Gk2CA",
+      "location": null,
+      "googleMapsUri": null,
       "googlePlaceId": null,
       "phone": "+524425082135",
       "photos": [],
@@ -11141,6 +11156,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "46"
+        ]
       },
       "active": true,
       "verification": {
@@ -11976,11 +11996,6 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
-      },
-      "unit": {
-        "locales": [
-          "116"
-        ]
       },
       "active": true,
       "verification": {

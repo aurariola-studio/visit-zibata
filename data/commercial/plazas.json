@@ -106,7 +106,6 @@
         "picorito-snacks",
         "la-pizzeria-de-diego",
         "beoxy-zibata",
-        "mandala-spa-beauty-center",
         "rob-nail-beauty-lab",
         "asturiano-xentric-anahuac",
         "el-huerto",
@@ -138,7 +137,6 @@
         "artes-marciales",
         "peluqueria",
         "unas",
-        "spa-y-masajes",
         "piel-y-cuerpo",
         "carnicerias",
         "fruterias",
@@ -332,7 +330,8 @@
         "ramen-express-paseo-zibata",
         "barberia-barbuda-paseo-zibata",
         "black-studio-beauty-nails",
-        "oxxo-paseo-zibata"
+        "oxxo-paseo-zibata",
+        "mandala-spa-beauty-center"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -358,6 +357,8 @@
         "peluqueria",
         "barberia",
         "unas",
+        "spa-y-masajes",
+        "piel-y-cuerpo",
         "cejas-y-pestanas",
         "panaderias"
       ],
