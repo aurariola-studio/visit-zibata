@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-20",
+  "updatedAt": "2026-11-23",
   "categories": [
     {
       "id": "desayunos-y-cafe",
@@ -847,43 +847,41 @@
     {
       "id": "panaderia-y-reposteria",
       "slug": {
-        "es": "panaderia-y-reposteria",
-        "en": "bakery-and-pastry"
+        "es": "reposteria-y-pasteleria",
+        "en": "pastry-and-cakes"
       },
       "sectorId": "comida-y-bebida",
       "label": {
-        "es": "Panadería y Repostería",
-        "en": "Bakery & Pastry"
+        "es": "Repostería y Pastelería",
+        "en": "Pastry & Cakes"
       },
-      "icon": "croissant",
+      "icon": "cupcake",
       "hue": 38,
       "schemaType": "Bakery",
       "order": 85,
       "synonyms": [
-        "pan",
-        "panadería",
-        "bakery",
         "pastel",
         "pastelería",
         "repostería",
         "postres",
         "tartas",
-        "galletas"
+        "galletas",
+        "cupcakes"
       ],
       "giros": [
         {
-          "id": "panaderia",
+          "id": "reposteria",
           "label": {
-            "es": "Panadería",
-            "en": "Bakery"
+            "es": "Repostería",
+            "en": "Pastry"
           },
-          "icon": "croissant",
+          "icon": "cupcake",
           "synonyms": [
-            "pan",
-            "bakery",
-            "croissant",
-            "pan dulce",
-            "conchas"
+            "repostería",
+            "postres",
+            "pasteles por encargo",
+            "galletas",
+            "brownies"
           ],
           "general": true
         },
@@ -899,21 +897,6 @@
             "pasteles",
             "repostería",
             "galletas"
-          ]
-        },
-        {
-          "id": "reposteria",
-          "label": {
-            "es": "Repostería",
-            "en": "Pastry"
-          },
-          "icon": "cupcake",
-          "synonyms": [
-            "repostería",
-            "postres",
-            "pasteles por encargo",
-            "galletas",
-            "brownies"
           ]
         }
       ]
@@ -2321,6 +2304,321 @@
           "general": true
         }
       ]
+    },
+    {
+      "id": "abarrotes",
+      "slug": {
+        "es": "abarrotes",
+        "en": "grocery-stores"
+      },
+      "sectorId": "despensa",
+      "label": {
+        "es": "Abarrotes",
+        "en": "Grocery Stores"
+      },
+      "icon": "tienda",
+      "hue": 85,
+      "schemaType": "GroceryStore",
+      "order": 500,
+      "synonyms": [
+        "tienda",
+        "tienda de abarrotes",
+        "super",
+        "despensa",
+        "miscelánea",
+        "grocery"
+      ],
+      "giros": [
+        {
+          "id": "abarrotes",
+          "label": {
+            "es": "Abarrotes",
+            "en": "Groceries"
+          },
+          "icon": "tienda",
+          "synonyms": [
+            "tienda de abarrotes",
+            "despensa",
+            "miscelánea",
+            "grocery"
+          ],
+          "general": true
+        },
+        {
+          "id": "cremeria",
+          "label": {
+            "es": "Cremería",
+            "en": "Dairy"
+          },
+          "icon": "leche",
+          "synonyms": [
+            "queso",
+            "quesos",
+            "lácteos",
+            "crema",
+            "jamón",
+            "cheese",
+            "dairy"
+          ]
+        },
+        {
+          "id": "a-granel",
+          "label": {
+            "es": "A Granel",
+            "en": "Bulk Foods"
+          },
+          "icon": "frasco",
+          "synonyms": [
+            "granel",
+            "sin empaque",
+            "zero waste",
+            "cero residuos",
+            "bulk"
+          ]
+        },
+        {
+          "id": "limpieza",
+          "label": {
+            "es": "Limpieza",
+            "en": "Cleaning"
+          },
+          "icon": "spray",
+          "synonyms": [
+            "detergente",
+            "desinfectante",
+            "cloro",
+            "cleaning"
+          ]
+        },
+        {
+          "id": "higiene-personal",
+          "label": {
+            "es": "Higiene Personal",
+            "en": "Personal Care"
+          },
+          "icon": "jabon",
+          "synonyms": [
+            "jabón",
+            "shampoo",
+            "cuidado personal",
+            "personal care"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conveniencia",
+      "slug": {
+        "es": "conveniencia",
+        "en": "convenience-stores"
+      },
+      "sectorId": "despensa",
+      "label": {
+        "es": "Conveniencia",
+        "en": "Convenience Stores"
+      },
+      "icon": "tienda-abierta",
+      "hue": 235,
+      "schemaType": "ConvenienceStore",
+      "order": 510,
+      "synonyms": [
+        "oxxo",
+        "tiendita",
+        "tienda de conveniencia",
+        "24 horas",
+        "convenience"
+      ],
+      "giros": [
+        {
+          "id": "tienda-de-conveniencia",
+          "label": {
+            "es": "Tienda de Conveniencia",
+            "en": "Convenience Store"
+          },
+          "icon": "tienda-abierta",
+          "synonyms": [
+            "oxxo",
+            "tiendita",
+            "24 horas",
+            "convenience store"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "carnicerias",
+      "slug": {
+        "es": "carnicerias",
+        "en": "butchers"
+      },
+      "sectorId": "despensa",
+      "label": {
+        "es": "Carnicerías",
+        "en": "Butchers"
+      },
+      "icon": "carne",
+      "hue": 5,
+      "schemaType": "Store",
+      "order": 520,
+      "synonyms": [
+        "carne",
+        "carnicería",
+        "cortes",
+        "res",
+        "cerdo",
+        "pollo",
+        "butcher"
+      ],
+      "giros": [
+        {
+          "id": "carniceria",
+          "label": {
+            "es": "Carnicería",
+            "en": "Butcher"
+          },
+          "icon": "carne",
+          "synonyms": [
+            "carne",
+            "cortes",
+            "res",
+            "cerdo",
+            "pollo",
+            "arrachera",
+            "butcher"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "fruterias",
+      "slug": {
+        "es": "fruterias",
+        "en": "fruit-shops"
+      },
+      "sectorId": "despensa",
+      "label": {
+        "es": "Fruterías",
+        "en": "Fruit Shops"
+      },
+      "icon": "naranja",
+      "hue": 150,
+      "schemaType": "GroceryStore",
+      "order": 530,
+      "synonyms": [
+        "fruta",
+        "frutas",
+        "verdura",
+        "verduras",
+        "frutería",
+        "fruit"
+      ],
+      "giros": [
+        {
+          "id": "fruteria",
+          "label": {
+            "es": "Frutería",
+            "en": "Fruit Shop"
+          },
+          "icon": "naranja",
+          "synonyms": [
+            "fruta",
+            "frutas",
+            "verdura",
+            "verduras",
+            "fruit",
+            "vegetables"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "licorerias",
+      "slug": {
+        "es": "licorerias",
+        "en": "liquor-stores"
+      },
+      "sectorId": "despensa",
+      "label": {
+        "es": "Licorerías",
+        "en": "Liquor Stores"
+      },
+      "icon": "copa-de-vino",
+      "hue": 335,
+      "schemaType": "Store",
+      "order": 540,
+      "synonyms": [
+        "licor",
+        "vinos",
+        "cerveza",
+        "destilados",
+        "alcohol",
+        "liquor"
+      ],
+      "giros": [
+        {
+          "id": "licoreria",
+          "label": {
+            "es": "Licorería",
+            "en": "Liquor Store"
+          },
+          "icon": "copa-de-vino",
+          "synonyms": [
+            "licor",
+            "vinos",
+            "cerveza",
+            "destilados",
+            "alcohol",
+            "wine",
+            "beer"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "panaderias",
+      "slug": {
+        "es": "panaderias",
+        "en": "bakeries"
+      },
+      "sectorId": "despensa",
+      "label": {
+        "es": "Panaderías",
+        "en": "Bakeries"
+      },
+      "icon": "croissant",
+      "hue": 38,
+      "schemaType": "Bakery",
+      "order": 550,
+      "synonyms": [
+        "pan",
+        "panadería",
+        "bakery",
+        "pan dulce",
+        "conchas",
+        "bolillo"
+      ],
+      "giros": [
+        {
+          "id": "panaderia",
+          "label": {
+            "es": "Panadería",
+            "en": "Bakery"
+          },
+          "icon": "croissant",
+          "synonyms": [
+            "pan",
+            "bakery",
+            "croissant",
+            "pan dulce",
+            "conchas"
+          ],
+          "general": true
+        }
+      ]
     }
   ],
   "sectors": [
@@ -2375,6 +2673,19 @@
       },
       "icon": "espejo",
       "order": 40
+    },
+    {
+      "id": "despensa",
+      "slug": {
+        "es": "despensa",
+        "en": "groceries"
+      },
+      "label": {
+        "es": "Despensa",
+        "en": "Groceries"
+      },
+      "icon": "shopping-basket",
+      "order": 50
     }
   ]
 }

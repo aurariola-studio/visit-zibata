@@ -229,7 +229,7 @@ describe('los demás escritores de categories.json conservan los sectores', () =
       'category',
       dataset,
       crudo,
-      { id: 'super', slug: 'abarrotes', lang: 'es' },
+      { id: 'super', slug: 'tiendas-de-prueba', lang: 'es' },
       HOY,
     )
     if (!r.ok) throw new Error(r.problemas.join(' | '))

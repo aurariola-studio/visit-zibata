@@ -6,6 +6,7 @@ import {
   BicepsFlexed,
   CookingPot,
   Croissant,
+  Cupcake,
   CupSoda,
   Glasses,
   Hamburger,
@@ -157,6 +158,34 @@ const Filete = solid(
   <path d="M11.9 2C8 2 4.9 5.4 5 9.3c.1 2.6 1.6 4.8 3.7 5.9c1.4.7 2.3 2.1 2.3 3.6v.2c0 1.7 1.3 3 3 3c4 0 5-5 5-13c0 0 0-7-7.1-7M14 20c-.6 0-1-.4-1-1v-.2c0-2.2-1.3-4.3-3.3-5.4C8.1 12.6 7.1 11 7 9.2c0-1.3.5-2.7 1.4-3.7S10.6 4 11.8 4C16.7 4 17 8.2 17 9c0 9.9-1.7 11-3 11m1.8-12.4l-7.5 2.7Q8 9.85 8 9.1c0-.7.2-1.3.5-2l5.2-1.9c1.2.6 1.8 1.5 2.1 2.4m-2.9 7.5l2.8-1c-.1 1.5-.4 2.6-.6 3.3l-1.3.5c0-1-.3-1.9-.9-2.8M16 9.2c0 1.2 0 2.3-.1 3.2l-4 1.5c-.5-.5-1.1-1-1.8-1.3c-.4-.2-.8-.5-1.1-.8z" />,
 )
 
+/** Una tienda con su toldo: la categoría Abarrotes. Boxicons `store` (MIT). */
+const Tienda = solid(
+  <path d="M19.1 2.8c-.38-.5-.97-.8-1.6-.8h-11c-.63 0-1.22.3-1.6.8L2.2 6.4c-.13.17-.2.38-.2.6v1c0 1.04.41 1.98 1.06 2.69c-.03.1-.06.2-.06.31v9c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-9c0-.11-.03-.21-.06-.31C21.59 9.98 22 9.04 22 8V7c0-.22-.07-.43-.2-.6zm.9 4.53V8c0 1.1-.9 2-2 2s-2-.9-2-2V7q0-.12-.03-.24L15.28 4h2.22zM10.78 4h2.44L14 7.12V8c0 1.1-.9 2-2 2s-2-.9-2-2v-.88zM4 7.33L6.5 4h2.22l-.69 2.76Q8 6.88 8 7v1c0 1.1-.9 2-2 2s-2-.9-2-2zM10 20v-4h4v4zm6 0v-4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v4H5v-8.14c.32.08.65.14 1 .14c1.2 0 2.27-.54 3-1.38c.73.84 1.8 1.38 3 1.38s2.27-.54 3-1.38c.73.84 1.8 1.38 3 1.38c.35 0 .68-.06 1-.14V20z" />,
+)
+
+/** Una tienda con un reloj: la categoría Conveniencia, que abre a todas horas. Material Design Icons `store-clock-outline` (Apache 2.0). */
+const TiendaAbierta = solid(
+  <path d="M18 4H2V2h16zm-.5 9H16v5l3.61 2.16l.75-1.22l-2.86-1.69zm6.5 4c0 3.87-3.13 7-7 7c-3.53 0-6.43-2.61-6.92-6H2v-6H1v-2l1-5h16l1 5v.29c2.89.87 5 3.54 5 6.71M3.04 10h13.92l-.6-3H3.64zM4 16h6v-4H4zm18 1c0-2.76-2.24-5-5-5s-5 2.24-5 5s2.24 5 5 5s5-2.24 5-5" />,
+)
+
+/** Una caja de carne con su hueso: la categoría Carnicerías. Griddy Icons `meat-boxed` (MIT). */
+const Carne = solid(
+  <>
+    <path d="M19.25 3.995H4.75A2.755 2.755 0 0 0 2 6.745v10.5a2.755 2.755 0 0 0 2.75 2.75h14.5a2.755 2.755 0 0 0 2.75-2.75v-10.5a2.755 2.755 0 0 0-2.75-2.75M8 14.69c-.915-.595-1.5-1.595-1.5-2.69S7.085 9.9 8 9.31v5.385zm-3.25 3.805c-.69 0-1.25-.56-1.25-1.25v-10.5c0-.69.56-1.25 1.25-1.25H8V7.62c-1.79.73-3 2.455-3 4.375s1.21 3.645 3 4.375v2.12H4.75zm4.75 0v-13H12v13zm4-9.58c2.56.285 3.5.88 3.5 1.335c0 .985-1.465 2.725-3.5 3.89zm7 8.33c0 .69-.56 1.25-1.25 1.25H13.5V15.83c2.485-1.2 5-3.565 5-5.58c0-2.15-3.225-2.675-5-2.85V5.495h5.75c.69 0 1.25.56 1.25 1.25z" />
+    <path d="M19 15.495h-3.5v1.5H19z" />
+  </>,
+)
+
+/** Una naranja con su hoja, solo el contorno: la categoría Fruterías. MingCute `orange-line` (Apache 2.0). */
+const Naranja = solid(
+  <path d="M12.637 4.024c.422-.343.842-.643 1.34-.868c1.282-.578 2.824-.68 4.187-.347c.268.065.573.149.806.304l.415.364l.101.551c.042.834-.605 2.022-1.035 2.699c.704.749 1.295 1.571 1.727 2.508c1.785 3.874.572 8.512-2.862 11.029a9 9 0 0 1-8.82 1.029a9.06 9.06 0 0 1-3.76-2.977a9 9 0 0 1-1.707-4.579C2.579 8.186 7.127 3.7 12.637 4.024m-2.022 4.498l-.101-.55c-.031-.624.313-1.36.573-1.907a6.93 6.93 0 0 0-3.642 1.62C3.329 11.217 4.64 17.93 9.787 19.643a7.07 7.07 0 0 0 4.426 0c3.712-1.236 5.702-5.342 4.371-9.025c-.332-.916-.854-1.695-1.495-2.42c-1.37 1.081-3.259 1.37-4.947 1.058c-.368-.068-.795-.158-1.112-.37Zm2.098-1.201c2.162.245 3.725-.608 4.574-2.643c-2.162-.244-3.725.609-4.574 2.643" />,
+)
+
+/** Una copa de vino: la categoría Licorerías. Boxicons `wine` (MIT). */
+const CopaDeVino = solid(
+  <path d="M11 17.92V20H8v2h8v-2h-3v-2.08c3.18-.4 5.89-2.66 6.76-5.79c.26-.95.31-2.03.14-3.21l-.87-6.06c-.07-.49-.49-.86-.99-.86H5.96c-.5 0-.92.37-.99.86L4.1 8.92c-.17 1.18-.12 2.26.14 3.21c.87 3.13 3.57 5.39 6.76 5.79m6.83-6.33C17.11 14.19 14.71 16 12 16c-2.56 0-4.83-1.63-5.68-4c.72.32 1.47.49 2.22.49c1.46 0 2.92-.6 4.15-1.77c1.5-1.44 3.35-1.61 4.95-.47l.35.25a5 5 0 0 1-.16 1.08ZM6.83 4h10.34l.58 4.03c-2.15-.98-4.57-.55-6.44 1.25c-1.5 1.44-3.35 1.61-4.95.47l-.31-.22l.03-.32l.75-5.2Z" />,
+)
+
 /** Flor de loto con su pétalo central: Spa y Masajes. Material Design Icons `spa` en versión angular (Apache 2.0). */
 const Spa = solid(
   <path d="M15.49 9.63c-.18-2.79-1.31-5.51-3.43-7.63a12.2 12.2 0 0 0-3.55 7.63c1.28.68 2.46 1.56 3.49 2.63c1.03-1.06 2.21-1.94 3.49-2.63m-6.5 2.65c-.14-.1-.3-.19-.45-.29c.15.11.31.19.45.29m6.42-.25c-.13.09-.27.16-.4.26c.13-.1.27-.17.4-.26M12 15.45C9.85 12.17 6.18 10 2 10c0 5.32 3.36 9.82 8.03 11.49c.63.23 1.29.4 1.97.51c.68-.12 1.33-.29 1.97-.51C18.64 19.82 22 15.32 22 10c-4.18 0-7.85 2.17-10 5.45" />,
@@ -184,10 +213,13 @@ const ICONS: Record<string, IconComponent> = {
   barbell: Barbell,
   'biceps-flexed': BicepsFlexed,
   candy: Galleta,
+  carne: Carne,
   ceja: Ceja,
   chopsticks: Chopsticks,
   'cooking-pot': CookingPot,
+  'copa-de-vino': CopaDeVino,
   croissant: Croissant,
+  cupcake: Cupcake,
   'cup-soda': CupSoda,
   danza: Danza,
   desayuno: Desayuno,
@@ -206,6 +238,7 @@ const ICONS: Record<string, IconComponent> = {
   martini: Martini,
   microscope: Microscope,
   molcajete: Molcajete,
+  naranja: Naranja,
   pan: Pan,
   pelotas: Pelotas,
   pill: Pill,
@@ -218,6 +251,8 @@ const ICONS: Record<string, IconComponent> = {
   stethoscope: Stethoscope,
   store: Store,
   taco: Taco,
+  tienda: Tienda,
+  'tienda-abierta': TiendaAbierta,
   tijeras: Tijeras,
   tooth: Tooth,
   'utensils-crossed': UtensilsCrossed,
@@ -245,6 +280,10 @@ const NOMBRES_DIFERIDOS = new Set([
   'boba',
   'bone',
   'bowl',
+  'frasco',
+  'jabon',
+  'leche',
+  'spray',
   'boxeo',
   'cake-slice',
   'cecina',
@@ -252,7 +291,6 @@ const NOMBRES_DIFERIDOS = new Set([
   'cherry',
   'coffee',
   'crepa',
-  'cupcake',
   'dermatology',
   'drumstick',
   'brunch',
