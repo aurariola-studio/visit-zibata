@@ -121,6 +121,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/mirrus-kitchen/vEdhdl54Xh-qWk25EYejFw",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "105"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -189,6 +194,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/a-kilos-de-cecina-queretaro/cjHzwj1MVTuiRcGymYMcOw",
         "didiFood": "https://www.didi-food.com/es-MX/food/store/5764609267378949911/?channel=10&cityId=52220400"
       },
+      "unit": {
+        "locales": [
+          "108"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -256,6 +266,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "115"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -320,6 +335,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930110288-boba-station-tapioca-bar",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "118"
+        ]
       },
       "active": true,
       "verification": {
@@ -389,6 +409,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/origenatural/N4amesE3VouL8XveZxiKnQ",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "121"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -455,6 +480,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930064964-subway",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "126"
+        ]
       },
       "active": true,
       "verification": {
@@ -588,6 +618,12 @@
         "uberEats": "https://www.ubereats.com/mx/store/tortas-fifthy-fifthy-zibata-queretaro/dEQQZM56TfSVY4IYAG7f1w",
         "didiFood": null
       },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "133"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -658,6 +694,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930074457-rometta-gastrobar",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "139"
+        ]
       },
       "active": true,
       "verification": {
@@ -859,6 +900,12 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "201",
+          "202"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -922,6 +969,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930116580-wicklow-irish-pub-zibata",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "205"
+        ]
       },
       "active": true,
       "verification": {
@@ -1313,6 +1365,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/cebicheria-del-dia-zibata-cebicheria-del-dia-zibata/ZrfVhPLlUneWaP__2nvjGA",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "32"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -1382,6 +1439,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930381079-dlu-coffee-y-bakery",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "33"
+        ]
       },
       "active": true,
       "verification": {
@@ -1837,6 +1899,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/carnitas-don-tono-zibata/0EPk-JhCSUiJpHwPG47xvA",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "10"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -1970,6 +2037,11 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/tomassa-almacen-de-pastas/FJm_wO1sUJuYQMGmgERA0A",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "5"
+        ]
       },
       "active": true,
       "verification": {
@@ -2213,6 +2285,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "25"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2416,6 +2493,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "67"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2479,6 +2561,11 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/namnam-sushi-zibata/th5_dKyxVryv_x02Fiag6Q",
         "didiFood": "https://web.didiglobal.com/mx/food/queretaro-que/nam-nam-sushi-zibata/5764607734100787559/"
+      },
+      "unit": {
+        "locales": [
+          "100-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -2611,6 +2698,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930162726-arepanas-mx",
         "uberEats": "https://www.ubereats.com/mx/store/arepanas/KOWDJeeLVcOslVQdi7FyYA",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "107-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -2745,6 +2837,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "108-A"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2811,6 +2908,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "112-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -3220,6 +3322,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/romelia-cafe/d0xN-HemVLqxVNIIBq7yHQ",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "220"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -3349,6 +3456,12 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "21",
+          "22"
+        ]
       },
       "active": true,
       "verification": {
@@ -4022,6 +4135,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/pio-poke-house-%26-rolls-queretaro/ijBvUEPLSGKcx1L2NzVfjg",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "202"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4350,6 +4468,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "54"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4414,6 +4537,12 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930470790-tacos-el-pata",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "6",
+          "7"
+        ]
       },
       "active": true,
       "verification": {
