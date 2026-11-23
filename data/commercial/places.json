@@ -2506,6 +2506,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "67"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -8734,7 +8739,6 @@
       "unit": {
         "locales": [
           "24",
-          "25",
           "26",
           "27"
         ]
@@ -10097,11 +10101,6 @@
         "uberEats": null,
         "didiFood": null
       },
-      "unit": {
-        "locales": [
-          "46"
-        ]
-      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -10533,6 +10532,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "43"
+        ]
       },
       "active": true,
       "verification": {
@@ -11156,11 +11160,6 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
-      },
-      "unit": {
-        "locales": [
-          "46"
-        ]
       },
       "active": true,
       "verification": {
