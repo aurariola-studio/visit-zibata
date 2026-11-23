@@ -35,13 +35,22 @@ export function custom(children: ReactNode): IconComponent {
 /**
  * Icono relleno (Material Design Icons y Material Symbols): las siluetas de esas familias
  * no se dibujan con trazo, así que llevan `fill` y no `stroke`. Con `size` y `color` se comporta
- * igual que `custom`.
+ * igual que `custom`. `engrosado` añade un contorno del mismo color (en px a tamaño 24) a los dibujos
+ * de trazo fino, como los de Fluent Emoji, para que pesen como los demás.
  */
-export function solid(children: ReactNode, viewBox = '0 0 24 24'): IconComponent {
+export function solid(children: ReactNode, viewBox = '0 0 24 24', engrosado = 0): IconComponent {
+  const contorno = engrosado
+    ? {
+        strokeWidth: (engrosado * Number(viewBox.split(' ')[2])) / 24,
+        strokeLinejoin: 'round' as const,
+      }
+    : {}
   return function SolidIcon({
     size = 24,
     color = 'currentColor',
     absoluteStrokeWidth: _,
+    // Quien llama pasa el grosor de los íconos de trazo (2): aquí es el del dibujo, no el de la interfaz.
+    strokeWidth: _grosor,
     ...rest
   }) {
     return (
@@ -51,6 +60,8 @@ export function solid(children: ReactNode, viewBox = '0 0 24 24'): IconComponent
         height={size}
         viewBox={viewBox}
         fill={color}
+        stroke={engrosado ? color : undefined}
+        {...contorno}
         aria-hidden="true"
         {...rest}
       >
