@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/redirects.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-21",
+  "updatedAt": "2026-11-22",
   "redirects": [
     {
       "kind": "place-slug",
@@ -372,6 +372,11 @@
       "kind": "place-slug",
       "id": "la-michoacana-xentric-zibata",
       "slug": "la-michoacana-xentric-zibata"
+    },
+    {
+      "kind": "plaza-slug",
+      "id": "mol-pitahaya",
+      "slug": "mol-jamadi"
     }
   ]
 }

@@ -112,8 +112,8 @@
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 12883,
-      "sha256": "f756fdfe4afd4b4982b5090e9caaa7621c497342db1566795780c1e6af6237a7",
+      "bytes": 12885,
+      "sha256": "8c17b28f13554d369fb25b6e9bf13c819c7a08332b4b3268d509f06b6a78af11",
       "features": 35,
       "synthesizedFor": [
         "paseo-zibata",

@@ -3763,7 +3763,7 @@
       "id": "cafele",
       "slug": "cafele",
       "name": "Cafele",
-      "plazaId": "mol-jamadi",
+      "plazaId": "mol-pitahaya",
       "giros": [
         "cafeteria",
         "panaderia",
@@ -7672,7 +7672,7 @@
       "id": "black-box-zibata",
       "slug": "black-box",
       "name": "Black Box",
-      "plazaId": "mol-jamadi",
+      "plazaId": "mol-pitahaya",
       "giros": [
         "boxeo",
         "entrenamiento-funcional"
@@ -10588,7 +10588,7 @@
       "id": "lusso-hair-boutique",
       "slug": "lusso-hair-boutique",
       "name": "LUSSO Hair Boutique",
-      "plazaId": "mol-jamadi",
+      "plazaId": "mol-pitahaya",
       "giros": [
         "peluqueria",
         "color",
