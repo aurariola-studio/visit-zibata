@@ -673,7 +673,7 @@ describe('editar una plaza', () => {
   it('un cambio sin consecuencias queda en seco en desarrollo', async () => {
     const respuesta = await editar({
       ...(await formulario()),
-      direccion: 'Calle de prueba 1, Zibatá',
+      direccion: 'Calle de prueba 1',
     })
     expect(respuesta?.status).toBe(200)
     const datos = (await respuesta?.json()) as { ok: boolean; confirmado: boolean; seco: boolean }

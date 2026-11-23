@@ -114,7 +114,7 @@ describe('editar una plaza', () => {
       crudo,
       igual({
         nombre: 'Plaza de prueba nueva',
-        direccion: 'Calle Nueva 1, Zibatá',
+        direccion: 'Calle Nueva 1',
         lat: plaza.coordinates.lat + 0.0001,
         lng: plaza.coordinates.lng,
       }),
@@ -126,7 +126,7 @@ describe('editar una plaza', () => {
     const filas = preparada.plazas.plazas as Record<string, unknown>[]
     const fila = filas.find((otra) => otra.id === plaza.id) as Record<string, unknown>
     expect(fila.name).toBe('Plaza de prueba nueva')
-    expect(fila.address).toBe('Calle Nueva 1, Zibatá')
+    expect(fila.address).toBe('Calle Nueva 1')
     // Lo que no se edita queda como estaba.
     const original = (plazasJson.plazas as Record<string, unknown>[]).find(
       (otra) => otra.id === plaza.id,
@@ -139,12 +139,7 @@ describe('editar una plaza', () => {
   })
 
   it('guardar una errata no toca la verificación: ni fecha, ni fuentes, ni estado', () => {
-    const preparada = prepararPlaza(
-      dataset,
-      crudo,
-      igual({ direccion: 'Otra calle 2, Zibatá' }),
-      HOY,
-    )
+    const preparada = prepararPlaza(dataset, crudo, igual({ direccion: 'Otra calle 2' }), HOY)
     expect(preparada.ok).toBe(true)
     if (!preparada.ok || !plaza.verification) return
     const fila = (
@@ -466,7 +461,7 @@ describe('guardarPlaza en desarrollo', () => {
   const entorno = { PANEL_ABIERTO: 'si' }
 
   it('un cambio que no afecta a lo que se ve se valida en seco', async () => {
-    const resultado = await guardarPlaza(entorno, igual({ direccion: 'Otra calle 3, Zibatá' }))
+    const resultado = await guardarPlaza(entorno, igual({ direccion: 'Otra calle 3' }))
     expect(resultado.ok && resultado.confirmado).toBe(true)
     expect(resultado.ok && resultado.seco).toBe(true)
   })
@@ -547,7 +542,7 @@ describe('con GitHub simulado', () => {
 
   it('manda solo plazas.json en el commit', async () => {
     const { arboles } = montar()
-    const resultado = await guardarPlaza(entorno, igual({ direccion: 'Otra calle 4, Zibatá' }))
+    const resultado = await guardarPlaza(entorno, igual({ direccion: 'Otra calle 4' }))
     expect(resultado.ok && resultado.pr?.numero).toBe(8)
     expect(arboles).toHaveLength(1)
     expect(arboles[0]?.map((fila) => fila.path)).toEqual(['data/commercial/plazas.json'])

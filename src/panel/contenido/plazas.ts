@@ -90,7 +90,7 @@ export function pintarPlaza(plaza: PlazaResumen): void {
             <span class="ayuda">Es el título de la página de la zona. Se le añade " · Visit Zibatá" y el tope son 60 caracteres en total.</span>
           </label>
           <label class="campo-form campo-ancho">
-            <span>Dirección <span class="ayuda">calle y número, y termina en , Zibatá. Sin código postal ni locales: el local de cada negocio se escribe en su ficha</span></span>
+            <span>Dirección <span class="ayuda">solo la calle y el número. Sin zona, Zibatá, código postal ni locales: el local de cada negocio se escribe en su ficha</span></span>
             <input class="${controls.campo}" type="text" name="direccion" value="${texto(plaza.address ?? '')}" maxlength="200" />
           </label>
           <label class="campo-form campo-ancho">

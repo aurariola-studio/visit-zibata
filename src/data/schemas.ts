@@ -147,7 +147,7 @@ const googleMapsUrl = httpUrl.refine(isGoogleMapsUrl, 'Debe ser un enlace https 
 
 /**
  * Dónde está un local dentro de su plaza, en partes y no en una frase, para que todas las fichas lo digan igual:
- * "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138, Zibatá" (el edificio es su nombre o letra: "Edificio Liderazgo"). La calle y el número no
+ * "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138" (el edificio es su nombre o letra: "Edificio Liderazgo"). La calle y el número no
  * se repiten aquí: son los de la plaza, y una dirección que no coincide con la de su plaza es una de las dos mal.
  *
  * El orden de las claves es el orden en que se dice y el que sigue el archivo. Los locales son los rótulos tal
@@ -247,12 +247,15 @@ export const PlazaSchema = z.strictObject({
   name: nonEmptyText,
   description: LocalizedTextSchema.nullable(),
   /**
-   * Calle y número, y "Zibatá" al final: "Av. Paseo de las Pitahayas 55, Zibatá". Sin código postal, sin colonia
-   * y sin locales (esos son de cada negocio, en `unit`). Las fichas de sus locales parten de esta línea, y
-   * `direccionDeLocal` cuenta con que termina así.
+   * Solo la calle y el número: "Av. Paseo de las Pitahayas 55". Sin el nombre de la zona (es la primera fila de la
+   * ficha), sin Zibatá, sin código postal, sin estado y sin locales (esos son de cada negocio, en `unit`). Las
+   * fichas de sus locales parten de esta línea.
    */
   address: nonEmptyText
-    .regex(PLAZA_ADDRESS, 'La dirección es calle y número, y termina en ", Zibatá"')
+    .regex(
+      PLAZA_ADDRESS,
+      'La dirección es solo la calle y el número (Av. Paseo de las Pitahayas 55)',
+    )
     .nullable(),
   coordinates: LatLngSchema,
   geometry: PlazaGeometrySchema,

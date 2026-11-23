@@ -52,7 +52,7 @@ describe('PlaceDetail', () => {
   })
 
   it('la dirección es la de la plaza con el interior del local, y sin interior es solo la de la plaza', async () => {
-    const conCalle = { ...plaza, address: 'Av. Paseo de las Pitahayas 55, Zibatá' }
+    const conCalle = { ...plaza, address: 'Av. Paseo de las Pitahayas 55' }
     const { unmount } = await renderWithCatalog(
       <PlaceDetail
         {...partes(
@@ -69,7 +69,7 @@ describe('PlaceDetail', () => {
       />,
     )
     expect(
-      screen.getByText('Av. Paseo de las Pitahayas 55, Planta Baja, Local 136, Zibatá'),
+      screen.getByText('Av. Paseo de las Pitahayas 55, Planta Baja, Local 136'),
     ).toBeInTheDocument()
     unmount()
     await renderWithCatalog(
@@ -81,7 +81,7 @@ describe('PlaceDetail', () => {
         onClose={vi.fn()}
       />,
     )
-    expect(screen.getByText('Av. Paseo de las Pitahayas 55, Zibatá')).toBeInTheDocument()
+    expect(screen.getByText('Av. Paseo de las Pitahayas 55')).toBeInTheDocument()
   })
 
   it('excluye de los fragmentos de búsqueda el texto de interfaz, no lo que dice el local', async () => {

@@ -1,14 +1,14 @@
 import type { Place } from '../types/domain.ts'
 
 /**
- * La dirección de un local: la de su plaza más el lugar que ocupa dentro de ella, siempre en el mismo orden.
- * "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138, Zibatá".
+ * La dirección de un local: la calle y el número de su plaza más el lugar que ocupa dentro de ella, siempre en el
+ * mismo orden. "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138".
  *
- * La ficha, el cuerpo que se sirve sin JavaScript y el marcado de Google leen esto y nada más, para que no
- * puedan contradecirse. La calle y el número no se guardan por local: son los de la plaza
- * (`PlazaSchema.address`, que termina en ", Zibatá" y una prueba lo vigila).
+ * Es la segunda fila de la ficha (la primera es la zona), así que no repite la zona ni la localidad: ni el nombre
+ * de la plaza, ni Zibatá, ni el código postal, ni el estado. La ficha, el cuerpo que se sirve sin JavaScript y el
+ * marcado de Google leen esto y nada más, para que no puedan contradecirse. La calle y el número no se guardan por
+ * local: son los de la plaza (`PlazaSchema.address`, que lleva solo eso).
  */
-const LOCALIDAD = ', Zibatá'
 
 /** Solo las claves que usa este módulo, para que lo acepten a la vez la interfaz (`t`) y el build (su traductor). */
 type Clave =
@@ -19,7 +19,7 @@ type Clave =
   | 'place.unit.island'
 type Traducir = (clave: Clave) => string
 
-/** Las partes que se añaden a la calle de la plaza: edificio, planta y locales, ya en el idioma. */
+/** Las partes que se añaden a la calle de la plaza: edificio, planta, locales e isla, ya en el idioma. */
 export function interiorDeLocal(unit: Place['unit'], traducir: Traducir, idioma: string): string[] {
   if (!unit) return []
   const partes: string[] = []
@@ -37,35 +37,13 @@ export function interiorDeLocal(unit: Place['unit'], traducir: Traducir, idioma:
   return partes
 }
 
-/** La calle y el número de la plaza, sin la localidad. `null` si la plaza no tiene dirección. */
-export function calleDeLaPlaza(direccionDePlaza: string | null | undefined): string | null {
-  if (!direccionDePlaza) return null
-  return direccionDePlaza.endsWith(LOCALIDAD)
-    ? direccionDePlaza.slice(0, -LOCALIDAD.length)
-    : direccionDePlaza
-}
-
-/**
- * La calle de la plaza y el interior del local, sin la localidad: lo que espera `streetAddress` del marcado, que
- * ya lleva `addressLocality` aparte. `null` si la plaza no tiene dirección.
- */
-export function calleYInterior(
-  direccionDePlaza: string | null | undefined,
-  unit: Place['unit'],
-  traducir: Traducir,
-  idioma: string,
-): string | null {
-  const calle = calleDeLaPlaza(direccionDePlaza)
-  return calle ? [calle, ...interiorDeLocal(unit, traducir, idioma)].join(', ') : null
-}
-
-/** La dirección completa, con la localidad al final, para la ficha y el cuerpo sin JavaScript. */
+/** La dirección completa del local. `null` si su plaza no tiene dirección. */
 export function direccionDeLocal(
   direccionDePlaza: string | null | undefined,
   unit: Place['unit'],
   traducir: Traducir,
   idioma: string,
 ): string | null {
-  const interior = calleYInterior(direccionDePlaza, unit, traducir, idioma)
-  return interior ? `${interior}${LOCALIDAD}` : null
+  if (!direccionDePlaza) return null
+  return [direccionDePlaza, ...interiorDeLocal(unit, traducir, idioma)].join(', ')
 }
