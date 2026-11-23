@@ -206,6 +206,10 @@ export function pintarFormulario(negocio: Negocio | null): void {
             <span class="ayuda">Al cambiar de plaza, el local se añade al final del orden.</span>
             <span class="ayuda" data-plaza-aviso></span>
           </label>
+          <label class="campo-form">
+            <span>Local <span class="ayuda">como lo rotula el negocio, por ejemplo Local 226</span></span>
+            <input class="${controls.campo}" type="text" name="local" value="${texto(negocio?.unit ?? '')}" maxlength="60" />
+          </label>
         </div>
       </section>
 
@@ -619,6 +623,7 @@ function leerFormulario(formulario: HTMLFormElement): {
     descripcionEs,
     descripcionEn,
     telefono: valorDe(formulario, 'telefono'),
+    local: valorDe(formulario, 'local'),
     sitio: valorDe(formulario, 'sitio'),
     instagram: valorDe(formulario, 'instagram'),
     facebook: valorDe(formulario, 'facebook'),

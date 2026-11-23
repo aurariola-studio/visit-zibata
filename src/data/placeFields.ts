@@ -36,6 +36,7 @@ export const PLACE_DETAIL_KEYS = [
   'phone',
   'googleMapsUri',
   'googlePlaceId',
+  'unit',
 ] as const
 
 /**

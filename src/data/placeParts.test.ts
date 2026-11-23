@@ -34,8 +34,9 @@ function lugar(id: string, extra: Partial<Place> = {}): Place {
 
 describe('proyección de un local', () => {
   it('el resumen no lleva nada del detalle y el detalle no lleva nada del resumen', () => {
-    const resumen = projectSummary(lugar('uno'))
-    const detalle = projectDetail(lugar('uno'))
+    // `unit` es opcional: con uno cargado el detalle lleva todas sus claves.
+    const resumen = projectSummary(lugar('uno', { unit: 'Local 12' }))
+    const detalle = projectDetail(lugar('uno', { unit: 'Local 12' }))
     for (const clave of PLACE_DETAIL_KEYS) expect(resumen).not.toHaveProperty(clave)
     for (const clave of ['hours', 'giros', 'location', 'photos', 'verification']) {
       expect(detalle).not.toHaveProperty(clave)

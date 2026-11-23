@@ -408,6 +408,7 @@ export function PlaceDetail({
           <MapPin aria-hidden="true" />
           <span>
             {plaza.name}
+            {datos.unit && `, ${datos.unit}`}
             {plaza.address && <span className={styles.address}>{plaza.address}</span>}
           </span>
         </p>

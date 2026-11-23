@@ -351,6 +351,11 @@
             },
             "additionalProperties": false
           },
+          "unit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
           "active": {
             "type": "boolean"
           },

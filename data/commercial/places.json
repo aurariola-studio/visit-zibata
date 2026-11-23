@@ -988,6 +988,7 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": "Local 226",
       "active": true,
       "verification": {
         "status": "likely_active",

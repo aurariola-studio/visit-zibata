@@ -844,6 +844,23 @@ describe('editar un negocio existente', () => {
     expect(preparado.place.cierre).toEqual({ motivo: 'vacaciones', desde: '2026-10-20' })
   })
 
+  it('el local dentro de la plaza se guarda, se conserva si el formulario no lo trae y se quita vacío', () => {
+    const conLocal: Place = { ...existente, unit: 'Local 226' }
+    const dataConLocal = {
+      ...dataset,
+      places: dataset.places.map((fila) => (fila.id === existente.id ? conLocal : fila)),
+    }
+    const guardar = (base: Place, cambios: Record<string, unknown>) => {
+      const preparado = prepararNegocio(dataConLocal, crudo, editar(base, cambios), HOY)
+      if (!preparado.ok) throw new Error('no preparó')
+      return preparado.place.unit
+    }
+    // Un formulario o un CSV que no sabe del local no se lo lleva por delante.
+    expect(guardar(conLocal, {})).toBe('Local 226')
+    expect(guardar(existente, { local: 'Planta Baja, Local 136' })).toBe('Planta Baja, Local 136')
+    expect(guardar(conLocal, { local: '' })).toBeUndefined()
+  })
+
   it('rechaza un cierre temporal que empieza en el futuro', () => {
     const preparado = prepararNegocio(
       dataset,

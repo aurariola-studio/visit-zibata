@@ -176,6 +176,13 @@ export const PlaceSchema = z.strictObject({
   phone: e164Phone.nullable(),
   photos: z.array(PhotoSchema),
   links: LinksSchema,
+  /**
+   * El local dentro de su plaza, tal como lo rotula el negocio ("Local 226", "Planta Baja, Local 136").
+   * La dirección de la calle es la de la plaza (`plaza.address`) y la comparten todos sus locales, así
+   * que el número va aquí. Texto libre en español, como la dirección. Solo se carga lo que el negocio
+   * o el propietario confirmaron; sin dato, no se pinta nada.
+   */
+  unit: z.string().trim().min(1).max(60).optional(),
   active: z.boolean(),
   /**
    * Cerrado temporalmente: por obra, vacaciones o cambio de dueño.

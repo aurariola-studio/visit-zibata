@@ -169,6 +169,7 @@ const checkPlaceDetail: Check = (value) => {
       'identificador de Google Place no válido',
     ),
     field(value, 'phone', nullable(isPhone), 'teléfono no válido'),
+    field(value, 'unit', (unit) => unit === undefined || isText(unit), 'local no válido'),
     field(value, 'links', isLinks, 'enlace no válido'),
   ])
 }

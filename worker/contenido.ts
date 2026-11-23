@@ -92,6 +92,8 @@ export const EntradaNegocioSchema = z.object({
   lat: z.number().min(-90).max(90).nullable().optional(),
   lng: z.number().min(-180).max(180).nullable().optional(),
   horario: z.record(z.string(), z.array(z.string())).nullable().optional(),
+  /** El local dentro de la plaza ("Local 226"). Vacío lo quita; omitido conserva el que hubiera (el CSV no lo trae). */
+  local: z.string().trim().max(60).optional(),
   /** `null` limpia el cierre; omitido conserva el que hubiera. */
   cierre: z
     .strictObject({
@@ -681,6 +683,8 @@ function construir(
       ...(entrada.uberEats !== undefined && { uberEats: urlDe(entrada.uberEats) }),
       ...(entrada.didiFood !== undefined && { didiFood: urlDe(entrada.didiFood) }),
     },
+    // Vacío lo quita, omitido conserva el que hubiera.
+    ...((entrada.local ?? existente?.unit) ? { unit: entrada.local ?? existente?.unit } : {}),
     active: entrada.activo,
     // `null` lo quita, `undefined` conserva el que hubiera: el formulario decide, no una heurística.
     ...(entrada.cierre === null

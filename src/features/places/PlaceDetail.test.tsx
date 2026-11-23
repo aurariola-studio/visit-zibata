@@ -51,6 +51,22 @@ describe('PlaceDetail', () => {
     expect(directions).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
+  it('el local dentro de la plaza va junto al nombre de la plaza, y sin dato no se pinta nada', async () => {
+    const { unmount } = await renderWithCatalog(
+      <PlaceDetail
+        {...partes(makePlace({ id: 'con-local', plazaId: plaza.id, unit: 'Local 226' }))}
+        plaza={plaza}
+        backLabel="Volver"
+        onBack={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    )
+    expect(screen.getByText('Plaza Norte, Local 226', { exact: false })).toBeInTheDocument()
+    unmount()
+    await setup(makePlace({ id: 'sin-local', plazaId: plaza.id }))
+    expect(screen.queryByText(/Local \d/)).not.toBeInTheDocument()
+  })
+
   it('excluye de los fragmentos de búsqueda el texto de interfaz, no lo que dice el local', async () => {
     const { container } = await renderWithCatalog(
       <PlaceDetail
