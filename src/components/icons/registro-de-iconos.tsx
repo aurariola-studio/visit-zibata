@@ -13,6 +13,7 @@ import {
   Beer,
   BicepsFlexed,
   Bike,
+  Blinds,
   Bone,
   CakeSlice,
   Cherry,
@@ -25,9 +26,11 @@ import {
   Flame,
   Glasses,
   Hamburger,
+  Hammer,
   HandPlatter,
   HeartPulse,
   IceCreamCone,
+  Lamp,
   LeafyGreen,
   Martini,
   Microscope,
@@ -657,6 +660,46 @@ const Cuerpo = solid(
   <path d="M18.035 13.913c-2.199.588-3.698 1.618-4.457 3.827c-.235.684-.374 1.398-.467 2.115l-.065.593c-.056.594-.005 1.192-.65 1.47l-.261.073a1 1 0 0 1-.763-.213c-.418-.337-.372-.845-.418-1.33l-.065-.593a12 12 0 0 0-.316-1.628c-.691-2.494-2.151-3.654-4.605-4.314c-.216 1.612.1 3.181.77 4.654q.27.59.603 1.144c.209.347.598.746.651 1.163c.033.261-.04.53-.201.738c-.414.534-1.17.48-1.587-.007c-.224-.261-.406-.579-.582-.873a12.5 12.5 0 0 1-1.497-3.666c-.312-1.385-.343-2.854.027-4.232c.194-.724.512-1.385.788-2.08c.435-1.098.786-2.234.997-3.397c.152-.835.235-1.684.222-2.533l-.041-.833c-.055-.621-.316-1.337.277-1.787a1 1 0 0 1 1.218.006c.219.17.327.398.379.664l.115.903l.052.982c.056 2.499-.614 4.961-1.576 7.247c2.528.73 4.283 1.86 5.417 4.299c1.135-2.441 2.89-3.57 5.42-4.3c-.962-2.285-1.632-4.748-1.576-7.246l.052-.982c.06-.611.046-1.416.72-1.699a.996.996 0 0 1 1.177.309c.366.472.139 1.075.092 1.604l-.042.833c-.012.849.071 1.698.222 2.533c.212 1.163.563 2.299.998 3.397c.276.695.594 1.356.788 2.08c.369 1.378.339 2.847.027 4.232a12.5 12.5 0 0 1-1.497 3.666c-.176.294-.358.612-.582.873c-.493.576-1.409.521-1.718-.218a1 1 0 0 1-.07-.513c.053-.417.442-.816.651-1.163q.334-.555.602-1.144c.671-1.473.986-3.042.771-4.654m-6.294-3.947a1 1 0 0 1-.607-.466c-.439-.76.29-1.69 1.127-1.466c.254.068.475.238.607.466c.439.76-.29 1.69-1.127 1.466" />,
 )
 
+/** Rodillo de pintura: el giro Pinturas. Tabler Icons `paint` (MIT). */
+const Rodillo = custom(
+  <>
+    <path d="M5 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z" />
+    <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1-5 5h-5v2m-2 1a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
+  </>,
+)
+
+/** Silla: el giro Muebles. Material Symbols `chair` en contorno (Apache 2.0). */
+const Silla = solid(
+  <path d="M5 21q-.425 0-.712-.288T4 20v-1q-1.25 0-2.125-.875T1 16v-5q0-1.25.875-2.125T4 8V6q0-1.25.875-2.125T7 3h10q1.25 0 2.125.875T20 6v2q1.25 0 2.125.875T23 11v5q0 1.25-.875 2.125T20 19v1q0 .425-.288.713T19 21t-.712-.288T18 20v-1H6v1q0 .425-.288.713T5 21m-1-4h16q.425 0 .713-.288T21 16v-5q0-.425-.288-.712T20 10t-.712.288T19 11v4H5v-4q0-.425-.288-.712T4 10t-.712.288T3 11v5q0 .425.288.713T4 17m3-4h10v-2q0-.675.275-1.225T18 8.8V6q0-.425-.288-.712T17 5H7q-.425 0-.712.288T6 6v2.8q.45.425.725.975T7 11zm5 2" />,
+)
+
+/**
+ * Lápiz y regla: la categoría Papelerías y su giro Papelería. Phosphor `pencil-ruler` (MIT). Su línea es de 1,5 px y la de
+ * la guía de 2, así que lleva medio píxel de contorno.
+ */
+const Papeleria = solid(
+  <path d="M208 32h-48a16 16 0 0 0-16 16v160a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16m0 176h-48v-32h24a8 8 0 0 0 0-16h-24v-24h24a8 8 0 0 0 0-16h-24V96h24a8 8 0 0 0 0-16h-24V48h48zM77.66 26.34a8 8 0 0 0-11.32 0l-32 32A8 8 0 0 0 32 64v144a16 16 0 0 0 16 16h48a16 16 0 0 0 16-16V64a8 8 0 0 0-2.34-5.66ZM48 176V80h16v96Zm32-96h16v96H80Zm-8-36.69L92.69 64H51.31ZM48 208v-16h48v16Z" />,
+  '0 0 256 256',
+  0.5,
+)
+
+/** Regalo: la categoría Regalos y fiestas y su giro Regalos. Material Design Icons `gift-outline` (Apache 2.0). */
+const Regalo = solid(
+  <path d="M22 12v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a1 1 0 0 1-1-1V8a2 2 0 0 1 2-2h3.17A3 3 0 0 1 6 5a3 3 0 0 1 3-3c1 0 1.88.5 2.43 1.24v-.01L12 4l.57-.77v.01C13.12 2.5 14 2 15 2a3 3 0 0 1 3 3a3 3 0 0 1-.17 1H21a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1M4 20h7v-8H4zm16 0v-8h-7v8zM9 4a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1a1 1 0 0 0-1-1m6 0a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1a1 1 0 0 0-1-1M3 8v2h8V8zm10 0v2h8V8z" />,
+)
+
+/** Cañón de confeti: el giro Artículos de fiesta. Phosphor `confetti` (MIT), con el mismo medio píxel de contorno. */
+const Confeti = solid(
+  <path d="M111.49 52.63a15.8 15.8 0 0 0-26 5.77L33 202.78A15.83 15.83 0 0 0 47.76 224a16 16 0 0 0 5.46-1l144.37-52.5a15.8 15.8 0 0 0 5.78-26Zm-8.33 135.21l-35-35l13.16-36.21l58.05 58.05Zm-55 20l14-38.41l24.45 24.45ZM156 168.64L87.36 100l13-35.87l91.43 91.43ZM160 72a37.8 37.8 0 0 1 3.84-15.58C169.14 45.83 179.14 40 192 40c6.7 0 11-2.29 13.65-7.21a22 22 0 0 0 2.35-8.85a8 8 0 0 1 16 .06c0 12.86-8.52 32-32 32c-6.7 0-11 2.29-13.65 7.21a22 22 0 0 0-2.35 8.85a8 8 0 0 1-16-.06m-24-32V16a8 8 0 0 1 16 0v24a8 8 0 0 1-16 0m101.66 82.34a8 8 0 1 1-11.32 11.31l-16-16a8 8 0 0 1 11.32-11.32Zm4.87-42.75l-24 8a8 8 0 0 1-5.06-15.18l24-8a8 8 0 0 1 5.06 15.18" />,
+  '0 0 256 256',
+  0.5,
+)
+
+/** Tulipán: la categoría Floristerías y su giro Floristería. Material Design Icons `flower-tulip-outline` (Apache 2.0). */
+const Tulipan = solid(
+  <path d="M3 13a9 9 0 0 0 9 9a9 9 0 0 0-9-9m2.44 2.44c1.91.71 3.41 2.21 4.12 4.12a7 7 0 0 1-4.12-4.12M12 22a9 9 0 0 0 9-9a9 9 0 0 0-9 9m2.42-2.43a6.88 6.88 0 0 1 4.15-4.15a7.03 7.03 0 0 1-4.15 4.15M12 14a6 6 0 0 0 6-6V3a5.9 5.9 0 0 0-2.16.39c-.55.23-1.04.57-1.45 1L12 2L9.61 4.39c-.41-.43-.9-.77-1.45-1A5.9 5.9 0 0 0 6 3v5a6 6 0 0 0 6 6M8 5.61l1.57 1.65L12 4.83l2.43 2.43L16 5.61V8a4 4 0 0 1-4 4a4 4 0 0 1-4-4z" />,
+)
+
 /** Nombre de icono a dibujo. Las claves son las de `src/data/iconos.ts`. */
 export const ICONOS: Record<string, IconComponent> = {
   acai: Acai,
@@ -689,6 +732,7 @@ export const ICONOS: Record<string, IconComponent> = {
   cherry: Cherry,
   chopsticks: Chopsticks,
   coffee: Coffee,
+  confeti: Confeti,
   'cooking-pot': CookingPot,
   'copa-de-vino': CopaDeVino,
   crepa: Crepa,
@@ -721,9 +765,11 @@ export const ICONOS: Record<string, IconComponent> = {
   jugo: Jugo,
   kebab: Kebab,
   labial: Labial,
+  lampara: Lamp,
   'leafy-green': LeafyGreen,
   leche: Leche,
   locion: Locion,
+  martillo: Hammer,
   martini: Martini,
   masaje: Masaje,
   microscope: Microscope,
@@ -734,10 +780,12 @@ export const ICONOS: Record<string, IconComponent> = {
   ortodoncia: Ortodoncia,
   padel: Padel,
   pan: Pan,
-  papas: Papas,
   'papas-fritas': PapasFritas,
+  papas: Papas,
+  papeleria: Papeleria,
   pasta: Pasta,
   pelotas: Pelotas,
+  persianas: Blinds,
   pickleball: Pickleball,
   pilates: Pilates,
   pill: Pill,
@@ -749,12 +797,15 @@ export const ICONOS: Record<string, IconComponent> = {
   quesadilla: Quesadilla,
   ramen: Ramen,
   rastrillo: Rastrillo,
+  regalo: Regalo,
+  rodillo: Rodillo,
   salad: Salad,
   sandwich: Sandwich,
   secadora: Secadora,
   'shopping-basket': ShoppingBasket,
   'shopping-cart': ShoppingCart,
   shrimp: Shrimp,
+  silla: Silla,
   spa: Spa,
   spray: Spray,
   stethoscope: Stethoscope,
@@ -762,12 +813,13 @@ export const ICONOS: Record<string, IconComponent> = {
   taco: Taco,
   taekwondo: Taekwondo,
   te: Te,
-  tienda: Tienda,
   'tienda-abierta': TiendaAbierta,
+  tienda: Tienda,
   tijeras: Tijeras,
   tinte: Tinte,
   tooth: Tooth,
   torta: Torta,
+  tulipan: Tulipan,
   'utensils-crossed': UtensilsCrossed,
   waffle: Waffle,
   wine: Wine,
