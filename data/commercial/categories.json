@@ -2311,7 +2311,7 @@
         "es": "abarrotes",
         "en": "grocery-stores"
       },
-      "sectorId": "despensa",
+      "sectorId": "tiendas",
       "label": {
         "es": "Abarrotes",
         "en": "Grocery Stores"
@@ -2412,7 +2412,7 @@
         "es": "conveniencia",
         "en": "convenience-stores"
       },
-      "sectorId": "despensa",
+      "sectorId": "tiendas",
       "label": {
         "es": "Conveniencia",
         "en": "Convenience Stores"
@@ -2452,7 +2452,7 @@
         "es": "carnicerias",
         "en": "butchers"
       },
-      "sectorId": "despensa",
+      "sectorId": "tiendas",
       "label": {
         "es": "Carnicerías",
         "en": "Butchers"
@@ -2497,7 +2497,7 @@
         "es": "fruterias",
         "en": "fruit-shops"
       },
-      "sectorId": "despensa",
+      "sectorId": "tiendas",
       "label": {
         "es": "Fruterías",
         "en": "Fruit Shops"
@@ -2540,7 +2540,7 @@
         "es": "licorerias",
         "en": "liquor-stores"
       },
-      "sectorId": "despensa",
+      "sectorId": "tiendas",
       "label": {
         "es": "Licorerías",
         "en": "Liquor Stores"
@@ -2584,7 +2584,7 @@
         "es": "panaderias",
         "en": "bakeries"
       },
-      "sectorId": "despensa",
+      "sectorId": "tiendas",
       "label": {
         "es": "Panaderías",
         "en": "Bakeries"
@@ -2615,6 +2615,287 @@
             "croissant",
             "pan dulce",
             "conchas"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "ferreterias",
+      "slug": {
+        "es": "ferreterias",
+        "en": "hardware-stores"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Ferreterías",
+        "en": "Hardware Stores"
+      },
+      "icon": "martillo",
+      "hue": 205,
+      "schemaType": "Store",
+      "order": 560,
+      "synonyms": [
+        "ferretería",
+        "herramientas",
+        "tlapalería",
+        "pintura",
+        "hardware"
+      ],
+      "giros": [
+        {
+          "id": "ferreteria",
+          "label": {
+            "es": "Ferretería",
+            "en": "Hardware Store"
+          },
+          "icon": "martillo",
+          "synonyms": [
+            "herramientas",
+            "tlapalería",
+            "tornillos",
+            "hardware"
+          ],
+          "general": true
+        },
+        {
+          "id": "pinturas",
+          "label": {
+            "es": "Pinturas",
+            "en": "Paint"
+          },
+          "icon": "rodillo",
+          "synonyms": [
+            "pintura",
+            "brochas",
+            "rodillos",
+            "paint"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hogar-y-muebles",
+      "slug": {
+        "es": "hogar-y-muebles",
+        "en": "home-and-furniture"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Hogar y muebles",
+        "en": "Home & Furniture"
+      },
+      "icon": "lampara",
+      "hue": 280,
+      "schemaType": "Store",
+      "order": 570,
+      "synonyms": [
+        "hogar",
+        "casa",
+        "muebles",
+        "decoración",
+        "persianas",
+        "cuadros",
+        "furniture"
+      ],
+      "giros": [
+        {
+          "id": "decoracion-y-hogar",
+          "label": {
+            "es": "Decoración y hogar",
+            "en": "Home & Decor"
+          },
+          "icon": "lampara",
+          "synonyms": [
+            "decoración",
+            "hogar",
+            "casa",
+            "artículos para el hogar",
+            "decor"
+          ],
+          "general": true
+        },
+        {
+          "id": "muebles",
+          "label": {
+            "es": "Muebles",
+            "en": "Furniture"
+          },
+          "icon": "silla",
+          "synonyms": [
+            "mueblería",
+            "sillas",
+            "mesas",
+            "sofá",
+            "furniture"
+          ]
+        },
+        {
+          "id": "persianas-y-cortinas",
+          "label": {
+            "es": "Persianas y cortinas",
+            "en": "Blinds & Curtains"
+          },
+          "icon": "persianas",
+          "synonyms": [
+            "persianas",
+            "cortinas",
+            "toldos",
+            "blinds",
+            "curtains"
+          ]
+        },
+        {
+          "id": "marcos-y-cuadros",
+          "label": {
+            "es": "Marcos y cuadros",
+            "en": "Frames & Pictures"
+          },
+          "icon": "marco",
+          "synonyms": [
+            "marquería",
+            "enmarcado",
+            "cuadros",
+            "marcos",
+            "frames"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "papelerias",
+      "slug": {
+        "es": "papelerias",
+        "en": "stationery-stores"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Papelerías",
+        "en": "Stationery Stores"
+      },
+      "icon": "papeleria",
+      "hue": 55,
+      "schemaType": "Store",
+      "order": 580,
+      "synonyms": [
+        "papelería",
+        "útiles escolares",
+        "copias",
+        "impresiones",
+        "oficina",
+        "stationery"
+      ],
+      "giros": [
+        {
+          "id": "papeleria",
+          "label": {
+            "es": "Papelería",
+            "en": "Stationery"
+          },
+          "icon": "papeleria",
+          "synonyms": [
+            "útiles",
+            "escolar",
+            "oficina",
+            "copias",
+            "stationery"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "regalos-y-fiestas",
+      "slug": {
+        "es": "regalos-y-fiestas",
+        "en": "gifts-and-party"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Regalos y fiestas",
+        "en": "Gifts & Party"
+      },
+      "icon": "regalo",
+      "hue": 295,
+      "schemaType": "Store",
+      "order": 590,
+      "synonyms": [
+        "regalos",
+        "fiestas",
+        "detalles",
+        "globos",
+        "piñatas",
+        "gifts"
+      ],
+      "giros": [
+        {
+          "id": "regalos",
+          "label": {
+            "es": "Regalos",
+            "en": "Gifts"
+          },
+          "icon": "regalo",
+          "synonyms": [
+            "detalles",
+            "obsequios",
+            "concept store",
+            "gifts"
+          ],
+          "general": true
+        },
+        {
+          "id": "articulos-de-fiesta",
+          "label": {
+            "es": "Artículos de fiesta",
+            "en": "Party Supplies"
+          },
+          "icon": "confeti",
+          "synonyms": [
+            "fiesta",
+            "globos",
+            "piñatas",
+            "cumpleaños",
+            "party"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "floristerias",
+      "slug": {
+        "es": "floristerias",
+        "en": "florists"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Floristerías",
+        "en": "Florists"
+      },
+      "icon": "tulipan",
+      "hue": 350,
+      "schemaType": "Store",
+      "order": 600,
+      "synonyms": [
+        "florería",
+        "flores",
+        "ramos",
+        "arreglos florales",
+        "florist"
+      ],
+      "giros": [
+        {
+          "id": "floristeria",
+          "label": {
+            "es": "Floristería",
+            "en": "Florist"
+          },
+          "icon": "tulipan",
+          "synonyms": [
+            "florería",
+            "flores",
+            "ramos",
+            "arreglos",
+            "florist"
           ],
           "general": true
         }
@@ -2675,14 +2956,14 @@
       "order": 40
     },
     {
-      "id": "despensa",
+      "id": "tiendas",
       "slug": {
-        "es": "despensa",
-        "en": "groceries"
+        "es": "tiendas",
+        "en": "shops"
       },
       "label": {
-        "es": "Despensa",
-        "en": "Groceries"
+        "es": "Tiendas",
+        "en": "Shops"
       },
       "icon": "shopping-basket",
       "order": 50
