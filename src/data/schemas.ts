@@ -17,10 +17,12 @@ import {
   isValidTimeRange,
   isWhatsappLink,
   LOCATION_CONFIDENCE,
+  PLAZA_ADDRESS,
   RESEARCH_STATUS,
   SCHEMA_TYPES,
   SLUG_PATTERN,
   TIME_RANGE_PATTERN,
+  UNIT_FLOORS,
 } from './rules.ts'
 
 export {
@@ -143,6 +145,41 @@ export const VerificationSchema = z.strictObject({
 
 const googleMapsUrl = httpUrl.refine(isGoogleMapsUrl, 'Debe ser un enlace https de Google Maps')
 
+/**
+ * Dónde está un local dentro de su plaza, en partes y no en una frase, para que todas las fichas lo digan igual:
+ * "Av. Paseo de las Pitahayas 55, Edificio A, Planta Baja, Locales 137 y 138" (el edificio es su nombre o letra: "Edificio Liderazgo"). La calle y el número no
+ * se repiten aquí: son los de la plaza, y una dirección que no coincide con la de su plaza es una de las dos mal.
+ *
+ * El orden de las claves es el orden en que se dice y el que sigue el archivo. Los locales son los rótulos tal
+ * como los pone el negocio ("226", "110-A", "L-131"), en mayúsculas; un rango ("24 a 27") se escribe entero.
+ * No hay referencias libres ("a un costado de..."): habría que traducirlas.
+ */
+export const UnitSchema = z
+  .strictObject({
+    edificio: z
+      .string()
+      .regex(
+        /^[\p{L}0-9][\p{L}0-9 ]{0,29}$/u,
+        'El edificio es su nombre o letra, sin signos (Liderazgo, A)',
+      )
+      .optional(),
+    planta: z.enum(UNIT_FLOORS).optional(),
+    locales: z
+      .array(
+        z
+          .string()
+          .regex(/^[A-Z]{0,2}-?[0-9]{1,3}(-?[A-Z])?$/, 'Un local es como 226, 110-A o L-131'),
+      )
+      .min(1)
+      .max(8)
+      .optional(),
+    /** Un puesto en medio del pasillo: `true` es "Isla" a secas y un número es "Isla 5". */
+    isla: z
+      .union([z.literal(true), z.string().regex(/^[0-9]{1,3}$/, 'Una isla es su número')])
+      .optional(),
+  })
+  .refine((unit) => Object.keys(unit).length > 0, 'El local no puede ir vacío')
+
 export const PlaceSchema = z.strictObject({
   id: slug,
   slug: slug,
@@ -176,6 +213,8 @@ export const PlaceSchema = z.strictObject({
   phone: e164Phone.nullable(),
   photos: z.array(PhotoSchema),
   links: LinksSchema,
+  /** Dónde está dentro de su plaza. La calle y el número son los de la plaza (`plaza.address`). */
+  unit: UnitSchema.optional(),
   active: z.boolean(),
   /**
    * Cerrado temporalmente: por obra, vacaciones o cambio de dueño.
@@ -207,7 +246,17 @@ export const PlazaSchema = z.strictObject({
   slug: slug,
   name: nonEmptyText,
   description: LocalizedTextSchema.nullable(),
-  address: nonEmptyText.nullable(),
+  /**
+   * Solo la calle y el número: "Av. Paseo de las Pitahayas 55". Sin el nombre de la zona (es la primera fila de la
+   * ficha), sin Zibatá, sin código postal, sin estado y sin locales (esos son de cada negocio, en `unit`). Las
+   * fichas de sus locales parten de esta línea.
+   */
+  address: nonEmptyText
+    .regex(
+      PLAZA_ADDRESS,
+      'La dirección es solo la calle y el número (Av. Paseo de las Pitahayas 55)',
+    )
+    .nullable(),
   coordinates: LatLngSchema,
   geometry: PlazaGeometrySchema,
   active: z.boolean(),

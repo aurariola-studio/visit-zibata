@@ -93,6 +93,7 @@ test.describe('Fragmentos de búsqueda', () => {
       [
         LOCAL_COMPLETO.name,
         zonaDelLocal.name,
+        // La ficha completa la dirección de la plaza con el interior del local: la calle y el número siguen ahí.
         zonaDelLocal.address,
         LOCAL_COMPLETO.description?.es.slice(0, 25),
       ].filter((texto): texto is string => Boolean(texto)),

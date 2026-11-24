@@ -121,6 +121,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/mirrus-kitchen/vEdhdl54Xh-qWk25EYejFw",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "105"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -189,6 +194,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/a-kilos-de-cecina-queretaro/cjHzwj1MVTuiRcGymYMcOw",
         "didiFood": "https://www.didi-food.com/es-MX/food/store/5764609267378949911/?channel=10&cityId=52220400"
       },
+      "unit": {
+        "locales": [
+          "108"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -256,6 +266,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "115"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -320,6 +335,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930110288-boba-station-tapioca-bar",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "118"
+        ]
       },
       "active": true,
       "verification": {
@@ -389,6 +409,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/origenatural/N4amesE3VouL8XveZxiKnQ",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "121"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -455,6 +480,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930064964-subway",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "126"
+        ]
       },
       "active": true,
       "verification": {
@@ -588,6 +618,12 @@
         "uberEats": "https://www.ubereats.com/mx/store/tortas-fifthy-fifthy-zibata-queretaro/dEQQZM56TfSVY4IYAG7f1w",
         "didiFood": null
       },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "133"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -658,6 +694,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930074457-rometta-gastrobar",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "139"
+        ]
       },
       "active": true,
       "verification": {
@@ -859,6 +900,12 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "201",
+          "202"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -922,6 +969,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930116580-wicklow-irish-pub-zibata",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "205"
+        ]
       },
       "active": true,
       "verification": {
@@ -1000,6 +1052,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "226"
+        ]
       },
       "active": true,
       "verification": {
@@ -1186,6 +1243,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -1321,6 +1381,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/cebicheria-del-dia-zibata-cebicheria-del-dia-zibata/ZrfVhPLlUneWaP__2nvjGA",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "32"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -1391,6 +1456,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "33"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -1453,6 +1523,13 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930278399-miches-burgers-zibata",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "260",
+          "261",
+          "262"
+        ]
       },
       "active": true,
       "verification": {
@@ -1845,6 +1922,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/carnitas-don-tono-zibata/0EPk-JhCSUiJpHwPG47xvA",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "10"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -1978,6 +2060,11 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/tomassa-almacen-de-pastas/FJm_wO1sUJuYQMGmgERA0A",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "5"
+        ]
       },
       "active": true,
       "verification": {
@@ -2221,6 +2308,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "25"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2357,6 +2449,9 @@
         "uberEats": "https://www.ubereats.com/mx/store/la-gaspacheria-tradicional/nUmQV6hdW0uIyNkzjQkdrg",
         "didiFood": null
       },
+      "unit": {
+        "isla": "5"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2424,6 +2519,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "67"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2487,6 +2587,11 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/namnam-sushi-zibata/th5_dKyxVryv_x02Fiag6Q",
         "didiFood": "https://web.didiglobal.com/mx/food/queretaro-que/nam-nam-sushi-zibata/5764607734100787559/"
+      },
+      "unit": {
+        "locales": [
+          "100-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -2555,6 +2660,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "103-A"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2619,6 +2729,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930162726-arepanas-mx",
         "uberEats": "https://www.ubereats.com/mx/store/arepanas/KOWDJeeLVcOslVQdi7FyYA",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "107-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -2753,6 +2868,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "108-A"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -2819,6 +2939,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "112-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -3228,6 +3353,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/romelia-cafe/d0xN-HemVLqxVNIIBq7yHQ",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "220"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -3357,6 +3487,12 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "21",
+          "22"
+        ]
       },
       "active": true,
       "verification": {
@@ -4030,6 +4166,11 @@
         "uberEats": "https://www.ubereats.com/mx/store/pio-poke-house-%26-rolls-queretaro/ijBvUEPLSGKcx1L2NzVfjg",
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "202"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4358,6 +4499,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "54"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4422,6 +4568,12 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930470790-tacos-el-pata",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "6",
+          "7"
+        ]
       },
       "active": true,
       "verification": {
@@ -4490,6 +4642,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "10"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4555,6 +4712,11 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/eddi-mena-reposteria/mtdiRsiIQO-8kAijq5mGuQ",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "E1"
+        ]
       },
       "active": true,
       "verification": {
@@ -4661,6 +4823,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4722,6 +4887,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4760,6 +4928,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -4803,6 +4974,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4845,6 +5019,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "isla": true
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4883,6 +5060,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -4940,6 +5120,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -4979,6 +5162,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -5042,6 +5228,11 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/oakberry-acai-bowls-zibata/Br30mP4YTneHGwhvgYLDvQ",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "A230"
+        ]
       },
       "active": true,
       "verification": {
@@ -5109,6 +5300,12 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/burgerthoven-zibata/IIyATdQ1XFeckUVXsGHpag",
         "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "220"
+        ]
       },
       "active": true,
       "verification": {
@@ -5435,6 +5632,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "117"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -5495,6 +5697,11 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/henko-queretaro/33nk0t72VDaln32czppmpw",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "8"
+        ]
       },
       "active": true,
       "verification": {
@@ -5617,6 +5824,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "203"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -5737,6 +5949,13 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "40",
+          "41",
+          "42"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -5799,6 +6018,12 @@
         "rappi": null,
         "uberEats": "https://www.ubereats.com/mx/store/enzza-pizza/v9MZ9juHWGyao8m0hzQ7jw",
         "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "34"
+        ]
       },
       "active": true,
       "verification": {
@@ -5864,6 +6089,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "104-A"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -5928,6 +6158,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "111"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -5990,6 +6225,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "102-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -6055,6 +6295,11 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930472334-enoff",
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "1"
+        ]
       },
       "active": true,
       "verification": {
@@ -6163,6 +6408,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -6203,6 +6451,9 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "edificio": "Liderazgo"
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -6241,6 +6492,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "Liderazgo"
       },
       "active": true,
       "verification": {
@@ -6561,6 +6815,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "201"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -6625,6 +6884,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "63"
+        ]
       },
       "active": true,
       "verification": {
@@ -6691,6 +6955,9 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "planta": "sotano"
       },
       "active": true,
       "verification": {
@@ -6761,6 +7028,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "204"
+        ]
       },
       "active": true,
       "verification": {
@@ -6834,6 +7106,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "58"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -6898,6 +7175,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "201"
+        ]
       },
       "active": true,
       "verification": {
@@ -6970,6 +7252,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "53"
+        ]
       },
       "active": true,
       "verification": {
@@ -7044,6 +7331,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "47"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7117,6 +7409,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "47"
+        ]
       },
       "active": true,
       "verification": {
@@ -7257,6 +7554,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "110-A"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7323,6 +7625,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "11"
+        ]
       },
       "active": true,
       "verification": {
@@ -7392,6 +7699,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "203"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7458,6 +7770,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "203"
+        ]
       },
       "active": true,
       "verification": {
@@ -7804,6 +8121,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "121"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -7942,6 +8264,12 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "22",
+          "23"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -8004,6 +8332,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "215"
+        ]
       },
       "active": true,
       "verification": {
@@ -8070,6 +8403,13 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "edificio": "A",
+        "locales": [
+          "137",
+          "138"
+        ]
       },
       "active": true,
       "verification": {
@@ -8409,6 +8749,13 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "24",
+          "26",
+          "27"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -8539,6 +8886,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "L-131"
+        ]
       },
       "active": true,
       "verification": {
@@ -8679,6 +9031,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "216"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -8748,6 +9105,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "45"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -8812,6 +9174,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "26"
+        ]
       },
       "active": true,
       "verification": {
@@ -8878,6 +9245,12 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "45"
+        ]
       },
       "active": true,
       "verification": {
@@ -8947,6 +9320,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "61"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -9011,6 +9389,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "16"
+        ]
       },
       "active": true,
       "verification": {
@@ -9291,6 +9674,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "112"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -9353,6 +9741,12 @@
         "rappi": "https://www.rappi.com.mx/restaurantes/1930500500-pizzeria-de-diego",
         "uberEats": "https://www.ubereats.com/mx/store/pizzeria-de-diego-%7C-zibata/hFOp2P_STJ2AYKdvadPWVQ",
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "223",
+          "224"
+        ]
       },
       "active": true,
       "verification": {
@@ -9422,6 +9816,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "59"
+        ]
       },
       "active": true,
       "verification": {
@@ -9554,6 +9953,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "215"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -9628,6 +10032,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "213"
+        ]
       },
       "active": true,
       "verification": {
@@ -9773,6 +10182,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "42"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -9841,6 +10255,12 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "231"
+        ]
       },
       "active": true,
       "verification": {
@@ -9912,6 +10332,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "21"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -9977,6 +10402,12 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "205"
+        ]
       },
       "active": true,
       "verification": {
@@ -10115,6 +10546,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "43"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -10181,6 +10617,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "101-A"
+        ]
       },
       "active": true,
       "verification": {
@@ -10316,6 +10757,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "39"
+        ]
       },
       "active": true,
       "verification": {
@@ -10653,6 +11099,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "17"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -10671,7 +11122,7 @@
       "id": "mandala-spa-beauty-center",
       "slug": "mandala-spa-beauty-center",
       "name": "Mandala Spa & Beauty Center",
-      "plazaId": "xentric-anahuac",
+      "plazaId": "paseo-zibata",
       "giros": [
         "faciales",
         "tratamientos-corporales",
@@ -10708,11 +11159,8 @@
         "sun": [],
         "byAppointment": true
       },
-      "location": {
-        "lat": 20.6781897,
-        "lng": -100.3136649
-      },
-      "googleMapsUri": "https://maps.app.goo.gl/DMEzGDL3UAf4Gk2CA",
+      "location": null,
+      "googleMapsUri": null,
       "googlePlaceId": null,
       "phone": "+524425082135",
       "photos": [],
@@ -10857,6 +11305,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "24"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "likely_active",
@@ -10923,6 +11376,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "211"
+        ]
       },
       "active": true,
       "verification": {
@@ -10995,6 +11453,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "109"
+        ]
       },
       "active": true,
       "verification": {
@@ -11270,6 +11733,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "12"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -11337,6 +11805,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "119"
+        ]
       },
       "active": true,
       "verification": {
@@ -11603,6 +12076,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "120"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -11669,6 +12147,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "219"
+        ]
       },
       "active": true,
       "verification": {
@@ -11997,6 +12480,11 @@
         "uberEats": null,
         "didiFood": null
       },
+      "unit": {
+        "locales": [
+          "120"
+        ]
+      },
       "active": true,
       "verification": {
         "status": "active",
@@ -12062,6 +12550,11 @@
         "rappi": null,
         "uberEats": null,
         "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "118"
+        ]
       },
       "active": false,
       "verification": {

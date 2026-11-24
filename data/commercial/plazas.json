@@ -11,7 +11,7 @@
         "es": "Plaza comercial con suites universitarias delante de la Universidad Anáhuac Querétaro.",
         "en": "Shopping plaza with student suites, across from Universidad Anáhuac Querétaro."
       },
-      "address": "Av. Paseo de las Pitahayas 55, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 55",
       "coordinates": {
         "lat": 20.678393,
         "lng": -100.313518
@@ -106,7 +106,6 @@
         "picorito-snacks",
         "la-pizzeria-de-diego",
         "beoxy-zibata",
-        "mandala-spa-beauty-center",
         "rob-nail-beauty-lab",
         "asturiano-xentric-anahuac",
         "el-huerto",
@@ -138,7 +137,6 @@
         "artes-marciales",
         "peluqueria",
         "unas",
-        "spa-y-masajes",
         "piel-y-cuerpo",
         "carnicerias",
         "fruterias",
@@ -166,7 +164,7 @@
         "es": "Opciones para comer dentro del campus de la Universidad Anáhuac Querétaro.",
         "en": "Places to eat inside the Universidad Anáhuac Querétaro campus."
       },
-      "address": "Circuito Universidades I km 7, Zibatá",
+      "address": "Circuito Universidades I km 7",
       "coordinates": {
         "lat": 20.68056,
         "lng": -100.31302
@@ -264,7 +262,7 @@
         "es": "Plaza comercial frente a la Universidad Anáhuac con restaurantes, cafeterías, panadería y servicios.",
         "en": "Shopping plaza across from Universidad Anáhuac, with restaurants, coffee shops, a bakery and services."
       },
-      "address": "Av. Paseo de las Pitahayas 501, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 13",
       "coordinates": {
         "lat": 20.679336,
         "lng": -100.314984
@@ -332,7 +330,8 @@
         "ramen-express-paseo-zibata",
         "barberia-barbuda-paseo-zibata",
         "black-studio-beauty-nails",
-        "oxxo-paseo-zibata"
+        "oxxo-paseo-zibata",
+        "mandala-spa-beauty-center"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -358,6 +357,8 @@
         "peluqueria",
         "barberia",
         "unas",
+        "spa-y-masajes",
+        "piel-y-cuerpo",
         "cejas-y-pestanas",
         "panaderias"
       ],
@@ -381,7 +382,7 @@
         "es": "Canchas de pickleball y food trucks, frente a la Universidad Anáhuac y a un lado de la plaza comercial Paseo Zibatá.",
         "en": "Pickleball courts and food trucks, across from Universidad Anáhuac and next to the Paseo Zibatá shopping plaza."
       },
-      "address": "Av. Paseo de las Pitahayas 24, locales 22 y 23, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 24",
       "coordinates": {
         "lat": 20.680135,
         "lng": -100.316257
@@ -442,7 +443,7 @@
         "es": "Zona comercial del desarrollo Riscos Condesa I, frente a la Universidad Anáhuac.",
         "en": "Shopping area of the Riscos Condesa I development, across from Universidad Anáhuac."
       },
-      "address": "Av. Paseo de las Pitahayas 9-B, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 9-B",
       "coordinates": {
         "lat": 20.68097,
         "lng": -100.316595
@@ -549,7 +550,7 @@
         "es": "Walmart Express Zibatá (supermercado), sobre Av. Paseo de las Pitahayas.",
         "en": "Walmart Express Zibatá (supermarket), on Av. Paseo de las Pitahayas."
       },
-      "address": "Av. Paseo de las Pitahayas 6A, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 6A",
       "coordinates": {
         "lat": 20.6824846,
         "lng": -100.3177617
@@ -635,7 +636,7 @@
         "es": "Plaza comercial con suites universitarias sobre Paseo Tunas.",
         "en": "Shopping plaza with student suites, on Paseo Tunas."
       },
-      "address": "Paseo Tunas 18, Zibatá",
+      "address": "Paseo Tunas 18",
       "coordinates": {
         "lat": 20.683739,
         "lng": -100.326266
@@ -735,7 +736,7 @@
         "es": "Plaza comercial entre el Discovery Center de Zibatá y la entrada principal a Zibatá.",
         "en": "Shopping plaza between the Zibatá Discovery Center and the main entrance to Zibatá."
       },
-      "address": "Av. Paseo de las Pitahayas 26, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 26",
       "coordinates": {
         "lat": 20.674848,
         "lng": -100.322713
@@ -872,7 +873,7 @@
         "es": "Plaza del desarrollo Paseo Pitahayas, a un costado del Parque Jamadi.",
         "en": "Plaza in the Paseo Pitahayas development, beside Parque Jamadi."
       },
-      "address": "Cerro del Huizache 49, 76269 Zibatá, Qro.",
+      "address": "Cerro del Huizache 49",
       "coordinates": {
         "lat": 20.67735,
         "lng": -100.335
@@ -1031,7 +1032,7 @@
         "es": "Plaza comercial en zona céntrica sobre Av. Paseo de las Pitahayas.",
         "en": "Shopping plaza in the central area, on Av. Paseo de las Pitahayas."
       },
-      "address": "Av. Paseo de las Pitahayas 199, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 199",
       "coordinates": {
         "lat": 20.68102,
         "lng": -100.340119
@@ -1196,7 +1197,7 @@
         "es": "Plaza comercial a un costado de Walmart Express Zibatá.",
         "en": "Shopping plaza beside Walmart Express Zibatá."
       },
-      "address": "Av. Paseo de las Pitahayas, Zibatá",
+      "address": "Av. Paseo de las Pitahayas 1-66",
       "coordinates": {
         "lat": 20.682679,
         "lng": -100.318637
@@ -1268,7 +1269,7 @@
         "es": "Zona comercial del desarrollo Riscos Condesa II, sobre Av. Ceiba.",
         "en": "Shopping area of the Riscos Condesa II development, on Av. Ceiba."
       },
-      "address": "Circuito Ceiba, Condesa II, Zibatá",
+      "address": "Circuito Ceiba 26",
       "coordinates": {
         "lat": 20.685199,
         "lng": -100.325317
@@ -1404,7 +1405,7 @@
         "es": "Club de pádel en Zibatá, Querétaro.",
         "en": "Padel club in Zibatá, Querétaro."
       },
-      "address": "Calle Agave 6, Zibatá",
+      "address": "Calle Agave 6",
       "coordinates": {
         "lat": 20.690018,
         "lng": -100.329255

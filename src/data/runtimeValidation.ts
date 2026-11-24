@@ -26,6 +26,7 @@ import {
   isWhatsappLink,
   LOCATION_CONFIDENCE,
   SLUG_PATTERN,
+  UNIT_FLOORS,
 } from './rules.ts'
 
 export interface RecordIssue {
@@ -169,9 +170,17 @@ const checkPlaceDetail: Check = (value) => {
       'identificador de Google Place no válido',
     ),
     field(value, 'phone', nullable(isPhone), 'teléfono no válido'),
+    field(value, 'unit', (unit) => unit === undefined || isUnit(unit), 'local no válido'),
     field(value, 'links', isLinks, 'enlace no válido'),
   ])
 }
+
+const isUnit = (value: unknown) =>
+  isObject(value) &&
+  (value.edificio === undefined || isText(value.edificio)) &&
+  (value.planta === undefined || (UNIT_FLOORS as readonly unknown[]).includes(value.planta)) &&
+  (value.locales === undefined || arrayOf(isText)(value.locales)) &&
+  (value.isla === undefined || value.isla === true || isText(value.isla))
 
 const checkPlace: Check = (value) => checkPlaceSummary(value) ?? checkPlaceDetail(value)
 

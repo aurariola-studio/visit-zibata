@@ -351,6 +351,45 @@
             },
             "additionalProperties": false
           },
+          "unit": {
+            "type": "object",
+            "properties": {
+              "edificio": {
+                "type": "string",
+                "pattern": "^[\\p{L}0-9][\\p{L}0-9 ]{0,29}$"
+              },
+              "planta": {
+                "type": "string",
+                "enum": [
+                  "sotano",
+                  "baja",
+                  "alta"
+                ]
+              },
+              "locales": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Z]{0,2}-?[0-9]{1,3}(-?[A-Z])?$"
+                }
+              },
+              "isla": {
+                "anyOf": [
+                  {
+                    "type": "boolean",
+                    "const": true
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9]{1,3}$"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
           "active": {
             "type": "boolean"
           },

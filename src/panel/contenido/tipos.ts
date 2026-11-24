@@ -79,6 +79,12 @@ export interface Negocio {
   phone: string | null
   links: Record<string, string | null>
   photos: Foto[]
+  unit?: {
+    edificio?: string
+    planta?: 'sotano' | 'baja' | 'alta'
+    locales?: string[]
+    isla?: true | string
+  }
   cierre?: Cierre
   active: boolean
   verification?: Verificacion
