@@ -133,17 +133,17 @@ const KB = 1024
  * siguiente paso es partir el registro por sector (un fragmento por sector, que se pide con el sector activo),
  * no subir el número.
  *
- * 2026-11-24: con Tiendas y Mascotas `iconosJs` llegó a 26,1 de 26 (los cuatro dibujos con corte de Mascotas
- * pesan unos 1,5 KB). Se hizo el paso que estaba previsto sin subir el número: el sector Mascotas tiene su propio
+ * 2026-11-23: con Tiendas y Mascotas `iconosJs` llegó a 26,1 de 26 (los cinco iconos de Mascotas, con dos de ellos
+ * dibujados con un corte, sumaban algo más de 1 KB). Se hizo el paso que estaba previsto sin subir el número: el sector Mascotas tiene su propio
  * fragmento (`iconos-de-mascotas.tsx`, ver `src/components/icons/fragmentos.ts`), que `CategoryIcon` pide solo
- * cuando pinta uno de sus iconos, y `iconosDeSectorJs` mide todos esos fragmentos juntos. `iconosJs` se queda en
- * el registro general (25,4) y la huella del sector, que sale en la primera pantalla, se queda dentro.
+ * cuando pinta uno de sus iconos, y `iconosDeSectorJs` mide todos esos fragmentos juntos (0,9). `iconosJs` se queda en
+ * el registro general (24,9) y la huella del sector, que sale en la primera pantalla, se queda dentro.
  */
 const BUDGET = {
   initialJs: 130,
   // Los dibujos de todos los iconos (ver la nota de 2026-11-23). Medido: 23,7 KB; unos 0,2 KB por icono nuevo.
   iconosJs: 26,
-  // Los fragmentos de iconos de un sector, que solo bajan cuando se pinta uno de sus iconos (Mascotas hoy: unos 1,5 KB).
+  // Los fragmentos de iconos de un sector, que solo bajan cuando se pinta uno de sus iconos (Mascotas hoy: 0,9 KB).
   // Suman todos los sectores que tengan el suyo; 6 da para tres o cuatro más antes de pensar en otra cosa.
   iconosDeSectorJs: 6,
   // 11 y no 10: el estilo del contenido escrito que trae cada página (v4.16) dejó la medida en 9,9

@@ -1,6 +1,7 @@
 /**
- * El registro de dibujos: TODOS los iconos de la guía (sectores, categorías y giros) viven aquí y en ningún
- * otro sitio. `CategoryIcon.tsx` es solo el componente que los pide; este fragmento se descarga aparte del
+ * El registro de dibujos: los iconos de la guía (sectores, categorías y giros) viven aquí, salvo los de un sector
+ * con dibujos pesados, que tienen su propio fragmento (hoy Mascotas: `iconos-de-mascotas.tsx`, con sus nombres
+ * en `fragmentos.ts`). `CategoryIcon.tsx` es solo el componente que los pide; este fragmento se descarga aparte del
  * paquete inicial y en paralelo con los datos del catálogo, que es lo único que dice qué icono pintar. Por eso
  * añadir una categoría o un giro nuevo no mueve `initialJs`: pesa en `iconosJs`, que tiene su propio tope
  * (`npm run perf:budget`).
