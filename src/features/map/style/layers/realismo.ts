@@ -29,7 +29,7 @@ const ATTRIBUTION = {
 }
 
 export const realismoTheme = {
-  groundOutside: '#d9cdb6',
+  groundOutside: '#c0d09f',
   groundZibata: '#e6dac4',
   boundaryEdge: '#cdbfa7',
   road: '#f3ecdd',
@@ -94,7 +94,7 @@ export function realismoSources(
   return sources
 }
 
-/** Mete el relieve y el suelo en el orden del terreno y repinta el fondo con el tono cálido del realismo. */
+/** Mete el relieve y el suelo en el orden del terreno y repinta el fondo con el verde salvia del realismo. */
 export function withRealismoGround(ground: LayerSpecification[]): LayerSpecification[] {
   const layers: LayerSpecification[] = []
   for (const layer of ground) {
@@ -111,13 +111,13 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
               ['linear'],
               ['elevation'],
               1930,
-              '#efe6d2',
+              '#dae4bf',
               2060,
-              '#e3d6b8',
+              '#c6d2a1',
               2200,
-              '#cdbf9a',
+              '#a8bc81',
               2320,
-              '#b3a483',
+              '#8ca268',
             ] as ExpressionSpecification,
           },
         },
@@ -128,9 +128,9 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
           paint: {
             'hillshade-exaggeration': 0.6,
             'hillshade-illumination-direction': 225,
-            'hillshade-shadow-color': '#6e5a3c',
-            'hillshade-highlight-color': '#fff1d6',
-            'hillshade-accent-color': '#8b7552',
+            'hillshade-shadow-color': '#475a32',
+            'hillshade-highlight-color': '#f4f5d5',
+            'hillshade-accent-color': '#657b46',
           },
         },
       )
@@ -141,8 +141,8 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
         type: 'raster',
         source: SOURCE.soil,
         paint: {
-          'raster-opacity': 0.18,
-          'raster-saturation': -0.6,
+          'raster-opacity': 0.55,
+          'raster-saturation': 0.2,
           'raster-contrast': -0.05,
           'raster-brightness-min': 0.15,
         },

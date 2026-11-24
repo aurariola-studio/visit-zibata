@@ -1,12 +1,12 @@
 /**
  * Paleta cartográfica. Deriva de la identidad (#D1C3B0 arena, #536C2A olivo, #8CBA37 lima):
- * suelo cálido tipo maqueta, verdes suaves que no compiten con las plazas y plazas en verde de marca.
+ * suelo verde salvia tipo maqueta (el monte que rodea Zibatá), verdes suaves que no compiten con las plazas y plazas en verde de marca.
  */
 export const mapTheme = {
-  groundOutside: '#e2d9c9',
-  groundZibata: '#eee6d9',
-  outsideVeil: '#e2d9c9',
-  boundaryEdge: '#cdbfa7',
+  groundOutside: '#cfdab4',
+  groundZibata: '#e4e8d2',
+  outsideVeil: '#cfdab4',
+  boundaryEdge: '#b4c394',
 
   landuse: {
     residential: '#ebe3d5',
