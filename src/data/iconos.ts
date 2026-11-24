@@ -76,7 +76,6 @@ export const ICONOS = [
   'leafy-green',
   'leche',
   'locion',
-  'marco',
   'martillo',
   'martini',
   'masaje',

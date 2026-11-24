@@ -2696,7 +2696,10 @@
         "decoración",
         "persianas",
         "cuadros",
-        "furniture"
+        "furniture",
+        "marcos",
+        "enmarcado",
+        "marquería"
       ],
       "giros": [
         {
@@ -2711,7 +2714,12 @@
             "hogar",
             "casa",
             "artículos para el hogar",
-            "decor"
+            "decor",
+            "marquería",
+            "enmarcado",
+            "cuadros",
+            "marcos",
+            "frames"
           ],
           "general": true
         },
@@ -2743,21 +2751,6 @@
             "toldos",
             "blinds",
             "curtains"
-          ]
-        },
-        {
-          "id": "marcos-y-cuadros",
-          "label": {
-            "es": "Marcos y cuadros",
-            "en": "Frames & Pictures"
-          },
-          "icon": "marco",
-          "synonyms": [
-            "marquería",
-            "enmarcado",
-            "cuadros",
-            "marcos",
-            "frames"
           ]
         }
       ]
