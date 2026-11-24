@@ -2682,7 +2682,7 @@
       },
       "sectorId": "tiendas",
       "label": {
-        "es": "Hogar y muebles",
+        "es": "Hogar y Muebles",
         "en": "Home & Furniture"
       },
       "icon": "lampara",
@@ -2705,7 +2705,7 @@
         {
           "id": "decoracion-y-hogar",
           "label": {
-            "es": "Decoración y hogar",
+            "es": "Decoración y Hogar",
             "en": "Home & Decor"
           },
           "icon": "lampara",
@@ -2741,7 +2741,7 @@
         {
           "id": "persianas-y-cortinas",
           "label": {
-            "es": "Persianas y cortinas",
+            "es": "Persianas y Cortinas",
             "en": "Blinds & Curtains"
           },
           "icon": "persianas",
@@ -2805,7 +2805,7 @@
       },
       "sectorId": "tiendas",
       "label": {
-        "es": "Regalos y fiestas",
+        "es": "Regalos y Fiestas",
         "en": "Gifts & Party"
       },
       "icon": "regalo",
@@ -2839,7 +2839,7 @@
         {
           "id": "articulos-de-fiesta",
           "label": {
-            "es": "Artículos de fiesta",
+            "es": "Artículos de Fiesta",
             "en": "Party Supplies"
           },
           "icon": "confeti",
