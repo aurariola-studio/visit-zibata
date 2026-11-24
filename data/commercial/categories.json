@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-23",
+  "updatedAt": "2026-11-24",
   "categories": [
     {
       "id": "desayunos-y-cafe",
@@ -2893,6 +2893,151 @@
           "general": true
         }
       ]
+    },
+    {
+      "id": "veterinarias",
+      "slug": {
+        "es": "veterinarias",
+        "en": "veterinary-clinics"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Veterinarias",
+        "en": "Veterinary Clinics"
+      },
+      "icon": "veterinaria",
+      "hue": 190,
+      "order": 700,
+      "synonyms": [
+        "veterinaria",
+        "veterinario",
+        "doctor de mascotas",
+        "consulta veterinaria",
+        "vacunas",
+        "vet",
+        "veterinary"
+      ],
+      "giros": [
+        {
+          "id": "veterinaria",
+          "label": {
+            "es": "Veterinaria",
+            "en": "Veterinary Clinic"
+          },
+          "icon": "veterinaria",
+          "synonyms": [
+            "veterinario",
+            "consulta",
+            "vacunas",
+            "desparasitación",
+            "vet",
+            "veterinary"
+          ],
+          "general": true
+        },
+        {
+          "id": "hospital-veterinario",
+          "label": {
+            "es": "Hospital Veterinario",
+            "en": "Veterinary Hospital"
+          },
+          "icon": "hospital-veterinario",
+          "synonyms": [
+            "urgencias",
+            "24 horas",
+            "cirugía",
+            "hospitalización",
+            "emergencias",
+            "animal hospital"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estetica-canina",
+      "slug": {
+        "es": "estetica-canina",
+        "en": "dog-grooming"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Estética Canina",
+        "en": "Dog Grooming"
+      },
+      "icon": "estetica-canina",
+      "hue": 305,
+      "order": 710,
+      "synonyms": [
+        "peluquería canina",
+        "grooming",
+        "baño para perros",
+        "corte de pelo",
+        "estética para perros",
+        "groomer"
+      ],
+      "giros": [
+        {
+          "id": "estetica-canina",
+          "label": {
+            "es": "Estética Canina",
+            "en": "Dog Grooming"
+          },
+          "icon": "estetica-canina",
+          "synonyms": [
+            "peluquería canina",
+            "grooming",
+            "baño",
+            "corte de pelo",
+            "estética para perros",
+            "groomer"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "articulos-para-mascotas",
+      "slug": {
+        "es": "articulos-para-mascotas",
+        "en": "pet-supplies"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Artículos para Mascotas",
+        "en": "Pet Supplies"
+      },
+      "icon": "hueso",
+      "hue": 30,
+      "schemaType": "Store",
+      "order": 720,
+      "synonyms": [
+        "tienda de mascotas",
+        "alimento para perro",
+        "croquetas",
+        "accesorios para mascotas",
+        "pet shop",
+        "pet store"
+      ],
+      "giros": [
+        {
+          "id": "articulos-para-mascotas",
+          "label": {
+            "es": "Artículos para Mascotas",
+            "en": "Pet Supplies"
+          },
+          "icon": "hueso",
+          "synonyms": [
+            "tienda de mascotas",
+            "alimento",
+            "croquetas",
+            "accesorios",
+            "juguetes",
+            "pet shop",
+            "pet store"
+          ],
+          "general": true
+        }
+      ]
     }
   ],
   "sectors": [
@@ -2960,6 +3105,19 @@
       },
       "icon": "shopping-basket",
       "order": 50
+    },
+    {
+      "id": "mascotas",
+      "slug": {
+        "es": "mascotas",
+        "en": "pets"
+      },
+      "label": {
+        "es": "Mascotas",
+        "en": "Pets"
+      },
+      "icon": "paw-print",
+      "order": 60
     }
   ]
 }
