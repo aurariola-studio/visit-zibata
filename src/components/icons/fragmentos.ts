@@ -10,7 +10,7 @@
 export type Fragmento = 'mascotas'
 
 export const FRAGMENTO_DE_ICONO: Readonly<Record<string, Fragmento>> = {
-  'estetica-canina': 'mascotas',
+  'estetica-mascotas': 'mascotas',
   'hospital-veterinario': 'mascotas',
   hueso: 'mascotas',
   veterinaria: 'mascotas',

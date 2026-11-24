@@ -63,8 +63,8 @@ const HospitalVeterinario = conInsignia(
   </>,
 )
 
-/** Estética Canina: el perro con tres burbujas en las esquinas (anillos de 1,5 px). */
-const EsteticaCanina = custom(
+/** Estética para Mascotas: el perro con tres burbujas en las esquinas (anillos de 1,5 px). */
+const EsteticaMascotas = custom(
   <>
     <g transform="translate(3.4 4.6) scale(.72)" strokeWidth={2.78}>
       {PerroTrazos}
@@ -78,7 +78,7 @@ const EsteticaCanina = custom(
 )
 
 export const ICONOS_DE_MASCOTAS: Record<string, IconComponent> = {
-  'estetica-canina': EsteticaCanina,
+  'estetica-mascotas': EsteticaMascotas,
   'hospital-veterinario': HospitalVeterinario,
   hueso: Hueso,
   veterinaria: Veterinaria,

@@ -2907,6 +2907,7 @@
       },
       "icon": "veterinaria",
       "hue": 190,
+      "schemaType": "VeterinaryCare",
       "order": 700,
       "synonyms": [
         "veterinaria",
@@ -2954,21 +2955,23 @@
       ]
     },
     {
-      "id": "estetica-canina",
+      "id": "estetica-para-mascotas",
       "slug": {
-        "es": "estetica-canina",
-        "en": "dog-grooming"
+        "es": "estetica-para-mascotas",
+        "en": "pet-grooming"
       },
       "sectorId": "mascotas",
       "label": {
-        "es": "Estética Canina",
-        "en": "Dog Grooming"
+        "es": "Estética para Mascotas",
+        "en": "Pet Grooming"
       },
-      "icon": "estetica-canina",
+      "icon": "estetica-mascotas",
       "hue": 305,
       "order": 710,
       "synonyms": [
         "peluquería canina",
+        "estética canina",
+        "peluquería para gatos",
         "grooming",
         "baño para perros",
         "corte de pelo",
@@ -2977,14 +2980,16 @@
       ],
       "giros": [
         {
-          "id": "estetica-canina",
+          "id": "estetica-para-mascotas",
           "label": {
-            "es": "Estética Canina",
-            "en": "Dog Grooming"
+            "es": "Estética para Mascotas",
+            "en": "Pet Grooming"
           },
-          "icon": "estetica-canina",
+          "icon": "estetica-mascotas",
           "synonyms": [
             "peluquería canina",
+            "estética canina",
+            "peluquería para gatos",
             "grooming",
             "baño",
             "corte de pelo",
@@ -3008,7 +3013,7 @@
       },
       "icon": "hueso",
       "hue": 30,
-      "schemaType": "Store",
+      "schemaType": "PetStore",
       "order": 720,
       "synonyms": [
         "tienda de mascotas",

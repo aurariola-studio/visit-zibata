@@ -54,7 +54,7 @@ export const ICONOS = [
   'empanada',
   'esmalte',
   'espejo',
-  'estetica-canina',
+  'estetica-mascotas',
   'estiramiento',
   'filete',
   'fish',

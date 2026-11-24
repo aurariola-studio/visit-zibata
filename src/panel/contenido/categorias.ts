@@ -35,6 +35,8 @@ const TIPOS_DE_NEGOCIO: Record<(typeof SCHEMA_TYPES)[number], string> = {
   NailSalon: 'Salón de uñas',
   DaySpa: 'Spa',
   BeautySalon: 'Salón de belleza',
+  VeterinaryCare: 'Veterinaria',
+  PetStore: 'Tienda de mascotas',
 }
 
 /** Las opciones del sector. Una categoría nueva arranca sin elegir: el sector se decide a propósito, no por omisión. */

@@ -155,7 +155,9 @@
               "HairSalon",
               "NailSalon",
               "DaySpa",
-              "BeautySalon"
+              "BeautySalon",
+              "VeterinaryCare",
+              "PetStore"
             ]
           },
           "order": {

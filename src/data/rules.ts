@@ -75,6 +75,8 @@ export const SCHEMA_TYPES = [
   'NailSalon',
   'DaySpa',
   'BeautySalon',
+  'VeterinaryCare',
+  'PetStore',
 ] as const
 
 export const LOCATION_CONFIDENCE = ['high', 'medium', 'low'] as const
