@@ -30,7 +30,7 @@ const ATTRIBUTION = {
 }
 
 export const realismoTheme = {
-  groundOutside: '#c0d09f',
+  groundOutside: '#a9ad82',
   groundZibata: '#e6dac4',
   boundaryEdge: '#cdbfa7',
   road: '#f3ecdd',
@@ -79,7 +79,7 @@ export function realismoSources(
       type: 'raster-dem',
       tiles: [`${baseUrl}relieve/{z}/{x}/{y}.webp`],
       tileSize: 512,
-      minzoom: descriptor.relieve.zoom,
+      minzoom: descriptor.relieve.minzoom,
       maxzoom: descriptor.relieve.zoom,
       bounds: bounds(descriptor.region.coordenadas as Esquinas),
       encoding: 'terrarium',
@@ -101,19 +101,19 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
           type: 'color-relief',
           source: SOURCE.relief,
           paint: {
-            'color-relief-opacity': 0.7,
+            'color-relief-opacity': 0.85,
             'color-relief-color': [
               'interpolate',
               ['linear'],
               ['elevation'],
               1930,
-              '#dae4bf',
+              '#c4c394',
               2060,
-              '#c6d2a1',
+              '#a5a876',
               2200,
-              '#a8bc81',
+              '#7d8b58',
               2320,
-              '#8ca268',
+              '#5f7143',
             ] as ExpressionSpecification,
           },
         },
@@ -122,11 +122,11 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
           type: 'hillshade',
           source: SOURCE.relief,
           paint: {
-            'hillshade-exaggeration': 0.75,
+            'hillshade-exaggeration': 0.8,
             'hillshade-illumination-direction': 225,
-            'hillshade-shadow-color': '#475a32',
-            'hillshade-highlight-color': '#f4f5d5',
-            'hillshade-accent-color': '#657b46',
+            'hillshade-shadow-color': '#34411f',
+            'hillshade-highlight-color': '#ebe8c9',
+            'hillshade-accent-color': '#4f5f33',
           },
         },
       )

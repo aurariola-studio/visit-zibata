@@ -76,7 +76,7 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
       [extent.bbox[0], extent.bbox[1]],
     ] as [number, number][]
   ).map(([lng, lat]) => toUtm(lng, lat))
-  const margen = 2 + Math.ceil(margenM / Math.abs(v.rx))
+  const margen = 2 + Math.ceil(Math.max(0, margenM) / Math.abs(v.rx))
   // La escena de 10 m es finita: la franja se recorta a lo que hay.
   const px0 = Math.max(
     0,
@@ -169,7 +169,12 @@ const vias = construirVias()
 writeJson(DESCRIPTOR, {
   suelo: { coordenadas: suelo.coordenadas },
   region: { coordenadas: regionCorners().map(([a, b]) => [redondear(a), redondear(b)]) },
-  relieve: { zoom: realismo.relieve.zoom, x: realismo.relieve.x, y: realismo.relieve.y },
+  relieve: {
+    zoom: realismo.relieve.zoom,
+    minzoom: Math.min(realismo.relieve.zoom, ...realismo.relieve.resumen),
+    x: realismo.relieve.x,
+    y: realismo.relieve.y,
+  },
   creditos: { sentinel: sentinel.escena, anio: sentinel.anio },
 })
 console.log(

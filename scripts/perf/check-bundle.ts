@@ -233,9 +233,9 @@ const teselas = medirTeselas(`${DIST}map/tiles`)
 
 /** Peso comprimido de lo que siempre baja con el realismo, más la tesela de relieve más pesada. */
 function medirRealismo(dir: string): number {
-  const relieve = readdirSync(`${dir}/relieve/12`, { recursive: true })
+  const relieve = readdirSync(`${dir}/relieve`, { recursive: true })
     .filter((nombre): nombre is string => typeof nombre === 'string' && nombre.endsWith('.webp'))
-    .map((nombre) => gz(`${dir}/relieve/12/${nombre}`))
+    .map((nombre) => gz(`${dir}/relieve/${nombre}`))
   const fijos = ['suelo.webp', 'vias.geojson', 'edificios.bin', 'arboles.bin'].map((nombre) =>
     gz(`${dir}/${nombre}`),
   )
