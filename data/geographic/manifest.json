@@ -243,8 +243,8 @@
     ],
     "outputs": {
       "public/map/realismo/suelo.webp": {
-        "bytes": 122096,
-        "sha256": "963c55097848ef580c71e887e41e640ddf10063f9e58ff45c3bb1ca94412fdac"
+        "bytes": 129192,
+        "sha256": "89fca1988a5e2e85349e162b8bde49167ff9b0b24ad72dabdcf06f84af6242f1"
       },
       "public/map/realismo/vias.geojson": {
         "bytes": 946262,

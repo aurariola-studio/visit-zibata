@@ -138,7 +138,16 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
         type: 'raster',
         source: SOURCE.soil,
         paint: {
-          'raster-opacity': 0.55,
+          // De cerca la imagen de 10 m por píxel se ve borrosa: se desvanece y toman el mando los colores vectoriales.
+          'raster-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14.5,
+            0.55,
+            17,
+            0.15,
+          ] as ExpressionSpecification,
           'raster-saturation': 0.2,
           'raster-contrast': -0.05,
           'raster-brightness-min': 0.15,
@@ -148,7 +157,21 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
     if (layer.id === 'landuse-built' && layer.type === 'fill') {
       // Los usos de suelo urbanos y de cultivo son polígonos de OpenStreetMap que llegan más allá del contorno: opacos
       // tapaban el relieve y se veían como manchas planas de bordes rectos. Translúcidos, solo tiñen.
-      layers.push({ ...layer, paint: { ...layer.paint, 'fill-opacity': 0.22 } })
+      layers.push({
+        ...layer,
+        paint: {
+          ...layer.paint,
+          'fill-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14.5,
+            0.22,
+            17,
+            0.5,
+          ] as ExpressionSpecification,
+        },
+      })
     } else if (layer.id === 'landuse-green' && layer.type === 'fill') {
       // Translúcido y de un verde medio: los parques, el golf y los pastos de OpenStreetMap (también los grandes de
       // fuera del contorno) eran un verde pálido plano que tapaba el suelo, y se leía como una piscina o un polígono.
@@ -165,6 +188,8 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
             0.16,
             16,
             0.3,
+            17.5,
+            0.5,
           ] as ExpressionSpecification,
         },
       })
