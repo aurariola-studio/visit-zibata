@@ -110,7 +110,11 @@
         "asturiano-xentric-anahuac",
         "el-huerto",
         "querekarne",
-        "franz-haus"
+        "franz-haus",
+        "ferreteria-mejorando-tu-casa",
+        "hunter-douglas",
+        "kroma-taller-colectivo",
+        "kubux-concept-store"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -142,6 +146,10 @@
         "carnicerias",
         "fruterias",
         "panaderias",
+        "ferreterias",
+        "hogar-y-muebles",
+        "papelerias",
+        "regalos-y-fiestas",
         "veterinarias",
         "estetica-para-mascotas"
       ],
@@ -232,7 +240,8 @@
         "grunen-lush-anahuac",
         "luka-anahuac",
         "sinforosa-anahuac",
-        "starbucks-anahuac"
+        "starbucks-anahuac",
+        "papeleria-lumen"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -243,7 +252,8 @@
         "saludable",
         "panaderia-y-reposteria",
         "bebidas",
-        "casera"
+        "casera",
+        "papelerias"
       ],
       "locationConfidence": "medium",
       "locationSource": "Campus según OSM (way 653492316) y POIs de Overture Maps (release 2026-08-19.0). El edificio exacto de los locales está por verificar.",
@@ -335,7 +345,10 @@
         "black-studio-beauty-nails",
         "oxxo-paseo-zibata",
         "mandala-spa-beauty-center",
-        "pets-avenue"
+        "pets-avenue",
+        "casa-caracola",
+        "spiruleka",
+        "truper-ferreteria-paseo-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -365,6 +378,9 @@
         "piel-y-cuerpo",
         "cejas-y-pestanas",
         "panaderias",
+        "ferreterias",
+        "regalos-y-fiestas",
+        "floristerias",
         "estetica-para-mascotas",
         "articulos-para-mascotas",
         "hotel-para-mascotas"
@@ -519,7 +535,8 @@
         "enchilokos",
         "knots-pilates",
         "eb-salon",
-        "kings-beard-barberia"
+        "kings-beard-barberia",
+        "papeleria-la-gomita"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -533,7 +550,8 @@
         "casera",
         "yoga-pilates-y-barre",
         "peluqueria",
-        "barberia"
+        "barberia",
+        "papelerias"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Condesa Zibata\" y locales con esa dirección (Bendito Bocado, Romani Pizzas, Freestyle Pizza); huella de Overture.",
@@ -699,7 +717,9 @@
         "oxxo-xentric-zibata",
         "sabego-meat-market",
         "groomalia",
-        "vet-kaan"
+        "vet-kaan",
+        "fantastink",
+        "mali-papeleria"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -724,6 +744,8 @@
         "abarrotes",
         "fruterias",
         "licorerias",
+        "hogar-y-muebles",
+        "papelerias",
         "veterinarias",
         "estetica-para-mascotas"
       ],
@@ -832,7 +854,11 @@
         "ecobuy",
         "meatgo",
         "oxxo-plaza-zielo",
-        "unidad-de-cuidados-veterinarios"
+        "unidad-de-cuidados-veterinarios",
+        "bruder-muebles",
+        "espacio-querido",
+        "ferreteria-el-refugio",
+        "maggix-detalles-magicos"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -863,6 +889,10 @@
         "cejas-y-pestanas",
         "abarrotes",
         "carnicerias",
+        "ferreterias",
+        "hogar-y-muebles",
+        "papelerias",
+        "regalos-y-fiestas",
         "veterinarias",
         "estetica-para-mascotas",
         "hotel-para-mascotas"
@@ -1119,7 +1149,9 @@
         "blanc-nail-bar",
         "piu-bella-studio-di-belleza",
         "asturiano-centro-zibata",
-        "mercado-coronel-centro-zibata"
+        "mercado-coronel-centro-zibata",
+        "nima-studio-floral",
+        "truper-ferreteria-centro-zibata"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -1137,7 +1169,9 @@
         "unas",
         "piel-y-cuerpo",
         "abarrotes",
-        "panaderias"
+        "panaderias",
+        "ferreterias",
+        "floristerias"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Centro Zibatá\" (shopping center) y Agave Grill; huella de Overture.",
