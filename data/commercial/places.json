@@ -13911,7 +13911,9 @@
       "name": "Papelería La Gomita",
       "plazaId": "condesa",
       "giros": [
-        "papeleria"
+        "papeleria",
+        "impresion",
+        "personalizacion"
       ],
       "description": {
         "es": "Todo para crear, regalar y celebrar 🎈\nPapelería, regalos, globos, envolturas, mercería y decoración de temporada. Personalizamos termos, agendas y papelería social 🎁 Internet e impresiones.",
@@ -14383,9 +14385,9 @@
       "name": "Luvel Inkjet",
       "plazaId": "paseo-zibata",
       "giros": [
-        "papeleria",
         "impresion",
-        "personalizacion"
+        "personalizacion",
+        "corte-y-grabado-laser"
       ],
       "description": {
         "es": "Papelería Técnica, Impresiones y personalización en Querétaro\nDTF | Vinil | Serigrafía | Grabado Láser | Sublimado | Bordado | y más....",

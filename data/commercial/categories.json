@@ -3125,15 +3125,17 @@
         {
           "id": "impresion",
           "label": {
-            "es": "Impresión",
-            "en": "Printing"
+            "es": "Impresión y Copias",
+            "en": "Printing and Copying"
           },
           "icon": "impresora",
           "synonyms": [
+            "impresión",
             "impresiones",
             "copias",
-            "fotocopias",
             "copiado",
+            "fotocopias",
+            "fotocopiado",
             "escaneo",
             "planos",
             "gran formato",
@@ -3141,7 +3143,8 @@
             "lonas",
             "serigrafía",
             "printing",
-            "copies"
+            "copies",
+            "copying"
           ]
         },
         {

@@ -458,7 +458,6 @@
         "cejas-y-pestanas",
         "panaderias",
         "ferreterias",
-        "papelerias",
         "regalos-y-fiestas",
         "floristerias",
         "taller-creativo",
@@ -632,7 +631,8 @@
         "yoga-pilates-y-barre",
         "peluqueria",
         "barberia",
-        "papelerias"
+        "papelerias",
+        "taller-creativo"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Condesa Zibata\" y locales con esa dirección (Bendito Bocado, Romani Pizzas, Freestyle Pizza); huella de Overture.",
