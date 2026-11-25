@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-23",
+  "updatedAt": "2026-11-24",
   "places": [
     {
       "id": "carls-jr",
@@ -5621,7 +5621,20 @@
       "googleMapsUri": "https://maps.app.goo.gl/ZXWHriS9NBo9cTW86",
       "googlePlaceId": null,
       "phone": null,
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/wake-cup-xentric-anahuac/portada.webp",
+          "alt": "Logo de Wake Cup Panadería y Cafetería",
+          "width": 1200,
+          "height": 1200,
+          "variants": [
+            480,
+            960
+          ],
+          "placeholder": "#f8f8f8",
+          "credit": "Cortesía de Wake Cup"
+        }
+      ],
       "links": {
         "website": null,
         "instagram": "https://www.instagram.com/wake.cup.panaderia/",
