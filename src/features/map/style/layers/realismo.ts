@@ -31,7 +31,8 @@ const ATTRIBUTION = {
 
 export const realismoTheme = {
   groundOutside: '#9ea375',
-  groundZibata: '#e6dac4',
+  groundZibata: '#9ea375',
+  areaVerde: '#6f8c4c',
   boundaryEdge: '#cdbfa7',
   road: '#f3ecdd',
   roadCasing: '#c9bba0',
@@ -144,20 +145,26 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
         },
       })
     }
-    if (layer.id === 'landuse-green' && layer.type === 'fill') {
-      // Translúcido: el verde plano de parques y golf tapaba el suelo de Sentinel y se leía como una piscina.
+    if (layer.id === 'landuse-built' && layer.type === 'fill') {
+      // Los usos de suelo urbanos y de cultivo son polígonos de OpenStreetMap que llegan más allá del contorno: opacos
+      // tapaban el relieve y se veían como manchas planas de bordes rectos. Translúcidos, solo tiñen.
+      layers.push({ ...layer, paint: { ...layer.paint, 'fill-opacity': 0.22 } })
+    } else if (layer.id === 'landuse-green' && layer.type === 'fill') {
+      // Translúcido y de un verde medio: los parques, el golf y los pastos de OpenStreetMap (también los grandes de
+      // fuera del contorno) eran un verde pálido plano que tapaba el suelo, y se leía como una piscina o un polígono.
       layers.push({
         ...layer,
         paint: {
           ...layer.paint,
+          'fill-color': realismoTheme.areaVerde,
           'fill-opacity': [
             'interpolate',
             ['linear'],
             ['zoom'],
             12,
-            0.25,
+            0.16,
             16,
-            0.4,
+            0.3,
           ] as ExpressionSpecification,
         },
       })
