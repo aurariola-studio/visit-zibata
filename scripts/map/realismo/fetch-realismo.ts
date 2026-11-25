@@ -3,7 +3,7 @@
  *
  * Descarga una sola vez lo que necesitan las capas de realismo, para que la app publicada no consulte
  * nunca un servidor externo:
- *  - teselas de relieve z12 y de resumen z9 a z11 (Copernicus GLO-30 vía Mapterhorn) → public/map/realismo/relieve
+ *  - teselas de relieve z12 y de resumen z10 y z11 (Copernicus GLO-30 vía Mapterhorn) → public/map/realismo/relieve
  *  - imagen de Sentinel-2 (ventana de Zibatá a 10 m y región a 20 m, por peticiones de rango) → raw
  *  - calles principales de la región (OpenStreetMap vía Overpass) → raw
  *

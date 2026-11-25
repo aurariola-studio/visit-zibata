@@ -30,7 +30,7 @@ const ATTRIBUTION = {
 }
 
 export const realismoTheme = {
-  groundOutside: '#a9ad82',
+  groundOutside: '#9ea375',
   groundZibata: '#e6dac4',
   boundaryEdge: '#cdbfa7',
   road: '#f3ecdd',
@@ -107,9 +107,9 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
               ['linear'],
               ['elevation'],
               1930,
-              '#c4c394',
+              '#aeb083',
               2060,
-              '#a5a876',
+              '#969c6b',
               2200,
               '#7d8b58',
               2320,

@@ -61,10 +61,12 @@ async function mascara(
 }
 
 /**
- * Imagen de suelo: Sentinel-2 a 10 m dentro del contorno y una franja alrededor (`realismo.suelo.margenM`), con alfa
- * suave en el borde. La franja existe porque la imagen de contexto, de unos 40 m por píxel, ampliada en el teléfono
- * se ve en cuadros justo al salir del contorno: ahí se ve el mismo suelo que dentro y el contexto entra más lejos.
+ * Imagen de suelo: Sentinel-2 a 10 m dentro del contorno y una franja ancha alrededor (`realismo.suelo.margenM`) que se
+ * apaga poco a poco. Fuera del contorno el monte se ve con la misma textura que dentro (la imagen horneada de
+ * contexto se veía como una nube) y se funde con el relieve de la GPU a lo lejos.
  */
+/** Píxeles (10 m) en que el suelo se apaga hacia el borde de la ventana de Sentinel. */
+const BORDE_PX = 170
 async function construirSuelo(): Promise<{ coordenadas: [number, number][]; bytes: number }> {
   const v = sentinel.zibata
   const { margenM, difuminadoM } = realismo.suelo
@@ -117,10 +119,15 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
     rgba[i * 4] = rgb[i * 3] ?? 0
     rgba[i * 4 + 1] = rgb[i * 3 + 1] ?? 0
     rgba[i * 4 + 2] = rgb[i * 3 + 2] ?? 0
-    rgba[i * 4 + 3] = alfa[i] ?? 0
+    // La imagen de Sentinel es finita: el alfa también se apaga hacia sus bordes para que no haya un corte recto.
+    const x = i % width
+    const y = Math.floor(i / width)
+    const borde = Math.min(x, y, width - 1 - x, height - 1 - y) / BORDE_PX
+    const t = Math.max(0, Math.min(1, borde))
+    rgba[i * 4 + 3] = Math.round((alfa[i] ?? 0) * t * t * (3 - 2 * t))
   }
   const webp = await sharp(rgba, { raw: { width, height, channels: 4 } })
-    .webp({ quality: 82, alphaQuality: 80 })
+    .webp({ quality: 70, alphaQuality: 60 })
     .toBuffer()
   writeFileSync(`${salida}/suelo.webp`, webp)
   return { coordenadas: esquinasLngLat(v, px0, py0, width, height), bytes: webp.length }

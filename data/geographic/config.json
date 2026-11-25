@@ -408,13 +408,13 @@
     "relieve": {
       "fuente": "https://download.mapterhorn.com/planet.pmtiles",
       "zoom": 12,
-      "resumen": [9, 10, 11],
+      "resumen": [10, 11],
       "x": [904, 908],
       "y": [1805, 1809]
     },
     "suelo": {
-      "margenM": -100,
-      "difuminadoM": 110
+      "margenM": 1800,
+      "difuminadoM": 800
     },
     "alturas": {
       "fuente": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/85d34_2023_06_30/",
