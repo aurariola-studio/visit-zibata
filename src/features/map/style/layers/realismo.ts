@@ -1,7 +1,8 @@
 /**
- * Capas de realismo nativas: suelo de Sentinel-2, relieve sombreado con tinte por altitud y, fuera del
- * contorno, la imagen de contexto con las calles principales de la región. Los datos salen de
- * `npm run map:build:realismo` y se sirven del mismo origen (public/map/realismo).
+ * Capas de realismo nativas: suelo de Sentinel-2 dentro del contorno y, en todo el mapa, el relieve sombreado con
+ * tinte por altitud que dibuja la GPU a partir del modelo de elevación (nítido a cualquier zoom, sin imagen
+ * horneada), más las calles principales de la región. Los datos salen de `npm run map:build:realismo` y se sirven
+ * del mismo origen (public/map/realismo).
  *
  * Con el realismo apagado nada de esto entra en el estilo, así que no se descarga ni un byte.
  */
@@ -29,7 +30,7 @@ const ATTRIBUTION = {
 }
 
 export const realismoTheme = {
-  groundOutside: '#c0d09f',
+  groundOutside: '#9ea375',
   groundZibata: '#e6dac4',
   boundaryEdge: '#cdbfa7',
   road: '#f3ecdd',
@@ -78,17 +79,12 @@ export function realismoSources(
       type: 'raster-dem',
       tiles: [`${baseUrl}relieve/{z}/{x}/{y}.webp`],
       tileSize: 512,
-      minzoom: descriptor.relieve.zoom,
+      minzoom: descriptor.relieve.minzoom,
       maxzoom: descriptor.relieve.zoom,
-      bounds: bounds(descriptor.contexto.coordenadas as Esquinas),
+      bounds: bounds(descriptor.region.coordenadas as Esquinas),
       encoding: 'terrarium',
       attribution: `${ATTRIBUTION.relieve} · ${ATTRIBUTION.sentinel} · ${ATTRIBUTION.alturas}`,
     },
-  }
-  sources[SOURCE.context] = {
-    type: 'image',
-    url: `${baseUrl}contexto.webp`,
-    coordinates: descriptor.contexto.coordenadas as Esquinas,
   }
   sources[SOURCE.contextRoads] = { type: 'geojson', data: `${baseUrl}vias.geojson` }
   return sources
@@ -105,19 +101,19 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
           type: 'color-relief',
           source: SOURCE.relief,
           paint: {
-            'color-relief-opacity': 0.55,
+            'color-relief-opacity': 0.85,
             'color-relief-color': [
               'interpolate',
               ['linear'],
               ['elevation'],
               1930,
-              '#dae4bf',
+              '#aeb083',
               2060,
-              '#c6d2a1',
+              '#969c6b',
               2200,
-              '#a8bc81',
+              '#7d8b58',
               2320,
-              '#8ca268',
+              '#5f7143',
             ] as ExpressionSpecification,
           },
         },
@@ -126,11 +122,11 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
           type: 'hillshade',
           source: SOURCE.relief,
           paint: {
-            'hillshade-exaggeration': 0.6,
+            'hillshade-exaggeration': 0.8,
             'hillshade-illumination-direction': 225,
-            'hillshade-shadow-color': '#475a32',
-            'hillshade-highlight-color': '#f4f5d5',
-            'hillshade-accent-color': '#657b46',
+            'hillshade-shadow-color': '#34411f',
+            'hillshade-highlight-color': '#ebe8c9',
+            'hillshade-accent-color': '#4f5f33',
           },
         },
       )
@@ -148,7 +144,24 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
         },
       })
     }
-    if (layer.id === 'background' && layer.type === 'background') {
+    if (layer.id === 'landuse-green' && layer.type === 'fill') {
+      // Translúcido: el verde plano de parques y golf tapaba el suelo de Sentinel y se leía como una piscina.
+      layers.push({
+        ...layer,
+        paint: {
+          ...layer.paint,
+          'fill-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            12,
+            0.25,
+            16,
+            0.4,
+          ] as ExpressionSpecification,
+        },
+      })
+    } else if (layer.id === 'background' && layer.type === 'background') {
       layers.push({ ...layer, paint: { 'background-color': realismoTheme.groundOutside } })
     } else if (layer.id === 'zibata-ground' && layer.type === 'fill') {
       layers.push({ ...layer, paint: { 'fill-color': realismoTheme.groundZibata } })
@@ -179,19 +192,11 @@ const ROAD_CLASSES: [string, number, number][] = [
 ]
 
 /**
- * Lo que sustituye al velo exterior: la imagen de contexto (satélite apagado, laderas y tinte ya
- * horneados, transparente dentro del contorno), las calles principales de la región y la línea del contorno.
+ * Lo que sustituye al velo exterior: las calles principales de la región y la línea del contorno. El monte de
+ * fuera lo pintan el tinte y el relieve del suelo, que cubren toda la región.
  */
 export function realismoOutsideLayers(): LayerSpecification[] {
-  const layers: LayerSpecification[] = [
-    {
-      id: 'realismo-contexto',
-      type: 'raster',
-      source: SOURCE.context,
-      // Con 0,7 se cuela el relieve en vivo (más nítido que la imagen de unos 30 m por píxel) y el monte se lee como monte.
-      paint: { 'raster-fade-duration': 0, 'raster-opacity': 0.7 },
-    },
-  ]
+  const layers: LayerSpecification[] = []
   for (const [clase, a, b] of ROAD_CLASSES) {
     const filter: ExpressionSpecification = ['==', ['get', 'clase'], clase]
     const layout = { 'line-cap': 'round', 'line-join': 'round' } as const

@@ -182,6 +182,21 @@ export default function MapView({
     for (const nombre of GESTOS) instance.on(nombre, alPrimerGesto)
 
     instance.getCanvas().setAttribute('aria-label', t('app.mapLabel'))
+    if (latest.current.realismo) {
+      // Bruma blanca en lo lejano: con la cámara inclinada el fondo del mapa se pierde en un verde parejo, y una
+      // niebla clara (varias capas con distinta transparencia) lo lee como nube. Va entre el lienzo y los marcadores.
+      const bruma = document.createElement('div')
+      bruma.className = styles.bruma ?? ''
+      bruma.setAttribute('aria-hidden', 'true')
+      instance.getCanvas().after(bruma)
+      const aplicarBruma = () =>
+        bruma.style.setProperty(
+          '--bruma',
+          String(Math.min(1, Math.max(0, (instance.getPitch() - 20) / 30))),
+        )
+      instance.on('pitch', aplicarBruma)
+      aplicarBruma()
+    }
     instance.addControl(new AttributionControl({ compact: true }), 'bottom-left')
     /**
      * MapLibre despliega la atribución compacta en cuanto el estilo trae sus créditos (no al añadir

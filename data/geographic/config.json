@@ -398,7 +398,7 @@
     }
   },
   "realismo": {
-    "$comment": "Capas de realismo (suelo, relieve y contexto). Todo se descarga una vez al preparar datos; la app publicada no consulta ningún servidor externo.",
+    "$comment": "Capas de realismo (suelo, relieve y calles). Todo se descarga una vez al preparar datos; la app publicada no consulta ningún servidor externo.",
     "sentinel": {
       "escena": "S2C_14QLH_20261020_0_L2A",
       "tif": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/14/Q/LH/2026/10/S2C_14QLH_20261020_0_L2A/TCI.tif",
@@ -408,17 +408,13 @@
     "relieve": {
       "fuente": "https://download.mapterhorn.com/planet.pmtiles",
       "zoom": 12,
+      "resumen": [10, 11],
       "x": [904, 908],
       "y": [1805, 1809]
     },
-    "contexto": {
-      "pixeles": 1536,
-      "anilloM": 450,
-      "difuminadoOrilla": 0.14
-    },
     "suelo": {
-      "margenM": 650,
-      "difuminadoM": 120
+      "margenM": 1800,
+      "difuminadoM": 800
     },
     "alturas": {
       "fuente": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/85d34_2023_06_30/",

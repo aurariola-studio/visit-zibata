@@ -3,7 +3,7 @@
  *
  * Descarga una sola vez lo que necesitan las capas de realismo, para que la app publicada no consulte
  * nunca un servidor externo:
- *  - teselas de relieve z12 (Copernicus GLO-30 vía Mapterhorn) → public/map/realismo/relieve
+ *  - teselas de relieve z12 y de resumen z10 y z11 (Copernicus GLO-30 vía Mapterhorn) → public/map/realismo/relieve
  *  - imagen de Sentinel-2 (ventana de Zibatá a 10 m y región a 20 m, por peticiones de rango) → raw
  *  - calles principales de la región (OpenStreetMap vía Overpass) → raw
  *
@@ -20,18 +20,22 @@ import type { SentinelMeta, Ventana } from './lib.ts'
 import { config, realismo, regionCorners, toUtm } from './lib.ts'
 
 async function fetchRelieve(): Promise<void> {
-  const { fuente, zoom, x, y } = realismo.relieve
+  const { fuente, zoom, resumen, x, y } = realismo.relieve
   const archivo = new PMTiles(new FetchSource(fuente))
   let nuevas = 0
-  for (let tx = x[0]; tx <= x[1]; tx++) {
-    for (let ty = y[0]; ty <= y[1]; ty++) {
-      const file = `${paths.relieveDir}/${zoom}/${tx}/${ty}.webp`
-      if (existsSync(file)) continue
-      const tile = await archivo.getZxy(zoom, tx, ty)
-      if (!tile) throw new Error(`Mapterhorn no tiene la tesela ${zoom}/${tx}/${ty}`)
-      mkdirSync(dirname(file), { recursive: true })
-      writeFileSync(file, Buffer.from(tile.data))
-      nuevas++
+  // Con la cámara inclinada MapLibre pide teselas de menos zoom para lo lejano; sin ellas esa franja queda sin relieve.
+  for (const z of [zoom, ...resumen]) {
+    const d = 2 ** (zoom - z)
+    for (let tx = Math.floor(x[0] / d); tx <= Math.floor(x[1] / d); tx++) {
+      for (let ty = Math.floor(y[0] / d); ty <= Math.floor(y[1] / d); ty++) {
+        const file = `${paths.relieveDir}/${z}/${tx}/${ty}.webp`
+        if (existsSync(file)) continue
+        const tile = await archivo.getZxy(z, tx, ty)
+        if (!tile) throw new Error(`Mapterhorn no tiene la tesela ${z}/${tx}/${ty}`)
+        mkdirSync(dirname(file), { recursive: true })
+        writeFileSync(file, Buffer.from(tile.data))
+        nuevas++
+      }
     }
   }
   console.log(`✓ relieve: ${nuevas} teselas nuevas en ${paths.relieveDir}`)

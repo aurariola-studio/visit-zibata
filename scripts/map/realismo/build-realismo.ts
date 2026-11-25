@@ -3,10 +3,10 @@
  *
  * Con lo que bajó `map:fetch:realismo` genera las capas de realismo que sirve la app:
  *  - suelo.webp: imagen de Sentinel-2 recortada al contorno de Zibatá, con borde suave
- *  - contexto.webp: imagen de la región, desaturada y teñida, con el sombreado de laderas y el tinte por
- *    altitud horneados; transparente dentro del anillo alrededor del contorno
  *  - vias.geojson: calles principales de la región, solo fuera del contorno
- *  - descriptor.json: esquinas de cada imagen (lo importa el estilo del mapa)
+ *  - descriptor.json: esquinas del suelo y de la región que cubre el relieve (lo importa el estilo del mapa)
+ *
+ * El monte de fuera del contorno ya no es una imagen: lo dibuja la GPU con el relieve (tinte y sombreado).
  *
  * Sentinel-2: contains modified Copernicus Sentinel data. Relieve: Copernicus DEM GLO-30.
  * Calles: © OpenStreetMap contributors (ODbL 1.0).
@@ -17,15 +17,7 @@ import type { Feature, LineString, Polygon, Position } from 'geojson'
 import sharp from 'sharp'
 import { paths, ROOT, readJson, writeJson } from '../lib/paths.ts'
 import type { SentinelMeta, Ventana } from './lib.ts'
-import {
-  anotarManifiesto,
-  fromUtm,
-  realismo,
-  regionCorners,
-  tileLat,
-  tileLng,
-  toUtm,
-} from './lib.ts'
+import { anotarManifiesto, fromUtm, realismo, regionCorners, toUtm } from './lib.ts'
 
 const extent = readJson<{ bbox: [number, number, number, number]; boundary: Polygon }>(paths.extent)
 const sentinel = readJson<SentinelMeta>(paths.rawSentinelMeta)
@@ -69,10 +61,12 @@ async function mascara(
 }
 
 /**
- * Imagen de suelo: Sentinel-2 a 10 m dentro del contorno y una franja alrededor (`realismo.suelo.margenM`), con alfa
- * suave en el borde. La franja existe porque la imagen de contexto, de unos 40 m por píxel, ampliada en el teléfono
- * se ve en cuadros justo al salir del contorno: ahí se ve el mismo suelo que dentro y el contexto entra más lejos.
+ * Imagen de suelo: Sentinel-2 a 10 m dentro del contorno y una franja ancha alrededor (`realismo.suelo.margenM`) que se
+ * apaga poco a poco. Fuera del contorno el monte se ve con la misma textura que dentro (la imagen horneada de
+ * contexto se veía como una nube) y se funde con el relieve de la GPU a lo lejos.
  */
+/** Píxeles (10 m) en que el suelo se apaga hacia el borde de la ventana de Sentinel. */
+const BORDE_PX = 170
 async function construirSuelo(): Promise<{ coordenadas: [number, number][]; bytes: number }> {
   const v = sentinel.zibata
   const { margenM, difuminadoM } = realismo.suelo
@@ -84,7 +78,7 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
       [extent.bbox[0], extent.bbox[1]],
     ] as [number, number][]
   ).map(([lng, lat]) => toUtm(lng, lat))
-  const margen = 2 + Math.ceil(margenM / Math.abs(v.rx))
+  const margen = 2 + Math.ceil(Math.max(0, margenM) / Math.abs(v.rx))
   // La escena de 10 m es finita: la franja se recorta a lo que hay.
   const px0 = Math.max(
     0,
@@ -125,220 +119,18 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
     rgba[i * 4] = rgb[i * 3] ?? 0
     rgba[i * 4 + 1] = rgb[i * 3 + 1] ?? 0
     rgba[i * 4 + 2] = rgb[i * 3 + 2] ?? 0
-    rgba[i * 4 + 3] = alfa[i] ?? 0
+    // La imagen de Sentinel es finita: el alfa también se apaga hacia sus bordes para que no haya un corte recto.
+    const x = i % width
+    const y = Math.floor(i / width)
+    const borde = Math.min(x, y, width - 1 - x, height - 1 - y) / BORDE_PX
+    const t = Math.max(0, Math.min(1, borde))
+    rgba[i * 4 + 3] = Math.round((alfa[i] ?? 0) * t * t * (3 - 2 * t))
   }
   const webp = await sharp(rgba, { raw: { width, height, channels: 4 } })
-    .webp({ quality: 82, alphaQuality: 80 })
+    .webp({ quality: 70, alphaQuality: 60 })
     .toBuffer()
   writeFileSync(`${salida}/suelo.webp`, webp)
   return { coordenadas: esquinasLngLat(v, px0, py0, width, height), bytes: webp.length }
-}
-
-const TESELA = 512
-type Rgb = [number, number, number]
-type Parada = [number, Rgb]
-const BG: Rgb = [192, 208, 159]
-/** Tinte por altitud (m): del verde pálido de la meseta al verde monte de las lomas (antes crema y pardo, que se leía como desierto). */
-const RAMPA: Parada[] = [
-  [1900, [220, 229, 191]],
-  [2060, [198, 213, 159]],
-  [2200, [162, 184, 116]],
-  [2400, [125, 149, 89]],
-  [3400, [95, 119, 70]],
-]
-const tinte = (altitud: number): Rgb => {
-  if (altitud <= (RAMPA[0] as Parada)[0]) return (RAMPA[0] as Parada)[1]
-  for (let k = 1; k < RAMPA.length; k++) {
-    const [h0, c0] = RAMPA[k - 1] as Parada
-    const [h1, c1] = RAMPA[k] as Parada
-    if (altitud <= h1) {
-      const t = (altitud - h0) / (h1 - h0)
-      return [c0[0] + (c1[0] - c0[0]) * t, c0[1] + (c1[1] - c0[1]) * t, c0[2] + (c1[2] - c0[2]) * t]
-    }
-  }
-  return (RAMPA.at(-1) as Parada)[1]
-}
-
-/** Altitud en metros de toda la región, decodificada de las teselas (codificación terrarium). */
-async function leerRelieve(n: number, tilesX: number): Promise<Float32Array> {
-  const { zoom, x, y } = realismo.relieve
-  const elevacion = new Float32Array(n * n)
-  for (let tx = 0; tx < tilesX; tx++) {
-    for (let ty = 0; ty < tilesX; ty++) {
-      const { data, info } = await sharp(
-        `${paths.relieveDir}/${zoom}/${x[0] + tx}/${y[0] + ty}.webp`,
-      )
-        .raw()
-        .toBuffer({ resolveWithObject: true })
-      for (let j = 0; j < TESELA; j++) {
-        for (let i = 0; i < TESELA; i++) {
-          const o = (j * TESELA + i) * info.channels
-          elevacion[(ty * TESELA + j) * n + tx * TESELA + i] =
-            (data[o] ?? 0) * 256 + (data[o + 1] ?? 0) + (data[o + 2] ?? 0) / 256 - 32768
-        }
-      }
-    }
-  }
-  return elevacion
-}
-
-/** Sombreado de laderas (luz del suroeste, 40° de altura) sobre el relieve exagerado. */
-function sombrear(elevacion: Float32Array, n: number): Float32Array {
-  const { zoom } = realismo.relieve
-  const metrosPorPixel = (40075016.686 * Math.cos((20.68 * Math.PI) / 180)) / (TESELA * 2 ** zoom)
-  const exageracion = 2.2
-  const acimut = (225 * Math.PI) / 180
-  const altura = (40 * Math.PI) / 180
-  const sombra = new Float32Array(n * n)
-  for (let j = 1; j < n - 1; j++) {
-    for (let i = 1; i < n - 1; i++) {
-      const e = (a: number, b: number): number =>
-        (elevacion[(j + b) * n + i + a] ?? 0) * exageracion
-      const dzdx =
-        (e(1, -1) + 2 * e(1, 0) + e(1, 1) - (e(-1, -1) + 2 * e(-1, 0) + e(-1, 1))) /
-        (8 * metrosPorPixel)
-      const dzdy =
-        (e(-1, 1) + 2 * e(0, 1) + e(1, 1) - (e(-1, -1) + 2 * e(0, -1) + e(1, -1))) /
-        (8 * metrosPorPixel)
-      const pendiente = Math.atan(Math.hypot(dzdx, dzdy))
-      const aspecto = Math.atan2(dzdy, -dzdx)
-      const hs =
-        Math.cos(Math.PI / 2 - altura) * Math.cos(pendiente) +
-        Math.sin(Math.PI / 2 - altura) *
-          Math.sin(pendiente) *
-          Math.cos(Math.PI * 2 - acimut + Math.PI / 2 - aspecto)
-      sombra[j * n + i] = Math.max(0, hs)
-    }
-  }
-  return sombra
-}
-
-/** Píxeles de Sentinel (20 m) de la franja en que el borde de la imagen se funde con el tono medio. */
-const FRANJA_SENTINEL = 40
-const suavizar = (t: number): number => {
-  const u = Math.max(0, Math.min(1, t))
-  return u * u * (3 - 2 * u)
-}
-/** Color medio de la imagen de Sentinel, el que se usa donde ya no hay imagen. */
-function tonoMedio(buf: Buffer, ancho: number, alto: number): Rgb {
-  const suma = [0, 0, 0]
-  let cuenta = 0
-  for (let j = 0; j < alto; j += 4) {
-    for (let i = 0; i < ancho; i += 4) {
-      const o = (j * ancho + i) * 3
-      for (const k of [0, 1, 2] as const) suma[k] = (suma[k] ?? 0) + (buf[o + k] ?? 0)
-      cuenta++
-    }
-  }
-  return [(suma[0] ?? 0) / cuenta, (suma[1] ?? 0) / cuenta, (suma[2] ?? 0) / cuenta]
-}
-
-/** Color bilineal del píxel (sx, sy) con la fracción (tx, ty) hacia el siguiente. */
-function bilineal(buf: Buffer, ancho: number, sx: number, sy: number, tx: number, ty: number): Rgb {
-  const a = (sy * ancho + sx) * 3
-  const b = a + 3
-  const c = a + ancho * 3
-  const d = c + 3
-  const canal = (k: number): number =>
-    ((buf[a + k] ?? 0) * (1 - tx) + (buf[b + k] ?? 0) * tx) * (1 - ty) +
-    ((buf[c + k] ?? 0) * (1 - tx) + (buf[d + k] ?? 0) * tx) * ty
-  return [canal(0), canal(1), canal(2)]
-}
-
-/** Imagen de contexto: satélite apagado, tinte por altitud y laderas, transparente dentro del anillo del contorno. */
-async function construirContexto(): Promise<{ coordenadas: [number, number][]; bytes: number }> {
-  const { zoom, x, y } = realismo.relieve
-  const tilesX = x[1] - x[0] + 1
-  const n = tilesX * TESELA
-  const elevacion = await leerRelieve(n, tilesX)
-  const sombra = sombrear(elevacion, n)
-  const plano = Math.sin((40 * Math.PI) / 180)
-
-  const v = sentinel.region
-  const sat = await sharp(paths.rawSentinelRegion).removeAlpha().raw().toBuffer()
-  const salida4 = Buffer.alloc(n * n * 4)
-  const medio = tonoMedio(sat, v.width, v.height)
-  for (let j = 0; j < n; j++) {
-    for (let i = 0; i < n; i++) {
-      const [ux, uy] = toUtm(
-        tileLng(x[0] + (i + 0.5) / TESELA, zoom),
-        tileLat(y[0] + (j + 0.5) / TESELA, zoom),
-      )
-      // Bilineal sobre el centro de cada píxel de Sentinel (de 20 m): con el vecino más cercano cada píxel de la
-      // imagen de contexto (de unos 36 m) heredaba el tono de uno solo y, ampliada en el teléfono, se veía en cuadros.
-      const fx = (ux - v.x0) / v.rx - 0.5
-      const fy = (uy - v.y0) / v.ry - 0.5
-      const sx = Math.floor(fx)
-      const sy = Math.floor(fy)
-      // Fuera de la imagen de Sentinel (la región es más chica que el relieve) no hay pixel: se mezcla hacia el tono
-      // medio del monte en una franja de ~800 m, en vez de pintar un color pálido plano con borde recto.
-      const peso = suavizar(
-        (Math.min(fx, v.width - 1 - fx, fy, v.height - 1 - fy) + 1) / FRANJA_SENTINEL,
-      )
-      const cx = Math.min(v.width - 2, Math.max(0, sx))
-      const cy = Math.min(v.height - 2, Math.max(0, sy))
-      const real = bilineal(
-        sat,
-        v.width,
-        cx,
-        cy,
-        Math.min(1, Math.max(0, fx - cx)),
-        Math.min(1, Math.max(0, fy - cy)),
-      )
-      const rgb: Rgb = [0, 1, 2].map(
-        (k) => (medio[k] as number) * (1 - peso) + (real[k] as number) * peso,
-      ) as Rgb
-      const gris = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
-      const t = tinte(elevacion[j * n + i] ?? 0)
-      const f = Math.max(0.86, Math.min(1.08, 1 + 0.95 * ((sombra[j * n + i] ?? 0) - plano)))
-      const o = (j * n + i) * 4
-      for (const k of [0, 1, 2] as const) {
-        const apagado = BG[k] * 0.62 + (gris + (rgb[k] - gris) * 0.55) * 0.38
-        salida4[o + k] = Math.min(255, (apagado * 0.53 + t[k] * 0.47) * f)
-      }
-      salida4[o + 3] = 255
-    }
-  }
-
-  // Alfa: transparente dentro del anillo alrededor del contorno, y difuminado hacia el borde de la región.
-  const anillo = turf.buffer(turf.feature(extent.boundary), realismo.contexto.anilloM / 1000, {
-    units: 'kilometers',
-    steps: 8,
-  })
-  const simple = turf.simplify(anillo as Feature<Polygon>, {
-    tolerance: 0.00005,
-    highQuality: true,
-  })
-  const coordenadasAnillo = simple.geometry.coordinates[0] ?? []
-  const px = (lng: number): number => (((lng + 180) / 360) * 2 ** zoom - x[0]) * TESELA
-  const py = (lat: number): number =>
-    ((0.5 - Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360)) / (2 * Math.PI)) * 2 ** zoom -
-      y[0]) *
-    TESELA
-  const alfa = await mascara(
-    n,
-    n,
-    coordenadasAnillo.map((p) => [px(p[0] ?? 0), py(p[1] ?? 0)] as [number, number]),
-    3,
-    true,
-  )
-  const orilla = Math.round(n * realismo.contexto.difuminadoOrilla)
-  for (let j = 0; j < n; j++) {
-    for (let i = 0; i < n; i++) {
-      const t = Math.max(0, Math.min(1, Math.min(i, j, n - 1 - i, n - 1 - j) / orilla))
-      salida4[(j * n + i) * 4 + 3] = Math.round((alfa[j * n + i] ?? 0) * t * t * (3 - 2 * t))
-    }
-  }
-  const px2 = realismo.contexto.pixeles
-  const webp = await sharp(salida4, { raw: { width: n, height: n, channels: 4 } })
-    .resize(px2, px2, { kernel: 'cubic' })
-    .webp({ quality: 74, alphaQuality: 70 })
-    .toBuffer()
-  writeFileSync(`${salida}/contexto.webp`, webp)
-  return {
-    coordenadas: regionCorners().map(([a, b]) => [redondear(a), redondear(b)]),
-    bytes: webp.length,
-  }
 }
 
 interface TramoOsm {
@@ -380,16 +172,20 @@ function construirVias(): { tramos: number; bytes: number } {
 }
 
 const suelo = await construirSuelo()
-const contexto = await construirContexto()
 const vias = construirVias()
 writeJson(DESCRIPTOR, {
   suelo: { coordenadas: suelo.coordenadas },
-  contexto: { coordenadas: contexto.coordenadas },
-  relieve: { zoom: realismo.relieve.zoom, x: realismo.relieve.x, y: realismo.relieve.y },
+  region: { coordenadas: regionCorners().map(([a, b]) => [redondear(a), redondear(b)]) },
+  relieve: {
+    zoom: realismo.relieve.zoom,
+    minzoom: Math.min(realismo.relieve.zoom, ...realismo.relieve.resumen),
+    x: realismo.relieve.x,
+    y: realismo.relieve.y,
+  },
   creditos: { sentinel: sentinel.escena, anio: sentinel.anio },
 })
 console.log(
-  `✓ suelo ${(suelo.bytes / 1024).toFixed(0)} KB · contexto ${(contexto.bytes / 1024).toFixed(0)} KB · ` +
+  `✓ suelo ${(suelo.bytes / 1024).toFixed(0)} KB · ` +
     `${vias.tramos} tramos de calles (${(vias.bytes / 1024).toFixed(0)} KB) → ${salida}`,
 )
 
@@ -399,7 +195,7 @@ anotarManifiesto(
     {
       id: 'sentinel-2',
       name: `Copernicus Sentinel-2 L2A, escena ${sentinel.escena}`,
-      layers: ['suelo', 'contexto'],
+      layers: ['suelo'],
       license: 'Copernicus Sentinel data licence (libre, completa y abierta)',
       attribution: `Contains modified Copernicus Sentinel data ${sentinel.anio}`,
       url: 'https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice',
@@ -409,7 +205,7 @@ anotarManifiesto(
     {
       id: 'copernicus-dem-glo30',
       name: 'Copernicus DEM GLO-30 vía Mapterhorn',
-      layers: ['relieve', 'contexto'],
+      layers: ['relieve'],
       license: 'COPERNICUS full, free and open license',
       attribution:
         'Copernicus DEM GLO-30 © DLR e.V. y Airbus Defence and Space, provisto por la Unión Europea y la ESA, vía Mapterhorn',
@@ -427,5 +223,5 @@ anotarManifiesto(
         'Overpass API (scripts/map/realismo/fetch-realismo.ts); archivo derivado bajo ODbL 1.0',
     },
   ],
-  ['suelo.webp', 'contexto.webp', 'vias.geojson'],
+  ['suelo.webp', 'vias.geojson'],
 )

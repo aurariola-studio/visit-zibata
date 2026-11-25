@@ -180,7 +180,7 @@ const BUDGET = {
   // Lo que baja quien ve el realismo, comprimido: suelo, contexto, calles de la region, las mallas de
   // edificios y arboles y una tesela de relieve. Hoy ronda 935 KB medidos con gzip (con Brotli en el CDN
   // son unos 100 KB menos); los edificios son casi dos tercios. Sube solo si cambian los datos.
-  realismoDatos: 1100,
+  realismoDatos: 1000,
   // El código de las capas propias (edificios, árboles, respaldo): un chunk aparte que solo baja quien ve el realismo.
   realismoJs: 12,
 }
@@ -233,11 +233,11 @@ const teselas = medirTeselas(`${DIST}map/tiles`)
 
 /** Peso comprimido de lo que siempre baja con el realismo, más la tesela de relieve más pesada. */
 function medirRealismo(dir: string): number {
-  const relieve = readdirSync(`${dir}/relieve/12`, { recursive: true })
+  const relieve = readdirSync(`${dir}/relieve`, { recursive: true })
     .filter((nombre): nombre is string => typeof nombre === 'string' && nombre.endsWith('.webp'))
-    .map((nombre) => gz(`${dir}/relieve/12/${nombre}`))
-  const fijos = ['suelo.webp', 'contexto.webp', 'vias.geojson', 'edificios.bin', 'arboles.bin'].map(
-    (nombre) => gz(`${dir}/${nombre}`),
+    .map((nombre) => gz(`${dir}/relieve/${nombre}`))
+  const fijos = ['suelo.webp', 'vias.geojson', 'edificios.bin', 'arboles.bin'].map((nombre) =>
+    gz(`${dir}/${nombre}`),
   )
   return fijos.reduce((total, peso) => total + peso, 0) + Math.max(0, ...relieve)
 }
