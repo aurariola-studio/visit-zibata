@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "places": [
     {
       "id": "carls-jr",
@@ -6372,7 +6372,17 @@
       "googleMapsUri": "https://maps.app.goo.gl/RAJunRpMVz2nGQTo6",
       "googlePlaceId": null,
       "phone": "+524424890070",
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/nomad-zibata/portada.webp",
+          "alt": "Logo de NOMAD Protein Bar",
+          "width": 433,
+          "height": 433,
+          "variants": [],
+          "placeholder": "#f8f8f8",
+          "credit": "Cortesía de NOMAD"
+        }
+      ],
       "links": {
         "website": "https://www.nomadpb.com",
         "instagram": "https://www.instagram.com/nomadproteinbar/",
