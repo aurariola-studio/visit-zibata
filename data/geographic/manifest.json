@@ -245,12 +245,12 @@
     ],
     "outputs": {
       "public/map/realismo/suelo.webp": {
-        "bytes": 46100,
-        "sha256": "2fe3f0f6be87c26db4b075fc5c3fdbd796b4f6ed64ac28e052b2a6a8b8a51c56"
+        "bytes": 84558,
+        "sha256": "ca53bca218ea6fbfebdfdd622cb4a638f86025a630041b968a05cdd917031970"
       },
       "public/map/realismo/contexto.webp": {
-        "bytes": 74594,
-        "sha256": "5751d4480a77ec2275b62be8c59e546d29498b7127810813ed2659d8e0dce12b"
+        "bytes": 67110,
+        "sha256": "eb16f307c2873043ba43e0338993cd5df4c5bcc817a748c5287d5c3e23d20c29"
       },
       "public/map/realismo/vias.geojson": {
         "bytes": 946262,

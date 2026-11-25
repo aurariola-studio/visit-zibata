@@ -75,6 +75,7 @@ export interface GeoConfig {
     /** Bloque de teselas z12 de relieve (Copernicus GLO-30 vía Mapterhorn), ambos extremos incluidos. */
     relieve: { fuente: string; zoom: number; x: [number, number]; y: [number, number] }
     contexto: { pixeles: number; anilloM: number; difuminadoOrilla: number }
+    suelo: { margenM: number; difuminadoM: number }
     /** Open Buildings 2.5D Temporal (Google Research): mosaicos UTM 14N de 12,5 km, con origen (x0, y1) en metros. */
     alturas: {
       fuente: string
