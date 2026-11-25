@@ -27,6 +27,15 @@ const Hueso = custom(
   <path d="M15 3a3 3 0 0 1 3 3a3 3 0 1 1-2.12 5.122l-4.758 4.758a3 3 0 1 1-5.117 2.297V18h-.176a3 3 0 1 1 2.298-5.115l4.758-4.758a3 3 0 0 1 2.12-5.122z" />,
 )
 
+/** Una caseta de perro: Hotel para Mascotas. Lucide `doghouse` (ISC). */
+const CasaDePerro = custom(
+  <>
+    <path d="m2 9.718l8.82-6.333a2 2 0 0 1 2.36 0L22 9.718" />
+    <path d="m20 8.282l-1.007 10.902A2 2 0 0 1 17 21H7a2 2 0 0 1-1.992-1.816L4 8.282" />
+    <path d="M8.5 9.938a7 7 0 0 1 7 0M9 21v-5a3 3 0 0 1 6 0v5" />
+  </>,
+)
+
 /**
  * La mascota a 0,78 arriba a la izquierda, con su trazo de 2 sin tocar (1,56 px en pantalla); la insignia va abajo a la
  * derecha con el mismo trazo y corta la línea de la mascota a su alrededor (ver `conInsignia`).
@@ -78,6 +87,7 @@ const EsteticaMascotas = custom(
 )
 
 export const ICONOS_DE_MASCOTAS: Record<string, IconComponent> = {
+  'casa-de-perro': CasaDePerro,
   'estetica-mascotas': EsteticaMascotas,
   'hospital-veterinario': HospitalVeterinario,
   hueso: Hueso,

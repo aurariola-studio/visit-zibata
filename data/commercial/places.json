@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-23",
+  "updatedAt": "2026-11-24",
   "places": [
     {
       "id": "carls-jr",
@@ -12629,6 +12629,432 @@
         "sources": [
           "https://maps.app.goo.gl/9hi3mNVz9EzxMH3J6",
           "campo:2026-11-23"
+        ]
+      }
+    },
+    {
+      "id": "franz-haus",
+      "slug": "franz-haus",
+      "name": "Franz Haus",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "hospital-veterinario",
+        "estetica-para-mascotas"
+      ],
+      "description": {
+        "es": "Somos un Centro Integral Veterinario. Nuestra misión es mejorar la calidad de vida de tu mascota.",
+        "en": "We are a comprehensive veterinary center. Our mission is to improve your pet's quality of life."
+      },
+      "hours": {
+        "mon": [
+          "00:00-24:00"
+        ],
+        "tue": [
+          "00:00-24:00"
+        ],
+        "wed": [
+          "00:00-24:00"
+        ],
+        "thu": [
+          "00:00-24:00"
+        ],
+        "fri": [
+          "00:00-24:00"
+        ],
+        "sat": [
+          "00:00-24:00"
+        ],
+        "sun": [
+          "00:00-24:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6784984,
+        "lng": -100.3142416
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/Yt43Kt1LQh1Hp2px5",
+      "googlePlaceId": null,
+      "phone": "+524421608406",
+      "photos": [],
+      "links": {
+        "website": "https://franzhausmx.com/",
+        "instagram": "https://www.instagram.com/franzhausmx/",
+        "facebook": "https://www.facebook.com/Franzhausmx/",
+        "tiktok": null,
+        "whatsapp": "+524421608406",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "136"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/Yt43Kt1LQh1Hp2px5",
+          "https://franzhausmx.com/",
+          "https://www.instagram.com/franzhausmx/",
+          "https://www.facebook.com/Franzhausmx/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "groomalia",
+      "slug": "groomalia",
+      "name": "Groomalia",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "estetica-para-mascotas"
+      ],
+      "description": {
+        "es": "Grooming consciente 🐾\nBaño • Corte • Uñas • Cuidado integral\nCertificación Fear Free 💙",
+        "en": "Mindful grooming 🐾\nBath • Haircut • Nails • Comprehensive care\nFear Free certified 💙"
+      },
+      "hours": {
+        "mon": [
+          "09:00-18:00"
+        ],
+        "tue": [
+          "09:00-18:00"
+        ],
+        "wed": [
+          "09:00-18:00"
+        ],
+        "thu": [
+          "09:00-18:00"
+        ],
+        "fri": [
+          "09:00-18:00"
+        ],
+        "sat": [
+          "09:00-18:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6839844,
+        "lng": -100.3263572
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/N4oZwv8m6qxAjByN6",
+      "googlePlaceId": null,
+      "phone": "+524461285550",
+      "photos": [],
+      "links": {
+        "website": "https://linktr.ee/groomalia",
+        "instagram": "https://www.instagram.com/groomaliamx/",
+        "facebook": "https://www.facebook.com/p/Groomalia-61575677297892/",
+        "tiktok": "https://www.tiktok.com/@groomalia.estetic",
+        "whatsapp": "+524461285550",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "106"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/N4oZwv8m6qxAjByN6",
+          "https://linktr.ee/groomalia",
+          "https://www.instagram.com/groomaliamx/",
+          "https://www.facebook.com/p/Groomalia-61575677297892/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "pelitos-style",
+      "slug": "pelitos-style",
+      "name": "Pelitos Style",
+      "plazaId": "mol-pitahaya",
+      "giros": [
+        "estetica-para-mascotas",
+        "veterinaria",
+        "articulos-para-mascotas"
+      ],
+      "description": {
+        "es": "\"Cuidamos lo que más quieres\"\n• Veterinaria 🩺\n• Venta de alimentos 🦴\n• Accesorios 🐾",
+        "en": "\"We take care of what you love most\"\n• Veterinary care 🩺\n• Pet food 🦴\n• Accessories 🐾"
+      },
+      "hours": {
+        "mon": [
+          "10:00-19:00"
+        ],
+        "tue": [
+          "10:00-19:00"
+        ],
+        "wed": [
+          "10:00-19:00"
+        ],
+        "thu": [
+          "10:00-19:00"
+        ],
+        "fri": [
+          "10:00-19:00"
+        ],
+        "sat": [
+          "09:00-18:00"
+        ],
+        "sun": [
+          "09:00-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6771266,
+        "lng": -100.3350181
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/TE9gSJZknmovCmP66",
+      "googlePlaceId": null,
+      "phone": "+524461285843",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/pelitosstyle/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "23"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/TE9gSJZknmovCmP66",
+          "https://www.instagram.com/pelitosstyle/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "pets-avenue",
+      "slug": "pets-avenue",
+      "name": "Pets Avenue",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "articulos-para-mascotas",
+        "estetica-para-mascotas",
+        "hotel-para-mascotas"
+      ],
+      "description": {
+        "es": "En PetsAvenue, nuestro amor por los animales y sus dueños se refleja en cada uno de nuestros servicios. Buscamos que compruebes que somos una opcion que no solo ofrece calidad, si no que puedas vernos como quien cuida a tu peludo como tu lo harias. Nos dedicamos a brindar lo mejor para tus mascotas, asegurando su felicidad y bienestar en un ambiente cálido y amigable.",
+        "en": "At PetsAvenue, our love for animals and their owners shows in every one of our services. We want you to see that we are not only an option that offers quality, but one you can see as someone who takes care of your furry friend just as you would. We are dedicated to providing the best for your pets, ensuring their happiness and well-being in a warm and friendly environment."
+      },
+      "hours": {
+        "mon": [
+          "10:00-20:00"
+        ],
+        "tue": [
+          "10:00-20:00"
+        ],
+        "wed": [
+          "10:00-20:00"
+        ],
+        "thu": [
+          "10:00-20:00"
+        ],
+        "fri": [
+          "10:00-20:00"
+        ],
+        "sat": [
+          "10:00-17:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6791077,
+        "lng": -100.3146856
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/U9fGAHQksm4WcBEt9",
+      "googlePlaceId": null,
+      "phone": "+527292237139",
+      "photos": [],
+      "links": {
+        "website": "https://horacms70.wixsite.com/petsavenue",
+        "instagram": "https://www.instagram.com/petsavenuemx/",
+        "facebook": "https://www.facebook.com/petsavenuemx/",
+        "tiktok": null,
+        "whatsapp": "+527292237139",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "1"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/U9fGAHQksm4WcBEt9",
+          "https://horacms70.wixsite.com/petsavenue",
+          "https://www.instagram.com/petsavenuemx/",
+          "https://www.facebook.com/petsavenuemx/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "unidad-de-cuidados-veterinarios",
+      "slug": "unidad-de-cuidados-veterinarios",
+      "name": "Unidad de Cuidados Veterinarios",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "hospital-veterinario",
+        "estetica-para-mascotas",
+        "hotel-para-mascotas"
+      ],
+      "description": {
+        "es": "El mejor lugar para la atención y el cuidado integral de ese miembro más de tu familia.",
+        "en": "The best place for comprehensive care and attention for that extra member of your family."
+      },
+      "hours": {
+        "mon": [
+          "10:00-18:00"
+        ],
+        "tue": [
+          "10:00-18:00"
+        ],
+        "wed": [
+          "10:00-18:00"
+        ],
+        "thu": [
+          "10:00-18:00"
+        ],
+        "fri": [
+          "10:00-18:00"
+        ],
+        "sat": [
+          "10:00-18:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6747596,
+        "lng": -100.3228486
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/hELiW8gev9fkwEAh7",
+      "googlePlaceId": null,
+      "phone": "+524426477392",
+      "photos": [],
+      "links": {
+        "website": "https://ucvqueretaro.com/",
+        "instagram": "https://www.instagram.com/ucv_queretaro/",
+        "facebook": "https://www.facebook.com/ucvelrefugio/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "14"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/hELiW8gev9fkwEAh7",
+          "https://ucvqueretaro.com/",
+          "https://www.instagram.com/ucv_queretaro/",
+          "https://www.facebook.com/ucvelrefugio/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "vet-kaan",
+      "slug": "vet-kaan",
+      "name": "Vet Kaan",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "veterinaria"
+      ],
+      "description": {
+        "es": "Clínica Veterinaria especializada en Dermatología y Traumatología.",
+        "en": "Veterinary clinic specializing in Dermatology and Traumatology."
+      },
+      "hours": {
+        "mon": [
+          "09:00-21:00"
+        ],
+        "tue": [
+          "09:00-21:00"
+        ],
+        "wed": [
+          "09:00-21:00"
+        ],
+        "thu": [
+          "09:00-21:00"
+        ],
+        "fri": [
+          "09:00-21:00"
+        ],
+        "sat": [
+          "10:00-16:00"
+        ],
+        "sun": [
+          "10:00-14:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6839882,
+        "lng": -100.3263662
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/Yuy9BSJ3FdMme6ts8",
+      "googlePlaceId": null,
+      "phone": "+524422413231",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/vetkaan",
+        "facebook": "https://www.facebook.com/VetKaanZibata/",
+        "tiktok": null,
+        "whatsapp": "+524427166005",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/Yuy9BSJ3FdMme6ts8",
+          "https://www.instagram.com/vetkaan",
+          "https://www.facebook.com/VetKaanZibata/",
+          "campo:2026-11-24"
         ]
       }
     }

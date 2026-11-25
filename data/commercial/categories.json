@@ -3043,6 +3043,52 @@
           "general": true
         }
       ]
+    },
+    {
+      "id": "hotel-para-mascotas",
+      "slug": {
+        "es": "hotel-para-mascotas",
+        "en": "pet-hotels"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Hotel para Mascotas",
+        "en": "Pet Hotels"
+      },
+      "icon": "casa-de-perro",
+      "hue": 250,
+      "order": 730,
+      "synonyms": [
+        "hotel canino",
+        "hotel para perros",
+        "guardería canina",
+        "pensión para perros",
+        "hospedaje para mascotas",
+        "hotel para gatos",
+        "pet hotel",
+        "dog daycare"
+      ],
+      "giros": [
+        {
+          "id": "hotel-para-mascotas",
+          "label": {
+            "es": "Hotel para Mascotas",
+            "en": "Pet Hotel"
+          },
+          "icon": "casa-de-perro",
+          "synonyms": [
+            "hotel canino",
+            "hotel para perros",
+            "guardería",
+            "pensión",
+            "hospedaje",
+            "hotel para gatos",
+            "pet hotel",
+            "boarding"
+          ],
+          "general": true
+        }
+      ]
     }
   ],
   "sectors": [

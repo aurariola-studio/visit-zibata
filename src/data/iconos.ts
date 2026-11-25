@@ -33,6 +33,7 @@ export const ICONOS = [
   'candy',
   'cara-cuidada',
   'carne',
+  'casa-de-perro',
   'cecina',
   'ceja',
   'cerdo',
