@@ -31,6 +31,7 @@ describe('CategoryIcon', () => {
     // lucide o del registro) de forma estática, volverían a pesar en `initialJs` con cada categoría nueva.
     const estaticos = [...fuente.matchAll(/^import .*? from '([^']+)'/gms)].map((m) => m[1])
     expect(estaticos).not.toContain('./registro-de-iconos.tsx')
+    expect(estaticos).not.toContain('./iconos-de-mascotas.tsx')
     const deLucide = fuente.match(/^import \{([^}]*)\} from 'lucide-react'/ms)?.[1] ?? ''
     const nombres = deLucide
       .split(',')
@@ -38,6 +39,7 @@ describe('CategoryIcon', () => {
       .filter(Boolean)
     expect(nombres.sort()).toEqual(['UtensilsCrossed', 'type LucideProps'])
     expect(fuente).toMatch(/import\('\.\/registro-de-iconos\.tsx'\)/)
+    expect(fuente).toMatch(/import\('\.\/iconos-de-mascotas\.tsx'\)/)
   })
 
   it('un nombre desconocido o heredado de Object pinta el icono genérico', async () => {
@@ -46,6 +48,34 @@ describe('CategoryIcon', () => {
       const { container, unmount } = render(<CategoryIcon name={nombre} size={20} />)
       await waitFor(() => expect(container.querySelector('svg'), nombre).not.toBeNull())
       unmount()
+    }
+  })
+
+  it('un icono de un sector reserva su caja hasta que llega su fragmento, y entonces pinta el dibujo', async () => {
+    vi.resetModules()
+    const { CategoryIcon } = await import('./CategoryIcon.tsx')
+    const { container } = render(<CategoryIcon name="veterinaria" size={20} />)
+    const caja = container.firstElementChild as HTMLElement
+    expect(caja.tagName).toBe('SPAN')
+    expect(caja.style.width).toBe('20px')
+    await waitFor(() => expect(container.querySelector('svg mask')).not.toBeNull())
+  })
+
+  it('el mismo icono con corte, varias veces en la página, lleva una máscara con id propio cada vez', async () => {
+    const { CategoryIcon } = await import('./CategoryIcon.tsx')
+    const { container } = render(
+      <>
+        <CategoryIcon name="veterinaria" size={20} />
+        <CategoryIcon name="veterinaria" size={20} />
+        <CategoryIcon name="hospital-veterinario" size={20} />
+      </>,
+    )
+    await waitFor(() => expect(container.querySelectorAll('mask')).toHaveLength(3))
+    const ids = [...container.querySelectorAll('mask')].map((m) => m.id)
+    expect(new Set(ids).size).toBe(3)
+    for (const id of ids) {
+      expect(id).toMatch(/^corte-[a-zA-Z0-9_-]+$/)
+      expect(container.querySelector(`[mask="url(#${id})"]`), id).not.toBeNull()
     }
   })
 })

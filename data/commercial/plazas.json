@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -109,7 +109,8 @@
         "rob-nail-beauty-lab",
         "asturiano-xentric-anahuac",
         "el-huerto",
-        "querekarne"
+        "querekarne",
+        "franz-haus"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -140,7 +141,9 @@
         "piel-y-cuerpo",
         "carnicerias",
         "fruterias",
-        "panaderias"
+        "panaderias",
+        "veterinarias",
+        "estetica-para-mascotas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -331,7 +334,8 @@
         "barberia-barbuda-paseo-zibata",
         "black-studio-beauty-nails",
         "oxxo-paseo-zibata",
-        "mandala-spa-beauty-center"
+        "mandala-spa-beauty-center",
+        "pets-avenue"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -360,7 +364,10 @@
         "spa-y-masajes",
         "piel-y-cuerpo",
         "cejas-y-pestanas",
-        "panaderias"
+        "panaderias",
+        "estetica-para-mascotas",
+        "articulos-para-mascotas",
+        "hotel-para-mascotas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Paseo Zibatá\" y locales con esa dirección (El Hornero, Currucucú, Masaru…). Huella aproximada: el edificio aún no aparece en los datos abiertos.",
@@ -690,7 +697,9 @@
         "mercado-coronel-xentric-zibata",
         "mexicava",
         "oxxo-xentric-zibata",
-        "sabego-meat-market"
+        "sabego-meat-market",
+        "groomalia",
+        "vet-kaan"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -714,7 +723,9 @@
         "cejas-y-pestanas",
         "abarrotes",
         "fruterias",
-        "licorerias"
+        "licorerias",
+        "veterinarias",
+        "estetica-para-mascotas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección Paseo Tunas 18 (Cosi Fan Tutte, Trecielos, La Marmota, Honu Sushi…). Huella aproximada.",
@@ -820,7 +831,8 @@
         "rene-marquez-studio-zibata",
         "ecobuy",
         "meatgo",
-        "oxxo-plaza-zielo"
+        "oxxo-plaza-zielo",
+        "unidad-de-cuidados-veterinarios"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -850,7 +862,10 @@
         "piel-y-cuerpo",
         "cejas-y-pestanas",
         "abarrotes",
-        "carnicerias"
+        "carnicerias",
+        "veterinarias",
+        "estetica-para-mascotas",
+        "hotel-para-mascotas"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Zielo\" y locales con esa dirección (Escarola, Donatto Pizza, Margaritas); huella de Overture.",
@@ -943,14 +958,18 @@
         "cafele",
         "black-box-zibata",
         "lusso-hair-boutique",
-        "oxxo-mol-pitahaya"
+        "oxxo-mol-pitahaya",
+        "pelitos-style"
       ],
       "categories": [
         "desayunos-y-cafe",
         "gimnasios",
         "artes-marciales",
         "peluqueria",
-        "panaderias"
+        "panaderias",
+        "veterinarias",
+        "estetica-para-mascotas",
+        "articulos-para-mascotas"
       ],
       "locationConfidence": "medium",
       "locationSource": "Dirección de MOL Pitahaya (Cerro del Huizache 49) publicada por Atlas Desarrollos y de Cafele Zibatá; POIs de Overture Maps (release 2026-08-19.0) en Av. Huizache 49 (local 23); huella de Overture.",

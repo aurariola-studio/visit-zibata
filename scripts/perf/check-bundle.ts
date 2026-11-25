@@ -132,11 +132,20 @@ const KB = 1024
  * categorías haya. El peso de los dibujos pasa a `iconosJs`, con su propio tope. Si ese tope aprieta, el
  * siguiente paso es partir el registro por sector (un fragmento por sector, que se pide con el sector activo),
  * no subir el número.
+ *
+ * 2026-11-23: con Tiendas y Mascotas `iconosJs` llegó a 26,1 de 26 (los cinco iconos de Mascotas, con dos de ellos
+ * dibujados con un corte, sumaban algo más de 1 KB). Se hizo el paso que estaba previsto sin subir el número: el sector Mascotas tiene su propio
+ * fragmento (`iconos-de-mascotas.tsx`, ver `src/components/icons/fragmentos.ts`), que `CategoryIcon` pide solo
+ * cuando pinta uno de sus iconos, y `iconosDeSectorJs` mide todos esos fragmentos juntos (0,9). `iconosJs` se queda en
+ * el registro general (24,9) y la huella del sector, que sale en la primera pantalla, se queda dentro.
  */
 const BUDGET = {
   initialJs: 130,
   // Los dibujos de todos los iconos (ver la nota de 2026-11-23). Medido: 23,7 KB; unos 0,2 KB por icono nuevo.
   iconosJs: 26,
+  // Los fragmentos de iconos de un sector, que solo bajan cuando se pinta uno de sus iconos (Mascotas hoy: 0,9 KB).
+  // Suman todos los sectores que tengan el suyo; 6 da para tres o cuatro más antes de pensar en otra cosa.
+  iconosDeSectorJs: 6,
   // 11 y no 10: el estilo del contenido escrito que trae cada página (v4.16) dejó la medida en 9,9
   // de 10, y un margen de cien bytes hace que el siguiente cambio honesto rompa la compilación sin
   // que haya pasado nada. El tope sigue existiendo para cazar un crecimiento descuidado, no para
@@ -196,6 +205,8 @@ const DATOS_DE_DETALLE = /^places-detalle-.*\.js$/
 const PARECE_DATOS = /^(categories|plazas|places|_?virtual_zibata-places)[-_].*\.js$/
 /** El registro de dibujos de iconos que carga `CategoryIcon` con `import('./registro-de-iconos.tsx')`. */
 const ICONOS_CHUNK = /^registro-de-iconos-.*\.js$/
+/** Los fragmentos de iconos por sector que carga `CategoryIcon` con `import('./iconos-de-<sector>.tsx')`. */
+const ICONOS_DE_SECTOR_CHUNK = /^iconos-de-.*\.js$/
 /** El chunk que carga `MapView` con `import('./realismo/install.ts')`. */
 const REALISMO_CHUNK = /^install-.*\.js$/
 
@@ -235,6 +246,7 @@ const measured = {
   initialJs: sum(referenced('.js')),
   initialCss: sum(referenced('.css')),
   iconosJs: sum(matching(ICONOS_CHUNK)),
+  iconosDeSectorJs: sum(matching(ICONOS_DE_SECTOR_CHUNK)),
   mapJs: sum(matching(/^MapView-.*\.js$/)),
   mapCss: sum(matching(/^MapView-.*\.css$/)),
   dataJs: sum(matching(DATOS_DE_ARRANQUE)),
@@ -283,6 +295,14 @@ if (matching(ICONOS_CHUNK).length !== 1) {
   console.error(
     '✗ Se esperaba un chunk de iconos (registro-de-iconos-*.js) en dist/assets y hay ' +
       matching(ICONOS_CHUNK).length,
+  )
+  failed = true
+}
+// Cada sector con fragmento propio (`fragmentos.ts`) tiene que dar un archivo `iconos-de-*.js`; si Rollup lo
+// llamara de otra forma, el tope de arriba pasaría sin medirlo.
+if (matching(ICONOS_DE_SECTOR_CHUNK).length === 0) {
+  console.error(
+    '✗ No se encontró ningún fragmento de iconos de sector (iconos-de-*.js) en dist/assets',
   )
   failed = true
 }

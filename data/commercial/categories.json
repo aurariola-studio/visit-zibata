@@ -2893,6 +2893,202 @@
           "general": true
         }
       ]
+    },
+    {
+      "id": "veterinarias",
+      "slug": {
+        "es": "veterinarias",
+        "en": "veterinary-clinics"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Veterinarias",
+        "en": "Veterinary Clinics"
+      },
+      "icon": "veterinaria",
+      "hue": 190,
+      "schemaType": "VeterinaryCare",
+      "order": 700,
+      "synonyms": [
+        "veterinaria",
+        "veterinario",
+        "doctor de mascotas",
+        "consulta veterinaria",
+        "vacunas",
+        "vet",
+        "veterinary"
+      ],
+      "giros": [
+        {
+          "id": "veterinaria",
+          "label": {
+            "es": "Veterinaria",
+            "en": "Veterinary Clinic"
+          },
+          "icon": "veterinaria",
+          "synonyms": [
+            "veterinario",
+            "consulta",
+            "vacunas",
+            "desparasitación",
+            "vet",
+            "veterinary"
+          ],
+          "general": true
+        },
+        {
+          "id": "hospital-veterinario",
+          "label": {
+            "es": "Hospital Veterinario",
+            "en": "Veterinary Hospital"
+          },
+          "icon": "hospital-veterinario",
+          "synonyms": [
+            "urgencias",
+            "24 horas",
+            "cirugía",
+            "hospitalización",
+            "emergencias",
+            "animal hospital"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estetica-para-mascotas",
+      "slug": {
+        "es": "estetica-para-mascotas",
+        "en": "pet-grooming"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Estética para Mascotas",
+        "en": "Pet Grooming"
+      },
+      "icon": "estetica-mascotas",
+      "hue": 305,
+      "order": 710,
+      "synonyms": [
+        "peluquería canina",
+        "estética canina",
+        "peluquería para gatos",
+        "grooming",
+        "baño para perros",
+        "corte de pelo",
+        "estética para perros",
+        "groomer"
+      ],
+      "giros": [
+        {
+          "id": "estetica-para-mascotas",
+          "label": {
+            "es": "Estética para Mascotas",
+            "en": "Pet Grooming"
+          },
+          "icon": "estetica-mascotas",
+          "synonyms": [
+            "peluquería canina",
+            "estética canina",
+            "peluquería para gatos",
+            "grooming",
+            "baño",
+            "corte de pelo",
+            "estética para perros",
+            "groomer"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "articulos-para-mascotas",
+      "slug": {
+        "es": "articulos-para-mascotas",
+        "en": "pet-supplies"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Artículos para Mascotas",
+        "en": "Pet Supplies"
+      },
+      "icon": "hueso",
+      "hue": 30,
+      "schemaType": "PetStore",
+      "order": 720,
+      "synonyms": [
+        "tienda de mascotas",
+        "alimento para perro",
+        "croquetas",
+        "accesorios para mascotas",
+        "pet shop",
+        "pet store"
+      ],
+      "giros": [
+        {
+          "id": "articulos-para-mascotas",
+          "label": {
+            "es": "Artículos para Mascotas",
+            "en": "Pet Supplies"
+          },
+          "icon": "hueso",
+          "synonyms": [
+            "tienda de mascotas",
+            "alimento",
+            "croquetas",
+            "accesorios",
+            "juguetes",
+            "pet shop",
+            "pet store"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "hotel-para-mascotas",
+      "slug": {
+        "es": "hotel-para-mascotas",
+        "en": "pet-hotels"
+      },
+      "sectorId": "mascotas",
+      "label": {
+        "es": "Hotel para Mascotas",
+        "en": "Pet Hotels"
+      },
+      "icon": "casa-de-perro",
+      "hue": 250,
+      "order": 730,
+      "synonyms": [
+        "hotel canino",
+        "hotel para perros",
+        "guardería canina",
+        "pensión para perros",
+        "hospedaje para mascotas",
+        "hotel para gatos",
+        "pet hotel",
+        "dog daycare"
+      ],
+      "giros": [
+        {
+          "id": "hotel-para-mascotas",
+          "label": {
+            "es": "Hotel para Mascotas",
+            "en": "Pet Hotel"
+          },
+          "icon": "casa-de-perro",
+          "synonyms": [
+            "hotel canino",
+            "hotel para perros",
+            "guardería",
+            "pensión",
+            "hospedaje",
+            "hotel para gatos",
+            "pet hotel",
+            "boarding"
+          ],
+          "general": true
+        }
+      ]
     }
   ],
   "sectors": [
@@ -2960,6 +3156,19 @@
       },
       "icon": "shopping-basket",
       "order": 50
+    },
+    {
+      "id": "mascotas",
+      "slug": {
+        "es": "mascotas",
+        "en": "pets"
+      },
+      "label": {
+        "es": "Mascotas",
+        "en": "Pets"
+      },
+      "icon": "paw-print",
+      "order": 60
     }
   ]
 }

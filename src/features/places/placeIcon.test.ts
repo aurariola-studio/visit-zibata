@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import categories from '../../../data/commercial/categories.json'
 import places from '../../../data/commercial/places.json'
 import plazas from '../../../data/commercial/plazas.json'
-import { hasCategoryIcon } from '../../components/icons/registro-de-iconos.tsx'
 import { buildCatalog } from '../../data/catalog.ts'
+import { tieneDibujo } from '../../test/iconos.ts'
 import type { Category, Place, Plaza } from '../../types/domain.ts'
 import { allGiroIds, placeIconName } from './placeIcon.ts'
 
@@ -20,7 +20,7 @@ describe('iconos y taxonomía del dataset publicado', () => {
       category.icon,
       ...category.giros.map((giro) => giro.icon),
     ])
-    for (const name of names) expect(hasCategoryIcon(name), name).toBe(true)
+    for (const name of names) expect(tieneDibujo(name), name).toBe(true)
   })
 
   it('ningún dibujo se repite entre dos giros distintos', () => {
