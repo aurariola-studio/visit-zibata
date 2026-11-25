@@ -14448,6 +14448,69 @@
           "campo:2026-11-24"
         ]
       }
+    },
+    {
+      "id": "karlitros",
+      "slug": "karlitros",
+      "name": "Karlitros",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "gastrobar"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [],
+        "tue": [
+          "15:00-01:00"
+        ],
+        "wed": [
+          "15:00-01:00"
+        ],
+        "thu": [
+          "15:00-01:00"
+        ],
+        "fri": [
+          "15:00-01:00"
+        ],
+        "sat": [
+          "15:00-01:00"
+        ],
+        "sun": [
+          "13:00-19:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6787525,
+        "lng": -100.3135233
+      },
+      "googleMapsUri": "https://www.google.com/maps/search/KARLITROS+ZIBATA",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "49"
+        ]
+      },
+      "active": false,
+      "verification": {
+        "status": "uncertain",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://www.google.com/maps/search/KARLITROS+ZIBATA"
+        ]
+      }
     }
   ]
 }
