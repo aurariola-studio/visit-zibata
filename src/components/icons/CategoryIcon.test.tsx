@@ -32,6 +32,7 @@ describe('CategoryIcon', () => {
     const estaticos = [...fuente.matchAll(/^import .*? from '([^']+)'/gms)].map((m) => m[1])
     expect(estaticos).not.toContain('./registro-de-iconos.tsx')
     expect(estaticos).not.toContain('./iconos-de-mascotas.tsx')
+    expect(estaticos).not.toContain('./iconos-de-servicios.tsx')
     const deLucide = fuente.match(/^import \{([^}]*)\} from 'lucide-react'/ms)?.[1] ?? ''
     const nombres = deLucide
       .split(',')

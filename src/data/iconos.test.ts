@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { FRAGMENTO_DE_ICONO } from '../components/icons/fragmentos.ts'
 import { ICONOS_DE_MASCOTAS } from '../components/icons/iconos-de-mascotas.tsx'
+import { ICONOS_DE_SERVICIOS } from '../components/icons/iconos-de-servicios.tsx'
 import { hasCategoryIcon } from '../components/icons/registro-de-iconos.tsx'
 import { tieneDibujo } from '../test/iconos.ts'
 import { ICONOS } from './iconos.ts'
@@ -21,7 +22,9 @@ describe('los nombres de icono', () => {
   })
 
   it('la tabla de fragmentos y cada fragmento dicen lo mismo, y ningún nombre está en los dos sitios', () => {
-    expect(Object.keys(FRAGMENTO_DE_ICONO).sort()).toEqual(Object.keys(ICONOS_DE_MASCOTAS).sort())
+    expect(Object.keys(FRAGMENTO_DE_ICONO).sort()).toEqual(
+      [...Object.keys(ICONOS_DE_MASCOTAS), ...Object.keys(ICONOS_DE_SERVICIOS)].sort(),
+    )
     for (const nombre of Object.keys(FRAGMENTO_DE_ICONO)) {
       expect(hasCategoryIcon(nombre), nombre).toBe(false)
       expect(ICONOS, nombre).toContain(nombre)
