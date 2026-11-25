@@ -2623,13 +2623,13 @@
     {
       "id": "ferreterias",
       "slug": {
-        "es": "ferreterias",
-        "en": "hardware-stores"
+        "es": "ferreterias-y-pinturas",
+        "en": "hardware-and-paint-stores"
       },
       "sectorId": "tiendas",
       "label": {
-        "es": "Ferreterías",
-        "en": "Hardware Stores"
+        "es": "Ferreterías y Pinturas",
+        "en": "Hardware and Paint Stores"
       },
       "icon": "martillo",
       "hue": 205,
@@ -2640,7 +2640,10 @@
         "herramientas",
         "tlapalería",
         "pintura",
-        "hardware"
+        "pinturas",
+        "tienda de pinturas",
+        "hardware",
+        "paint"
       ],
       "giros": [
         {
@@ -2667,8 +2670,13 @@
           "icon": "rodillo",
           "synonyms": [
             "pintura",
+            "tienda de pinturas",
             "brochas",
             "rodillos",
+            "esmalte",
+            "impermeabilizante",
+            "comex",
+            "berel",
             "paint"
           ]
         }

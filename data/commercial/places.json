@@ -14238,6 +14238,134 @@
           "campo:2026-11-24"
         ]
       }
+    },
+    {
+      "id": "tienda-comex",
+      "slug": "tienda-comex",
+      "name": "Tienda Comex",
+      "plazaId": "xentric-zibata",
+      "unit": {
+        "locales": [
+          "110",
+          "111"
+        ]
+      },
+      "giros": [
+        "pinturas"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "09:00-17:00"
+        ],
+        "tue": [
+          "09:00-17:00"
+        ],
+        "wed": [
+          "09:00-17:00"
+        ],
+        "thu": [
+          "09:00-17:00"
+        ],
+        "fri": [
+          "09:00-17:00"
+        ],
+        "sat": [
+          "09:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6839674,
+        "lng": -100.3261134
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d17e6d33777:0x7486069a2c300e24",
+      "googlePlaceId": null,
+      "phone": "+524422990219",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d17e6d33777:0x7486069a2c300e24"
+        ]
+      }
+    },
+    {
+      "id": "pinturas-berel-idearte",
+      "slug": "pinturas-berel-idearte",
+      "name": "Pinturas Berel Idearte",
+      "plazaId": "xentric-anahuac",
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "127"
+        ]
+      },
+      "giros": [
+        "pinturas"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "08:30-18:00"
+        ],
+        "tue": [
+          "08:30-18:00"
+        ],
+        "wed": [
+          "08:30-18:00"
+        ],
+        "thu": [
+          "08:30-18:00"
+        ],
+        "fri": [
+          "08:30-18:00"
+        ],
+        "sat": [
+          "09:00-13:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6782152,
+        "lng": -100.3136897
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d47d8a833ab:0xcfe4a3e29f141d35",
+      "googlePlaceId": null,
+      "phone": "+524422410193",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d47d8a833ab:0xcfe4a3e29f141d35"
+        ]
+      }
     }
   ]
 }
