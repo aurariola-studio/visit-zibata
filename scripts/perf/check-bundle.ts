@@ -180,7 +180,7 @@ const BUDGET = {
   // Lo que baja quien ve el realismo, comprimido: suelo, contexto, calles de la region, las mallas de
   // edificios y arboles y una tesela de relieve. Hoy ronda 935 KB medidos con gzip (con Brotli en el CDN
   // son unos 100 KB menos); los edificios son casi dos tercios. Sube solo si cambian los datos.
-  realismoDatos: 1000,
+  realismoDatos: 1100,
   // El código de las capas propias (edificios, árboles, respaldo): un chunk aparte que solo baja quien ve el realismo.
   realismoJs: 12,
 }

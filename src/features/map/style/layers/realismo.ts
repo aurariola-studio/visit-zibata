@@ -188,7 +188,8 @@ export function realismoOutsideLayers(): LayerSpecification[] {
       id: 'realismo-contexto',
       type: 'raster',
       source: SOURCE.context,
-      paint: { 'raster-fade-duration': 0 },
+      // Con 0,7 se cuela el relieve en vivo (más nítido que la imagen de unos 30 m por píxel) y el monte se lee como monte.
+      paint: { 'raster-fade-duration': 0, 'raster-opacity': 0.7 },
     },
   ]
   for (const [clase, a, b] of ROAD_CLASSES) {
