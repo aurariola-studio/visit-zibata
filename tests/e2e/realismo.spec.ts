@@ -64,7 +64,7 @@ test.describe('Realismo del mapa @mapa', () => {
     await expect(page.locator('[data-realismo]')).toHaveCount(0)
   })
 
-  test('con GPU carga suelo, contexto, calles y relieve del mismo origen, con sus créditos', async ({
+  test('con GPU carga suelo, calles y relieve del mismo origen, con sus créditos', async ({
     page,
     baseURL,
   }) => {
@@ -103,7 +103,7 @@ test.describe('Realismo del mapa @mapa', () => {
     expect(externas).toEqual([])
     expect(fallidas).toEqual([])
     const nombres = [...pedidas]
-    expect(nombres).toEqual(expect.arrayContaining(['suelo.webp', 'contexto.webp', 'vias.geojson']))
+    expect(nombres).toEqual(expect.arrayContaining(['suelo.webp', 'vias.geojson']))
     expect(nombres.some((nombre) => /^relieve\/12\/\d+\/\d+\.webp$/.test(nombre))).toBe(true)
 
     const atribucion = await page.locator('.maplibregl-ctrl-attrib').textContent()

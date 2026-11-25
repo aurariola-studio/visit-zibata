@@ -42,7 +42,7 @@ describe('estilo del mapa', () => {
     }
   })
 
-  it('pone el relieve sobre el suelo y bajo los usos de suelo, y el contexto sustituye al velo', () => {
+  it('pone el relieve sobre el suelo y bajo los usos de suelo, y las calles de la región sustituyen al velo', () => {
     const layerIds = ids(buildMapStyle({ ...base, realismo }))
     const pos = (id: string) => layerIds.indexOf(id)
     expect(pos('zibata-ground')).toBeLessThan(pos('realismo-tinte'))
@@ -51,8 +51,8 @@ describe('estilo del mapa', () => {
     expect(pos('landuse-built')).toBeLessThan(pos('realismo-suelo'))
     expect(pos('realismo-suelo')).toBeLessThan(pos('landuse-green'))
     expect(layerIds).not.toContain('outside-veil')
-    expect(pos('road-street')).toBeLessThan(pos('realismo-contexto'))
-    expect(pos('realismo-contexto')).toBeLessThan(pos('buildings'))
+    expect(pos('road-street')).toBeLessThan(pos('realismo-vias-autopista'))
+    expect(pos('realismo-vias-autopista')).toBeLessThan(pos('buildings'))
   })
 
   it('acredita el relieve y Sentinel-2 en la atribución de la fuente de relieve', () => {

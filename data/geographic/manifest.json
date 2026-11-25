@@ -187,8 +187,7 @@
         "id": "sentinel-2",
         "name": "Copernicus Sentinel-2 L2A, escena S2C_14QLH_20261020_0_L2A",
         "layers": [
-          "suelo",
-          "contexto"
+          "suelo"
         ],
         "license": "Copernicus Sentinel data licence (libre, completa y abierta)",
         "attribution": "Contains modified Copernicus Sentinel data 2026",
@@ -200,8 +199,7 @@
         "id": "copernicus-dem-glo30",
         "name": "Copernicus DEM GLO-30 vía Mapterhorn",
         "layers": [
-          "relieve",
-          "contexto"
+          "relieve"
         ],
         "license": "COPERNICUS full, free and open license",
         "attribution": "Copernicus DEM GLO-30 © DLR e.V. y Airbus Defence and Space, provisto por la Unión Europea y la ESA, vía Mapterhorn",
@@ -245,12 +243,8 @@
     ],
     "outputs": {
       "public/map/realismo/suelo.webp": {
-        "bytes": 84626,
-        "sha256": "c77117851f0ecd444d78c06db1910eb332c8ffbe1a292a6b44fe923d514384bb"
-      },
-      "public/map/realismo/contexto.webp": {
-        "bytes": 149016,
-        "sha256": "a8158b1de7ca310630623c04dac9d405ef8941c92bd12beffe28f5578f52087e"
+        "bytes": 56168,
+        "sha256": "9ef0442fb2368009d4ff58cc5b85bc94c8ca097007c64438c2932f5f762b125b"
       },
       "public/map/realismo/vias.geojson": {
         "bytes": 946262,
