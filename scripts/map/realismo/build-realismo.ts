@@ -113,14 +113,14 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
 const TESELA = 512
 type Rgb = [number, number, number]
 type Parada = [number, Rgb]
-const BG: Rgb = [217, 205, 182]
-/** Tinte por altitud (m): del crema claro de la meseta al pardo de las lomas. */
+const BG: Rgb = [192, 208, 159]
+/** Tinte por altitud (m): del verde pálido de la meseta al verde monte de las lomas (antes crema y pardo, que se leía como desierto). */
 const RAMPA: Parada[] = [
-  [1900, [239, 230, 210]],
-  [2060, [227, 214, 184]],
-  [2200, [205, 191, 154]],
-  [2400, [179, 164, 131]],
-  [3400, [143, 130, 103]],
+  [1900, [220, 229, 191]],
+  [2060, [198, 213, 159]],
+  [2200, [162, 184, 116]],
+  [2400, [125, 149, 89]],
+  [3400, [95, 119, 70]],
 ]
 const tinte = (altitud: number): Rgb => {
   if (altitud <= (RAMPA[0] as Parada)[0]) return (RAMPA[0] as Parada)[1]
@@ -217,8 +217,8 @@ async function construirContexto(): Promise<{ coordenadas: [number, number][]; b
       const f = Math.max(0.93, Math.min(1.06, 1 + 0.6 * ((sombra[j * n + i] ?? 0) - plano)))
       const o = (j * n + i) * 4
       for (const k of [0, 1, 2] as const) {
-        const apagado = BG[k] * 0.84 + (gris + (rgb[k] - gris) * 0.35) * 0.16
-        salida4[o + k] = Math.min(255, (apagado * 0.8 + t[k] * 0.2) * f)
+        const apagado = BG[k] * 0.62 + (gris + (rgb[k] - gris) * 0.55) * 0.38
+        salida4[o + k] = Math.min(255, (apagado * 0.53 + t[k] * 0.47) * f)
       }
       salida4[o + 3] = 255
     }
