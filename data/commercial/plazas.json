@@ -151,6 +151,7 @@
         "hogar-y-muebles",
         "papelerias",
         "regalos-y-fiestas",
+        "taller-creativo",
         "veterinarias",
         "estetica-para-mascotas"
       ],
@@ -425,7 +426,8 @@
         "pets-avenue",
         "casa-caracola",
         "spiruleka",
-        "truper-ferreteria-paseo-zibata"
+        "truper-ferreteria-paseo-zibata",
+        "luvel-inkjet"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -456,8 +458,10 @@
         "cejas-y-pestanas",
         "panaderias",
         "ferreterias",
+        "papelerias",
         "regalos-y-fiestas",
         "floristerias",
+        "taller-creativo",
         "estetica-para-mascotas",
         "articulos-para-mascotas",
         "hotel-para-mascotas"

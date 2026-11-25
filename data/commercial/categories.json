@@ -3097,6 +3097,93 @@
           "general": true
         }
       ]
+    },
+    {
+      "id": "taller-creativo",
+      "slug": {
+        "es": "taller-creativo",
+        "en": "creative-workshop"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Taller Creativo",
+        "en": "Creative Workshop"
+      },
+      "icon": "compas",
+      "hue": 118,
+      "schemaType": "Store",
+      "order": 610,
+      "synonyms": [
+        "taller",
+        "imprenta",
+        "personalizado",
+        "diseño",
+        "makerspace",
+        "creative workshop"
+      ],
+      "giros": [
+        {
+          "id": "impresion",
+          "label": {
+            "es": "Impresión",
+            "en": "Printing"
+          },
+          "icon": "impresora",
+          "synonyms": [
+            "impresiones",
+            "copias",
+            "fotocopias",
+            "copiado",
+            "escaneo",
+            "planos",
+            "gran formato",
+            "plotter",
+            "lonas",
+            "serigrafía",
+            "printing",
+            "copies"
+          ]
+        },
+        {
+          "id": "personalizacion",
+          "label": {
+            "es": "Personalización",
+            "en": "Customization"
+          },
+          "icon": "sello",
+          "synonyms": [
+            "personalizado",
+            "playeras",
+            "camisetas",
+            "estampado",
+            "tazas",
+            "dtf",
+            "vinil",
+            "sublimación",
+            "bordado",
+            "serigrafía",
+            "regalos personalizados",
+            "custom"
+          ]
+        },
+        {
+          "id": "corte-y-grabado-laser",
+          "label": {
+            "es": "Corte y Grabado Láser",
+            "en": "Laser Cutting and Engraving"
+          },
+          "icon": "cutter",
+          "synonyms": [
+            "láser",
+            "laser",
+            "corte láser",
+            "grabado láser",
+            "grabado",
+            "corte",
+            "engraving"
+          ]
+        }
+      ]
     }
   ],
   "sectors": [
