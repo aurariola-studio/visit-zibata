@@ -43,6 +43,17 @@ export default function MapDebugPanel({ map }: { map: MapLibreMap }) {
   const [plazas, setPlazas] = useState(true)
   const [planoOpacity, setPlanoOpacity] = useState(0)
   const [collapsed, setCollapsed] = useState(false)
+  // El panel se monta en cuanto existe el mapa, antes de que cargue el estilo: añadir capas entonces lanza "Style is not done loading".
+  const [listo, setListo] = useState(() => map.isStyleLoaded())
+
+  useEffect(() => {
+    if (listo) return
+    const alCargar = () => setListo(true)
+    map.once('load', alCargar)
+    return () => {
+      map.off('load', alCargar)
+    }
+  }, [map, listo])
 
   const georef = Object.values(georefModules)[0]?.default
   const planoUrl = georef
@@ -87,7 +98,7 @@ export default function MapDebugPanel({ map }: { map: MapLibreMap }) {
   }, [map, tiles, collisions])
 
   useEffect(() => {
-    if (!plazas) return
+    if (!plazas || !listo) return
     map.addLayer({
       id: PLAZA_OUTLINE,
       type: 'line',
@@ -114,10 +125,10 @@ export default function MapDebugPanel({ map }: { map: MapLibreMap }) {
       if (map.getLayer(PLAZA_IDS)) map.removeLayer(PLAZA_IDS)
       if (map.getLayer(PLAZA_OUTLINE)) map.removeLayer(PLAZA_OUTLINE)
     }
-  }, [map, plazas])
+  }, [map, plazas, listo])
 
   useEffect(() => {
-    if (!georef || !planoUrl) return
+    if (!georef || !planoUrl || !listo) return
     if (!map.getSource(PLANO_SOURCE)) {
       map.addSource(PLANO_SOURCE, { type: 'image', url: planoUrl, coordinates: georef.coordinates })
       map.addLayer(
@@ -129,7 +140,7 @@ export default function MapDebugPanel({ map }: { map: MapLibreMap }) {
       if (map.getLayer(PLANO_LAYER)) map.removeLayer(PLANO_LAYER)
       if (map.getSource(PLANO_SOURCE)) map.removeSource(PLANO_SOURCE)
     }
-  }, [map, georef, planoUrl])
+  }, [map, georef, planoUrl, listo])
 
   useEffect(() => {
     if (map.getLayer(PLANO_LAYER)) map.setPaintProperty(PLANO_LAYER, 'raster-opacity', planoOpacity)
