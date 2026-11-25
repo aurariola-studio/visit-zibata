@@ -213,6 +213,26 @@ function sombrear(elevacion: Float32Array, n: number): Float32Array {
   return sombra
 }
 
+/** Píxeles de Sentinel (20 m) de la franja en que el borde de la imagen se funde con el tono medio. */
+const FRANJA_SENTINEL = 40
+const suavizar = (t: number): number => {
+  const u = Math.max(0, Math.min(1, t))
+  return u * u * (3 - 2 * u)
+}
+/** Color medio de la imagen de Sentinel, el que se usa donde ya no hay imagen. */
+function tonoMedio(buf: Buffer, ancho: number, alto: number): Rgb {
+  const suma = [0, 0, 0]
+  let cuenta = 0
+  for (let j = 0; j < alto; j += 4) {
+    for (let i = 0; i < ancho; i += 4) {
+      const o = (j * ancho + i) * 3
+      for (const k of [0, 1, 2] as const) suma[k] = (suma[k] ?? 0) + (buf[o + k] ?? 0)
+      cuenta++
+    }
+  }
+  return [(suma[0] ?? 0) / cuenta, (suma[1] ?? 0) / cuenta, (suma[2] ?? 0) / cuenta]
+}
+
 /** Color bilineal del píxel (sx, sy) con la fracción (tx, ty) hacia el siguiente. */
 function bilineal(buf: Buffer, ancho: number, sx: number, sy: number, tx: number, ty: number): Rgb {
   const a = (sy * ancho + sx) * 3
@@ -237,6 +257,7 @@ async function construirContexto(): Promise<{ coordenadas: [number, number][]; b
   const v = sentinel.region
   const sat = await sharp(paths.rawSentinelRegion).removeAlpha().raw().toBuffer()
   const salida4 = Buffer.alloc(n * n * 4)
+  const medio = tonoMedio(sat, v.width, v.height)
   for (let j = 0; j < n; j++) {
     for (let i = 0; i < n; i++) {
       const [ux, uy] = toUtm(
@@ -249,11 +270,27 @@ async function construirContexto(): Promise<{ coordenadas: [number, number][]; b
       const fy = (uy - v.y0) / v.ry - 0.5
       const sx = Math.floor(fx)
       const sy = Math.floor(fy)
-      const hay = sx >= 0 && sx + 1 < v.width && sy >= 0 && sy + 1 < v.height
-      const rgb: Rgb = hay ? bilineal(sat, v.width, sx, sy, fx - sx, fy - sy) : BG
+      // Fuera de la imagen de Sentinel (la región es más chica que el relieve) no hay pixel: se mezcla hacia el tono
+      // medio del monte en una franja de ~800 m, en vez de pintar un color pálido plano con borde recto.
+      const peso = suavizar(
+        (Math.min(fx, v.width - 1 - fx, fy, v.height - 1 - fy) + 1) / FRANJA_SENTINEL,
+      )
+      const cx = Math.min(v.width - 2, Math.max(0, sx))
+      const cy = Math.min(v.height - 2, Math.max(0, sy))
+      const real = bilineal(
+        sat,
+        v.width,
+        cx,
+        cy,
+        Math.min(1, Math.max(0, fx - cx)),
+        Math.min(1, Math.max(0, fy - cy)),
+      )
+      const rgb: Rgb = [0, 1, 2].map(
+        (k) => (medio[k] as number) * (1 - peso) + (real[k] as number) * peso,
+      ) as Rgb
       const gris = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
       const t = tinte(elevacion[j * n + i] ?? 0)
-      const f = Math.max(0.93, Math.min(1.06, 1 + 0.6 * ((sombra[j * n + i] ?? 0) - plano)))
+      const f = Math.max(0.86, Math.min(1.08, 1 + 0.95 * ((sombra[j * n + i] ?? 0) - plano)))
       const o = (j * n + i) * 4
       for (const k of [0, 1, 2] as const) {
         const apagado = BG[k] * 0.62 + (gris + (rgb[k] - gris) * 0.55) * 0.38
