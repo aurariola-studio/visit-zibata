@@ -1616,7 +1616,10 @@
         "fisioterapeuta",
         "rehabilitación",
         "terapia física",
-        "physical therapy"
+        "lesiones",
+        "fisio",
+        "physical therapy",
+        "rehab"
       ],
       "giros": [
         {
@@ -1627,8 +1630,12 @@
           },
           "icon": "muletas",
           "synonyms": [
+            "fisioterapeuta",
+            "rehabilitación",
+            "terapia física",
             "lesiones",
-            "fisio"
+            "fisio",
+            "physical therapy"
           ],
           "general": true
         }
@@ -3236,14 +3243,19 @@
         "en": "Laundry & Tailoring"
       },
       "icon": "percha",
-      "hue": 205,
+      "hue": 225,
       "order": 800,
       "synonyms": [
         "lavandería",
         "tintorería",
         "sastrería",
+        "planchado",
+        "lavado de ropa",
         "arreglos",
-        "laundry"
+        "costura",
+        "dry cleaning",
+        "laundry",
+        "tailor"
       ],
       "giros": [
         {
@@ -3256,7 +3268,8 @@
           "synonyms": [
             "lavado de ropa",
             "lavado por kilo",
-            "planchado"
+            "planchado",
+            "laundry"
           ],
           "general": true
         },
@@ -3269,6 +3282,7 @@
           "icon": "plancha",
           "synonyms": [
             "lavado en seco",
+            "tintorería",
             "planchado",
             "trajes",
             "dry cleaning"
@@ -3285,7 +3299,9 @@
             "autoservicio",
             "lavadoras",
             "secadoras",
-            "lavar tu ropa"
+            "lavar tu ropa",
+            "self service",
+            "laundromat"
           ]
         },
         {
@@ -3297,9 +3313,13 @@
           "icon": "aguja",
           "synonyms": [
             "sastre",
+            "sastrería",
             "costura",
             "dobladillo",
-            "ajustes"
+            "ajustes",
+            "modista",
+            "alterations",
+            "tailor"
           ]
         }
       ]
@@ -3321,6 +3341,9 @@
       "synonyms": [
         "banco",
         "cajero",
+        "cajero automático",
+        "sucursal bancaria",
+        "retiro de efectivo",
         "atm",
         "bank"
       ],
@@ -3334,7 +3357,9 @@
           "icon": "cartera",
           "synonyms": [
             "sucursal",
-            "sucursal bancaria"
+            "sucursal bancaria",
+            "banco",
+            "bank"
           ],
           "general": true
         },
@@ -3346,8 +3371,10 @@
           },
           "icon": "tarjeta",
           "synonyms": [
+            "cajero",
             "retirar efectivo",
-            "retiro"
+            "retiro",
+            "atm"
           ]
         }
       ]
@@ -3370,9 +3397,15 @@
         "escuela",
         "colegio",
         "guardería",
+        "preescolar",
+        "primaria",
+        "secundaria",
+        "preparatoria",
         "universidad",
         "idiomas",
-        "school"
+        "ludoteca",
+        "school",
+        "education"
       ],
       "giros": [
         {
@@ -3382,7 +3415,11 @@
             "en": "School"
           },
           "icon": "birrete",
-          "synonyms": [],
+          "synonyms": [
+            "escuela",
+            "colegio",
+            "school"
+          ],
           "general": true
         },
         {
@@ -3396,7 +3433,8 @@
             "estancia infantil",
             "cuidado de niños",
             "maternal",
-            "bebés"
+            "bebés",
+            "daycare"
           ]
         },
         {
@@ -3410,7 +3448,8 @@
             "kínder",
             "kinder",
             "jardín de niños",
-            "maternal"
+            "maternal",
+            "preschool"
           ]
         },
         {
@@ -3464,6 +3503,7 @@
             "licenciatura",
             "posgrado",
             "campus",
+            "universidad",
             "university"
           ]
         },
@@ -3478,7 +3518,10 @@
             "inglés",
             "ingles",
             "francés",
-            "clases de idiomas"
+            "clases de idiomas",
+            "academia de idiomas",
+            "english",
+            "language"
           ]
         },
         {
@@ -3492,7 +3535,9 @@
             "regularización",
             "tareas",
             "matemáticas",
-            "método kumon"
+            "método kumon",
+            "tutoría",
+            "tutoring"
           ]
         },
         {
@@ -3506,7 +3551,8 @@
             "juegos didácticos",
             "espacio para niños",
             "talleres infantiles",
-            "play center"
+            "play center",
+            "playroom"
           ]
         }
       ]
@@ -3529,7 +3575,10 @@
         "paquetería",
         "envíos",
         "mensajería",
-        "courier"
+        "recolección de paquetes",
+        "paquetes",
+        "courier",
+        "shipping"
       ],
       "giros": [
         {
@@ -3540,7 +3589,10 @@
           },
           "icon": "camion-de-reparto",
           "synonyms": [
+            "envíos",
+            "mensajería",
             "paquetes",
+            "courier",
             "recolección"
           ],
           "general": true
@@ -3562,10 +3614,12 @@
       "hue": 262,
       "order": 840,
       "synonyms": [
-        "reparación",
+        "reparación de celulares",
+        "reparación de computadoras",
         "técnico",
-        "celular",
+        "pantalla",
         "laptop",
+        "celular",
         "repair"
       ],
       "giros": [
@@ -3577,6 +3631,7 @@
           },
           "icon": "celular-engranaje",
           "synonyms": [
+            "celular",
             "pantalla rota",
             "cambio de batería",
             "smartphone",
@@ -3592,9 +3647,11 @@
           "icon": "computadora-engranaje",
           "synonyms": [
             "computadora",
+            "laptop",
             "pc",
             "mantenimiento",
-            "formateo"
+            "formateo",
+            "computer repair"
           ]
         }
       ]
@@ -3617,7 +3674,10 @@
         "teatro",
         "obras",
         "espectáculos",
-        "theater"
+        "funciones",
+        "show",
+        "theater",
+        "theatre"
       ],
       "giros": [
         {
@@ -3631,7 +3691,9 @@
             "obras de teatro",
             "funciones",
             "escenario",
-            "theatre"
+            "espectáculos",
+            "theatre",
+            "show"
           ],
           "general": true
         }
