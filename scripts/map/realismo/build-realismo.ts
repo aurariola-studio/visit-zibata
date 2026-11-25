@@ -68,9 +68,14 @@ async function mascara(
   return sharp(Buffer.from(svg)).blur(desenfoque).greyscale().raw().toBuffer()
 }
 
-/** Imagen de suelo: Sentinel-2 a 10 m dentro de la caja del contorno, con alfa suave en el borde. */
+/**
+ * Imagen de suelo: Sentinel-2 a 10 m dentro del contorno y una franja alrededor (`realismo.suelo.margenM`), con alfa
+ * suave en el borde. La franja existe porque la imagen de contexto, de unos 40 m por píxel, ampliada en el teléfono
+ * se ve en cuadros justo al salir del contorno: ahí se ve el mismo suelo que dentro y el contexto entra más lejos.
+ */
 async function construirSuelo(): Promise<{ coordenadas: [number, number][]; bytes: number }> {
   const v = sentinel.zibata
+  const { margenM, difuminadoM } = realismo.suelo
   const esquinas = (
     [
       [extent.bbox[0], extent.bbox[3]],
@@ -79,18 +84,37 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
       [extent.bbox[0], extent.bbox[1]],
     ] as [number, number][]
   ).map(([lng, lat]) => toUtm(lng, lat))
-  const margen = 2
-  const px0 = Math.floor((Math.min(...esquinas.map((p) => p[0])) - v.x0) / v.rx) - margen
-  const px1 = Math.ceil((Math.max(...esquinas.map((p) => p[0])) - v.x0) / v.rx) + margen
-  const py0 = Math.floor((Math.max(...esquinas.map((p) => p[1])) - v.y0) / v.ry) - margen
-  const py1 = Math.ceil((Math.min(...esquinas.map((p) => p[1])) - v.y0) / v.ry) + margen
+  const margen = 2 + Math.ceil(margenM / Math.abs(v.rx))
+  // La escena de 10 m es finita: la franja se recorta a lo que hay.
+  const px0 = Math.max(
+    0,
+    Math.floor((Math.min(...esquinas.map((p) => p[0])) - v.x0) / v.rx) - margen,
+  )
+  const px1 = Math.min(
+    v.width,
+    Math.ceil((Math.max(...esquinas.map((p) => p[0])) - v.x0) / v.rx) + margen,
+  )
+  const py0 = Math.max(
+    0,
+    Math.floor((Math.max(...esquinas.map((p) => p[1])) - v.y0) / v.ry) - margen,
+  )
+  const py1 = Math.min(
+    v.height,
+    Math.ceil((Math.min(...esquinas.map((p) => p[1])) - v.y0) / v.ry) + margen,
+  )
   const width = px1 - px0
   const height = py1 - py0
-  const anillo = (extent.boundary.coordinates[0] ?? []).map((p) => {
+  const franja = turf.buffer(turf.feature(extent.boundary), margenM / 1000, {
+    units: 'kilometers',
+    steps: 8,
+  })
+  const anillo = (
+    franja?.geometry.type === 'Polygon' ? (franja.geometry.coordinates[0] ?? []) : []
+  ).map((p) => {
     const [x, y] = toUtm(p[0] ?? 0, p[1] ?? 0)
     return [(x - v.x0) / v.rx - px0, (y - v.y0) / v.ry - py0] as [number, number]
   })
-  const alfa = await mascara(width, height, anillo, 2)
+  const alfa = await mascara(width, height, anillo, Math.max(2, difuminadoM / Math.abs(v.rx)))
   const rgb = await sharp(paths.rawSentinelZibata)
     .extract({ left: px0, top: py0, width, height })
     .removeAlpha()
@@ -189,6 +213,18 @@ function sombrear(elevacion: Float32Array, n: number): Float32Array {
   return sombra
 }
 
+/** Color bilineal del píxel (sx, sy) con la fracción (tx, ty) hacia el siguiente. */
+function bilineal(buf: Buffer, ancho: number, sx: number, sy: number, tx: number, ty: number): Rgb {
+  const a = (sy * ancho + sx) * 3
+  const b = a + 3
+  const c = a + ancho * 3
+  const d = c + 3
+  const canal = (k: number): number =>
+    ((buf[a + k] ?? 0) * (1 - tx) + (buf[b + k] ?? 0) * tx) * (1 - ty) +
+    ((buf[c + k] ?? 0) * (1 - tx) + (buf[d + k] ?? 0) * tx) * ty
+  return [canal(0), canal(1), canal(2)]
+}
+
 /** Imagen de contexto: satélite apagado, tinte por altitud y laderas, transparente dentro del anillo del contorno. */
 async function construirContexto(): Promise<{ coordenadas: [number, number][]; bytes: number }> {
   const { zoom, x, y } = realismo.relieve
@@ -207,11 +243,14 @@ async function construirContexto(): Promise<{ coordenadas: [number, number][]; b
         tileLng(x[0] + (i + 0.5) / TESELA, zoom),
         tileLat(y[0] + (j + 0.5) / TESELA, zoom),
       )
-      const sx = Math.floor((ux - v.x0) / v.rx)
-      const sy = Math.floor((uy - v.y0) / v.ry)
-      const hay = sx >= 0 && sx < v.width && sy >= 0 && sy < v.height
-      const so = hay ? (sy * v.width + sx) * 3 : 0
-      const rgb: Rgb = hay ? [sat[so] ?? 0, sat[so + 1] ?? 0, sat[so + 2] ?? 0] : BG
+      // Bilineal sobre el centro de cada píxel de Sentinel (de 20 m): con el vecino más cercano cada píxel de la
+      // imagen de contexto (de unos 36 m) heredaba el tono de uno solo y, ampliada en el teléfono, se veía en cuadros.
+      const fx = (ux - v.x0) / v.rx - 0.5
+      const fy = (uy - v.y0) / v.ry - 0.5
+      const sx = Math.floor(fx)
+      const sy = Math.floor(fy)
+      const hay = sx >= 0 && sx + 1 < v.width && sy >= 0 && sy + 1 < v.height
+      const rgb: Rgb = hay ? bilineal(sat, v.width, sx, sy, fx - sx, fy - sy) : BG
       const gris = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
       const t = tinte(elevacion[j * n + i] ?? 0)
       const f = Math.max(0.93, Math.min(1.06, 1 + 0.6 * ((sombra[j * n + i] ?? 0) - plano)))
@@ -255,7 +294,7 @@ async function construirContexto(): Promise<{ coordenadas: [number, number][]; b
   }
   const px2 = realismo.contexto.pixeles
   const webp = await sharp(salida4, { raw: { width: n, height: n, channels: 4 } })
-    .resize(px2, px2, { kernel: 'lanczos3' })
+    .resize(px2, px2, { kernel: 'cubic' })
     .webp({ quality: 74, alphaQuality: 70 })
     .toBuffer()
   writeFileSync(`${salida}/contexto.webp`, webp)

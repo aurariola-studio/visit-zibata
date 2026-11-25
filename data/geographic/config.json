@@ -413,8 +413,12 @@
     },
     "contexto": {
       "pixeles": 1024,
-      "anilloM": 100,
+      "anilloM": 450,
       "difuminadoOrilla": 0.14
+    },
+    "suelo": {
+      "margenM": 650,
+      "difuminadoM": 120
     },
     "alturas": {
       "fuente": "https://storage.googleapis.com/open-buildings-temporal-data/v1/geotiffs/85d34_2023_06_30/",
