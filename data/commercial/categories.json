@@ -2703,10 +2703,10 @@
       ],
       "giros": [
         {
-          "id": "decoracion-y-hogar",
+          "id": "decoracion",
           "label": {
-            "es": "Decoración y Hogar",
-            "en": "Home & Decor"
+            "es": "Decoración",
+            "en": "Decor"
           },
           "icon": "lampara",
           "synonyms": [

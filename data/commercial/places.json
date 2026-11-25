@@ -13070,6 +13070,1174 @@
           "campo:2026-11-24"
         ]
       }
+    },
+    {
+      "id": "bruder-muebles",
+      "slug": "bruder-muebles",
+      "name": "Brüder Muebles",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "muebles"
+      ],
+      "description": {
+        "es": "Más que muebles, creamos experiencias de lujo. Diseño exclusivo que transforma cada espacio.",
+        "en": "More than furniture, we create luxury experiences. Exclusive design that transforms every space."
+      },
+      "hours": {
+        "mon": [
+          "10:00-18:00"
+        ],
+        "tue": [
+          "10:00-18:00"
+        ],
+        "wed": [
+          "10:00-18:00"
+        ],
+        "thu": [
+          "10:00-18:00"
+        ],
+        "fri": [
+          "10:00-18:00"
+        ],
+        "sat": [
+          "12:00-16:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6746392,
+        "lng": -100.3231081
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/dNg173eGhgZZYRA16",
+      "googlePlaceId": null,
+      "phone": "+524427747021",
+      "photos": [],
+      "links": {
+        "website": "https://www.brudermuebles.com/",
+        "instagram": "https://www.instagram.com/brudermuebles/",
+        "facebook": "http://facebook.com/p/Br%C3%BCder-Muebles-61576836584254/",
+        "tiktok": "https://www.tiktok.com/@brudermuebles",
+        "whatsapp": "+524427747021",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "3"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/dNg173eGhgZZYRA16",
+          "https://www.brudermuebles.com/",
+          "https://www.instagram.com/brudermuebles/",
+          "http://facebook.com/p/Br%C3%BCder-Muebles-61576836584254/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "casa-caracola",
+      "slug": "casa-caracola",
+      "name": "Casa Caracola",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "floristeria"
+      ],
+      "description": {
+        "es": "Flores que hablan de ti 💐\nArreglos florales personalizados con alma y detalle ✨",
+        "en": "Flowers that speak of you 💐\nCustom floral arrangements with soul and detail ✨"
+      },
+      "hours": {
+        "mon": [
+          "10:00-20:00"
+        ],
+        "tue": [
+          "10:00-20:00"
+        ],
+        "wed": [
+          "10:00-20:00"
+        ],
+        "thu": [
+          "10:00-20:00"
+        ],
+        "fri": [
+          "10:00-20:00"
+        ],
+        "sat": [
+          "10:00-20:00"
+        ],
+        "sun": [
+          "10:00-14:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6792084,
+        "lng": -100.31467
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/4Di7Pny6kgZapUQk8",
+      "googlePlaceId": null,
+      "phone": "+524427877730",
+      "photos": [],
+      "links": {
+        "website": "https://casacaracola.my.canva.site/",
+        "instagram": "https://www.instagram.com/casa.caracola.flores/",
+        "facebook": null,
+        "tiktok": "https://www.tiktok.com/@casa.caracola.flores",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/4Di7Pny6kgZapUQk8",
+          "https://casacaracola.my.canva.site/",
+          "https://www.instagram.com/casa.caracola.flores/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "espacio-querido",
+      "slug": "espacio-querido",
+      "name": "Espacio Querido",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "decoracion"
+      ],
+      "description": {
+        "es": "Somos un equipo enfocado al desarrollo integral de espacios, muebles y accesorios desde la ideación hasta la fabricación.\nNos gusta centrarnos en las experiencias con cada uno de nuestros clientes, creando juntos, espacios únicos y personalizados.",
+        "en": "We are a team focused on the comprehensive development of spaces, furniture and accessories, from ideation to manufacturing.\nWe like to focus on the experience of each of our clients, creating unique, personalized spaces together."
+      },
+      "hours": {
+        "mon": [],
+        "tue": [],
+        "wed": [],
+        "thu": [],
+        "fri": [],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6749844,
+        "lng": -100.322775
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/8RMWa5gTKarqQ94N9",
+      "googlePlaceId": null,
+      "phone": "+525542583499",
+      "photos": [],
+      "links": {
+        "website": "http://espacioquerido.com/",
+        "instagram": "https://www.instagram.com/espacio_querido/",
+        "facebook": "https://www.facebook.com/Espacio.Querido/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": false,
+      "verification": {
+        "status": "uncertain",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/8RMWa5gTKarqQ94N9",
+          "http://espacioquerido.com/",
+          "https://www.instagram.com/espacio_querido/",
+          "https://www.facebook.com/Espacio.Querido/"
+        ]
+      }
+    },
+    {
+      "id": "fantastink",
+      "slug": "fantastink",
+      "name": "Fantastink",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "decoracion"
+      ],
+      "description": {
+        "es": "Dale vida a tus espacios con el cuadro perfecto, arte original, serigrafías o tus mejores recuerdos.",
+        "en": "Bring your spaces to life with the perfect frame, original art, screen prints or your best memories."
+      },
+      "hours": {
+        "mon": [
+          "10:00-14:00",
+          "15:00-19:00"
+        ],
+        "tue": [
+          "10:00-14:00",
+          "15:00-19:00"
+        ],
+        "wed": [
+          "10:00-14:00",
+          "15:00-19:00"
+        ],
+        "thu": [
+          "10:00-14:00",
+          "15:00-19:00"
+        ],
+        "fri": [
+          "10:00-14:00",
+          "15:00-19:00"
+        ],
+        "sat": [
+          "10:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6840444,
+        "lng": -100.326263
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/UMqjZBYLWKdyayoq8",
+      "googlePlaceId": null,
+      "phone": "+525523413767",
+      "photos": [],
+      "links": {
+        "website": "https://fantast.ink/pages/lp-zibata",
+        "instagram": "https://www.instagram.com/fantastinkmx/",
+        "facebook": "https://www.facebook.com/fantastinkmx/",
+        "tiktok": null,
+        "whatsapp": "+524421951654",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "204"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/UMqjZBYLWKdyayoq8",
+          "https://fantast.ink/pages/lp-zibata",
+          "https://www.instagram.com/fantastinkmx/",
+          "https://www.facebook.com/fantastinkmx/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "ferreteria-el-refugio",
+      "slug": "ferreteria-el-refugio",
+      "name": "Ferretería El Refugio",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "ferreteria"
+      ],
+      "description": {
+        "es": "Gran variedad en artículos de plomería, jarcieria, electricidad, pintura, ¡y más!",
+        "en": "Wide variety of plumbing, rope and cordage goods, electrical and paint supplies, and more!"
+      },
+      "hours": {
+        "mon": [
+          "08:00-20:00"
+        ],
+        "tue": [
+          "08:00-20:00"
+        ],
+        "wed": [
+          "08:00-20:00"
+        ],
+        "thu": [
+          "08:00-20:00"
+        ],
+        "fri": [
+          "08:00-20:00"
+        ],
+        "sat": [
+          "09:00-17:00"
+        ],
+        "sun": [
+          "10:00-16:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6747014,
+        "lng": -100.3231214
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/QdURgPjyg7SqJgb3A",
+      "googlePlaceId": null,
+      "phone": "+524426482160",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/profile.php?id=100057477098069",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "1"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/QdURgPjyg7SqJgb3A",
+          "https://www.facebook.com/profile.php?id=100057477098069",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "ferreteria-mejorando-tu-casa",
+      "slug": "ferreteria-mejorando-tu-casa",
+      "name": "Ferretería Mejorando tu Casa",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "ferreteria",
+        "pinturas"
+      ],
+      "description": {
+        "es": "Mejoramos tu casa, negocio e industria.\nEncuentra la herramienta que necesitas y si no la tenemos, insistiremos hasta encontrarla para ti.",
+        "en": "We improve your home, business and industry.\nFind the tool you need, and if we don't have it, we'll keep looking until we find it for you."
+      },
+      "hours": {
+        "mon": [
+          "08:30-20:00"
+        ],
+        "tue": [
+          "08:30-20:00"
+        ],
+        "wed": [
+          "08:30-20:00"
+        ],
+        "thu": [
+          "08:30-20:00"
+        ],
+        "fri": [
+          "08:30-20:00"
+        ],
+        "sat": [
+          "09:00-19:00"
+        ],
+        "sun": [
+          "09:00-19:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6778799,
+        "lng": -100.3132861
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/ao7VPWLzBEWwYoxBA",
+      "googlePlaceId": null,
+      "phone": "+524426859052",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/mejorandotucasa.ferreteria/",
+        "facebook": "https://www.facebook.com/p/Mejorando-Tu-Casa-Qro-100070928420669/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "113"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/ao7VPWLzBEWwYoxBA",
+          "https://www.instagram.com/mejorandotucasa.ferreteria/",
+          "https://www.facebook.com/p/Mejorando-Tu-Casa-Qro-100070928420669/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "hunter-douglas",
+      "slug": "hunter-douglas",
+      "name": "Hunter Douglas",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "persianas-y-cortinas"
+      ],
+      "description": {
+        "es": "HD Expert | Persianas, cortinas y control solar\nHunter Douglas en Querétaro y el Bajío.\nPersianas · Cortinas · Toldos · Pérgolas · Smart Film · Motorización\nVenta · Instalación · Reparación · Mantenimiento",
+        "en": "HD Expert | Blinds, curtains and solar control\nHunter Douglas in Querétaro and the Bajío.\nBlinds · Curtains · Awnings · Pergolas · Smart Film · Motorization\nSales · Installation · Repair · Maintenance"
+      },
+      "hours": {
+        "mon": [
+          "10:00-18:00"
+        ],
+        "tue": [
+          "10:00-18:00"
+        ],
+        "wed": [
+          "10:00-18:00"
+        ],
+        "thu": [
+          "10:00-18:00"
+        ],
+        "fri": [
+          "10:00-18:00"
+        ],
+        "sat": [
+          "11:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6783237,
+        "lng": -100.3138348
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/GAyZ4HG3vYbiTp4J8",
+      "googlePlaceId": null,
+      "phone": "+524425823212",
+      "photos": [],
+      "links": {
+        "website": "https://www.hd.expert/",
+        "instagram": "https://www.instagram.com/hdqro/",
+        "facebook": "https://www.facebook.com/qrohd",
+        "tiktok": null,
+        "whatsapp": "+524425823212",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "229"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/GAyZ4HG3vYbiTp4J8",
+          "https://www.hd.expert/",
+          "https://www.instagram.com/hdqro/",
+          "https://www.facebook.com/qrohd",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "kroma-taller-colectivo",
+      "slug": "kroma-taller-colectivo",
+      "name": "Kroma Taller Colectivo",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "papeleria"
+      ],
+      "description": {
+        "es": "Somos una papelería especializada en arquitectura, diseño y arte. KROMA es un espacio donde puedes encontrar todos los productos, artículos y materiales para tus necesidades y proyectos escolares y profesionales.\nContamos con servicios de impresión normal y de gran formato, también tenemos servicio de corte láser, etc.",
+        "en": "We are a stationery shop specialized in architecture, design and art. KROMA is a space where you can find all the products, items and materials for your school and professional needs and projects.\nWe offer standard and large-format printing services, and also laser cutting service, etc."
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:00"
+        ],
+        "tue": [
+          "09:00-19:00"
+        ],
+        "wed": [
+          "09:00-19:00"
+        ],
+        "thu": [
+          "09:00-19:00"
+        ],
+        "fri": [
+          "09:00-19:00"
+        ],
+        "sat": [
+          "10:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6779285,
+        "lng": -100.3133656
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/X1p1y7Mn5vcDT1gh6",
+      "googlePlaceId": null,
+      "phone": "+524428121771",
+      "photos": [],
+      "links": {
+        "website": "http://kromataller.mx/",
+        "instagram": "https://www.instagram.com/kroma.taller/",
+        "facebook": "https://www.facebook.com/p/KROMA-taller-colectivo-100078816340306/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "116"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/X1p1y7Mn5vcDT1gh6",
+          "http://kromataller.mx/",
+          "https://www.instagram.com/kroma.taller/",
+          "https://www.facebook.com/p/KROMA-taller-colectivo-100078816340306/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "kubux-concept-store",
+      "slug": "kubux-concept-store",
+      "name": "Kubux Concept Store",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "regalos"
+      ],
+      "description": {
+        "es": "Kubux es una tienda donde podrás encontrar productos únicos, originales y de moda. ¡Te va a encantar!",
+        "en": "Kubux is a store where you will find unique, original and trendy products. You are going to love it!"
+      },
+      "hours": {
+        "mon": [
+          "10:00-20:00"
+        ],
+        "tue": [
+          "10:00-20:00"
+        ],
+        "wed": [
+          "10:00-20:00"
+        ],
+        "thu": [
+          "10:00-20:00"
+        ],
+        "fri": [
+          "10:00-20:00"
+        ],
+        "sat": [
+          "10:00-20:00"
+        ],
+        "sun": [
+          "10:00-20:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6779587,
+        "lng": -100.3131497
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/jC2Leh1xze62Wtrh9",
+      "googlePlaceId": null,
+      "phone": "+524421180310",
+      "photos": [],
+      "links": {
+        "website": "https://www.kubux.mx/home",
+        "instagram": "https://www.instagram.com/kubux.mx/",
+        "facebook": "https://www.facebook.com/kubux.mx/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "109"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/jC2Leh1xze62Wtrh9",
+          "https://www.kubux.mx/home",
+          "https://www.instagram.com/kubux.mx/",
+          "https://www.facebook.com/kubux.mx/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "maggix-detalles-magicos",
+      "slug": "maggix-detalles-magicos",
+      "name": "Maggix Detalles Mágicos",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "papeleria",
+        "regalos"
+      ],
+      "description": {
+        "es": "La mejor papelería de la zona, con venta de regalos y artículos para cualquier ocasión.",
+        "en": "The best stationery shop in the area, selling gifts and items for any occasion."
+      },
+      "hours": {
+        "mon": [
+          "08:00-21:00"
+        ],
+        "tue": [
+          "08:00-21:00"
+        ],
+        "wed": [
+          "08:00-21:00"
+        ],
+        "thu": [
+          "08:00-20:00"
+        ],
+        "fri": [
+          "08:00-20:00"
+        ],
+        "sat": [
+          "09:00-17:00"
+        ],
+        "sun": [
+          "09:00-17:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6748861,
+        "lng": -100.322727
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/VyUbxx1VNFvcBiRp9",
+      "googlePlaceId": null,
+      "phone": "+524426117335",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/maggixdetallesmagicos/",
+        "facebook": "https://www.facebook.com/p/Maggix-Detalles-Magicos-100084145724481/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "49"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/VyUbxx1VNFvcBiRp9",
+          "https://www.instagram.com/maggixdetallesmagicos/",
+          "https://www.facebook.com/p/Maggix-Detalles-Magicos-100084145724481/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "mali-papeleria",
+      "slug": "mali-papeleria",
+      "name": "MALI Papelería",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "papeleria"
+      ],
+      "description": {
+        "es": "🫵🏻Tu papelería favorita en Zibatá📍📝\nEncuentra todo para crear, estudiar y sorprender",
+        "en": "🫵🏻Your favorite stationery shop in Zibatá📍📝\nFind everything to create, study and surprise"
+      },
+      "hours": {
+        "mon": [
+          "08:00-20:00"
+        ],
+        "tue": [
+          "08:00-20:00"
+        ],
+        "wed": [
+          "08:00-20:00"
+        ],
+        "thu": [
+          "08:00-20:00"
+        ],
+        "fri": [
+          "08:00-20:00"
+        ],
+        "sat": [
+          "11:00-19:00"
+        ],
+        "sun": [
+          "11:00-19:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6835209,
+        "lng": -100.3259786
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/ikrarBd1N2BwdcZ78",
+      "googlePlaceId": null,
+      "phone": "+524422413381",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/malipapeleria/",
+        "facebook": "https://www.facebook.com/malipapeleria/",
+        "tiktok": "https://www.tiktok.com/@mali.papeleria",
+        "whatsapp": "+524424502521",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/ikrarBd1N2BwdcZ78",
+          "https://www.instagram.com/malipapeleria/",
+          "https://www.facebook.com/malipapeleria/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "nima-studio-floral",
+      "slug": "nima-studio-floral",
+      "name": "Nima Studio Floral",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "floristeria"
+      ],
+      "description": {
+        "es": "NIMA busca crear mucho más que arreglos florales, lo que hacemos es crear deleites sensoriales.",
+        "en": "NIMA seeks to create much more than floral arrangements; what we do is create sensory delights."
+      },
+      "hours": {
+        "mon": [
+          "11:00-19:00"
+        ],
+        "tue": [
+          "11:00-19:00"
+        ],
+        "wed": [
+          "11:00-19:00"
+        ],
+        "thu": [
+          "11:00-19:00"
+        ],
+        "fri": [
+          "11:00-19:00"
+        ],
+        "sat": [
+          "10:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6810902,
+        "lng": -100.3399522
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/sqYQGatiHpcFYFps6",
+      "googlePlaceId": null,
+      "phone": "+524422055555",
+      "photos": [],
+      "links": {
+        "website": "https://nimafloral.com/",
+        "instagram": "https://www.instagram.com/nimastudiofloral/",
+        "facebook": "https://www.facebook.com/nimastudiofloral/",
+        "tiktok": null,
+        "whatsapp": "https://api.whatsapp.com/message/2FGLPTEB7WQKP1",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "118"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/sqYQGatiHpcFYFps6",
+          "https://nimafloral.com/",
+          "https://www.instagram.com/nimastudiofloral/",
+          "https://www.facebook.com/nimastudiofloral/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "papeleria-la-gomita",
+      "slug": "papeleria-la-gomita",
+      "name": "Papelería La Gomita",
+      "plazaId": "condesa",
+      "giros": [
+        "papeleria"
+      ],
+      "description": {
+        "es": "Todo para crear, regalar y celebrar 🎈\nPapelería, regalos, globos, envolturas, mercería y decoración de temporada. Personalizamos termos, agendas y papelería social 🎁 Internet e impresiones.",
+        "en": "Everything to create, give and celebrate 🎈\nStationery, gifts, balloons, wrapping, haberdashery and seasonal decor. We personalize thermoses, planners and social stationery 🎁 Internet and printing."
+      },
+      "hours": {
+        "mon": [
+          "07:30-21:30"
+        ],
+        "tue": [
+          "07:30-21:30"
+        ],
+        "wed": [
+          "07:30-21:30"
+        ],
+        "thu": [
+          "07:30-21:30"
+        ],
+        "fri": [
+          "07:30-21:00"
+        ],
+        "sat": [
+          "09:00-20:00"
+        ],
+        "sun": [
+          "10:00-20:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6808407,
+        "lng": -100.3164826
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/xGMWprf8jfwDajEk8",
+      "googlePlaceId": null,
+      "phone": "+524421162918",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/lagomitapapeleria/",
+        "facebook": "https://www.facebook.com/PapeleriasLaGomita",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "105-A"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/xGMWprf8jfwDajEk8",
+          "https://www.instagram.com/lagomitapapeleria/",
+          "https://www.facebook.com/PapeleriasLaGomita",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "papeleria-lumen",
+      "slug": "papeleria-lumen",
+      "name": "Papelería Lumen",
+      "plazaId": "anahuac-queretaro",
+      "giros": [
+        "papeleria"
+      ],
+      "description": {
+        "es": "Expertos en arte, dibujo, manualidades y mucho más 🎨",
+        "en": "Experts in art, drawing, crafts and much more 🎨"
+      },
+      "hours": {
+        "mon": [
+          "07:00-19:00"
+        ],
+        "tue": [
+          "07:00-19:00"
+        ],
+        "wed": [
+          "07:00-19:00"
+        ],
+        "thu": [
+          "07:00-19:00"
+        ],
+        "fri": [
+          "07:00-19:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6808813,
+        "lng": -100.3131129
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/aYxsw4Y7UyHmpMbp9",
+      "googlePlaceId": null,
+      "phone": "+525538551784",
+      "photos": [],
+      "links": {
+        "website": "https://lumen.com.mx/sucursales/anahuac-norte",
+        "instagram": "https://www.instagram.com/papeleria_lumen/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "edificio": "A"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/aYxsw4Y7UyHmpMbp9",
+          "https://lumen.com.mx/sucursales/anahuac-norte",
+          "https://www.instagram.com/papeleria_lumen/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "spiruleka",
+      "slug": "spiruleka",
+      "name": "Spiruleka",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "articulos-de-fiesta"
+      ],
+      "description": {
+        "es": "Para arreglo de globos, cotizaciones y más envía DM vía Instagram o escríbenos vía WhatsApp.",
+        "en": "For balloon arrangements, quotes and more, send a DM on Instagram or write to us on WhatsApp."
+      },
+      "hours": {
+        "mon": [
+          "09:00-21:00"
+        ],
+        "tue": [
+          "09:00-21:00"
+        ],
+        "wed": [
+          "09:00-21:00"
+        ],
+        "thu": [
+          "09:00-21:00"
+        ],
+        "fri": [
+          "09:00-21:00"
+        ],
+        "sat": [
+          "09:00-21:00"
+        ],
+        "sun": [
+          "10:00-19:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6790994,
+        "lng": -100.3147883
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/QYjvi2URBiKSK7Yt6",
+      "googlePlaceId": null,
+      "phone": "+524428880229",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/spiruleka_paseozibata/",
+        "facebook": "https://www.facebook.com/p/Spiruleka-Paseo-Zibat%C3%A1-100063521470459/",
+        "tiktok": null,
+        "whatsapp": "+524428880229",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/QYjvi2URBiKSK7Yt6",
+          "https://www.instagram.com/spiruleka_paseozibata/",
+          "https://www.facebook.com/p/Spiruleka-Paseo-Zibat%C3%A1-100063521470459/",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "truper-ferreteria-centro-zibata",
+      "slug": "truper-ferreteria-centro-zibata",
+      "name": "Truper Ferretería Centro Zibatá",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "ferreteria"
+      ],
+      "description": {
+        "es": "Todas las herramientas que necesitas las encuentras en Truper Ferretería.",
+        "en": "You'll find every tool you need at Truper Ferretería."
+      },
+      "hours": {
+        "mon": [
+          "08:00-19:00"
+        ],
+        "tue": [
+          "08:00-19:00"
+        ],
+        "wed": [
+          "08:00-19:00"
+        ],
+        "thu": [
+          "08:00-19:00"
+        ],
+        "fri": [
+          "08:00-19:00"
+        ],
+        "sat": [
+          "08:00-19:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6812974,
+        "lng": -100.3403167
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/xewYe6UnvR8xeP28A",
+      "googlePlaceId": null,
+      "phone": "+524426779455",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/xewYe6UnvR8xeP28A",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "truper-ferreteria-paseo-zibata",
+      "slug": "truper-ferreteria-paseo-zibata",
+      "name": "Truper Ferretería Paseo Zibatá",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "ferreteria"
+      ],
+      "description": {
+        "es": "Todas las herramientas que necesitas las encuentras en Truper Ferretería.",
+        "en": "You'll find every tool you need at Truper Ferretería."
+      },
+      "hours": {
+        "mon": [
+          "08:30-19:00"
+        ],
+        "tue": [
+          "08:30-19:00"
+        ],
+        "wed": [
+          "08:30-19:00"
+        ],
+        "thu": [
+          "08:30-19:00"
+        ],
+        "fri": [
+          "08:30-19:00"
+        ],
+        "sat": [
+          "09:00-17:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6791246,
+        "lng": -100.3146212
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/uMG2DHoLTLua5Rmv7",
+      "googlePlaceId": null,
+      "phone": "+524421423250",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/ferreteriatruperzibata/",
+        "facebook": "https://www.facebook.com/profile.php?id=61582448121122",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "66"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://maps.app.goo.gl/uMG2DHoLTLua5Rmv7",
+          "https://www.instagram.com/ferreteriatruperzibata/",
+          "https://www.facebook.com/profile.php?id=61582448121122",
+          "campo:2026-11-24"
+        ]
+      }
     }
   ]
 }
