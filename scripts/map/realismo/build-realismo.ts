@@ -127,7 +127,7 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
     rgba[i * 4 + 3] = Math.round((alfa[i] ?? 0) * t * t * (3 - 2 * t))
   }
   const webp = await sharp(rgba, { raw: { width, height, channels: 4 } })
-    .webp({ quality: 70, alphaQuality: 60 })
+    .webp({ quality: 70, alphaQuality: 100 })
     .toBuffer()
   writeFileSync(`${salida}/suelo.webp`, webp)
   return { coordenadas: esquinasLngLat(v, px0, py0, width, height), bytes: webp.length }
