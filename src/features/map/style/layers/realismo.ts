@@ -138,15 +138,17 @@ export function withRealismoGround(ground: LayerSpecification[]): LayerSpecifica
         type: 'raster',
         source: SOURCE.soil,
         paint: {
-          // De cerca la imagen de 10 m por píxel se ve borrosa: se desvanece y toman el mando los colores vectoriales.
+          // De cerca la imagen de 10 m por píxel se ve borrosa: se desvanece del todo hacia el zoom 17 (los bloques de la compresión se ampliaban hasta verse) y toman el mando los colores vectoriales.
           'raster-opacity': [
             'interpolate',
             ['linear'],
             ['zoom'],
             14.5,
             0.55,
+            16,
+            0.3,
             17,
-            0.15,
+            0.04,
           ] as ExpressionSpecification,
           'raster-saturation': 0.2,
           'raster-contrast': -0.05,

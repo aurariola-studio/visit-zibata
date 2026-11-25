@@ -112,8 +112,6 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
   const rgb = await sharp(paths.rawSentinelZibata)
     .extract({ left: px0, top: py0, width, height })
     .removeAlpha()
-    // Un poco de nitidez: a 10 m por píxel los bordes salen blandos al ampliarse (no inventa detalle, solo los marca).
-    .sharpen({ sigma: 0.9, m1: 0.8, m2: 2.2 })
     .raw()
     .toBuffer()
   const rgba = Buffer.alloc(width * height * 4)
@@ -129,7 +127,7 @@ async function construirSuelo(): Promise<{ coordenadas: [number, number][]; byte
     rgba[i * 4 + 3] = Math.round((alfa[i] ?? 0) * t * t * (3 - 2 * t))
   }
   const webp = await sharp(rgba, { raw: { width, height, channels: 4 } })
-    .webp({ quality: 54, alphaQuality: 100, effort: 6 })
+    .webp({ quality: 72, alphaQuality: 100, effort: 6 })
     .toBuffer()
   writeFileSync(`${salida}/suelo.webp`, webp)
   return { coordenadas: esquinasLngLat(v, px0, py0, width, height), bytes: webp.length }
