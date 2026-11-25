@@ -389,6 +389,18 @@
       "id": "panaderia-y-reposteria",
       "lang": "en",
       "slug": "bakery-and-pastry"
+    },
+    {
+      "kind": "category-slug",
+      "id": "ferreterias",
+      "lang": "es",
+      "slug": "ferreterias"
+    },
+    {
+      "kind": "category-slug",
+      "id": "ferreterias",
+      "lang": "en",
+      "slug": "hardware-stores"
     }
   ]
 }

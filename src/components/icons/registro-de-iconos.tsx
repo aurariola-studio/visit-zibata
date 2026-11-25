@@ -702,6 +702,29 @@ const Tulipan = solid(
   <path d="M3 13a9 9 0 0 0 9 9a9 9 0 0 0-9-9m2.44 2.44c1.91.71 3.41 2.21 4.12 4.12a7 7 0 0 1-4.12-4.12M12 22a9 9 0 0 0 9-9a9 9 0 0 0-9 9m2.42-2.43a6.88 6.88 0 0 1 4.15-4.15a7.03 7.03 0 0 1-4.15 4.15M12 14a6 6 0 0 0 6-6V3a5.9 5.9 0 0 0-2.16.39c-.55.23-1.04.57-1.45 1L12 2L9.61 4.39c-.41-.43-.9-.77-1.45-1A5.9 5.9 0 0 0 6 3v5a6 6 0 0 0 6 6M8 5.61l1.57 1.65L12 4.83l2.43 2.43L16 5.61V8a4 4 0 0 1-4 4a4 4 0 0 1-4-4z" />,
 )
 
+/** Compás de dibujo: la categoría Taller Creativo. Lucide `drafting-compass` (ISC). */
+const Compas = custom(
+  <>
+    <path d="m12.99 6.74l1.93 3.44M19.136 12a10 10 0 0 1-14.271 0M21 21l-2.16-3.84M3 21l8.02-14.26" />
+    <circle cx="12" cy="5" r="2" />
+  </>,
+)
+
+/** Impresora: el giro Impresión. Iconoir `printer` (MIT), con el trazo de la guía en vez del de 1,5 px del original. */
+const Impresora = custom(
+  <path d="m17 13.01l.01-.011M7 17h10M6 10V3.6a.6.6 0 0 1 .6-.6h10.8a.6.6 0 0 1 .6.6V10m3 10.4V14a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v6.4a.6.6 0 0 0 .6.6h16.8a.6.6 0 0 0 .6-.6" />,
+)
+
+/** Sello: el giro Personalización. Lucide `stamp` (ISC). */
+const Sello = custom(
+  <path d="M14 13V8.5C14 7 15 7 15 5a3 3 0 0 0-6 0c0 2 1 2 1 3.5V13m10 2.5a2.5 2.5 0 0 0-2.5-2.5h-11A2.5 2.5 0 0 0 4 15.5V17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1zM5 22h14" />,
+)
+
+/** Cúter: el giro Corte y Grabado Láser. Material Design Icons `box-cutter` (Apache 2.0). */
+const Cutter = solid(
+  <path d="M7.22 11.91c-.33.33-.51.74-.56 1.17l5.51 2.36l8.49-8.48c.78-.79.78-2.05 0-2.83l-1.42-1.42c-.78-.78-2.04-.78-2.83 0zM5 16v5.75l5.81-5.22l-5-2zM17.12 4.83c.38-.39 1.03-.39 1.42 0c.39.4.39 1.03 0 1.42s-1.04.39-1.42 0c-.39-.39-.39-1.02 0-1.42" />,
+)
+
 /** Nombre de icono a dibujo. Las claves son las de `src/data/iconos.ts`. */
 export const ICONOS: Record<string, IconComponent> = {
   acai: Acai,
@@ -734,6 +757,7 @@ export const ICONOS: Record<string, IconComponent> = {
   cherry: Cherry,
   chopsticks: Chopsticks,
   coffee: Coffee,
+  compas: Compas,
   confeti: Confeti,
   'cooking-pot': CookingPot,
   'copa-de-vino': CopaDeVino,
@@ -741,6 +765,7 @@ export const ICONOS: Record<string, IconComponent> = {
   cuerpo: Cuerpo,
   'cup-soda': CupSoda,
   cupcake: Cupcake,
+  cutter: Cutter,
   danza: Danza,
   dermatology: Dermatology,
   desayuno: Desayuno,
@@ -762,6 +787,7 @@ export const ICONOS: Record<string, IconComponent> = {
   'heart-pulse': HeartPulse,
   'hot-dog': HotDog,
   'ice-cream': IceCreamCone,
+  impresora: Impresora,
   italiana: Italiana,
   jabon: Jabon,
   jugo: Jugo,
@@ -805,6 +831,7 @@ export const ICONOS: Record<string, IconComponent> = {
   salad: Salad,
   sandwich: Sandwich,
   secadora: Secadora,
+  sello: Sello,
   'shopping-basket': ShoppingBasket,
   'shopping-cart': ShoppingCart,
   shrimp: Shrimp,

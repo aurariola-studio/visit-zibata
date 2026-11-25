@@ -13555,7 +13555,9 @@
       "name": "Kroma Taller Colectivo",
       "plazaId": "xentric-anahuac",
       "giros": [
-        "papeleria"
+        "papeleria",
+        "impresion",
+        "corte-y-grabado-laser"
       ],
       "description": {
         "es": "Somos una papelería especializada en arquitectura, diseño y arte. KROMA es un espacio donde puedes encontrar todos los productos, artículos y materiales para tus necesidades y proyectos escolares y profesionales.\nContamos con servicios de impresión normal y de gran formato, también tenemos servicio de corte láser, etc.",
@@ -13909,7 +13911,9 @@
       "name": "Papelería La Gomita",
       "plazaId": "condesa",
       "giros": [
-        "papeleria"
+        "papeleria",
+        "impresion",
+        "personalizacion"
       ],
       "description": {
         "es": "Todo para crear, regalar y celebrar 🎈\nPapelería, regalos, globos, envolturas, mercería y decoración de temporada. Personalizamos termos, agendas y papelería social 🎁 Internet e impresiones.",
@@ -14235,6 +14239,212 @@
           "https://maps.app.goo.gl/uMG2DHoLTLua5Rmv7",
           "https://www.instagram.com/ferreteriatruperzibata/",
           "https://www.facebook.com/profile.php?id=61582448121122",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "tienda-comex",
+      "slug": "tienda-comex",
+      "name": "Tienda Comex",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "pinturas"
+      ],
+      "description": {
+        "es": "Pinturas vinílicas, impermeabilizantes, esmaltes y +3500 colores Comex para cada proyecto",
+        "en": "Vinyl paints, waterproofing, enamels and 3,500+ Comex colors for every project"
+      },
+      "hours": {
+        "mon": [
+          "09:00-17:00"
+        ],
+        "tue": [
+          "09:00-17:00"
+        ],
+        "wed": [
+          "09:00-17:00"
+        ],
+        "thu": [
+          "09:00-17:00"
+        ],
+        "fri": [
+          "09:00-17:00"
+        ],
+        "sat": [
+          "09:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6839674,
+        "lng": -100.3261134
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d17e6d33777:0x7486069a2c300e24",
+      "googlePlaceId": null,
+      "phone": "+524422990219",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/people/Comex-Zibat%C3%A1/61574964000618/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "110",
+          "111"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d17e6d33777:0x7486069a2c300e24",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "pinturas-berel-idearte",
+      "slug": "pinturas-berel-idearte",
+      "name": "Pinturas Berel Idearte",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "pinturas"
+      ],
+      "description": {
+        "es": "Somos un equipo de trabajo basado en procesos de calidad y honorabilidad de nuestro personal, con el objetivo de atender las necesidades y buscar la total satisfacción de nuestros clientes internos y externos.",
+        "en": "We are a work team grounded in quality processes and the honorability of our staff, with the goal of meeting the needs of our internal and external clients and seeking their total satisfaction."
+      },
+      "hours": {
+        "mon": [
+          "08:30-18:00"
+        ],
+        "tue": [
+          "08:30-18:00"
+        ],
+        "wed": [
+          "08:30-18:00"
+        ],
+        "thu": [
+          "08:30-18:00"
+        ],
+        "fri": [
+          "08:30-18:00"
+        ],
+        "sat": [
+          "09:00-13:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6782152,
+        "lng": -100.3136897
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d47d8a833ab:0xcfe4a3e29f141d35",
+      "googlePlaceId": null,
+      "phone": "+524422410193",
+      "photos": [],
+      "links": {
+        "website": "https://grupoidearte.com.mx/",
+        "instagram": "https://www.instagram.com/idearte_berel_fester",
+        "facebook": "https://www.facebook.com/IdearteQueretaro",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "127"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d47d8a833ab:0xcfe4a3e29f141d35",
+          "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "luvel-inkjet",
+      "slug": "luvel-inkjet",
+      "name": "Luvel Inkjet",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "impresion",
+        "personalizacion",
+        "corte-y-grabado-laser"
+      ],
+      "description": {
+        "es": "Papelería Técnica, Impresiones y personalización en Querétaro\nDTF | Vinil | Serigrafía | Grabado Láser | Sublimado | Bordado | y más....",
+        "en": "Technical stationery, printing and personalization in Querétaro\nDTF | Vinyl | Screen printing | Laser engraving | Sublimation | Embroidery | and more...."
+      },
+      "hours": {
+        "mon": [
+          "09:00-20:00"
+        ],
+        "tue": [
+          "09:00-20:00"
+        ],
+        "wed": [
+          "09:00-20:00"
+        ],
+        "thu": [
+          "09:00-20:00"
+        ],
+        "fri": [
+          "09:00-20:00"
+        ],
+        "sat": [
+          "10:00-13:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6794182,
+        "lng": -100.3145431
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d357ee0937ccaf:0xd8434f42f101bd38",
+      "googlePlaceId": null,
+      "phone": "+524422875595",
+      "photos": [],
+      "links": {
+        "website": "https://luvel-inkjet.com.mx/",
+        "instagram": "https://www.instagram.com/luvelinkjet/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": "+524422875595",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "62"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-24",
+        "sources": [
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d357ee0937ccaf:0xd8434f42f101bd38",
+          "https://luvel-inkjet.com.mx/",
           "campo:2026-11-24"
         ]
       }

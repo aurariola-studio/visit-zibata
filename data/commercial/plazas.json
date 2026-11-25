@@ -114,7 +114,8 @@
         "ferreteria-mejorando-tu-casa",
         "hunter-douglas",
         "kroma-taller-colectivo",
-        "kubux-concept-store"
+        "kubux-concept-store",
+        "pinturas-berel-idearte"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -150,6 +151,7 @@
         "hogar-y-muebles",
         "papelerias",
         "regalos-y-fiestas",
+        "taller-creativo",
         "veterinarias",
         "estetica-para-mascotas"
       ],
@@ -424,7 +426,8 @@
         "pets-avenue",
         "casa-caracola",
         "spiruleka",
-        "truper-ferreteria-paseo-zibata"
+        "truper-ferreteria-paseo-zibata",
+        "luvel-inkjet"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -457,6 +460,7 @@
         "ferreterias",
         "regalos-y-fiestas",
         "floristerias",
+        "taller-creativo",
         "estetica-para-mascotas",
         "articulos-para-mascotas",
         "hotel-para-mascotas"
@@ -627,7 +631,8 @@
         "yoga-pilates-y-barre",
         "peluqueria",
         "barberia",
-        "papelerias"
+        "papelerias",
+        "taller-creativo"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Condesa Zibata\" y locales con esa dirección (Bendito Bocado, Romani Pizzas, Freestyle Pizza); huella de Overture.",
@@ -795,7 +800,8 @@
         "groomalia",
         "vet-kaan",
         "fantastink",
-        "mali-papeleria"
+        "mali-papeleria",
+        "tienda-comex"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -820,6 +826,7 @@
         "abarrotes",
         "fruterias",
         "licorerias",
+        "ferreterias",
         "hogar-y-muebles",
         "papelerias",
         "veterinarias",

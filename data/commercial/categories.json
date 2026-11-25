@@ -2623,13 +2623,13 @@
     {
       "id": "ferreterias",
       "slug": {
-        "es": "ferreterias",
-        "en": "hardware-stores"
+        "es": "ferreterias-y-pinturas",
+        "en": "hardware-and-paint-stores"
       },
       "sectorId": "tiendas",
       "label": {
-        "es": "Ferreterías",
-        "en": "Hardware Stores"
+        "es": "Ferreterías y Pinturas",
+        "en": "Hardware and Paint Stores"
       },
       "icon": "martillo",
       "hue": 205,
@@ -2640,7 +2640,10 @@
         "herramientas",
         "tlapalería",
         "pintura",
-        "hardware"
+        "pinturas",
+        "tienda de pinturas",
+        "hardware",
+        "paint"
       ],
       "giros": [
         {
@@ -2667,8 +2670,13 @@
           "icon": "rodillo",
           "synonyms": [
             "pintura",
+            "tienda de pinturas",
             "brochas",
             "rodillos",
+            "esmalte",
+            "impermeabilizante",
+            "comex",
+            "berel",
             "paint"
           ]
         }
@@ -3087,6 +3095,96 @@
             "boarding"
           ],
           "general": true
+        }
+      ]
+    },
+    {
+      "id": "taller-creativo",
+      "slug": {
+        "es": "taller-creativo",
+        "en": "creative-workshop"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Taller Creativo",
+        "en": "Creative Workshop"
+      },
+      "icon": "compas",
+      "hue": 118,
+      "schemaType": "Store",
+      "order": 610,
+      "synonyms": [
+        "taller",
+        "imprenta",
+        "personalizado",
+        "diseño",
+        "makerspace",
+        "creative workshop"
+      ],
+      "giros": [
+        {
+          "id": "impresion",
+          "label": {
+            "es": "Impresión y Copias",
+            "en": "Printing and Copying"
+          },
+          "icon": "impresora",
+          "synonyms": [
+            "impresión",
+            "impresiones",
+            "copias",
+            "copiado",
+            "fotocopias",
+            "fotocopiado",
+            "escaneo",
+            "planos",
+            "gran formato",
+            "plotter",
+            "lonas",
+            "serigrafía",
+            "printing",
+            "copies",
+            "copying"
+          ]
+        },
+        {
+          "id": "personalizacion",
+          "label": {
+            "es": "Personalización",
+            "en": "Customization"
+          },
+          "icon": "sello",
+          "synonyms": [
+            "personalizado",
+            "playeras",
+            "camisetas",
+            "estampado",
+            "tazas",
+            "dtf",
+            "vinil",
+            "sublimación",
+            "bordado",
+            "serigrafía",
+            "regalos personalizados",
+            "custom"
+          ]
+        },
+        {
+          "id": "corte-y-grabado-laser",
+          "label": {
+            "es": "Corte y Grabado Láser",
+            "en": "Laser Cutting and Engraving"
+          },
+          "icon": "cutter",
+          "synonyms": [
+            "láser",
+            "laser",
+            "corte láser",
+            "grabado láser",
+            "grabado",
+            "corte",
+            "engraving"
+          ]
         }
       ]
     }
