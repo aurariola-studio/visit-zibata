@@ -27,7 +27,7 @@ export const CSS_CARGADOR = [
   '.cargador{',
   'position:fixed;inset:0;z-index:10;',
   'display:grid;justify-items:center;align-content:center;gap:1rem;padding:1.5rem;',
-  'background:radial-gradient(90% 60% at 50% 40%,#fefdf9,transparent),#f1ebe0;',
+  'background:radial-gradient(90% 60% at 50% 40%,#fefdf9,transparent),#f8f5ed;',
   'font-family:"Special Gothic",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;',
   '}',
   '.cargador .marca{position:relative;display:block;width:6rem;height:6rem}',
