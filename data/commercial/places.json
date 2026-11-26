@@ -12,10 +12,7 @@
         "hamburguesas",
         "papas-fritas"
       ],
-      "description": {
-        "es": "¡Las mejores hamburguesas de todo QUERÉTARO! 🍔💯🌟",
-        "en": "The best burgers in all of QUERÉTARO! 🍔💯🌟"
-      },
+      "description": null,
       "hours": {
         "mon": [
           "10:00-23:00"
@@ -436,10 +433,7 @@
       "giros": [
         "sandwiches"
       ],
-      "description": {
-        "es": "Sucursal de la cadena de sándwiches Subway.",
-        "en": "A branch of the Subway sandwich chain."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "10:30-18:30"
@@ -722,10 +716,7 @@
       "giros": [
         "pizza"
       ],
-      "description": {
-        "es": "Sucursal de la cadena de pizzas Domino's.",
-        "en": "A branch of the Domino’s pizza chain."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "06:00-21:55"
@@ -1203,10 +1194,7 @@
         "cafeteria",
         "desayunos"
       ],
-      "description": {
-        "es": "Cafetería de la cadena Tim Hortons dentro del campus de la Universidad Anáhuac.",
-        "en": "A Tim Hortons coffee shop inside the Universidad Anáhuac campus."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "06:00-20:00"
@@ -3585,10 +3573,7 @@
       "giros": [
         "helados"
       ],
-      "description": {
-        "es": "Con Devoción, todo sabe mejor.",
-        "en": "With devotion, everything tastes better."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "11:00-20:00"
@@ -4259,10 +4244,7 @@
       "giros": [
         "cafeteria"
       ],
-      "description": {
-        "es": "Sucursal de la cadena de cafeterías Starbucks.",
-        "en": "A branch of the Starbucks coffee chain."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "06:00-21:55"
@@ -5184,10 +5166,7 @@
       "giros": [
         "acai"
       ],
-      "description": {
-        "es": "#RespectTheOAK\n🫐 Açaí #1 del mundo, directo desde la selva Amazónica🌴",
-        "en": "#RespectTheOAK\n🫐 The world’s #1 açaí, straight from the Amazon rainforest🌴"
-      },
+      "description": null,
       "hours": {
         "mon": [
           "10:00-21:00"
@@ -5522,10 +5501,7 @@
       "giros": [
         "helados"
       ],
-      "description": {
-        "es": "Sucursal de la cadena de helados de yogur Nutrisa.",
-        "en": "A branch of the Nutrisa frozen yogurt chain."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "11:00-21:00"
@@ -6496,10 +6472,7 @@
         "cafeteria",
         "desayunos"
       ],
-      "description": {
-        "es": "Cafetería de la cadena Starbucks dentro del campus de la Universidad Anáhuac.",
-        "en": "A Starbucks coffee shop inside the Universidad Anáhuac campus."
-      },
+      "description": null,
       "hours": null,
       "location": null,
       "googleMapsUri": null,
@@ -8450,10 +8423,7 @@
         "farmacia",
         "consulta-general"
       ],
-      "description": {
-        "es": "💙 #SanPablo apasionados de la salud\n🍃 #SanPabloNatural te impulsa a estar #MejorYMejor\n💆‍♀ #SanPabloDermo salud en la piel",
-        "en": "💙 #SanPablo passionate about health\n🍃 #SanPabloNatural drives you to be #MejorYMejor\n💆‍♀ #SanPabloDermo healthy skin"
-      },
+      "description": null,
       "hours": {
         "mon": [
           "07:00-23:00"
@@ -8526,10 +8496,7 @@
         "farmacia",
         "consulta-general"
       ],
-      "description": {
-        "es": "💙 Expertos en Cuidarte",
-        "en": "💙 Experts in Caring for You"
-      },
+      "description": null,
       "hours": {
         "mon": [
           "08:00-22:30"
@@ -8595,10 +8562,7 @@
       "giros": [
         "farmacia"
       ],
-      "description": {
-        "es": "Encuentra medicamentos, productos para el cuidado personal, bebés y más en Farmacias Guadalajara.",
-        "en": "Find medicine, personal care products, baby products and more at Farmacias Guadalajara."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "00:00-24:00"
@@ -8662,10 +8626,7 @@
       "giros": [
         "farmacia"
       ],
-      "description": {
-        "es": "Cadena farmacéutica líder en México y América Latina. Trabajamos todos los días para ayudar a los que menos tienen.",
-        "en": "Leading pharmacy chain in Mexico and Latin America. We work every day to help those who have the least."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "08:00-22:00"
@@ -8729,10 +8690,7 @@
       "giros": [
         "farmacia"
       ],
-      "description": {
-        "es": "Cadena farmacéutica líder en México y América Latina. Trabajamos todos los días para ayudar a los que menos tienen.",
-        "en": "Leading pharmacy chain in Mexico and Latin America. We work every day to help those who have the least."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "08:00-22:00"
@@ -8935,10 +8893,7 @@
       "giros": [
         "laboratorio-clinico"
       ],
-      "description": {
-        "es": "Más de 75 años brindando certeza, confianza, tranquilidad y seguridad a la salud de las familias en México con análisis clínicos y estudios especializados en nuestras más de 700 sucursales a nivel nacional. 🔬💙",
-        "en": "For more than 75 years, bringing certainty, trust, peace of mind and security to the health of families in Mexico with clinical analyses and specialized studies at our more than 700 branches nationwide. 🔬💙"
-      },
+      "description": null,
       "hours": {
         "mon": [
           "07:00-15:00"
@@ -11641,10 +11596,7 @@
       "giros": [
         "tienda-de-conveniencia"
       ],
-      "description": {
-        "es": "Tiendas de Conveniencia.\nDías más divertidos y personas más felices.",
-        "en": "Convenience Stores.\nMore fun days and happier people."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "08:00-23:00"
@@ -11709,10 +11661,7 @@
       "giros": [
         "tienda-de-conveniencia"
       ],
-      "description": {
-        "es": "Tiendas de Conveniencia.\nDías más divertidos y personas más felices.",
-        "en": "Convenience Stores.\nMore fun days and happier people."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "07:00-23:00"
@@ -12266,10 +12215,7 @@
       "giros": [
         "tienda-de-conveniencia"
       ],
-      "description": {
-        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
-        "en": "There is always an OXXO nearby to make your household shopping easy."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "07:00-23:45"
@@ -12331,10 +12277,7 @@
       "giros": [
         "tienda-de-conveniencia"
       ],
-      "description": {
-        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
-        "en": "There is always an OXXO nearby to make your household shopping easy."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "00:00-24:00"
@@ -12396,10 +12339,7 @@
       "giros": [
         "tienda-de-conveniencia"
       ],
-      "description": {
-        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
-        "en": "There is always an OXXO nearby to make your household shopping easy."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "00:00-24:00"
@@ -12461,10 +12401,7 @@
       "giros": [
         "tienda-de-conveniencia"
       ],
-      "description": {
-        "es": "Siempre hay un OXXO cerca para resolver fácil las compras del hogar.",
-        "en": "There is always an OXXO nearby to make your household shopping easy."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "07:00-22:00"

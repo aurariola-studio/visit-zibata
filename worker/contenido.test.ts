@@ -130,6 +130,31 @@ describe('preparar un negocio nuevo', () => {
     expect(preparado.problemas.join(' ')).toContain('descripción')
   })
 
+  it('sin descripción guarda null, también junto a otro local sin descripción en la misma plaza', () => {
+    const conOtro = {
+      ...dataset,
+      places: dataset.places.map((fila) =>
+        fila.id === existente.id ? { ...fila, description: null } : fila,
+      ),
+    }
+    const preparado = prepararNegocio(
+      conOtro,
+      crudo,
+      nuevo({ plazaId: existente.plazaId, descripcionEs: '', descripcionEn: '' }),
+      HOY,
+    )
+    expect(preparado.ok).toBe(true)
+    if (!preparado.ok) return
+    expect(preparado.place.description).toBeNull()
+  })
+
+  it('rechaza la descripción en un solo idioma', () => {
+    const preparado = prepararNegocio(dataset, crudo, nuevo({ descripcionEn: '' }), HOY)
+    expect(preparado.ok).toBe(false)
+    if (preparado.ok) return
+    expect(preparado.problemas.join(' ')).toContain('o ninguna')
+  })
+
   it('rechaza un nombre que no cabe en el título de la página', () => {
     const preparado = prepararNegocio(dataset, crudo, nuevo({ nombre: 'A'.repeat(50) }), HOY)
     expect(preparado.ok).toBe(false)

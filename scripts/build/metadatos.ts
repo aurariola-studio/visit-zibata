@@ -201,6 +201,8 @@ export interface OpcionesDescripcion {
   contexto: Contexto
   /** El aviso de cierre temporal, si lo hay ("Cerrado temporalmente. Por remodelación."). */
   aviso?: string
+  /** Sin texto del negocio, antepone el nombre: para dos fichas de la misma zona y los mismos giros. */
+  conNombre?: boolean
   max?: number
 }
 
@@ -215,7 +217,9 @@ export function descripcionDeFicha(opciones: OpcionesDescripcion): string {
   const base = quitarNombre(aplanarDescripcion(opciones.descripcion), nombre)
   const delante = aviso ? `${aviso} ` : ''
   const contexto = contextoDe(opciones.contexto)
-  if (!base) return recortar(`${delante}${contexto}`, max)
+  if (!base) {
+    return recortar(`${delante}${opciones.conNombre ? `${nombre}. ` : ''}${contexto}`, max)
+  }
   /*
    * Dos de holgura y no uno: el espacio que separa el contexto del texto y el punto que `terminado`
    * añade al final. Con uno solo, una descripción que llega justa salía de 161.

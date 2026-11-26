@@ -363,6 +363,27 @@ describe('los giros que el filtro dice cortos se leen completos en la descripci�
   }
 })
 
+describe('dos fichas sin texto, de la misma zona y con los mismos giros', () => {
+  const zona = plazaPrueba('zona-uno', 'Zona Uno')
+  const lugares = ['uno', 'dos'].map((n) =>
+    lugarPrueba({
+      id: `cadena-${n}`,
+      slug: `cadena-${n}`,
+      name: `Cadena ${n}`,
+      plazaId: 'zona-uno',
+      description: null,
+    }),
+  )
+
+  it.each(idiomas)('se distinguen por el nombre (%s)', (idioma) => {
+    const paginas = paginasDe(idioma, lugares, [zona])
+    for (const lugar of lugares) {
+      const pagina = paginas.find((candidata) => candidata.href.endsWith(`/${lugar.slug}`))
+      expect(pagina?.description).toMatch(new RegExp(`^${lugar.name}\. `))
+    }
+  })
+})
+
 describe('la descripción enumera todas las categorías del local', () => {
   const tres = giroDeCada(3)
   const lugar = lugarPrueba({ giros: tres.map((giro) => giro.id) })

@@ -74,8 +74,9 @@ export const EntradaNegocioSchema = z.object({
     .array(z.string().trim().min(1))
     .min(1, 'Elige al menos un giro')
     .max(3, 'El tope son tres giros'),
-  descripcionEs: z.string().trim().min(1, 'La descripción en español es obligatoria').max(2000),
-  descripcionEn: z.string().trim().min(1, 'La descripción en inglés es obligatoria').max(2000),
+  /** Las dos o ninguna: las cadenas grandes van sin descripción. */
+  descripcionEs: z.string().trim().max(2000),
+  descripcionEn: z.string().trim().max(2000),
   telefono: z.string().trim().max(40).optional().default(''),
   sitio: z.string().trim().max(500).optional().default(''),
   instagram: z.string().trim().max(500).optional().default(''),
@@ -602,6 +603,10 @@ function construir(
     return { problemas: ['Indica las dos coordenadas o ninguna'] }
   }
 
+  if (Boolean(entrada.descripcionEs) !== Boolean(entrada.descripcionEn)) {
+    return { problemas: ['Escribe la descripción en español y en inglés, o ninguna'] }
+  }
+
   if (entrada.cierre && entrada.cierre.desde > hoy) {
     return { problemas: ['El cierre temporal no puede empezar en el futuro.'] }
   }
@@ -660,7 +665,9 @@ function construir(
     name: entrada.nombre,
     plazaId: entrada.plazaId,
     giros,
-    description: { es: entrada.descripcionEs, en: entrada.descripcionEn },
+    description: entrada.descripcionEs
+      ? { es: entrada.descripcionEs, en: entrada.descripcionEn }
+      : null,
     hours: horarioDe(entrada.horario, {
       note: existente?.hours?.note,
       byClasses: existente?.hours?.byClasses,
@@ -819,11 +826,14 @@ export function prepararNegocio(
     const recorte = (valor: string): string => normalizar(valor).slice(0, 160)
     const descripcionEs = recorte(place.description?.es ?? '')
     const descripcionEn = recorte(place.description?.en ?? '')
-    const mismaDescripcion = visibles.find(
-      (fila) =>
-        recorte(fila.description?.es ?? '') === descripcionEs ||
-        recorte(fila.description?.en ?? '') === descripcionEn,
-    )
+    // Sin descripción no hay texto que repetir; el prerender distingue esas fichas por el nombre.
+    const mismaDescripcion =
+      place.description &&
+      visibles.find(
+        (fila) =>
+          recorte(fila.description?.es ?? '') === descripcionEs ||
+          recorte(fila.description?.en ?? '') === descripcionEn,
+      )
     if (mismaDescripcion) {
       problemas.push(
         `La descripción coincide con la de "${mismaDescripcion.name}" en esta plaza; los metadatos de las dos fichas se repetirían.`,
@@ -865,11 +875,13 @@ export function prepararNegocio(
         `El nombre coincide con el de la plaza "${plazaMismoNombre.name}"; los títulos de las dos páginas se repetirían.`,
       )
     }
-    const plazaMismaDescripcion = dataset.plazas.find(
-      (fila) =>
-        recorte(fila.description?.es ?? '') === descripcionEs ||
-        recorte(fila.description?.en ?? '') === descripcionEn,
-    )
+    const plazaMismaDescripcion =
+      place.description &&
+      dataset.plazas.find(
+        (fila) =>
+          recorte(fila.description?.es ?? '') === descripcionEs ||
+          recorte(fila.description?.en ?? '') === descripcionEn,
+      )
     if (plazaMismaDescripcion) {
       problemas.push(
         `La descripción coincide con la de la plaza "${plazaMismaDescripcion.name}"; los metadatos de las dos páginas se repetirían.`,
