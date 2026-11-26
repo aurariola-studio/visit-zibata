@@ -105,9 +105,11 @@ export function colocarPuntos(
       return dentro(caja, vista) && libre(caja, punto.id)
     })
 
-  // El elegido primero y con nombre, haya sitio o no.
+  // El elegido primero y con nombre, haya sitio o no: si no hay uno libre, uno que al menos quepa en la pantalla.
   for (const punto of puntos.filter((p) => p.elegido)) {
-    poner(punto, conNombre(punto, LADO.cerca) ?? 'derecha', LADO.cerca)
+    const quepa = () =>
+      MODOS_CON_NOMBRE.find((modo) => dentro(cajaDe(punto, modo, LADO.cerca), vista))
+    poner(punto, conNombre(punto, LADO.cerca) ?? quepa() ?? 'derecha', LADO.cerca)
   }
   const resto = puntos.filter((p) => !p.elegido)
   // Primero todos con su forma sin nombre: ningún nombre le quita el sitio a otro punto.

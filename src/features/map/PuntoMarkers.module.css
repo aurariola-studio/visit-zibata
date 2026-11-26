@@ -54,6 +54,14 @@
   flex: none;
 }
 
+/* Un nombre muy largo se recorta: la pieza tiene que caber a un lado u otro en un teléfono de 320 px. */
+.nombre,
+.medida {
+  max-width: min(10rem, 36vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .nombre {
   display: none;
 }
@@ -111,7 +119,7 @@
 
 .punto[data-modo$="derecha"] .nombre,
 .punto[data-modo$="izquierda"] .nombre {
-  display: inline;
+  display: block;
 }
 
 /* Colgando por debajo: el pico arriba, apuntando al punto. */

@@ -57,6 +57,11 @@ describe('colocación de los puntos de interés', () => {
     }
   })
 
+  it('el elegido junto al borde saca el nombre hacia el lado que cabe, aunque una zona lo ocupe', () => {
+    const todo = { left: 0, right: 400, top: 0, bottom: 800 }
+    expect(colocar([punto({ x: 380, elegido: true })], 16, [todo]).get('uno')).toBe('izquierda')
+  })
+
   it('el elegido lleva nombre a cualquier distancia, aunque no haya sitio', () => {
     expect(colocar([punto({ elegido: true })], 13).get('uno')).toBe('derecha')
     const todo = { left: 0, right: 400, top: 0, bottom: 800 }
