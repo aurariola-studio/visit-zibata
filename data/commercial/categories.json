@@ -2345,6 +2345,20 @@
           "general": true
         },
         {
+          "id": "supermercado",
+          "label": {
+            "es": "Supermercado",
+            "en": "Supermarket"
+          },
+          "icon": "supermercado",
+          "synonyms": [
+            "supermercado",
+            "súper",
+            "super",
+            "supermarket"
+          ]
+        },
+        {
           "id": "cremeria",
           "label": {
             "es": "Cremería",

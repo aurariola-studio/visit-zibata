@@ -126,6 +126,7 @@ export const ICONOS = [
   'spray',
   'stethoscope',
   'store',
+  'supermercado',
   'taco',
   'taekwondo',
   'te',
