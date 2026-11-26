@@ -26,6 +26,8 @@ interface DatasetPlace {
 }
 
 interface DatasetPlaza {
+  /** Un punto de interés comparte archivo con las zonas y no es una. */
+  tipo?: 'punto'
   id: string
   slug: string
   name: string
@@ -71,10 +73,13 @@ export function placesInPlaza(name: string): number {
   return dataset.places.filter((place) => place.plazaId === plaza.id && place.active).length
 }
 
-export const activePlazas = () => dataset.plazas.filter((plaza) => plaza.active)
+/** Solo las zonas: sin página, sello ni marcador de zona, un punto no cuenta. */
+const soloZonas = () => dataset.plazas.filter((plaza) => plaza.tipo !== 'punto')
+
+export const activePlazas = () => soloZonas().filter((plaza) => plaza.active)
 
 /** Las que aún no abrieron: en la hoja van detrás, apagadas. */
-export const inactivePlazas = () => dataset.plazas.filter((plaza) => !plaza.active)
+export const inactivePlazas = () => soloZonas().filter((plaza) => !plaza.active)
 
 /*
  * Los ejemplares. Las pruebas no nombran un local ni una zona de la guía: borrar o cambiar la dirección de
@@ -92,18 +97,14 @@ const unico = <T>(valor: T | undefined, que: string): T => {
 
 /** La zona activa con más locales: la que nunca debe desaparecer del mapa ni de las listas. */
 export const ZONA_GRANDE: DatasetPlaza = unico(
-  deMenorId(dataset.plazas.filter((plaza) => plaza.active)).sort(
-    (a, b) => conteoDeLocales(b) - conteoDeLocales(a),
-  )[0],
+  deMenorId(activePlazas()).sort((a, b) => conteoDeLocales(b) - conteoDeLocales(a))[0],
   'ninguna zona activa',
 )
 
 /** Otra zona activa con locales, distinta de la grande: la que se abre cuando hace falta una segunda. */
 export const ZONA_B: DatasetPlaza = unico(
   deMenorId(
-    dataset.plazas.filter(
-      (plaza) => plaza.active && plaza.id !== ZONA_GRANDE.id && conteoDeLocales(plaza) > 0,
-    ),
+    activePlazas().filter((plaza) => plaza.id !== ZONA_GRANDE.id && conteoDeLocales(plaza) > 0),
   ).sort((a, b) => conteoDeLocales(b) - conteoDeLocales(a))[0],
   'una segunda zona activa con locales',
 )
@@ -111,12 +112,9 @@ export const ZONA_B: DatasetPlaza = unico(
 /** La tercera zona activa por número de locales. */
 export const ZONA_C: DatasetPlaza = unico(
   deMenorId(
-    dataset.plazas.filter(
+    activePlazas().filter(
       (plaza) =>
-        plaza.active &&
-        plaza.id !== ZONA_GRANDE.id &&
-        plaza.id !== ZONA_B.id &&
-        conteoDeLocales(plaza) > 0,
+        plaza.id !== ZONA_GRANDE.id && plaza.id !== ZONA_B.id && conteoDeLocales(plaza) > 0,
     ),
   ).sort((a, b) => conteoDeLocales(b) - conteoDeLocales(a))[0],
   'una tercera zona activa con locales',
@@ -270,7 +268,7 @@ export const lejanaDe = (zona: DatasetPlaza): DatasetPlaza => {
   const distancia = (a: DatasetPlaza, b: DatasetPlaza) =>
     Math.hypot(a.coordinates.lat - b.coordinates.lat, a.coordinates.lng - b.coordinates.lng)
   return unico(
-    deMenorId(dataset.plazas.filter((plaza) => plaza.active && plaza.id !== zona.id)).sort(
+    deMenorId(activePlazas().filter((plaza) => plaza.id !== zona.id)).sort(
       (a, b) => distancia(b, zona) - distancia(a, zona),
     )[0],
     'otra zona activa',
@@ -555,7 +553,7 @@ const trozos = (texto: string): Set<string> => {
  * la guía aparece el local.
  */
 export const AJENA: { zona: DatasetPlaza; place: DatasetPlace; consulta: string } = (() => {
-  const zonas = deMenorId(dataset.plazas.filter((zona) => zona.active))
+  const zonas = deMenorId(activePlazas())
     .map((zona) => ({ zona, locales: visibles().filter((place) => place.plazaId === zona.id) }))
     .filter(({ locales }) => locales.length > 0)
     .sort((a, b) => a.locales.length - b.locales.length)
