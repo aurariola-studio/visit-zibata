@@ -304,6 +304,7 @@ export function useExperience(catalog: Catalog) {
               {
                 id: punto.id,
                 placeId: place.id,
+                slug: place.slug,
                 name: place.name,
                 icon: placeIconName(place, catalog),
                 lat: punto.coordinates.lat,

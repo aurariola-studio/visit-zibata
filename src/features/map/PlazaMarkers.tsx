@@ -464,7 +464,12 @@ export function PlazaMarkers({
         stem.style.zIndex = String(CAPA_TALLOS + cercania)
       }
 
-      alColocar.current?.([...placed.values()])
+      // Con filtros, una zona sin resultados solo está atenuada: no le quita el sitio a un punto que sí los tiene.
+      alColocar.current?.(
+        [...placed]
+          .filter(([id]) => !matchCounts || matchCounts.get(id) || id === selectedPlazaId)
+          .map(([, caja]) => caja),
+      )
 
       setModes((previous) =>
         previous.size === next.size &&

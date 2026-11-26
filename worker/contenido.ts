@@ -512,6 +512,7 @@ export async function contenido(
         address,
         coordinates,
         googleMapsUri,
+        tipo,
         geometry,
         active,
         comingSoon,
@@ -524,6 +525,8 @@ export async function contenido(
         address,
         coordinates,
         googleMapsUri,
+        // El panel tiene que saber que es un punto de interés: no lleva contorno ni página.
+        tipo,
         // El contorno viaja al panel para poder editarlo: son unos cientos de bytes por plaza.
         geometry,
         active,

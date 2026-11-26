@@ -17,6 +17,7 @@
   flex-direction: column;
   align-items: flex-start;
   color: var(--ink-900);
+  text-decoration: none;
   filter: drop-shadow(0 1px 1.5px rgb(31 36 25 / 0.35));
   transition: opacity var(--duration-base) var(--ease-out);
 }

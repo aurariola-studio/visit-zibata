@@ -24,7 +24,10 @@ describe('mapa generado al día con el dataset', () => {
   const withVolume = new Set(buildings.features.map((feature) => feature.properties.plazaId))
 
   it('cada plaza tiene volumen en el mapa (real o generado)', () => {
-    const missing = plazas.plazas.filter((plaza) => !withVolume.has(plaza.id)).map((p) => p.id)
+    // Un punto de interés no tiene volumen: es un solo negocio, sin contorno.
+    const missing = (plazas.plazas as { id: string; tipo?: string }[])
+      .filter((plaza) => plaza.tipo !== 'punto' && !withVolume.has(plaza.id))
+      .map((p) => p.id)
     expect(missing, 'ejecuta `npm run map:build`').toEqual([])
   })
 

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { esPunto } from '../../src/data/puntos.ts'
 import type { Category, Place, Plaza } from '../../src/types/domain.ts'
 import { type Dataset, pagesFor } from './prerender.ts'
 
@@ -23,6 +24,8 @@ const data: Dataset = {
 
 const plazasActivas = new Set(data.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
 const visibles = data.places.filter((place) => place.active && plazasActivas.has(place.plazaId))
+/** Las que tienen página: un punto de interés no la tiene, aunque su local sí tenga ficha. */
+const zonasActivas = data.plazas.filter((plaza) => plaza.active && !esPunto(plaza))
 
 /*
  * El filtro usa la etiqueta corta ("Italiana", "Saludable"); el título, la descripción y el h1 la
@@ -114,7 +117,7 @@ describe.each(idiomas)('metadatos de las páginas (%s)', (idioma) => {
       visibles.some((p) => p.giros.some((giro) => c.giros.some((g) => g.id === giro))),
     )
     expect(todas).toHaveLength(
-      1 + plazasActivas.size + categoriasConLocales.length + visibles.length + 4,
+      1 + zonasActivas.length + categoriasConLocales.length + visibles.length + 4,
     )
   })
 
@@ -587,7 +590,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
         )
       }
     }
-    for (const plaza of data.plazas.filter((p) => p.active)) {
+    for (const plaza of zonasActivas) {
       const pagina = de(
         idioma,
         idioma === 'es' ? `/es/zona/${plaza.slug}` : `/en/area/${plaza.slug}`,

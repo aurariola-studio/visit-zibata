@@ -103,7 +103,12 @@ export function colocarPuntos(
   // Primero todos con su forma sin nombre: ningún nombre le quita el sitio a otro punto.
   for (const punto of resto) {
     const escalera: ModoDePunto[] = zoom < compactoBajoZoom ? ['circulo'] : ['pin', 'circulo']
-    const modo = escalera.find((m) => libre(cajaDe(punto, m, lado), punto.id)) ?? 'oculto'
+    const modo =
+      escalera.find((m) => {
+        const caja = cajaDe(punto, m, lado)
+        // Fuera de la vista (o bajo la barra, la hoja o los controles) no se dibuja: tampoco recibe el foco.
+        return dentro(caja, vista) && libre(caja, punto.id)
+      }) ?? 'oculto'
     poner(punto, modo, lado)
   }
   if (zoom >= NOMBRE_DESDE_ZOOM) {

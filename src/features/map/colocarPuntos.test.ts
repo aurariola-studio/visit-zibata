@@ -45,6 +45,12 @@ describe('colocación de los puntos de interés', () => {
     expect(cercanos.get('dos')).toBe('derecha')
   })
 
+  it('un punto fuera de la vista no se dibuja a ninguna distancia', () => {
+    for (const zoom of [13, 15, 16]) {
+      expect(colocar([punto({ x: 900 })], zoom).get('uno')).toBe('oculto')
+    }
+  })
+
   it('el elegido lleva nombre a cualquier distancia, aunque no haya sitio', () => {
     expect(colocar([punto({ elegido: true })], 13).get('uno')).toBe('derecha')
     const todo = { left: 0, right: 400, top: 0, bottom: 800 }

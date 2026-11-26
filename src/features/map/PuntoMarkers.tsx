@@ -1,12 +1,15 @@
 /**
- * Marcadores de puntos de interés: un negocio cada uno, en crema y tinta. Pulsar uno abre su ficha. Ceden siempre
- * ante los marcadores de zona, así que se colocan después de ellos, con sus cajas (ver `colocarPuntos.ts`).
+ * Marcadores de puntos de interés: un negocio cada uno, en crema y tinta. Son un enlace a su ficha, como su tarjeta.
+ * Ceden siempre ante los marcadores de zona, así que se colocan después de ellos, con sus cajas (ver
+ * `colocarPuntos.ts`).
  */
 import { type Map as MapLibreMap, Marker } from 'maplibre-gl'
 import { type RefObject, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
-import { t } from '../../i18n/index.ts'
+import { t, useLocale } from '../../i18n/index.ts'
+import { alPulsarEnlace } from '../../lib/navegacion.ts'
+import { rutaDeLugar } from '../../lib/url-state.ts'
 import { type Caja, colocarPuntos, type ModoDePunto, NOMBRE_DESDE_ZOOM } from './colocarPuntos.ts'
 import { CAPA_ETIQUETAS, CAPA_TALLOS, COMPACT_BELOW_ZOOM } from './PlazaMarkers.tsx'
 import styles from './PuntoMarkers.module.css'
@@ -15,6 +18,7 @@ export interface PuntoEnElMapa {
   /** El id del registro del punto en `plazas.json`. */
   id: string
   placeId: string
+  slug: string
   name: string
   icon: string
   lng: number
@@ -29,6 +33,7 @@ export interface SitioDeZonas {
 
 /** Por encima de los tallos y por debajo de cualquier marcador de zona; el elegido, por delante de todos. */
 const CAPA_PUNTOS = CAPA_TALLOS + 10_000
+const CAPA_CON_RESULTADO = CAPA_ETIQUETAS + 5_000
 const CAPA_PUNTO_ELEGIDO = CAPA_ETIQUETAS + 15_000
 /** Lo que ocupa la pieza además del texto: borde, ícono, huecos y relleno. */
 const ADORNO = 32
@@ -53,6 +58,7 @@ export function PuntoMarkers({
   const [modos, setModos] = useState<ReadonlyMap<string, ModoDePunto>>(new Map())
   const [cerca, setCerca] = useState(false)
   const textos = useRef(new Map<string, HTMLElement>())
+  const idioma = useLocale()
 
   useEffect(() => {
     const creados = new Map<string, HTMLElement>()
@@ -103,7 +109,9 @@ export function PuntoMarkers({
       for (const punto of en) {
         const element = elements.get(punto.id)
         if (!element) continue
-        const base = punto.elegido ? CAPA_PUNTO_ELEGIDO : CAPA_PUNTOS
+        // Con filtros, el que cumple va por delante de las zonas atenuadas (las que cumplen ya le quitaron el sitio).
+        const cumple = matchCounts?.get(punto.id)
+        const base = punto.elegido ? CAPA_PUNTO_ELEGIDO : cumple ? CAPA_CON_RESULTADO : CAPA_PUNTOS
         element.style.zIndex = String(base + Math.round(punto.y))
       }
       setCerca(zoom >= NOMBRE_DESDE_ZOOM)
@@ -120,7 +128,7 @@ export function PuntoMarkers({
     return () => {
       sitio.alCambiar = () => {}
     }
-  }, [map, elements, puntos, selectedPuntoId, zonas])
+  }, [map, elements, puntos, matchCounts, selectedPuntoId, zonas])
 
   return puntos.map((punto) => {
     const element = elements.get(punto.id)
@@ -129,17 +137,17 @@ export function PuntoMarkers({
     const modo = modos.get(punto.id) ?? 'oculto'
     const atenuado = matchCounts !== null && !matchCounts.get(punto.id)
     return createPortal(
-      <button
-        type="button"
+      <a
+        href={rutaDeLugar(punto.slug, idioma, import.meta.env.BASE_URL)}
         className={styles.punto}
         data-modo={modo}
         data-cerca={cerca || elegido || undefined}
         data-state={elegido ? 'selected' : atenuado ? 'dimmed' : 'idle'}
-        tabIndex={modo === 'oculto' ? -1 : 0}
-        aria-hidden={modo === 'oculto' ? true : undefined}
-        aria-pressed={elegido}
+        // Lo que no se ve tampoco se pulsa, ni recibe el foco, ni se anuncia.
+        inert={modo === 'oculto'}
+        aria-current={elegido ? 'page' : undefined}
         aria-label={t('place.openDetail', { name: punto.name })}
-        onClick={() => onSelect(punto.placeId)}
+        onClick={alPulsarEnlace(() => onSelect(punto.placeId))}
       >
         <span className={styles.caja}>
           <CategoryIcon name={punto.icon} size={cerca || elegido ? 14 : 12} />
@@ -160,7 +168,7 @@ export function PuntoMarkers({
         >
           {punto.name}
         </span>
-      </button>,
+      </a>,
       element,
       punto.id,
     )

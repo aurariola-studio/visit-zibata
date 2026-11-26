@@ -232,7 +232,7 @@ describe('guardar sin tocar', () => {
   // 8 de las 15 plazas reales se guardaron en sentido horario (rectángulos dibujados a mano) y el build las
   // reorienta. Un editor que carga un contorno y lo vuelve a guardar sin cambiarlo no puede producir un
   // commit que solo le da la vuelta al anillo: tiene que ser "nada que guardar", en cualquier plaza.
-  for (const real of completo.plazas) {
+  for (const real of completo.plazas.filter(esZona)) {
     it(`${real.id}: el mismo contorno es "nada que guardar"`, () => {
       const preparado = prepararContorno(
         completo,

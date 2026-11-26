@@ -463,7 +463,8 @@ export function pagesFor(
            * caracteres por el final del texto del negocio, así que la lista no se desborda.
            */
           giros: place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
-          lugar: lugarDe(nombrePlaza),
+          // De un punto de interés, su calle: dos del mismo giro sin ella dirían la misma frase.
+          lugar: lugarDe(plaza && esPunto(plaza) ? (plaza.address ?? undefined) : nombrePlaza),
           idioma: locale,
           conGiros: copy['seo.place.context'],
           soloLugar: copy['seo.place.contextLugar'],

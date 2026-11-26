@@ -69,7 +69,8 @@ export interface Direcciones {
  */
 export function resolverDirecciones(
   filas: readonly Redirect[],
-  plazas: readonly { id: string; slug: string; active: boolean; tipo?: 'punto' }[],
+  // `tipo` como texto: es lo que da el JSON importado en cuanto hay un punto de interés cargado.
+  plazas: readonly { id: string; slug: string; active: boolean; tipo?: string }[],
   lugares: readonly {
     id: string
     slug: string
