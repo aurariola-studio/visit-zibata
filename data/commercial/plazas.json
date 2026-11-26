@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/plazas.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-26",
   "plazas": [
     {
       "id": "xentric-anahuac",
@@ -1102,8 +1102,8 @@
       "slug": "campo-de-golf",
       "name": "Zibatá Golf",
       "description": {
-        "es": "Restaurante y terraza bar del campo de golf de Zibatá.",
-        "en": "Restaurant and terrace bar at the Zibatá golf course."
+        "es": "Campo de golf de Zibatá, con restaurante y terraza bar.",
+        "en": "Zibatá golf course, with a restaurant and terrace bar."
       },
       "address": null,
       "coordinates": {
@@ -1139,11 +1139,13 @@
       },
       "active": true,
       "placeIds": [
+        "campo-de-golf-zibata",
         "hoyo-19"
       ],
       "categories": [
         "desayunos-y-cafe",
-        "bar"
+        "bar",
+        "deportes"
       ],
       "locationConfidence": "medium",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) del restaurante del club (DiezyNueve / Birdie) junto a Golf Zibatá (OSM). Huella aproximada.",

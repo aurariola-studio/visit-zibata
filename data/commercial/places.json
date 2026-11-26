@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-26",
   "places": [
     {
       "id": "carls-jr",
@@ -3974,6 +3974,69 @@
           "https://zibatahoy.com/es/donde-comer-en-zibata-guia-restaurantes-cafeterias/",
           "https://www.rappi.com.mx/restaurantes/1930198261-cafele",
           "campo:2026-09-21"
+        ]
+      }
+    },
+    {
+      "id": "campo-de-golf-zibata",
+      "slug": "campo-de-golf",
+      "name": "Campo de Golf",
+      "plazaId": "campo-de-golf",
+      "giros": [
+        "golf"
+      ],
+      "description": {
+        "es": "El Campo de golf de Zibatá tiene un diseño moderno, con suficientes retos pero sin ser un campo muy difícil, con vistas espectaculares del Valle de Amazcala desde todos sus hoyos, siendo un increíble lugar de naturaleza incomparable, acompañado de cielos impresionantes.",
+        "en": "The Zibatá golf course has a modern design, with enough challenges without being a very difficult course, with spectacular views of the Amazcala Valley from every hole, an incredible place of incomparable nature under impressive skies."
+      },
+      "hours": {
+        "mon": [],
+        "tue": [
+          "06:30-16:00"
+        ],
+        "wed": [
+          "06:30-16:00"
+        ],
+        "thu": [
+          "06:30-16:00"
+        ],
+        "fri": [
+          "06:30-16:00"
+        ],
+        "sat": [
+          "06:30-16:00"
+        ],
+        "sun": [
+          "06:30-15:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6825675,
+        "lng": -100.3377151
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7a3b8e3775:0x98fc0c5ff1ee59ae",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://zibatagolf.com/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/zibatagolf/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://zibatagolf.com/",
+          "https://www.facebook.com/zibatagolf/",
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7a3b8e3775:0x98fc0c5ff1ee59ae"
         ]
       }
     },

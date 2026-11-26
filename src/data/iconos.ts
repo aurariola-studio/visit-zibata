@@ -66,6 +66,7 @@ export const ICONOS = [
   'fruta',
   'funcional',
   'glasses',
+  'golf',
   'hamburger',
   'hand-platter',
   'heart-pulse',
