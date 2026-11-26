@@ -3321,6 +3321,24 @@
             "alterations",
             "tailor"
           ]
+        },
+        {
+          "id": "calzado",
+          "label": {
+            "es": "Calzado",
+            "en": "Shoe Care"
+          },
+          "icon": "calzado",
+          "synonyms": [
+            "limpieza de tenis",
+            "lavado de tenis",
+            "reparación de calzado",
+            "zapatero",
+            "zapatos",
+            "sneakers",
+            "shoe cleaning",
+            "shoe repair"
+          ]
         }
       ]
     },

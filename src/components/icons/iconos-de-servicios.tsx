@@ -162,6 +162,14 @@ const Muletas = custom(
   <path d="M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2m3 16h2m-1 0v-4.092a3 3 0 0 1 .504-1.664l.992-1.488A3 3 0 0 0 14 12.092V7m-2 14v-4.092a3 3 0 0 0-.504-1.664l-.992-1.488A3 3 0 0 1 10 12.092V7m0 4h4" />,
 )
 
+/** Tenis: el giro Calzado. Lucide Lab `sneaker` (ISC). */
+const Calzado = custom(
+  <>
+    <path d="M14.1 7.9L12.5 10m4.9.1L16 12M2 16a2 2 0 0 0 2 2h13c2.8 0 5-2.2 5-5a2 2 0 0 0-2-2c-.8 0-1.6-.2-2.2-.7l-6.2-4.2c-.4-.3-.9-.2-1.3.1c0 0-.6.8-1.2 1.1a3.5 3.5 0 0 1-4.2.1C4.4 7 3.7 6.3 3.7 6.3A.92.92 0 0 0 2 7Z" />
+    <path d="M2 11c0 1.7 1.3 3 3 3h7" />
+  </>,
+)
+
 /** Nombre de icono a dibujo. Las claves son las de `src/data/iconos.ts`, y `fragmentos.ts` lleva los mismos nombres. */
 export const ICONOS_DE_SERVICIOS: Record<string, IconComponent> = {
   percha: Percha,
@@ -175,6 +183,7 @@ export const ICONOS_DE_SERVICIOS: Record<string, IconComponent> = {
   figuras: Figuras,
   mochila: Mochila,
   calculadora: Calculadora,
+  calzado: Calzado,
   libros: Libros,
   universidad: Universidad,
   idiomas: Idiomas,

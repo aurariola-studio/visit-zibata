@@ -34,6 +34,7 @@ export const ICONOS = [
   'brunch',
   'cake-slice',
   'calculadora',
+  'calzado',
   'camion-de-reparto',
   'candy',
   'cara-cuidada',

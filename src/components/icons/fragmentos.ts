@@ -26,6 +26,7 @@ export const FRAGMENTO_DE_ICONO: Readonly<Record<string, Fragmento>> = {
   figuras: 'servicios',
   mochila: 'servicios',
   calculadora: 'servicios',
+  calzado: 'servicios',
   libros: 'servicios',
   universidad: 'servicios',
   idiomas: 'servicios',
