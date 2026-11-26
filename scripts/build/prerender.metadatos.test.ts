@@ -342,7 +342,7 @@ describe('los giros que el filtro dice cortos se leen completos en la descripciÃ
       name: 'Local Prueba',
       plazaId: 'plaza-prueba',
       giros: [giro],
-      // Sin texto del negocio, la descripciÃ³n es solo el contexto: el giro y la zona.
+      // Sin texto del negocio, la descripciÃ³n es el nombre y el contexto: el giro y la zona.
       description: null,
       cierre: undefined,
     } as unknown as Place
@@ -357,8 +357,8 @@ describe('los giros que el filtro dice cortos se leen completos en la descripciÃ
 
   for (const [giro, es, en] of casos) {
     it(`${giro}: ${es}`, () => {
-      expect(descripcionDe(giro, 'es')).toBe(es)
-      expect(descripcionDe(giro, 'en')).toBe(en)
+      expect(descripcionDe(giro, 'es')).toBe(`Local Prueba. ${es}`)
+      expect(descripcionDe(giro, 'en')).toBe(`Local Prueba. ${en}`)
     })
   }
 })

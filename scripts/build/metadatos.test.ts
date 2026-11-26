@@ -261,7 +261,13 @@ describe('la descripción de una ficha', () => {
   })
 
   it('si el dato no trae descripción, dice al menos qué es y dónde está', () => {
-    expect(descripcionDeFicha({ ...base, descripcion: '' })).toBe('Açaí y Jugos en Centro Zibatá.')
+    expect(descripcionDeFicha({ ...base, descripcion: '' })).toBe(
+      `${base.nombre}. Açaí y Jugos en Centro Zibatá.`,
+    )
+    // Un nombre que ya acaba en punto no lo repite.
+    expect(descripcionDeFicha({ ...base, nombre: "Carl's Jr.", descripcion: '' })).toBe(
+      "Carl's Jr. Açaí y Jugos en Centro Zibatá.",
+    )
   })
 })
 

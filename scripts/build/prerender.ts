@@ -475,20 +475,14 @@ export function pagesFor(
       : fill(copy['seo.title'], { name: ficha.place.name }),
   )
 
-  const componer = (ficha: (typeof fichas)[number], conNombre = false): string =>
+  const componer = (ficha: (typeof fichas)[number]): string =>
     descripcionDeFicha({
       descripcion: ficha.descripcion,
       nombre: ficha.place.name,
       contexto: ficha.contexto,
       aviso: ficha.aviso,
-      conNombre,
     })
-  const descripciones = fichas.map((ficha) => componer(ficha))
-  // Sin texto del negocio queda solo el contexto, que dos cadenas de la misma zona comparten.
-  for (const indice of repetidos(descripciones)) {
-    const ficha = fichas[indice]
-    if (ficha && !ficha.descripcion) descripciones[indice] = componer(ficha, true)
-  }
+  const descripciones = fichas.map(componer)
 
   // A qué locales enlaza cada ficha: el mismo bloque de siempre, repartido entre todos (ver vecinos.ts).
   const placeById = new Map(visibles.map((place) => [place.id, place]))
