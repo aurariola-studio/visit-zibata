@@ -14067,10 +14067,7 @@
         "banco",
         "cajero-automatico"
       ],
-      "description": {
-        "es": "Atención a personas físicas y PyMEs, apertura de cuentas, depósitos, pago de servicios, asesoría de crédito y cajero automático.",
-        "en": "Services for individuals and small and medium businesses, account opening, deposits, bill payments, credit advice and an ATM."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "09:00-17:00"
@@ -14412,10 +14409,7 @@
       "giros": [
         "universidad"
       ],
-      "description": {
-        "es": "Somos una institución que forma líderes de acción positiva con excelencia académica y valores humanistas. Ofrecemos programas de Licenciatura, Posgrado, Educación Continua y Empresariales. Formamos profesionales capaces de transformar su entorno 🦁",
-        "en": "We are an institution that forms leaders of positive action with academic excellence and humanist values. We offer undergraduate, graduate, continuing education and business programmes. We train professionals able to transform their surroundings 🦁"
-      },
+      "description": null,
       "hours": {
         "mon": [
           "07:00-22:00"
@@ -14609,10 +14603,7 @@
         "banco",
         "cajero-automatico"
       ],
-      "description": {
-        "es": "Apertura de cuentas, tarjetas de crédito, créditos personales o hipotecarios, pagos, transferencias, inversiones, seguros, atención a PyMEs/empresas y cajero automático (ATM).",
-        "en": "Account opening, credit cards, personal and mortgage loans, payments, transfers, investments, insurance, services for small and medium businesses and companies, and an automated teller machine (ATM)."
-      },
+      "description": null,
       "hours": {
         "mon": [
           "09:00-16:00"
@@ -14945,10 +14936,7 @@
       "giros": [
         "cajero-automatico"
       ],
-      "description": {
-        "es": "Aceptan tarjetas nacionales y extranjeras además podrás disfrutar de retiros y consultas de saldo sin comisión en más de 11,800 cajeros de la Multired.",
-        "en": "Domestic and foreign cards are accepted, and you can withdraw and check your balance with no fee at more than 11,800 Multired ATMs."
-      },
+      "description": null,
       "hours": null,
       "location": {
         "lat": 20.6840141,
