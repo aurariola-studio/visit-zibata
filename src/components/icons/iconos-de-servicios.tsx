@@ -26,7 +26,7 @@ const Lavadora = custom(
   </>,
 )
 
-/** Aguja con hilo: el giro Arreglos de Ropa. Tabler Icons `needle-thread` (MIT). */
+/** Aguja con hilo: el giro Sastrería. Tabler Icons `needle-thread` (MIT). */
 const Aguja = custom(
   <>
     <path d="M3 21Q2 20 14.785 4.291a3.5 3.5 0 1 1 5.078 4.791Q4.001 22 3 21M17.5 6.5l-1 1" />

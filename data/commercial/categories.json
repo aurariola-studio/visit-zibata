@@ -3305,15 +3305,15 @@
           ]
         },
         {
-          "id": "arreglos-de-ropa",
+          "id": "sastreria",
           "label": {
-            "es": "Arreglos de Ropa",
-            "en": "Clothing Alterations"
+            "es": "Sastrería",
+            "en": "Tailoring"
           },
           "icon": "aguja",
           "synonyms": [
             "sastre",
-            "sastrería",
+            "arreglos de ropa",
             "costura",
             "dobladillo",
             "ajustes",
