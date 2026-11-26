@@ -1,7 +1,7 @@
 /*
  * ## El punto de interés
  *
- * Crema y tinta, sin color de zona: es un solo negocio y pesa menos que una zona. La misma pieza en tres estados:
+ * Marfil (`--color-pin`) y tinta, sin color de zona: es un solo negocio y pesa menos que una zona. La misma pieza en tres estados:
  * un círculo de lejos, un pin con su ícono a media distancia y, de cerca, el pin alargado con el nombre dentro,
  * hacia un lado o hacia el otro. El pico se queda siempre sobre el punto, así que alargarse no mueve lo que señala.
  *
@@ -42,7 +42,7 @@
   min-width: var(--lado);
   height: var(--lado);
   border-radius: 6px;
-  background: var(--sand-25);
+  background: var(--color-pin);
   /*
    * El contorno es una sombra interior y no un `border`: en pantallas de escala 125, 150 o 175 % el navegador
    * redondea un borde de 1 px a un solo punto físico, y quedaba más fino que el pico.
@@ -81,7 +81,7 @@
 }
 
 .relleno {
-  fill: var(--sand-25);
+  fill: var(--color-pin);
 }
 
 .borde {
@@ -172,11 +172,11 @@
 }
 
 .punto:hover .caja {
-  background: var(--sand-100);
+  background: var(--color-pin-hover);
 }
 
 .punto:hover .relleno {
-  fill: var(--sand-100);
+  fill: var(--color-pin-hover);
 }
 
 .punto:focus-visible {

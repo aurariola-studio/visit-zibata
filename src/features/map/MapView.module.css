@@ -50,7 +50,7 @@
 
 /* Atribución compacta y discreta, siempre visible. */
 .root :global(.maplibregl-ctrl-attrib) {
-  background: rgb(252 250 246 / 0.82);
+  background: rgb(254 253 249 / 0.82);
   font-family: var(--font-sans);
   font-size: var(--text-2xs);
   color: var(--ink-600);
