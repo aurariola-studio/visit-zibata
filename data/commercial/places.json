@@ -8230,6 +8230,74 @@
       }
     },
     {
+      "id": "apex",
+      "slug": "apex",
+      "name": "APEX",
+      "plazaId": "intercepta",
+      "giros": [
+        "entrenamiento-funcional"
+      ],
+      "description": {
+        "es": "Entrena fuerte, con técnica y comunidad",
+        "en": "Train hard, with technique and community"
+      },
+      "hours": {
+        "mon": [
+          "06:00-09:30",
+          "19:00-21:30"
+        ],
+        "tue": [
+          "06:00-09:30",
+          "19:00-21:30"
+        ],
+        "wed": [
+          "06:00-09:30",
+          "19:00-21:30"
+        ],
+        "thu": [
+          "06:00-09:30",
+          "19:00-21:30"
+        ],
+        "fri": [
+          "06:00-09:30",
+          "19:00-21:30"
+        ],
+        "sat": [
+          "08:30-10:00"
+        ],
+        "sun": [],
+        "byClasses": true
+      },
+      "location": {
+        "lat": 20.6899118,
+        "lng": -100.3293267
+      },
+      "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35f005e6e98cd:0x6eca16b8723769d",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/apex_ftnss/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "likely_active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://www.instagram.com/apex_ftnss/",
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35f005e6e98cd:0x6eca16b8723769d"
+        ]
+      }
+    },
+    {
       "id": "pickspot",
       "slug": "pickspot",
       "name": "PickSpot",
