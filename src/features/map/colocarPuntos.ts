@@ -5,8 +5,10 @@
  * - Intermedia: el pin con el ícono, sin nombre.
  * - De cerca: la misma pieza alargada con el nombre, hacia la derecha, la izquierda o colgando por debajo.
  *
- * Manda la zona: un punto que pisa un marcador de zona (u otro punto ya puesto) baja un escalón, de nombre a pin,
- * de pin a círculo y de círculo a no verse hasta que alguien se acerque. El punto elegido siempre lleva su nombre.
+ * Manda la zona: de cerca y a media distancia, un punto que pisa un marcador de zona (u otro punto ya puesto) baja un
+ * escalón, de nombre a pin, de pin a círculo y de círculo a no verse hasta que alguien se acerque. En la vista completa
+ * el círculo se queda en su sitio aunque una zona lo tape en parte: va por debajo y asoma lo que no queda cubierto.
+ * Entre dos puntos encimados se ve uno. El punto elegido siempre lleva su nombre.
  */
 
 export interface Caja {
@@ -72,6 +74,12 @@ function cajaDe({ x, y, ancho }: PorColocar, modo: ModoDePunto, lado: number): C
   }
 }
 
+/** ¿Toca el círculo de un punto alguna de estas cajas? Con una zona encima, el círculo se queda debajo de ella. */
+export const circuloPisa = (punto: Pick<PorColocar, 'x' | 'y'>, cajas: readonly Caja[]) => {
+  const circulo = cajaDe({ ...punto, id: '', ancho: 0, elegido: false }, 'circulo', 0)
+  return cajas.some((caja) => pisa(circulo, caja))
+}
+
 export function colocarPuntos(
   puntos: readonly PorColocar[],
   zonas: readonly Caja[],
@@ -81,9 +89,11 @@ export function colocarPuntos(
 ): Map<string, ModoDePunto> {
   const modos = new Map<string, ModoDePunto>()
   const cajas = new Map<string, Caja>()
-  const libre = (caja: Caja, propio: string) =>
-    !zonas.some((zona) => pisa(caja, zona)) &&
+  const completa = zoom < compactoBajoZoom
+  const sinPuntos = (caja: Caja, propio: string) =>
     ![...cajas].some(([id, otra]) => id !== propio && pisa(caja, otra))
+  const libre = (caja: Caja, propio: string) =>
+    !zonas.some((zona) => pisa(caja, zona)) && sinPuntos(caja, propio)
   const poner = (punto: PorColocar, modo: ModoDePunto, lado: number) => {
     modos.set(punto.id, modo)
     if (modo !== 'oculto') cajas.set(punto.id, cajaDe(punto, modo, lado))
@@ -102,12 +112,12 @@ export function colocarPuntos(
   const resto = puntos.filter((p) => !p.elegido)
   // Primero todos con su forma sin nombre: ningún nombre le quita el sitio a otro punto.
   for (const punto of resto) {
-    const escalera: ModoDePunto[] = zoom < compactoBajoZoom ? ['circulo'] : ['pin', 'circulo']
+    const escalera: ModoDePunto[] = completa ? ['circulo'] : ['pin', 'circulo']
     const modo =
       escalera.find((m) => {
         const caja = cajaDe(punto, m, lado)
         // Fuera de la vista (o bajo la barra, la hoja o los controles) no se dibuja: tampoco recibe el foco.
-        return dentro(caja, vista) && libre(caja, punto.id)
+        return dentro(caja, vista) && (completa ? sinPuntos : libre)(caja, punto.id)
       }) ?? 'oculto'
     poner(punto, modo, lado)
   }

@@ -10,7 +10,13 @@ import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
 import { t, useLocale } from '../../i18n/index.ts'
 import { alPulsarEnlace } from '../../lib/navegacion.ts'
 import { rutaDeLugar } from '../../lib/url-state.ts'
-import { type Caja, colocarPuntos, type ModoDePunto, NOMBRE_DESDE_ZOOM } from './colocarPuntos.ts'
+import {
+  type Caja,
+  circuloPisa,
+  colocarPuntos,
+  type ModoDePunto,
+  NOMBRE_DESDE_ZOOM,
+} from './colocarPuntos.ts'
 import { CAPA_ETIQUETAS, CAPA_TALLOS, COMPACT_BELOW_ZOOM } from './PlazaMarkers.tsx'
 import styles from './PuntoMarkers.module.css'
 
@@ -59,6 +65,8 @@ export function PuntoMarkers({
   const [cerca, setCerca] = useState(false)
   const textos = useRef(new Map<string, HTMLElement>())
   const idioma = useLocale()
+  /** El que tiene el foco del teclado pasa por delante: no puede quedar tapado por una zona. */
+  const conFoco = useRef<string | null>(null)
 
   useEffect(() => {
     const creados = new Map<string, HTMLElement>()
@@ -109,9 +117,11 @@ export function PuntoMarkers({
       for (const punto of en) {
         const element = elements.get(punto.id)
         if (!element) continue
-        // Con filtros, el que cumple va por delante de las zonas atenuadas (las que cumplen ya le quitaron el sitio).
-        const cumple = matchCounts?.get(punto.id)
-        const base = punto.elegido ? CAPA_PUNTO_ELEGIDO : cumple ? CAPA_CON_RESULTADO : CAPA_PUNTOS
+        // Con filtros, el que cumple va por delante de las zonas atenuadas. Si una que cumple lo tapa en la vista
+        // completa, se queda debajo: manda la zona.
+        const cumple = matchCounts?.get(punto.id) && !circuloPisa(punto, zonas.current.cajas)
+        const delante = punto.elegido || conFoco.current === punto.id
+        const base = delante ? CAPA_PUNTO_ELEGIDO : cumple ? CAPA_CON_RESULTADO : CAPA_PUNTOS
         element.style.zIndex = String(base + Math.round(punto.y))
       }
       setCerca(zoom >= NOMBRE_DESDE_ZOOM)
@@ -147,6 +157,14 @@ export function PuntoMarkers({
         inert={modo === 'oculto'}
         aria-current={elegido ? 'page' : undefined}
         aria-label={t('place.openDetail', { name: punto.name })}
+        onFocus={() => {
+          conFoco.current = punto.id
+          zonas.current.alCambiar()
+        }}
+        onBlur={() => {
+          conFoco.current = null
+          zonas.current.alCambiar()
+        }}
         onClick={alPulsarEnlace(() => onSelect(punto.placeId))}
       >
         <span className={styles.caja}>

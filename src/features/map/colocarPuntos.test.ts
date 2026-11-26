@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { type Caja, colocarPuntos, type PorColocar } from './colocarPuntos.ts'
+import { type Caja, circuloPisa, colocarPuntos, type PorColocar } from './colocarPuntos.ts'
 
 const VISTA: Caja = { left: 0, right: 400, top: 0, bottom: 800 }
 const COMPACTO = 14.3
@@ -34,7 +34,13 @@ describe('colocación de los puntos de interés', () => {
     expect(colocar([punto()], 15, [sobreElPin]).get('uno')).toBe('circulo')
     const sobreElPunto = { left: 150, right: 250, top: 380, bottom: 420 }
     expect(colocar([punto()], 15, [sobreElPunto]).get('uno')).toBe('oculto')
-    expect(colocar([punto()], 13, [sobreElPunto]).get('uno')).toBe('oculto')
+  })
+
+  it('en la vista completa el círculo se queda en su sitio, por debajo de la zona', () => {
+    const sobreElPunto = { left: 150, right: 250, top: 380, bottom: 420 }
+    expect(colocar([punto()], 13, [sobreElPunto]).get('uno')).toBe('circulo')
+    expect(circuloPisa(punto(), [sobreElPunto])).toBe(true)
+    expect(circuloPisa(punto({ y: 500 }), [sobreElPunto])).toBe(false)
   })
 
   it('de dos puntos encimados se ve uno, y ningún nombre tapa a otro punto', () => {
