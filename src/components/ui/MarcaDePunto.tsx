@@ -5,7 +5,7 @@ export function MarcaDePunto() {
       viewBox="0 0 14 17"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.8}
+      strokeWidth={1.4}
       strokeLinejoin="round"
       aria-hidden="true"
       focusable="false"

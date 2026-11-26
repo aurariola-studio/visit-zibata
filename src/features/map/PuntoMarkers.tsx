@@ -173,7 +173,7 @@ export function PuntoMarkers({
         </span>
         <svg className={styles.pico} viewBox="0 0 12 8" aria-hidden="true" focusable="false">
           <path className={styles.relleno} d="M1 0H11L6 6Z" />
-          <path className={styles.borde} d="M1 1L6 6.5L11 1" />
+          <path className={styles.borde} d="M1 1.5L6 6.5L11 1.5" />
         </svg>
         {/* Siempre en el documento, sin verse: es lo que dice cuánto ocupa el nombre antes de enseñarlo. */}
         <span
