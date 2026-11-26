@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-26",
   "places": [
     {
       "id": "carls-jr",
@@ -7668,6 +7668,74 @@
       }
     },
     {
+      "id": "arreglalo",
+      "slug": "arreglalo",
+      "name": "Arréglalo",
+      "plazaId": "plaza-loop",
+      "giros": [
+        "sastreria"
+      ],
+      "description": {
+        "es": "¿Tienes un pantalón que necesita un dobladillo, una prenda que quieres ajustar o una pieza especial que merece una segunda oportunidad? ¡Nosotros te ayudamos! 🧵✂️\n✨ Conoce algunos de nuestros servicios:\n👔 Ajustes y arreglos de ropa\n🪡 Dobladillos y composturas\n🧥 Cambio de forros y reparación de prendas\n👕 Bordados y etiquetas personalizadas\n♻️ Modificaciones y transformaciones de prendas",
+        "en": "Do you have trousers that need hemming, a garment you want to adjust or a special piece that deserves a second chance? We help you! 🧵✂️\n✨ Some of our services:\n👔 Clothing alterations and repairs\n🪡 Hems and mending\n🧥 Lining replacement and garment repair\n👕 Embroidery and custom labels\n♻️ Garment modifications and transformations"
+      },
+      "hours": {
+        "mon": [
+          "09:30-18:30"
+        ],
+        "tue": [
+          "09:30-18:30"
+        ],
+        "wed": [
+          "09:30-18:30"
+        ],
+        "thu": [
+          "09:30-18:30"
+        ],
+        "fri": [
+          "09:30-18:30"
+        ],
+        "sat": [
+          "10:00-16:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6825684,
+        "lng": -100.3188404
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/KzCpoKeWocFKD3d8A",
+      "googlePlaceId": null,
+      "phone": "+524422130703",
+      "photos": [],
+      "links": {
+        "website": "https://arreglalo.com.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "66"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/KzCpoKeWocFKD3d8A",
+          "https://arreglalo.com.mx/",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
       "id": "l-balans",
       "slug": "l-balans",
       "name": "L-Balans",
@@ -12656,6 +12724,79 @@
       }
     },
     {
+      "id": "lavax",
+      "slug": "lavax",
+      "name": "Lavax",
+      "plazaId": "plaza-luna",
+      "giros": [
+        "lavanderia-de-autoservicio"
+      ],
+      "description": {
+        "es": "Fácil. Rápida. Ecológica.",
+        "en": "Easy. Fast. Eco-friendly."
+      },
+      "hours": {
+        "mon": [
+          "08:00-20:00"
+        ],
+        "tue": [
+          "08:00-20:00"
+        ],
+        "wed": [
+          "08:00-20:00"
+        ],
+        "thu": [
+          "08:00-20:00"
+        ],
+        "fri": [
+          "08:00-20:00"
+        ],
+        "sat": [
+          "08:00-20:00"
+        ],
+        "sun": [
+          "08:00-20:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6850055,
+        "lng": -100.3251237
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/mVRSknDwSr6X8AHX7",
+      "googlePlaceId": null,
+      "phone": "+524425878857",
+      "photos": [],
+      "links": {
+        "website": "https://lavax.mx/",
+        "instagram": "https://www.instagram.com/lavax.mx/",
+        "facebook": "https://www.facebook.com/lavax.mx/",
+        "tiktok": "https://www.tiktok.com/@lavax.mx",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "A-111"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/mVRSknDwSr6X8AHX7",
+          "https://lavax.mx/",
+          "https://www.instagram.com/lavax.mx/",
+          "https://www.facebook.com/lavax.mx/",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
       "id": "franz-haus",
       "slug": "franz-haus",
       "name": "Franz Haus",
@@ -12868,6 +13009,139 @@
           "https://maps.app.goo.gl/TE9gSJZknmovCmP66",
           "https://www.instagram.com/pelitosstyle/",
           "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "dry-mart-tintoreria-lavanderia",
+      "slug": "dry-mart-tintoreria-lavanderia",
+      "name": "Dry Mart Tintorería y Lavandería",
+      "plazaId": "mol-pitahaya",
+      "giros": [
+        "tintoreria",
+        "lavanderia"
+      ],
+      "description": {
+        "es": "En Dry Mart, somos más que una simple lavandería. Desde nuestra primera sucursal en el corazón de Querétaro en 2015, nos hemos dedicado a transformar la experiencia del cuidado de la ropa, ofreciendo un servicio de lavandería, tintorería y planchaduría con los más altos estándares de calidad.",
+        "en": "At Dry Mart we are more than a simple laundry. Since our first branch in the heart of Querétaro in 2015, we have set out to transform the experience of caring for clothes, offering laundry, dry cleaning and ironing with the highest quality standards."
+      },
+      "hours": {
+        "mon": [
+          "08:00-19:20"
+        ],
+        "tue": [
+          "08:00-19:20"
+        ],
+        "wed": [
+          "08:00-19:20"
+        ],
+        "thu": [
+          "08:00-19:20"
+        ],
+        "fri": [
+          "08:00-19:20"
+        ],
+        "sat": [
+          "08:00-16:00"
+        ],
+        "sun": [
+          "08:00-16:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6774224,
+        "lng": -100.3353613
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/KoSCWB6pW5sFKwGi6",
+      "googlePlaceId": null,
+      "phone": "+524425984157",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/KoSCWB6pW5sFKwGi6",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
+      "id": "piccoli-abbracci",
+      "slug": "piccoli-abbracci",
+      "name": "Piccoli Abbracci",
+      "plazaId": "mol-pitahaya",
+      "giros": [
+        "ludoteca"
+      ],
+      "description": {
+        "es": "Estimulamos el desarrollo infantil a través de la diversión 🎨🖍️🎻🎹🧩",
+        "en": "We stimulate child development through fun 🎨🖍️🎻🎹🧩"
+      },
+      "hours": {
+        "mon": [
+          "08:00-19:00"
+        ],
+        "tue": [
+          "08:00-19:00"
+        ],
+        "wed": [
+          "08:00-19:00"
+        ],
+        "thu": [
+          "08:00-19:00"
+        ],
+        "fri": [
+          "08:00-19:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6772783,
+        "lng": -100.3343099
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/CvRUwYoxRGxqHNAy8",
+      "googlePlaceId": null,
+      "phone": "+524442038098",
+      "photos": [],
+      "links": {
+        "website": "https://piccoliabbracci.com/",
+        "instagram": "https://www.instagram.com/piccoli.25/",
+        "facebook": "https://www.facebook.com/estimulaciontempranalube/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "24"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/CvRUwYoxRGxqHNAy8",
+          "https://piccoliabbracci.com/",
+          "https://www.instagram.com/piccoli.25/",
+          "https://www.facebook.com/estimulaciontempranalube/",
+          "campo:2026-11-25"
         ]
       }
     },
@@ -13776,6 +14050,146 @@
       }
     },
     {
+      "id": "tintoreria-7clean",
+      "slug": "tintoreria-7clean",
+      "name": "Tintorería 7clean",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "tintoreria",
+        "sastreria",
+        "calzado"
+      ],
+      "description": {
+        "es": "4 en 1 para tu ropa 👇\n🧺 Lavandería | 👔 Sastrería | 👟 Calzado | 🫧 Tintorería",
+        "en": "4 in 1 for your clothes 👇\n🧺 Laundry | 👔 Tailoring | 👟 Shoe care | 🫧 Dry cleaning"
+      },
+      "hours": {
+        "mon": [
+          "08:00-19:00"
+        ],
+        "tue": [
+          "08:00-19:00"
+        ],
+        "wed": [
+          "08:00-19:00"
+        ],
+        "thu": [
+          "08:00-19:00"
+        ],
+        "fri": [
+          "08:00-19:00"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6749851,
+        "lng": -100.3228587
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/q4dpTaNotAKHsWiM7",
+      "googlePlaceId": null,
+      "phone": "+524422514932",
+      "photos": [],
+      "links": {
+        "website": "https://7clean.mx/",
+        "instagram": "https://www.instagram.com/7clean.oficial/",
+        "facebook": "https://www.facebook.com/7clean.official",
+        "tiktok": "https://www.tiktok.com/@7clean.oficial",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "5"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/q4dpTaNotAKHsWiM7",
+          "https://7clean.mx/",
+          "https://www.instagram.com/7clean.oficial/",
+          "https://www.facebook.com/7clean.official",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
+      "id": "banco-banregio",
+      "slug": "banco-banregio",
+      "name": "Banco Banregio",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "banco",
+        "cajero-automatico"
+      ],
+      "description": {
+        "es": "Atención a personas físicas y PyMEs, apertura de cuentas, depósitos, pago de servicios, asesoría de crédito y cajero automático.",
+        "en": "Services for individuals and small and medium businesses, account opening, deposits, bill payments, credit advice and an ATM."
+      },
+      "hours": {
+        "mon": [
+          "09:00-17:00"
+        ],
+        "tue": [
+          "09:00-17:00"
+        ],
+        "wed": [
+          "09:00-17:00"
+        ],
+        "thu": [
+          "09:00-17:00"
+        ],
+        "fri": [
+          "09:00-17:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6749125,
+        "lng": -100.3224824
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/Q3UCTwQxTb2yJN2CA",
+      "googlePlaceId": null,
+      "phone": "+528122673446",
+      "photos": [],
+      "links": {
+        "website": "https://www.banregio.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "17",
+          "18"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/Q3UCTwQxTb2yJN2CA",
+          "https://www.banregio.com/",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
       "id": "mali-papeleria",
       "slug": "mali-papeleria",
       "name": "MALI Papelería",
@@ -14054,6 +14468,71 @@
       }
     },
     {
+      "id": "universidad-anahuac-queretaro",
+      "slug": "universidad-anahuac-queretaro",
+      "name": "Universidad Anáhuac Querétaro",
+      "plazaId": "anahuac-queretaro",
+      "giros": [
+        "universidad"
+      ],
+      "description": {
+        "es": "Somos una institución que forma líderes de acción positiva con excelencia académica y valores humanistas. Ofrecemos programas de Licenciatura, Posgrado, Educación Continua y Empresariales. Formamos profesionales capaces de transformar su entorno 🦁",
+        "en": "We are an institution that forms leaders of positive action with academic excellence and humanist values. We offer undergraduate, graduate, continuing education and business programmes. We train professionals able to transform their surroundings 🦁"
+      },
+      "hours": {
+        "mon": [
+          "07:00-22:00"
+        ],
+        "tue": [
+          "07:00-22:00"
+        ],
+        "wed": [
+          "07:00-22:00"
+        ],
+        "thu": [
+          "07:00-22:00"
+        ],
+        "fri": [
+          "07:00-22:00"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6807889,
+        "lng": -100.3131278
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/zHEVhnc9KyRmrvZp6",
+      "googlePlaceId": null,
+      "phone": "+524422456742",
+      "photos": [],
+      "links": {
+        "website": "https://www.anahuac.mx/queretaro/",
+        "instagram": "https://www.instagram.com/anahuacqro/",
+        "facebook": "https://www.facebook.com/anahuacqro/",
+        "tiktok": "https://www.tiktok.com/@anahuacqro",
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/zHEVhnc9KyRmrvZp6",
+          "https://www.anahuac.mx/queretaro/",
+          "https://www.instagram.com/anahuacqro/",
+          "https://www.facebook.com/anahuacqro/",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
       "id": "spiruleka",
       "slug": "spiruleka",
       "name": "Spiruleka",
@@ -14181,6 +14660,137 @@
         "sources": [
           "https://maps.app.goo.gl/xewYe6UnvR8xeP28A",
           "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "banco-santander",
+      "slug": "banco-santander",
+      "name": "Banco Santander",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "banco",
+        "cajero-automatico"
+      ],
+      "description": {
+        "es": "Apertura de cuentas, tarjetas de crédito, créditos personales o hipotecarios, pagos, transferencias, inversiones, seguros, atención a PyMEs/empresas y cajero automático (ATM).",
+        "en": "Account opening, credit cards, personal and mortgage loans, payments, transfers, investments, insurance, services for small and medium businesses and companies, and an automated teller machine (ATM)."
+      },
+      "hours": {
+        "mon": [
+          "09:00-16:00"
+        ],
+        "tue": [
+          "09:00-16:00"
+        ],
+        "wed": [
+          "09:00-16:00"
+        ],
+        "thu": [
+          "09:00-16:00"
+        ],
+        "fri": [
+          "09:00-16:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": null,
+      "googleMapsUri": null,
+      "googlePlaceId": null,
+      "phone": "+524422623009",
+      "photos": [],
+      "links": {
+        "website": "https://www.santander.com.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "103"
+        ]
+      },
+      "active": false,
+      "verification": {
+        "status": "uncertain",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://www.santander.com.mx/"
+        ]
+      }
+    },
+    {
+      "id": "tintoreria-pressto",
+      "slug": "tintoreria-pressto",
+      "name": "Tintorería Pressto",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "tintoreria",
+        "calzado"
+      ],
+      "description": {
+        "es": "En Pressto Zibatá te ofrecemos el más amplio catálogo de servicios relacionados con el mundo de la limpieza, cuidado y planchado de tus prendas. Somos especialistas en limpieza en seco y lavado en agua, con la última maquinaria y los más innovadores procesos de limpieza. Confíanos cualquiera de tus prendas, inclusive las más delicadas, y te sorprenderán los excelentes acabados.",
+        "en": "At Pressto Zibatá we offer the widest range of services for cleaning, caring for and pressing your garments. We specialise in dry cleaning and wet cleaning, with the latest machinery and the most innovative processes. Trust us with any garment, even the most delicate, and you will be surprised by the excellent finish."
+      },
+      "hours": {
+        "mon": [
+          "08:00-19:00"
+        ],
+        "tue": [
+          "08:00-19:00"
+        ],
+        "wed": [
+          "08:00-19:00"
+        ],
+        "thu": [
+          "08:00-19:00"
+        ],
+        "fri": [
+          "08:00-19:00"
+        ],
+        "sat": [
+          "08:00-19:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6811679,
+        "lng": -100.3400626
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/UQa7K3gAWDYYw3na8",
+      "googlePlaceId": null,
+      "phone": "+524151927109",
+      "photos": [],
+      "links": {
+        "website": "https://mx.pressto.com/tienda/pressto-zibata/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "115"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/UQa7K3gAWDYYw3na8",
+          "https://mx.pressto.com/tienda/pressto-zibata/",
+          "campo:2026-11-25"
         ]
       }
     },
@@ -14318,6 +14928,188 @@
         "sources": [
           "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d17e6d33777:0x7486069a2c300e24",
           "campo:2026-11-24"
+        ]
+      }
+    },
+    {
+      "id": "guarderia-arcoiris",
+      "slug": "guarderia-arcoiris",
+      "name": "Guardería Arcoíris",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "guarderia",
+        "ludoteca"
+      ],
+      "description": {
+        "es": "Espacio divertido, seguro y confiable para tus peques.",
+        "en": "A fun, safe and trustworthy space for your little ones."
+      },
+      "hours": {
+        "mon": [
+          "08:30-14:30"
+        ],
+        "tue": [
+          "08:30-14:30"
+        ],
+        "wed": [
+          "08:30-14:30"
+        ],
+        "thu": [
+          "08:30-14:30"
+        ],
+        "fri": [
+          "08:30-14:30",
+          "15:00-20:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6833719,
+        "lng": -100.3257543
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/zPKoTumx6C7ubhHA7",
+      "googlePlaceId": null,
+      "phone": "+525563573804",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/arcoiriskidsmx/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "218"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/zPKoTumx6C7ubhHA7",
+          "https://www.instagram.com/arcoiriskidsmx/",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
+      "id": "atm-multiva",
+      "slug": "atm-multiva",
+      "name": "ATM Multiva",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "cajero-automatico"
+      ],
+      "description": {
+        "es": "Aceptan tarjetas nacionales y extranjeras además podrás disfrutar de retiros y consultas de saldo sin comisión en más de 11,800 cajeros de la Multired.",
+        "en": "Domestic and foreign cards are accepted, and you can withdraw and check your balance with no fee at more than 11,800 Multired ATMs."
+      },
+      "hours": null,
+      "location": {
+        "lat": 20.6840141,
+        "lng": -100.3264464
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/DoFpssmHuPidZg9DA",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/DoFpssmHuPidZg9DA",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
+      "id": "mr-jeff",
+      "slug": "mr-jeff",
+      "name": "Mr Jeff",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "lavanderia",
+        "tintoreria"
+      ],
+      "description": {
+        "es": "Lavandería - Tintorería - Planchado",
+        "en": "Laundry - Dry cleaning - Ironing"
+      },
+      "hours": {
+        "mon": [
+          "09:00-19:30"
+        ],
+        "tue": [
+          "09:00-19:30"
+        ],
+        "wed": [
+          "09:00-19:30"
+        ],
+        "thu": [
+          "09:00-19:30"
+        ],
+        "fri": [
+          "09:00-19:30"
+        ],
+        "sat": [
+          "10:00-14:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6837854,
+        "lng": -100.3262492
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/Dcpo6GvHVDYjnRBM9",
+      "googlePlaceId": null,
+      "phone": "+524463248746",
+      "photos": [],
+      "links": {
+        "website": "https://www.mymrjeff.com/",
+        "instagram": "https://www.instagram.com/mrjeffzibata/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/Dcpo6GvHVDYjnRBM9",
+          "https://www.mymrjeff.com/",
+          "https://www.instagram.com/mrjeffzibata/",
+          "campo:2026-11-25"
         ]
       }
     },
@@ -14460,6 +15252,79 @@
       }
     },
     {
+      "id": "swiss-clean-lavanderia",
+      "slug": "swiss-clean-lavanderia",
+      "name": "Swiss Clean Lavandería",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "lavanderia",
+        "lavanderia-de-autoservicio"
+      ],
+      "description": {
+        "es": "¿Te imaginas una lavandería en Querétaro donde la tecnología, innovación y comodidad se unen para hacerte la vida más fácil? 🧺\nEn Swiss Clean Zibatá lo estamos haciendo posible:\n💡 Máquinas inteligentes y eficientes\n⏱ Servicio rápido y sin complicaciones\n⚙ Resultados con precisión suiza\n☕ Sala lounge para que descanses o trabajes mientras esperas",
+        "en": "Can you picture a laundry in Querétaro where technology, innovation and comfort come together to make your life easier? 🧺\nAt Swiss Clean Zibatá we are making it possible:\n💡 Smart, efficient machines\n⏱ Fast, hassle-free service\n⚙ Results with Swiss precision\n☕ A lounge to rest or work while you wait"
+      },
+      "hours": {
+        "mon": [
+          "08:00-20:00"
+        ],
+        "tue": [
+          "08:00-20:00"
+        ],
+        "wed": [
+          "08:00-20:00"
+        ],
+        "thu": [
+          "08:00-20:00"
+        ],
+        "fri": [
+          "08:00-20:00"
+        ],
+        "sat": [
+          "10:00-18:00"
+        ],
+        "sun": [
+          "10:00-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6794169,
+        "lng": -100.3145535
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/DB3HPRS1vzQEiKMB7",
+      "googlePlaceId": null,
+      "phone": "+527971326542",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/swisscleanlavanderia/",
+        "facebook": "https://www.facebook.com/profile.php?id=61581288248961",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "53"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/DB3HPRS1vzQEiKMB7",
+          "https://www.instagram.com/swisscleanlavanderia/",
+          "https://www.facebook.com/profile.php?id=61581288248961",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
       "id": "karlitros",
       "slug": "karlitros",
       "name": "Karlitros",
@@ -14519,6 +15384,77 @@
         "lastVerifiedAt": "2026-11-25",
         "sources": [
           "https://www.google.com/maps/search/KARLITROS+ZIBATA"
+        ]
+      }
+    },
+    {
+      "id": "ultra-clean",
+      "slug": "ultra-clean",
+      "name": "Ultra Clean",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "tintoreria",
+        "lavanderia"
+      ],
+      "description": {
+        "es": "Tintoreria, lavenderia y planchado.\nTecnologia avanzada. Amigable con el medio ambiente.",
+        "en": "Dry cleaning, laundry and ironing.\nAdvanced technology. Environmentally friendly."
+      },
+      "hours": {
+        "mon": [
+          "08:00-20:00"
+        ],
+        "tue": [
+          "08:00-20:00"
+        ],
+        "wed": [
+          "08:00-20:00"
+        ],
+        "thu": [
+          "08:00-20:00"
+        ],
+        "fri": [
+          "08:00-20:00"
+        ],
+        "sat": [
+          "08:00-16:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6780433,
+        "lng": -100.3130568
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/2HgQVTUkRXtyPJCk6",
+      "googlePlaceId": null,
+      "phone": "+524422770096",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/ultracleanzibata/",
+        "facebook": "https://www.facebook.com/ultracleanzibata/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "104"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/2HgQVTUkRXtyPJCk6",
+          "https://www.instagram.com/ultracleanzibata/",
+          "https://www.facebook.com/ultracleanzibata/",
+          "campo:2026-11-25"
         ]
       }
     }
