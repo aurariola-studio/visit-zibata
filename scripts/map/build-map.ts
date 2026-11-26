@@ -10,6 +10,7 @@
  *  - data/geographic/extent.json          contorno, bbox y centro de Zibatá (lo usa la app)
  *  - data/geographic/manifest.json        procedencia, licencias, fechas, conteos y huellas de archivos
  */
+
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import * as turf from '@turf/turf'
@@ -24,6 +25,7 @@ import type {
   Position,
 } from 'geojson'
 import { AjustesEdificiosFileSchema } from '../../src/data/ajustes-edificios.ts'
+import { esZona } from '../../src/data/puntos.ts'
 import { PlazasFileSchema } from '../../src/data/schemas.ts'
 import { reglaDeVolumen, VolumenesPlazaFileSchema } from '../../src/data/volumenes-plaza.ts'
 import { VolumenesPropiosFileSchema } from '../../src/data/volumenes-propios.ts'
@@ -194,7 +196,8 @@ log(
 )
 
 // ── 4. Plazas ───────────────────────────────────────────────────────────────────────────────────
-const plazas = PlazasFileSchema.parse(readJson(paths.plazas)).plazas
+// Solo las zonas: un punto de interés no tiene contorno y no cambia el mapa generado.
+const plazas = PlazasFileSchema.parse(readJson(paths.plazas)).plazas.filter(esZona)
 const plazaShapes = plazas.map((plaza) => ({ plaza, shape: turf.feature(plaza.geometry) }))
 // Una plaza no puede atravesar una calle: pasa cuando su huella aproximada se centra en el punto de un
 // enlace de Maps que cae sobre la vía (Xënica, 2026-09). Se avisa para rehacerla con map:suggest-plaza.

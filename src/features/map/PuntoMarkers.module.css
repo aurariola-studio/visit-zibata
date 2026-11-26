@@ -1,0 +1,176 @@
+/*
+ * ## El punto de interés
+ *
+ * Crema y tinta, sin color de zona: es un solo negocio y pesa menos que una zona. La misma pieza en tres estados:
+ * un círculo de lejos, un pin con su ícono a media distancia y, de cerca, el pin alargado con el nombre dentro,
+ * hacia un lado o hacia el otro. El pico se queda siempre sobre el punto, así que alargarse no mueve lo que señala.
+ *
+ * Las medidas (24 y 21 de lado, 6 de pico, 10 de círculo) tienen que coincidir con `colocarPuntos.ts`.
+ */
+.punto {
+  composes: base from "../../styles/controls.module.css";
+  --lado: 21px;
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--lado) / -2);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--ink-900);
+  filter: drop-shadow(0 1px 1.5px rgb(31 36 25 / 0.35));
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.punto[data-cerca="true"] {
+  --lado: 24px;
+}
+
+/* El área que se pulsa nunca baja de 24 px, aunque el pin intermedio mida 21. */
+.punto::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+}
+
+.caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  min-width: var(--lado);
+  height: var(--lado);
+  border: 2px solid var(--ink-900);
+  border-radius: 6px;
+  background: var(--sand-25);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-heavy);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.caja svg {
+  flex: none;
+}
+
+.nombre {
+  display: none;
+}
+
+/* El pico se mete 2 px en la caja para tapar su borde y que las dos piezas sean una. */
+.pico {
+  position: relative;
+  width: 12px;
+  height: 8px;
+  margin-top: -2px;
+  margin-left: calc(var(--lado) / 2 - 6px);
+  overflow: visible;
+}
+
+.relleno {
+  fill: var(--sand-25);
+}
+
+.borde {
+  fill: none;
+  stroke: var(--ink-900);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.medida {
+  position: absolute;
+  visibility: hidden;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-heavy);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Con nombre ──────────────────────────────────────────────────────────────────────────────── */
+.punto[data-modo$="derecha"] .caja {
+  padding: 0 7px 0 3px;
+}
+
+.punto[data-modo$="izquierda"] {
+  right: calc(var(--lado) / -2);
+  left: auto;
+  align-items: flex-end;
+}
+
+.punto[data-modo$="izquierda"] .caja {
+  flex-direction: row-reverse;
+  padding: 0 3px 0 7px;
+}
+
+.punto[data-modo$="izquierda"] .pico {
+  margin-right: calc(var(--lado) / 2 - 6px);
+  margin-left: 0;
+}
+
+.punto[data-modo$="derecha"] .nombre,
+.punto[data-modo$="izquierda"] .nombre {
+  display: inline;
+}
+
+/* Colgando por debajo: el pico arriba, apuntando al punto. */
+.punto[data-modo^="abajo"] {
+  top: 0;
+  bottom: auto;
+  flex-direction: column-reverse;
+}
+
+.punto[data-modo^="abajo"] .pico {
+  margin-top: 0;
+  margin-bottom: -2px;
+  scale: 1 -1;
+}
+
+/* ── Vista completa: un círculo que solo dice que ahí hay algo ───────────────────────────────── */
+.punto[data-modo="circulo"] {
+  top: -12px;
+  bottom: auto;
+  left: -12px;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.punto[data-modo="circulo"] .caja {
+  min-width: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-round);
+}
+
+.punto[data-modo="circulo"] .caja > *,
+.punto[data-modo="circulo"] .pico {
+  display: none;
+}
+
+.punto[data-modo="oculto"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.punto[data-state="dimmed"]:not([data-modo="oculto"]) {
+  opacity: 0.45;
+}
+
+.punto:hover .caja {
+  background: var(--sand-100);
+}
+
+.punto:hover .relleno {
+  fill: var(--sand-100);
+}
+
+.punto:focus-visible {
+  outline: none;
+}
+
+.punto:focus-visible .caja {
+  outline: 2.5px solid var(--color-focus);
+  outline-offset: 2px;
+}

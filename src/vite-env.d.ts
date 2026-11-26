@@ -14,6 +14,11 @@ declare module 'virtual:zibata-places-resumen' {
   const datos: { places: unknown[] }
   export default datos
 }
+/** `data/commercial/plazas.json` con la cercanía de cada punto de interés (ver `vite.config.ts`). */
+declare module 'virtual:zibata-plazas' {
+  const datos: { plazas: unknown[] }
+  export default datos
+}
 declare module 'virtual:zibata-places-detalle' {
   const datos: { places: unknown[] }
   export default datos

@@ -193,7 +193,11 @@ const checkPlaza: Check = (value) => {
     field(value, 'description', nullable(isLocalizedText), 'descripción no válida'),
     field(value, 'address', nullable(isText), 'dirección no válida'),
     field(value, 'coordinates', isLatLng, 'coordenadas no válidas'),
-    field(value, 'geometry', isGeometry, 'geometría no válida'),
+    // Un punto de interés no lleva contorno; una zona sin uno válido se omite.
+    field(value, 'tipo', (tipo) => tipo === undefined || tipo === 'punto', 'tipo no válido'),
+    (value.tipo === 'punto' ? value.geometry === undefined : isGeometry(value.geometry))
+      ? null
+      : 'geometría no válida',
     field(value, 'active', (active) => typeof active === 'boolean', 'active debe ser booleano'),
     field(
       value,

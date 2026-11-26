@@ -8,7 +8,9 @@
  * Aquí vive también la traducción entre el **slug** que viaja en la URL y el **id** que usa el
  * estado: `url-state` es puro y no conoce el catálogo, así que no puede hacerla.
  */
+
 import { useEffect, useLayoutEffect, useRef } from 'react'
+import { esPunto } from '../data/puntos.ts'
 import { type Locale, setLocale, useLocale } from '../i18n/index.ts'
 import {
   buildPath,
@@ -136,7 +138,8 @@ export function useUrlSync(catalog: Catalog): void {
       }
       dispatch({
         type: 'syncFromUrl',
-        plazaId: plaza?.active ? plaza.id : null,
+        // Un punto de interés no queda elegido como zona: solo se abre su ficha.
+        plazaId: plaza?.active && !esPunto(plaza) ? plaza.id : null,
         placeId: place?.id ?? null,
         categoryId: category?.id ?? null,
         sectorId: sector?.id ?? null,

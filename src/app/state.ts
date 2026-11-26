@@ -49,7 +49,8 @@ export const initialAppState: AppState = {
 
 export type AppAction =
   | { type: 'selectPlaza'; plazaId: string | null }
-  | { type: 'selectPlace'; placeId: string; plazaId: string; origin: 'plaza' | 'results' }
+  // `plazaId` es la zona que queda elegida debajo de la ficha: nula en un punto de interés, que no es una zona.
+  | { type: 'selectPlace'; placeId: string; plazaId: string | null; origin: 'plaza' | 'results' }
   | { type: 'closePlace' }
   | { type: 'closePanel' }
   | { type: 'setCategory'; categoryId: string | null }

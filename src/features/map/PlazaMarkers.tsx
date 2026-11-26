@@ -22,6 +22,8 @@ interface PlazaMarkersProps {
   hoveredPlazaId: string | null
   onHover: (plazaId: string | null) => void
   onSelect: (plazaId: string) => void
+  /** Las cajas que ocupan las zonas tras cada reparto: los puntos de interés se colocan alrededor. */
+  onColocado?: (cajas: Rect[]) => void
 }
 
 type Mode = 'full' | 'left' | 'compact' | 'dot' | 'hidden'
@@ -41,7 +43,7 @@ interface Rect {
 }
 
 /** Por debajo de este zoom todas las plazas muestran solo la cifra. */
-const COMPACT_BELOW_ZOOM = 14.3
+export const COMPACT_BELOW_ZOOM = 14.3
 const MARKER_HEIGHT = 44
 /**
  * El ancho de la gota, que es la pieza anclada: no cambia en ningún modo, y por eso sirve a la vez
@@ -84,7 +86,10 @@ export function PlazaMarkers({
   hoveredPlazaId,
   onHover,
   onSelect,
+  onColocado,
 }: PlazaMarkersProps) {
+  const alColocar = useRef(onColocado)
+  alColocar.current = onColocado
   const activePlazas = useMemo(() => plazas.filter((plaza) => plaza.active), [plazas])
   // Mismo reparto de tonos que el estilo del mapa (buildMapStyle): la etiqueta y su plaza combinan.
   const tones = useMemo(() => plazaTones(activePlazas.map((plaza) => plaza.id)), [activePlazas])
@@ -458,6 +463,8 @@ export function PlazaMarkers({
         else delete stem.dataset.abajo
         stem.style.zIndex = String(CAPA_TALLOS + cercania)
       }
+
+      alColocar.current?.([...placed.values()])
 
       setModes((previous) =>
         previous.size === next.size &&

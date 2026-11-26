@@ -1,6 +1,7 @@
 import { ZIBATA_EXTENT } from '../config/map.ts'
 import type { Catalog, Category, PlaceSummary, Plaza, Sector } from '../types/domain.ts'
 import { DataLoadError, type PlacesRepository, type RetiredPlace } from './PlacesRepository.ts'
+import { esPunto, esZona } from './puntos.ts'
 import {
   type Bounds,
   type CommercialDataset,
@@ -54,10 +55,14 @@ export function buildCatalog(
       .map(({ id, giros, plazaId }) => [id, { giros, plazaId }] as const),
   ])
 
+  // Un punto de interés no es una zona: fuera de `plazas`, que es de donde salen todas las listas.
+  const zonas = plazas.filter(esZona)
+
   return {
     categories: sortedCategories,
     sectors,
-    plazas,
+    plazas: zonas,
+    puntos: plazas.filter((plaza) => esPunto(plaza) && plaza.active),
     places,
     categoryById: new Map(sortedCategories.map((c) => [c.id, c])),
     sectorById,
@@ -70,7 +75,7 @@ export function buildCatalog(
     giroById,
     categoryOfGiro,
     plazaById: new Map(plazas.map((p) => [p.id, p])),
-    plazaBySlug: new Map(plazas.map((p) => [p.slug, p])),
+    plazaBySlug: new Map(zonas.map((p) => [p.slug, p])),
     placeById: new Map(places.map((p) => [p.id, p])),
     retiredById,
     placeBySlug: new Map(places.map((p) => [p.slug, p])),

@@ -2,6 +2,7 @@
  * Composición de la experiencia: el mapa ocupa toda la pantalla y la interfaz flota encima.
  * Escritorio: panel lateral derecho. Móvil: hoja inferior. Misma lógica y componentes en ambos.
  */
+
 import { AlertTriangle, List, WifiOff, X } from 'lucide-react'
 import type { Map as MapLibreMap, PaddingOptions } from 'maplibre-gl'
 import {
@@ -25,6 +26,7 @@ import { DesktopSidePanel } from '../components/panel/DesktopSidePanel.tsx'
 import { DialogSkeleton } from '../components/ui/DialogSkeleton.tsx'
 import { EmptyState } from '../components/ui/EmptyState.tsx'
 import { useCatalogState } from '../data/CatalogContext.tsx'
+import { esPunto } from '../data/puntos.ts'
 import { GuideBar } from '../features/about/GuideBar.tsx'
 import { LocaleSwitch } from '../features/about/LocaleSwitch.tsx'
 import { FilterBar } from '../features/filters/FilterBar.tsx'
@@ -286,14 +288,16 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
   }, [dispatch, state.missingLinkNotice])
 
   const openPlace = useCallback(
-    (place: PlaceSummary) =>
+    (place: PlaceSummary) => {
+      const plaza = catalog.plazaById.get(place.plazaId)
       dispatch({
         type: 'selectPlace',
         placeId: place.id,
-        plazaId: place.plazaId,
+        plazaId: plaza && esPunto(plaza) ? null : place.plazaId,
         origin: panel.kind === 'results' ? 'results' : 'plaza',
-      }),
-    [dispatch, panel.kind],
+      })
+    },
+    [catalog, dispatch, panel.kind],
   )
   const selectPlaza = useCallback(
     (plazaId: string | null) => dispatch({ type: 'selectPlaza', plazaId }),
@@ -437,7 +441,9 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
               backLabel={
                 panel.fromResults
                   ? t('place.backToResults')
-                  : t('place.backToPlaza', { plaza: panel.plaza.name })
+                  : esPunto(panel.plaza)
+                    ? t('place.backToMap')
+                    : t('place.backToPlaza', { plaza: panel.plaza.name })
               }
               onBack={() => dispatch({ type: 'closePlace' })}
               onClose={closePanel}
@@ -539,6 +545,12 @@ function ReadyExperience({ catalog }: { catalog: Catalog }) {
               matchCounts={experience.matchCounts}
               selectedPlazaId={state.selectedPlazaId}
               onSelectPlaza={selectPlaza}
+              puntos={experience.puntosEnMapa}
+              selectedPuntoId={experience.selectedPuntoId}
+              onSelectPunto={(placeId) => {
+                const place = catalog.placeById.get(placeId)
+                if (place) openPlace(place)
+              }}
               padding={padding}
               compact={!isDesktop}
               realismo={realismo}

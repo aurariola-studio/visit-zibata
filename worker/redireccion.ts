@@ -69,7 +69,7 @@ export interface Direcciones {
  */
 export function resolverDirecciones(
   filas: readonly Redirect[],
-  plazas: readonly { id: string; slug: string; active: boolean }[],
+  plazas: readonly { id: string; slug: string; active: boolean; tipo?: 'punto' }[],
   lugares: readonly {
     id: string
     slug: string
@@ -101,7 +101,8 @@ export function resolverDirecciones(
   const zonaDe = (plazaId: string): Destino => {
     const plaza = plazaViva.get(plazaId)
     // Una plaza borrada después ya no está en `plazas`: tampoco tiene página y va a la portada.
-    return plaza?.active ? { tipo: 'zona', slug: plaza.slug } : null
+    // Un punto de interés tampoco tiene página de zona.
+    return plaza?.active && plaza.tipo !== 'punto' ? { tipo: 'zona', slug: plaza.slug } : null
   }
   const fichaDe = (id: string): Destino | undefined => {
     const lugar = lugarVivo.get(id)

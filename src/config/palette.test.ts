@@ -45,7 +45,10 @@ const tokensDeMarca = [...tokensCss.matchAll(/--([\w-]+):\s*(#[0-9a-f]{6});/gi)]
   ([, nombre, hex]) => [nombre as string, hex as string] as const,
 )
 
-const activePlazaIds = plazas.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id)
+// Solo las zonas llevan color; un punto de interés va en crema y tinta.
+const activePlazaIds = (plazas.plazas as { id: string; active: boolean; tipo?: string }[])
+  .filter((plaza) => plaza.active && plaza.tipo !== 'punto')
+  .map((plaza) => plaza.id)
 const tonos = plazaTones(activePlazaIds)
 const pares = activePlazaIds.flatMap((uno, i) =>
   activePlazaIds.slice(i + 1).map((otro) => [uno, otro] as const),

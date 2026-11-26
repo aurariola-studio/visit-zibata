@@ -258,7 +258,13 @@ export const PlazaSchema = z.strictObject({
     )
     .nullable(),
   coordinates: LatLngSchema,
-  geometry: PlazaGeometrySchema,
+  /**
+   * Un punto de interés: un solo negocio en su propio lugar, sin contorno, sin página de zona y fuera de las listas
+   * de zonas. La regla para distinguirlo de una zona está en docs/DATOS.md y su estructura la exige `validateRelations`.
+   */
+  tipo: z.literal('punto').optional(),
+  /** El contorno. Toda zona lo lleva; un punto de interés, nunca. */
+  geometry: PlazaGeometrySchema.optional(),
   active: z.boolean(),
   /**
    * Plaza confirmada y en construcción: aparece en el mapa y en la lista con la leyenda

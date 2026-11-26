@@ -55,6 +55,8 @@ export const en = {
 
   'place.backToPlaza': 'Back to {plaza}',
   'place.backToResults': 'Back to Results',
+  'place.backToMap': 'Back to Map',
+  'place.near': '{distancia} from {plaza}',
   'place.directionsToPlaza': 'Directions to {plaza}',
   'place.directionsToPlace': 'Directions to {name}',
   'place.directions': 'Directions',
@@ -169,6 +171,7 @@ export const en = {
   'share.action': 'Share',
   'share.place': 'Share {name}',
   'share.text': '{name} · {giros} · {plaza}. Learn more at',
+  'share.textSinZona': '{name} · {giros}. Learn more at',
   'share.copied': 'Copied',
   'share.failed': 'Could not copy the link',
 

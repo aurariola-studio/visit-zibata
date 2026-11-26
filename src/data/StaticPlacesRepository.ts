@@ -78,7 +78,7 @@ export class StaticPlacesRepository implements PlacesRepository {
     this.plazas ??= load(
       'plazas.json',
       'plazas',
-      () => import('../../data/commercial/plazas.json'),
+      () => import('virtual:zibata-plazas'),
       validatePlazas,
     )
     return this.plazas

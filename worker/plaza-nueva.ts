@@ -25,8 +25,10 @@
  *
  * Como cualquier escritura del panel, va en dos pasos: sin `confirmar` solo devuelve lo que se guardaría.
  */
+
 import { z } from 'zod'
 import { areaM2, normalizarContorno, validarContornoDePlaza } from '../src/data/geometria.ts'
+import { esZona } from '../src/data/puntos.ts'
 import {
   type CommercialDataset,
   syncPlazaDerivedFields,
@@ -176,11 +178,13 @@ export function prepararPlazaNueva(
 
   const anillo = cuadradoProvisional(dato.lat, dato.lng)
   const geometry = { type: 'Polygon' as const, coordinates: [anillo] }
-  const otras = dataset.plazas.flatMap((otra) =>
-    otra.geometry.type === 'Polygon'
-      ? [{ id: otra.id, anillo: (otra.geometry.coordinates as number[][][])[0] ?? [] }]
-      : [],
-  )
+  const otras = dataset.plazas
+    .filter(esZona)
+    .flatMap((otra) =>
+      otra.geometry.type === 'Polygon'
+        ? [{ id: otra.id, anillo: (otra.geometry.coordinates as number[][][])[0] ?? [] }]
+        : [],
+    )
   const rotos = validarContornoDePlaza(geometry, {
     contorno: CONTORNO_DE_ZIBATA,
     marcador: { lat: dato.lat, lng: dato.lng },

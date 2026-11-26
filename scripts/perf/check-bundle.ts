@@ -202,7 +202,7 @@ const matching = (pattern: RegExp) => assets.filter((name) => pattern.test(name)
 const DATOS_DE_ARRANQUE = /^(categories|plazas|places-resumen)-.*\.js$/
 const DATOS_DE_DETALLE = /^places-detalle-.*\.js$/
 /** Todo lo que parece un trozo de datos, venga o no con un nombre que esperemos. */
-const PARECE_DATOS = /^(categories|plazas|places|_?virtual_zibata-places)[-_].*\.js$/
+const PARECE_DATOS = /^(categories|plazas|places|_?virtual_zibata-(places|plazas))[-_].*\.js$/
 /** El registro de dibujos de iconos que carga `CategoryIcon` con `import('./registro-de-iconos.tsx')`. */
 const ICONOS_CHUNK = /^registro-de-iconos-.*\.js$/
 /** Los fragmentos de iconos por sector que carga `CategoryIcon` con `import('./iconos-de-<sector>.tsx')`. */

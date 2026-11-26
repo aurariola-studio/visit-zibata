@@ -69,6 +69,9 @@ export const es = {
 
   'place.backToPlaza': 'Volver a {plaza}',
   'place.backToResults': 'Volver a Resultados',
+  'place.backToMap': 'Volver al Mapa',
+  // Un punto de interés no está en ninguna zona: se dice a cuánto queda de la abierta más cercana.
+  'place.near': 'A {distancia} de {plaza}',
   'place.directionsToPlaza': 'Cómo llegar a {plaza}',
   'place.directionsToPlace': 'Cómo llegar a {name}',
   'place.directions': 'Cómo llegar',
@@ -207,6 +210,7 @@ export const es = {
   'share.place': 'Compartir {name}',
   /* Etiqueta, no frase: lleva el nombre, los giros y la zona, que es lo que la guía ya publica. */
   'share.text': '{name} · {giros} · {plaza}. Conoce más en',
+  'share.textSinZona': '{name} · {giros}. Conoce más en',
   'share.copied': 'Copiado',
   'share.failed': 'No se pudo copiar el enlace',
 

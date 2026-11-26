@@ -13,7 +13,8 @@ interface ShareButtonProps {
   slug: string
   /** Los giros del lugar, completos y unidos en prosa ("Comida Italiana y Pizza"): van en el texto. */
   giros: string
-  plazaName: string
+  /** Sin ella, el texto no nombra zona: es un punto de interés. */
+  plazaName?: string
   size?: 'sm' | 'md'
   /**
    * Con nombre a la vista, para la fila de salidas de la ficha. Sin esto es solo el icono, que es
@@ -71,7 +72,9 @@ export function ShareButton({
           // Sin await antes: `navigator.share` exige la activación del usuario y se perdería.
           void share({
             title: `${name} · ${t('app.name')}`,
-            text: t('share.text', { name, giros, plaza: plazaName }),
+            text: plazaName
+              ? t('share.text', { name, giros, plaza: plazaName })
+              : t('share.textSinZona', { name, giros }),
             url: placeUrl(slug),
           }).then((salida) => {
             // Cuenta lo que se llegó a compartir o copiar, no el botón pulsado y cancelado.

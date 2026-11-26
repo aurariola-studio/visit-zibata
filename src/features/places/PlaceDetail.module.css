@@ -128,6 +128,11 @@
   color: var(--plaza-ink, var(--olive-600));
 }
 
+/* El de un punto de interés va en tinta, como su pin en el mapa: no tiene color de zona. */
+.location[data-punto] svg {
+  color: var(--ink-900);
+}
+
 .address {
   display: block;
   color: var(--color-text-muted);

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import categoriasJson from '../data/commercial/categories.json' with { type: 'json' }
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
 import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
+import { esZona } from '../src/data/puntos.ts'
 import { type CommercialDataset, isInsidePlazaGeometry } from '../src/data/relations.ts'
 import { CategoriesFileSchema, PlacesFileSchema, PlazasFileSchema } from '../src/data/schemas.ts'
 import { guardarContorno, prepararContorno } from './geometria-plaza.ts'
@@ -41,7 +42,7 @@ const conUbicacion = (id: string) =>
   completo.places.filter((place) => place.plazaId === id && place.location)
 
 /** La plaza de los casos: con al menos dos locales ubicados y un contorno que encogido al 90 % sigue valiendo. */
-const elegida = completo.plazas.find((plaza) => {
+const elegida = completo.plazas.filter(esZona).find((plaza) => {
   if (conUbicacion(plaza.id).length < 2) return false
   const preparado = prepararContorno(
     completo,

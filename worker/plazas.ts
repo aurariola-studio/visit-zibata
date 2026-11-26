@@ -13,7 +13,9 @@
  * dependen de ellos), así que ese cambio no se guarda a la primera: el Worker responde con el impacto y
  * espera una confirmación. Cualquier otro cambio se guarda directo, como en un negocio.
  */
+
 import { z } from 'zod'
+import { esPunto } from '../src/data/puntos.ts'
 import {
   type CommercialDataset,
   isWithinBounds,
@@ -202,9 +204,10 @@ export function prepararPlaza(
    * llamarse como otra plaza, como una página de información o como un local que se ve, ni compartir
    * su descripción recortada.
    */
-  if (plaza.active) {
+  // Un punto de interés no tiene página: su nombre y su texto no compiten con ningún título.
+  if (plaza.active && !esPunto(plaza)) {
     const nombre = normalizar(plaza.name)
-    const otras = dataset.plazas.filter((otra) => otra.id !== plaza.id)
+    const otras = dataset.plazas.filter((otra) => otra.id !== plaza.id && !esPunto(otra))
     const igual = otras.find((otra) => normalizar(otra.name) === nombre)
     if (igual)
       problemas.push(`Ya hay una plaza llamada "${igual.name}"; los títulos se repetirían.`)

@@ -17,6 +17,7 @@
  *  - **El diff se mantiene pequeño.** Se reemplaza solo el local tocado y los campos derivados de
  *    su plaza, en vez de volver a serializar todo el archivo desde los objetos de Zod.
  */
+
 import { z } from 'zod'
 import categoriasJson from '../data/commercial/categories.json' with { type: 'json' }
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
@@ -26,6 +27,7 @@ import ajustesJson from '../data/geographic/ajustes-edificios.json' with { type:
 import extent from '../data/geographic/extent.json' with { type: 'json' }
 import volumenesJson from '../data/geographic/volumenes-plaza.json' with { type: 'json' }
 import { type AjusteEdificio, leerAjustes } from '../src/data/ajustes-edificios.ts'
+import { esPunto } from '../src/data/puntos.ts'
 import {
   type CommercialDataset,
   syncPlazaDerivedFields,
@@ -838,7 +840,7 @@ export function prepararNegocio(
     )
     const nombreRepetido = visiblesGlobal.some((fila) => normalizar(fila.name) === nombre)
     const titulos =
-      nombreRepetido && plaza
+      nombreRepetido && plaza && !esPunto(plaza)
         ? [
             `${place.name} en ${plaza.name}${SUFIJO_TITULO}`,
             `${place.name} in ${plaza.name}${SUFIJO_TITULO}`,
@@ -859,13 +861,15 @@ export function prepararNegocio(
         `El nombre coincide con el de la página de información "${tituloReservado}"; los títulos se repetirían.`,
       )
     }
-    const plazaMismoNombre = dataset.plazas.find((fila) => normalizar(fila.name) === nombre)
+    // Un punto de interés suele llamarse como su negocio y no tiene página: no cuenta.
+    const zonas = dataset.plazas.filter((fila) => !esPunto(fila))
+    const plazaMismoNombre = zonas.find((fila) => normalizar(fila.name) === nombre)
     if (plazaMismoNombre) {
       problemas.push(
         `El nombre coincide con el de la plaza "${plazaMismoNombre.name}"; los títulos de las dos páginas se repetirían.`,
       )
     }
-    const plazaMismaDescripcion = dataset.plazas.find(
+    const plazaMismaDescripcion = zonas.find(
       (fila) =>
         recorte(fila.description?.es ?? '') === descripcionEs ||
         recorte(fila.description?.en ?? '') === descripcionEn,

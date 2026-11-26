@@ -15,9 +15,11 @@
  * locales vecinos (ver contenido.ts). Antes el cuerpo eran 193 bytes iguales en las 234, así que un
  * rastreador veía páginas vacías y sin enlaces entre ellas. React lo sustituye al montar.
  */
+
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import type { Plugin } from 'vite'
+import { esPunto } from '../../src/data/puntos.ts'
 import { enCompleto as en, esCompleto as es } from '../../src/i18n/completo.ts'
 import {
   etiquetaDeCategoria,
@@ -187,7 +189,8 @@ export function pagesFor(
       },
       base,
     )
-  const activePlazas = data.plazas.filter((plaza) => plaza.active)
+  // Un punto de interés no tiene página de zona ni sale en ninguna lista de zonas.
+  const activePlazas = data.plazas.filter((plaza) => plaza.active && !esPunto(plaza))
 
   /*
    * Cada categoría con algún local tiene su página (`/categoria/x`), y las desde donde se llega a ella
@@ -441,7 +444,8 @@ export function pagesFor(
     .map((place) => {
       const plaza = plazaById.get(place.plazaId)
       const giros = place.giros.map((id) => giroLabel.get(id) ?? id)
-      const nombrePlaza = plaza ? text(plaza.name, locale) : undefined
+      // De un punto de interés no se dice "en tal zona": no está en ninguna.
+      const nombrePlaza = plaza && !esPunto(plaza) ? text(plaza.name, locale) : undefined
       return {
         place,
         plaza,
@@ -520,7 +524,8 @@ export function pagesFor(
         category: categoryOfGiro.get(place.giros[0] ?? ''),
         giros,
         url: absolute(route({ placeSlug: place.slug })),
-        plazaUrl: plaza?.active ? absolute(route({ plazaSlug: plaza.slug })) : undefined,
+        plazaUrl:
+          plaza?.active && !esPunto(plaza) ? absolute(route({ plazaSlug: plaza.slug })) : undefined,
         image: absolute(image),
         direccion,
         locale,
@@ -544,9 +549,10 @@ export function pagesFor(
           place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           locale,
         ),
-        plaza: plaza?.active
-          ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
-          : undefined,
+        plaza:
+          plaza?.active && !esPunto(plaza)
+            ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
+            : undefined,
         direccion: direccion ?? undefined,
         descripcion: text(place.description, locale) || undefined,
         dias: DIAS.map((dia) => ({
@@ -562,7 +568,7 @@ export function pagesFor(
           return otro ? [{ texto: otro.name, href: route({ placeSlug: otro.slug }) }] : []
         }),
         tituloVecinos: fill(copy['seo.nearby'], {
-          plaza: plaza ? text(plaza.name, locale) : 'Zibatá',
+          plaza: plaza && !esPunto(plaza) ? text(plaza.name, locale) : 'Zibatá',
         }),
         categorias: {
           titulo: copy['seo.categories'],

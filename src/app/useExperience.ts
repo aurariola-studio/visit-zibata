@@ -1,7 +1,9 @@
 /** Datos derivados del estado: resultados, conteos por plaza y qué muestra el panel. */
+
 import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
 import { usePlaceDetails } from '../data/CatalogContext.tsx'
 import { markedPlace } from '../data/catalog.ts'
+import { esPunto } from '../data/puntos.ts'
 import { useFavorites } from '../features/favorites/useFavorites.ts'
 import {
   applyFilters,
@@ -13,6 +15,7 @@ import {
   sectorsOf,
 } from '../features/filters/filters.ts'
 import { useZonedNow } from '../features/places/OpenStatus.tsx'
+import { placeIconName } from '../features/places/placeIcon.ts'
 import { preferences } from '../features/ranking/preferences.ts'
 import { categoryAffinity } from '../features/ranking/rankPlaces.ts'
 import { usePersonalOrder } from '../features/ranking/usePersonalOrder.ts'
@@ -291,6 +294,27 @@ export function useExperience(catalog: Catalog) {
     if (selectedPlace) preferences.recordOpen(selectedPlace.id)
   }, [selectedPlace])
 
+  // Cada punto de interés en el mapa lleva el nombre y el ícono de su negocio; sin negocio visible no se dibuja.
+  const puntosEnMapa = useMemo(
+    () =>
+      catalog.puntos.flatMap((punto) => {
+        const place = catalog.placesByPlaza.get(punto.id)?.[0]
+        return place
+          ? [
+              {
+                id: punto.id,
+                placeId: place.id,
+                name: place.name,
+                icon: placeIconName(place, catalog),
+                lat: punto.coordinates.lat,
+                lng: punto.coordinates.lng,
+              },
+            ]
+          : []
+      }),
+    [catalog],
+  )
+
   const panel: PanelMode = useMemo(() => {
     if (selectedPlace) {
       const plaza = catalog.plazaById.get(selectedPlace.plazaId)
@@ -337,5 +361,7 @@ export function useExperience(catalog: Catalog) {
     effectiveSectorId,
     panel,
     activePlazas: catalog.plazas.filter((plaza) => plaza.active),
+    puntosEnMapa,
+    selectedPuntoId: panel.kind === 'place' && esPunto(panel.plaza) ? panel.plaza.id : null,
   }
 }
