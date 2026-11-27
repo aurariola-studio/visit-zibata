@@ -1,6 +1,6 @@
 import { Info } from 'lucide-react'
 import { locale, t } from '../../i18n/index.ts'
-import { formatRange, groupWeek, hasAnyHours } from '../../lib/hours.ts'
+import { formatRange, groupWeek, hasAnyHours, partirEnMedianoche } from '../../lib/hours.ts'
 import type { Hours } from '../../types/domain.ts'
 import styles from './HoursTable.module.css'
 import { OpenStatus, useZonedNow } from './OpenStatus.tsx'
@@ -35,7 +35,7 @@ export function HoursTable({
     )
   }
 
-  const groups = groupWeek(hours).filter((group) => group.ranges !== null)
+  const groups = groupWeek(partirEnMedianoche(hours)).filter((group) => group.ranges !== null)
   return (
     <section className={styles.section} aria-label={t('place.hours')}>
       {hours.byClasses && (
