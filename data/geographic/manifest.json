@@ -84,36 +84,36 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2573423,
-      "sha256": "ec3b37a260d9748297d9d1f371c0d5eab9fb5a7cf5c9363f913d94107ef28acb",
+      "bytes": 2573449,
+      "sha256": "dded4be2506a8e5ca89242c7f13d0247664d3e47171376f58bae17e849d4c438",
       "tiles": 266,
       "bytesByZoom": {
-        "12": 49718,
-        "13": 250671,
-        "14": 529796,
-        "15": 732116,
-        "16": 1009807
+        "12": 49714,
+        "13": 250682,
+        "14": 529815,
+        "15": 732110,
+        "16": 1009815
       },
       "largestTile": {
         "z": 13,
         "x": 1812,
         "y": 3615,
-        "bytes": 96938
+        "bytes": 96949
       },
       "features": {
         "roads": 4216,
         "landuse": 155,
         "water": 8,
         "waterway": 11,
-        "buildings": 16010,
+        "buildings": 16009,
         "labels": 21,
         "trees": 30780,
         "shrubs": 1747
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 19813,
-      "sha256": "9a5600616ab4a6bbd794df0977508f1f6b987bfb234f61259df3321a94b9cc8d",
+      "bytes": 19871,
+      "sha256": "7e6c3288480620efb465a410e5628b3adc6e0ca3df817b6682004659f6122bbc",
       "features": 53,
       "synthesizedFor": [
         "paseo-zibata",
@@ -157,8 +157,8 @@
       ]
     },
     "data/geographic/volumenes-propios.json": {
-      "bytes": 14906,
-      "sha256": "faceea8dc8a844cfdd679602cb9fd2d0a07db60f4291c5950d244cab16331be6",
+      "bytes": 17518,
+      "sha256": "9b3723e17c56478a2c4b701014c50d7e2e74609bd252766a421314cc1d78a530",
       "sueltos": [
         {
           "id": "h-e-b",
@@ -195,6 +195,15 @@
           "alturaNota": "Estimación provisional de 4 m para un local de una planta. Ninguna fuente la respalda.",
           "creado": "2026-11-27",
           "retirarCuando": "Cuando el propietario dé sus medidas o una versión de Overture traiga una huella correcta."
+        },
+        {
+          "id": "banco-bbva",
+          "nombre": "Banco BBVA",
+          "height": 6.1,
+          "fuente": "Huella abierta de Overture (12b293cd-c076-4004-a591-2f6e1d854f1b) girada 17 grados sobre su centro para quedar paralela al edificio de Paseo Zibatá, como pidió el propietario el 2026-11-27.",
+          "alturaNota": "La misma altura estimada que tenía la huella abierta.",
+          "creado": "2026-11-27",
+          "retirarCuando": "Cuando una versión de Overture traiga la huella bien orientada."
         }
       ]
     },
@@ -278,8 +287,8 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3875584,
-        "sha256": "aeadd10b64217caebdf2dabb5492b1f82ad83fdb06a2400dec81b60df1394b80"
+        "bytes": 3874984,
+        "sha256": "9f540523925c86c9458fe68c505e124a93f69de0c8236a84ddc6c59c399e454a"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 144856,

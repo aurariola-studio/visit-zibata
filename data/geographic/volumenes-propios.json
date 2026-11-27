@@ -493,6 +493,106 @@
             20.681355
           ]
         ]
+      },
+      {
+        "nombre": "Edificio octogonal",
+        "height": 10.2,
+        "anillo": [
+          [
+            -100.312796,
+            20.680549
+          ],
+          [
+            -100.312761,
+            20.680366
+          ],
+          [
+            -100.312875,
+            20.680214
+          ],
+          [
+            -100.313071,
+            20.680181
+          ],
+          [
+            -100.313234,
+            20.680288
+          ],
+          [
+            -100.313268,
+            20.680471
+          ],
+          [
+            -100.313154,
+            20.680624
+          ],
+          [
+            -100.312959,
+            20.680656
+          ],
+          [
+            -100.312796,
+            20.680549
+          ]
+        ]
+      },
+      {
+        "nombre": "Edificio en U",
+        "height": 13.4,
+        "anillo": [
+          [
+            -100.313417,
+            20.680248
+          ],
+          [
+            -100.313734,
+            20.679824
+          ],
+          [
+            -100.313625,
+            20.679752
+          ],
+          [
+            -100.313393,
+            20.680063
+          ],
+          [
+            -100.313189,
+            20.67993
+          ],
+          [
+            -100.313412,
+            20.679632
+          ],
+          [
+            -100.313331,
+            20.679578
+          ],
+          [
+            -100.313029,
+            20.679981
+          ],
+          [
+            -100.313132,
+            20.680049
+          ],
+          [
+            -100.313097,
+            20.680095
+          ],
+          [
+            -100.313249,
+            20.680195
+          ],
+          [
+            -100.313278,
+            20.680157
+          ],
+          [
+            -100.313417,
+            20.680248
+          ]
+        ]
       }
     ]
   },
@@ -624,6 +724,53 @@
       "alturaNota": "Estimación provisional de 4 m para un local de una planta. Ninguna fuente la respalda.",
       "creado": "2026-11-27",
       "retirarCuando": "Cuando el propietario dé sus medidas o una versión de Overture traiga una huella correcta."
+    },
+    {
+      "id": "banco-bbva",
+      "nombre": "Banco BBVA",
+      "height": 6.1,
+      "anillo": [
+        [
+          -100.315162,
+          20.679829
+        ],
+        [
+          -100.315275,
+          20.679909
+        ],
+        [
+          -100.315357,
+          20.679806
+        ],
+        [
+          -100.315347,
+          20.679799
+        ],
+        [
+          -100.315388,
+          20.679748
+        ],
+        [
+          -100.315318,
+          20.679699
+        ],
+        [
+          -100.315282,
+          20.679743
+        ],
+        [
+          -100.31525,
+          20.67972
+        ],
+        [
+          -100.315162,
+          20.679829
+        ]
+      ],
+      "fuente": "Huella abierta de Overture (12b293cd-c076-4004-a591-2f6e1d854f1b) girada 17 grados sobre su centro para quedar paralela al edificio de Paseo Zibatá, como pidió el propietario el 2026-11-27.",
+      "alturaNota": "La misma altura estimada que tenía la huella abierta.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando una versión de Overture traiga la huella bien orientada."
     }
   ],
   "vias": [
@@ -632,39 +779,19 @@
       "nombre": "Estacionamiento y acceso al Colegio NWL",
       "linea": [
         [
-          -100.339518,
-          20.680436
+          -100.339934,
+          20.680602
         ],
         [
-          -100.339614,
-          20.680876
+          -100.339585,
+          20.681216
         ],
         [
-          -100.339671,
-          20.681024
-        ],
-        [
-          -100.339567,
-          20.681207
-        ],
-        [
-          -100.339788,
-          20.681317
-        ],
-        [
-          -100.340042,
-          20.681443
-        ],
-        [
-          -100.340293,
-          20.681578
-        ],
-        [
-          -100.340371,
-          20.681708
+          -100.340416,
+          20.681629
         ]
       ],
-      "fuente": "Trazo estimado según el propietario (2026-11-27): el estacionamiento por el que se llega al colegio rodea Plaza Centro por la derecha y por detrás. Dibujado alrededor de las huellas abiertas, sin calcar ninguna imagen.",
+      "fuente": "Trazo estimado según el propietario (2026-11-27): el estacionamiento por el que se llega al colegio es recto, sube desde la avenida por la derecha de Plaza Centro y sigue por detrás. Dibujado alrededor de las huellas abiertas, sin calcar ninguna imagen.",
       "creado": "2026-11-27",
       "retirarCuando": "Cuando OpenStreetMap traiga la vía."
     }
