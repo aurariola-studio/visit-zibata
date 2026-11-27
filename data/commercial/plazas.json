@@ -117,7 +117,10 @@
         "kubux-concept-store",
         "pinturas-berel-idearte",
         "karlitros",
-        "ultra-clean"
+        "ultra-clean",
+        "al-agua-papos",
+        "dhl-express",
+        "fisiokinema"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -156,7 +159,8 @@
         "taller-creativo",
         "veterinarias",
         "estetica-para-mascotas",
-        "lavanderia-y-sastreria"
+        "lavanderia-y-sastreria",
+        "envios"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0) con dirección \"Plaza Xentric Anáhuac\" (Wicklow Irish Pub, Boba Station, Origenatural, Subway…); huellas de edificio de Overture.",
@@ -433,7 +437,10 @@
         "spiruleka",
         "truper-ferreteria-paseo-zibata",
         "luvel-inkjet",
-        "swiss-clean-lavanderia"
+        "swiss-clean-lavanderia",
+        "aptecshop",
+        "kimi-playroom-cafeteria",
+        "teatro-punto-aplauso"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -470,7 +477,10 @@
         "estetica-para-mascotas",
         "articulos-para-mascotas",
         "hotel-para-mascotas",
-        "lavanderia-y-sastreria"
+        "lavanderia-y-sastreria",
+        "educacion",
+        "reparacion-de-equipos",
+        "teatro-y-espectaculos"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Paseo Zibatá\" y locales con esa dirección (El Hornero, Currucucú, Masaru…). Huella aproximada: el edificio aún no aparece en los datos abiertos.",
@@ -811,7 +821,8 @@
         "tienda-comex",
         "guarderia-arcoiris",
         "atm-multiva",
-        "mr-jeff"
+        "mr-jeff",
+        "english-tutoring-center"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -956,7 +967,10 @@
         "ferreteria-el-refugio",
         "maggix-detalles-magicos",
         "tintoreria-7clean",
-        "banco-banregio"
+        "banco-banregio",
+        "centro-kumon",
+        "fisioceler",
+        "pequeshub"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -976,6 +990,7 @@
         "consultorios-y-clinicas",
         "dentistas",
         "laboratorios-y-diagnostico",
+        "fisioterapia",
         "gimnasios",
         "yoga-pilates-y-barre",
         "danza",
@@ -995,7 +1010,8 @@
         "estetica-para-mascotas",
         "hotel-para-mascotas",
         "lavanderia-y-sastreria",
-        "bancos-y-cajeros"
+        "bancos-y-cajeros",
+        "educacion"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Plaza Zielo\" y locales con esa dirección (Escarola, Donatto Pizza, Margaritas); huella de Overture.",
@@ -1257,7 +1273,9 @@
         "nima-studio-floral",
         "truper-ferreteria-centro-zibata",
         "banco-santander",
-        "tintoreria-pressto"
+        "tintoreria-pressto",
+        "fedex",
+        "moms-tots"
       ],
       "categories": [
         "desayunos-y-cafe",
@@ -1278,7 +1296,9 @@
         "panaderias",
         "ferreterias",
         "floristerias",
-        "lavanderia-y-sastreria"
+        "lavanderia-y-sastreria",
+        "educacion",
+        "envios"
       ],
       "locationConfidence": "high",
       "locationSource": "POIs de Overture Maps (release 2026-08-19.0): \"Centro Zibatá\" (shopping center) y Agave Grill; huella de Overture.",

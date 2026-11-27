@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-26",
+  "updatedAt": "2026-11-27",
   "places": [
     {
       "id": "carls-jr",
@@ -14124,6 +14124,213 @@
       }
     },
     {
+      "id": "centro-kumon",
+      "slug": "centro-kumon",
+      "name": "Centro Kumon",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "refuerzo-academico"
+      ],
+      "description": {
+        "es": "Ayude a su hijo a desarrollar habilidades en matemáticas, lectura e inglés mediante la práctica constante.",
+        "en": "Help your child develop maths, reading and English skills through consistent practice."
+      },
+      "hours": {
+        "mon": [
+          "15:00-20:00"
+        ],
+        "tue": [
+          "15:00-20:00"
+        ],
+        "wed": [
+          "15:00-20:00"
+        ],
+        "thu": [
+          "15:00-20:00"
+        ],
+        "fri": [],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6750294,
+        "lng": -100.3227246
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/Xwk8d82byEfkyLd78",
+      "googlePlaceId": null,
+      "phone": "+524461391235",
+      "photos": [],
+      "links": {
+        "website": "https://mx.centro.kumon.com/",
+        "instagram": "https://www.instagram.com/kumonzibataqro/",
+        "facebook": "https://www.facebook.com/KumonZibataQro/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "37"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/Xwk8d82byEfkyLd78",
+          "https://mx.centro.kumon.com/",
+          "https://www.instagram.com/kumonzibataqro/",
+          "https://www.facebook.com/KumonZibataQro/",
+          "campo:2026-11-26"
+        ]
+      }
+    },
+    {
+      "id": "fisioceler",
+      "slug": "fisioceler",
+      "name": "Fisioceler",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "fisioterapia"
+      ],
+      "description": {
+        "es": "Somos Fisioceler, un centro de fisioterapia y rehabilitación conformado por un equipo multidisciplinario de profesionales dedicados a mejorar la salud y el bienestar de nuestros pacientes.",
+        "en": "We are Fisioceler, a physiotherapy and rehabilitation centre made up of a multidisciplinary team of professionals dedicated to improving the health and well-being of our patients."
+      },
+      "hours": {
+        "mon": [
+          "09:00-20:00"
+        ],
+        "tue": [
+          "09:00-20:00"
+        ],
+        "wed": [
+          "09:00-20:00"
+        ],
+        "thu": [
+          "09:00-20:00"
+        ],
+        "fri": [
+          "09:00-20:00"
+        ],
+        "sat": [
+          "09:00-15:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6748664,
+        "lng": -100.3225615
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/FvZiM28Wa4r5BLgj8",
+      "googlePlaceId": null,
+      "phone": "+524423471614",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/fisioceler/",
+        "facebook": "https://www.facebook.com/fisioceler.qro/",
+        "tiktok": null,
+        "whatsapp": "+524423471614",
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "55"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/FvZiM28Wa4r5BLgj8",
+          "https://www.instagram.com/fisioceler/",
+          "https://www.facebook.com/fisioceler.qro/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "pequeshub",
+      "slug": "pequeshub",
+      "name": "PequesHUB",
+      "plazaId": "plaza-zielo",
+      "giros": [
+        "guarderia"
+      ],
+      "description": {
+        "es": "Un espacio creado para acompañar a cada Peque con atención, aprendizaje, juego y experiencias acordes a su etapa.",
+        "en": "A space created to support every little one with care, learning, play and experiences suited to their stage."
+      },
+      "hours": {
+        "mon": [
+          "07:00-19:00"
+        ],
+        "tue": [
+          "07:00-19:00"
+        ],
+        "wed": [
+          "07:00-19:00"
+        ],
+        "thu": [
+          "07:00-19:00"
+        ],
+        "fri": [
+          "07:00-19:00"
+        ],
+        "sat": [
+          "09:00-17:00"
+        ],
+        "sun": [
+          "09:00-17:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6746918,
+        "lng": -100.3226899
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/yRtCJWoSpMFkrqp87",
+      "googlePlaceId": null,
+      "phone": "+524421940605",
+      "photos": [],
+      "links": {
+        "website": "https://pequeshub.com.mx/",
+        "instagram": "https://www.instagram.com/pequeshub/",
+        "facebook": "https://www.facebook.com/profile.php?id=61583415753441",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "23"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/yRtCJWoSpMFkrqp87",
+          "https://pequeshub.com.mx/",
+          "https://www.instagram.com/pequeshub/",
+          "https://www.facebook.com/profile.php?id=61583415753441",
+          "campo:2026-11-26"
+        ]
+      }
+    },
+    {
       "id": "mali-papeleria",
       "slug": "mali-papeleria",
       "name": "MALI Papelería",
@@ -14723,6 +14930,134 @@
       }
     },
     {
+      "id": "fedex",
+      "slug": "fedex",
+      "name": "FedEx",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "paqueteria"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "09:30-18:30"
+        ],
+        "tue": [
+          "09:30-18:30"
+        ],
+        "wed": [
+          "09:30-18:30"
+        ],
+        "thu": [
+          "09:30-18:30"
+        ],
+        "fri": [
+          "09:30-18:30"
+        ],
+        "sat": [
+          "10:00-13:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6811553,
+        "lng": -100.3400375
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/iouJ9C4HMLtCeQVe8",
+      "googlePlaceId": null,
+      "phone": "+524428880333",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": "https://www.facebook.com/profile.php?id=61553008335177",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/iouJ9C4HMLtCeQVe8",
+          "https://www.facebook.com/profile.php?id=61553008335177",
+          "campo:2026-11-26"
+        ]
+      }
+    },
+    {
+      "id": "moms-tots",
+      "slug": "moms-tots",
+      "name": "Mom's and Tot's",
+      "plazaId": "centro-zibata",
+      "giros": [
+        "guarderia"
+      ],
+      "description": {
+        "es": "Moms and Tots es un Centro de Desarrollo Infantil, especializado en brindar procesos de estimulación temprana y métodos de enseñanza enfocados hacia un aprendizaje significativo, de acuerdo a cada etapa del desarrollo desde los 3 meses hasta los 6 años de edad todo esto, a través del servicio de Guardería, Maternal y Kínder incorporado.",
+        "en": "Moms and Tots is a Child Development Centre specialised in early stimulation and teaching methods aimed at meaningful learning, according to each stage of development from 3 months to 6 years of age, all through our daycare, maternal and accredited kindergarten services."
+      },
+      "hours": {
+        "mon": [
+          "08:00-17:00"
+        ],
+        "tue": [
+          "08:00-17:00"
+        ],
+        "wed": [
+          "08:00-17:00"
+        ],
+        "thu": [
+          "08:00-17:00"
+        ],
+        "fri": [
+          "08:00-17:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6812977,
+        "lng": -100.3402229
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/LyAaYJScu4CAjwg39",
+      "googlePlaceId": null,
+      "phone": "+524426440042",
+      "photos": [],
+      "links": {
+        "website": "https://www.momsandtots.com.mx/",
+        "instagram": "https://www.instagram.com/momsandtots.mx/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta"
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/LyAaYJScu4CAjwg39",
+          "https://www.momsandtots.com.mx/",
+          "https://www.instagram.com/momsandtots.mx/",
+          "campo:2026-11-26"
+        ]
+      }
+    },
+    {
       "id": "truper-ferreteria-paseo-zibata",
       "slug": "truper-ferreteria-paseo-zibata",
       "name": "Truper Ferretería Paseo Zibatá",
@@ -15039,6 +15374,57 @@
       }
     },
     {
+      "id": "english-tutoring-center",
+      "slug": "english-tutoring-center",
+      "name": "English Tutoring Center",
+      "plazaId": "xentric-zibata",
+      "giros": [
+        "idiomas"
+      ],
+      "description": {
+        "es": "Grupos pequeños de hasta 7 alumnos.\nClases privadas disponibles.\nMaestro certificado, hablante nativo de inglés.\nMetodología Montessori aplicada a la enseñanza del inglés.\nNiños de 5 a 15 años.",
+        "en": "Small groups of up to 7 students.\nPrivate lessons available.\nCertified teacher, native English speaker.\nMontessori methodology applied to teaching English.\nChildren aged 5 to 15."
+      },
+      "hours": {
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6835207,
+        "lng": -100.3259464
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/r5ijDB3LcJKoq9N47",
+      "googlePlaceId": null,
+      "phone": "+524428731171",
+      "photos": [],
+      "links": {
+        "website": "https://etcqro.com/",
+        "instagram": null,
+        "facebook": "https://www.facebook.com/profile.php?id=61589455494265",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "213"
+        ]
+      },
+      "active": false,
+      "verification": {
+        "status": "uncertain",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/r5ijDB3LcJKoq9N47",
+          "https://etcqro.com/",
+          "https://www.facebook.com/profile.php?id=61589455494265"
+        ]
+      }
+    },
+    {
       "id": "pinturas-berel-idearte",
       "slug": "pinturas-berel-idearte",
       "name": "Pinturas Berel Idearte",
@@ -15250,6 +15636,219 @@
       }
     },
     {
+      "id": "aptecshop",
+      "slug": "aptecshop",
+      "name": "Aptecshop",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "reparacion-de-celulares"
+      ],
+      "description": {
+        "es": "Somos una empresa dedicada y especializada en restauración de equipos apple en general.",
+        "en": "We are a company dedicated to and specialised in the restoration of Apple equipment in general."
+      },
+      "hours": {
+        "mon": [
+          "11:00-19:00"
+        ],
+        "tue": [
+          "11:00-19:00"
+        ],
+        "wed": [
+          "11:00-19:00"
+        ],
+        "thu": [
+          "11:00-19:00"
+        ],
+        "fri": [
+          "11:00-19:00"
+        ],
+        "sat": [
+          "11:00-19:00"
+        ],
+        "sun": [
+          "11:30-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6791089,
+        "lng": -100.3149873
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/BuZjhk6xnmmbmZZ28",
+      "googlePlaceId": null,
+      "phone": "+524421681917",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/apple_tec_shop_/",
+        "facebook": "https://www.facebook.com/TecShop000/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/BuZjhk6xnmmbmZZ28",
+          "https://www.instagram.com/apple_tec_shop_/",
+          "https://www.facebook.com/TecShop000/",
+          "campo:2026-11-26"
+        ]
+      }
+    },
+    {
+      "id": "kimi-playroom-cafeteria",
+      "slug": "kimi-playroom-cafeteria",
+      "name": "Kimi Playroom & Cafetería",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "ludoteca"
+      ],
+      "description": {
+        "es": "Los menores de 2 años juegan acompañados de un adulto, y a partir de los 2 años pueden explorar y divertirse con el apoyo de nuestras niñeras, mientras tú disfrutas de un café o un momento para ti. ☕🧸",
+        "en": "Children under 2 play accompanied by an adult, and from age 2 they can explore and have fun with the support of our nannies, while you enjoy a coffee or a moment for yourself. ☕🧸"
+      },
+      "hours": {
+        "mon": [
+          "10:00-19:30"
+        ],
+        "tue": [
+          "10:00-19:30"
+        ],
+        "wed": [
+          "10:00-19:30"
+        ],
+        "thu": [
+          "10:00-20:30"
+        ],
+        "fri": [
+          "10:00-20:30"
+        ],
+        "sat": [
+          "10:00-20:30"
+        ],
+        "sun": [
+          "10:00-19:30"
+        ]
+      },
+      "location": {
+        "lat": 20.6791014,
+        "lng": -100.3146748
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/mNYVL3xY4dbAHUMd8",
+      "googlePlaceId": null,
+      "phone": "+529812922213",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/kimicafeplayroom/",
+        "facebook": "https://www.facebook.com/p/Kimi-caf%C3%A9playroom-61589157658666/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "50",
+          "51",
+          "52"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/mNYVL3xY4dbAHUMd8",
+          "https://www.instagram.com/kimicafeplayroom/",
+          "https://www.facebook.com/p/Kimi-caf%C3%A9playroom-61589157658666/",
+          "campo:2026-11-26"
+        ]
+      }
+    },
+    {
+      "id": "teatro-punto-aplauso",
+      "slug": "teatro-punto-aplauso",
+      "name": "Teatro Punto y Aplauso",
+      "plazaId": "paseo-zibata",
+      "giros": [
+        "teatro"
+      ],
+      "description": {
+        "es": "🎭Teatro infantil y para adultos 🎶 Tributos\n🎤Stand up ✨Micrófono abierto",
+        "en": "🎭Theatre for children and adults 🎶 Tributes\n🎤Stand-up ✨Open mic"
+      },
+      "hours": {
+        "mon": [
+          "17:00-23:00"
+        ],
+        "tue": [
+          "17:00-23:30"
+        ],
+        "wed": [
+          "18:00-23:00"
+        ],
+        "thu": [
+          "19:00-23:00"
+        ],
+        "fri": [
+          "19:00-23:00"
+        ],
+        "sat": [
+          "19:00-24:00"
+        ],
+        "sun": [
+          "14:30-18:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6794169,
+        "lng": -100.3145535
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/gLVEZdcvciSApa617",
+      "googlePlaceId": null,
+      "phone": "+524427858903",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/puntoyaplauso/",
+        "facebook": "https://www.facebook.com/puntoyaplauso.teatro",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "7",
+          "8",
+          "9"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/gLVEZdcvciSApa617",
+          "https://www.instagram.com/puntoyaplauso/",
+          "https://www.facebook.com/puntoyaplauso.teatro",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
       "id": "karlitros",
       "slug": "karlitros",
       "name": "Karlitros",
@@ -15380,6 +15979,216 @@
           "https://www.instagram.com/ultracleanzibata/",
           "https://www.facebook.com/ultracleanzibata/",
           "campo:2026-11-25"
+        ]
+      }
+    },
+    {
+      "id": "al-agua-papos",
+      "slug": "al-agua-papos",
+      "name": "Al Agua Papos",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "calzado"
+      ],
+      "description": {
+        "es": "👟 Al agua… ¡y salen relucientes!\n🦆 Especialistas en limpieza de calzado",
+        "en": "👟 Into the water… and out they come sparkling!\n🦆 Shoe cleaning specialists"
+      },
+      "hours": {
+        "mon": [
+          "10:30-19:00"
+        ],
+        "tue": [
+          "10:30-19:00"
+        ],
+        "wed": [
+          "10:30-19:00"
+        ],
+        "thu": [
+          "10:30-19:00"
+        ],
+        "fri": [
+          "10:30-19:00"
+        ],
+        "sat": [
+          "10:30-13:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6781049,
+        "lng": -100.313569
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/xZDouHPXp2Fe6Nyw9",
+      "googlePlaceId": null,
+      "phone": "+524427770054",
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": "https://www.instagram.com/alaguapapos/",
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "alta",
+        "locales": [
+          "210"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/xZDouHPXp2Fe6Nyw9",
+          "https://www.instagram.com/alaguapapos/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "dhl-express",
+      "slug": "dhl-express",
+      "name": "DHL Express",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "paqueteria"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "09:30-14:00",
+          "15:00-19:00"
+        ],
+        "tue": [
+          "09:30-14:00",
+          "15:00-19:00"
+        ],
+        "wed": [
+          "09:30-14:00",
+          "15:00-19:00"
+        ],
+        "thu": [
+          "09:30-14:00",
+          "15:00-19:00"
+        ],
+        "fri": [
+          "09:30-14:00",
+          "15:00-19:00"
+        ],
+        "sat": [
+          "09:00-13:00"
+        ],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6787362,
+        "lng": -100.3135159
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/R3APcAdC7PEeTRmNA",
+      "googlePlaceId": null,
+      "phone": "+525553457000",
+      "photos": [],
+      "links": {
+        "website": "https://www.dhlproductosyservicios.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "planta": "baja",
+        "locales": [
+          "A-125"
+        ]
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/R3APcAdC7PEeTRmNA",
+          "https://www.dhlproductosyservicios.com/",
+          "campo:2026-11-26"
+        ]
+      }
+    },
+    {
+      "id": "fisiokinema",
+      "slug": "fisiokinema",
+      "name": "Fisiokinema",
+      "plazaId": "xentric-anahuac",
+      "giros": [
+        "fisioterapia"
+      ],
+      "description": {
+        "es": "En Fisiokinema nos enfocamos en una atención personalizada y de calidad para tu rehabilitación física, tenemos profesionales altamente capacitados y especializados en diversas áreas de la fisioterapia, dispuestos a ayudarte a recuperar tu bienestar y movilidad.",
+        "en": "At Fisiokinema we focus on personalised, quality care for your physical rehabilitation. We have highly trained professionals specialised in different areas of physiotherapy, ready to help you recover your well-being and mobility."
+      },
+      "hours": {
+        "mon": [
+          "09:00-20:00"
+        ],
+        "tue": [
+          "09:00-20:00"
+        ],
+        "wed": [
+          "09:00-20:00"
+        ],
+        "thu": [
+          "09:00-20:00"
+        ],
+        "fri": [
+          "09:00-20:00"
+        ],
+        "sat": [
+          "10:00-15:00"
+        ],
+        "sun": [],
+        "byAppointment": true
+      },
+      "location": {
+        "lat": 20.6786057,
+        "lng": -100.3135338
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/qjXAww8oQDA1Xy9DA",
+      "googlePlaceId": null,
+      "phone": "+524461383144",
+      "photos": [],
+      "links": {
+        "website": "https://fisiokinema.com/",
+        "instagram": "https://www.instagram.com/kinemafisio/",
+        "facebook": "https://www.facebook.com/kinemaqro/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "unit": {
+        "locales": [
+          "237"
+        ]
+      },
+      "active": false,
+      "verification": {
+        "status": "uncertain",
+        "confidence": "low",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/qjXAww8oQDA1Xy9DA",
+          "https://fisiokinema.com/",
+          "https://www.instagram.com/kinemafisio/",
+          "https://www.facebook.com/kinemaqro/"
         ]
       }
     }
