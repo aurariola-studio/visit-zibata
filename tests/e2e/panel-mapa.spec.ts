@@ -215,7 +215,7 @@ test.describe('el mapa del contorno', () => {
 
 /**
  * Edificios reales de `public/map/plaza-buildings.geojson`: el panel real los dibuja, así que la prueba pulsa uno
- * de verdad. El 9439 es una huella de Microsoft en Plaza Walmart; el 16041 es un volumen sintético en Paseo Zibatá.
+ * de verdad. El 9119 es una huella de Microsoft en una zona; el 16041 es un volumen sintético en Paseo Zibatá.
  */
 interface EdificioDePrueba {
   properties: { id: number; src: string; plazaId: string }
@@ -237,9 +237,11 @@ const interiorDe = (id: number) => {
   return { lat: seis(punto.lat), lng: seis(punto.lng) }
 }
 
-const REAL = 9439
+const REAL = 9119
+/** El nombre que le pone la prueba a la zona de esa huella. */
+const ZONA_CON_HUELLA = 'Zona con huella'
 const SINTETICO = 16041
-const walmart = interiorDe(REAL)
+const real = interiorDe(REAL)
 const paseo = interiorDe(SINTETICO)
 
 const contenidoEdificios = (ajustes: object[] = []) => ({
@@ -250,13 +252,13 @@ const contenidoEdificios = (ajustes: object[] = []) => ({
   places: [],
   plazas: [
     {
-      id: 'plaza-walmart',
-      slug: 'plaza-walmart',
-      name: 'Plaza Walmart',
+      id: edificio(REAL).properties.plazaId,
+      slug: 'zona-con-huella',
+      name: ZONA_CON_HUELLA,
       description: null,
       address: null,
-      coordinates: walmart,
-      geometry: cuadradoEn(walmart.lng, walmart.lat, 0.004),
+      coordinates: real,
+      geometry: cuadradoEn(real.lng, real.lat, 0.004),
       active: true,
     },
     {
@@ -339,7 +341,7 @@ test.describe('ajustar un edificio desde el mapa', () => {
   }) => {
     test.slow()
     const { dialogo, caja } = await abrirAjuste(page)
-    await pulsarCentro(page, dialogo, caja, 'Plaza Walmart')
+    await pulsarCentro(page, dialogo, caja, ZONA_CON_HUELLA)
     await expect(caja).toHaveAttribute('data-seleccion', /./, { timeout: 15_000 })
     const elegido = JSON.parse((await caja.getAttribute('data-seleccion')) ?? '{}') as {
       id: number
@@ -367,7 +369,7 @@ test.describe('ajustar un edificio desde el mapa', () => {
       await ruta.fulfill({ json: respuestaDeAjuste(Boolean(cuerpo.confirmar)) })
     })
     const { dialogo, caja } = await abrirAjuste(page)
-    await pulsarCentro(page, dialogo, caja, 'Plaza Walmart')
+    await pulsarCentro(page, dialogo, caja, ZONA_CON_HUELLA)
     await expect(dialogo.locator('input[name="lat"]')).not.toHaveValue('')
     await dialogo.getByRole('radio', { name: /Ocultarlo/ }).check()
     await dialogo.locator('textarea[name="motivo"]').fill('Se demolió en 2026')
@@ -401,12 +403,12 @@ test.describe('ajustar un edificio desde el mapa', () => {
     test.slow()
     const ajuste = {
       accion: 'ocultar',
-      punto: walmart,
+      punto: real,
       motivo: 'Ya estaba',
       creado: hoy,
     }
     const { dialogo, caja } = await abrirAjuste(page, contenidoEdificios([ajuste]))
-    await pulsarCentro(page, dialogo, caja, 'Plaza Walmart')
+    await pulsarCentro(page, dialogo, caja, ZONA_CON_HUELLA)
     await expect(dialogo.locator('[data-edificio-aviso]')).toContainText('ya tiene un ajuste', {
       timeout: 15_000,
     })
@@ -437,8 +439,8 @@ test.describe('ajustar un edificio desde el mapa', () => {
     await expect(dialogo.locator('[data-edificio-aviso]')).toContainText(
       'No se pudo cargar el mapa',
     )
-    await dialogo.locator('input[name="lat"]').fill(String(walmart.lat))
-    await dialogo.locator('input[name="lng"]').fill(String(walmart.lng))
+    await dialogo.locator('input[name="lat"]').fill(String(real.lat))
+    await dialogo.locator('input[name="lng"]').fill(String(real.lng))
     await expect(dialogo.locator('[data-edificio-elegido]')).toContainText('a mano')
     await dialogo.getByRole('radio', { name: /Fijarle la altura/ }).check()
     await dialogo.locator('input[name="alturaM"]').fill('9,5')
@@ -451,7 +453,7 @@ test.describe('ajustar un edificio desde el mapa', () => {
       operacion: 'ajustar',
       accion: 'altura',
       alturaM: 9.5,
-      punto: walmart,
+      punto: real,
     })
   })
 
