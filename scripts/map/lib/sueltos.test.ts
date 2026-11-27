@@ -1,7 +1,7 @@
 import * as turf from '@turf/turf'
 import { describe, expect, it } from 'vitest'
 import type { Suelto } from '../../../src/data/volumenes-propios.ts'
-import { poligonoDe, problemasDeSueltos } from './sueltos.ts'
+import { poligonoDe, problemasDeSueltos, trazosRepetidos } from './sueltos.ts'
 
 /** Un cuadrado de unos 55 m de lado, en un punto inventado. */
 const cuadrado = (lng: number, lat: number, lado = 0.0005): Suelto['anillo'] => [
@@ -30,6 +30,56 @@ const huella = (anillo: Suelto['anillo'], id = 'huella-abierta') =>
   }
 
 const zona = (id: string, anillo: Suelto['anillo']) => ({ id, shape: turf.polygon([anillo]) })
+
+describe('trazosRepetidos', () => {
+  const trazo = {
+    nombre: 'Trazo de prueba',
+    fuente: 'Inventado para la prueba.',
+    creado: '2026-01-01',
+    retirarCuando: 'Nunca.',
+  }
+  const propios = {
+    vias: [
+      {
+        ...trazo,
+        id: 'calle-de-prueba',
+        linea: [
+          [-100.5, 20.5],
+          [-100.499, 20.5],
+        ] as [number, number][],
+      },
+    ],
+    canchas: [{ ...trazo, id: 'cancha-de-prueba', anillo: cuadrado(-100.5, 20.5) }],
+  }
+
+  it('avisa cuando los datos abiertos ya traen la calle y la cancha', () => {
+    const avisos = trazosRepetidos(
+      propios,
+      [
+        turf.lineString([
+          [-100.5, 20.50002],
+          [-100.499, 20.50002],
+        ]),
+      ],
+      [turf.polygon([cuadrado(-100.5, 20.5)])],
+    )
+    expect(avisos).toHaveLength(2)
+  })
+
+  it('una calle que solo la cruza y una cancha lejana no cuentan', () => {
+    const avisos = trazosRepetidos(
+      propios,
+      [
+        turf.lineString([
+          [-100.4995, 20.499],
+          [-100.4995, 20.501],
+        ]),
+      ],
+      [turf.polygon([cuadrado(-100.4, 20.4)])],
+    )
+    expect(avisos).toEqual([])
+  })
+})
 
 describe('problemasDeSueltos', () => {
   it('un edificio aislado, sin huella abierta ni zona encima, no tiene problemas', () => {

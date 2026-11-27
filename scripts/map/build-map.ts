@@ -45,7 +45,7 @@ import { polygonsOf, roundPositions } from './lib/geo.ts'
 import { type OverpassResponse, overpassToFeatures } from './lib/osm.ts'
 import { loadConfig, paths, readJson, writeJson } from './lib/paths.ts'
 import { Compression, TileType, writePmtiles } from './lib/pmtiles-writer.ts'
-import { poligonoDe, problemasDeSueltos } from './lib/sueltos.ts'
+import { poligonoDe, problemasDeSueltos, trazosRepetidos } from './lib/sueltos.ts'
 import { buildVectorTiles, type LayerInput } from './lib/tiles.ts'
 import {
   MEZCLA_ARBUSTO,
@@ -373,6 +373,16 @@ for (const [plazaId, piezas] of Object.entries(propios.plazas)) {
 }
 
 // Calles de servicio y canchas que se ven en el sitio y los datos abiertos no traen (volumenes-propios.json).
+// Se comparan antes de añadirlas: aquí `roads` y `landuse` solo traen lo de OpenStreetMap.
+for (const aviso of trazosRepetidos(
+  propios,
+  roads.filter(
+    (road) => (road.properties as { class?: string }).class === 'service',
+  ) as Feature<LineString>[],
+  landuse.filter((area) => area.properties.class === 'pitch'),
+)) {
+  log(`⚠ ${aviso}`)
+}
 for (const via of propios.vias ?? []) {
   roads.push({
     type: 'Feature',
