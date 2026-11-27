@@ -8266,8 +8266,7 @@
           "08:30-10:00"
         ],
         "sun": [],
-        "byClasses": true,
-        "byAppointment": true
+        "byClasses": true
       },
       "location": {
         "lat": 20.6899118,
