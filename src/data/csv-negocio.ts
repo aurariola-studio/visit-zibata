@@ -11,7 +11,7 @@
  *
  * **Una columna vacía conserva lo que ya hay** en un local existente: el CSV complementa, no borra. Para
  * borrar un enlace se usa el panel. En un local nuevo las columnas vacías quedan vacías, salvo las que
- * se exigen (nombre, plaza, giro, descripciones, `active` y la procedencia).
+ * se exigen (nombre, plaza, giro, `active` y la procedencia). Las descripciones van las dos o ninguna.
  */
 import { normalizeText, slugify } from '../lib/text.ts'
 import type { Category, Place, Plaza } from '../types/domain.ts'

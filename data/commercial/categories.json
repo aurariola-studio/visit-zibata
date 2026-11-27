@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/categories.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-23",
+  "updatedAt": "2026-11-25",
   "categories": [
     {
       "id": "desayunos-y-cafe",
@@ -1593,6 +1593,49 @@
             "lentes",
             "anteojos",
             "examen de la vista"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "fisioterapia",
+      "slug": {
+        "es": "fisioterapia",
+        "en": "physiotherapy"
+      },
+      "sectorId": "salud",
+      "label": {
+        "es": "Fisioterapia",
+        "en": "Physiotherapy"
+      },
+      "icon": "muletas",
+      "hue": 175,
+      "order": 250,
+      "synonyms": [
+        "fisioterapeuta",
+        "rehabilitación",
+        "terapia física",
+        "lesiones",
+        "fisio",
+        "physical therapy",
+        "rehab"
+      ],
+      "giros": [
+        {
+          "id": "fisioterapia",
+          "label": {
+            "es": "Fisioterapia",
+            "en": "Physiotherapy"
+          },
+          "icon": "muletas",
+          "synonyms": [
+            "fisioterapeuta",
+            "rehabilitación",
+            "terapia física",
+            "lesiones",
+            "fisio",
+            "physical therapy"
           ],
           "general": true
         }
@@ -3225,6 +3268,492 @@
           ]
         }
       ]
+    },
+    {
+      "id": "lavanderia-y-sastreria",
+      "slug": {
+        "es": "lavanderia-y-sastreria",
+        "en": "laundry-and-tailoring"
+      },
+      "sectorId": "servicios",
+      "label": {
+        "es": "Lavandería y Sastrería",
+        "en": "Laundry & Tailoring"
+      },
+      "icon": "percha",
+      "hue": 225,
+      "order": 800,
+      "synonyms": [
+        "lavandería",
+        "tintorería",
+        "sastrería",
+        "planchado",
+        "lavado de ropa",
+        "arreglos",
+        "costura",
+        "dry cleaning",
+        "laundry",
+        "tailor"
+      ],
+      "giros": [
+        {
+          "id": "lavanderia",
+          "label": {
+            "es": "Lavandería",
+            "en": "Laundry"
+          },
+          "icon": "percha",
+          "synonyms": [
+            "lavado de ropa",
+            "lavado por kilo",
+            "planchado",
+            "laundry"
+          ],
+          "general": true
+        },
+        {
+          "id": "tintoreria",
+          "label": {
+            "es": "Tintorería",
+            "en": "Dry Cleaning"
+          },
+          "icon": "plancha",
+          "synonyms": [
+            "lavado en seco",
+            "tintorería",
+            "planchado",
+            "trajes",
+            "dry cleaning"
+          ]
+        },
+        {
+          "id": "lavanderia-de-autoservicio",
+          "label": {
+            "es": "Lavandería de Autoservicio",
+            "en": "Self-Service Laundry"
+          },
+          "icon": "lavadora",
+          "synonyms": [
+            "autoservicio",
+            "lavadoras",
+            "secadoras",
+            "lavar tu ropa",
+            "self service",
+            "laundromat"
+          ]
+        },
+        {
+          "id": "sastreria",
+          "label": {
+            "es": "Sastrería",
+            "en": "Tailoring"
+          },
+          "icon": "aguja",
+          "synonyms": [
+            "sastre",
+            "arreglos de ropa",
+            "costura",
+            "dobladillo",
+            "ajustes",
+            "modista",
+            "alterations",
+            "tailor"
+          ]
+        },
+        {
+          "id": "calzado",
+          "label": {
+            "es": "Calzado",
+            "en": "Shoe Care"
+          },
+          "icon": "calzado",
+          "synonyms": [
+            "limpieza de tenis",
+            "lavado de tenis",
+            "reparación de calzado",
+            "zapatero",
+            "zapatos",
+            "sneakers",
+            "shoe cleaning",
+            "shoe repair"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bancos-y-cajeros",
+      "slug": {
+        "es": "bancos-y-cajeros",
+        "en": "banks-and-atms"
+      },
+      "sectorId": "servicios",
+      "label": {
+        "es": "Bancos y Cajeros",
+        "en": "Banks & ATMs"
+      },
+      "icon": "cartera",
+      "hue": 145,
+      "order": 810,
+      "synonyms": [
+        "banco",
+        "cajero",
+        "cajero automático",
+        "sucursal bancaria",
+        "retiro de efectivo",
+        "atm",
+        "bank"
+      ],
+      "giros": [
+        {
+          "id": "banco",
+          "label": {
+            "es": "Banco",
+            "en": "Bank"
+          },
+          "icon": "cartera",
+          "synonyms": [
+            "sucursal",
+            "sucursal bancaria",
+            "banco",
+            "bank"
+          ],
+          "general": true
+        },
+        {
+          "id": "cajero-automatico",
+          "label": {
+            "es": "Cajero Automático",
+            "en": "ATM"
+          },
+          "icon": "tarjeta",
+          "synonyms": [
+            "cajero",
+            "retirar efectivo",
+            "retiro",
+            "atm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "educacion",
+      "slug": {
+        "es": "educacion",
+        "en": "education"
+      },
+      "sectorId": "servicios",
+      "label": {
+        "es": "Educación",
+        "en": "Education"
+      },
+      "icon": "birrete",
+      "hue": 48,
+      "order": 820,
+      "synonyms": [
+        "escuela",
+        "colegio",
+        "guardería",
+        "preescolar",
+        "primaria",
+        "secundaria",
+        "preparatoria",
+        "universidad",
+        "idiomas",
+        "ludoteca",
+        "school",
+        "education"
+      ],
+      "giros": [
+        {
+          "id": "colegio",
+          "label": {
+            "es": "Colegio",
+            "en": "School"
+          },
+          "icon": "birrete",
+          "synonyms": [
+            "escuela",
+            "colegio",
+            "school"
+          ],
+          "general": true
+        },
+        {
+          "id": "guarderia",
+          "label": {
+            "es": "Guardería",
+            "en": "Daycare"
+          },
+          "icon": "carriola",
+          "synonyms": [
+            "estancia infantil",
+            "cuidado de niños",
+            "maternal",
+            "bebés",
+            "daycare"
+          ]
+        },
+        {
+          "id": "preescolar",
+          "label": {
+            "es": "Preescolar",
+            "en": "Preschool"
+          },
+          "icon": "figuras",
+          "synonyms": [
+            "kínder",
+            "kinder",
+            "jardín de niños",
+            "maternal",
+            "preschool"
+          ]
+        },
+        {
+          "id": "primaria",
+          "label": {
+            "es": "Primaria",
+            "en": "Elementary School"
+          },
+          "icon": "mochila",
+          "synonyms": [
+            "primaria",
+            "escuela primaria",
+            "elementary"
+          ]
+        },
+        {
+          "id": "secundaria",
+          "label": {
+            "es": "Secundaria",
+            "en": "Middle School"
+          },
+          "icon": "calculadora",
+          "synonyms": [
+            "secundaria",
+            "escuela secundaria",
+            "middle school"
+          ]
+        },
+        {
+          "id": "preparatoria",
+          "label": {
+            "es": "Preparatoria",
+            "en": "High School"
+          },
+          "icon": "libros",
+          "synonyms": [
+            "bachillerato",
+            "prepa",
+            "preparatoria",
+            "high school"
+          ]
+        },
+        {
+          "id": "universidad",
+          "label": {
+            "es": "Universidad",
+            "en": "University"
+          },
+          "icon": "universidad",
+          "synonyms": [
+            "licenciatura",
+            "posgrado",
+            "campus",
+            "universidad",
+            "university"
+          ]
+        },
+        {
+          "id": "idiomas",
+          "label": {
+            "es": "Idiomas",
+            "en": "Language Classes"
+          },
+          "icon": "idiomas",
+          "synonyms": [
+            "inglés",
+            "ingles",
+            "francés",
+            "clases de idiomas",
+            "academia de idiomas",
+            "english",
+            "language"
+          ]
+        },
+        {
+          "id": "refuerzo-academico",
+          "label": {
+            "es": "Refuerzo Académico",
+            "en": "Tutoring"
+          },
+          "icon": "cerebro",
+          "synonyms": [
+            "regularización",
+            "tareas",
+            "matemáticas",
+            "método kumon",
+            "tutoría",
+            "tutoring"
+          ]
+        },
+        {
+          "id": "ludoteca",
+          "label": {
+            "es": "Ludoteca",
+            "en": "Kids Play Center"
+          },
+          "icon": "ladrillo",
+          "synonyms": [
+            "juegos didácticos",
+            "espacio para niños",
+            "talleres infantiles",
+            "play center",
+            "playroom"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "envios",
+      "slug": {
+        "es": "envios",
+        "en": "shipping"
+      },
+      "sectorId": "servicios",
+      "label": {
+        "es": "Envíos",
+        "en": "Shipping"
+      },
+      "icon": "camion-de-reparto",
+      "hue": 22,
+      "order": 830,
+      "synonyms": [
+        "paquetería",
+        "envíos",
+        "mensajería",
+        "recolección de paquetes",
+        "paquetes",
+        "courier",
+        "shipping"
+      ],
+      "giros": [
+        {
+          "id": "paqueteria",
+          "label": {
+            "es": "Paquetería",
+            "en": "Parcel Service"
+          },
+          "icon": "camion-de-reparto",
+          "synonyms": [
+            "envíos",
+            "mensajería",
+            "paquetes",
+            "courier",
+            "recolección"
+          ],
+          "general": true
+        }
+      ]
+    },
+    {
+      "id": "reparacion-de-equipos",
+      "slug": {
+        "es": "reparacion-de-equipos",
+        "en": "device-repair"
+      },
+      "sectorId": "servicios",
+      "label": {
+        "es": "Reparación de Equipos",
+        "en": "Device Repair"
+      },
+      "icon": "monitor-celular",
+      "hue": 262,
+      "order": 840,
+      "synonyms": [
+        "reparación de celulares",
+        "reparación de computadoras",
+        "técnico",
+        "pantalla",
+        "laptop",
+        "celular",
+        "repair"
+      ],
+      "giros": [
+        {
+          "id": "reparacion-de-celulares",
+          "label": {
+            "es": "Reparación de Celulares",
+            "en": "Phone Repair"
+          },
+          "icon": "celular-engranaje",
+          "synonyms": [
+            "celular",
+            "pantalla rota",
+            "cambio de batería",
+            "smartphone",
+            "phone repair"
+          ]
+        },
+        {
+          "id": "reparacion-de-computadoras",
+          "label": {
+            "es": "Reparación de Computadoras",
+            "en": "Computer Repair"
+          },
+          "icon": "computadora-engranaje",
+          "synonyms": [
+            "computadora",
+            "laptop",
+            "pc",
+            "mantenimiento",
+            "formateo",
+            "computer repair"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "teatro-y-espectaculos",
+      "slug": {
+        "es": "teatro-y-espectaculos",
+        "en": "theater-and-shows"
+      },
+      "sectorId": "entretenimiento",
+      "label": {
+        "es": "Teatro y Espectáculos",
+        "en": "Theater & Shows"
+      },
+      "icon": "mascaras",
+      "hue": 332,
+      "order": 900,
+      "synonyms": [
+        "teatro",
+        "obras",
+        "espectáculos",
+        "funciones",
+        "show",
+        "theater",
+        "theatre"
+      ],
+      "giros": [
+        {
+          "id": "teatro",
+          "label": {
+            "es": "Teatro",
+            "en": "Theater"
+          },
+          "icon": "mascaras",
+          "synonyms": [
+            "obras de teatro",
+            "funciones",
+            "escenario",
+            "espectáculos",
+            "theatre",
+            "show"
+          ],
+          "general": true
+        }
+      ]
     }
   ],
   "sectors": [
@@ -3305,6 +3834,32 @@
       },
       "icon": "paw-print",
       "order": 60
+    },
+    {
+      "id": "servicios",
+      "slug": {
+        "es": "servicios",
+        "en": "services"
+      },
+      "label": {
+        "es": "Servicios",
+        "en": "Services"
+      },
+      "icon": "servicio",
+      "order": 70
+    },
+    {
+      "id": "entretenimiento",
+      "slug": {
+        "es": "entretenimiento",
+        "en": "entertainment"
+      },
+      "label": {
+        "es": "Entretenimiento",
+        "en": "Entertainment"
+      },
+      "icon": "boleto",
+      "order": 80
     }
   ]
 }

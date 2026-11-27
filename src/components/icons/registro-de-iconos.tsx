@@ -730,6 +730,16 @@ const Cutter = solid(
   <path d="M7.22 11.91c-.33.33-.51.74-.56 1.17l5.51 2.36l8.49-8.48c.78-.79.78-2.05 0-2.83l-1.42-1.42c-.78-.78-2.04-.78-2.83 0zM5 16v5.75l5.81-5.22l-5-2zM17.12 4.83c.38-.39 1.03-.39 1.42 0c.39.4.39 1.03 0 1.42s-1.04.39-1.42 0c-.39-.39-.39-1.02 0-1.42" />,
 )
 
+/** Campanilla de servicio: el sector Servicios. Material Design Icons `room-service-outline` (Apache 2.0). */
+const Servicio = solid(
+  <path d="M12 5a2 2 0 0 1 2 2q0 .36-.12.69C17.95 8.5 21 11.91 21 16H3c0-4.09 3.05-7.5 7.12-8.31Q10 7.36 10 7a2 2 0 0 1 2-2m10 14H2v-2h20zM12 9.5c-3.11 0-5.75 1.89-6.66 4.5h13.32c-.91-2.61-3.55-4.5-6.66-4.5" />,
+)
+
+/** Boleto: el sector Entretenimiento. Lucide `ticket` (ISC). */
+const Boleto = custom(
+  <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Zm11-4v2m0 10v2m0-8v2" />,
+)
+
 /** Nombre de icono a dibujo. Las claves son las de `src/data/iconos.ts`. */
 export const ICONOS: Record<string, IconComponent> = {
   acai: Acai,
@@ -747,6 +757,7 @@ export const ICONOS: Record<string, IconComponent> = {
   bike: Bike,
   birria: Birria,
   boba: Boba,
+  boleto: Boleto,
   bolillo: Bolillo,
   bone: Bone,
   bowl: Bowl,
@@ -836,6 +847,7 @@ export const ICONOS: Record<string, IconComponent> = {
   salad: Salad,
   sandwich: Sandwich,
   secadora: Secadora,
+  servicio: Servicio,
   sello: Sello,
   'shopping-basket': ShoppingBasket,
   'shopping-cart': ShoppingCart,

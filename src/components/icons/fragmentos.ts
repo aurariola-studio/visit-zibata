@@ -7,7 +7,7 @@
  * Para un sector nuevo con dibujos pesados: su fragmento, su entrada aquí y su cargador en `CategoryIcon.tsx`. Si
  * caben en el registro general (`iconosJs`), no hace falta nada de esto.
  */
-export type Fragmento = 'mascotas'
+export type Fragmento = 'mascotas' | 'servicios'
 
 export const FRAGMENTO_DE_ICONO: Readonly<Record<string, Fragmento>> = {
   'casa-de-perro': 'mascotas',
@@ -15,4 +15,27 @@ export const FRAGMENTO_DE_ICONO: Readonly<Record<string, Fragmento>> = {
   'hospital-veterinario': 'mascotas',
   hueso: 'mascotas',
   veterinaria: 'mascotas',
+  percha: 'servicios',
+  plancha: 'servicios',
+  lavadora: 'servicios',
+  aguja: 'servicios',
+  cartera: 'servicios',
+  tarjeta: 'servicios',
+  birrete: 'servicios',
+  carriola: 'servicios',
+  figuras: 'servicios',
+  mochila: 'servicios',
+  calculadora: 'servicios',
+  calzado: 'servicios',
+  libros: 'servicios',
+  universidad: 'servicios',
+  idiomas: 'servicios',
+  cerebro: 'servicios',
+  ladrillo: 'servicios',
+  'camion-de-reparto': 'servicios',
+  'monitor-celular': 'servicios',
+  'celular-engranaje': 'servicios',
+  'computadora-engranaje': 'servicios',
+  mascaras: 'servicios',
+  muletas: 'servicios',
 }

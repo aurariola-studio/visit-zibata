@@ -262,14 +262,15 @@ export function pintarFormulario(negocio: Negocio | null): void {
 
       <section class="editor-seccion">
         <h3>Descripción</h3>
+        <p class="ayuda">En español y en inglés, o ninguna. Las cadenas grandes van sin descripción.</p>
         <div class="editor-rejilla">
           <label class="campo-form campo-ancho">
             <span class="campo-etiqueta"><span>Español</span> <span class="ayuda" data-contador-es></span></span>
-            <textarea class="${controls.campo} ${controls.areaTexto}" name="descripcionEs" rows="3" maxlength="2000" required>${texto(negocio?.description?.es ?? '')}</textarea>
+            <textarea class="${controls.campo} ${controls.areaTexto}" name="descripcionEs" rows="3" maxlength="2000">${texto(negocio?.description?.es ?? '')}</textarea>
           </label>
           <label class="campo-form campo-ancho">
             <span class="campo-etiqueta"><span>Inglés</span> <span class="ayuda" data-contador-en></span></span>
-            <textarea class="${controls.campo} ${controls.areaTexto}" name="descripcionEn" rows="3" maxlength="2000" required>${texto(negocio?.description?.en ?? '')}</textarea>
+            <textarea class="${controls.campo} ${controls.areaTexto}" name="descripcionEn" rows="3" maxlength="2000">${texto(negocio?.description?.en ?? '')}</textarea>
             <span class="ayuda">La descripción para buscadores se recorta a 160 caracteres.</span>
           </label>
         </div>
@@ -592,8 +593,13 @@ function validarNegocio(formEl: HTMLFormElement): string[] {
     const ids = vista.formularioActual.seleccion
     if (new Set(ids).size !== ids.length) problemas.push('giros: Hay un giro repetido.')
   }
-  if (!descripcionEs) problemas.push('descripcionEs: Falta la descripción en español.')
-  if (!descripcionEn) problemas.push('descripcionEn: Falta la descripción en inglés.')
+  if (Boolean(descripcionEs) !== Boolean(descripcionEn)) {
+    problemas.push(
+      descripcionEs
+        ? 'descripcionEn: Falta la descripción en inglés.'
+        : 'descripcionEs: Falta la descripción en español.',
+    )
+  }
   if (Boolean(lat) !== Boolean(lng)) {
     problemas.push('lat: Indica la latitud y la longitud, o ninguna de las dos.')
   }
