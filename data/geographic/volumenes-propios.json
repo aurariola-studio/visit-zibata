@@ -593,6 +593,111 @@
       "alturaNota": "Estimación provisional de 7 m para un colegio de dos plantas. Ninguna fuente la respalda.",
       "creado": "2026-11-27",
       "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
+    },
+    {
+      "id": "asturiano-ceiba",
+      "nombre": "Asturiano Ceiba",
+      "height": 4,
+      "anillo": [
+        [
+          -100.324837,
+          20.683445
+        ],
+        [
+          -100.324739,
+          20.683531
+        ],
+        [
+          -100.32468,
+          20.683471
+        ],
+        [
+          -100.324778,
+          20.683386
+        ],
+        [
+          -100.324837,
+          20.683445
+        ]
+      ],
+      "fuente": "Bloque estimado de 14 por 9 m centrado en la ubicación del local y alineado con el Circuito Ceiba. Sustituye a la huella abierta, que según el propietario se extendía sobre el estacionamiento.",
+      "alturaNota": "Estimación provisional de 4 m para un local de una planta. Ninguna fuente la respalda.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando el propietario dé sus medidas o una versión de Overture traiga una huella correcta."
+    }
+  ],
+  "vias": [
+    {
+      "id": "acceso-colegio-nwl",
+      "nombre": "Estacionamiento y acceso al Colegio NWL",
+      "linea": [
+        [
+          -100.339518,
+          20.680436
+        ],
+        [
+          -100.339614,
+          20.680876
+        ],
+        [
+          -100.339671,
+          20.681024
+        ],
+        [
+          -100.339567,
+          20.681207
+        ],
+        [
+          -100.339788,
+          20.681317
+        ],
+        [
+          -100.340042,
+          20.681443
+        ],
+        [
+          -100.340293,
+          20.681578
+        ],
+        [
+          -100.340371,
+          20.681708
+        ]
+      ],
+      "fuente": "Trazo estimado según el propietario (2026-11-27): el estacionamiento por el que se llega al colegio rodea Plaza Centro por la derecha y por detrás. Dibujado alrededor de las huellas abiertas, sin calcar ninguna imagen.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando OpenStreetMap traiga la vía."
+    }
+  ],
+  "canchas": [
+    {
+      "id": "cancha-colegio-nwl",
+      "nombre": "Cancha del Colegio NWL",
+      "anillo": [
+        [
+          -100.339845,
+          20.681732
+        ],
+        [
+          -100.339693,
+          20.681656
+        ],
+        [
+          -100.339819,
+          20.681434
+        ],
+        [
+          -100.339972,
+          20.68151
+        ],
+        [
+          -100.339845,
+          20.681732
+        ]
+      ],
+      "fuente": "Cancha estimada de 18 por 28 m junto al bloque del colegio. El propietario confirma que es parte del colegio; no está en OpenStreetMap ni se calcó de ninguna imagen.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando OpenStreetMap traiga la cancha o el propietario dé sus medidas."
     }
   ]
 }

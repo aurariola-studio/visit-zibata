@@ -57,6 +57,15 @@ export class Ajustador {
     return resultado
   }
 
+  /** Los ids de las huellas que un ajuste oculta: dejan de contar como "los datos abiertos ya la traen". */
+  ocultas(): Set<string> {
+    return new Set(
+      this.ajustes.flatMap((ajuste, i) =>
+        ajuste.accion === 'ocultar' ? (this.aciertos[i] ?? []) : [],
+      ),
+    )
+  }
+
   /**
    * Lo que impide dar el mapa por bueno: un ajuste sin huella, con varias, con otro id del esperado, o dos
    * ajustes sobre la misma huella. Vacío si todo se aplicó.

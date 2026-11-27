@@ -9,6 +9,16 @@
       "overtureId": "bb2fe9fe-a92c-4b3d-bb07-93bb75a89f32",
       "motivo": "Caseta de los datos abiertos encimada a una cancha de Intercepta: las canchas llevan sus propias piezas",
       "creado": "2026-11-16"
+    },
+    {
+      "accion": "ocultar",
+      "punto": {
+        "lat": 20.6834581,
+        "lng": -100.3247583
+      },
+      "overtureId": "240e3aff-66aa-48c1-907c-694cb30304ca",
+      "motivo": "Huella abierta más grande que el local, se extiende sobre su estacionamiento. La sustituye un bloque en volumenes-propios.json",
+      "creado": "2026-11-27"
     }
   ]
 }

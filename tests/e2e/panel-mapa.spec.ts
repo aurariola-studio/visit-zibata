@@ -215,7 +215,8 @@ test.describe('el mapa del contorno', () => {
 
 /**
  * Edificios reales de `public/map/plaza-buildings.geojson`: el panel real los dibuja, así que la prueba pulsa uno
- * de verdad. El 9119 es una huella de Microsoft en una zona; el 16041 es un volumen sintético en Paseo Zibatá.
+ * de verdad: la huella abierta de una zona con un solo edificio y el volumen generado de Paseo Zibatá. Se buscan
+ * por su zona y no por su número, que cambia al ocultar una huella o mover un contorno.
  */
 interface EdificioDePrueba {
   properties: { id: number; src: string; plazaId: string }
@@ -226,21 +227,24 @@ const edificiosDelMapa = (
     readFileSync(new URL('../../public/map/plaza-buildings.geojson', import.meta.url), 'utf8'),
   ) as { features: EdificioDePrueba[] }
 ).features
-const edificio = (id: number): EdificioDePrueba => {
-  const encontrado = edificiosDelMapa.find((f) => f.properties.id === id)
-  if (!encontrado) throw new Error(`el edificio ${id} ya no está en plaza-buildings.geojson`)
+const edificioDe = (plazaId: string, sintetico: boolean): EdificioDePrueba => {
+  const encontrado = edificiosDelMapa.find(
+    (f) => f.properties.plazaId === plazaId && (f.properties.src === 'synthetic') === sintetico,
+  )
+  if (!encontrado)
+    throw new Error(`el edificio de ${plazaId} ya no está en plaza-buildings.geojson`)
   return encontrado
 }
-const interiorDe = (id: number) => {
-  const punto = puntoInterior(edificio(id).geometry.coordinates)
-  if (!punto) throw new Error(`el edificio ${id} no tiene punto interior`)
+const interiorDe = (de: EdificioDePrueba) => {
+  const punto = puntoInterior(de.geometry.coordinates)
+  if (!punto) throw new Error(`el edificio ${de.properties.id} no tiene punto interior`)
   return { lat: seis(punto.lat), lng: seis(punto.lng) }
 }
 
-const REAL = 9119
+const REAL = edificioDe('mol-pitahaya', false)
 /** El nombre que le pone la prueba a la zona de esa huella. */
 const ZONA_CON_HUELLA = 'Zona con huella'
-const SINTETICO = 16041
+const SINTETICO = edificioDe('paseo-zibata', true)
 const real = interiorDe(REAL)
 const paseo = interiorDe(SINTETICO)
 
@@ -252,7 +256,7 @@ const contenidoEdificios = (ajustes: object[] = []) => ({
   places: [],
   plazas: [
     {
-      id: edificio(REAL).properties.plazaId,
+      id: REAL.properties.plazaId,
       slug: 'zona-con-huella',
       name: ZONA_CON_HUELLA,
       description: null,
@@ -349,10 +353,10 @@ test.describe('ajustar un edificio desde el mapa', () => {
       margenM: number
       fuente: string
     }
-    expect(elegido.id).toBe(REAL)
+    expect(elegido.id).toBe(REAL.properties.id)
     expect(elegido.margenM).toBeGreaterThanOrEqual(1)
     // El punto cae dentro de la huella de verdad, y es el que ve el formulario.
-    expect(puntoEnContorno(elegido.punto, edificio(REAL).geometry.coordinates[0] ?? [])).toBe(true)
+    expect(puntoEnContorno(elegido.punto, REAL.geometry.coordinates[0] ?? [])).toBe(true)
     await expect(dialogo.locator('input[name="lat"]')).toHaveValue(String(elegido.punto.lat))
     await expect(dialogo.locator('input[name="lng"]')).toHaveValue(String(elegido.punto.lng))
     await expect(dialogo.locator('[data-edificio-elegido]')).toContainText(elegido.fuente)

@@ -372,11 +372,27 @@ for (const [plazaId, piezas] of Object.entries(propios.plazas)) {
   plazaBuildings.set(plazaId, lista)
 }
 
+// Calles de servicio y canchas que se ven en el sitio y los datos abiertos no traen (volumenes-propios.json).
+for (const via of propios.vias ?? []) {
+  roads.push({
+    type: 'Feature',
+    properties: { class: 'service', link: false },
+    geometry: { type: 'LineString', coordinates: via.linea },
+  })
+}
+for (const cancha of propios.canchas ?? []) {
+  landuse.push({
+    type: 'Feature',
+    properties: { class: 'pitch' },
+    geometry: turf.rewind(turf.polygon([cancha.anillo]).geometry) as Polygon,
+  })
+}
+
 // Edificios que están en el mapa sin ser una zona (volumenes-propios.json, `sueltos`). Entran entre los edificios
 // base: de ahí leen las teselas, `edificios-base.geojson` (las mallas del realismo) y los obstáculos de los árboles.
 const sueltos = propios.sueltos ?? []
 const problemasDeSueltosCrudos = problemasDeSueltos(sueltos, {
-  huellas: rawBuildings.features,
+  huellas: rawBuildings.features.filter((f) => !ajustador.ocultas().has(f.properties.id)),
   zonas: plazaShapes.map(({ plaza, shape }) => ({ id: plaza.id, shape })),
 })
 if (problemasDeSueltosCrudos.length > 0) {

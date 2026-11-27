@@ -7,6 +7,41 @@ import {
 } from '../../../src/data/ajustes-edificios.ts'
 import { Ajustador } from './ajustes.ts'
 
+describe('las huellas ocultas', () => {
+  it('solo cuentan las de un ajuste de ocultar: así se puede dibujar otra encima', () => {
+    const ajustador = new Ajustador([
+      {
+        accion: 'ocultar',
+        punto: { lat: 20.6901, lng: -100.3499 },
+        motivo: 'Mal medida',
+        creado: '2026-11-27',
+      },
+      {
+        accion: 'altura',
+        alturaM: 5,
+        punto: { lat: 20.6901, lng: -100.3489 },
+        motivo: 'Medida',
+        creado: '2026-11-27',
+      },
+    ])
+    const cuadro = (lng: number) => ({
+      type: 'Polygon' as const,
+      coordinates: [
+        [
+          [lng, 20.69],
+          [lng + 0.0002, 20.69],
+          [lng + 0.0002, 20.6902],
+          [lng, 20.6902],
+          [lng, 20.69],
+        ],
+      ],
+    })
+    ajustador.para(cuadro(-100.35), 'a')
+    ajustador.para(cuadro(-100.349), 'b')
+    expect([...ajustador.ocultas()]).toEqual(['a'])
+  })
+})
+
 /** Un cuadrado de ~22 m de lado con la esquina suroeste en (lng, lat). */
 const cuadrado = (lng: number, lat: number): Polygon => ({
   type: 'Polygon',

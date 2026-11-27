@@ -84,15 +84,15 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2572987,
-      "sha256": "27a29835ca182b313202fd77d736ec20e195d7512db871d1f78cc2c4104329b4",
+      "bytes": 2573423,
+      "sha256": "ec3b37a260d9748297d9d1f371c0d5eab9fb5a7cf5c9363f913d94107ef28acb",
       "tiles": 266,
       "bytesByZoom": {
-        "12": 49691,
-        "13": 250609,
-        "14": 529722,
-        "15": 732008,
-        "16": 1009641
+        "12": 49718,
+        "13": 250671,
+        "14": 529796,
+        "15": 732116,
+        "16": 1009807
       },
       "largestTile": {
         "z": 13,
@@ -101,20 +101,20 @@
         "bytes": 96938
       },
       "features": {
-        "roads": 4215,
-        "landuse": 154,
+        "roads": 4216,
+        "landuse": 155,
         "water": 8,
         "waterway": 11,
-        "buildings": 16008,
+        "buildings": 16010,
         "labels": 21,
         "trees": 30780,
         "shrubs": 1747
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 20448,
-      "sha256": "fc8c0a22a8ddf16040c1b81e17ff5328dce660e4aac95d29eb24aebb936330b1",
-      "features": 55,
+      "bytes": 19813,
+      "sha256": "9a5600616ab4a6bbd794df0977508f1f6b987bfb234f61259df3321a94b9cc8d",
+      "features": 53,
       "synthesizedFor": [
         "paseo-zibata",
         "xentric-zibata",
@@ -157,8 +157,8 @@
       ]
     },
     "data/geographic/volumenes-propios.json": {
-      "bytes": 12231,
-      "sha256": "3824d25b506e7d84cbff907b001aacb1ae0a0920b9523e1dd7cf37540af9f68d",
+      "bytes": 14906,
+      "sha256": "faceea8dc8a844cfdd679602cb9fd2d0a07db60f4291c5950d244cab16331be6",
       "sueltos": [
         {
           "id": "h-e-b",
@@ -186,6 +186,15 @@
           "alturaNota": "Estimación provisional de 7 m para un colegio de dos plantas. Ninguna fuente la respalda.",
           "creado": "2026-11-27",
           "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
+        },
+        {
+          "id": "asturiano-ceiba",
+          "nombre": "Asturiano Ceiba",
+          "height": 4,
+          "fuente": "Bloque estimado de 14 por 9 m centrado en la ubicación del local y alineado con el Circuito Ceiba. Sustituye a la huella abierta, que según el propietario se extendía sobre el estacionamiento.",
+          "alturaNota": "Estimación provisional de 4 m para un local de una planta. Ninguna fuente la respalda.",
+          "creado": "2026-11-27",
+          "retirarCuando": "Cuando el propietario dé sus medidas o una versión de Overture traiga una huella correcta."
         }
       ]
     },
@@ -269,8 +278,8 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3875104,
-        "sha256": "9cbf2845e419b4d76c948b5a88c5e857b184d8fccd84bc02cece3fcffa129125"
+        "bytes": 3875584,
+        "sha256": "aeadd10b64217caebdf2dabb5492b1f82ad83fdb06a2400dec81b60df1394b80"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 144856,
