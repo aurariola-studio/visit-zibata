@@ -3423,7 +3423,9 @@
         "idiomas",
         "ludoteca",
         "school",
-        "education"
+        "education",
+        "maternal",
+        "kínder"
       ],
       "giros": [
         {
@@ -3450,9 +3452,34 @@
           "synonyms": [
             "estancia infantil",
             "cuidado de niños",
-            "maternal",
             "bebés",
             "daycare"
+          ]
+        },
+        {
+          "id": "maternal",
+          "label": {
+            "es": "Maternal",
+            "en": "Nursery"
+          },
+          "icon": "carriola",
+          "synonyms": [
+            "maternal",
+            "nursery",
+            "toddlers"
+          ]
+        },
+        {
+          "id": "kinder",
+          "label": {
+            "es": "Kínder",
+            "en": "Kindergarten"
+          },
+          "icon": "figuras",
+          "synonyms": [
+            "kínder",
+            "kinder",
+            "kindergarten"
           ]
         },
         {
@@ -3463,10 +3490,7 @@
           },
           "icon": "figuras",
           "synonyms": [
-            "kínder",
-            "kinder",
             "jardín de niños",
-            "maternal",
             "preschool"
           ]
         },

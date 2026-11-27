@@ -14998,7 +14998,9 @@
       "name": "Mom's and Tot's",
       "plazaId": "centro-zibata",
       "giros": [
-        "guarderia"
+        "guarderia",
+        "maternal",
+        "kinder"
       ],
       "description": {
         "es": "Moms and Tots es un Centro de Desarrollo Infantil, especializado en brindar procesos de estimulación temprana y métodos de enseñanza enfocados hacia un aprendizaje significativo, de acuerdo a cada etapa del desarrollo desde los 3 meses hasta los 6 años de edad todo esto, a través del servicio de Guardería, Maternal y Kínder incorporado.",
