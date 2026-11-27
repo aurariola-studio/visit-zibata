@@ -344,6 +344,7 @@ function paquetesDeLocales(): Plugin {
  */
 function plazasConCercania(): Plugin {
   const archivo = resolve('data/commercial/plazas.json')
+  const locales = resolve('data/commercial/places.json')
   return {
     name: 'zibata-plazas-con-cercania',
     resolveId(id) {
@@ -352,8 +353,10 @@ function plazasConCercania(): Plugin {
     load(id) {
       if (id !== '\0virtual:zibata-plazas') return null
       this.addWatchFile(archivo)
+      this.addWatchFile(locales)
       const { plazas } = JSON.parse(readFileSync(archivo, 'utf8')) as { plazas: Plaza[] }
-      return `export default ${JSON.stringify({ plazas: conCercania(plazas) })}`
+      const { places } = JSON.parse(readFileSync(locales, 'utf8')) as { places: Place[] }
+      return `export default ${JSON.stringify({ plazas: conCercania(plazas, places) })}`
     },
   }
 }
