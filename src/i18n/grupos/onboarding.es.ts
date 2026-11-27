@@ -15,7 +15,7 @@ export const onboardingEs = {
     'Toca el corazón para guardar el lugar, marca el día en que fuiste y califica con estrellas. También verás cuántas personas lo han guardado.',
   'onboarding.step5.title': '¿Cómo sugiero un cambio?',
   'onboarding.step5.body':
-    '¿Viste un horario equivocado, un teléfono que ya no funciona o un lugar que cerró? ¿Tienes un local en Zibatá que quieres promocionar o actualizar? Escríbenos desde "Sugiere un cambio o contáctanos". Nos encantará leerte.',
+    '¿Viste un horario equivocado, un teléfono que ya no funciona o un lugar que cerró? ¿Tienes un local en Zibatá que quieres promocionar o actualizar? Escríbenos desde "Contacto". Nos encantará leerte.',
   'onboarding.demo.place2': 'Cafetería del parque',
   'onboarding.demo.place3': 'Pizzería de la plaza',
   'onboarding.demo.place4': 'Café de la Abuela',

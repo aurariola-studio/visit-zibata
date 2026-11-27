@@ -37,7 +37,7 @@ const CROMA_MINIMO = 0.045
 const CLARIDAD_MAXIMA = 0.82
 const CLARIDAD_OSCURA = 0.3
 const CROMA_OSCURO = 0.09
-const PAPEL = '#f8f4ed'
+const PAPEL = '#faf7f1'
 const AA = 4.5
 
 /** Los tokens de la paleta de marca, leídos de donde viven y no de una copia que se queda atrás. */
@@ -45,7 +45,10 @@ const tokensDeMarca = [...tokensCss.matchAll(/--([\w-]+):\s*(#[0-9a-f]{6});/gi)]
   ([, nombre, hex]) => [nombre as string, hex as string] as const,
 )
 
-const activePlazaIds = plazas.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id)
+// Solo las zonas llevan color; un punto de interés va en crema y tinta.
+const activePlazaIds = (plazas.plazas as { id: string; active: boolean; tipo?: string }[])
+  .filter((plaza) => plaza.active && plaza.tipo !== 'punto')
+  .map((plaza) => plaza.id)
 const tonos = plazaTones(activePlazaIds)
 const pares = activePlazaIds.flatMap((uno, i) =>
   activePlazaIds.slice(i + 1).map((otro) => [uno, otro] as const),
@@ -101,7 +104,7 @@ describe('colores de zona', () => {
 
   it('el texto de la gota va en arena en todas las zonas y se lee', () => {
     for (const [id, tono] of tonos) {
-      expect(tono.onAccent, id).toBe('#fcfaf6')
+      expect(tono.onAccent, id).toBe('#fefdf9')
       expect(contraste(tono.accent, tono.onAccent), id).toBeGreaterThanOrEqual(PUERTA.textoEnLaGota)
     }
   })

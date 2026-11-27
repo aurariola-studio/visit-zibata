@@ -493,6 +493,106 @@
             20.681355
           ]
         ]
+      },
+      {
+        "nombre": "Edificio octogonal",
+        "height": 10.2,
+        "anillo": [
+          [
+            -100.312796,
+            20.680549
+          ],
+          [
+            -100.312761,
+            20.680366
+          ],
+          [
+            -100.312875,
+            20.680214
+          ],
+          [
+            -100.313071,
+            20.680181
+          ],
+          [
+            -100.313234,
+            20.680288
+          ],
+          [
+            -100.313268,
+            20.680471
+          ],
+          [
+            -100.313154,
+            20.680624
+          ],
+          [
+            -100.312959,
+            20.680656
+          ],
+          [
+            -100.312796,
+            20.680549
+          ]
+        ]
+      },
+      {
+        "nombre": "Edificio en U",
+        "height": 13.4,
+        "anillo": [
+          [
+            -100.313417,
+            20.680248
+          ],
+          [
+            -100.313734,
+            20.679824
+          ],
+          [
+            -100.313625,
+            20.679752
+          ],
+          [
+            -100.313393,
+            20.680063
+          ],
+          [
+            -100.313189,
+            20.67993
+          ],
+          [
+            -100.313412,
+            20.679632
+          ],
+          [
+            -100.313331,
+            20.679578
+          ],
+          [
+            -100.313029,
+            20.679981
+          ],
+          [
+            -100.313132,
+            20.680049
+          ],
+          [
+            -100.313097,
+            20.680095
+          ],
+          [
+            -100.313249,
+            20.680195
+          ],
+          [
+            -100.313278,
+            20.680157
+          ],
+          [
+            -100.313417,
+            20.680248
+          ]
+        ]
       }
     ]
   },
@@ -531,6 +631,200 @@
       "alturaNota": "Estimación provisional de 9 m: ninguna fuente la respalda, porque los datos abiertos no traen el edificio.",
       "creado": "2026-11-21",
       "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando H-E-B pase a ser una zona."
+    },
+    {
+      "id": "oxxo-biznaga",
+      "nombre": "OXXO Biznaga",
+      "height": 5,
+      "anillo": [
+        [
+          -100.31745,
+          20.682196
+        ],
+        [
+          -100.317508,
+          20.682083
+        ],
+        [
+          -100.317603,
+          20.682125
+        ],
+        [
+          -100.317545,
+          20.682239
+        ],
+        [
+          -100.31745,
+          20.682196
+        ]
+      ],
+      "fuente": "Bloque estimado de 14 por 11 m centrado en la ubicación del local (Av. Paseo de las Pitahayas 6A) y alineado con el edificio vecino de datos abiertos. La huella no está en OpenStreetMap ni en Overture y no se calcó de ninguna imagen.",
+      "alturaNota": "Estimación provisional de 5 m para un local de una planta. Ninguna fuente la respalda.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
+    },
+    {
+      "id": "colegio-nwl-newland",
+      "nombre": "Colegio NWL Newland",
+      "height": 7,
+      "anillo": [
+        [
+          -100.340234,
+          20.681873
+        ],
+        [
+          -100.339894,
+          20.681707
+        ],
+        [
+          -100.339992,
+          20.681531
+        ],
+        [
+          -100.340332,
+          20.681698
+        ],
+        [
+          -100.340234,
+          20.681873
+        ]
+      ],
+      "fuente": "Bloque estimado de 40 por 22 m centrado en la ubicación del local y alineado con el edificio vecino de datos abiertos. La huella no está en OpenStreetMap ni en Overture. Sentinel-2 (2026-10-20) muestra un techo claro ahí, sin resolución para su contorno.",
+      "alturaNota": "Estimación provisional de 7 m para un colegio de dos plantas. Ninguna fuente la respalda.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
+    },
+    {
+      "id": "asturiano-ceiba",
+      "nombre": "Asturiano Ceiba",
+      "height": 4,
+      "anillo": [
+        [
+          -100.324837,
+          20.683445
+        ],
+        [
+          -100.324739,
+          20.683531
+        ],
+        [
+          -100.32468,
+          20.683471
+        ],
+        [
+          -100.324778,
+          20.683386
+        ],
+        [
+          -100.324837,
+          20.683445
+        ]
+      ],
+      "fuente": "Bloque estimado de 14 por 9 m centrado en la ubicación del local y alineado con el Circuito Ceiba. Sustituye a la huella abierta, que según el propietario se extendía sobre el estacionamiento.",
+      "alturaNota": "Estimación provisional de 4 m para un local de una planta. Ninguna fuente la respalda.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando el propietario dé sus medidas o una versión de Overture traiga una huella correcta."
+    },
+    {
+      "id": "banco-bbva",
+      "nombre": "Banco BBVA",
+      "height": 6.1,
+      "anillo": [
+        [
+          -100.315162,
+          20.679829
+        ],
+        [
+          -100.315275,
+          20.679909
+        ],
+        [
+          -100.315357,
+          20.679806
+        ],
+        [
+          -100.315347,
+          20.679799
+        ],
+        [
+          -100.315388,
+          20.679748
+        ],
+        [
+          -100.315318,
+          20.679699
+        ],
+        [
+          -100.315282,
+          20.679743
+        ],
+        [
+          -100.31525,
+          20.67972
+        ],
+        [
+          -100.315162,
+          20.679829
+        ]
+      ],
+      "fuente": "Huella abierta de Overture (12b293cd-c076-4004-a591-2f6e1d854f1b) girada 17 grados sobre su centro para quedar paralela al edificio de Paseo Zibatá, como pidió el propietario el 2026-11-27.",
+      "alturaNota": "La misma altura estimada que tenía la huella abierta.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando una versión de Overture traiga la huella bien orientada."
+    }
+  ],
+  "vias": [
+    {
+      "id": "acceso-colegio-nwl",
+      "nombre": "Estacionamiento y acceso al Colegio NWL",
+      "linea": [
+        [
+          -100.339878,
+          20.680576
+        ],
+        [
+          -100.339515,
+          20.681214
+        ],
+        [
+          -100.340401,
+          20.681655
+        ]
+      ],
+      "fuente": "Trazo estimado según el propietario (2026-11-27): el estacionamiento por el que se llega al colegio es recto, sube desde la avenida por la derecha de Plaza Centro y sigue por detrás. Dibujado alrededor de las huellas abiertas, sin calcar ninguna imagen. Separado unos metros del contorno de la plaza a petición suya.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando OpenStreetMap traiga la vía."
+    }
+  ],
+  "canchas": [
+    {
+      "id": "cancha-colegio-nwl",
+      "nombre": "Cancha del Colegio NWL",
+      "anillo": [
+        [
+          -100.339845,
+          20.681732
+        ],
+        [
+          -100.339693,
+          20.681656
+        ],
+        [
+          -100.339819,
+          20.681434
+        ],
+        [
+          -100.339972,
+          20.68151
+        ],
+        [
+          -100.339845,
+          20.681732
+        ]
+      ],
+      "fuente": "Cancha estimada de 18 por 28 m junto al bloque del colegio. El propietario confirma que es parte del colegio; no está en OpenStreetMap ni se calcó de ninguna imagen.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando OpenStreetMap traiga la cancha o el propietario dé sus medidas."
     }
   ]
 }

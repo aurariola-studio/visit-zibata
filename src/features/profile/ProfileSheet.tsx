@@ -11,6 +11,7 @@
  *
  * Vive aparte del botón porque casi nunca se abre: así no viaja en el arranque de la guía.
  */
+
 import { Clock, Heart, X } from 'lucide-react'
 import { type CSSProperties, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -19,10 +20,12 @@ import { ProfileIcon } from '../../components/icons/ProfileIcon.tsx'
 import { DEFAULT_PLAZA_TONE, type PlazaTone, plazaTones, plazaVars } from '../../config/palette.ts'
 import { useCatalog } from '../../data/CatalogContext.tsx'
 import { markedPlace } from '../../data/catalog.ts'
+import { esPunto } from '../../data/puntos.ts'
 import { formatNumber, localized, t, useLocale } from '../../i18n/index.ts'
+import { cercaniaDe } from '../../lib/cercania.ts'
 import { alPulsarEnlace } from '../../lib/navegacion.ts'
 import { type InfoTopic, rutaDeInfo, rutaDeLugar } from '../../lib/url-state.ts'
-import type { Category, PlaceSummary, Plaza } from '../../types/domain.ts'
+import type { Catalog, Category, PlaceSummary, Plaza } from '../../types/domain.ts'
 import { placeIconName } from '../places/placeIcon.ts'
 import { categoryAffinity } from '../ranking/rankPlaces.ts'
 import styles from './ProfileButton.module.css'
@@ -42,7 +45,7 @@ type HojaId = (typeof HOJAS)[number]['id']
 const LINKS = [
   { topic: 'acerca', label: 'about.openShort' },
   { topic: 'privacidad', label: 'about.privacy' },
-  { topic: 'sugerir', label: 'about.suggestShort' },
+  { topic: 'sugerir', label: 'about.fix' },
   { topic: 'tutorial', label: 'about.tutorialShort' },
 ] as const
 
@@ -88,6 +91,13 @@ interface Journey {
  * El orden de tus tres, en cascada: primero lo que dijiste a propósito (las estrellas), luego lo que
  * hiciste (visitas, corazón), después lo que miraste, y al final los desempates.
  */
+/** La zona de un local, o a cuánto queda de una si es un punto de interés. */
+function dondeEsta(plaza: Plaza | undefined, catalog: Catalog, idioma: 'es' | 'en') {
+  if (!plaza || !esPunto(plaza)) return plaza?.name
+  const cerca = cercaniaDe(plaza, catalog, idioma)
+  return cerca ? t('place.near', cerca) : undefined
+}
+
 function byMine(a: Ranked, b: Ranked): number {
   return (
     b.rating - a.rating ||
@@ -366,7 +376,9 @@ function Podio({
                   </span>
                   <span className={styles.rankName}>{place.name}</span>
                   <span className={styles.rankMeta}>
-                    {[plaza?.name, loQueHiciste(entry, idioma)].filter(Boolean).join(' · ')}
+                    {[dondeEsta(plaza, catalog, idioma), loQueHiciste(entry, idioma)]
+                      .filter(Boolean)
+                      .join(' · ')}
                   </span>
                 </span>
                 <span className={styles.stepBlock} data-place={index + 1} aria-hidden="true">

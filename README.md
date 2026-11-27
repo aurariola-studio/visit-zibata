@@ -13,6 +13,8 @@ código, `plaza`.
 
 - **Mapa propio** con MapLibre GL JS y teselas generadas aquí: edificios en 3D, calles, áreas verdes y
   agua a partir de OpenStreetMap y Overture Maps. Google Maps solo aparece como enlace para llegar.
+- **Puntos de interés.** Un negocio suelto, fuera de toda zona, tiene su propio marcador en el mapa. Su tarjeta dice a
+  qué distancia queda de la zona más cercana.
 - **Sectores, categorías y giros.** Un local tiene hasta tres giros y de ellos se deducen su categoría y
   su sector. La barra de filtros baja de nivel: primero los sectores y, dentro de uno, sus categorías.
 - **Búsqueda y filtros**: por texto (tolera acentos y errores menores), por zona, por categoría y por lo
@@ -128,8 +130,8 @@ una ruta inexistente (el build genera `404.html`) y no añada una barra final a 
 
 ## Contribuir
 
-- **Corregir un dato** (un horario, un teléfono, un local que cerró): usa el formulario "Sugiere un
-  cambio" dentro de la propia guía.
+- **Corregir un dato** (un horario, un teléfono, un local que cerró): usa el formulario de "Contacto" dentro de la
+  propia guía.
 - **Cambiar el código:** abre una pull request y corre antes `npm run check`; si tocaste la interfaz o
   el mapa, también `npm run test:e2e`. Los imports son relativos y llevan su extensión (`.ts`, `.tsx`),
   porque los scripts corren con Node sin transpilar.

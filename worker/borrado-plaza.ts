@@ -10,7 +10,9 @@
  * `plazas.json` en cada build, así que al fusionar la PR el despliegue los reconstruye sin esta plaza; no hace
  * falta `npm run map:build` a mano.
  */
+
 import { z } from 'zod'
+import { esPunto } from '../src/data/puntos.ts'
 import {
   type CommercialDataset,
   syncPlazaDerivedFields,
@@ -82,7 +84,7 @@ export function prepararBorradoPlaza(
     }
   }
   const plazas = dataset.plazas.filter((fila) => fila.id !== plaza.id)
-  if (!plazas.some((fila) => fila.active)) {
+  if (!plazas.some((fila) => fila.active && !esPunto(fila))) {
     return { ok: false, problemas: ['La guía no puede quedarse sin ninguna plaza activa'] }
   }
 

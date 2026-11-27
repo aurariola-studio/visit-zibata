@@ -29,7 +29,7 @@ export const en = {
   'places.count': { one: '{count} place', other: '{count} places' },
 
   'explore.title': 'Explore Zibatá',
-  'explore.summary': '{plazas} with {places} on the map',
+  'explore.summary': '{plazas} and {places} on the map',
   'explore.hint': 'Tap an area on the map or pick one from the list.',
   'explore.andMore': '{list} and {count} more categories',
   'explore.list': 'Areas',
@@ -55,6 +55,8 @@ export const en = {
 
   'place.backToPlaza': 'Back to {plaza}',
   'place.backToResults': 'Back to Results',
+  'place.backToMap': 'Back to Map',
+  'place.near': '{distancia} from {plaza}',
   'place.directionsToPlaza': 'Directions to {plaza}',
   'place.directionsToPlace': 'Directions to {name}',
   'place.directions': 'Directions',
@@ -100,6 +102,7 @@ export const en = {
   'hours.none': 'No opening hours published.',
   'hours.byClasses': 'Hours depend on the classes. Check availability before you go.',
   'hours.byAppointment': 'Booking an appointment is recommended. Check availability before you go.',
+  'hours.paidAccess': 'There is an access fee. Check availability before you go.',
   'hours.reviewed': 'Hours checked on {date}.',
 
   'day.mon': 'Monday',
@@ -169,6 +172,7 @@ export const en = {
   'share.action': 'Share',
   'share.place': 'Share {name}',
   'share.text': '{name} · {giros} · {plaza}. Learn more at',
+  'share.textSinZona': '{name} · {giros}. Learn more at',
   'share.copied': 'Copied',
   'share.failed': 'Could not copy the link',
 
@@ -212,8 +216,7 @@ export const en = {
   'onboarding.demo.message': 'I want to fix an opening time',
   'about.openShort': 'About',
   'about.title': 'About this guide',
-  'about.fix': 'Suggest or contact',
-  'about.suggestShort': 'Suggest',
+  'about.fix': 'Contact',
   'about.tutorial': 'See the tutorial',
   'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'How to use the guide',
@@ -223,7 +226,7 @@ export const en = {
   'about.privacy': 'Privacy',
   'about.privacyTitle': 'Privacy and terms',
 
-  'about.contribute': 'Suggest a change or contact us',
+  'about.contribute': 'Contact',
   'suggest.who': 'Who is writing?',
   'suggest.whoNeighbor': 'Neighbour',
   'suggest.whoOwner': 'Business',

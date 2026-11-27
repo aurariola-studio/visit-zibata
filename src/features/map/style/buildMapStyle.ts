@@ -8,6 +8,7 @@ import type { Feature, FeatureCollection, Polygon } from 'geojson'
 import type { StyleSpecification } from 'maplibre-gl'
 import type { Bbox } from '../../../config/map.ts'
 import { plazaTones } from '../../../config/palette.ts'
+import { esZona } from '../../../data/puntos.ts'
 import type { Plaza } from '../../../types/domain.ts'
 import { SOURCE } from './ids.ts'
 import { buildingLayers } from './layers/buildings.ts'
@@ -49,7 +50,8 @@ const absolute = (url: string) => new URL(url, window.location.href).href
 export function plazaSitesGeoJSON(plazas: readonly Plaza[]): FeatureCollection {
   return {
     type: 'FeatureCollection',
-    features: plazas.map((plaza) => ({
+    // Un punto de interés no tiene contorno que pintar.
+    features: plazas.filter(esZona).map((plaza) => ({
       type: 'Feature',
       properties: {
         plazaId: plaza.id,

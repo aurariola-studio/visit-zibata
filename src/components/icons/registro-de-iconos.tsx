@@ -200,6 +200,11 @@ const Filete = solid(
   <path d="M11.9 2C8 2 4.9 5.4 5 9.3c.1 2.6 1.6 4.8 3.7 5.9c1.4.7 2.3 2.1 2.3 3.6v.2c0 1.7 1.3 3 3 3c4 0 5-5 5-13c0 0 0-7-7.1-7M14 20c-.6 0-1-.4-1-1v-.2c0-2.2-1.3-4.3-3.3-5.4C8.1 12.6 7.1 11 7 9.2c0-1.3.5-2.7 1.4-3.7S10.6 4 11.8 4C16.7 4 17 8.2 17 9c0 9.9-1.7 11-3 11m1.8-12.4l-7.5 2.7Q8 9.85 8 9.1c0-.7.2-1.3.5-2l5.2-1.9c1.2.6 1.8 1.5 2.1 2.4m-2.9 7.5l2.8-1c-.1 1.5-.4 2.6-.6 3.3l-1.3.5c0-1-.3-1.9-.9-2.8M16 9.2c0 1.2 0 2.3-.1 3.2l-4 1.5c-.5-.5-1.1-1-1.8-1.3c-.4-.2-.8-.5-1.1-.8z" />,
 )
 
+/** Un carrito de súper: el giro Supermercado. Tabler Icons `shopping-cart` (MIT). */
+const Supermercado = custom(
+  <path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0-4 0m11 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M17 17H6V3H4m2 2l14 1l-1 7H6" />,
+)
+
 /** Una tienda con su toldo: la categoría Abarrotes. Boxicons `store` (MIT). */
 const Tienda = solid(
   <path d="M19.1 2.8c-.38-.5-.97-.8-1.6-.8h-11c-.63 0-1.22.3-1.6.8L2.2 6.4c-.13.17-.2.38-.2.6v1c0 1.04.41 1.98 1.06 2.69c-.03.1-.06.2-.06.31v9c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-9c0-.11-.03-.21-.06-.31C21.59 9.98 22 9.04 22 8V7c0-.22-.07-.43-.2-.6zm.9 4.53V8c0 1.1-.9 2-2 2s-2-.9-2-2V7q0-.12-.03-.24L15.28 4h2.22zM10.78 4h2.44L14 7.12V8c0 1.1-.9 2-2 2s-2-.9-2-2v-.88zM4 7.33L6.5 4h2.22l-.69 2.76Q8 6.88 8 7v1c0 1.1-.9 2-2 2s-2-.9-2-2zM10 20v-4h4v4zm6 0v-4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v4H5v-8.14c.32.08.65.14 1 .14c1.2 0 2.27-.54 3-1.38c.73.84 1.8 1.38 3 1.38s2.27-.54 3-1.38c.73.84 1.8 1.38 3 1.38c.35 0 .68-.06 1-.14V20z" />,
@@ -438,6 +443,12 @@ const Kebab = custom(
 )
 
 /** Nadador sobre las olas. Tabler Icons (MIT). */
+/** Pelota de golf sobre su tee. Phosphor `golf` (MIT). */
+const Golf = solid(
+  <path d="M176 100a12 12 0 1 1-12-12a12 12 0 0 1 12 12m-44 20a12 12 0 1 0 12 12a12 12 0 0 0-12-12m84-24a88 88 0 1 1-88-88a88.1 88.1 0 0 1 88 88m-16 0a72 72 0 1 0-72 72a72.08 72.08 0 0 0 72-72m-34.86 96.53C152 197.56 139.85 200 128 200s-24-2.44-37.14-7.47a8 8 0 1 0-5.72 14.94a126 126 0 0 0 34.86 8.21V248a8 8 0 0 0 16 0v-32.32a126 126 0 0 0 34.86-8.21a8 8 0 1 0-5.72-14.94" />,
+  '0 0 256 256',
+)
+
 const Natacion = custom(
   <>
     <path d="M15 9a1 1 0 1 0 2 0a1 1 0 1 0-2 0m-9 2l4-2l3.5 3l-1.5 2m-9 2.75A2.4 2.4 0 0 0 4 17a2.4 2.4 0 0 0 2-1a2.4 2.4 0 0 1 2-1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2-1a2.4 2.4 0 0 1 2-1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 1-.25" />
@@ -725,6 +736,16 @@ const Cutter = solid(
   <path d="M7.22 11.91c-.33.33-.51.74-.56 1.17l5.51 2.36l8.49-8.48c.78-.79.78-2.05 0-2.83l-1.42-1.42c-.78-.78-2.04-.78-2.83 0zM5 16v5.75l5.81-5.22l-5-2zM17.12 4.83c.38-.39 1.03-.39 1.42 0c.39.4.39 1.03 0 1.42s-1.04.39-1.42 0c-.39-.39-.39-1.02 0-1.42" />,
 )
 
+/** Campanilla de servicio: el sector Servicios. Material Design Icons `room-service-outline` (Apache 2.0). */
+const Servicio = solid(
+  <path d="M12 5a2 2 0 0 1 2 2q0 .36-.12.69C17.95 8.5 21 11.91 21 16H3c0-4.09 3.05-7.5 7.12-8.31Q10 7.36 10 7a2 2 0 0 1 2-2m10 14H2v-2h20zM12 9.5c-3.11 0-5.75 1.89-6.66 4.5h13.32c-.91-2.61-3.55-4.5-6.66-4.5" />,
+)
+
+/** Boleto: el sector Entretenimiento. Lucide `ticket` (ISC). */
+const Boleto = custom(
+  <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Zm11-4v2m0 10v2m0-8v2" />,
+)
+
 /** Nombre de icono a dibujo. Las claves son las de `src/data/iconos.ts`. */
 export const ICONOS: Record<string, IconComponent> = {
   acai: Acai,
@@ -742,6 +763,7 @@ export const ICONOS: Record<string, IconComponent> = {
   bike: Bike,
   birria: Birria,
   boba: Boba,
+  boleto: Boleto,
   bolillo: Bolillo,
   bone: Bone,
   bowl: Bowl,
@@ -782,6 +804,7 @@ export const ICONOS: Record<string, IconComponent> = {
   fruta: Fruta,
   funcional: Funcional,
   glasses: Glasses,
+  golf: Golf,
   hamburger: Hamburger,
   'hand-platter': HandPlatter,
   'heart-pulse': HeartPulse,
@@ -831,6 +854,7 @@ export const ICONOS: Record<string, IconComponent> = {
   salad: Salad,
   sandwich: Sandwich,
   secadora: Secadora,
+  servicio: Servicio,
   sello: Sello,
   'shopping-basket': ShoppingBasket,
   'shopping-cart': ShoppingCart,
@@ -840,6 +864,7 @@ export const ICONOS: Record<string, IconComponent> = {
   spray: Spray,
   stethoscope: Stethoscope,
   store: Store,
+  supermercado: Supermercado,
   taco: Taco,
   taekwondo: Taekwondo,
   te: Te,

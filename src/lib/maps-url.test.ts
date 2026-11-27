@@ -48,7 +48,10 @@ describe('enlaces "Cómo llegar" del dataset publicado', () => {
       const [lat = Number.NaN, lng = Number.NaN] = destination.split(',').map(Number)
       expect([lat, lng], place.id).toEqual([plaza.coordinates.lat, plaza.coordinates.lng])
       expect(lng >= west && lng <= east && lat >= south && lat <= north, place.id).toBe(true)
-      expect(isInsidePlazaGeometry({ lat, lng }, plaza.geometry), place.id).toBe(true)
+      // Un punto de interés no tiene contorno contra el que comprobarlo.
+      if (plaza.geometry) {
+        expect(isInsidePlazaGeometry({ lat, lng }, plaza.geometry), place.id).toBe(true)
+      }
     }
   })
 

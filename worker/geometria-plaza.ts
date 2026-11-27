@@ -13,6 +13,7 @@
  * El mapa no se toca aquí: desde la Fase 3a los edificios y las mallas de las plazas se derivan de
  * `plazas.json` en cada build, así que al fusionar la PR el despliegue dibuja el contorno nuevo.
  */
+
 import { z } from 'zod'
 import { leerAjustes } from '../src/data/ajustes-edificios.ts'
 import {
@@ -21,6 +22,7 @@ import {
   normalizarContorno,
   validarContornoDePlaza,
 } from '../src/data/geometria.ts'
+import { esZona } from '../src/data/puntos.ts'
 import {
   type CommercialDataset,
   isInsidePlazaGeometry,
@@ -87,6 +89,9 @@ export function prepararContorno(
 
   const plaza = dataset.plazas.find((fila) => fila.id === entrada.data.id)
   if (!plaza) return { ok: false, problemas: ['Esa plaza ya no existe'] }
+  if (!esZona(plaza)) {
+    return { ok: false, problemas: ['Un punto de interés no tiene contorno.'] }
+  }
   if (plaza.geometry.type !== 'Polygon') {
     return {
       ok: false,
@@ -94,11 +99,13 @@ export function prepararContorno(
     }
   }
 
-  const otras = dataset.plazas.flatMap((otra) =>
-    otra.id !== plaza.id && otra.geometry.type === 'Polygon'
-      ? [{ id: otra.id, anillo: anilloDe(otra.geometry) }]
-      : [],
-  )
+  const otras = dataset.plazas
+    .filter(esZona)
+    .flatMap((otra) =>
+      otra.id !== plaza.id && otra.geometry.type === 'Polygon'
+        ? [{ id: otra.id, anillo: anilloDe(otra.geometry) }]
+        : [],
+    )
   const rotos = validarContornoDePlaza(entrada.data.geometria, {
     contorno: CONTORNO_DE_ZIBATA,
     marcador: plaza.coordinates,

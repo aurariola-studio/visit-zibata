@@ -1,11 +1,14 @@
 import { MapPin } from 'lucide-react'
 import { type CSSProperties, useRef } from 'react'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
+import { MarcaDePunto } from '../../components/ui/MarcaDePunto.tsx'
 import { DEFAULT_PLAZA_TONE, plazaTones, plazaVars } from '../../config/palette.ts'
 import { useCatalog } from '../../data/CatalogContext.tsx'
+import { esPunto } from '../../data/puntos.ts'
 import { useElementWidth } from '../../hooks/useElementWidth.ts'
 import { localized, t, useLocale } from '../../i18n/index.ts'
 import { lista } from '../../lib/categorias.ts'
+import { cercaniaDe } from '../../lib/cercania.ts'
 import { estadoDe } from '../../lib/estado.ts'
 import { rutaDeLugar } from '../../lib/url-state.ts'
 import type { PlaceSummary } from '../../types/domain.ts'
@@ -36,6 +39,8 @@ interface PlaceCardProps {
 export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }: PlaceCardProps) {
   const catalog = useCatalog()
   const plaza = catalog.plazaById.get(place.plazaId)
+  // Un punto de interés no está en ninguna zona: su fila dice a cuánto queda de la más cercana.
+  const punto = plaza !== undefined && esPunto(plaza)
   /*
    * El punto de estado, sobre la foto y abajo a la derecha, como el de "en línea" de cualquier
    * lista de contactos. Es un sitio que la gente ya sabe leer sin que nadie se lo explique, y cae
@@ -62,6 +67,7 @@ export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }:
   const giros = girosOf(place, catalog)
   const iconos = giros.map((giro) => giro.icon)
   const idioma = useLocale()
+  const cerca = showPlaza && plaza ? cercaniaDe(plaza, catalog, idioma) : null
   /*
    * Aquí solo hay una línea: se nombran los giros que caben en ella, siempre al menos uno, y el
    * resto se cuenta ("Alitas y Hamburguesas +1"). Cuántos caben sale del ancho real de la fila, así
@@ -160,10 +166,16 @@ export function PlaceCard({ place, onOpen, showPlaza = false, compact = false }:
            * En el color de la zona, el mismo con el que se ve en el mapa, para que la lista y el mapa
            * se lean como el mismo sitio y no como dos inventarios distintos.
            */}
-          {showPlaza && plaza && (
+          {showPlaza && plaza && !punto && (
             <span className={styles.area} style={plazaVars(tone) as CSSProperties}>
               <MapPin aria-hidden="true" />
               {plaza.name}
+            </span>
+          )}
+          {cerca && (
+            <span className={styles.area}>
+              <MarcaDePunto />
+              {t('place.near', cerca)}
             </span>
           )}
         </span>

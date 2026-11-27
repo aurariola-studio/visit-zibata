@@ -2,8 +2,8 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { makePlace } from '../../test/fixtures.ts'
-import { renderWithCatalog } from '../../test/render.tsx'
+import { categoriesFixture, makePlace, makePlaza, plazasFixture } from '../../test/fixtures.ts'
+import { InMemoryPlacesRepository, renderWithCatalog } from '../../test/render.tsx'
 import { PlaceCard } from './PlaceCard.tsx'
 
 const allDay = {
@@ -158,5 +158,28 @@ describe('la marca de abierto', () => {
     expect(screen.getByText('Sin horario publicado, Sin')).toBeInTheDocument()
     expect(screen.queryByText(/Abierto ahora/)).not.toBeInTheDocument()
     expect(screen.queryByText(/Cerrado ahora/)).not.toBeInTheDocument()
+  })
+})
+
+describe('la tarjeta de un punto de interés', () => {
+  it('en lugar de una zona dice a cuánto queda de la más cercana', async () => {
+    const punto = {
+      ...makePlaza({ id: 'punto-prueba', placeIds: ['suelto'] }),
+      tipo: 'punto' as const,
+      geometry: undefined,
+      cerca: { plazaId: 'plaza-sur', metros: 250 },
+    }
+    const place = makePlace({ id: 'suelto', plazaId: 'punto-prueba', name: 'Suelto' })
+    const datos = {
+      categories: categoriesFixture,
+      plazas: [...plazasFixture, punto],
+      places: [place],
+    }
+    await renderWithCatalog(
+      <PlaceCard place={place} onOpen={vi.fn()} showPlaza />,
+      new InMemoryPlacesRepository(datos),
+    )
+    expect(screen.getByText('A 250 m de Plaza Sur')).toBeInTheDocument()
+    expect(screen.queryByText('Plaza punto-prueba')).not.toBeInTheDocument()
   })
 })

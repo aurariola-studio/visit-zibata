@@ -118,9 +118,10 @@ const sectoresConPagina = new Set(
     ? sectoresConLocales.flatMap((sector) => [sector.slug.es, sector.slug.en])
     : [],
 )
-const zonas = dato<{ plazas: { id: string; slug: string; active: boolean }[] }>(
+// Un punto de interés vive en el mismo archivo y no tiene página de zona.
+const zonas = dato<{ plazas: { id: string; slug: string; active: boolean; tipo?: string }[] }>(
   'plazas.json',
-).plazas
+).plazas.filter((plaza) => plaza.tipo !== 'punto')
 
 /** Quita el origen y la base: `https://x.com/visit-zibata/lugar/a` -> `/lugar/a`. */
 function rutaDe(direccion: string): string {

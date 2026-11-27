@@ -58,9 +58,11 @@ describe('el punto que manda el panel resuelve a una sola huella en el crudo', (
     expect(fallos).toEqual([])
   })
 
-  it('un edificio cóncavo (mol-pitahaya, 9119) también', () => {
-    const jamadi = reales.find((f) => f.properties.id === 9119)
-    if (!jamadi) throw new Error('mol-pitahaya #9119 ya no está en plaza-buildings.geojson')
+  it('un edificio cóncavo (el de mol-pitahaya) también', () => {
+    // Por su zona y no por su número, que cambia al ocultar una huella o mover un contorno.
+    const jamadi = reales.find((f) => f.properties.plazaId === 'mol-pitahaya')
+    if (!jamadi)
+      throw new Error('el edificio de mol-pitahaya ya no está en plaza-buildings.geojson')
     const punto = puntoInterior(poligonosDe(jamadi.geometry)[0] ?? [])
     expect(punto).not.toBeNull()
     expect(huellasEn(punto?.lng ?? 0, punto?.lat ?? 0)).toBe(1)

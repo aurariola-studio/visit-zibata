@@ -38,6 +38,7 @@ if (typeof window !== 'undefined') cargarDibujos().catch(() => {})
 
 const CARGADORES: Record<Fragmento, () => Promise<Record<string, IconComponent>>> = {
   mascotas: () => import('./iconos-de-mascotas.tsx').then((m) => m.ICONOS_DE_MASCOTAS),
+  servicios: () => import('./iconos-de-servicios.tsx').then((m) => m.ICONOS_DE_SERVICIOS),
 }
 const fragmentos: Partial<Record<Fragmento, Record<string, IconComponent>>> = {}
 const cargasDeFragmento: Partial<Record<Fragmento, Promise<void>>> = {}

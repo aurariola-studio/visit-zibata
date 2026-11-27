@@ -7,15 +7,17 @@ import { validarContornoDePlaza } from '../../src/data/geometria.ts'
  * regla nueva rechaza una plaza real, la regla está mal (o el dato) y se decide aquí, no en producción.
  */
 describe('las plazas reales cumplen las reglas', () => {
+  // Las zonas: un punto de interés no tiene contorno que comprobar.
   const plazas = (
     JSON.parse(readFileSync('data/commercial/plazas.json', 'utf8')) as {
       plazas: {
         id: string
         geometry: { type: string; coordinates: number[][][] }
         coordinates: { lat: number; lng: number }
+        tipo?: string
       }[]
     }
-  ).plazas
+  ).plazas.filter((plaza) => plaza.tipo !== 'punto')
   const extent = JSON.parse(readFileSync('data/geographic/extent.json', 'utf8')) as {
     boundary: { coordinates: number[][][] }
   }

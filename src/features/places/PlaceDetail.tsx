@@ -1,6 +1,7 @@
 /**
  * Ficha del lugar. Solo muestra los campos que existen: nunca botones vacíos ni textos de relleno.
  */
+
 import {
   ArrowUpRight,
   ChevronLeft,
@@ -14,11 +15,14 @@ import {
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from 'react'
 import { BrandIcon, type BrandName } from '../../components/icons/BrandIcons.tsx'
 import { CategoryIcon } from '../../components/icons/CategoryIcon.tsx'
+import { MarcaDePunto } from '../../components/ui/MarcaDePunto.tsx'
 import { DEFAULT_PLAZA_TONE, plazaTones, plazaVars } from '../../config/palette.ts'
 import { useCatalog, usePlaceDetails } from '../../data/CatalogContext.tsx'
+import { esPunto } from '../../data/puntos.ts'
 import { locale, localized, t } from '../../i18n/index.ts'
 import { assetUrl } from '../../lib/assets.ts'
 import { etiquetaDeGiro, lista } from '../../lib/categorias.ts'
+import { cercaniaDe } from '../../lib/cercania.ts'
 import { direccionDeLocal } from '../../lib/direccion.ts'
 import { registrar, salidaDe } from '../../lib/eventos.ts'
 import { focusPanelHeading } from '../../lib/focus.ts'
@@ -207,6 +211,10 @@ export function PlaceDetail({
   const directions = placeDirections(datos.googleMapsUri, plaza)
   // La calle de la plaza y el interior del local, igual que lo dice el cuerpo sin JavaScript y el marcado.
   const direccion = direccionDeLocal(plaza.address, datos.unit, t, locale)
+  // Un punto de interés no es una zona: donde iría su nombre va la distancia a la más cercana.
+  const punto = esPunto(plaza)
+  const cerca = cercaniaDe(plaza, catalog, locale)
+  const donde = punto ? cerca && t('place.near', cerca) : plaza.name
   /**
    * Los giros del local en una sola línea, en su orden y con el icono de cada uno. La ficha es la
    * vista que los enseña completos; la tarjeta recorta por ancho y cuenta el resto.
@@ -407,10 +415,10 @@ export function PlaceDetail({
             </p>
           </div>
         </div>
-        <p className={styles.location}>
-          <MapPin aria-hidden="true" />
+        <p className={styles.location} data-punto={punto || undefined}>
+          {punto ? <MarcaDePunto /> : <MapPin aria-hidden="true" />}
           <span>
-            {plaza.name}
+            {donde}
             {direccion && <span className={styles.address}>{direccion}</span>}
           </span>
         </p>
@@ -453,7 +461,7 @@ export function PlaceDetail({
             aria-label={
               directions.toPlace
                 ? t('place.directionsToPlace', { name: place.name })
-                : t('place.directionsToPlaza', { plaza: plaza.name })
+                : t('place.directionsToPlaza', { plaza: punto ? place.name : plaza.name })
             }
           >
             <Navigation aria-hidden="true" />
@@ -474,7 +482,7 @@ export function PlaceDetail({
           name={place.name}
           slug={place.slug}
           giros={girosEnProsa}
-          plazaName={plaza.name}
+          plazaName={punto ? undefined : plaza.name}
           conNombre
         />
       </div>

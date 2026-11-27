@@ -3,7 +3,8 @@
  * IDs duplicados, referencias inexistentes, campos derivados desincronizados y coordenadas
  * fuera de Zibatá. La usan la app en runtime y `npm run data:validate` en build.
  */
-import type { Category, LatLng, Place, Plaza, Sector } from '../types/domain.ts'
+import type { Category, LatLng, Place, Plaza, Sector, Zona } from '../types/domain.ts'
+import { esPunto } from './puntos.ts'
 import { PUBLISHABLE_STATUS } from './rules.ts'
 import type { Redirect } from './schemas.ts'
 
@@ -62,7 +63,7 @@ function insideRing([lng, lat]: readonly number[], ring: Ring): boolean {
 }
 
 /** ¿Está el punto dentro de la geometría de la plaza (respetando huecos)? */
-export function isInsidePlazaGeometry({ lat, lng }: LatLng, geometry: Plaza['geometry']): boolean {
+export function isInsidePlazaGeometry({ lat, lng }: LatLng, geometry: Zona['geometry']): boolean {
   const polygons = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates
   return polygons.some(
     ([outer, ...holes]) =>
@@ -257,7 +258,11 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
 
     if (bounds && place.location && !isWithinBounds(place.location, bounds)) {
       error('places', 'Las coordenadas del local están fuera del área de Zibatá', place.id)
-    } else if (plaza && place.location && !isInsidePlazaGeometry(place.location, plaza.geometry)) {
+    } else if (
+      plaza?.geometry &&
+      place.location &&
+      !isInsidePlazaGeometry(place.location, plaza.geometry)
+    ) {
       warn(
         'places',
         `Las coordenadas del local quedan fuera del polígono de "${plaza.id}"`,
@@ -270,8 +275,25 @@ export function validateRelations(dataset: CommercialDataset, bounds?: Bounds): 
     if (bounds && !isWithinBounds(plaza.coordinates, bounds)) {
       error('plazas', 'Las coordenadas de la plaza están fuera del área de Zibatá', plaza.id)
     }
-    // El marcador se ancla en `coordinates` y el volumen se dibuja con `geometry`: deben coincidir.
-    if (!isInsidePlazaGeometry(plaza.coordinates, plaza.geometry)) {
+    if (esPunto(plaza)) {
+      // La regla de qué es un punto la decide una persona (docs/DATOS.md); aquí solo se exige su forma.
+      if (plaza.geometry) error('plazas', 'Un punto de interés no lleva contorno', plaza.id)
+      if (plaza.comingSoon) {
+        error('plazas', 'Un punto de interés no puede ser un "próximamente"', plaza.id)
+      }
+      // Cero se tolera (el local se puede borrar antes que su punto); dos ya sería una zona.
+      const suyos = places.filter((place) => place.plazaId === plaza.id).length
+      if (suyos > 1) {
+        error('plazas', `Un punto de interés es un solo local y este tiene ${suyos}`, plaza.id)
+      }
+      // Los clics de salida se cuentan por id, sea de local o de zona: compartirlo los sumaría.
+      if (placeById.has(plaza.id)) {
+        error('plazas', 'Un punto de interés no puede compartir su id con un local', plaza.id)
+      }
+    } else if (!plaza.geometry) {
+      error('plazas', 'Una zona necesita contorno', plaza.id)
+    } else if (!isInsidePlazaGeometry(plaza.coordinates, plaza.geometry)) {
+      // El marcador se ancla en `coordinates` y el volumen se dibuja con `geometry`: deben coincidir.
       error('plazas', 'El punto de la plaza queda fuera de su propio polígono', plaza.id)
     }
 

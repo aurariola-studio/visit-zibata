@@ -37,7 +37,7 @@ export const es = {
   'places.count': { one: '{count} lugar', other: '{count} lugares' },
 
   'explore.title': 'Explora Zibatá',
-  'explore.summary': '{plazas} con {places} en el mapa',
+  'explore.summary': '{plazas} y {places} en el mapa',
   'explore.hint': 'Toca una zona en el mapa o elige una de la lista.',
   /*
    * Cuenta categorías, no lugares: "25 tipos y 24 más" se leería como 24 sitios. Y al añadir tipos de
@@ -69,6 +69,9 @@ export const es = {
 
   'place.backToPlaza': 'Volver a {plaza}',
   'place.backToResults': 'Volver a Resultados',
+  'place.backToMap': 'Volver al Mapa',
+  // Un punto de interés no está en ninguna zona: se dice a cuánto queda de la abierta más cercana.
+  'place.near': 'A {distancia} de {plaza}',
   'place.directionsToPlaza': 'Cómo llegar a {plaza}',
   'place.directionsToPlace': 'Cómo llegar a {name}',
   'place.directions': 'Cómo llegar',
@@ -114,6 +117,7 @@ export const es = {
   'hours.none': 'Sin horario publicado.',
   'hours.byClasses': 'El horario depende de las clases. Consulta su disponibilidad antes de ir.',
   'hours.byAppointment': 'Se recomienda reservar tu cita. Consulta su disponibilidad antes de ir.',
+  'hours.paidAccess': 'El acceso tiene costo. Consulta su disponibilidad antes de ir.',
   'hours.reviewed': 'Horario revisado el {date}.',
 
   'day.mon': 'Lunes',
@@ -207,6 +211,7 @@ export const es = {
   'share.place': 'Compartir {name}',
   /* Etiqueta, no frase: lleva el nombre, los giros y la zona, que es lo que la guía ya publica. */
   'share.text': '{name} · {giros} · {plaza}. Conoce más en',
+  'share.textSinZona': '{name} · {giros}. Conoce más en',
   'share.copied': 'Copiado',
   'share.failed': 'No se pudo copiar el enlace',
 
@@ -251,8 +256,7 @@ export const es = {
   'onboarding.demo.message': 'Quiero corregir un horario',
   'about.openShort': 'Acerca',
   'about.title': 'Acerca de esta guía',
-  'about.fix': 'Sugiere o contacta',
-  'about.suggestShort': 'Sugiere',
+  'about.fix': 'Contacto',
   'about.tutorial': 'Ver el tutorial',
   'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'Cómo usar la guía',
@@ -269,7 +273,7 @@ export const es = {
   'about.privacy': 'Privacidad',
   'about.privacyTitle': 'Privacidad y términos',
 
-  'about.contribute': 'Sugiere un cambio o contáctanos',
+  'about.contribute': 'Contacto',
   'suggest.who': '¿Quién escribe?',
   'suggest.whoNeighbor': 'Vecino',
   'suggest.whoOwner': 'Negocio',

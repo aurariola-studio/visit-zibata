@@ -7,11 +7,13 @@
  *
  * También regenera data/commercial/schemas/*.schema.json para autocompletado en el editor.
  */
+
 import { existsSync, mkdirSync } from 'node:fs'
 import { parseArgs } from 'node:util'
 import * as turf from '@turf/turf'
 import { z } from 'zod'
 import { validarContornoDePlaza } from '../../src/data/geometria.ts'
+import { esZona } from '../../src/data/puntos.ts'
 import {
   type DataIssue,
   isWithinBounds,
@@ -92,8 +94,9 @@ try {
 
   // El contorno de cada plaza, con las mismas reglas que aplica el Worker cuando el panel lo guarda.
   const contorno = loadContorno()
-  for (const plaza of dataset.plazas) {
-    const otras = dataset.plazas.flatMap((otra) =>
+  const zonas = dataset.plazas.filter(esZona)
+  for (const plaza of zonas) {
+    const otras = zonas.flatMap((otra) =>
       otra.id !== plaza.id && otra.geometry.type === 'Polygon'
         ? [{ id: otra.id, anillo: otra.geometry.coordinates[0] ?? [] }]
         : [],
@@ -133,7 +136,7 @@ try {
   }
 
   // El volumen provisional: la forma la fija el esquema; aquí, que cada clave sea una plaza que existe.
-  const idsDePlaza = new Set(dataset.plazas.map((plaza) => plaza.id))
+  const idsDePlaza = new Set(zonas.map((plaza) => plaza.id))
   for (const id of Object.keys(loadVolumenesPlaza().plazas)) {
     if (!idsDePlaza.has(id)) {
       issues.push({
@@ -147,7 +150,7 @@ try {
 
   // Las piezas dibujadas a mano: cada clave, una zona que existe, y cada pieza dentro de su contorno.
   for (const [id, piezas] of Object.entries(loadVolumenesPropios().plazas)) {
-    const zona = dataset.plazas.find((plaza) => plaza.id === id)
+    const zona = zonas.find((plaza) => plaza.id === id)
     if (!zona) {
       issues.push({
         level: 'error',
@@ -173,7 +176,7 @@ try {
   // Los edificios sueltos: sin huellas abiertas aquí (el crudo no siempre está), pero con las demás guardas.
   const sueltos = loadVolumenesPropios().sueltos ?? []
   for (const mensaje of problemasDeSueltos(sueltos, {
-    zonas: dataset.plazas.map((plaza) => ({ id: plaza.id, shape: turf.feature(plaza.geometry) })),
+    zonas: zonas.map((plaza) => ({ id: plaza.id, shape: turf.feature(plaza.geometry) })),
   })) {
     issues.push({ level: 'error', dataset: 'volumenes-propios', id: 'sueltos', message: mensaje })
   }

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { esPunto } from '../../src/data/puntos.ts'
 import type { Category, Place, Plaza } from '../../src/types/domain.ts'
 import { type Dataset, pagesFor } from './prerender.ts'
 
@@ -23,6 +24,8 @@ const data: Dataset = {
 
 const plazasActivas = new Set(data.plazas.filter((plaza) => plaza.active).map((plaza) => plaza.id))
 const visibles = data.places.filter((place) => place.active && plazasActivas.has(place.plazaId))
+/** Las que tienen página: un punto de interés no la tiene, aunque su local sí tenga ficha. */
+const zonasActivas = data.plazas.filter((plaza) => plaza.active && !esPunto(plaza))
 
 /*
  * El filtro usa la etiqueta corta ("Italiana", "Saludable"); el título, la descripción y el h1 la
@@ -95,6 +98,21 @@ const fichaDe = (idioma: Idioma, lugar: Place, plazas: Plaza[] = [ZONA]) => {
   if (!pagina) throw new Error(`No hay ficha de ${lugar.slug} en ${idioma}`)
   return pagina
 }
+describe('un punto de interés en la lista de su categoría', () => {
+  const punto = { ...plazaPrueba('punto-prueba', 'Local Suelto'), tipo: 'punto' } as Plaza
+  const suelto = lugarPrueba({ name: 'Local Suelto', plazaId: 'punto-prueba' })
+  const deZona = lugarPrueba({ id: 'de-zona', slug: 'de-zona', name: 'Local de Zona' })
+
+  it('no repite su nombre como si fuera su zona', () => {
+    const cuerpos = paginasDe('es', [suelto, deZona], [ZONA, punto])
+      .map((pagina) => pagina.contenido)
+      .join(' ')
+    expect(cuerpos).toContain('Local de Zona (Zona Prueba)')
+    expect(cuerpos).toContain('>Local Suelto<')
+    expect(cuerpos).not.toContain('Local Suelto (Local Suelto)')
+  })
+})
+
 /** Los giros de la taxonomía real, de uno en uno por categoría: lo que cambia con el catálogo, no con los locales. */
 const GIROS = data.categories.flatMap((categoria) =>
   categoria.giros.filter((giro) => !giro.general),
@@ -114,7 +132,7 @@ describe.each(idiomas)('metadatos de las páginas (%s)', (idioma) => {
       visibles.some((p) => p.giros.some((giro) => c.giros.some((g) => g.id === giro))),
     )
     expect(todas).toHaveLength(
-      1 + plazasActivas.size + categoriasConLocales.length + visibles.length + 4,
+      1 + zonasActivas.length + categoriasConLocales.length + visibles.length + 4,
     )
   })
 
@@ -342,7 +360,7 @@ describe('los giros que el filtro dice cortos se leen completos en la descripci�
       name: 'Local Prueba',
       plazaId: 'plaza-prueba',
       giros: [giro],
-      // Sin texto del negocio, la descripción es solo el contexto: el giro y la zona.
+      // Sin texto del negocio, la descripción es el nombre y el contexto: el giro y la zona.
       description: null,
       cierre: undefined,
     } as unknown as Place
@@ -357,10 +375,31 @@ describe('los giros que el filtro dice cortos se leen completos en la descripci�
 
   for (const [giro, es, en] of casos) {
     it(`${giro}: ${es}`, () => {
-      expect(descripcionDe(giro, 'es')).toBe(es)
-      expect(descripcionDe(giro, 'en')).toBe(en)
+      expect(descripcionDe(giro, 'es')).toBe(`Local Prueba. ${es}`)
+      expect(descripcionDe(giro, 'en')).toBe(`Local Prueba. ${en}`)
     })
   }
+})
+
+describe('dos fichas sin texto, de la misma zona y con los mismos giros', () => {
+  const zona = plazaPrueba('zona-uno', 'Zona Uno')
+  const lugares = ['uno', 'dos'].map((n) =>
+    lugarPrueba({
+      id: `cadena-${n}`,
+      slug: `cadena-${n}`,
+      name: `Cadena ${n}`,
+      plazaId: 'zona-uno',
+      description: null,
+    }),
+  )
+
+  it.each(idiomas)('se distinguen por el nombre (%s)', (idioma) => {
+    const paginas = paginasDe(idioma, lugares, [zona])
+    for (const lugar of lugares) {
+      const pagina = paginas.find((candidata) => candidata.href.endsWith(`/${lugar.slug}`))
+      expect(pagina?.description).toMatch(new RegExp(`^${lugar.name}\. `))
+    }
+  })
 })
 
 describe('la descripción enumera todas las categorías del local', () => {
@@ -587,7 +626,7 @@ describe.each(idiomas)('las páginas de categoría (%s)', (idioma) => {
         )
       }
     }
-    for (const plaza of data.plazas.filter((p) => p.active)) {
+    for (const plaza of zonasActivas) {
       const pagina = de(
         idioma,
         idioma === 'es' ? `/es/zona/${plaza.slug}` : `/en/area/${plaza.slug}`,

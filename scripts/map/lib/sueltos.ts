@@ -12,8 +12,8 @@
  *    dos veces. Y mientras tanto, un volumen de zona lleva sus piezas en `plazas`, no aquí.
  */
 import * as turf from '@turf/turf'
-import type { Feature, MultiPolygon, Polygon } from 'geojson'
-import type { Suelto } from '../../../src/data/volumenes-propios.ts'
+import type { Feature, LineString, MultiLineString, MultiPolygon, Polygon } from 'geojson'
+import type { Suelto, VolumenesPropiosFile } from '../../../src/data/volumenes-propios.ts'
 
 /** Qué parte del edificio suelto tiene que cubrir una huella abierta para darlo por duplicado. */
 export const UMBRAL_DE_DUPLICADO = 0.3
@@ -81,6 +81,60 @@ function partes(huella: Feature<Polygon | MultiPolygon>): Feature<Polygon>[] {
   return huella.geometry.type === 'Polygon'
     ? [turf.feature(huella.geometry)]
     : huella.geometry.coordinates.map((coordinates) => turf.polygon(coordinates))
+}
+
+/**
+ * Las calles y canchas a mano que OpenStreetMap ya trae: hay que retirarlas o se dibujan dos veces. Es un aviso y no
+ * un fallo, porque un trazo parecido no estorba como un edificio duplicado.
+ */
+export function trazosRepetidos(
+  propios: Pick<VolumenesPropiosFile, 'vias' | 'canchas'>,
+  calles: readonly Feature<LineString | MultiLineString>[],
+  canchas: readonly Feature<Polygon | MultiPolygon>[],
+): string[] {
+  const lineas = calles.flatMap((calle) => turf.flatten(calle).features)
+  const avisos: string[] = []
+  for (const via of propios.vias ?? []) {
+    const propia = turf.lineString(via.linea)
+    const largo = turf.length(propia, { units: 'meters' })
+    const puntos = Array.from({ length: Math.floor(largo / 5) + 1 }, (_, i) =>
+      turf.along(propia, i * 5, { units: 'meters' }),
+    )
+    const cubiertos = puntos.filter((punto) =>
+      lineas.some((linea) => turf.pointToLineDistance(punto, linea, { units: 'meters' }) < 8),
+    )
+    if (cubiertos.length / puntos.length > 0.6) {
+      avisos.push(
+        `"${via.id}": OpenStreetMap ya trae esa calle. Retírala de volumenes-propios.json`,
+      )
+    }
+  }
+  for (const cancha of propios.canchas ?? []) {
+    const propia = turf.polygon([cancha.anillo])
+    const repetida = canchas.flatMap(partes).some((otra) => {
+      const cruce = turf.intersect(turf.featureCollection([propia, otra]))
+      return cruce !== null && turf.area(cruce) / turf.area(propia) > UMBRAL_DE_DUPLICADO
+    })
+    if (repetida) {
+      avisos.push(
+        `"${cancha.id}": OpenStreetMap ya trae esa cancha. Retírala de volumenes-propios.json`,
+      )
+    }
+  }
+  return avisos
+}
+
+/**
+ * A cuántos metros queda un lugar del centro de superficie del edificio que tiene debajo, o `null` sin edificio. Un
+ * punto de interés va en ese centro.
+ */
+export function metrosAlCentro(
+  lugar: [number, number],
+  edificios: readonly Feature<Polygon | MultiPolygon>[],
+): number | null {
+  // shortcut: en un edificio en L o en U el centro puede caer fuera; medir contra un punto interior si llega uno así.
+  const debajo = edificios.find((edificio) => turf.booleanPointInPolygon(lugar, edificio))
+  return debajo ? turf.distance(lugar, turf.centerOfMass(debajo), { units: 'meters' }) : null
 }
 
 /** El polígono de un edificio suelto, con el sentido de los anillos que esperan las teselas. */

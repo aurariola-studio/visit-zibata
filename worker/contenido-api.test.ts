@@ -317,10 +317,15 @@ describe('lo que el panel recibe de cada plaza', () => {
   it('lleva el contorno de cada plaza, para poder editarlo', async () => {
     const respuesta = await pedir('/api/panel/contenido')
     const datos = (await respuesta?.json()) as {
-      plazas: { id: string; geometry?: { type: string; coordinates: number[][][] } }[]
+      plazas: {
+        id: string
+        tipo?: string
+        geometry?: { type: string; coordinates: number[][][] }
+      }[]
     }
     expect(datos.plazas.length).toBeGreaterThan(0)
-    for (const plaza of datos.plazas) {
+    // Un punto de interés no tiene contorno que editar.
+    for (const plaza of datos.plazas.filter((fila) => fila.tipo !== 'punto')) {
       expect(plaza.geometry?.type, plaza.id).toBe('Polygon')
       expect(plaza.geometry?.coordinates[0]?.length ?? 0, plaza.id).toBeGreaterThanOrEqual(4)
     }

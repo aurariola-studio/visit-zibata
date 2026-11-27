@@ -66,8 +66,8 @@ export interface PlazaTone {
 }
 
 /** Las tres superficies claras donde se apoya un color de zona. */
-const PAPEL = '#f8f4ed' // sand-50, la superficie de una ficha
-const ARENA = '#fcfaf6' // sand-25
+const PAPEL = '#faf7f1' // sand-50, la superficie de una ficha
+const ARENA = '#fefdf9' // sand-25
 
 /** Oscurece el tono en su propia saturación hasta que se lea sobre el papel. */
 function tintaLegible(accent: string): string {

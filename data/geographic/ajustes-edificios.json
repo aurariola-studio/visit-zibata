@@ -9,6 +9,56 @@
       "overtureId": "bb2fe9fe-a92c-4b3d-bb07-93bb75a89f32",
       "motivo": "Caseta de los datos abiertos encimada a una cancha de Intercepta: las canchas llevan sus propias piezas",
       "creado": "2026-11-16"
+    },
+    {
+      "accion": "ocultar",
+      "punto": {
+        "lat": 20.6834581,
+        "lng": -100.3247583
+      },
+      "overtureId": "240e3aff-66aa-48c1-907c-694cb30304ca",
+      "motivo": "Huella abierta más grande que el local, se extiende sobre su estacionamiento. La sustituye un bloque en volumenes-propios.json",
+      "creado": "2026-11-27"
+    },
+    {
+      "accion": "ocultar",
+      "punto": {
+        "lat": 20.68358,
+        "lng": -100.324633
+      },
+      "overtureId": "a3758ac9-6e76-4284-9995-1e781365bea7",
+      "motivo": "Es el estacionamiento del Asturiano, no un edificio (lo confirma el propietario)",
+      "creado": "2026-11-27"
+    },
+    {
+      "accion": "ocultar",
+      "punto": {
+        "lat": 20.6798687,
+        "lng": -100.3152192
+      },
+      "overtureId": "12b293cd-c076-4004-a591-2f6e1d854f1b",
+      "motivo": "La huella abierta está girada respecto a la plaza; la sustituye la misma, alineada (volumenes-propios.json)",
+      "creado": "2026-11-27"
+    },
+    {
+      "accion": "ocultar",
+      "punto": {
+        "lat": 20.680436,
+        "lng": -100.31298
+      },
+      "overtureId": "38a2dd99-383f-4001-a14f-4bc9e2e401e3",
+      "motivo": "Huella abierta con lados irregulares; la sustituye una pieza regular (volumenes-propios.json)",
+      "creado": "2026-11-27"
+    },
+    {
+      "accion": "ocultar",
+      "punto": {
+        "lat": 20.680058,
+        "lng": -100.313402
+      },
+      "overtureId": "8bb571d7-c63e-47bc-bdf6-56dfc686a42f",
+      "motivo": "Huella abierta con lados irregulares; la sustituye una pieza regular (volumenes-propios.json)",
+      "creado": "2026-11-27"
     }
   ]
 }

@@ -10,6 +10,7 @@
  *  - data/geographic/extent.json          contorno, bbox y centro de Zibatá (lo usa la app)
  *  - data/geographic/manifest.json        procedencia, licencias, fechas, conteos y huellas de archivos
  */
+
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import * as turf from '@turf/turf'
@@ -24,6 +25,7 @@ import type {
   Position,
 } from 'geojson'
 import { AjustesEdificiosFileSchema } from '../../src/data/ajustes-edificios.ts'
+import { esPunto, esZona } from '../../src/data/puntos.ts'
 import { PlazasFileSchema } from '../../src/data/schemas.ts'
 import { reglaDeVolumen, VolumenesPlazaFileSchema } from '../../src/data/volumenes-plaza.ts'
 import { VolumenesPropiosFileSchema } from '../../src/data/volumenes-propios.ts'
@@ -43,7 +45,7 @@ import { polygonsOf, roundPositions } from './lib/geo.ts'
 import { type OverpassResponse, overpassToFeatures } from './lib/osm.ts'
 import { loadConfig, paths, readJson, writeJson } from './lib/paths.ts'
 import { Compression, TileType, writePmtiles } from './lib/pmtiles-writer.ts'
-import { poligonoDe, problemasDeSueltos } from './lib/sueltos.ts'
+import { metrosAlCentro, poligonoDe, problemasDeSueltos, trazosRepetidos } from './lib/sueltos.ts'
 import { buildVectorTiles, type LayerInput } from './lib/tiles.ts'
 import {
   MEZCLA_ARBUSTO,
@@ -194,7 +196,9 @@ log(
 )
 
 // ── 4. Plazas ───────────────────────────────────────────────────────────────────────────────────
-const plazas = PlazasFileSchema.parse(readJson(paths.plazas)).plazas
+// Solo las zonas: un punto de interés no tiene contorno y no cambia el mapa generado.
+const todasLasPlazas = PlazasFileSchema.parse(readJson(paths.plazas)).plazas
+const plazas = todasLasPlazas.filter(esZona)
 const plazaShapes = plazas.map((plaza) => ({ plaza, shape: turf.feature(plaza.geometry) }))
 // Una plaza no puede atravesar una calle: pasa cuando su huella aproximada se centra en el punto de un
 // enlace de Maps que cae sobre la vía (Xënica, 2026-09). Se avisa para rehacerla con map:suggest-plaza.
@@ -368,11 +372,37 @@ for (const [plazaId, piezas] of Object.entries(propios.plazas)) {
   plazaBuildings.set(plazaId, lista)
 }
 
+// Calles de servicio y canchas que se ven en el sitio y los datos abiertos no traen (volumenes-propios.json).
+// Se comparan antes de añadirlas: aquí `roads` y `landuse` solo traen lo de OpenStreetMap.
+for (const aviso of trazosRepetidos(
+  propios,
+  roads.filter(
+    (road) => (road.properties as { class?: string }).class === 'service',
+  ) as Feature<LineString>[],
+  landuse.filter((area) => area.properties.class === 'pitch'),
+)) {
+  log(`⚠ ${aviso}`)
+}
+for (const via of propios.vias ?? []) {
+  roads.push({
+    type: 'Feature',
+    properties: { class: 'service', link: false },
+    geometry: { type: 'LineString', coordinates: via.linea },
+  })
+}
+for (const cancha of propios.canchas ?? []) {
+  landuse.push({
+    type: 'Feature',
+    properties: { class: 'pitch' },
+    geometry: turf.rewind(turf.polygon([cancha.anillo]).geometry) as Polygon,
+  })
+}
+
 // Edificios que están en el mapa sin ser una zona (volumenes-propios.json, `sueltos`). Entran entre los edificios
 // base: de ahí leen las teselas, `edificios-base.geojson` (las mallas del realismo) y los obstáculos de los árboles.
 const sueltos = propios.sueltos ?? []
 const problemasDeSueltosCrudos = problemasDeSueltos(sueltos, {
-  huellas: rawBuildings.features,
+  huellas: rawBuildings.features.filter((f) => !ajustador.ocultas().has(f.properties.id)),
   zonas: plazaShapes.map(({ plaza, shape }) => ({ id: plaza.id, shape })),
 })
 if (problemasDeSueltosCrudos.length > 0) {
@@ -438,6 +468,20 @@ for (const { plaza, shape } of plazaShapes) {
 log(
   `Alturas: ${new Set(baseBuildings.map((f) => f.properties.height)).size} valores distintos entre ${baseBuildings.length} edificios base`,
 )
+// Un punto de interés se ve sobre su edificio: si los datos abiertos no lo traen, se dibuja en `sueltos`.
+const todosLosEdificios = [...baseBuildings, ...[...plazaBuildings.values()].flat()]
+for (const punto of todasLasPlazas.filter((p) => esPunto(p) && p.active)) {
+  const metros = metrosAlCentro([punto.coordinates.lng, punto.coordinates.lat], todosLosEdificios)
+  if (metros === null) {
+    log(
+      `⚠ El punto de interés "${punto.name}" no tiene edificio en el mapa (volumenes-propios.json)`,
+    )
+  } else if (metros > 3) {
+    log(
+      `⚠ El punto de interés "${punto.name}" está a ${Math.round(metros)} m del centro de su edificio (coordinates en plazas.json)`,
+    )
+  }
+}
 const plazaBuildingCount = [...plazaBuildings.values()].reduce((sum, list) => sum + list.length, 0)
 log(
   `${baseBuildings.length} edificios base · ${plazaBuildingCount} de plazas (generados: ${synthesized.join(', ') || 'ninguno'})`,

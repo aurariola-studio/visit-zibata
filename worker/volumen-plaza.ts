@@ -12,8 +12,10 @@
  * contorno. Con ese interruptor las huellas reales se descartan, así que el ajuste no cambiaría nada, y el build
  * lo da por error (`Ajustador`): la PR del panel no se podría fusionar.
  */
+
 import { z } from 'zod'
 import { leerAjustes } from '../src/data/ajustes-edificios.ts'
+import { esZona } from '../src/data/puntos.ts'
 import { type CommercialDataset, isInsidePlazaGeometry } from '../src/data/relations.ts'
 import {
   leerVolumenes,
@@ -21,6 +23,7 @@ import {
   ReglaDeVolumenSchema,
   reglaDeVolumen,
 } from '../src/data/volumenes-plaza.ts'
+import type { Zona } from '../src/types/domain.ts'
 import { type Cargado, cargar } from './contenido.ts'
 import { type EntornoGitHub, type Publicacion, publicar } from './github.ts'
 
@@ -71,6 +74,9 @@ export function prepararVolumen(
 
   const plaza = dataset.plazas.find((fila) => fila.id === dato.id)
   if (!plaza) return { ok: false, problemas: ['Esa plaza ya no existe'] }
+  if (!esZona(plaza)) {
+    return { ok: false, problemas: ['Un punto de interés no tiene volumen: no tiene contorno.'] }
+  }
 
   if (crudo.volumenesPlaza === undefined) {
     return {
@@ -220,12 +226,11 @@ export async function guardarVolumen(
  * Las plazas cuyo volumen **reemplaza** sus huellas reales (`replaceExisting`): ahí un ajuste de edificio no
  * cambiaría nada y el build lo da por error. Vacío si el archivo de volúmenes falta o no pasa el esquema.
  */
-export function plazasQueReemplazan(
-  crudo: Cargado['crudo'],
-  dataset: CommercialDataset,
-): CommercialDataset['plazas'] {
+export function plazasQueReemplazan(crudo: Cargado['crudo'], dataset: CommercialDataset): Zona[] {
   const leido = leerVolumenes(crudo.volumenesPlaza)
   if (!leido.valido) return []
   const { archivo } = leido
-  return dataset.plazas.filter((plaza) => reglaDeVolumen(archivo, plaza.id).replaceExisting)
+  return dataset.plazas
+    .filter(esZona)
+    .filter((plaza) => reglaDeVolumen(archivo, plaza.id).replaceExisting)
 }

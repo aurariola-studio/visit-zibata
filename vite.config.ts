@@ -8,9 +8,10 @@ import { HUELLA_CARGADOR, HUELLA_SIN_JS } from './scripts/build/cargador.ts'
 import { mapTiles } from './scripts/build/map-tiles.ts'
 import { HUELLA_ESTILO_404, html404 } from './scripts/build/pagina-404.ts'
 import { prerender } from './scripts/build/prerender.ts'
+import { conCercania } from './scripts/map/lib/cercania.ts'
 import { projectDetail, projectSummary } from './src/data/placeParts.ts'
 import { APP_ROUTE } from './src/lib/url-state.ts'
-import type { Place } from './src/types/domain.ts'
+import type { Place, Plaza } from './src/types/domain.ts'
 
 // BASE_PATH permite publicar en un subdirectorio (GitHub Pages: "/<repo>/") sin acoplar el código a
 // un hosting concreto. En local y en hostings en raíz es "/".
@@ -338,6 +339,29 @@ function paquetesDeLocales(): Plugin {
 }
 
 /**
+ * `virtual:zibata-plazas`: el mismo `plazas.json` con la cercanía de cada punto de interés ya calculada (ver
+ * `scripts/map/lib/cercania.ts`). Así el navegador no mide nada y la cifra no se guarda en los datos.
+ */
+function plazasConCercania(): Plugin {
+  const archivo = resolve('data/commercial/plazas.json')
+  const locales = resolve('data/commercial/places.json')
+  return {
+    name: 'zibata-plazas-con-cercania',
+    resolveId(id) {
+      return id === 'virtual:zibata-plazas' ? `\0${id}` : null
+    },
+    load(id) {
+      if (id !== '\0virtual:zibata-plazas') return null
+      this.addWatchFile(archivo)
+      this.addWatchFile(locales)
+      const { plazas } = JSON.parse(readFileSync(archivo, 'utf8')) as { plazas: Plaza[] }
+      const { places } = JSON.parse(readFileSync(locales, 'utf8')) as { places: Place[] }
+      return `export default ${JSON.stringify({ plazas: conCercania(plazas, places) })}`
+    },
+  }
+}
+
+/**
  * En desarrollo, las rutas de la aplicación entregan `index.html`.
  *
  * En producción existe un archivo por ruta (lo genera el prerenderizado), pero aquí no, y el modo
@@ -390,6 +414,7 @@ export default defineConfig({
   plugins: [
     react(),
     paquetesDeLocales(),
+    plazasConCercania(),
     devRoutes(),
     socialMeta(),
     contentSecurityPolicy(),
@@ -413,13 +438,16 @@ export default defineConfig({
       },
       output: {
         /*
-         * Los dos paquetes de locales salen como `places-resumen-*.js` y `places-detalle-*.js`. Rollup los
-         * llamaría `_virtual_zibata-places-*`, y el presupuesto (`scripts/perf/check-bundle.ts`) los mide por
-         * nombre: uno que no encaje en ningún patrón no se contaría en ningún tope.
+         * Los dos paquetes de locales salen como `places-resumen-*.js` y `places-detalle-*.js`, y las plazas
+         * como `plazas-*.js`. Rollup los llamaría `_virtual_zibata-*`, y el presupuesto
+         * (`scripts/perf/check-bundle.ts`) los mide por nombre: uno que no encaje en ningún patrón no se
+         * contaría en ningún tope.
          */
         chunkFileNames: (trozo) => {
           const paquete = /zibata-places-(resumen|detalle)$/.exec(trozo.facadeModuleId ?? '')
-          return paquete ? `assets/places-${paquete[1]}-[hash].js` : 'assets/[name]-[hash].js'
+          if (paquete) return `assets/places-${paquete[1]}-[hash].js`
+          if (/zibata-plazas$/.test(trozo.facadeModuleId ?? '')) return 'assets/plazas-[hash].js'
+          return 'assets/[name]-[hash].js'
         },
       },
     },

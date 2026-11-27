@@ -50,10 +50,27 @@ export const SueltoSchema = z.strictObject({
   retirarCuando: z.string().trim().min(10).max(300),
 })
 
+/** Lo que comparten una calle y una cancha dibujadas a mano: qué es, de dónde sale y cuándo sobra. */
+const trazo = {
+  id: z.string().regex(SLUG_PATTERN),
+  nombre: z.string().trim().min(1).max(60),
+  fuente: z.string().trim().min(20).max(500),
+  creado: z.iso.date(),
+  retirarCuando: z.string().trim().min(10).max(300),
+}
+
+/** Una calle de servicio que los datos abiertos no traen: el acceso o el estacionamiento por el que se llega. */
+export const ViaPropiaSchema = z.strictObject({ ...trazo, linea: z.array(posicion).min(2) })
+
+/** Una cancha que los datos abiertos no traen: se pinta como suelo deportivo, sin volumen. */
+export const CanchaPropiaSchema = z.strictObject({ ...trazo, anillo: z.array(posicion).min(4) })
+
 export const VolumenesPropiosFileSchema = z.strictObject({
   $comment: z.string().optional(),
   plazas: z.record(z.string().regex(SLUG_PATTERN), z.array(PiezaSchema).min(1)),
   sueltos: z.array(SueltoSchema).optional(),
+  vias: z.array(ViaPropiaSchema).optional(),
+  canchas: z.array(CanchaPropiaSchema).optional(),
 })
 
 export type Pieza = z.infer<typeof PiezaSchema>

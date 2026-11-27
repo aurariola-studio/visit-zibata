@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import categoriasJson from '../data/commercial/categories.json' with { type: 'json' }
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
 import plazasJson from '../data/commercial/plazas.json' with { type: 'json' }
+import { esZona } from '../src/data/puntos.ts'
 import { type CommercialDataset, isInsidePlazaGeometry } from '../src/data/relations.ts'
 import { CategoriesFileSchema, PlacesFileSchema, PlazasFileSchema } from '../src/data/schemas.ts'
 import { guardarContorno, prepararContorno } from './geometria-plaza.ts'
@@ -41,7 +42,7 @@ const conUbicacion = (id: string) =>
   completo.places.filter((place) => place.plazaId === id && place.location)
 
 /** La plaza de los casos: con al menos dos locales ubicados y un contorno que encogido al 90 % sigue valiendo. */
-const elegida = completo.plazas.find((plaza) => {
+const elegida = completo.plazas.filter(esZona).find((plaza) => {
   if (conUbicacion(plaza.id).length < 2) return false
   const preparado = prepararContorno(
     completo,
@@ -231,7 +232,7 @@ describe('guardar sin tocar', () => {
   // 8 de las 15 plazas reales se guardaron en sentido horario (rectángulos dibujados a mano) y el build las
   // reorienta. Un editor que carga un contorno y lo vuelve a guardar sin cambiarlo no puede producir un
   // commit que solo le da la vuelta al anillo: tiene que ser "nada que guardar", en cualquier plaza.
-  for (const real of completo.plazas) {
+  for (const real of completo.plazas.filter(esZona)) {
     it(`${real.id}: el mismo contorno es "nada que guardar"`, () => {
       const preparado = prepararContorno(
         completo,

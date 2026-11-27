@@ -6,11 +6,19 @@
  * ("pasta" no trae "pastor", "bar" no trae "parrilla" ni "barista"... salvo que no haya ninguna al inicio: entonces
  * cuentan las que la contienen ("ron" → "camarón"), y la tolerancia a errores solo cuando no hay ninguna literal.
  */
+
 import Fuse, { type IFuseOptions } from 'fuse.js'
+import { esPunto } from '../../data/puntos.ts'
 import { localized } from '../../i18n/index.ts'
 import { searchTerms, wordText } from '../../lib/text.ts'
 import type { Catalog, PlaceDetailData, PlaceSummary } from '../../types/domain.ts'
 import { allGiroIds } from '../places/placeIcon.ts'
+
+/** El nombre de la zona de un local. De un punto de interés, nada: buscar por zona no lo trae. */
+const nombreDeZona = (catalog: Catalog, plazaId: string): string => {
+  const plaza = catalog.plazaById.get(plazaId)
+  return plaza && !esPunto(plaza) ? plaza.name : ''
+}
 
 interface SearchDocument {
   id: string
@@ -60,7 +68,7 @@ function toDocument(
   return {
     id: place.id,
     name: place.name,
-    plaza: catalog.plazaById.get(place.plazaId)?.name ?? '',
+    plaza: nombreDeZona(catalog, place.plazaId),
     category: categorias.map((c) => localized(c.label)).join(' '),
     categorySynonyms: categorias.flatMap((c) => c.synonyms),
     giros: giros.map((giro) => localized(giro.label)).join(' '),

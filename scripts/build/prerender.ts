@@ -15,9 +15,11 @@
  * locales vecinos (ver contenido.ts). Antes el cuerpo eran 193 bytes iguales en las 234, así que un
  * rastreador veía páginas vacías y sin enlaces entre ellas. React lo sustituye al montar.
  */
+
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import type { Plugin } from 'vite'
+import { esPunto } from '../../src/data/puntos.ts'
 import { enCompleto as en, esCompleto as es } from '../../src/i18n/completo.ts'
 import {
   etiquetaDeCategoria,
@@ -26,6 +28,7 @@ import {
   type Traductor,
 } from '../../src/lib/categorias.ts'
 import { direccionDeLocal } from '../../src/lib/direccion.ts'
+import { partirEnMedianoche } from '../../src/lib/hours.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
@@ -171,6 +174,11 @@ export function pagesFor(
     }
   }
   const plazaById = new Map(data.plazas.map((plaza) => [plaza.id, plaza]))
+  /** Un local en una lista sin JavaScript, con su zona entre paréntesis. Un punto de interés no es una zona. */
+  const enLista = (place: Place): string => {
+    const zona = plazaById.get(place.plazaId)
+    return zona && !esPunto(zona) ? `${place.name} (${text(zona.name, locale)})` : place.name
+  }
   // Un local oculto no sale en listas, cuentas, fichas ni sitemap. (Que su zona esté oculta es otra cosa:
   // la ficha desaparece, pero el local sigue contando en su categoría.)
   const visibles = data.places.filter((place) => place.active)
@@ -187,7 +195,8 @@ export function pagesFor(
       },
       base,
     )
-  const activePlazas = data.plazas.filter((plaza) => plaza.active)
+  // Un punto de interés no tiene página de zona ni sale en ninguna lista de zonas.
+  const activePlazas = data.plazas.filter((plaza) => plaza.active && !esPunto(plaza))
 
   /*
    * Cada categoría con algún local tiene su página (`/categoria/x`), y las desde donde se llega a ella
@@ -342,13 +351,10 @@ export function pagesFor(
         nombre: name,
         descripcion: resumen,
         tituloLista: copy['seo.category.places'],
-        enlaces: lugares.map((place) => {
-          const zona = plazaById.get(place.plazaId)
-          return {
-            texto: zona ? `${place.name} (${text(zona.name, locale)})` : place.name,
-            href: route({ placeSlug: place.slug }),
-          }
-        }),
+        enlaces: lugares.map((place) => ({
+          texto: enLista(place),
+          href: route({ placeSlug: place.slug }),
+        })),
         secciones: [
           {
             titulo: copy['seo.category.zones'],
@@ -405,13 +411,10 @@ export function pagesFor(
         nombre: name,
         descripcion: resumen,
         tituloLista: copy['seo.category.places'],
-        enlaces: lugares.map((place) => {
-          const zona = plazaById.get(place.plazaId)
-          return {
-            texto: zona ? `${place.name} (${text(zona.name, locale)})` : place.name,
-            href: route({ placeSlug: place.slug }),
-          }
-        }),
+        enlaces: lugares.map((place) => ({
+          texto: enLista(place),
+          href: route({ placeSlug: place.slug }),
+        })),
         secciones: [
           { titulo: copy['seo.categories'], enlaces: categorias.map(enlaceDeCategoria) },
           {
@@ -441,7 +444,8 @@ export function pagesFor(
     .map((place) => {
       const plaza = plazaById.get(place.plazaId)
       const giros = place.giros.map((id) => giroLabel.get(id) ?? id)
-      const nombrePlaza = plaza ? text(plaza.name, locale) : undefined
+      // De un punto de interés no se dice "en tal zona": no está en ninguna.
+      const nombrePlaza = plaza && !esPunto(plaza) ? text(plaza.name, locale) : undefined
       return {
         place,
         plaza,
@@ -459,7 +463,8 @@ export function pagesFor(
            * caracteres por el final del texto del negocio, así que la lista no se desborda.
            */
           giros: place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
-          lugar: lugarDe(nombrePlaza),
+          // De un punto de interés, su calle: dos del mismo giro sin ella dirían la misma frase.
+          lugar: lugarDe(plaza && esPunto(plaza) ? (plaza.address ?? undefined) : nombrePlaza),
           idioma: locale,
           conGiros: copy['seo.place.context'],
           soloLugar: copy['seo.place.contextLugar'],
@@ -502,6 +507,8 @@ export function pagesFor(
   )
 
   fichas.forEach(({ place, plaza, giros }, indice) => {
+    // El horario del cuerpo sin JavaScript se parte igual que el de la ficha; el JSON-LD lleva el dato tal cual.
+    const horario = place.hours ? partirEnMedianoche(place.hours) : null
     // La misma dirección para el marcado y para el cuerpo sin JavaScript (ver src/lib/direccion.ts).
     const direccion = direccionDeLocal(plaza?.address, place.unit, traducir, locale)
     pages.push({
@@ -520,7 +527,8 @@ export function pagesFor(
         category: categoryOfGiro.get(place.giros[0] ?? ''),
         giros,
         url: absolute(route({ placeSlug: place.slug })),
-        plazaUrl: plaza?.active ? absolute(route({ plazaSlug: plaza.slug })) : undefined,
+        plazaUrl:
+          plaza?.active && !esPunto(plaza) ? absolute(route({ plazaSlug: plaza.slug })) : undefined,
         image: absolute(image),
         direccion,
         locale,
@@ -544,14 +552,15 @@ export function pagesFor(
           place.giros.map((id) => giroLargo.get(id) ?? giroLabel.get(id) ?? id),
           locale,
         ),
-        plaza: plaza?.active
-          ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
-          : undefined,
+        plaza:
+          plaza?.active && !esPunto(plaza)
+            ? { texto: text(plaza.name, locale), href: route({ plazaSlug: plaza.slug }) }
+            : undefined,
         direccion: direccion ?? undefined,
         descripcion: text(place.description, locale) || undefined,
         dias: DIAS.map((dia) => ({
           dia: copy[`day.${dia}`],
-          franjas: place.hours?.[dia] ?? [],
+          franjas: horario?.[dia] ?? [],
           cerrado: copy['hours.closedAllDay'],
         })).filter((dia) => dia.franjas.length > 0 || place.hours),
         tituloHorario: copy['place.hours'],
@@ -562,7 +571,7 @@ export function pagesFor(
           return otro ? [{ texto: otro.name, href: route({ placeSlug: otro.slug }) }] : []
         }),
         tituloVecinos: fill(copy['seo.nearby'], {
-          plaza: plaza ? text(plaza.name, locale) : 'Zibatá',
+          plaza: plaza && !esPunto(plaza) ? text(plaza.name, locale) : 'Zibatá',
         }),
         categorias: {
           titulo: copy['seo.categories'],

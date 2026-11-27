@@ -87,6 +87,10 @@
             ],
             "additionalProperties": false
           },
+          "tipo": {
+            "type": "string",
+            "const": "punto"
+          },
           "geometry": {
             "oneOf": [
               {
@@ -256,7 +260,6 @@
           "description",
           "address",
           "coordinates",
-          "geometry",
           "active",
           "placeIds",
           "categories",

@@ -32,6 +32,7 @@ import { MapErrorMessage } from './MapErrorMessage.tsx'
 import styles from './MapView.module.css'
 import { ensureMapRuntime } from './mapRuntime.ts'
 import { PlazaMarkers } from './PlazaMarkers.tsx'
+import { type PuntoEnElMapa, PuntoMarkers, type SitioDeZonas } from './PuntoMarkers.tsx'
 import { opcionesRealismo } from './realismo/modo.ts'
 import { buildMapStyle } from './style/buildMapStyle.ts'
 import { INTERACTIVE_PLAZA_LAYERS, SOURCE } from './style/ids.ts'
@@ -47,6 +48,10 @@ export interface MapViewProps {
   matchCounts: ReadonlyMap<string, number> | null
   selectedPlazaId: string | null
   onSelectPlaza: (plazaId: string) => void
+  /** Los puntos de interés, ya con el nombre y el ícono de su negocio. */
+  puntos: readonly PuntoEnElMapa[]
+  selectedPuntoId: string | null
+  onSelectPunto: (placeId: string) => void
   /** Espacio ocupado por paneles (px), para centrar la cámara en el área visible. */
   padding: PaddingOptions
   compact: boolean
@@ -70,12 +75,16 @@ export default function MapView({
   matchCounts,
   selectedPlazaId,
   onSelectPlaza,
+  puntos,
+  selectedPuntoId,
+  onSelectPunto,
   padding,
   compact,
   realismo,
   onStatusChange,
   onMapInstance,
 }: MapViewProps) {
+  const sitioDeZonas = useRef<SitioDeZonas>({ cajas: [], alCambiar: () => {} })
   const containerRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<MapLibreMap | null>(null)
   const [status, setStatus] = useState<MapStatus>({ state: 'loading' })
@@ -342,16 +351,18 @@ export default function MapView({
   // biome-ignore lint/correctness/useExhaustiveDependencies: se reacciona a los valores del padding, no a la referencia del objeto.
   useEffect(() => {
     if (!map || status.state !== 'ready') return
-    const selectionChanged = previousSelection.current !== selectedPlazaId
-    previousSelection.current = selectedPlazaId
-    const plaza = selectedPlazaId
-      ? latest.current.plazas.find((p) => p.id === selectedPlazaId)
-      : undefined
-    // Si el padding cambia mientras la cámara aún vuela hacia la plaza, se reencuadra en vez de cortar el vuelo.
-    if (plaza && (selectionChanged || map.isMoving()))
-      focusPlaza(map, plaza.coordinates, latest.current.padding)
+    // La cámara va igual a una zona elegida que al punto de interés cuya ficha está abierta.
+    const elegido = selectedPlazaId ?? selectedPuntoId
+    const selectionChanged = previousSelection.current !== elegido
+    previousSelection.current = elegido
+    const destino = selectedPlazaId
+      ? latest.current.plazas.find((p) => p.id === selectedPlazaId)?.coordinates
+      : puntos.find((punto) => punto.id === selectedPuntoId)
+    // Si el padding cambia mientras la cámara aún vuela hacia allí, se reencuadra en vez de cortar el vuelo.
+    if (destino && (selectionChanged || map.isMoving()))
+      focusPlaza(map, destino, latest.current.padding)
     else updatePadding(map, latest.current.padding)
-  }, [map, status.state, selectedPlazaId, paddingKey])
+  }, [map, status.state, selectedPlazaId, selectedPuntoId, paddingKey])
 
   return (
     <div className={styles.root}>
@@ -377,6 +388,18 @@ export default function MapView({
               registrar('mapa', plazaId)
               onSelectPlaza(plazaId)
             }}
+            onColocado={(cajas) => {
+              sitioDeZonas.current.cajas = cajas
+              sitioDeZonas.current.alCambiar()
+            }}
+          />
+          <PuntoMarkers
+            map={map}
+            puntos={puntos}
+            matchCounts={matchCounts}
+            selectedPuntoId={selectedPuntoId}
+            zonas={sitioDeZonas}
+            onSelect={onSelectPunto}
           />
           <ComingSoonMarkers map={map} plazas={plazas} />
           <MapControls map={map} plazas={plazas} compact={compact} />

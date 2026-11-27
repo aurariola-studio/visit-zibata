@@ -153,7 +153,7 @@
   gap: var(--space-4);
   min-height: 100%;
   padding: var(--space-6);
-  background: radial-gradient(90% 60% at 50% 40%, var(--sand-25), transparent), var(--sand-100);
+  background: radial-gradient(90% 60% at 50% 40%, var(--sand-25), transparent), var(--sand-75);
 }
 
 /* Un fallo del panel no puede llevarse la pantalla entera: ocupa la hoja y el mapa sigue detrás. */

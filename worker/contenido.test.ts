@@ -130,6 +130,31 @@ describe('preparar un negocio nuevo', () => {
     expect(preparado.problemas.join(' ')).toContain('descripción')
   })
 
+  it('sin descripción guarda null, también junto a otro local sin descripción en la misma plaza', () => {
+    const conOtro = {
+      ...dataset,
+      places: dataset.places.map((fila) =>
+        fila.id === existente.id ? { ...fila, description: null } : fila,
+      ),
+    }
+    const preparado = prepararNegocio(
+      conOtro,
+      crudo,
+      nuevo({ plazaId: existente.plazaId, descripcionEs: '', descripcionEn: '' }),
+      HOY,
+    )
+    expect(preparado.ok).toBe(true)
+    if (!preparado.ok) return
+    expect(preparado.place.description).toBeNull()
+  })
+
+  it('rechaza la descripción en un solo idioma', () => {
+    const preparado = prepararNegocio(dataset, crudo, nuevo({ descripcionEn: '' }), HOY)
+    expect(preparado.ok).toBe(false)
+    if (preparado.ok) return
+    expect(preparado.problemas.join(' ')).toContain('o ninguna')
+  })
+
   it('rechaza un nombre que no cabe en el título de la página', () => {
     const preparado = prepararNegocio(dataset, crudo, nuevo({ nombre: 'A'.repeat(50) }), HOY)
     expect(preparado.ok).toBe(false)
@@ -529,31 +554,33 @@ describe('editar un negocio existente', () => {
     expect(sinDias.place.hours).toEqual({ note: 'Cierra en días festivos' })
   })
 
-  it('las marcas de cita y de clases no se pierden al guardar, con o sin días', () => {
-    const conMarcas: Place = {
-      ...existente,
-      hours: { mon: ['09:00-18:00'], byAppointment: true, byClasses: true },
-    }
-    const ds = {
-      ...dataset,
-      places: dataset.places.map((fila) => (fila.id === existente.id ? conMarcas : fila)),
-    }
-    const conDias = prepararNegocio(
-      ds,
-      crudo,
-      editar(conMarcas, { horario: { mon: ['10:00-19:00'] } }),
-      HOY,
-    )
-    if (!conDias.ok) throw new Error('no preparó')
-    expect(conDias.place.hours).toEqual({
-      mon: ['10:00-19:00'],
-      byAppointment: true,
-      byClasses: true,
-    })
-    const sinDias = prepararNegocio(ds, crudo, editar(conMarcas, { horario: null }), HOY)
-    if (!sinDias.ok) throw new Error('no preparó')
-    expect(sinDias.place.hours).toEqual({ byAppointment: true, byClasses: true })
-  })
+  it.each(['byClasses', 'byAppointment', 'paidAccess'] as const)(
+    'la marca %s no se pierde al guardar, con o sin días',
+    (marca) => {
+      const conMarcas: Place = {
+        ...existente,
+        hours: { mon: ['09:00-18:00'], [marca]: true },
+      }
+      const ds = {
+        ...dataset,
+        places: dataset.places.map((fila) => (fila.id === existente.id ? conMarcas : fila)),
+      }
+      const conDias = prepararNegocio(
+        ds,
+        crudo,
+        editar(conMarcas, { horario: { mon: ['10:00-19:00'] } }),
+        HOY,
+      )
+      if (!conDias.ok) throw new Error('no preparó')
+      expect(conDias.place.hours).toEqual({
+        mon: ['10:00-19:00'],
+        [marca]: true,
+      })
+      const sinDias = prepararNegocio(ds, crudo, editar(conMarcas, { horario: null }), HOY)
+      if (!sinDias.ok) throw new Error('no preparó')
+      expect(sinDias.place.hours).toEqual({ [marca]: true })
+    },
+  )
 
   it('un WhatsApp Business, que es un enlace y no un número, no se rompe al guardar', () => {
     const enlace = 'https://api.whatsapp.com/message/ABC123XYZ'

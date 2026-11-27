@@ -161,7 +161,11 @@ const BUDGET = {
   // el detalle se pide después, en reposo o cuando algo lo necesita (fases 3 y 4 de `docs/PLAN-PARTIR-DATOS.md`),
   // de modo que este tope sí es lo que pesa el arranque de datos. Medido el 2026-11-21 contra la versión de un
   // solo paquete: de 47 a 22 KB de datos antes de poder usar la guía.
-  dataJs: 30,
+  // 30 a 36 (2026-11-25): los sectores Servicios y Entretenimiento y la categoría Fisioterapia suman siete categorías
+  // y 22 giros con etiqueta en los dos idiomas (1,6 KB gzip en `categories`, 28,7 a 30,3), y los 31 locales que
+  // vienen detrás suman unos 3 KB más al resumen. Es una subida por catálogo nuevo, no por descuido; lo que toca
+  // vigilar es que `categories` no siga creciendo en el arranque (ver `docs/PLAN-PARTIR-DATOS.md`).
+  dataJs: 36,
   // El DETALLE de los locales (descripción, enlaces, teléfono, ruta a la puerta): lo que solo lee la ficha y el
   // buscador. Hoy unos 28 de 45; cada local suma unos 0,16 KB, así que da para unos cien más antes de tener
   // que partirlo por sector o plaza.
@@ -202,7 +206,7 @@ const matching = (pattern: RegExp) => assets.filter((name) => pattern.test(name)
 const DATOS_DE_ARRANQUE = /^(categories|plazas|places-resumen)-.*\.js$/
 const DATOS_DE_DETALLE = /^places-detalle-.*\.js$/
 /** Todo lo que parece un trozo de datos, venga o no con un nombre que esperemos. */
-const PARECE_DATOS = /^(categories|plazas|places|_?virtual_zibata-places)[-_].*\.js$/
+const PARECE_DATOS = /^(categories|plazas|places|_?virtual_zibata-(places|plazas))[-_].*\.js$/
 /** El registro de dibujos de iconos que carga `CategoryIcon` con `import('./registro-de-iconos.tsx')`. */
 const ICONOS_CHUNK = /^registro-de-iconos-.*\.js$/
 /** Los fragmentos de iconos por sector que carga `CategoryIcon` con `import('./iconos-de-<sector>.tsx')`. */

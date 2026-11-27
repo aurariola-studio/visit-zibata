@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/redirects.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-23",
+  "updatedAt": "2026-11-27",
   "redirects": [
     {
       "kind": "place-slug",
@@ -401,6 +401,11 @@
       "id": "ferreterias",
       "lang": "en",
       "slug": "hardware-stores"
+    },
+    {
+      "kind": "plaza-slug",
+      "id": "campo-de-golf",
+      "slug": "campo-de-golf"
     }
   ]
 }

@@ -17,6 +17,7 @@
  *  - **El diff se mantiene pequeño.** Se reemplaza solo el local tocado y los campos derivados de
  *    su plaza, en vez de volver a serializar todo el archivo desde los objetos de Zod.
  */
+
 import { z } from 'zod'
 import categoriasJson from '../data/commercial/categories.json' with { type: 'json' }
 import lugaresJson from '../data/commercial/places.json' with { type: 'json' }
@@ -26,6 +27,7 @@ import ajustesJson from '../data/geographic/ajustes-edificios.json' with { type:
 import extent from '../data/geographic/extent.json' with { type: 'json' }
 import volumenesJson from '../data/geographic/volumenes-plaza.json' with { type: 'json' }
 import { type AjusteEdificio, leerAjustes } from '../src/data/ajustes-edificios.ts'
+import { esPunto } from '../src/data/puntos.ts'
 import {
   type CommercialDataset,
   syncPlazaDerivedFields,
@@ -74,8 +76,9 @@ export const EntradaNegocioSchema = z.object({
     .array(z.string().trim().min(1))
     .min(1, 'Elige al menos un giro')
     .max(3, 'El tope son tres giros'),
-  descripcionEs: z.string().trim().min(1, 'La descripción en español es obligatoria').max(2000),
-  descripcionEn: z.string().trim().min(1, 'La descripción en inglés es obligatoria').max(2000),
+  /** Las dos o ninguna: las cadenas grandes van sin descripción. */
+  descripcionEs: z.string().trim().max(2000),
+  descripcionEn: z.string().trim().max(2000),
   telefono: z.string().trim().max(40).optional().default(''),
   sitio: z.string().trim().max(500).optional().default(''),
   instagram: z.string().trim().max(500).optional().default(''),
@@ -510,6 +513,7 @@ export async function contenido(
         address,
         coordinates,
         googleMapsUri,
+        tipo,
         geometry,
         active,
         comingSoon,
@@ -522,6 +526,8 @@ export async function contenido(
         address,
         coordinates,
         googleMapsUri,
+        // El panel tiene que saber que es un punto de interés: no lleva contorno ni página.
+        tipo,
         // El contorno viaja al panel para poder editarlo: son unos cientos de bytes por plaza.
         geometry,
         active,
@@ -559,14 +565,15 @@ const whatsappDe = (valor: string): string | null =>
 /** Día ausente = no se sabe; lista vacía = cerrado. Una cadena vacía del formulario es "no se sabe". */
 function horarioDe(
   horario: Record<string, string[]> | null | undefined,
-  conservar: { note?: string; byClasses?: true; byAppointment?: true } = {},
+  conservar: { note?: string; byClasses?: true; byAppointment?: true; paidAccess?: true } = {},
 ): Record<string, string[] | string | boolean> | null {
-  // La nota del horario y las marcas de "por clases" y "con cita" no tienen campo en el formulario: se
-  // conservan, porque perderlas es perder un dato.
+  // La nota del horario y las marcas de "por clases", "con cita" y "de pago" no tienen campo en el formulario:
+  // se conservan, porque perderlas es perder un dato.
   const fijo: Record<string, string | boolean> = {}
   if (conservar.note) fijo.note = conservar.note
   if (conservar.byClasses) fijo.byClasses = true
   if (conservar.byAppointment) fijo.byAppointment = true
+  if (conservar.paidAccess) fijo.paidAccess = true
   if (!horario) return Object.keys(fijo).length > 0 ? fijo : null
   const salida: Record<string, string[] | string | boolean> = { ...fijo }
   for (const [dia, rangos] of Object.entries(horario)) {
@@ -600,6 +607,10 @@ function construir(
 
   if ((entrada.lat == null) !== (entrada.lng == null)) {
     return { problemas: ['Indica las dos coordenadas o ninguna'] }
+  }
+
+  if (Boolean(entrada.descripcionEs) !== Boolean(entrada.descripcionEn)) {
+    return { problemas: ['Escribe la descripción en español y en inglés, o ninguna'] }
   }
 
   if (entrada.cierre && entrada.cierre.desde > hoy) {
@@ -660,11 +671,14 @@ function construir(
     name: entrada.nombre,
     plazaId: entrada.plazaId,
     giros,
-    description: { es: entrada.descripcionEs, en: entrada.descripcionEn },
+    description: entrada.descripcionEs
+      ? { es: entrada.descripcionEs, en: entrada.descripcionEn }
+      : null,
     hours: horarioDe(entrada.horario, {
       note: existente?.hours?.note,
       byClasses: existente?.hours?.byClasses,
       byAppointment: existente?.hours?.byAppointment,
+      paidAccess: existente?.hours?.paidAccess,
     }),
     location:
       entrada.lat != null && entrada.lng != null ? { lat: entrada.lat, lng: entrada.lng } : null,
@@ -819,11 +833,14 @@ export function prepararNegocio(
     const recorte = (valor: string): string => normalizar(valor).slice(0, 160)
     const descripcionEs = recorte(place.description?.es ?? '')
     const descripcionEn = recorte(place.description?.en ?? '')
-    const mismaDescripcion = visibles.find(
-      (fila) =>
-        recorte(fila.description?.es ?? '') === descripcionEs ||
-        recorte(fila.description?.en ?? '') === descripcionEn,
-    )
+    // Sin descripción no hay texto que repetir; el prerender distingue esas fichas por el nombre.
+    const mismaDescripcion =
+      place.description &&
+      visibles.find(
+        (fila) =>
+          recorte(fila.description?.es ?? '') === descripcionEs ||
+          recorte(fila.description?.en ?? '') === descripcionEn,
+      )
     if (mismaDescripcion) {
       problemas.push(
         `La descripción coincide con la de "${mismaDescripcion.name}" en esta plaza; los metadatos de las dos fichas se repetirían.`,
@@ -838,7 +855,7 @@ export function prepararNegocio(
     )
     const nombreRepetido = visiblesGlobal.some((fila) => normalizar(fila.name) === nombre)
     const titulos =
-      nombreRepetido && plaza
+      nombreRepetido && plaza && !esPunto(plaza)
         ? [
             `${place.name} en ${plaza.name}${SUFIJO_TITULO}`,
             `${place.name} in ${plaza.name}${SUFIJO_TITULO}`,
@@ -859,17 +876,21 @@ export function prepararNegocio(
         `El nombre coincide con el de la página de información "${tituloReservado}"; los títulos se repetirían.`,
       )
     }
-    const plazaMismoNombre = dataset.plazas.find((fila) => normalizar(fila.name) === nombre)
+    // Un punto de interés suele llamarse como su negocio y no tiene página: no cuenta.
+    const zonas = dataset.plazas.filter((fila) => !esPunto(fila))
+    const plazaMismoNombre = zonas.find((fila) => normalizar(fila.name) === nombre)
     if (plazaMismoNombre) {
       problemas.push(
         `El nombre coincide con el de la plaza "${plazaMismoNombre.name}"; los títulos de las dos páginas se repetirían.`,
       )
     }
-    const plazaMismaDescripcion = dataset.plazas.find(
-      (fila) =>
-        recorte(fila.description?.es ?? '') === descripcionEs ||
-        recorte(fila.description?.en ?? '') === descripcionEn,
-    )
+    const plazaMismaDescripcion =
+      place.description &&
+      zonas.find(
+        (fila) =>
+          recorte(fila.description?.es ?? '') === descripcionEs ||
+          recorte(fila.description?.en ?? '') === descripcionEn,
+      )
     if (plazaMismaDescripcion) {
       problemas.push(
         `La descripción coincide con la de la plaza "${plazaMismaDescripcion.name}"; los metadatos de las dos páginas se repetirían.`,

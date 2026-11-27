@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { HoursSchema } from '../../data/schemas.ts'
 import { setLocale } from '../../i18n/index.ts'
 import { renderWithCatalog } from '../../test/render.tsx'
 import { HoursTable } from './HoursTable.tsx'
@@ -54,6 +55,18 @@ describe('HoursTable: aviso de cita', () => {
     expect(
       aviso.compareDocumentPosition(tabla as Node) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy()
+  })
+
+  it('el esquema no admite dos avisos en un horario', () => {
+    expect(HoursSchema.safeParse({ byClasses: true }).success).toBe(true)
+    expect(HoursSchema.safeParse({ byClasses: true, byAppointment: true }).success).toBe(false)
+  })
+
+  it('un horario que solo trae el aviso lo enseña, sin decir que no hay horario', async () => {
+    const { container } = await renderWithCatalog(<HoursTable hours={{ paidAccess: true }} />)
+    expect(container.textContent).toBe(
+      'El acceso tiene costo. Consulta su disponibilidad antes de ir.',
+    )
   })
 
   it('sin byAppointment no dice nada, y no se confunde con el de clases', async () => {
