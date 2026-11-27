@@ -1,7 +1,7 @@
 {
   "$schema": "./schemas/places.schema.json",
   "version": 1,
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-27",
   "places": [
     {
       "id": "carls-jr",
@@ -5290,7 +5290,20 @@
       "googleMapsUri": "https://maps.app.goo.gl/1BmQ9o94Jf7PTDxW7",
       "googlePlaceId": null,
       "phone": "+524461117775",
-      "photos": [],
+      "photos": [
+        {
+          "src": "images/places/burgerthoven-zibata/portada.webp",
+          "alt": "Logo de Burgerthoven",
+          "width": 1080,
+          "height": 1080,
+          "variants": [
+            480,
+            960
+          ],
+          "placeholder": "#080808",
+          "credit": "Cortesía de Burgerthoven"
+        }
+      ],
       "links": {
         "website": null,
         "instagram": "https://www.instagram.com/burgerthovenzibata/",
