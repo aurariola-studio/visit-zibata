@@ -98,6 +98,21 @@ const fichaDe = (idioma: Idioma, lugar: Place, plazas: Plaza[] = [ZONA]) => {
   if (!pagina) throw new Error(`No hay ficha de ${lugar.slug} en ${idioma}`)
   return pagina
 }
+describe('un punto de interés en la lista de su categoría', () => {
+  const punto = { ...plazaPrueba('punto-prueba', 'Local Suelto'), tipo: 'punto' } as Plaza
+  const suelto = lugarPrueba({ name: 'Local Suelto', plazaId: 'punto-prueba' })
+  const deZona = lugarPrueba({ id: 'de-zona', slug: 'de-zona', name: 'Local de Zona' })
+
+  it('no repite su nombre como si fuera su zona', () => {
+    const cuerpos = paginasDe('es', [suelto, deZona], [ZONA, punto])
+      .map((pagina) => pagina.contenido)
+      .join(' ')
+    expect(cuerpos).toContain('Local de Zona (Zona Prueba)')
+    expect(cuerpos).toContain('>Local Suelto<')
+    expect(cuerpos).not.toContain('Local Suelto (Local Suelto)')
+  })
+})
+
 /** Los giros de la taxonomía real, de uno en uno por categoría: lo que cambia con el catálogo, no con los locales. */
 const GIROS = data.categories.flatMap((categoria) =>
   categoria.giros.filter((giro) => !giro.general),

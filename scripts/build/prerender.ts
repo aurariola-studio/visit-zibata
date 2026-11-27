@@ -173,6 +173,11 @@ export function pagesFor(
     }
   }
   const plazaById = new Map(data.plazas.map((plaza) => [plaza.id, plaza]))
+  /** Un local en una lista sin JavaScript, con su zona entre paréntesis. Un punto de interés no es una zona. */
+  const enLista = (place: Place): string => {
+    const zona = plazaById.get(place.plazaId)
+    return zona && !esPunto(zona) ? `${place.name} (${text(zona.name, locale)})` : place.name
+  }
   // Un local oculto no sale en listas, cuentas, fichas ni sitemap. (Que su zona esté oculta es otra cosa:
   // la ficha desaparece, pero el local sigue contando en su categoría.)
   const visibles = data.places.filter((place) => place.active)
@@ -345,13 +350,10 @@ export function pagesFor(
         nombre: name,
         descripcion: resumen,
         tituloLista: copy['seo.category.places'],
-        enlaces: lugares.map((place) => {
-          const zona = plazaById.get(place.plazaId)
-          return {
-            texto: zona ? `${place.name} (${text(zona.name, locale)})` : place.name,
-            href: route({ placeSlug: place.slug }),
-          }
-        }),
+        enlaces: lugares.map((place) => ({
+          texto: enLista(place),
+          href: route({ placeSlug: place.slug }),
+        })),
         secciones: [
           {
             titulo: copy['seo.category.zones'],
@@ -408,13 +410,10 @@ export function pagesFor(
         nombre: name,
         descripcion: resumen,
         tituloLista: copy['seo.category.places'],
-        enlaces: lugares.map((place) => {
-          const zona = plazaById.get(place.plazaId)
-          return {
-            texto: zona ? `${place.name} (${text(zona.name, locale)})` : place.name,
-            href: route({ placeSlug: place.slug }),
-          }
-        }),
+        enlaces: lugares.map((place) => ({
+          texto: enLista(place),
+          href: route({ placeSlug: place.slug }),
+        })),
         secciones: [
           { titulo: copy['seo.categories'], enlaces: categorias.map(enlaceDeCategoria) },
           {
