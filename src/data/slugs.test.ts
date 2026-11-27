@@ -38,6 +38,8 @@ const ETIQUETA_DE_ZONA: Record<string, string> = {
 const EXCEPCIONES: Record<string, string> = {
   // "E|B": la barra es del logotipo; `e-b-salon` se leería como tres palabras.
   'eb-salon': 'eb-salon',
+  // "H-E-B": los guiones son del logotipo y el propietario la quiere en una sola palabra.
+  heb: 'heb',
 }
 
 const CONECTORES = new Set(['y', 'and'])

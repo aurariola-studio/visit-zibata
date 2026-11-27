@@ -16191,6 +16191,372 @@
           "https://www.facebook.com/kinemaqro/"
         ]
       }
+    },
+    {
+      "id": "heb",
+      "slug": "heb",
+      "name": "H-E-B",
+      "plazaId": "punto-heb",
+      "giros": [
+        "supermercado"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "07:00-23:00"
+        ],
+        "tue": [
+          "07:00-23:00"
+        ],
+        "wed": [
+          "07:00-23:00"
+        ],
+        "thu": [
+          "07:00-23:00"
+        ],
+        "fri": [
+          "07:00-23:00"
+        ],
+        "sat": [
+          "07:00-23:00"
+        ],
+        "sun": [
+          "07:00-23:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6757444,
+        "lng": -100.3252669
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/VkfqQ855KVhVHjru8",
+      "googlePlaceId": null,
+      "phone": "+524428865022",
+      "photos": [],
+      "links": {
+        "website": "https://www.heb.com.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/VkfqQ855KVhVHjru8",
+          "https://www.heb.com.mx/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "walmart-express",
+      "slug": "walmart-express",
+      "name": "Walmart Express",
+      "plazaId": "punto-walmart-express",
+      "giros": [
+        "supermercado"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "07:00-22:00"
+        ],
+        "tue": [
+          "07:00-22:00"
+        ],
+        "wed": [
+          "07:00-22:00"
+        ],
+        "thu": [
+          "07:00-22:00"
+        ],
+        "fri": [
+          "07:00-22:00"
+        ],
+        "sat": [
+          "07:00-23:00"
+        ],
+        "sun": [
+          "07:00-22:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6824846,
+        "lng": -100.3177617
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/V5rtRanaKQYD7SWT6",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": "https://www.walmart.com.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/V5rtRanaKQYD7SWT6",
+          "https://www.walmart.com.mx/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "oxxo-biznaga",
+      "slug": "oxxo-biznaga",
+      "name": "Oxxo Biznaga",
+      "plazaId": "punto-oxxo-biznaga",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "06:00-00:59"
+        ],
+        "tue": [
+          "06:00-00:59"
+        ],
+        "wed": [
+          "06:00-00:59"
+        ],
+        "thu": [
+          "06:00-00:59"
+        ],
+        "fri": [
+          "06:00-00:59"
+        ],
+        "sat": [
+          "06:00-00:59"
+        ],
+        "sun": [
+          "06:00-00:59"
+        ]
+      },
+      "location": {
+        "lat": 20.6821609,
+        "lng": -100.3175267
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/UTbix9HoU845vEVk6",
+      "googlePlaceId": null,
+      "phone": null,
+      "photos": [],
+      "links": {
+        "website": null,
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/UTbix9HoU845vEVk6",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "asturiano-ceiba",
+      "slug": "asturiano-ceiba",
+      "name": "Asturiano Ceiba",
+      "plazaId": "punto-asturiano-ceiba",
+      "giros": [
+        "tienda-de-conveniencia"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "07:00-22:30"
+        ],
+        "tue": [
+          "07:00-22:30"
+        ],
+        "wed": [
+          "07:00-22:30"
+        ],
+        "thu": [
+          "07:00-22:30"
+        ],
+        "fri": [
+          "07:00-23:00"
+        ],
+        "sat": [
+          "07:00-23:00"
+        ],
+        "sun": [
+          "07:00-21:00"
+        ]
+      },
+      "location": {
+        "lat": 20.6834581,
+        "lng": -100.3247583
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/VJnRRd7axnrjui947",
+      "googlePlaceId": null,
+      "phone": "+524421830550",
+      "photos": [],
+      "links": {
+        "website": "https://tiendaselasturiano.com/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/VJnRRd7axnrjui947",
+          "https://tiendaselasturiano.com/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "banco-bbva",
+      "slug": "banco-bbva",
+      "name": "Banco BBVA",
+      "plazaId": "punto-banco-bbva",
+      "giros": [
+        "banco",
+        "cajero-automatico"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "08:30-16:00"
+        ],
+        "tue": [
+          "08:30-16:00"
+        ],
+        "wed": [
+          "08:30-16:00"
+        ],
+        "thu": [
+          "08:30-16:00"
+        ],
+        "fri": [
+          "08:30-16:00"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6798687,
+        "lng": -100.3152192
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/1bpGvhjLahbv1JeN8",
+      "googlePlaceId": null,
+      "phone": "+525552262663",
+      "photos": [],
+      "links": {
+        "website": "https://www.bbva.mx/",
+        "instagram": null,
+        "facebook": null,
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/1bpGvhjLahbv1JeN8",
+          "https://www.bbva.mx/",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
+      "id": "colegio-nwl-newland",
+      "slug": "colegio-nwl-newland",
+      "name": "Colegio NWL Newland",
+      "plazaId": "punto-colegio-nwl-newland",
+      "giros": [
+        "colegio"
+      ],
+      "description": null,
+      "hours": {
+        "mon": [
+          "07:00-14:30"
+        ],
+        "tue": [
+          "07:00-14:30"
+        ],
+        "wed": [
+          "07:00-14:30"
+        ],
+        "thu": [
+          "07:00-14:30"
+        ],
+        "fri": [
+          "07:00-14:30"
+        ],
+        "sat": [],
+        "sun": []
+      },
+      "location": {
+        "lat": 20.6817023,
+        "lng": -100.3401129
+      },
+      "googleMapsUri": "https://maps.app.goo.gl/QD1LfUK6BNp822wf7",
+      "googlePlaceId": null,
+      "phone": "+524421612211",
+      "photos": [],
+      "links": {
+        "website": "https://www.nwl.com.mx/campus/zibata",
+        "instagram": "https://www.instagram.com/colegionwl/",
+        "facebook": "https://www.facebook.com/ColegioNWL/",
+        "tiktok": null,
+        "whatsapp": null,
+        "rappi": null,
+        "uberEats": null,
+        "didiFood": null
+      },
+      "active": true,
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/QD1LfUK6BNp822wf7",
+          "https://www.nwl.com.mx/campus/zibata",
+          "https://www.instagram.com/colegionwl/",
+          "https://www.facebook.com/ColegioNWL/",
+          "campo:2026-11-26"
+        ]
+      }
     }
   ]
 }

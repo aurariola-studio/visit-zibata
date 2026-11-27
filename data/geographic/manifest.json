@@ -84,15 +84,15 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2572363,
-      "sha256": "10974b454076894efaf1b5b975a1a178b4db6f497fe7635ff0ec21669b349642",
+      "bytes": 2572576,
+      "sha256": "b98e3e25eac0b45071a34c50bf1147271ce23578fbce92b4994bedbf141fbbbd",
       "tiles": 266,
       "bytesByZoom": {
         "12": 49691,
-        "13": 250481,
-        "14": 529579,
-        "15": 731858,
-        "16": 1009439
+        "13": 250519,
+        "14": 529632,
+        "15": 731912,
+        "16": 1009506
       },
       "largestTile": {
         "z": 13,
@@ -105,16 +105,16 @@
         "landuse": 154,
         "water": 8,
         "waterway": 11,
-        "buildings": 16004,
+        "buildings": 16006,
         "labels": 21,
         "trees": 30780,
         "shrubs": 1747
       }
     },
     "public/map/plaza-buildings.geojson": {
-      "bytes": 21230,
-      "sha256": "5dadd351273e96c93fa3f3263add0dc0d3891f6a20915a06469437c7af7f623f",
-      "features": 57,
+      "bytes": 20448,
+      "sha256": "a458584615129cdfacdca4ee9b5eaf42588bfd32233e47743ee13f3d9e389678",
+      "features": 55,
       "synthesizedFor": [
         "paseo-zibata",
         "xentric-zibata",
@@ -251,8 +251,8 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3871624,
-        "sha256": "e6606a80a0dc7886cc611b6c23e864303da933ddc2fcc33d986f6598d640511e"
+        "bytes": 3873904,
+        "sha256": "755ceb020763742680be5a9db50588f8d985d3482a587869ab031ce92342e780"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 144856,

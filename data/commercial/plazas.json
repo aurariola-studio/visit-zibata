@@ -666,92 +666,6 @@
       }
     },
     {
-      "id": "plaza-walmart",
-      "slug": "plaza-walmart",
-      "name": "Plaza Walmart",
-      "description": {
-        "es": "Walmart Express Zibatá (supermercado), sobre Av. Paseo de las Pitahayas.",
-        "en": "Walmart Express Zibatá (supermarket), on Av. Paseo de las Pitahayas."
-      },
-      "address": "Av. Paseo de las Pitahayas 6A",
-      "coordinates": {
-        "lat": 20.6824846,
-        "lng": -100.3177617
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -100.317583,
-              20.682193
-            ],
-            [
-              -100.317349,
-              20.682322
-            ],
-            [
-              -100.317258,
-              20.682495
-            ],
-            [
-              -100.317254,
-              20.682563
-            ],
-            [
-              -100.317334,
-              20.682734
-            ],
-            [
-              -100.317768,
-              20.682913
-            ],
-            [
-              -100.317839,
-              20.682914
-            ],
-            [
-              -100.317892,
-              20.682869
-            ],
-            [
-              -100.318091,
-              20.682478
-            ],
-            [
-              -100.318095,
-              20.68241
-            ],
-            [
-              -100.318046,
-              20.682358
-            ],
-            [
-              -100.31767,
-              20.682191
-            ],
-            [
-              -100.317583,
-              20.682193
-            ]
-          ]
-        ]
-      },
-      "active": false,
-      "placeIds": [],
-      "categories": [],
-      "locationConfidence": "high",
-      "locationSource": "Ubicación publicada de Walmart Express Zibatá (Av. Paseo de las Pitahayas 6A); huella de Overture. Inactiva: sin locales activos registrados.",
-      "verification": {
-        "status": "removed",
-        "confidence": "high",
-        "lastVerifiedAt": "2026-09-14",
-        "sources": [
-          "https://www.walmartmexico.com/sala-de-prensa/2022/10/11/inaugura-walmart-express-su-tienda-numero-100-en-mexico"
-        ]
-      }
-    },
-    {
       "id": "xentric-zibata",
       "slug": "xentric-zibata",
       "name": "Xentric Zibatá",
@@ -1637,6 +1551,193 @@
         "sources": [
           "https://intercepta.mx/",
           "https://www.google.com/maps/search/Intercepta+Zibat%C3%A1"
+        ]
+      }
+    },
+    {
+      "id": "punto-heb",
+      "slug": "punto-heb",
+      "name": "H-E-B",
+      "tipo": "punto",
+      "description": null,
+      "address": "Av. Paseo de las Pitahayas 23",
+      "coordinates": {
+        "lat": 20.6757444,
+        "lng": -100.3252669
+      },
+      "active": true,
+      "placeIds": [
+        "heb"
+      ],
+      "categories": [
+        "supermercados"
+      ],
+      "locationConfidence": "high",
+      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-27).",
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/VkfqQ855KVhVHjru8",
+          "https://www.heb.com.mx/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "punto-walmart-express",
+      "slug": "punto-walmart-express",
+      "name": "Walmart Express",
+      "tipo": "punto",
+      "description": null,
+      "address": "Av. Paseo de las Pitahayas 6A",
+      "coordinates": {
+        "lat": 20.6824846,
+        "lng": -100.3177617
+      },
+      "active": true,
+      "placeIds": [
+        "walmart-express"
+      ],
+      "categories": [
+        "supermercados"
+      ],
+      "locationConfidence": "high",
+      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-27).",
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/V5rtRanaKQYD7SWT6",
+          "https://www.walmart.com.mx/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "punto-oxxo-biznaga",
+      "slug": "punto-oxxo-biznaga",
+      "name": "Oxxo Biznaga",
+      "tipo": "punto",
+      "description": null,
+      "address": "Av. Paseo de las Pitahayas 6A",
+      "coordinates": {
+        "lat": 20.6821609,
+        "lng": -100.3175267
+      },
+      "active": true,
+      "placeIds": [
+        "oxxo-biznaga"
+      ],
+      "categories": [
+        "conveniencia"
+      ],
+      "locationConfidence": "high",
+      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-27).",
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/UTbix9HoU845vEVk6",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "punto-asturiano-ceiba",
+      "slug": "punto-asturiano-ceiba",
+      "name": "Asturiano Ceiba",
+      "tipo": "punto",
+      "description": null,
+      "address": "Ceiba s/n",
+      "coordinates": {
+        "lat": 20.6834581,
+        "lng": -100.3247583
+      },
+      "active": true,
+      "placeIds": [
+        "asturiano-ceiba"
+      ],
+      "categories": [
+        "conveniencia"
+      ],
+      "locationConfidence": "high",
+      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-27).",
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-27",
+        "sources": [
+          "https://maps.app.goo.gl/VJnRRd7axnrjui947",
+          "https://tiendaselasturiano.com/",
+          "campo:2026-11-27"
+        ]
+      }
+    },
+    {
+      "id": "punto-banco-bbva",
+      "slug": "punto-banco-bbva",
+      "name": "Banco BBVA",
+      "tipo": "punto",
+      "description": null,
+      "address": "Av. Paseo de las Pitahayas 13",
+      "coordinates": {
+        "lat": 20.6798687,
+        "lng": -100.3152192
+      },
+      "active": true,
+      "placeIds": [
+        "banco-bbva"
+      ],
+      "categories": [
+        "bancos-y-cajeros"
+      ],
+      "locationConfidence": "high",
+      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-25).",
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-25",
+        "sources": [
+          "https://maps.app.goo.gl/1bpGvhjLahbv1JeN8",
+          "https://www.bbva.mx/",
+          "campo:2026-11-25"
+        ]
+      }
+    },
+    {
+      "id": "punto-colegio-nwl-newland",
+      "slug": "punto-colegio-nwl-newland",
+      "name": "Colegio NWL Newland",
+      "tipo": "punto",
+      "description": null,
+      "address": "Av. Paseo de las Pitahayas 39B",
+      "coordinates": {
+        "lat": 20.6817023,
+        "lng": -100.3401129
+      },
+      "active": true,
+      "placeIds": [
+        "colegio-nwl-newland"
+      ],
+      "categories": [
+        "educacion"
+      ],
+      "locationConfidence": "high",
+      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-26).",
+      "verification": {
+        "status": "active",
+        "confidence": "medium",
+        "lastVerifiedAt": "2026-11-26",
+        "sources": [
+          "https://maps.app.goo.gl/QD1LfUK6BNp822wf7",
+          "https://www.nwl.com.mx/campus/zibata",
+          "https://www.instagram.com/colegionwl/",
+          "https://www.facebook.com/ColegioNWL/",
+          "campo:2026-11-26"
         ]
       }
     }
