@@ -37,7 +37,7 @@ const CROMA_MINIMO = 0.045
 const CLARIDAD_MAXIMA = 0.82
 const CLARIDAD_OSCURA = 0.3
 const CROMA_OSCURO = 0.09
-const PAPEL = '#f8f4ed'
+const PAPEL = '#faf7f1'
 const AA = 4.5
 
 /** Los tokens de la paleta de marca, leídos de donde viven y no de una copia que se queda atrás. */
@@ -104,7 +104,7 @@ describe('colores de zona', () => {
 
   it('el texto de la gota va en arena en todas las zonas y se lee', () => {
     for (const [id, tono] of tonos) {
-      expect(tono.onAccent, id).toBe('#fcfaf6')
+      expect(tono.onAccent, id).toBe('#fefdf9')
       expect(contraste(tono.accent, tono.onAccent), id).toBeGreaterThanOrEqual(PUERTA.textoEnLaGota)
     }
   })

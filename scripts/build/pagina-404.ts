@@ -31,7 +31,7 @@ import { createHash } from 'node:crypto'
  * página de error no debe esperar a una descarga.
  */
 const ESTILO = `
-      :root { --olivo: #536c2a; --tinta: #1f2419; --apagado: #62655a; --papel: #f8f4ed; }
+      :root { --olivo: #536c2a; --tinta: #1f2419; --apagado: #62655a; --papel: #faf7f1; }
       * { box-sizing: border-box; margin: 0; }
       body { min-height: 100svh; display: grid; place-items: center; padding: 1.5rem;
         background: var(--papel); color: var(--tinta); text-align: center;

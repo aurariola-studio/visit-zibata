@@ -37,7 +37,7 @@
   height: 1.1rem;
   border-radius: var(--radius-round);
   background: rgb(31 36 25 / 0.5);
-  border: 2px solid rgb(252 250 246 / 0.95);
+  border: 2px solid rgb(254 253 249 / 0.95);
   box-shadow: 0 1px 6px rgb(31 36 25 / 0.4);
   pointer-events: none;
 }

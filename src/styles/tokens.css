@@ -5,8 +5,10 @@
  */
 :root {
   /* Arena / neutros cálidos */
-  --sand-25: #fcfaf6;
-  --sand-50: #f8f4ed;
+  --sand-25: #fefdf9;
+  --sand-50: #faf7f1;
+  /* La superficie apagada (botones y cajas neutras): un paso suave sobre el fondo, que delimita su filete. */
+  --sand-75: #f8f5ed;
   --sand-100: #f1ebe0;
   --sand-300: #d1c3b0;
   --sand-400: #b9a88f;
@@ -78,9 +80,12 @@
 
   /* Semánticos */
   --color-bg: var(--sand-50);
-  --color-surface: rgb(252 250 246 / 0.94);
+  --color-surface: rgb(254 253 249 / 0.94);
   --color-surface-solid: var(--sand-25);
-  --color-surface-muted: var(--sand-100);
+  --color-surface-muted: var(--sand-75);
+  /* El marcador de punto de interés va un paso más oscuro que tarjetas y botones, y otro al pasar por encima. */
+  --color-pin: #f4eee1;
+  --color-pin-hover: #ebe3d3;
   --color-border: rgb(69 74 59 / 0.12);
   --color-border-strong: rgb(69 74 59 / 0.22);
   --color-text: var(--ink-900);
