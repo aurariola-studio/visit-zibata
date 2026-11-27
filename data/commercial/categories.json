@@ -2323,7 +2323,6 @@
       "synonyms": [
         "tienda",
         "tienda de abarrotes",
-        "super",
         "despensa",
         "miscelánea",
         "grocery"
@@ -2403,6 +2402,45 @@
             "cuidado personal",
             "personal care"
           ]
+        }
+      ]
+    },
+    {
+      "id": "supermercados",
+      "slug": {
+        "es": "supermercados",
+        "en": "supermarkets"
+      },
+      "sectorId": "tiendas",
+      "label": {
+        "es": "Supermercados",
+        "en": "Supermarkets"
+      },
+      "icon": "supermercado",
+      "hue": 95,
+      "schemaType": "GroceryStore",
+      "order": 505,
+      "synonyms": [
+        "supermercado",
+        "súper",
+        "super",
+        "supermarket"
+      ],
+      "giros": [
+        {
+          "id": "supermercado",
+          "label": {
+            "es": "Supermercado",
+            "en": "Supermarket"
+          },
+          "icon": "supermercado",
+          "synonyms": [
+            "supermercado",
+            "súper",
+            "super",
+            "supermarket"
+          ],
+          "general": true
         }
       ]
     },
