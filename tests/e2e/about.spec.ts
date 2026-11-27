@@ -40,10 +40,8 @@ test.describe('Información de la guía', () => {
     await expect(privacy.locator('a[href^="http"]')).toHaveCount(0)
 
     // Desde una página se llega a las otras dos.
-    await privacy.getByRole('link', { name: 'Sugiere o contacta' }).click()
-    await expect(
-      page.getByRole('dialog', { name: 'Sugiere un cambio o contáctanos' }),
-    ).toBeVisible()
+    await privacy.getByRole('link', { name: 'Contacto', exact: true }).click()
+    await expect(page.getByRole('dialog', { name: 'Contacto', exact: true })).toBeVisible()
     await expect(page).toHaveURL(/\/es\/info\/sugerir$/)
 
     await page.getByRole('dialog').getByRole('button', { name: 'Cerrar', exact: true }).click()
@@ -117,7 +115,7 @@ test.describe('Información de la guía', () => {
     {
       idioma: 'es',
       ruta: 'es/info/sugerir',
-      nombre: 'Sugiere un cambio o contáctanos',
+      nombre: 'Contacto',
       frase: 'Escribe quien sea',
     },
     {

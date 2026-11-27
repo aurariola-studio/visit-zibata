@@ -42,7 +42,7 @@ type HojaId = (typeof HOJAS)[number]['id']
 const LINKS = [
   { topic: 'acerca', label: 'about.openShort' },
   { topic: 'privacidad', label: 'about.privacy' },
-  { topic: 'sugerir', label: 'about.suggestShort' },
+  { topic: 'sugerir', label: 'about.fix' },
   { topic: 'tutorial', label: 'about.tutorialShort' },
 ] as const
 

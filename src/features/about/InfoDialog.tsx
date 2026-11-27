@@ -1,5 +1,5 @@
 /**
- * Páginas de información: "Acerca de esta guía", "Privacidad y términos" y "Sugiere un cambio". Cada
+ * Páginas de información: "Acerca de esta guía", "Privacidad y términos" y "Contacto". Cada
  * una tiene su propia ruta (#/info/…), así que se puede enlazar y compartir por separado; al cerrarlas
  * se vuelve a lo que había debajo. Desde cada una se salta a las otras dos, sin volver a buscarlas en
  * la interfaz.
@@ -185,7 +185,7 @@ export function InfoDialog({ topic, onClose, onGoTo }: InfoDialogProps) {
           <p className={styles.lead}>{t(page.lead)}</p>
           <p className={styles.body}>{t(page.body)}</p>
           {/*
-           * En "Sugiere un cambio" el formulario ocupa el sitio del detalle. Desde la v4.18 siempre
+           * En "Contacto" el formulario ocupa el sitio del detalle. Desde la v4.18 siempre
            * está: ya no depende de una clave de terceros que podía faltar, así que no hay caso en el
            * que la página tenga que explicar que el canal no existe.
            */}

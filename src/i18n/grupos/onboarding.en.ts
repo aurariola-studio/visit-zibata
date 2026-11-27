@@ -15,7 +15,7 @@ export const onboardingEn = {
     'Tap the heart to save the place, mark the day you went and rate it with stars. You will also see how many people have saved it.',
   'onboarding.step5.title': 'How do I suggest a change?',
   'onboarding.step5.body':
-    'Did you see a wrong opening time, a phone number that no longer works or a place that has closed? Do you have a business in Zibatá you want to promote or update? Write to us from "Suggest a change or contact us". We would love to hear from you.',
+    'Did you see a wrong opening time, a phone number that no longer works or a place that has closed? Do you have a business in Zibatá you want to promote or update? Write to us from "Contact". We would love to hear from you.',
   'onboarding.demo.place2': 'Café by the park',
   'onboarding.demo.place3': 'Pizzeria on the square',
   'onboarding.demo.place4': "Grandma's café",

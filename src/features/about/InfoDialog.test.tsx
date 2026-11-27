@@ -35,7 +35,7 @@ describe('InfoDialog', () => {
     // Las otras páginas no se amontonan aquí: son enlaces a su propia ruta.
     expect(screen.queryByText(/OpenStreetMap/)).not.toBeInTheDocument()
 
-    await userEvent.click(screen.getByRole('link', { name: 'Sugiere o contacta' }))
+    await userEvent.click(screen.getByRole('link', { name: 'Contacto' }))
     expect(onGoTo).toHaveBeenCalledWith('sugerir')
   })
 
