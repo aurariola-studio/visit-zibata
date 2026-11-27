@@ -25,7 +25,7 @@ import type {
   Position,
 } from 'geojson'
 import { AjustesEdificiosFileSchema } from '../../src/data/ajustes-edificios.ts'
-import { esZona } from '../../src/data/puntos.ts'
+import { esPunto, esZona } from '../../src/data/puntos.ts'
 import { PlazasFileSchema } from '../../src/data/schemas.ts'
 import { reglaDeVolumen, VolumenesPlazaFileSchema } from '../../src/data/volumenes-plaza.ts'
 import { VolumenesPropiosFileSchema } from '../../src/data/volumenes-propios.ts'
@@ -197,7 +197,8 @@ log(
 
 // ── 4. Plazas ───────────────────────────────────────────────────────────────────────────────────
 // Solo las zonas: un punto de interés no tiene contorno y no cambia el mapa generado.
-const plazas = PlazasFileSchema.parse(readJson(paths.plazas)).plazas.filter(esZona)
+const todasLasPlazas = PlazasFileSchema.parse(readJson(paths.plazas)).plazas
+const plazas = todasLasPlazas.filter(esZona)
 const plazaShapes = plazas.map((plaza) => ({ plaza, shape: turf.feature(plaza.geometry) }))
 // Una plaza no puede atravesar una calle: pasa cuando su huella aproximada se centra en el punto de un
 // enlace de Maps que cae sobre la vía (Xënica, 2026-09). Se avisa para rehacerla con map:suggest-plaza.
@@ -441,6 +442,16 @@ for (const { plaza, shape } of plazaShapes) {
 log(
   `Alturas: ${new Set(baseBuildings.map((f) => f.properties.height)).size} valores distintos entre ${baseBuildings.length} edificios base`,
 )
+// Un punto de interés se ve sobre su edificio: si los datos abiertos no lo traen, se dibuja en `sueltos`.
+const todosLosEdificios = [...baseBuildings, ...[...plazaBuildings.values()].flat()]
+for (const punto of todasLasPlazas.filter((p) => esPunto(p) && p.active)) {
+  const lugar = turf.point([punto.coordinates.lng, punto.coordinates.lat])
+  if (!todosLosEdificios.some((edificio) => turf.booleanPointInPolygon(lugar, edificio))) {
+    log(
+      `⚠ El punto de interés "${punto.name}" no tiene edificio en el mapa (volumenes-propios.json)`,
+    )
+  }
+}
 const plazaBuildingCount = [...plazaBuildings.values()].reduce((sum, list) => sum + list.length, 0)
 log(
   `${baseBuildings.length} edificios base · ${plazaBuildingCount} de plazas (generados: ${synthesized.join(', ') || 'ninguno'})`,

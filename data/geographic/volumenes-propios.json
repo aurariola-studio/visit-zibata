@@ -562,6 +562,37 @@
       "alturaNota": "Estimación provisional de 5 m para un local de una planta. Ninguna fuente la respalda.",
       "creado": "2026-11-27",
       "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
+    },
+    {
+      "id": "colegio-nwl-newland",
+      "nombre": "Colegio NWL Newland",
+      "height": 7,
+      "anillo": [
+        [
+          -100.340234,
+          20.681873
+        ],
+        [
+          -100.339894,
+          20.681707
+        ],
+        [
+          -100.339992,
+          20.681531
+        ],
+        [
+          -100.340332,
+          20.681698
+        ],
+        [
+          -100.340234,
+          20.681873
+        ]
+      ],
+      "fuente": "Bloque estimado de 40 por 22 m centrado en la ubicación del local y alineado con el edificio vecino de datos abiertos. La huella no está en OpenStreetMap ni en Overture. Sentinel-2 (2026-10-20) muestra un techo claro ahí, sin resolución para su contorno.",
+      "alturaNota": "Estimación provisional de 7 m para un colegio de dos plantas. Ninguna fuente la respalda.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
     }
   ]
 }

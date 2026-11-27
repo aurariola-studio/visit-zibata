@@ -84,15 +84,15 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2572725,
-      "sha256": "8b0ce946c895d90732fa2656b055d9ecbd5b7c718b0f986d26038106058b5a2d",
+      "bytes": 2572987,
+      "sha256": "27a29835ca182b313202fd77d736ec20e195d7512db871d1f78cc2c4104329b4",
       "tiles": 266,
       "bytesByZoom": {
         "12": 49691,
-        "13": 250548,
-        "14": 529663,
-        "15": 731939,
-        "16": 1009569
+        "13": 250609,
+        "14": 529722,
+        "15": 732008,
+        "16": 1009641
       },
       "largestTile": {
         "z": 13,
@@ -105,7 +105,7 @@
         "landuse": 154,
         "water": 8,
         "waterway": 11,
-        "buildings": 16007,
+        "buildings": 16008,
         "labels": 21,
         "trees": 30780,
         "shrubs": 1747
@@ -113,7 +113,7 @@
     },
     "public/map/plaza-buildings.geojson": {
       "bytes": 20448,
-      "sha256": "1540e982ee0860da7ec48be2ccb7fdeb40bd5325b12decfb486b027e5e1d09ce",
+      "sha256": "fc8c0a22a8ddf16040c1b81e17ff5328dce660e4aac95d29eb24aebb936330b1",
       "features": 55,
       "synthesizedFor": [
         "paseo-zibata",
@@ -157,8 +157,8 @@
       ]
     },
     "data/geographic/volumenes-propios.json": {
-      "bytes": 11221,
-      "sha256": "439290bfcc1d3444316024035db6aea087a4ece9721094d28265cdbbd2cd4797",
+      "bytes": 12231,
+      "sha256": "3824d25b506e7d84cbff907b001aacb1ae0a0920b9523e1dd7cf37540af9f68d",
       "sueltos": [
         {
           "id": "h-e-b",
@@ -175,6 +175,15 @@
           "height": 5,
           "fuente": "Bloque estimado de 14 por 11 m centrado en la ubicación del local (Av. Paseo de las Pitahayas 6A) y alineado con el edificio vecino de datos abiertos. La huella no está en OpenStreetMap ni en Overture y no se calcó de ninguna imagen.",
           "alturaNota": "Estimación provisional de 5 m para un local de una planta. Ninguna fuente la respalda.",
+          "creado": "2026-11-27",
+          "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
+        },
+        {
+          "id": "colegio-nwl-newland",
+          "nombre": "Colegio NWL Newland",
+          "height": 7,
+          "fuente": "Bloque estimado de 40 por 22 m centrado en la ubicación del local y alineado con el edificio vecino de datos abiertos. La huella no está en OpenStreetMap ni en Overture. Sentinel-2 (2026-10-20) muestra un techo claro ahí, sin resolución para su contorno.",
+          "alturaNota": "Estimación provisional de 7 m para un colegio de dos plantas. Ninguna fuente la respalda.",
           "creado": "2026-11-27",
           "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
         }
@@ -260,8 +269,8 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3874504,
-        "sha256": "681825b3d3af681900c6f179a28abdcbffc65038e12b7ca95fb0a21bdefd8368"
+        "bytes": 3875104,
+        "sha256": "9cbf2845e419b4d76c948b5a88c5e857b184d8fccd84bc02cece3fcffa129125"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 144856,
