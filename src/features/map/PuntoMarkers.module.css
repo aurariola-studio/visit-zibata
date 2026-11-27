@@ -54,13 +54,6 @@
   white-space: nowrap;
 }
 
-/* Con colores forzados no se pintan sombras: el contorno vuelve a ser un borde. */
-@media (forced-colors: active) {
-  .caja {
-    border: 1px solid;
-  }
-}
-
 .caja svg {
   flex: none;
 }
@@ -193,4 +186,22 @@
 .punto:focus-visible .caja {
   outline: 2.5px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+/*
+ * Con colores forzados no se pintan sombras: el contorno vuelve a ser un borde, y el pico toma los mismos colores.
+ * Va al final para ganarle también al color del hover.
+ */
+@media (forced-colors: active) {
+  .caja {
+    border: 1px solid;
+  }
+
+  .punto .pico .relleno {
+    fill: Canvas;
+  }
+
+  .punto .pico .borde {
+    stroke: currentColor;
+  }
 }
