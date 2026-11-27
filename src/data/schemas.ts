@@ -87,6 +87,8 @@ export const HoursSchema = z.strictObject({
   byClasses: z.literal(true).optional(),
   /** El local conviene visitarlo con cita: la ficha lo recomienda, antes del horario, y avisa de consultar su disponibilidad. */
   byAppointment: z.literal(true).optional(),
+  /** Se entra pagando: la ficha lo avisa, antes del horario, y pide consultar su disponibilidad. */
+  paidAccess: z.literal(true).optional(),
 })
 
 /**

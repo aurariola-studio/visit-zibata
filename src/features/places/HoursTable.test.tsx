@@ -56,6 +56,13 @@ describe('HoursTable: aviso de cita', () => {
     ).toBeTruthy()
   })
 
+  it('un horario que solo trae el aviso lo enseña, sin decir que no hay horario', async () => {
+    const { container } = await renderWithCatalog(<HoursTable hours={{ paidAccess: true }} />)
+    expect(container.textContent).toBe(
+      'El acceso tiene costo. Consulta su disponibilidad antes de ir.',
+    )
+  })
+
   it('sin byAppointment no dice nada, y no se confunde con el de clases', async () => {
     await renderWithCatalog(<HoursTable hours={semana} />)
     expect(screen.queryByText(/reservar/i)).toBeNull()

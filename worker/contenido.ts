@@ -559,14 +559,15 @@ const whatsappDe = (valor: string): string | null =>
 /** Día ausente = no se sabe; lista vacía = cerrado. Una cadena vacía del formulario es "no se sabe". */
 function horarioDe(
   horario: Record<string, string[]> | null | undefined,
-  conservar: { note?: string; byClasses?: true; byAppointment?: true } = {},
+  conservar: { note?: string; byClasses?: true; byAppointment?: true; paidAccess?: true } = {},
 ): Record<string, string[] | string | boolean> | null {
-  // La nota del horario y las marcas de "por clases" y "con cita" no tienen campo en el formulario: se
-  // conservan, porque perderlas es perder un dato.
+  // La nota del horario y las marcas de "por clases", "con cita" y "de pago" no tienen campo en el formulario:
+  // se conservan, porque perderlas es perder un dato.
   const fijo: Record<string, string | boolean> = {}
   if (conservar.note) fijo.note = conservar.note
   if (conservar.byClasses) fijo.byClasses = true
   if (conservar.byAppointment) fijo.byAppointment = true
+  if (conservar.paidAccess) fijo.paidAccess = true
   if (!horario) return Object.keys(fijo).length > 0 ? fijo : null
   const salida: Record<string, string[] | string | boolean> = { ...fijo }
   for (const [dia, rangos] of Object.entries(horario)) {
@@ -665,6 +666,7 @@ function construir(
       note: existente?.hours?.note,
       byClasses: existente?.hours?.byClasses,
       byAppointment: existente?.hours?.byAppointment,
+      paidAccess: existente?.hours?.paidAccess,
     }),
     location:
       entrada.lat != null && entrada.lng != null ? { lat: entrada.lat, lng: entrada.lng } : null,

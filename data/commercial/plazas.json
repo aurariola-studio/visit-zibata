@@ -1099,13 +1099,13 @@
     },
     {
       "id": "campo-de-golf",
-      "slug": "campo-de-golf",
+      "slug": "zibata-golf",
       "name": "Zibatá Golf",
       "description": {
         "es": "Campo de golf de Zibatá, con restaurante y terraza bar.",
         "en": "Zibatá golf course, with a restaurant and terrace bar."
       },
-      "address": null,
+      "address": "Circuito Universidades s/n",
       "coordinates": {
         "lat": 20.68274,
         "lng": -100.33784

@@ -80,7 +80,7 @@ const isHours = (value: unknown) =>
   Object.entries(value).every(([key, ranges]) =>
     key === 'note'
       ? isText(ranges)
-      : key === 'byClasses' || key === 'byAppointment'
+      : key === 'byClasses' || key === 'byAppointment' || key === 'paidAccess'
         ? ranges === true
         : (DAY_KEYS as readonly string[]).includes(key) &&
           arrayOf((range) => typeof range === 'string' && isValidTimeRange(range))(ranges),

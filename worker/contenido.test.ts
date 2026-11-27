@@ -532,7 +532,7 @@ describe('editar un negocio existente', () => {
   it('las marcas de cita y de clases no se pierden al guardar, con o sin días', () => {
     const conMarcas: Place = {
       ...existente,
-      hours: { mon: ['09:00-18:00'], byAppointment: true, byClasses: true },
+      hours: { mon: ['09:00-18:00'], byAppointment: true, byClasses: true, paidAccess: true },
     }
     const ds = {
       ...dataset,
@@ -549,10 +549,15 @@ describe('editar un negocio existente', () => {
       mon: ['10:00-19:00'],
       byAppointment: true,
       byClasses: true,
+      paidAccess: true,
     })
     const sinDias = prepararNegocio(ds, crudo, editar(conMarcas, { horario: null }), HOY)
     if (!sinDias.ok) throw new Error('no preparó')
-    expect(sinDias.place.hours).toEqual({ byAppointment: true, byClasses: true })
+    expect(sinDias.place.hours).toEqual({
+      byAppointment: true,
+      byClasses: true,
+      paidAccess: true,
+    })
   })
 
   it('un WhatsApp Business, que es un enlace y no un número, no se rompe al guardar', () => {

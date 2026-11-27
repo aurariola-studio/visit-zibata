@@ -4008,7 +4008,8 @@
         ],
         "sun": [
           "06:30-15:00"
-        ]
+        ],
+        "paidAccess": true
       },
       "location": {
         "lat": 20.6825675,
@@ -4016,27 +4017,28 @@
       },
       "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7a3b8e3775:0x98fc0c5ff1ee59ae",
       "googlePlaceId": null,
-      "phone": null,
+      "phone": "+524422633073",
       "photos": [],
       "links": {
         "website": "https://zibatagolf.com/",
-        "instagram": null,
+        "instagram": "https://www.instagram.com/zibatagolf.mx/",
         "facebook": "https://www.facebook.com/zibatagolf/",
         "tiktok": null,
-        "whatsapp": null,
+        "whatsapp": "+524422633073",
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-26",
+        "lastVerifiedAt": "2026-11-27",
         "sources": [
           "https://zibatagolf.com/",
           "https://www.facebook.com/zibatagolf/",
-          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7a3b8e3775:0x98fc0c5ff1ee59ae"
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35d7a3b8e3775:0x98fc0c5ff1ee59ae",
+          "campo:2026-11-27"
         ]
       }
     },
