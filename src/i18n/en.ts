@@ -102,6 +102,7 @@ export const en = {
   'hours.none': 'No opening hours published.',
   'hours.byClasses': 'Hours depend on the classes. Check availability before you go.',
   'hours.byAppointment': 'Booking an appointment is recommended. Check availability before you go.',
+  'hours.paidAccess': 'There is an access fee. Check availability before you go.',
   'hours.reviewed': 'Hours checked on {date}.',
 
   'day.mon': 'Monday',

@@ -74,20 +74,29 @@ const timeRange = z
  * Horario semanal. Día ausente = sin información; lista vacía = cerrado ese día.
  * Un rango cuyo cierre es menor que la apertura cruza la medianoche ("18:00-02:00").
  */
-export const HoursSchema = z.strictObject({
-  mon: z.array(timeRange).optional(),
-  tue: z.array(timeRange).optional(),
-  wed: z.array(timeRange).optional(),
-  thu: z.array(timeRange).optional(),
-  fri: z.array(timeRange).optional(),
-  sat: z.array(timeRange).optional(),
-  sun: z.array(timeRange).optional(),
-  note: nonEmptyText.optional(),
-  /** El local se organiza por clases: la ficha avisa, antes del horario, que hay que consultar su disponibilidad. */
-  byClasses: z.literal(true).optional(),
-  /** El local conviene visitarlo con cita: la ficha lo recomienda, antes del horario, y avisa de consultar su disponibilidad. */
-  byAppointment: z.literal(true).optional(),
-})
+export const HoursSchema = z
+  .strictObject({
+    mon: z.array(timeRange).optional(),
+    tue: z.array(timeRange).optional(),
+    wed: z.array(timeRange).optional(),
+    thu: z.array(timeRange).optional(),
+    fri: z.array(timeRange).optional(),
+    sat: z.array(timeRange).optional(),
+    sun: z.array(timeRange).optional(),
+    note: nonEmptyText.optional(),
+    /** El local se organiza por clases: la ficha avisa, antes del horario, que hay que consultar su disponibilidad. */
+    byClasses: z.literal(true).optional(),
+    /** El local conviene visitarlo con cita: la ficha lo recomienda, antes del horario, y avisa de consultar su disponibilidad. */
+    byAppointment: z.literal(true).optional(),
+    /** Se entra pagando: la ficha lo avisa, antes del horario, y pide consultar su disponibilidad. */
+    paidAccess: z.literal(true).optional(),
+  })
+  // Un aviso por local, por decisión del propietario (2026-11-27): dos seguidos se leen como ruido.
+  .refine(
+    (horario) =>
+      [horario.byClasses, horario.byAppointment, horario.paidAccess].filter(Boolean).length <= 1,
+    'Un horario lleva un solo aviso (clases, cita o acceso de pago)',
+  )
 
 /**
  * Fotografía gestionada como asset propio (nunca Google Places ni scraping).

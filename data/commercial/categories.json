@@ -1899,6 +1899,19 @@
             "pickle",
             "cancha de pickleball"
           ]
+        },
+        {
+          "id": "golf",
+          "label": {
+            "es": "Golf",
+            "en": "Golf"
+          },
+          "icon": "golf",
+          "synonyms": [
+            "golf",
+            "campo de golf",
+            "golf course"
+          ]
         }
       ]
     },

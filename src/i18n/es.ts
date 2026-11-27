@@ -117,6 +117,7 @@ export const es = {
   'hours.none': 'Sin horario publicado.',
   'hours.byClasses': 'El horario depende de las clases. Consulta su disponibilidad antes de ir.',
   'hours.byAppointment': 'Se recomienda reservar tu cita. Consulta su disponibilidad antes de ir.',
+  'hours.paidAccess': 'El acceso tiene costo. Consulta su disponibilidad antes de ir.',
   'hours.reviewed': 'Horario revisado el {date}.',
 
   'day.mon': 'Lunes',

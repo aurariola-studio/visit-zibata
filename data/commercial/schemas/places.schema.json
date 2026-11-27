@@ -133,6 +133,10 @@
                   "byAppointment": {
                     "type": "boolean",
                     "const": true
+                  },
+                  "paidAccess": {
+                    "type": "boolean",
+                    "const": true
                   }
                 },
                 "additionalProperties": false
