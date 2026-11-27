@@ -14264,7 +14264,8 @@
       "name": "PequesHUB",
       "plazaId": "plaza-zielo",
       "giros": [
-        "guarderia"
+        "guarderia",
+        "kinder"
       ],
       "description": {
         "es": "Un espacio creado para acompañar a cada Peque con atención, aprendizaje, juego y experiencias acordes a su etapa.",
