@@ -58,6 +58,38 @@ describe('mapa generado al día con el dataset', () => {
     }
   })
 
+  it('ningún contorno de zona se cruza consigo mismo', () => {
+    const zonas = plazas.plazas as { id: string; geometry?: Polygon }[]
+    const cruzadas = zonas.flatMap((zona) =>
+      zona.geometry && turf.kinks(turf.feature(zona.geometry)).features.length > 0 ? [zona.id] : [],
+    )
+    expect(cruzadas).toEqual([])
+  })
+
+  it('no crecen árboles sobre las calles y canchas dibujadas a mano', () => {
+    const propios = read<{
+      vias?: { id: string; linea: [number, number][] }[]
+      canchas?: { id: string; anillo: [number, number][] }[]
+    }>('../../data/geographic/volumenes-propios.json')
+    const arboles = read<{ features: { geometry: Polygon }[] }>(
+      '../../data/geographic/raw/arboles-base.geojson',
+    ).features.map((arbol) => turf.centroid(turf.feature(arbol.geometry)))
+    for (const via of propios.vias ?? []) {
+      const linea = turf.lineString(via.linea)
+      const encima = arboles.filter(
+        (arbol) => turf.pointToLineDistance(arbol, linea, { units: 'meters' }) < 3,
+      )
+      expect(encima, `árboles sobre ${via.id}`).toEqual([])
+    }
+    for (const cancha of propios.canchas ?? []) {
+      const area = turf.polygon([cancha.anillo])
+      expect(
+        arboles.filter((arbol) => turf.booleanPointInPolygon(arbol, area)),
+        `árboles en ${cancha.id}`,
+      ).toEqual([])
+    }
+  })
+
   it('un edificio suelto no es una zona: ninguna zona lleva su identificador', () => {
     const propios = read<{ sueltos?: { id: string }[] }>(
       '../../data/geographic/volumenes-propios.json',
