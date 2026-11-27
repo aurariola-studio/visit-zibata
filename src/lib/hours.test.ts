@@ -7,6 +7,7 @@ import {
   groupWeek,
   hasAnyHours,
   parseTimeRange,
+  partirEnMedianoche,
 } from './hours.ts'
 
 const at = (day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun', time: string) => {
@@ -87,6 +88,50 @@ describe('getOpenStatus', () => {
 
   it('día sin información es desconocido', () => {
     expect(getOpenStatus(hours, at('thu', '12:00'))).toEqual({ state: 'unknown' })
+  })
+})
+
+describe('partirEnMedianoche', () => {
+  it('lo que pasa de medianoche se lista en el día siguiente, y el domingo en el lunes', () => {
+    const partido = partirEnMedianoche({
+      mon: ['09:00-18:00'],
+      tue: ['15:00-01:00'],
+      wed: [],
+      sun: ['17:00-02:00'],
+    })
+    expect(partido).toEqual({
+      mon: ['00:00-02:00', '09:00-18:00'],
+      tue: ['15:00-24:00'],
+      wed: ['00:00-01:00'],
+      sun: ['17:00-24:00'],
+    })
+  })
+
+  it('con el mismo horario toda la semana, los siete días quedan iguales y se agrupan', () => {
+    const semana = Object.fromEntries(
+      ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map((day) => [day, ['06:00-00:59']]),
+    ) as Hours
+    const grupos = groupWeek(partirEnMedianoche(semana))
+    expect(grupos).toHaveLength(1)
+    expect(grupos[0]?.ranges).toEqual(['00:00-00:59', '06:00-24:00'])
+  })
+
+  it('cerrar a medianoche se escribe 24:00 y no deja nada para el día siguiente', () => {
+    expect(partirEnMedianoche({ mon: ['15:00-00:00'], tue: [] })).toEqual({
+      mon: ['15:00-24:00'],
+      tue: [],
+    })
+  })
+
+  it('si del día siguiente no hay dato, el tramo se queda entero', () => {
+    expect(partirEnMedianoche({ fri: ['17:00-03:00'] })).toEqual({ fri: ['17:00-03:00'] })
+  })
+
+  it('no toca un horario que no cruza ni el original', () => {
+    const horas: Hours = { mon: ['00:00-24:00'], tue: ['18:00-02:00'], wed: ['09:00-12:00'] }
+    partirEnMedianoche(horas)
+    expect(horas.tue).toEqual(['18:00-02:00'])
+    expect(partirEnMedianoche(horas).mon).toEqual(['00:00-24:00'])
   })
 })
 

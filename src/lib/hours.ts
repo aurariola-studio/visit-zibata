@@ -84,6 +84,35 @@ function rangesOf(hours: Hours, day: DayKey): MinuteRange[] | undefined {
   return values.map(parseTimeRange).filter((range): range is MinuteRange => range !== null)
 }
 
+/**
+ * El horario como se enseña: lo que pasa de medianoche se lista en el día siguiente ("06:00-00:59" queda en
+ * "06:00-24:00" y un "00:00-00:59" al día de después). Solo para mostrar, los datos y "abierto ahora" usan el
+ * horario tal cual. Si del día siguiente no se sabe nada, el tramo se deja entero.
+ */
+export function partirEnMedianoche(hours: Hours): Hours {
+  const salida: Hours = { ...hours }
+  const colas: Partial<Record<DayKey, string>> = {}
+  for (const day of DAY_KEYS) {
+    const values = hours[day]
+    if (values === undefined) continue
+    salida[day] = values.map((value) => {
+      const range = parseTimeRange(value)
+      if (!range || range.end < MINUTES_PER_DAY) return value
+      if (range.end > MINUTES_PER_DAY) {
+        const siguiente = nextDay(day)
+        if (hours[siguiente] === undefined) return value
+        colas[siguiente] = `00:00-${formatMinutes(range.end)}`
+      }
+      return `${formatMinutes(range.start)}-24:00`
+    })
+  }
+  for (const day of DAY_KEYS) {
+    const cola = colas[day]
+    if (cola) salida[day] = [cola, ...(salida[day] ?? [])]
+  }
+  return salida
+}
+
 export function hasAnyHours(hours: Hours | null): hours is Hours {
   return hours !== null && DAY_KEYS.some((day) => hours[day] !== undefined)
 }

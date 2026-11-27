@@ -28,6 +28,7 @@ import {
   type Traductor,
 } from '../../src/lib/categorias.ts'
 import { direccionDeLocal } from '../../src/lib/direccion.ts'
+import { partirEnMedianoche } from '../../src/lib/hours.ts'
 import { whatsappUrl } from '../../src/lib/maps-url.ts'
 import { tituloDeCategoria } from '../../src/lib/titulo-categoria.ts'
 import { buildPath, INFO_TOPICS, type InfoTopic } from '../../src/lib/url-state.ts'
@@ -506,6 +507,8 @@ export function pagesFor(
   )
 
   fichas.forEach(({ place, plaza, giros }, indice) => {
+    // El horario del cuerpo sin JavaScript se parte igual que el de la ficha; el JSON-LD lleva el dato tal cual.
+    const horario = place.hours ? partirEnMedianoche(place.hours) : null
     // La misma dirección para el marcado y para el cuerpo sin JavaScript (ver src/lib/direccion.ts).
     const direccion = direccionDeLocal(plaza?.address, place.unit, traducir, locale)
     pages.push({
@@ -557,7 +560,7 @@ export function pagesFor(
         descripcion: text(place.description, locale) || undefined,
         dias: DIAS.map((dia) => ({
           dia: copy[`day.${dia}`],
-          franjas: place.hours?.[dia] ?? [],
+          franjas: horario?.[dia] ?? [],
           cerrado: copy['hours.closedAllDay'],
         })).filter((dia) => dia.franjas.length > 0 || place.hours),
         tituloHorario: copy['place.hours'],
