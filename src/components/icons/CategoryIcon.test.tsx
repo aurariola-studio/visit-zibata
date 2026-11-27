@@ -26,6 +26,20 @@ describe('CategoryIcon', () => {
     }
   })
 
+  it('no hay dos nombres que pinten el mismo dibujo', async () => {
+    const { CategoryIcon } = await import('./CategoryIcon.tsx')
+    const dibujos = new Map<string, string[]>()
+    for (const nombre of ICONOS) {
+      const { container, unmount } = render(<CategoryIcon name={nombre} size={20} />)
+      await waitFor(() => expect(container.querySelector('svg'), nombre).not.toBeNull())
+      // Solo la geometría: las clases y atributos del <svg> no distinguen un dibujo de otro.
+      const forma = container.querySelector('svg')?.innerHTML ?? ''
+      dibujos.set(forma, [...(dibujos.get(forma) ?? []), nombre])
+      unmount()
+    }
+    expect([...dibujos.values()].filter((nombres) => nombres.length > 1)).toEqual([])
+  })
+
   it('ningún dibujo vive en el paquete inicial: el componente solo pide el registro', () => {
     // `CategoryIcon.tsx` es lo único de los iconos que entra en el paquete inicial. Si importara dibujos (de
     // lucide o del registro) de forma estática, volverían a pesar en `initialJs` con cada categoría nueva.
