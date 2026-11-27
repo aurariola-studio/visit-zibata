@@ -137,7 +137,7 @@ describe('ProfileButton', () => {
     expect(onOpenPlace).toHaveBeenCalledWith(expect.objectContaining({ id: 'cafe-aurora' }))
 
     sheet = await openSheet()
-    await userEvent.click(within(sheet).getByRole('link', { name: 'Sugiere' }))
+    await userEvent.click(within(sheet).getByRole('link', { name: 'Contacto' }))
     expect(onOpenInfo).toHaveBeenCalledWith('sugerir')
   })
 })

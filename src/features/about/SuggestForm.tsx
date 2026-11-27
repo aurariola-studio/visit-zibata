@@ -1,5 +1,5 @@
 /**
- * Formulario de "Sugiere un cambio". Es nuestro de punta a punta: desde la v4.18 el envío va a
+ * Formulario de "Contacto". Es nuestro de punta a punta: desde la v4.18 el envío va a
  * nuestro propio servidor y no a un tercero, así que usar la guía entera no hace ni una petición
  * fuera del origen.
  *

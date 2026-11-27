@@ -1,5 +1,5 @@
 /**
- * "Sugiere un cambio", sin terceros.
+ * "Contacto", sin terceros.
  *
  * Antes de la v4.18 esto salía a Web3Forms, que lo entregaba por correo. Nunca llegó a funcionar en
  * producción (faltaba la clave y el formulario no se dibujaba), y para cuando iba a ponerse ya

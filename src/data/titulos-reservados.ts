@@ -8,10 +8,10 @@
 export const TITULOS_RESERVADOS = [
   'Acerca de esta guía',
   'Privacidad y términos',
-  'Sugiere un cambio o contáctanos',
+  'Contacto',
   'Cómo usar la guía',
   'About this guide',
   'Privacy and terms',
-  'Suggest a change or contact us',
+  'Contact',
   'How to use the guide',
 ] as const

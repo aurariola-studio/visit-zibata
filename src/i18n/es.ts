@@ -256,8 +256,7 @@ export const es = {
   'onboarding.demo.message': 'Quiero corregir un horario',
   'about.openShort': 'Acerca',
   'about.title': 'Acerca de esta guía',
-  'about.fix': 'Sugiere o contacta',
-  'about.suggestShort': 'Sugiere',
+  'about.fix': 'Contacto',
   'about.tutorial': 'Ver el tutorial',
   'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'Cómo usar la guía',
@@ -274,7 +273,7 @@ export const es = {
   'about.privacy': 'Privacidad',
   'about.privacyTitle': 'Privacidad y términos',
 
-  'about.contribute': 'Sugiere un cambio o contáctanos',
+  'about.contribute': 'Contacto',
   'suggest.who': '¿Quién escribe?',
   'suggest.whoNeighbor': 'Vecino',
   'suggest.whoOwner': 'Negocio',

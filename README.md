@@ -130,8 +130,8 @@ una ruta inexistente (el build genera `404.html`) y no añada una barra final a 
 
 ## Contribuir
 
-- **Corregir un dato** (un horario, un teléfono, un local que cerró): usa el formulario "Sugiere un
-  cambio" dentro de la propia guía.
+- **Corregir un dato** (un horario, un teléfono, un local que cerró): usa el formulario de "Contacto" dentro de la
+  propia guía.
 - **Cambiar el código:** abre una pull request y corre antes `npm run check`; si tocaste la interfaz o
   el mapa, también `npm run test:e2e`. Los imports son relativos y llevan su extensión (`.ts`, `.tsx`),
   porque los scripts corren con Node sin transpilar.

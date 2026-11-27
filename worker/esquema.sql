@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS eventos (
 
 CREATE INDEX IF NOT EXISTS eventos_por_fecha ON eventos (fecha);
 
--- Las sugerencias de "Sugiere un cambio".
+-- Las sugerencias de "Contacto".
 --
 -- No cuelgan de ninguna cuenta a proposito: mandar un recado no es guardar algo tuyo, y obligar a
 -- crear identidad para avisar de un horario mal puesto seria pedir mas de lo que hace falta. Lo

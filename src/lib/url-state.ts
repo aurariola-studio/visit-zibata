@@ -296,7 +296,7 @@ export const rutaDeZona = (slug: string, locale: Locale, base: string): string =
 /**
  * Y la de una página de información, que también es una dirección de verdad.
  *
- * "Acerca", "Privacidad" y "Sugiere un cambio" se abrían con un botón teniendo cada una su ruta
+ * "Acerca", "Privacidad" y "Contacto" se abrían con un botón teniendo cada una su ruta
  * (`/info/privacidad` y las suyas), así que pasaba lo mismo: no se podían abrir aparte ni copiar,
  * y un buscador no encontraba ninguna.
  *

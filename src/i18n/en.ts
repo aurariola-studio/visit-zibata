@@ -216,8 +216,7 @@ export const en = {
   'onboarding.demo.message': 'I want to fix an opening time',
   'about.openShort': 'About',
   'about.title': 'About this guide',
-  'about.fix': 'Suggest or contact',
-  'about.suggestShort': 'Suggest',
+  'about.fix': 'Contact',
   'about.tutorial': 'See the tutorial',
   'about.tutorialShort': 'Tutorial',
   'about.tutorialTitle': 'How to use the guide',
@@ -227,7 +226,7 @@ export const en = {
   'about.privacy': 'Privacy',
   'about.privacyTitle': 'Privacy and terms',
 
-  'about.contribute': 'Suggest a change or contact us',
+  'about.contribute': 'Contact',
   'suggest.who': 'Who is writing?',
   'suggest.whoNeighbor': 'Neighbour',
   'suggest.whoOwner': 'Business',
