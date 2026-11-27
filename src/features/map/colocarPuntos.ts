@@ -42,7 +42,7 @@ export const NOMBRE_DESDE_ZOOM = 15.5
 /** Medidas en píxeles; tienen que coincidir con `PuntoMarkers.module.css`. */
 export const LADO = { cerca: 24, medio: 21 } as const
 const PICO = 6
-const CIRCULO = 12
+const CIRCULO = 11
 const HOLGURA = 2
 
 const pisa = (a: Caja, b: Caja) =>
