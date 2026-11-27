@@ -57,6 +57,14 @@ describe('cercanía de un punto de interés', () => {
     expect(cerca?.plazaId).toBe('abierta')
   })
 
+  it('mide desde la entrada del local y no desde el marcador', () => {
+    const locales = [{ plazaId: 'punto-inventado', location: { lat: 20.68, lng: -100.319 } }]
+    const todo = [zona('cerca', -100.32), punto(-100.318)]
+    // La entrada queda a 0,0005° del borde (unos 52 m) y el marcador a 0,0015° (unos 156 m).
+    expect(conCercania(todo, locales).find((p) => p.tipo === 'punto')?.cerca?.metros).toBe(50)
+    expect(cercaDe(todo)?.metros).toBe(160)
+  })
+
   it('dentro del contorno no dice cero', () => {
     expect(cercaDe([zona('encima', -100.32), punto(-100.32)])?.metros).toBe(10)
   })
