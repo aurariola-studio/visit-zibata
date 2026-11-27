@@ -5,7 +5,7 @@
  * un círculo de lejos, un pin con su ícono a media distancia y, de cerca, el pin alargado con el nombre dentro,
  * hacia un lado o hacia el otro. El pico se queda siempre sobre el punto, así que alargarse no mueve lo que señala.
  *
- * Las medidas (24 y 21 de lado, 6 de pico, 12 de círculo) tienen que coincidir con `colocarPuntos.ts`.
+ * Las medidas (24 y 21 de lado, 6 de pico, 11 de círculo) tienen que coincidir con `colocarPuntos.ts`.
  */
 .punto {
   composes: base from "../../styles/controls.module.css";
@@ -147,9 +147,9 @@
 }
 
 .punto[data-modo="circulo"] .caja {
-  min-width: 12px;
-  width: 12px;
-  height: 12px;
+  min-width: 11px;
+  width: 11px;
+  height: 11px;
   border-radius: var(--radius-round);
 }
 

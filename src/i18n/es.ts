@@ -37,7 +37,7 @@ export const es = {
   'places.count': { one: '{count} lugar', other: '{count} lugares' },
 
   'explore.title': 'Explora Zibatá',
-  'explore.summary': '{plazas} con {places} en el mapa',
+  'explore.summary': '{plazas} y {places} en el mapa',
   'explore.hint': 'Toca una zona en el mapa o elige una de la lista.',
   /*
    * Cuenta categorías, no lugares: "25 tipos y 24 más" se leería como 24 sitios. Y al añadir tipos de

@@ -29,7 +29,7 @@ export const en = {
   'places.count': { one: '{count} place', other: '{count} places' },
 
   'explore.title': 'Explore Zibatá',
-  'explore.summary': '{plazas} with {places} on the map',
+  'explore.summary': '{plazas} and {places} on the map',
   'explore.hint': 'Tap an area on the map or pick one from the list.',
   'explore.andMore': '{list} and {count} more categories',
   'explore.list': 'Areas',
