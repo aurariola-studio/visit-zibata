@@ -12210,7 +12210,7 @@
     {
       "id": "oxxo-mol-pitahaya",
       "slug": "oxxo-mol-pitahaya",
-      "name": "Oxxo MOL Pitahaya",
+      "name": "OXXO MOL Pitahaya",
       "plazaId": "mol-pitahaya",
       "giros": [
         "tienda-de-conveniencia"
@@ -12272,7 +12272,7 @@
     {
       "id": "oxxo-paseo-zibata",
       "slug": "oxxo-paseo-zibata",
-      "name": "Oxxo Paseo Zibatá",
+      "name": "OXXO Paseo Zibatá",
       "plazaId": "paseo-zibata",
       "giros": [
         "tienda-de-conveniencia"
@@ -12334,7 +12334,7 @@
     {
       "id": "oxxo-plaza-zielo",
       "slug": "oxxo-plaza-zielo",
-      "name": "Oxxo Plaza Zielo",
+      "name": "OXXO Plaza Zielo",
       "plazaId": "plaza-zielo",
       "giros": [
         "tienda-de-conveniencia"
@@ -12396,7 +12396,7 @@
     {
       "id": "oxxo-xentric-zibata",
       "slug": "oxxo-xentric-zibata",
-      "name": "Oxxo Xentric Zibatá",
+      "name": "OXXO Xentric Zibatá",
       "plazaId": "xentric-zibata",
       "giros": [
         "tienda-de-conveniencia"
@@ -16321,7 +16321,7 @@
     {
       "id": "oxxo-biznaga",
       "slug": "oxxo-biznaga",
-      "name": "Oxxo Biznaga",
+      "name": "OXXO Biznaga",
       "plazaId": "punto-oxxo-biznaga",
       "giros": [
         "tienda-de-conveniencia"

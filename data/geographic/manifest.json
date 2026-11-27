@@ -84,15 +84,15 @@
   ],
   "outputs": {
     "public/map/zibata.pmtiles": {
-      "bytes": 2572576,
-      "sha256": "b98e3e25eac0b45071a34c50bf1147271ce23578fbce92b4994bedbf141fbbbd",
+      "bytes": 2572725,
+      "sha256": "8b0ce946c895d90732fa2656b055d9ecbd5b7c718b0f986d26038106058b5a2d",
       "tiles": 266,
       "bytesByZoom": {
         "12": 49691,
-        "13": 250519,
-        "14": 529632,
-        "15": 731912,
-        "16": 1009506
+        "13": 250548,
+        "14": 529663,
+        "15": 731939,
+        "16": 1009569
       },
       "largestTile": {
         "z": 13,
@@ -105,7 +105,7 @@
         "landuse": 154,
         "water": 8,
         "waterway": 11,
-        "buildings": 16006,
+        "buildings": 16007,
         "labels": 21,
         "trees": 30780,
         "shrubs": 1747
@@ -113,7 +113,7 @@
     },
     "public/map/plaza-buildings.geojson": {
       "bytes": 20448,
-      "sha256": "a458584615129cdfacdca4ee9b5eaf42588bfd32233e47743ee13f3d9e389678",
+      "sha256": "1540e982ee0860da7ec48be2ccb7fdeb40bd5325b12decfb486b027e5e1d09ce",
       "features": 55,
       "synthesizedFor": [
         "paseo-zibata",
@@ -157,8 +157,8 @@
       ]
     },
     "data/geographic/volumenes-propios.json": {
-      "bytes": 10252,
-      "sha256": "1f32a5edbdf703913360708d9209b9ae3285b28adc244b3595d8990fad63baeb",
+      "bytes": 11221,
+      "sha256": "439290bfcc1d3444316024035db6aea087a4ece9721094d28265cdbbd2cd4797",
       "sueltos": [
         {
           "id": "h-e-b",
@@ -168,6 +168,15 @@
           "alturaNota": "Estimación provisional de 9 m: ninguna fuente la respalda, porque los datos abiertos no traen el edificio.",
           "creado": "2026-11-21",
           "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando H-E-B pase a ser una zona."
+        },
+        {
+          "id": "oxxo-biznaga",
+          "nombre": "OXXO Biznaga",
+          "height": 5,
+          "fuente": "Bloque estimado de 14 por 11 m centrado en la ubicación del local (Av. Paseo de las Pitahayas 6A) y alineado con el edificio vecino de datos abiertos. La huella no está en OpenStreetMap ni en Overture y no se calcó de ninguna imagen.",
+          "alturaNota": "Estimación provisional de 5 m para un local de una planta. Ninguna fuente la respalda.",
+          "creado": "2026-11-27",
+          "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
         }
       ]
     },
@@ -251,8 +260,8 @@
         "sha256": "d350b7d5fa67c8db0b9293206e631b5f813ae27a977fcb5f12f01839062a5a9a"
       },
       "public/map/realismo/edificios.bin": {
-        "bytes": 3873904,
-        "sha256": "755ceb020763742680be5a9db50588f8d985d3482a587869ab031ce92342e780"
+        "bytes": 3874504,
+        "sha256": "681825b3d3af681900c6f179a28abdcbffc65038e12b7ca95fb0a21bdefd8368"
       },
       "public/map/realismo/arboles.bin": {
         "bytes": 144856,

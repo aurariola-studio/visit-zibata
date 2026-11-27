@@ -531,6 +531,37 @@
       "alturaNota": "Estimación provisional de 9 m: ninguna fuente la respalda, porque los datos abiertos no traen el edificio.",
       "creado": "2026-11-21",
       "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando H-E-B pase a ser una zona."
+    },
+    {
+      "id": "oxxo-biznaga",
+      "nombre": "OXXO Biznaga",
+      "height": 5,
+      "anillo": [
+        [
+          -100.31745,
+          20.682196
+        ],
+        [
+          -100.317508,
+          20.682083
+        ],
+        [
+          -100.317603,
+          20.682125
+        ],
+        [
+          -100.317545,
+          20.682239
+        ],
+        [
+          -100.31745,
+          20.682196
+        ]
+      ],
+      "fuente": "Bloque estimado de 14 por 11 m centrado en la ubicación del local (Av. Paseo de las Pitahayas 6A) y alineado con el edificio vecino de datos abiertos. La huella no está en OpenStreetMap ni en Overture y no se calcó de ninguna imagen.",
+      "alturaNota": "Estimación provisional de 5 m para un local de una planta. Ninguna fuente la respalda.",
+      "creado": "2026-11-27",
+      "retirarCuando": "Cuando una versión de Overture traiga su huella (map:build lo avisa) o cuando el propietario dé sus medidas."
     }
   ]
 }
