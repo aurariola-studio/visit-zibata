@@ -1,7 +1,7 @@
 import * as turf from '@turf/turf'
 import { describe, expect, it } from 'vitest'
 import type { Suelto } from '../../../src/data/volumenes-propios.ts'
-import { poligonoDe, problemasDeSueltos, trazosRepetidos } from './sueltos.ts'
+import { metrosAlCentro, poligonoDe, problemasDeSueltos, trazosRepetidos } from './sueltos.ts'
 
 /** Un cuadrado de unos 55 m de lado, en un punto inventado. */
 const cuadrado = (lng: number, lat: number, lado = 0.0005): Suelto['anillo'] => [
@@ -30,6 +30,20 @@ const huella = (anillo: Suelto['anillo'], id = 'huella-abierta') =>
   }
 
 const zona = (id: string, anillo: Suelto['anillo']) => ({ id, shape: turf.polygon([anillo]) })
+
+describe('metrosAlCentro', () => {
+  const edificio = turf.polygon([cuadrado(-100.5, 20.5)])
+  const [lng, lat] = turf.centerOfMass(edificio).geometry.coordinates as [number, number]
+
+  it('mide desde el centro del edificio que hay debajo', () => {
+    expect(metrosAlCentro([lng, lat], [edificio])).toBeLessThan(0.1)
+    expect(metrosAlCentro([lng, lat + 0.00004], [edificio])).toBeGreaterThan(3)
+  })
+
+  it('sin edificio debajo no hay medida', () => {
+    expect(metrosAlCentro([-100.4, 20.4], [edificio])).toBeNull()
+  })
+})
 
 describe('trazosRepetidos', () => {
   const trazo = {

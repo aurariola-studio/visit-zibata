@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs'
 import * as turf from '@turf/turf'
-import type { Polygon } from 'geojson'
+import type { Feature, Polygon } from 'geojson'
 import { describe, expect, it } from 'vitest'
+import { metrosAlCentro } from './lib/sueltos.ts'
 
 /**
  * El mapa (public/map) se genera aparte del dataset (`npm run map:build`). Si se añade una plaza y no se
@@ -37,6 +38,29 @@ describe('mapa generado al día con el dataset', () => {
     // quedaría un hueco). Cualquier otro id huérfano sigue siendo un mapa desactualizado.
     const ids = new Set(plazas.plazas.map((plaza) => plaza.id))
     expect([...withVolume].filter((id) => !ids.has(id) && !borradas.has(id))).toEqual([])
+  })
+
+  it('cada punto de interés está en el centro de su edificio', () => {
+    const base = read<{ features: Feature<Polygon>[] }>(
+      '../../data/geographic/raw/edificios-base.geojson',
+    )
+    const deZona = read<{ features: Feature<Polygon>[] }>(
+      '../../public/map/plaza-buildings.geojson',
+    )
+    type Punto = {
+      id: string
+      tipo?: string
+      active: boolean
+      coordinates: { lat: number; lng: number }
+    }
+    for (const punto of (plazas.plazas as Punto[]).filter((p) => p.tipo === 'punto' && p.active)) {
+      const metros = metrosAlCentro(
+        [punto.coordinates.lng, punto.coordinates.lat],
+        [...base.features, ...deZona.features],
+      )
+      expect(metros, `"${punto.id}" no tiene edificio`).not.toBeNull()
+      expect(metros, `"${punto.id}" está lejos del centro de su edificio`).toBeLessThan(3)
+    }
   })
 
   it('cada edificio suelto (volumenes-propios.json) está en los edificios base: teselas, mallas y árboles lo ven', () => {

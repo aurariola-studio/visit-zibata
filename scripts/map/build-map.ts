@@ -45,7 +45,7 @@ import { polygonsOf, roundPositions } from './lib/geo.ts'
 import { type OverpassResponse, overpassToFeatures } from './lib/osm.ts'
 import { loadConfig, paths, readJson, writeJson } from './lib/paths.ts'
 import { Compression, TileType, writePmtiles } from './lib/pmtiles-writer.ts'
-import { poligonoDe, problemasDeSueltos, trazosRepetidos } from './lib/sueltos.ts'
+import { metrosAlCentro, poligonoDe, problemasDeSueltos, trazosRepetidos } from './lib/sueltos.ts'
 import { buildVectorTiles, type LayerInput } from './lib/tiles.ts'
 import {
   MEZCLA_ARBUSTO,
@@ -471,10 +471,14 @@ log(
 // Un punto de interés se ve sobre su edificio: si los datos abiertos no lo traen, se dibuja en `sueltos`.
 const todosLosEdificios = [...baseBuildings, ...[...plazaBuildings.values()].flat()]
 for (const punto of todasLasPlazas.filter((p) => esPunto(p) && p.active)) {
-  const lugar = turf.point([punto.coordinates.lng, punto.coordinates.lat])
-  if (!todosLosEdificios.some((edificio) => turf.booleanPointInPolygon(lugar, edificio))) {
+  const metros = metrosAlCentro([punto.coordinates.lng, punto.coordinates.lat], todosLosEdificios)
+  if (metros === null) {
     log(
       `⚠ El punto de interés "${punto.name}" no tiene edificio en el mapa (volumenes-propios.json)`,
+    )
+  } else if (metros > 3) {
+    log(
+      `⚠ El punto de interés "${punto.name}" está a ${Math.round(metros)} m del centro de su edificio (coordinates en plazas.json)`,
     )
   }
 }

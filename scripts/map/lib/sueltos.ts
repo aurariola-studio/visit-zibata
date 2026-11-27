@@ -124,6 +124,19 @@ export function trazosRepetidos(
   return avisos
 }
 
+/**
+ * A cuántos metros queda un lugar del centro de superficie del edificio que tiene debajo, o `null` sin edificio. Un
+ * punto de interés va en ese centro.
+ */
+export function metrosAlCentro(
+  lugar: [number, number],
+  edificios: readonly Feature<Polygon | MultiPolygon>[],
+): number | null {
+  // shortcut: en un edificio en L o en U el centro puede caer fuera; medir contra un punto interior si llega uno así.
+  const debajo = edificios.find((edificio) => turf.booleanPointInPolygon(lugar, edificio))
+  return debajo ? turf.distance(lugar, turf.centerOfMass(debajo), { units: 'meters' }) : null
+}
+
 /** El polígono de un edificio suelto, con el sentido de los anillos que esperan las teselas. */
 export function poligonoDe(suelto: Suelto): Polygon {
   return turf.rewind(turf.polygon([suelto.anillo]).geometry) as Polygon

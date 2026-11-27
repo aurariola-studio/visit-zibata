@@ -1566,8 +1566,8 @@
       "description": null,
       "address": "Av. Paseo de las Pitahayas 23",
       "coordinates": {
-        "lat": 20.6757444,
-        "lng": -100.3252669
+        "lat": 20.6759219,
+        "lng": -100.3254223
       },
       "active": true,
       "placeIds": [
@@ -1577,7 +1577,7 @@
         "supermercados"
       ],
       "locationConfidence": "high",
-      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-27).",
+      "locationSource": "Centro de su edificio en el mapa. La ubicación del local es la del enlace de Google Maps del propietario (revisado el 2026-11-27).",
       "verification": {
         "status": "active",
         "confidence": "medium",
@@ -1597,8 +1597,8 @@
       "description": null,
       "address": "Av. Paseo de las Pitahayas 6A",
       "coordinates": {
-        "lat": 20.6824846,
-        "lng": -100.3177617
+        "lat": 20.6825446,
+        "lng": -100.3176807
       },
       "active": true,
       "placeIds": [
@@ -1608,7 +1608,7 @@
         "supermercados"
       ],
       "locationConfidence": "high",
-      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-27).",
+      "locationSource": "Centro de su edificio en el mapa. La ubicación del local es la del enlace de Google Maps del propietario (revisado el 2026-11-27).",
       "verification": {
         "status": "active",
         "confidence": "medium",
@@ -1689,8 +1689,8 @@
       "description": null,
       "address": "Av. Paseo de las Pitahayas 13",
       "coordinates": {
-        "lat": 20.6798687,
-        "lng": -100.3152192
+        "lat": 20.6798006,
+        "lng": -100.3152766
       },
       "active": true,
       "placeIds": [
@@ -1700,7 +1700,7 @@
         "bancos-y-cajeros"
       ],
       "locationConfidence": "high",
-      "locationSource": "Enlace de Google Maps del propietario (revisado el 2026-11-25).",
+      "locationSource": "Centro de su edificio en el mapa. La ubicación del local es la del enlace de Google Maps del propietario (revisado el 2026-11-25).",
       "verification": {
         "status": "active",
         "confidence": "medium",
