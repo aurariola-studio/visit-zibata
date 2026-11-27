@@ -779,19 +779,19 @@
       "nombre": "Estacionamiento y acceso al Colegio NWL",
       "linea": [
         [
-          -100.339934,
-          20.680602
+          -100.339878,
+          20.680576
         ],
         [
-          -100.339585,
-          20.681216
+          -100.339515,
+          20.681214
         ],
         [
-          -100.340416,
-          20.681629
+          -100.340401,
+          20.681655
         ]
       ],
-      "fuente": "Trazo estimado según el propietario (2026-11-27): el estacionamiento por el que se llega al colegio es recto, sube desde la avenida por la derecha de Plaza Centro y sigue por detrás. Dibujado alrededor de las huellas abiertas, sin calcar ninguna imagen.",
+      "fuente": "Trazo estimado según el propietario (2026-11-27): el estacionamiento por el que se llega al colegio es recto, sube desde la avenida por la derecha de Plaza Centro y sigue por detrás. Dibujado alrededor de las huellas abiertas, sin calcar ninguna imagen. Separado unos metros del contorno de la plaza a petición suya.",
       "creado": "2026-11-27",
       "retirarCuando": "Cuando OpenStreetMap traiga la vía."
     }

@@ -85,7 +85,7 @@
   "outputs": {
     "public/map/zibata.pmtiles": {
       "bytes": 2573449,
-      "sha256": "dded4be2506a8e5ca89242c7f13d0247664d3e47171376f58bae17e849d4c438",
+      "sha256": "acceb047f1b578302dc0ef33a53edca3f237aff0f472bebb0b3a0366f1ba2ad6",
       "tiles": 266,
       "bytesByZoom": {
         "12": 49714,
@@ -157,8 +157,8 @@
       ]
     },
     "data/geographic/volumenes-propios.json": {
-      "bytes": 17518,
-      "sha256": "9b3723e17c56478a2c4b701014c50d7e2e74609bd252766a421314cc1d78a530",
+      "bytes": 17582,
+      "sha256": "edb1e51eae95681f851f3e7c3e52323bb5864ada63ac20850939bd14fb7a97f3",
       "sueltos": [
         {
           "id": "h-e-b",
