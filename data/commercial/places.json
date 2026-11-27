@@ -8266,7 +8266,8 @@
           "08:30-10:00"
         ],
         "sun": [],
-        "byClasses": true
+        "byClasses": true,
+        "byAppointment": true
       },
       "location": {
         "lat": 20.6899118,
@@ -8274,26 +8275,27 @@
       },
       "googleMapsUri": "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35f005e6e98cd:0x6eca16b8723769d",
       "googlePlaceId": null,
-      "phone": null,
+      "phone": "+525566073955",
       "photos": [],
       "links": {
-        "website": null,
+        "website": "https://nessty.mx/@apex",
         "instagram": "https://www.instagram.com/apex_ftnss/",
         "facebook": null,
         "tiktok": null,
-        "whatsapp": null,
+        "whatsapp": "+525566073955",
         "rappi": null,
         "uberEats": null,
         "didiFood": null
       },
       "active": true,
       "verification": {
-        "status": "likely_active",
+        "status": "active",
         "confidence": "medium",
-        "lastVerifiedAt": "2026-11-25",
+        "lastVerifiedAt": "2026-11-27",
         "sources": [
           "https://www.instagram.com/apex_ftnss/",
-          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35f005e6e98cd:0x6eca16b8723769d"
+          "https://www.google.com/maps/place/data=!4m2!3m1!1s0x85d35f005e6e98cd:0x6eca16b8723769d",
+          "campo:2026-11-27"
         ]
       }
     },
