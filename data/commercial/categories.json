@@ -3462,7 +3462,7 @@
             "es": "Maternal",
             "en": "Nursery"
           },
-          "icon": "carriola",
+          "icon": "bebe",
           "synonyms": [
             "maternal",
             "nursery",
@@ -3475,7 +3475,7 @@
             "es": "Kínder",
             "en": "Kindergarten"
           },
-          "icon": "figuras",
+          "icon": "rompecabezas",
           "synonyms": [
             "kínder",
             "kinder",
